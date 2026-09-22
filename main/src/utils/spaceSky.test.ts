@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import {
   CONSTELLATION_TUNING,
+  CONSTELLATION_HOST_CELLS,
   SPACE_DOME_RADIUS,
   SPACE_DOME_RENDER_ORDER,
   createSpaceSkyMaterial,
@@ -84,10 +85,24 @@ describe('CONSTELLATION_TUNING', () => {
   });
 
   it('keeps a sky-wide figure count in the authored 6..16 band', () => {
-    const cells = 6 * CONSTELLATION_TUNING.grid ** 2;
-    const figures = cells * CONSTELLATION_TUNING.figureOdds;
+    const figures = CONSTELLATION_HOST_CELLS.length;
     expect(figures).toBeGreaterThanOrEqual(6);
     expect(figures).toBeLessThanOrEqual(16);
+  });
+
+  it('reserves real figure cells on every sky face, including the upper centre', () => {
+    const unique = new Set(CONSTELLATION_HOST_CELLS.map(cell => cell.join(',')));
+    expect(unique.size).toBe(CONSTELLATION_HOST_CELLS.length);
+    expect(unique.has('2,1,1')).toBe(true);
+    for (let face = 0; face < 6; face++) {
+      expect(CONSTELLATION_HOST_CELLS.filter(cell => cell[0] === face).length).toBeGreaterThan(0);
+    }
+    for (const [, x, y] of CONSTELLATION_HOST_CELLS) {
+      expect(x).toBeLessThan(CONSTELLATION_TUNING.grid);
+      expect(y).toBeLessThan(CONSTELLATION_TUNING.grid);
+    }
+    const shader = createSpaceSkyMaterial().fragmentShader;
+    expect(shader).not.toContain('CONST_FIGURE_ODDS');
   });
 
   it('interpolates every constant into the shader as a GLSL float literal', () => {

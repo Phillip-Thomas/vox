@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 303313,
+  "stop_reason": "end_turn",
+  "session_id": "3ccec08c-6f1b-419b-8c3d-4c8f1907f573",
+  "total_cost_usd": 1.8089880000000003,
+  "usage": {
+    "input_tokens": 66,
+    "cache_creation_input_tokens": 59342,
+    "cache_read_input_tokens": 1317980,
+    "output_tokens": 22145,
+    "output_tokens_details": {
+      "thinking_tokens": 5133
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 59342,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1356,
+        "cache_read_input_tokens": 64866,
+        "cache_creation_input_tokens": 782,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 782
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2553,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0026230000000000003,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 66,
+      "outputTokens": 22145,
+      "cacheReadInputTokens": 1317980,
+      "cacheCreationInputTokens": 59342,
+      "webSearchRequests": 0,
+      "costUSD": 1.8063650000000004,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 5133,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 39,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Finished at **22:59:05 UTC**, inside the 23:04:45 deadline.\n\n**VERDICT**: both gaps closed; one actual capture taken; leading source path measured live; **physical writer UNMEASURED** \u2014 cause not fully closed.\n\n## Gaps finished\n\n**Point table** \u2014 resolved offline from the exact bundle (`68c8be84\u2026`), not from a hypothesis. The `fq` container object in the generic helper was a fiction; I bound real lexical variables. EfficientScene region is bundle line 9361: `iA`=landedShipPos, `FA`=landedPlayerEgress, `GA`=landedPlayerSpawn, `H`=initialPlayerPosition, `K`=arrivalPose, `e`=commandContext (`e.actorId` \u2014 confirmed, *not* `world.actorId`).\n\nOne correction to the commission: `aZ` is `resolveShipPlayerEgressPosition(e,A,t,i)` with face as the 4th positional, but the `i.face ?? Vt(t)` choice lives in **`MjA`**, a different helper. I instrumented both.\n\n| site | requested | actual | reloc |\n|---|---|---|---|\n| EfficientScene.landedPlayerSpawn | 9361:106767 | 9361:106770 | yes |\n| resolveShipPlayerEgressPosition | 5208:17626 | 5208:17655 | yes |\n| MjA.faceChoice | 5208:17790 | 5208:17800 | yes |\n| EfficientPlayer.body.setTranslation | 7990:69648 | 7990:69648 | no |\n\n4/4 resolved, 0 unresolved. **23 events, 0 drops, 0 errors.** Resolved locations and actual hits counted separately \u2014 which is what exposes the shortfall below.\n\n**`--pose-handoff-only`** \u2014 now a real branch before the controller, not an annotation. Walk and new [F] did not run; distinct verdict `pose-handoff-observation-only`; acceptance explicitly left pending.\n\n## Observed\nAt the spawn selection: `landedShipPos [53.5,20,-20]` non-null, `landedPlayerEgress [53.85,17.5,-20]`, `initialPlayerPosition [-31.716, 52.7897, 20.1519]`. The scene's own egress call carries **`faceArgument: {absent:true}`** (3-arg, source-confirmed). A separate generic arrival query in the same frames passes `face:\"top\"` on a different shipPos \u2014 easy to mistake for the scene's call; it isn't.\n\nPost-Continue saved on-foot pose `[52.78897476196289, 17.5, -20]` \u2014 Y and Z equal the egress exactly.\n\nActivation path for your next source handoff: `EfficientScene.tsx:523-524`, `landedShipPos` non-null short-circuits the ternary so `initialPlayerPosition` is never consulted. Face is not implicated \u2014 the parked ship really is near +X and the egress is +X-consistent; no top-face fix warranted.\n\n## What I will not claim\nThe `setTranslation` point resolved but got **zero hits**, and the click split returned `clickMonotonicMs: undefined`, so the 23 events' document provenance and before/after ordering are unestablished. The physical writer's argument and callsite are **unmeasured** \u2014 the selector precedence is measured, the body write is not. `validatedPersistedParked` local was not identified in the bundle. Those are the concrete targets for the next window.\n\nLock held on inherited FD 9 throughout; preview 37395 reused; probe session `stopped/cleanupCompleted:true`; remaining chrome PIDs are the pre-existing owned `paraform-managed-webgpu` helper, untouched. No saves, source, or producer receipts modified.\n\nArtifacts: `continue-pose-handoff-runtime-report.md`, `verifier/captures/continue-pose-handoff/attempt-2026-09-06T2256Z` (6 349 296 B), `verifier/logs/continue-pose-handoff-runtime/`.",
+  "ttft_ms": 1587,
+  "type": "result",
+  "duration_ms": 402476,
+  "uuid": "f5e31e22-23e5-4ea4-849a-2242d27fc0d1",
+  "ttft_stream_ms": 858,
+  "time_to_request_ms": 19,
+  "first_content_frame_ms": 1220,
+  "queued_turn_count": 0
+}

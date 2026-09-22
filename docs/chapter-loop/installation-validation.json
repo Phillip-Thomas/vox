@@ -1,0 +1,60 @@
+{
+  "schema": "paravoxia.chapterLoopInstallation.v1",
+  "at": "2026-09-07T00:49:26.672153+00:00",
+  "status": "IMPLEMENTED_AND_TRANSPORT_TESTED",
+  "tests": [
+    {
+      "command": "npm --prefix main run chapter:loop:test",
+      "exitCode": 0,
+      "passed": 18,
+      "failed": 0,
+      "durationMs": 10220.342924,
+      "kind": "synthetic subprocess/preview/checkpoint tests; no model calls or gameplay acceptance"
+    },
+    {
+      "command": "npm --prefix main run creative:workflow:check",
+      "exitCode": 0,
+      "passed": 185,
+      "kind": "existing workflow configuration compatibility"
+    },
+    {
+      "command": "git diff --check (changed tracked workflow files)",
+      "exitCode": 0
+    }
+  ],
+  "files": {
+    "main/tools/chapter-loop.mjs": "707b688315e990741ea341b4e64650413219546bd5b5ad391fb705bd10b2165a",
+    "main/package.json": "d3b5fa7125d0e87b89bf16094ed9d275bae6a4543cbf3220973b9b0df480e5d5",
+    "CLAUDE.md": "24ec4e63413a12e5ab72c770c044420ca1eadcd1aad957a66672881ba33ae807",
+    "PARAVOXIA_CREATIVE_COUNCIL.md": "f4050ab6d3d2b564a906c7351c304fadecfbd7e71e3936f495782ffa3311c985",
+    ".claude/skills/creative-triad/SKILL.md": "8e2d671b177baf11e734dcb03a71c4537126f36d8b4897be9b82126edc00be17",
+    "docs/architecture/workflow-orchestration/README.md": "b0dd291f938d895b5a814bbd9b4f0d764e532fcae564ded245aa6ae4607b23c2",
+    "docs/chapter-loop.md": "fef57f745c425c02abe7eadd8c5acf81c251c192a49db7a633e98ca0551ac782",
+    "docs/chapter-loop/brief.example.json": "11991e313295b907c7a4f557635154571bf416610b4c221116fafe0b9b610adf",
+    "main/tools/chapter-loop/contract.mjs": "511d30cc5fdb8a8c9b325d5a614846fdfd31e04165fd96fda93b36b48c5ffbcf",
+    "main/tools/chapter-loop/evidence.mjs": "fb5b698d4820039ece1007e59355393bf69f9a397e9c09493b4e36f9c6a4e61e",
+    "main/tools/chapter-loop/loop.test.mjs": "88ed90001945e0d530710e77f0b6fc06402851b3b000a99a0496af877a1abbbc",
+    "main/tools/chapter-loop/preview.mjs": "a81fcfb0769f059ac57450069ad8ef201dac8f89584a86313d06404805a26686",
+    "main/tools/chapter-loop/process.mjs": "b375cfe851999d46bdb42e84323919852620e409e416746af81617428b941273",
+    "main/tools/chapter-loop/providers.mjs": "70f8d89692c2499072a51a3746525f23c069fd5deb233093d683e59382057aa4",
+    "main/tools/chapter-loop/runner.mjs": "8c1db96da3a33195a5dce749b628e92b2814c077c283f230edb5c6ed378a8364",
+    "main/tools/chapter-loop/store.mjs": "ed718e050eb7e19f4bc5a23bd71901232350019cd5caa56ec6cd7a40115afc52",
+    ".claude/agents/chapter-loop/av.md": "c438f8e9f9ad9696a0a7426ea327a1858322b692c747d63ea6fb25fa33768859",
+    ".claude/agents/chapter-loop/builder.md": "1ace65235eff69373ad3378b8111abf72962a3a3a4ec7eeb903996d3dd8ccb76",
+    ".claude/agents/chapter-loop/chapter.md": "35597cceb143d9943d320f9c9c3f06cb76b3f673cceda80c0d4b51e7f7ad3000",
+    ".claude/agents/chapter-loop/cinema.md": "21cf4c8c0f72be2f17c416533a805d872b67fecbb80711cc712a698d26ecf084",
+    ".claude/agents/chapter-loop/composer.md": "1926e8aa24b310da58016dafa24b4cd20581586055f0de9452bbade37faf6c39",
+    ".claude/agents/chapter-loop/continuity.md": "41d85ee325a4f0a2456606cdb6f830acfbb60b8a60d56e1f5f9be9def2a75487",
+    ".claude/agents/chapter-loop/council.md": "24b84b781bb43f0a3e96fb0b9423667e4a592bcfe38ada16be1478ef6995e34f",
+    ".claude/agents/chapter-loop/player.md": "447dfafe9052eb64aec3f9cd4b74c3ce3e44bacbaf474c5fd272f2685b0a7db0",
+    ".claude/agents/chapter-loop/refiner.md": "f924e70d53431626888d16e8c98e0c45c67350f917c2034d987491cbeca9b0ea",
+    ".claude/agents/chapter-loop/result.md": "a8f0f44bca818223b381debdb9d190a1544faff70c75f626ea26370d7fde183e",
+    ".claude/agents/chapter-loop/score.md": "7329c6a7f6c8206ca1a4c45bc65f17b0f4fdc1f439dbd0e7bbd13a337318474f"
+  },
+  "realChapterPilot": false,
+  "productionSpeedupMeasured": false,
+  "chapter13": "STOPPED_BY_OWNER",
+  "publishing": false,
+  "goal": null,
+  "remainingGoalTokens": null
+}

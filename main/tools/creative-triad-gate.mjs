@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
 import os from 'node:os'
 import path from 'node:path'
+const { validateGuidanceTargetContract, validateGuidanceTargetEvidence } = await import(new URL('./lib/guidanceTargets.mjs', import.meta.url))
 
 const DIRECTORS = ['chapter', 'score', 'cinematography']
 const DIRECTED_PAIRS = DIRECTORS.flatMap((from) =>
@@ -77,6 +78,18 @@ const UX_VARIANTS = ['desktop', 'mobile', 'reducedMotion', 'lowestQuality']
 const JOURNEY_CONTRACT_REPO_REF = 'main/chapter-journey-contract.json'
 const JOURNEY_CONTRACT_SCHEMA_REPO_REF = 'docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-journey-contract.schema.json'
 const JOURNEY_EVIDENCE_FILE = 'chapter-journey-evidence.json'
+// The decision brief: every owner-only question, asked once, before signature.
+const DECISION_BRIEF_FILE = 'decision-brief.json'
+const DECISION_BRIEF_KINDS = new Set(['creative', 'boundary', 'release'])
+// The perceptual verdict: percept's hash-bound receipt over the headed evidence bundle.
+const PERCEPT_BUNDLE_DIR = 'evidence/bundle'
+const PERCEPT_RECEIPT_FILE = `${PERCEPT_BUNDLE_DIR}/judge-receipt.md`
+const PERCEPT_ARTIFACTS_FILE = `${PERCEPT_BUNDLE_DIR}/artifacts.json`
+const PERCEPT_BUNDLE_FILE = `${PERCEPT_BUNDLE_DIR}/bundle.json`
+const PERCEPT_CITED_CATEGORIES = ['cinematic_composition_and_lens', 'palette_light_and_render_cohesion']
+// A numeric acceptance band written in prose: "22.0-28.7%", "5,100–5,200 units", "±10°" is
+// handled by the explicit acceptanceBands entry the prose must be paired with.
+const BAND_PROSE = /(\d[\d,]*(?:\.\d+)?)\s*(?:%|°|px|u\/s|units)?\s*(?:–|-|to)\s*(\d[\d,]*(?:\.\d+)?)\s*(%|°|px|u\/s|units)/
 const PLACEHOLDER_PATTERN = /\b(?:TODO|TBD|PLACEHOLDER|FILL[ -]?ME|REPLACE[ -]?ME)\b|<[^>\n]+>/i
 const MARKDOWN_SECTION_RULES = {
   'production-lock.md': ['authority', 'locked scope', 'protected paths', 'stop conditions', 'lock disposition'],
@@ -339,8 +352,8 @@ function actionableWorkOrder(kind, workOrder) {
   if (!Array.isArray(workOrder) || workOrder.length === 0 || workOrder.some((line) => !nonEmptyString(line))) return false
   const action = workOrder.at(-1).trim()
   const patterns = {
-    travel: /\b(?:follow|return|go|move|reach|travel|enter|leave|climb|cross|land|hover|approach|walk|run|swim|jetpack)\b/i,
-    interact: /(?:\[[a-z]\]|\b(?:interact|attend|recover|scan|trace|read|look|aim|use|activate|install|certify|relight|confirm|touch|take|open|secure)\b)/i,
+    travel: /\b(?:follow|return|go|move|reach|travel|enter|leave|climb|cross|land|hover|approach|walk|run|swim|jetpack|deliver|fly)\b/i,
+    interact: /(?:\[(?:[a-z]|space)\]|\b(?:interact|attend|recover|scan|trace|read|look|aim|use|activate|install|certify|relight|confirm|touch|take|open|secure|present)\b)/i,
     craft: /(?:\[c\]|\b(?:craft|fabricate|assemble|make)\b)/i,
     build: /(?:\[b\]|\b(?:build|place|construct|install|enclose)\b)/i,
     wait: /\b(?:wait|rest|observe|hold|remain|sleep|watch)\b/i,
@@ -369,7 +382,7 @@ function validateGuidanceContract(contract, anchorSet, agencyIds, variantIds, re
     const enterOrder = anchorOrders.get(objective?.enterAnchorRef)
     const clearOrder = anchorOrders.get(objective?.clearAnchorRef)
     collector.assert(Number.isFinite(enterOrder) && Number.isFinite(clearOrder) && clearOrder >= enterOrder, 'ux.contract-anchor-order', `${label} clear anchor cannot precede its enter anchor`, { enterOrder, clearOrder })
-    collector.assert(nonEmptyString(objective?.markerLabel) && objective?.requiresMarker === true, 'ux.contract-marker', `${label} requires one exact nonempty directional marker label`)
+    validateGuidanceTargetContract(objective, collector)
     collector.assert(actionableWorkOrder(objective?.kind, objective?.workOrder), 'ux.contract-work-order', `${label} final work-order line must state an action appropriate to ${objective?.kind}`, objective?.workOrder)
     collector.assert(objective?.feedback?.eventType === 'objective-enter' && objective?.feedback?.presentationOnly === true && objective?.feedback?.advancesProgression === false && objective?.feedback?.emissionsPerEntry === 1, 'ux.contract-feedback', `${label} feedback must be one-shot presentation only and cannot advance progression`)
     const objectiveVariantRefs = new Set(objective?.variantRefs || [])
@@ -489,7 +502,145 @@ function validateSceneContract(contract, collector) {
   collector.assert(Number.isFinite(contract.performance?.maximumFrameTimeMs) && Number.isFinite(contract.performance?.maximumDrawCalls) && Number.isFinite(contract.performance?.maximumShaderPrograms), 'contract.performance-budgets', 'Measurable frame, draw-call, and shader budgets are required')
   collector.assert(Array.isArray(contract.evidence?.acceptanceCriteria) && contract.evidence.acceptanceCriteria.length > 0, 'contract.evidence', 'Acceptance evidence requirements are required')
   collector.assert(contract.reset?.sandboxNoOp?.required === true && resetIds.size > 0, 'contract.reset', 'Named state resets and sandbox no-op proof are required')
+  validateAcceptanceBands(contract, collector)
   collector.assert(!includesPlaceholder(contract), 'contract.placeholders', 'Scene contract cannot contain template placeholders')
+}
+
+// Reachability at signature. Four draft-v9 terms on the ch10 run were unsatisfiable
+// by construction — a band the attainable domain never enters — and each cost
+// rounds after signing. A band-shaped term now carries a structured entry in
+// evidence.acceptanceBands with the values it was derived from or measured at,
+// and a band none of those values falls inside cannot be signed.
+// Every acceptance-criterion string in the contract, keyed by its path — they
+// live on evidence.acceptanceCriteria[i], evidence.captures[i].acceptanceCriterion,
+// syncAnchors[i].acceptanceCriterion, guidance.objectives[i].acceptanceCriterion, …
+function collectCriteria(value, pathParts = [], out = new Map()) {
+  if (Array.isArray(value)) value.forEach((item, index) => collectCriteria(item, [...pathParts, `[${index}]`], out))
+  else if (isObject(value)) {
+    for (const [key, child] of Object.entries(value)) {
+      const next = [...pathParts, pathParts.length ? `.${key}` : key]
+      if (/^acceptanceCriteri(?:on|a)$/.test(key)) {
+        if (typeof child === 'string') out.set(next.join(''), child)
+        else if (Array.isArray(child)) child.forEach((text, index) => { if (typeof text === 'string') out.set(`${next.join('')}[${index}]`, text) })
+        continue
+      }
+      collectCriteria(child, next, out)
+    }
+  }
+  return out
+}
+
+function validateAcceptanceBands(contract, collector) {
+  const criteria = collectCriteria(contract)
+  const bands = Array.isArray(contract.evidence?.acceptanceBands) ? contract.evidence.acceptanceBands : []
+  const ids = bands.map((band) => band?.id).filter(nonEmptyString)
+  collector.assert(ids.length === bands.length && new Set(ids).size === ids.length, 'contract.band-ids', 'Every acceptance band needs a unique id')
+  const covered = new Set()
+  for (const band of bands) {
+    const label = nonEmptyString(band?.id) ? band.id : '<unnamed-band>'
+    const range = Array.isArray(band?.band) && band.band.length === 2 && band.band.every(Number.isFinite) && band.band[0] <= band.band[1]
+    collector.assert(range, 'contract.band-range', `${label} must declare band: [lo, hi] with finite lo <= hi`, band?.band)
+    const criterionOk = nonEmptyString(band?.criterionRef) && criteria.has(band.criterionRef)
+    collector.assert(criterionOk, 'contract.band-criterion', `${label} must reference an acceptance criterion by path (e.g. evidence.captures[10].acceptanceCriterion)`, band?.criterionRef)
+    if (criterionOk) covered.add(band.criterionRef)
+    const reach = band?.reachability
+    const reachOk = isObject(reach) && nonEmptyString(reach.source) && Array.isArray(reach.values) && reach.values.length > 0 && reach.values.every(Number.isFinite)
+    collector.assert(reachOk, 'contract.band-reachability', `${label} must state how its band is reached: reachability.source (the baseline captures or the derivation) and reachability.values (the measured or derived values over the attainable domain)`)
+    if (range && reachOk) {
+      const [lo, hi] = band.band
+      const inside = reach.values.some((value) => value >= lo && value <= hi)
+      const nearest = reach.values.reduce((best, value) => {
+        const distance = value < lo ? lo - value : value > hi ? value - hi : 0
+        return distance < best.distance ? { value, distance } : best
+      }, { value: null, distance: Number.POSITIVE_INFINITY })
+      collector.assert(inside, 'contract.band-unreachable', `${label} acceptance band [${lo}, ${hi}]${nonEmptyString(band.unit) ? ` ${band.unit}` : ''} contains none of its reachability values — an unsatisfiable term cannot be signed`, { nearest: nearest.value, values: reach.values, source: reach.source })
+    }
+  }
+  for (const [ref, text] of criteria) {
+    const match = text.match(BAND_PROSE)
+    if (!match) continue
+    collector.assert(covered.has(ref), 'contract.band-unstructured', `${ref} states a numeric band ("${match[0]}") but evidence.acceptanceBands has no entry for it — a band without stated reachability cannot be signed`)
+  }
+}
+
+// The decision brief. Thirteen owner questions surfaced mid-run on ch10, all after
+// signing began, ten of them mutation-boundary questions the intent already
+// implied. The brief asks them once, before Stage 2, and the ledger proves that
+// no question was asked later that the brief should have carried.
+export function validateDecisionBrief(brief, lock, phase, iterations, collector, root = resolveRepoRoot()) {
+  collector.assert(Boolean(brief), 'brief.exists', `${DECISION_BRIEF_FILE} is required before any treatment is commissioned`)
+  if (!brief) return
+  collector.assert(brief.schema === 'paravoxia.decisionBrief.v1', 'brief.schema', 'Decision brief must use paravoxia.decisionBrief.v1')
+  collector.assert(!lock || brief.runId === lock.runId, 'brief.run-id', 'Decision brief must target the production-lock run ID')
+  collector.assert(nonEmptyString(brief.authoredBy) && nonEmptyString(brief.authoredAt) && !Number.isNaN(Date.parse(brief.authoredAt)), 'brief.authorship', 'Decision brief needs authoredBy and an ISO authoredAt')
+  const items = Array.isArray(brief.items) ? brief.items : []
+  const ids = items.map((item) => item?.id).filter(nonEmptyString)
+  collector.assert(ids.length === items.length && new Set(ids).size === ids.length, 'brief.item-ids', 'Every brief item needs a unique id')
+  collector.assert(Array.isArray(brief.items), 'brief.items', 'List only actual decisions; an empty list is valid when standing authority settles the scope')
+  for (const item of items) {
+    const label = nonEmptyString(item?.id) ? item.id : '<unnamed-item>'
+    collector.assert(DECISION_BRIEF_KINDS.has(item?.kind), 'brief.item-kind', `${label} kind must be creative, boundary, or release`, item?.kind)
+    collector.assert(nonEmptyString(item?.question) && Array.isArray(item?.options) && item.options.length > 0 && nonEmptyString(item?.recommended), 'brief.item-substance', `${label} needs a question, options, and the director's recommendation`)
+    let delegated = false
+    if (item?.decidedBy === 'delegate' && item?.kind !== 'release') {
+      const ref = item.authorityRef
+      const authority = (lock?.authority || []).find(a => a.path === ref?.path && a.sha256 === ref?.sha256)
+      const absolute = ref?.path ? path.resolve(root, ref.path) : ''
+      if (authority && absolute.startsWith(`${root}${path.sep}`) && fs.existsSync(absolute)
+          && sha256File(absolute) === ref.sha256) {
+        try {
+          const grant = JSON.parse(fs.readFileSync(absolute, 'utf8'))
+          delegated = grant.schema === 'paravoxia.ownerStandingAuthority.v1'
+            && nonEmptyString(grant.scope) && Array.isArray(grant.instructions) && grant.instructions.length > 0
+            && nonEmptyString(item.delegationRationale)
+        } catch { /* malformed authority is not authorization */ }
+      }
+    }
+    collector.assert(item?.decidedBy === 'owner' || delegated, 'brief.item-authority', `${label} requires the owner or a hash-bound standing delegation from the production lock`)
+
+    collector.assert(['pending', 'decided'].includes(item?.status), 'brief.item-status', `${label} status must be pending or decided`, item?.status)
+    if (item?.kind === 'boundary') collector.assert(Array.isArray(item?.paths) && item.paths.length > 0 && item.paths.every((entry) => nonEmptyString(entry?.path) && nonEmptyString(entry?.symbol)), 'brief.boundary-specificity', `${label} must name the exact file and symbol outside the mutation boundary`)
+    if (item?.status === 'decided') collector.assert(nonEmptyString(item?.decision) && nonEmptyString(item?.decidedAt), 'brief.item-decision', `${label} is decided but records no decision text or time`)
+  }
+  const pending = items.filter((item) => item?.status === 'pending').map((item) => item?.id)
+  collector.assert(pending.length === 0, 'brief.pending', `Every brief item must be decided before the ${phase} phase can pass`, pending)
+  if (phase === 'final') {
+    const idSet = new Set(ids)
+    for (const row of iterations || []) {
+      if (row?.route !== 'contract-question') continue
+      collector.warn(nonEmptyString(row?.briefItemRef) && idSet.has(row.briefItemRef), 'brief.missed-question', `Iteration ${row?.iteration ?? '?'} asked the owner a contract question the brief did not carry (${row?.questionId ?? 'unnamed'}); add it to the brief so the next run asks first`)
+    }
+  }
+  collector.assert(!includesPlaceholder(brief), 'brief.placeholders', 'Decision brief cannot contain template placeholders')
+}
+
+// The perceptual verdict: the percept judge lane's receipt over the headed
+// evidence bundle (tools/chapter-evidence.mjs). Assessed by percept itself so the
+// hash binding is percept's, not a re-implementation here.
+function validatePerceptualVerdict(runPath, registryMap, collector) {
+  const receiptPath = path.join(runPath, PERCEPT_RECEIPT_FILE)
+  const bundlePath = path.join(runPath, PERCEPT_BUNDLE_FILE)
+  const artifactsPath = path.join(runPath, PERCEPT_ARTIFACTS_FILE)
+  const present = fs.existsSync(receiptPath) && fs.existsSync(bundlePath) && fs.existsSync(artifactsPath)
+  collector.warn(present, 'percept.missing', `No perceptual verdict at ${PERCEPT_BUNDLE_DIR}: the visual reviewers ran without the headed evidence bundle, the capped commission and the pairwise comparison (npm run chapter:evidence, then the percept judge lane)`)
+  if (!present) return false
+  const perceptDir = process.env.PERCEPT_DIR ?? path.join(resolveRepoRoot(), '..', 'percept')
+  const judge = path.join(perceptDir, 'judge.mjs')
+  collector.assert(fs.existsSync(judge), 'percept.package', `percept judge not found at ${perceptDir} (set PERCEPT_DIR)`)
+  if (!fs.existsSync(judge)) return false
+  const assessed = spawnSync('node', [judge, 'assess', path.join(runPath, PERCEPT_BUNDLE_DIR)], { encoding: 'utf8' })
+  let verdict = null
+  try { verdict = JSON.parse(assessed.stdout.trim().split('\n').pop()) } catch { verdict = null }
+  collector.assert(Boolean(verdict), 'percept.assess', 'percept assess must return a verdict', assessed.stderr?.trim())
+  collector.assert(verdict?.detail && !/does not match|invalid|missing/i.test(verdict.detail), 'percept.receipt-binding', 'The perceptual receipt must bind to the exact rubric, bundle and verdict bytes', verdict?.detail)
+  const bundle = readJson(bundlePath, collector, 'percept-bundle')
+  const artifacts = readJson(artifactsPath, collector, 'percept-artifacts')
+  collector.assert(bundle?.capture?.tier === 'hardware-high', 'percept.tier', 'The perceptual verdict must be over a headed real-GPU capture (capture.tier hardware-high)', bundle?.capture?.tier)
+  collector.assert(isObject(artifacts?.scorecard?.pairwise), 'percept.pairwise', 'The perceptual verdict must carry a pairwise comparison against the previous accepted chapter (judge.mjs pair …)')
+  const registryEntry = registryMap instanceof Map ? [...registryMap.values()].find((entry) => entry?.path === PERCEPT_BUNDLE_FILE) : null
+  collector.assert(Boolean(registryEntry), 'percept.registry-entry', `${PERCEPT_BUNDLE_FILE} must be hashed in evidence-registry.json`)
+  if (registryEntry) collector.assert(registryEntry.sha256 === sha256File(bundlePath), 'percept.registry-hash', `${PERCEPT_BUNDLE_FILE} registry hash must match its exact bytes`)
+  return true
 }
 
 function validateNotes(notes, contract, collector) {
@@ -621,7 +772,23 @@ function validateProductionLock(lock, lockSchema, contract, runPath, collector) 
     collector.assert(authorityPath.startsWith(`${resolveRepoRoot()}${path.sep}`) && fs.existsSync(authorityPath), 'lock.authority-path', `Authority file must resolve inside the repository: ${authority.path}`)
     if (authorityPath.startsWith(`${resolveRepoRoot()}${path.sep}`) && fs.existsSync(authorityPath)) {
       const actual = createHash('sha256').update(fs.readFileSync(authorityPath)).digest('hex')
-      collector.assert(actual === authority.sha256, 'lock.authority-hash', `Authority hash must match current file: ${authority.path}`, { expected: authority.sha256, actual })
+      // Workflow instruction revisions do not retroactively invalidate a signed
+      // run. Only these two instruction files have explicit retained versions;
+      // canon, production authority, runtime, and signatures still require exact
+      // current bytes. This is version pinning, never an authority waiver.
+      let pinned = false
+      if (['CLAUDE.md', '.claude/skills/creative-triad/SKILL.md'].includes(authority.path)) {
+        const registry = path.join(resolveRepoRoot(), '.claude/policy-versions.json')
+        if (fs.existsSync(registry)) {
+          const ref = JSON.parse(fs.readFileSync(registry, 'utf8'))[authority.path]?.[authority.sha256]
+          const version = ref ? path.resolve(resolveRepoRoot(), ref) : ''
+          pinned = version.startsWith(path.join(resolveRepoRoot(), '.claude/policy-versions') + path.sep)
+            && fs.existsSync(version)
+            && fs.realpathSync(version).startsWith(fs.realpathSync(path.join(resolveRepoRoot(), '.claude/policy-versions')) + path.sep)
+            && sha256File(version) === authority.sha256
+        }
+      }
+      collector.assert(actual === authority.sha256 || pinned, 'lock.authority-hash', `Authority must match current bytes or its retained instruction version: ${authority.path}`, { expected: authority.sha256, actual, pinned })
     }
   }
 
@@ -747,7 +914,7 @@ function validateShippedVisualBaseline(baseline, contract, lock, runPath, collec
   collector.assert(!includesPlaceholder(baseline), 'baseline.placeholders', 'Shipped visual baseline cannot contain template placeholders')
 }
 
-function validateShippedUxBaseline(baseline, contract, lock, collector) {
+function validateShippedUxBaseline(baseline, contract, lock, runPath, collector) {
   if (!baseline) return
   collector.assert(baseline.schema === 'paravoxia.shippedUxBaseline.v1', 'ux.baseline-schema', 'Shipped UX baseline must use paravoxia.shippedUxBaseline.v1')
   collector.assert(baseline.runId === lock?.runId && baseline.sourceRevision === lock?.sourceRevision, 'ux.baseline-source', 'Shipped UX baseline must target the production-lock run and source revision')
@@ -757,17 +924,27 @@ function validateShippedUxBaseline(baseline, contract, lock, collector) {
   const repoRoot = resolveRepoRoot()
   const sources = Array.isArray(baseline.sourceFiles) ? baseline.sourceFiles : []
   const sourcePaths = sources.map((source) => source?.path)
-  collector.assert(sources.length > 0, 'ux.baseline-sources', 'Shipped UX baseline must hash at least one current main/src/story/ux source file')
+  collector.assert(sources.length > 0, 'ux.baseline-sources', 'Shipped UX baseline must hash at least one captured main/src/story/ux source file')
   collector.assert(sourcePaths.every(nonEmptyString) && new Set(sourcePaths).size === sourcePaths.length, 'ux.baseline-source-unique', 'Shipped UX baseline source paths must be present and unique')
   collector.assert(sourcePaths.some((sourcePath) => sourcePath?.startsWith('main/src/story/ux/')), 'ux.baseline-source-scope', 'Shipped UX baseline must include at least one source under main/src/story/ux')
   for (const source of sources) {
     const sourcePath = nonEmptyString(source?.path) ? path.resolve(repoRoot, source.path) : null
     const insideRepo = sourcePath?.startsWith(`${repoRoot}${path.sep}`)
     collector.assert(insideRepo, 'ux.baseline-source-inside-repo', `Shipped UX baseline source must remain inside the repository: ${source?.path}`)
-    collector.assert(insideRepo && fs.existsSync(sourcePath) && fs.statSync(sourcePath).isFile(), 'ux.baseline-source-path', `Shipped UX baseline source must resolve: ${source?.path}`)
+    // A pre-change baseline remains evidence after the authorized source is
+    // edited. Bind archived bytes to its ORIGINAL hash instead of demanding
+    // that the implementation still equal the code it was meant to replace.
+    const archived = source?.snapshotPath !== undefined
+    const snapshotPath = nonEmptyString(source?.snapshotPath) ? path.resolve(runPath, source.snapshotPath) : null
+    const snapshotExists = snapshotPath && fs.existsSync(snapshotPath) && fs.statSync(snapshotPath).isFile()
+    const insideRun = snapshotExists && fs.realpathSync(snapshotPath).startsWith(`${fs.realpathSync(runPath)}${path.sep}`)
+    if (archived) collector.assert(insideRun, 'ux.baseline-snapshot-path', `Baseline source snapshot must resolve inside this run: ${source?.snapshotPath}`)
+    const evidencePath = archived ? (insideRun ? snapshotPath : null) : sourcePath
+    const evidenceExists = insideRepo && evidencePath && fs.existsSync(evidencePath) && fs.statSync(evidencePath).isFile()
+    collector.assert(evidenceExists, 'ux.baseline-source-path', `Shipped UX baseline source bytes must resolve: ${source?.path}`)
     collector.assert(/^[a-f0-9]{64}$/i.test(source?.sha256 || ''), 'ux.baseline-source-hash-format', `Shipped UX baseline source needs a SHA-256 hash: ${source?.path}`)
-    if (insideRepo && fs.existsSync(sourcePath) && fs.statSync(sourcePath).isFile() && /^[a-f0-9]{64}$/i.test(source?.sha256 || '')) {
-      collector.assert(sha256File(sourcePath) === source.sha256.toLowerCase(), 'ux.baseline-source-hash', `Shipped UX baseline source hash must match: ${source.path}`)
+    if (evidenceExists && /^[a-f0-9]{64}$/i.test(source?.sha256 || '')) {
+      collector.assert(sha256File(evidencePath) === source.sha256.toLowerCase(), 'ux.baseline-source-hash', `Shipped UX baseline source hash must match: ${source.path}`)
     }
   }
 
@@ -833,9 +1010,13 @@ function validateObjectiveLifecycleEvidence(evidence, contract, contractSha256, 
     collector.assert(objective.markerLabel === contracted.markerLabel, 'ux.lifecycle-marker-contract', `${label} marker label must match the signed guidance contract exactly`)
     collector.assert(JSON.stringify(objective.workOrder) === JSON.stringify(contracted.workOrder) && actionableWorkOrder(objective.kind, objective.workOrder), 'ux.lifecycle-work-order', `${label} work order must exactly match the signed actionable guidance contract`)
     collector.assert(Number.isInteger(objective.entryCount) && objective.entryCount >= 1, 'ux.lifecycle-entry-count', `${label} must record at least one objective entry`)
-    const markerObservations = Array.isArray(objective.markerObservations) ? objective.markerObservations : []
-    collector.assert(markerObservations.length >= objective.entryCount && markerObservations.every((marker) => marker === contracted.markerLabel), 'ux.lifecycle-marker-exact', `${label} must observe the exact contracted directional marker on every entry`, markerObservations)
-    collector.assert(objective.missingMarkerFrames === 0, 'ux.lifecycle-marker-health', `${label} cannot report any missing-marker frames while active`)
+    if (contracted.requiresMarker === true) {
+      const markerObservations = Array.isArray(objective.markerObservations) ? objective.markerObservations : []
+      collector.assert(markerObservations.length >= objective.entryCount && markerObservations.every((marker) => marker === contracted.markerLabel), 'ux.lifecycle-marker-exact', `${label} must observe the exact contracted directional marker on every entry`, markerObservations)
+      collector.assert(objective.missingMarkerFrames === 0, 'ux.lifecycle-marker-health', `${label} cannot report any missing-marker frames while active`)
+    } else {
+      validateGuidanceTargetEvidence(objective, contracted, { sourceRevision: lock?.sourceRevision, contractSha256 }, collector)
+    }
     const lifecycleStates = Array.isArray(objective.lifecycleStates) ? objective.lifecycleStates : []
     let previousStateIndex = -1
     const orderedStates = ['entered', 'ready', 'completed', 'cleared']
@@ -859,6 +1040,9 @@ function validateObjectiveLifecycleEvidence(evidence, contract, contractSha256, 
       collector.assert(result?.variantId === variantRefs[variant], 'ux.lifecycle-variant-ref', `${label} ${variant} proof must resolve to the contracted variant`, { reported: result?.variantId, expected: variantRefs[variant] })
       collector.assert(result?.markerLabel === contracted.markerLabel, 'ux.lifecycle-variant-marker', `${label} ${variant} must preserve the exact marker label`)
       collector.assert(result?.workOrderActionable === true && Array.isArray(result?.evidenceRefs) && result.evidenceRefs.length > 0, 'ux.lifecycle-variant-evidence', `${label} ${variant} must preserve an actionable work order and cite evidence`)
+      if (contracted.requiresMarker === false) {
+        validateGuidanceTargetEvidence(result?.targetEvidence, contracted, { sourceRevision: lock?.sourceRevision, contractSha256 }, collector, `${label} ${variant}`)
+      }
     }
 
     const resetResults = Array.isArray(objective.resetResults) ? objective.resetResults : []
@@ -1013,7 +1197,7 @@ function validateRawAudiovisualEvidence(manifest, contract, contractSha256, runP
   collector.assert(!includesPlaceholder(manifest), 'raw-evidence.placeholders', 'Raw audiovisual evidence cannot contain template placeholders')
 }
 
-function validateScorecard(scorecard, rubric, contract, contractSha256, collector) {
+function validateScorecard(scorecard, rubric, contract, contractSha256, collector, runProfile = null, perceptPresent = false) {
   if (!scorecard || !rubric) return
   collector.assert(scorecard.schema === 'paravoxia.creativeScorecard.v1', 'scorecard.schema', 'Final scorecard must use paravoxia.creativeScorecard.v1')
   collector.assert(scorecard.contractSha256 === contractSha256, 'scorecard.contract-hash', 'Final scorecard must bind the exact signed scene contract')
@@ -1040,9 +1224,19 @@ function validateScorecard(scorecard, rubric, contract, contractSha256, collecto
   const computedWeighted = usable ? weightedTotal / 100 : Number.NaN
   collector.assert(usable && Math.abs(scorecard.weightedScore - computedWeighted) <= 0.005, 'scorecard.weighted-score', 'Weighted score must match rubric weights', { reported: scorecard.weightedScore, computed: computedWeighted })
   collector.assert(usable && Math.abs(scorecard.categoryFloor - floor) <= 0.005, 'scorecard.floor', 'Category floor must match the lowest category', { reported: scorecard.categoryFloor, computed: floor })
+  // one source for the bar: the run profile's approval block (four prose copies
+  // used to disagree with each other and with this file)
   const flagship = contract?.production?.mode === 'flagship'
-  const threshold = flagship ? 4.8 : 4.75
-  const categoryFloor = flagship ? 4.5 : 4.3
+  const profileApproval = isObject(runProfile?.approval) ? runProfile.approval : null
+  collector.assert(profileApproval && Number.isFinite(profileApproval.weightedScoreThreshold) && Number.isFinite(profileApproval.categoryFloor), 'scorecard.profile-thresholds', 'The run profile must declare approval.weightedScoreThreshold and approval.categoryFloor', runProfile?.identity?.slug)
+  const threshold = Number.isFinite(profileApproval?.weightedScoreThreshold) ? profileApproval.weightedScoreThreshold : flagship ? 4.8 : 4.75
+  const categoryFloor = Number.isFinite(profileApproval?.categoryFloor) ? profileApproval.categoryFloor : flagship ? 4.5 : 4.3
+  if (perceptPresent) {
+    for (const slug of PERCEPT_CITED_CATEGORIES) {
+      const entry = categoryMap.get(slug)
+      collector.assert((entry?.evidenceRefs || []).some((ref) => /^percept:/i.test(ref)), 'scorecard.percept-citation', `${slug} must cite the perceptual verdict (a percept:* evidence ref) when one exists`)
+    }
+  }
   collector.assert(scorecard.weightedScore >= threshold, 'scorecard.threshold', `Weighted score must be at least ${threshold}`)
   collector.assert(scorecard.categoryFloor >= categoryFloor, 'scorecard.floor-threshold', `Every category must be at least ${categoryFloor}`)
   collector.assert(scorecard.fullCategoryCoverage === true, 'scorecard.full-coverage', 'Scorecard must attest full category coverage')
@@ -1434,6 +1628,12 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
   const journeyContractSha256 = fs.existsSync(journeyContractPath) ? sha256File(journeyContractPath) : null
   const journeyContractSchema = readJson(path.join(resolveRepoRoot(), JOURNEY_CONTRACT_SCHEMA_REPO_REF), collector, 'journey-contract-schema')
   const rubric = readJson(path.join(resolveRepoRoot(), 'docs/architecture/workflow-orchestration/rubrics/paravoxia-creative-cohesion.rubric.json'), collector, 'rubric')
+  const profileSlug = String(productionLock?.runProfileRef ?? '').replace(/@v\d+$/, '')
+  const runProfilePath = path.join(resolveRepoRoot(), 'docs/architecture/workflow-orchestration/run-profiles', `${profileSlug}.run-profile.json`)
+  const runProfile = profileSlug && fs.existsSync(runProfilePath) ? readJson(runProfilePath, collector, 'run-profile') : null
+  collector.assert(Boolean(runProfile), 'lock.run-profile-file', `Run profile must exist for ${productionLock?.runProfileRef ?? '<no runProfileRef>'}`)
+  const decisionBriefPath = path.join(runPath, DECISION_BRIEF_FILE)
+  const decisionBrief = fs.existsSync(decisionBriefPath) ? readJson(decisionBriefPath, collector, 'decision-brief') : null
   const workflow = readJson(path.join(resolveRepoRoot(), 'docs/architecture/workflow-orchestration/examples/paravoxia-creative-triad.workflow.json'), collector, 'workflow')
 
   validateWorkflowRoleContracts(workflow, collector)
@@ -1443,9 +1643,10 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
   notes.forEach((note, index) => assertSchema(note, noteSchema, collector, 'notes.json-schema', `Director note line ${index + 1}`))
   collector.assert(!uxMode || isObject(contract?.guidance), 'ux.contract-required', 'UX artifact mode requires scene-contract.guidance')
   validateSceneContract(contract, collector)
+  validateDecisionBrief(decisionBrief, productionLock, phase, phase === 'final' ? readJsonl(path.join(runPath, 'iteration-ledger.jsonl'), makeCollector()) : [], collector)
   validateProductionLock(productionLock, lockSchema, contract, runPath, collector)
   validateShippedVisualBaseline(shippedVisualBaseline, contract, productionLock, runPath, collector)
-  validateShippedUxBaseline(shippedUxBaseline, contract, productionLock, collector)
+  validateShippedUxBaseline(shippedUxBaseline, contract, productionLock, runPath, collector)
   validateObjectiveLifecycleEvidence(objectiveLifecycle, contract, contractSha256, productionLock, collector)
   validateNotes(notes, contract, collector)
   validateDirectorAuthorship(peerNotesByDirector, reconciliationsByDirector, notes, contract, noteSchema, collector)
@@ -1488,7 +1689,8 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
     const journeyRegistryEntry = [...registryMap.values()].find((entry) => entry?.path === JOURNEY_EVIDENCE_FILE)
     collector.assert(Boolean(journeyRegistryEntry), 'journey.registry-entry', `${JOURNEY_EVIDENCE_FILE} must be hashed in evidence-registry.json`)
     if (journeyRegistryEntry) collector.assert(journeyRegistryEntry.sha256 === sha256File(path.join(runPath, JOURNEY_EVIDENCE_FILE)), 'journey.registry-hash', `${JOURNEY_EVIDENCE_FILE} registry hash must match its exact bytes`)
-    validateScorecard(scorecard, rubric, contract, contractSha256, collector)
+    const perceptPresent = validatePerceptualVerdict(runPath, registryMap, collector)
+    validateScorecard(scorecard, rubric, contract, contractSha256, collector, runProfile, perceptPresent)
     validateReviewMetadata(runPath, contract, individualSignoffs, collector)
     if (humanDecision) validateHumanDecision(humanDecision, contract, contractSha256, collector)
     validateDefectRegister(defects, scorecard, contract, contractSha256, productionLock, humanDecision, runPath, uxMode, collector)
@@ -1558,6 +1760,11 @@ function makeValidFixture(runPath) {
   contract.production.authorityRefs = ['PARAVOXIA_DEMO_FOUNDATION_PLAN.md']
   contract.production.mutationBoundary = 'bounded-runtime'
   contract.production.allowedPaths = ['main/tools/creative-triad-gate.mjs']
+  contract.evidence.acceptanceCriteria = [...(contract.evidence.acceptanceCriteria || []), 'The fixture subject occupies 22.0-28.7% of frame width at the cut line.']
+  contract.evidence.acceptanceBands = [{
+    id: 'band-fixture-cut-line', criterionRef: `evidence.acceptanceCriteria[${contract.evidence.acceptanceCriteria.length - 1}]`, band: [22.0, 28.7], unit: '% of frame width',
+    reachability: { source: 'derivation f(Z)=K/Z over Z in [1000, 1300] with K=286.57', values: [28.66, 25.0, 22.04] },
+  }]
   contract.production.protectedPaths = ['main/src/audio', 'main/src/components/audio', 'main/public/audio']
   contract.production.frozenAt = '2026-07-13T12:00:00.000Z'
   contract.scope.beats = ['ch7-reconstruct']
@@ -1592,6 +1799,14 @@ function makeValidFixture(runPath) {
     canonicalPreviewUrl: 'http://127.0.0.1:5201/', publishAllowed: false, frozenAt: '2026-07-13T12:00:00.000Z',
   }
   fs.writeFileSync(path.join(runPath, 'production-lock.json'), `${JSON.stringify(productionLock, null, 2)}\n`)
+  fs.writeFileSync(path.join(runPath, DECISION_BRIEF_FILE), `${JSON.stringify({
+    schema: 'paravoxia.decisionBrief.v1', runId: 'fixture-run', authoredBy: 'chapter-director', authoredAt: '2026-07-13T11:55:00.000Z',
+    items: [
+      { id: 'brief-voice', kind: 'creative', question: 'Which narrative voice governs the fixture beat?', options: ['bare first person', 'parenthetical second person'], recommended: 'bare first person', decidedBy: 'owner', status: 'decided', decision: 'bare first person', decidedAt: '2026-07-13T12:00:00.000Z' },
+      { id: 'brief-gate-path', kind: 'boundary', question: 'The fixture needs one path outside allowedPaths.', options: ['open the path', 'stop at the boundary'], recommended: 'open the path', paths: [{ path: 'main/tools/creative-triad-gate.mjs', symbol: 'validateRun' }], decidedBy: 'owner', status: 'decided', decision: 'open the path', decidedAt: '2026-07-13T12:00:00.000Z' },
+      { id: 'brief-release', kind: 'release', question: 'Release surface for the fixture.', options: ['none needed'], recommended: 'none needed', decidedBy: 'owner', status: 'decided', decision: 'none needed', decidedAt: '2026-07-13T12:00:00.000Z' },
+    ],
+  }, null, 2)}\n`)
   fs.appendFileSync(path.join(runPath, 'production-lock.md'), `\n## Fixture machine-lock mirror\n\n${[
     productionLock.runId,
     productionLock.mode,
@@ -1919,6 +2134,57 @@ Verdict: \`pass\`
 }
 
 function runSelfTest() {
+  const workOrderCases = [
+    ['travel', ['RETURN TO TIDEGARDEN.', 'DELIVER THE BONDED CELL TO THE SECOND HEARTH.'], true],
+    ['travel', ['Fly to the Origin audit site.'], true],
+    ['interact', ['Hold [Space] to ignite and lift.'], true],
+    ['interact', ['[F] Begin recording your route.'], true],
+    ['interact', ['Hold [unknown] until ready.'], false],
+    ['travel', ['Fly to Origin.', 'The hearth remembers.'], false],
+    ['travel', ['Delivery pending.'], false],
+  ]
+  for (const [kind, workOrder, expected] of workOrderCases) {
+    if (actionableWorkOrder(kind, workOrder) !== expected) {
+      throw new Error(`Work order vocabulary mismatch: ${kind} ${JSON.stringify(workOrder)}`)
+    }
+  }
+  const controlObjective = {
+    id: 'fixture:ship:lift', kind: 'interact', markerLabel: 'Kestrel controls · lift',
+    requiresMarker: false, targetMode: 'none',
+    targetContract: {
+      ownerRef: 'ship controls', selectionRef: 'the occupied controls',
+      readinessCriterion: 'actual boarding', completionCriterion: 'actual lift', maxVisibleTargets: 0,
+      evidenceFields: ['controlId', 'controlAvailable', 'controlInputActive'],
+    },
+  }
+  const controlBinding = { sourceRevision: 'fixture-source', contractSha256: 'fixture-contract' }
+  const controlEvidence = {
+    targetMode: 'none', directionalMarkerCount: 0, maximumVisibleTargetCount: 0, entryCount: 1,
+    targetObservations: [{ ...controlBinding, objectiveId: controlObjective.id, entryIndex: 0,
+      state: 'ready', visibleTargetCount: 0, presentedFrameId: 'frame-control', evidenceRefs: ['input-trace'],
+      controlId: 'ship-ignition-lift', controlAvailable: true, controlInputActive: true }],
+    completionEvidence: { ...controlBinding, objectiveId: controlObjective.id, predicateBefore: false,
+      predicateAfter: true, progressionChangedByFeedback: false, causeId: 'accepted-input', evidenceRefs: ['input-trace'],
+      kind: 'control-input', controlId: 'ship-ignition-lift', inputAccepted: true,
+      inputStartedAtSeconds: 2, completedAtSeconds: 3, controlStateBefore: 'boarded', controlStateAfter: 'flight' },
+  }
+  const checkControl = (evidence, objective = controlObjective) => {
+    const failures = []
+    const collector = { assert: (passed, code) => { if (!passed) failures.push(code) } }
+    validateGuidanceTargetContract(objective, collector)
+    validateGuidanceTargetEvidence(evidence, objective, controlBinding, collector)
+    return failures
+  }
+  if (checkControl(controlEvidence).length) throw new Error('Valid target-free control evidence rejected')
+  for (const patch of [{ kind: 'authored-bundle' }, { inputAccepted: false },
+    { controlStateAfter: 'boarded' }, { controlId: 'unobserved-control' }, { completedAtSeconds: 1 }]) {
+    if (!checkControl({ ...controlEvidence, completionEvidence: { ...controlEvidence.completionEvidence, ...patch } }).includes('ux.lifecycle-target-completion-control')) {
+      throw new Error(`Invalid control completion accepted: ${JSON.stringify(patch)}`)
+    }
+  }
+  if (!checkControl(controlEvidence, { ...controlObjective, targetContract: {
+    ...controlObjective.targetContract, evidenceFields: ['objectiveId'],
+  } }).includes('ux.contract-control-fields')) throw new Error('Unqualified target-free interaction accepted')
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'paravoxia-creative-gate-'))
   try {
     makeValidFixture(tempRoot)
@@ -1936,6 +2202,34 @@ function runSelfTest() {
     fs.writeFileSync(stagedAuditPath, stagedAuditSource)
     const valid = validateRun(tempRoot, { writeReport: false, phase: 'final' })
     if (!valid.passed) throw new Error(`Valid fixture failed:\n${valid.checks.filter((check) => !check.passed).map((check) => `${check.code}: ${check.message}`).join('\n')}`)
+
+    const archivedBaseline = JSON.parse(fs.readFileSync(path.join(tempRoot, UX_BASELINE_FILE), 'utf8'))
+    const archivedSource = archivedBaseline.sourceFiles[0]
+    archivedSource.snapshotPath = 'evidence/baseline-source.ts'
+    const archivePath = path.join(tempRoot, archivedSource.snapshotPath)
+    const originalBytes = '// Original source before the implementation changed it.\n'
+    fs.writeFileSync(archivePath, originalBytes)
+    archivedSource.sha256 = sha256File(archivePath)
+    const baselineContract = JSON.parse(fs.readFileSync(path.join(tempRoot, 'scene-contract.json'), 'utf8'))
+    const baselineLock = JSON.parse(fs.readFileSync(path.join(tempRoot, 'production-lock.json'), 'utf8'))
+    const checkArchive = () => {
+      const checks = makeCollector()
+      validateShippedUxBaseline(archivedBaseline, baselineContract, baselineLock, tempRoot, checks)
+      return checks.checks.filter((check) => !check.passed)
+    }
+    if (checkArchive().length) throw new Error('Archived pre-change source should remain valid after current source changes')
+    fs.appendFileSync(archivePath, '// changed\n')
+    if (!checkArchive().some((check) => check.code === 'ux.baseline-source-hash')) throw new Error('Tampered baseline snapshot was accepted')
+    fs.writeFileSync(archivePath, originalBytes)
+    archivedSource.snapshotPath = '../outside-baseline.ts'
+    if (!checkArchive().some((check) => check.code === 'ux.baseline-snapshot-path')) throw new Error('Baseline snapshot escape was accepted')
+    archivedSource.snapshotPath = 'evidence/baseline-link.ts'
+    fs.symlinkSync(path.join(resolveRepoRoot(), archivedSource.path), path.join(tempRoot, archivedSource.snapshotPath))
+    if (!checkArchive().some((check) => check.code === 'ux.baseline-snapshot-path')) throw new Error('Baseline snapshot symlink escape was accepted')
+    archivedSource.snapshotPath = 'evidence/missing-baseline.ts'
+    if (!checkArchive().some((check) => check.code === 'ux.baseline-snapshot-path')) throw new Error('Missing baseline snapshot was accepted')
+    delete archivedSource.snapshotPath
+    if (!checkArchive().some((check) => check.code === 'ux.baseline-source-hash')) throw new Error('Unarchived stale source should still fail its hash check')
 
     const uxAuditPath = path.join(tempRoot, UX_AUDIT_FILE)
     const originalUxAuditSource = fs.readFileSync(uxAuditPath, 'utf8')
@@ -2074,7 +2368,47 @@ function runSelfTest() {
     if (spoofedMedia.passed || !spoofedMedia.checks.some((check) => check.code === 'media.probe-command' && !check.passed)) {
       throw new Error('Invalid fixture did not reject non-media bytes with a matching file hash')
     }
-    process.stdout.write(`Creative triad gate self-test passed (${valid.checkCount} final checks; staged gates plus UX missing-artifact, marker-exactness, focused-journey failure and stale-authority, anchor, agency-fallback, authorship, hidden-defect, repair-lineage, director-override, evidence-registry, and media-authenticity rejection confirmed).\n`)
+    // reachability at signature: a band none of its values reaches, and a prose band with no structured entry
+    const unreachable = JSON.parse(originalContractSource)
+    unreachable.evidence.acceptanceBands[0].reachability.values = [965]
+    fs.writeFileSync(contractPath, JSON.stringify(unreachable))
+    const unreachableRun = validateRun(tempRoot, { writeReport: false, phase: 'contract' })
+    if (unreachableRun.passed || !unreachableRun.checks.some((check) => check.code === 'contract.band-unreachable' && !check.passed)) {
+      throw new Error('Invalid fixture did not reject an acceptance band none of its reachability values fall inside')
+    }
+    const unstructured = JSON.parse(originalContractSource)
+    unstructured.evidence.acceptanceBands = []
+    fs.writeFileSync(contractPath, JSON.stringify(unstructured))
+    const unstructuredRun = validateRun(tempRoot, { writeReport: false, phase: 'contract' })
+    if (unstructuredRun.passed || !unstructuredRun.checks.some((check) => check.code === 'contract.band-unstructured' && !check.passed)) {
+      throw new Error('Invalid fixture did not reject a prose band with no structured acceptanceBands entry')
+    }
+    fs.writeFileSync(contractPath, originalContractSource)
+
+    // the decision brief: a pending item blocks the contract phase; a mid-run owner question the brief did not carry is a finding
+    const briefPath = path.join(tempRoot, DECISION_BRIEF_FILE)
+    const originalBriefSource = fs.readFileSync(briefPath, 'utf8')
+    const pendingBrief = JSON.parse(originalBriefSource)
+    pendingBrief.items[0].status = 'pending'
+    delete pendingBrief.items[0].decision
+    fs.writeFileSync(briefPath, `${JSON.stringify(pendingBrief, null, 2)}\n`)
+    const pendingRun = validateRun(tempRoot, { writeReport: false, phase: 'contract' })
+    if (pendingRun.passed || !pendingRun.checks.some((check) => check.code === 'brief.pending' && !check.passed)) {
+      throw new Error('Invalid fixture did not reject a decision brief with a pending owner item')
+    }
+    fs.writeFileSync(briefPath, originalBriefSource)
+    const ledgerPath = path.join(tempRoot, 'iteration-ledger.jsonl')
+    const originalLedgerSource = fs.readFileSync(ledgerPath, 'utf8')
+    const ledgerRows = originalLedgerSource.trim().split('\n').map((line) => JSON.parse(line))
+    const missedQuestion = { ...ledgerRows[ledgerRows.length - 1], iteration: ledgerRows.length + 1, route: 'contract-question', questionId: 'q-fixture-late', question: 'A question the brief did not carry.' }
+    delete missedQuestion.briefItemRef
+    fs.writeFileSync(ledgerPath, `${[...ledgerRows, missedQuestion].map((row) => JSON.stringify(row)).join('\n')}\n`)
+    const missedRun = validateRun(tempRoot, { writeReport: false, phase: 'final' })
+    if (!missedRun.checks.some((check) => check.code === 'brief.missed-question' && !check.passed)) {
+      throw new Error('Invalid fixture did not flag a mid-run owner question the decision brief did not carry')
+    }
+    fs.writeFileSync(ledgerPath, originalLedgerSource)
+    process.stdout.write(`Creative triad gate self-test passed (${valid.checkCount} final checks; staged gates plus UX missing-artifact, marker-exactness, focused-journey failure and stale-authority, anchor, agency-fallback, band-reachability, decision-brief, authorship, hidden-defect, repair-lineage, director-override, evidence-registry, and media-authenticity rejection confirmed).\n`)
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true })
   }
@@ -2091,7 +2425,7 @@ function printReport(report) {
   }
 }
 
-try {
+if (process.argv[1] && path.resolve(process.argv[1]) === new URL(import.meta.url).pathname) try {
   const options = parseArgs(process.argv.slice(2))
   if (options.selfTest) runSelfTest()
   else {

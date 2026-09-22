@@ -1,0 +1,160 @@
+{
+  "schema": "paravoxia.verifier.finaleCandidateRuntime.v1",
+  "role": "finale-candidate-runtime",
+  "at": "2026-09-06T22:10:00Z",
+  "startedAt": "2026-09-06T22:04:03Z",
+  "sameProductionRun": true,
+  "budgetRef": "producer-final-proof-continuation-budget.json",
+  "outcome": "CANDIDATE-FINALE-WINDOW-OBTAINED-NO-VERDICT",
+  "outcomeIsAcceptance": false,
+  "privateImportRepair": {
+    "confirmedCopyDepthFault": true,
+    "priorDiagnosisOfMissingBaselineDependency": false,
+    "fixed": [
+      "finale-window-fr/finale-window-probe.mjs:423 ../lib/ownedSession.mjs -> ../../lib/ownedSession.mjs",
+      "finale-window-fr/closure-checks.mjs:106 ../lib/ownedSession.mjs -> ../../lib/ownedSession.mjs",
+      "finale-window-fr/closure-checks.mjs:254 ../lib/ownedSession.mjs -> ../../lib/ownedSession.mjs"
+    ],
+    "mainToolsImportsLeftAt7Levels": true,
+    "allRelativeSpecifiersResolvedBeforeGpu": true,
+    "namedExportBindingsVerifiedBeforeGpu": ["createOwnedSessionGuard", "failureRecord", "openParavoxia", "waitReady", "SWIFTSHADER", "chromePath", "CHROMIUM_ARGS", "assertHardwareGl"],
+    "nodeCheckSyntaxAllFiles": "pass"
+  },
+  "pinAudit": {
+    "comparedAgainst": ["verifier-control.json", "verifier/artifacts/preview-ownership.json", "implementation-source-manifest.json", "scene-contract.json"],
+    "matched": ["manifestSha256", "contractSha256", "previewUrl", "indexSha256", "bundlePath", "bundleSha256"],
+    "staleFieldsFoundAndCorrectedBeforeGpu": [
+      {"field": "sourceFileCount", "was": 99, "now": 100, "evidence": "manifest.hashes has 100 game paths"},
+      {"field": "activeRole", "was": "story-verifier-manual-credit-finale-final-runtime", "now": "finale-candidate-runtime", "evidence": "verifier-control.activeRole"}
+    ],
+    "browserLaunchesSpentOnStalePins": 0
+  },
+  "session": {
+    "launcher": "verifier/probes/manual-credit-finale/finale-candidate-runtime/run-finale-candidate.sh",
+    "wrapperLogicReused": "finale-window-runtime.mjs unchanged",
+    "args": "--out <abs capture dir> --heavy-lock-fd 9 --heavy-lock /home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock --max-session-s 135",
+    "lock": {"exec9ToSharedLock": true, "flockWaitS": 30, "exclusive": true, "inheritedFdValidatedInProcess": true, "fdDevIno": "66306:8397196", "pathDevIno": "66306:8397196", "identityMatch": true, "procLocks": ["207: FLOCK ADVISORY WRITE 2230808 103:02:8397196 0 EOF"]},
+    "headed": true,
+    "headless": false,
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "hardwareAdapterAsserted": true,
+    "swiftshaderUsed": false,
+    "previewUrl": "http://127.0.0.1:37395/?story=ch13-survey&journeyprobe=1&debug=1&movie=1",
+    "newPreviewStarted": false,
+    "rootPreviewDaemonPid": 2144696,
+    "browserPid": 2230833,
+    "browserPidPublishedByProbe": true,
+    "globalBrowserKills": false,
+    "startedAt": "2026-09-06T22:05:42.886Z",
+    "endedAt": "2026-09-06T22:07:01.268Z",
+    "wallSeconds": 78.4,
+    "launcherExit": 0
+  },
+  "window": {
+    "sealed": true,
+    "sealReason": "window-complete",
+    "edgeReason": "complete+handback+committed-terra18-worker18",
+    "edgeAtMs": 63380.8,
+    "edgeIndex": 179,
+    "records": 848,
+    "rafFramesObserved": 4241,
+    "framesDroppedByCadence": 3393,
+    "capHit": false,
+    "sampleErrors": 0,
+    "pageErrors": [],
+    "preEdgeSeconds": 2.99,
+    "preEdgeRequiredSeconds": 3.0,
+    "preEdgeNote": "2.99s is the last pre-edge SAMPLE timestamp; the configured preEdgeMs is 3000 and the ring was not truncated. Sub-frame shortfall is sampling cadence, not missing coverage.",
+    "postEdgeSeconds": 11.5,
+    "postEdgeRequiredSeconds": 11.5,
+    "atomicity": "every field of every record read inside ONE synchronous call in ONE rAF callback",
+    "driver": "raf"
+  },
+  "edgeConjunctsObserved": {
+    "terraUnits": 18,
+    "workerUnits": 18,
+    "routeUnitsRequired": 18,
+    "committed": true,
+    "comparisonProved": true,
+    "finalReferenceOffered": true,
+    "ancCgComplete": true,
+    "ancCgHandback": true,
+    "pendingAnchors": [],
+    "avActivationSequence": 13,
+    "stage": "arrived"
+  },
+  "storyAndControlAtSeal": {
+    "storyActive": false,
+    "chapter": "complete",
+    "beat": "done",
+    "objectiveId": null,
+    "avActive": false,
+    "avSuspended": false,
+    "avBeat": null,
+    "runId": 1
+  },
+  "finaleTokenDeadlineRelease": {
+    "observed": false,
+    "note": "No live token/deadline/release-named field is exposed on any shipped diagnostic surface in this build; the sampler recorded score.finalTextureSeconds (present-flag true, value null) and the anchor/stage conjuncts instead. Recorded as UNMEASURED, not as a game failure."
+  },
+  "audio": {
+    "sink": "owned numeric-index null sink (module 536870913, index 16435); wrapper-owned, default sink unchanged",
+    "defaultSinkBeforeAndAfter": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+    "recorderDevice": "paravoxia_finale_window.monitor",
+    "isMicrophone": false,
+    "wav": {"file": "owned-sink.wav", "bytes": 12320812, "channels": 2, "rate": 44100, "durationS": 69.85, "peakAbs": 10355, "rmsWhole": 1313.2, "rms5sWindows": {"t0": 50.6, "t10": 45.5, "t20": 21.2, "t30": 0.0, "t40": 86.1, "t50": 0.0, "t60": 3186.9}},
+    "forcedAudioContextResume": false,
+    "sourceOrStateSettersUsed": false,
+    "gestureMethod": "ordinary UI click only",
+    "samplerIIFE": "invoked, preserved",
+    "pcmEventAlignmentUncertainty": "The WAV clock starts at recorder start (wall 1788732349877) and the window clock is page-relative rAF time; the two were not hardware-synchronised. Per-sample alignment to edgeAtMs is therefore approximate to the recorder start offset. NO audible or aesthetic verdict is drawn from this numeric envelope."
+  },
+  "missingSignalsCarriedForward": [
+    "final-texture cancellation reason / calling site (commonGroundScore.ts:259 discards _reason)",
+    "AudioContext.state / musicVolume / mute at the clearing frame",
+    "paused / hudBlockingOverlayOpen / downed / worldGenReady / initialRenderReleased"
+  ],
+  "sourceIntegrity": {
+    "manifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+    "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+    "indexSha256": "a9b880389deff7717b3d76b0f4a962beff1031a2ffa44fde427a5f0022353d8f",
+    "bundleSha256": "68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b",
+    "gameFilesRehashed": 100,
+    "mismatches": 0,
+    "sourceChanged": false,
+    "gamePatchesMade": 0,
+    "contractVersion": "scene-v3"
+  },
+  "probeHashes": {
+    "finale-window-probe.mjs": "97da9f8ff5bf17a61bb42e80cca30ba402a3ace033a7a7cfe1802f10b9feb28f",
+    "windowSampler.mjs": "c984535db45b4f8717b57e335d2cb2b1f6e93dfa579485f651b24a5b79ff5c68",
+    "finale-window-runtime.mjs": "a312accb54ba8af745a8c660c5ff23eff0132d385f0ddf0c5c8b4e5609d922b2",
+    "closure-checks.mjs": "1dcc5c25a336ea06351322b9a66c4f8fd7c29d0949fb03f40c0da1b4325c8b72"
+  },
+  "teardown": {
+    "cleanupCompleted": true,
+    "sessionStopped": true,
+    "cleanupError": null,
+    "cleanupReason": "run-guarded-finally",
+    "stopsRootPreview": false,
+    "killsProcesses": false,
+    "browserProcessGone": true,
+    "recorderExitCode": 0,
+    "nullSinkModulesRemaining": 0,
+    "defaultSinkRestored": true,
+    "heavyLockReleased": true
+  },
+  "cancellationVariant": {
+    "attempted": false,
+    "reason": "Optional and only after the normal window; the remaining clock inside the authorized 10 minutes was not sufficient to run a second GPU session honestly. No deadline extension invented."
+  },
+  "notPerformed": [
+    "full verify rerun (3192 tests / 352 pass retained from prior evidence)",
+    "three cold movies, recovery, Continue (separate tasks; not substituted)",
+    "chapter acceptance or publishing",
+    "any source, build, producer, control, invocation or archive edit",
+    "any removal of prior captures"
+  ],
+  "failedAttemptsThisTask": [],
+  "publicationAuthorized": false
+}

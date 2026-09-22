@@ -1,7 +1,7 @@
 import { seededUnit } from '../../utils/worldCoordinates.ts';
 import type { Vec3Tuple } from '../starSystem.ts';
 import type { SpaceStationBox } from './spaceStationShell.ts';
-import type { SpaceStationCell, SpaceStationGraph } from './spaceStationTypes.ts';
+import type { SpaceStationCell, SpaceStationGraph, SpaceStationPortal } from './spaceStationTypes.ts';
 
 /**
  * Dressing: the clutter that makes a volume read as a place.
@@ -23,13 +23,123 @@ const LAMP_HEIGHT = 0.28;
 /** Keeps the instance count bounded no matter how large a seed makes a cell. */
 const MAX_PROPS_PER_CELL = 1_800;
 
+/**
+ * Wayfinding trim is a `lamp` with `radius: 0`: it joins the emissive instanced
+ * draw and reads as light, but it never takes a slot in the point-light pool. The
+ * convention is the whole mechanism — light *cardinality* never changes, and the
+ * way out of a room is still the brightest thing on its wall.
+ */
+export const UNLIT_TRIM_RADIUS = 0;
+
+/**
+ * How far a jamb strip stands off the portal plane: flush on the outer face of
+ * the door frame (`FRAME_DEPTH` 0.9 in spaceStationShell, so ±0.45 from the plane)
+ * plus half its own thickness.
+ */
+const JAMB_STANDOFF = 0.5;
+const JAMB_THICKNESS = 0.1;
+const JAMB_WIDTH = 0.14;
+/** The frame's vertical pieces are 0.35 wide, centred 0.175 outside the opening. */
+const JAMB_OFFSET_FROM_OPENING = 0.175;
+
+/** The deck guidance strip: 0.25 m wide, 4 cm proud of the deck, per the treatment. */
+const DECK_STRIP_WIDTH = 0.25;
+const DECK_STRIP_HEIGHT = 0.04;
+/** Metres of strip laid into each cell from the shared portal. */
+const DECK_STRIP_RUN = 28;
+/**
+ * Laid as dashes rather than one bar: a solid 28 m emissive band under the camera
+ * is the brightest thing in the concourse entry frame and steals the first read
+ * from the room. Dashes are guidance; a bar is a runway.
+ */
+const DECK_STRIP_DASH = 1.4;
+const DECK_STRIP_GAP = 1.6;
+
 export function buildSpaceStationDressing(graph: SpaceStationGraph, seed: number): SpaceStationBox[] {
   const boxes: SpaceStationBox[] = [];
   for (const [index, cell] of graph.cells.entries()) {
     if (!cell.enterable) continue;
     const cellSeed = (seed ^ Math.imul(index + 1, 2654435761)) >>> 0;
+    // Wayfinding first: it is the one dressing that must survive the prop cap.
+    for (const box of wayfindingTrim(cell, graph)) {
+      boxes.push({ ...box, cellId: cell.id });
+    }
     for (const box of dressCell(cell, cellSeed)) {
       boxes.push({ ...box, cellId: cell.id });
+    }
+  }
+  return boxes;
+}
+
+/** Portals a walker can actually use from this cell: unsealed, into an enterable room. */
+function walkablePortals(cell: SpaceStationCell, graph: SpaceStationGraph): SpaceStationPortal[] {
+  const enterable = new Set(graph.cells.filter(entry => entry.enterable).map(entry => entry.id));
+  return graph.portals.filter(
+    portal =>
+      !portal.sealed &&
+      (portal.a === cell.id || portal.b === cell.id) &&
+      enterable.has(portal.a) &&
+      enterable.has(portal.b)
+  );
+}
+
+/**
+ * Threshold jamb strips on this cell's face of every portal it can walk through,
+ * plus the one deck guidance strip on the counter ↔ concourse spine.
+ *
+ * Every portal, both faces, so the exit is the brightest thing on any wall from
+ * either side. The Kestrel airlock is not a portal — it is a dock route inside the
+ * apron — so it gets nothing here by construction: in the apron the counter portal
+ * is the brightest object and the lock is a dark frame until the departure marker
+ * points at it. No text signage: the lexicon stays unspent and the surface stays
+ * one program.
+ *
+ * Nothing here has a period. Strips are static emissive boxes.
+ */
+function wayfindingTrim(cell: SpaceStationCell, graph: SpaceStationGraph): SpaceStationBox[] {
+  const boxes: SpaceStationBox[] = [];
+  for (const portal of walkablePortals(cell, graph)) {
+    const normal: 0 | 2 = portal.halfExtents[0] === 0 ? 0 : 2;
+    const u: 0 | 2 = normal === 0 ? 2 : 0;
+    // Which side of the plane this cell lies on; the strip stands on that side.
+    const cellMid = (cell.min[normal] + cell.max[normal]) / 2;
+    const side = cellMid >= portal.center[normal] ? 1 : -1;
+    const height = portal.halfExtents[1] * 2 - 0.1;
+
+    for (const edge of [-1, 1] as const) {
+      const center: Vec3Tuple = [0, 0, 0];
+      const size: Vec3Tuple = [0, 0, 0];
+      center[normal] = portal.center[normal] + side * JAMB_STANDOFF;
+      size[normal] = JAMB_THICKNESS;
+      center[u] = portal.center[u] + edge * (portal.halfExtents[u] + JAMB_OFFSET_FROM_OPENING);
+      size[u] = JAMB_WIDTH;
+      center[1] = portal.center[1];
+      size[1] = height;
+      boxes.push({ center, size, kind: 'lamp', tone: 1, radius: UNLIT_TRIM_RADIUS });
+    }
+
+    // The deck strip exists only on the objective spine: counter ↔ concourse (G2
+    // out, G3 back). Nothing on the floor points into the hall; it stays findable
+    // by the jamb strips on both faces of the concourse's far portal and by its
+    // own blue-grey fill seen through the frame.
+    const other = graph.cells.find(entry => entry.id === (portal.a === cell.id ? portal.b : portal.a));
+    const spine =
+      (cell.kind === 'counter' && other?.kind === 'concourse') ||
+      (cell.kind === 'concourse' && other?.kind === 'counter');
+    if (spine) {
+      const run = Math.min(DECK_STRIP_RUN, cell.max[normal] - cell.min[normal] - 2);
+      const pitch = DECK_STRIP_DASH + DECK_STRIP_GAP;
+      for (let start = JAMB_STANDOFF + DECK_STRIP_GAP; start + DECK_STRIP_DASH <= JAMB_STANDOFF + run; start += pitch) {
+        const center: Vec3Tuple = [0, 0, 0];
+        const size: Vec3Tuple = [0, 0, 0];
+        center[normal] = portal.center[normal] + side * (start + DECK_STRIP_DASH / 2);
+        size[normal] = DECK_STRIP_DASH;
+        center[u] = portal.center[u];
+        size[u] = DECK_STRIP_WIDTH;
+        center[1] = cell.min[1] + DECK_STRIP_HEIGHT / 2;
+        size[1] = DECK_STRIP_HEIGHT;
+        boxes.push({ center, size, kind: 'lamp', tone: 1, radius: UNLIT_TRIM_RADIUS });
+      }
     }
   }
   return boxes;
@@ -52,12 +162,46 @@ function dressCell(cell: SpaceStationCell, seed: number): SpaceStationBox[] {
   }
 }
 
+/** The Kestrel lock hatch: a closed door in the apron's -X wall, on the dock route axis. */
+const LOCK_HATCH_WIDTH = 3.2;
+const LOCK_HATCH_HEIGHT = 3.4;
+const LOCK_FRAME = 0.35;
+
 /** Dock: cargo stacked against the walls, a couple of gantry columns overhead. */
 function dressApron(cell: SpaceStationCell, seed: number): SpaceStationBox[] {
   const boxes: SpaceStationBox[] = [];
   const floorY = cell.min[1];
   const length = cell.max[0] - cell.min[0];
   const stacks = Math.min(34, Math.floor(length / 3.4));
+
+  // The way you came in. A closed hatch with a plain frame on the -X wall where the
+  // dock route lands (spaceStationDockRoute: lock at min x + 2.4, centre z). It is
+  // built in ceiling tone and carries no strip: deliberately the darkest thing on
+  // the wall, so the counter portal — not the door home — is what the room offers.
+  {
+    const centreZ = (cell.min[2] + cell.max[2]) / 2;
+    const hatchY = floorY + LOCK_HATCH_HEIGHT / 2;
+    boxes.push({
+      center: [cell.min[0] + 0.32, hatchY, centreZ],
+      size: [0.06, LOCK_HATCH_HEIGHT, LOCK_HATCH_WIDTH],
+      kind: 'structure',
+      tone: 1
+    });
+    for (const side of [-1, 1] as const) {
+      boxes.push({
+        center: [cell.min[0] + 0.3, hatchY, centreZ + side * (LOCK_HATCH_WIDTH / 2 + LOCK_FRAME / 2)],
+        size: [0.9, LOCK_HATCH_HEIGHT + LOCK_FRAME, LOCK_FRAME],
+        kind: 'trim',
+        tone: 3
+      });
+    }
+    boxes.push({
+      center: [cell.min[0] + 0.3, floorY + LOCK_HATCH_HEIGHT + LOCK_FRAME / 2, centreZ],
+      size: [0.9, LOCK_FRAME, LOCK_HATCH_WIDTH + LOCK_FRAME * 2],
+      kind: 'trim',
+      tone: 3
+    });
+  }
 
   for (let i = 0; i < stacks; i++) {
     const t = (i + 0.5) / stacks;
@@ -108,13 +252,15 @@ function dressApron(cell: SpaceStationCell, seed: number): SpaceStationBox[] {
         tone: 2
       });
       // A strip up each column's aisle-facing edge. Unlit trim, so a support reads
-      // as a lit object rather than a silhouette cut out of the room behind it.
+      // as a lit object rather than a silhouette cut out of the room behind it —
+      // and never pooled, so the cool slots go to the wall and ceiling fittings
+      // that actually have somewhere to reach.
       boxes.push({
         center: [x, floorY + (cell.max[1] - floorY) * 0.45, bay * (columnZ - 0.8)],
         size: [0.18, (cell.max[1] - floorY) * 0.72, 0.1],
         kind: 'lamp',
         tone: 1,
-        radius: 9
+        radius: UNLIT_TRIM_RADIUS
       });
       // Collar at the base, so the column meets the floor rather than intersecting it.
       boxes.push({
@@ -130,7 +276,9 @@ function dressApron(cell: SpaceStationCell, seed: number): SpaceStationBox[] {
     // lit the way a real one is — from where the work actually happens.
   }
 
-  boxes.push(...ceilingStrips(cell, seed, 9));
+  // Reach 15 rather than the height-derived 18.75, hung 2.8 m down: enough to give
+  // the lid a surface without turning the dock into the brightest room.
+  boxes.push(...ceilingStrips(cell, seed, 9, 14, 2.8));
   return boxes.slice(0, MAX_PROPS_PER_CELL);
 }
 
@@ -157,7 +305,7 @@ function dressCounter(cell: SpaceStationCell, seed: number): SpaceStationBox[] {
       size: [0.34, LAMP_HEIGHT, 0.34],
       kind: 'lamp',
       tone: 0,
-      radius: 6.5
+      radius: 2.8
     });
 
     // Queue rail opposite, in segments so it reads as railing not a wall.
@@ -175,7 +323,15 @@ function dressCounter(cell: SpaceStationCell, seed: number): SpaceStationBox[] {
     });
   }
 
-  boxes.push(...ceilingStrips(cell, seed, stations));
+  // Reach 2.2, not the height-derived 7.5: the corridor is meant to be carried by
+  // its flat ambient. Strips that reach the floor put hot pools on the walls and the
+  // registry stops being the shadowless room it is meant to be.
+  // Their unlit faces must be restrained too: reducing point-light reach cannot
+  // dim the broad luminous bars in the image. Jambs retain full output so the
+  // exit remains the brightest fitting; geometry, hue and pool reach stay fixed.
+  boxes.push(...ceilingStrips(cell, seed, stations, 2.2).map(box => ({
+    ...box, emissionScale: 0.1
+  })));
   return boxes.slice(0, MAX_PROPS_PER_CELL);
 }
 
@@ -417,12 +573,15 @@ function dressConcourse(cell: SpaceStationCell, seed: number): SpaceStationBox[]
       kind: 'prop',
       tone: 7 + (i % 3)
     });
+    // Hung 4 m below the lid rather than 0.6: a fitting flush against a surface
+    // lights a coin of it; one a few metres off lights a lid. Reach 16 so the four
+    // pooled bars cover the lid between them.
     boxes.push({
-      center: [x, cell.max[1] - 0.6, centreZ],
+      center: [x, cell.max[1] - 4.0, centreZ],
       size: [1.2, 0.16, halfWidth * 1.3],
       kind: 'lamp',
       tone: 1,
-      radius: Math.max(9, (cell.max[1] - cell.min[1]) * 1.2)
+      radius: 16
     });
   }
 
@@ -455,6 +614,22 @@ function dressFloor(cell: SpaceStationCell, seed: number): SpaceStationBox[] {
         kind: 'structure',
         tone: 2
       });
+      // A vertical edge strip on the two spine-facing faces of each column — unlit
+      // trim, never pooled — so the column grid reads as a grid of lit objects all
+      // the way to the far wall instead of as silhouettes cut out of the haze.
+      for (const face of [-1, 1] as const) {
+        boxes.push({
+          center: [
+            cell.min[0] + (spanX * (ix + 0.5)) / pillars + face * (1.7 + 0.06),
+            floorY + (cell.max[1] - floorY) * 0.45,
+            cell.min[2] + (spanZ * (iz + 0.5)) / pillarRows
+          ],
+          size: [0.12, (cell.max[1] - floorY) * 0.72, 0.22],
+          kind: 'lamp',
+          tone: 1,
+          radius: UNLIT_TRIM_RADIUS
+        });
+      }
 
       // A work lamp clamped partway up each column. Without these the hall has no
       // light above desk height and its volume simply reads as black.
@@ -550,15 +725,30 @@ function dressShelves(cell: SpaceStationCell, seed: number): SpaceStationBox[] {
     }
   }
 
-  boxes.push(...ceilingStrips(cell, seed, 7));
+  // The height-derived 17.5 m reach flooded the deck with cool light while rack
+  // undersides stayed black. Keep the existing fittings and seven-light pool;
+  // the district's sodium ambient/ground bounce now carries the shelves below.
+  boxes.push(...ceilingStrips(cell, seed, 7, 14.2, 3.5));
   return boxes.slice(0, MAX_PROPS_PER_CELL);
 }
 
-/** Emissive strips just under the ceiling. Cheap, and they give a room a top. */
-function ceilingStrips(cell: SpaceStationCell, seed: number, count: number): SpaceStationBox[] {
+/**
+ * Emissive strips under the ceiling. Cheap, and they give a room a top.
+ *
+ * `hang` is how far below the lid they sit. Flush (0.5) is right for a 6 m
+ * corridor; a tall room wants them a couple of metres down, because a fitting
+ * pressed against a surface lights a coin of it and the lid stays black.
+ */
+function ceilingStrips(
+  cell: SpaceStationCell,
+  seed: number,
+  count: number,
+  reach = Math.max(7, (cell.max[1] - cell.min[1]) * 1.25),
+  hang = 0.5
+): SpaceStationBox[] {
   const boxes: SpaceStationBox[] = [];
   const spanX = cell.max[0] - cell.min[0];
-  const y = cell.max[1] - 0.5;
+  const y = cell.max[1] - hang;
   const halfZ = Math.min(cell.max[2] - cell.min[2], 18) / 2;
 
   for (let i = 0; i < count; i++) {
@@ -568,7 +758,7 @@ function ceilingStrips(cell: SpaceStationCell, seed: number, count: number): Spa
       size: [1.1, 0.14, halfZ * 1.5],
       kind: 'lamp',
       tone: 1,
-      radius: Math.max(7, (cell.max[1] - cell.min[1]) * 1.25)
+      radius: reach
     });
   }
   return boxes;

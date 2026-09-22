@@ -1,0 +1,63 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": null,
+  "kind": "continuity",
+  "chapter": "ch14",
+  "proof": {
+    "earnedEntry": false,
+    "earnedExit": false,
+    "chapterWindowComplete": false,
+    "noFixtures": true,
+    "priorIndex": -1,
+    "entryIndex": -1,
+    "beatIndices": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "exitIndex": -1,
+    "sampleCount": 13328,
+    "hardware": true,
+    "cleanup": false,
+    "videoDecodes": false,
+    "audioDecodes": false,
+    "framesNonblank": false
+  },
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-3/continuity/raw/cleanup.json",
+      "sha256": "438efd8cd64a9057d3583760d802d6b1e13160da4efb00bf094f5cb81e4bdfb9"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-3/continuity/raw/diagnostic-checkpoints.json",
+      "sha256": "c878743a39992132448d0a52ddf194be94dd529bc64fbab969dccf00c75b3d76"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-3/continuity/raw/media-proof.json",
+      "sha256": "c848d08909506f17879265bfdbe1302abb5934171a89b7d25be3c0755d9ed486"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-3/continuity/raw/provenance.json",
+      "sha256": "70fa51edd21658270470c2f6c3d2512af352bdc5f55b16aaf00a81d446a55d20"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-3/continuity/raw/trace.ndjson",
+      "sha256": "64c90edb9d0cad6e7e9cb0f37c78594a39000627d1598e037039a0fd2c292b3c"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "page.evaluate: Target page, context or browser has been closed",
+    "Chapter video: Chapter-ready video window was not observed"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "c7fa91ecd188043560a8c3f73d054a0607f206963f6ea42349a7ad63798944f9",
+    "buildSha256": "e707d950e288b67141c376cd38310685336535a75dc167efebba1373a21acb10",
+    "transportSha256": "7c378b54cae14374417b7d5b28acfb17383b210d0994442f36a66e38b66cddc2"
+  }
+}

@@ -1,0 +1,3846 @@
+{
+ "schema": "paravoxia.verifier.commonPhysicalDiscriminator.report.v1",
+ "role": "common-physical-discriminator",
+ "writtenAt": "2026-09-06T20:17:16.536859+00:00",
+ "startedAt": "2026-09-06T19:59:37.252325+00:00",
+ "actualDeadlineUtc": "2026-09-06T20:19:37Z",
+ "isAcceptance": false,
+ "isMovementProof": true,
+ "ranBrowser": true,
+ "headed": true,
+ "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+ "identity": {
+  "ok": true,
+  "problems": []
+ },
+ "fixture": {
+  "entryUrl": "http://127.0.0.1:34413/?story=ch13-survey&journeyprobe=1&debug=1",
+  "deepLinked": true,
+  "movieRail": false,
+  "beat": "ch13-survey",
+  "label": "LABELLED-FIXTURE",
+  "isEarnedContinuousArrival": false,
+  "mayClaimEarnedArrival": false,
+  "claim": "LABELLED ch13-survey FIXTURE (ch13-survey). Isolated survey proof only. NOT an earned continuous arrival, not first-time naive UX, and no continuity claim of any kind.",
+  "manualLane": true
+ },
+ "gates": [
+  {
+   "name": "current-build-identity-and-hardware-angle",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "ok": true,
+    "problems": []
+   },
+   "at": "2026-09-06T20:16:05.297Z"
+  },
+  {
+   "name": "fixture-boot-seeds-no-short-completion",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "ok": true,
+    "problems": []
+   },
+   "at": "2026-09-06T20:16:05.766Z"
+  },
+  {
+   "name": "world-bound-and-body",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "bodyCentre": [
+     8,
+     53.85,
+     -6
+    ],
+    "bodyPose": [
+     8,
+     52.050000000000004,
+     -6
+    ],
+    "groundOffsetUnits": 1.8,
+    "supported": false,
+    "available": true
+   },
+   "at": "2026-09-06T20:16:08.594Z"
+  },
+  {
+   "name": "settled-grounded-body",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "spread": 0.001232147216796875,
+    "supported": true
+   },
+   "at": "2026-09-06T20:16:11.726Z"
+  },
+  {
+   "name": "policy-permits-movement",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "moveSpeedScale": 1,
+    "lookMode": "free"
+   },
+   "at": "2026-09-06T20:16:11.727Z"
+  },
+  {
+   "name": "pointer-lock-active-via-ordinary-click",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "pointerLockIsCanvas": true,
+    "hasFocus": true
+   },
+   "at": "2026-09-06T20:16:11.772Z"
+  },
+  {
+   "name": "manual-lane-no-autopilot",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "autopilotPresent": false
+   },
+   "at": "2026-09-06T20:16:11.772Z"
+  },
+  {
+   "name": "four-key-calibration-is-directional",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "dirs": {
+     "KeyW": [
+      0,
+      -1
+     ],
+     "KeyA": [
+      -1,
+      0
+     ],
+     "KeyS": [
+      0,
+      1
+     ],
+     "KeyD": [
+      1,
+      0
+     ]
+    }
+   },
+   "at": "2026-09-06T20:16:15.264Z"
+  },
+  {
+   "name": "arrived-at-W",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "finalDistance": 0.8940028174594902,
+    "travelled": 56.96110534667969
+   },
+   "at": "2026-09-06T20:16:30.436Z"
+  },
+  {
+   "name": "survey-opened-by-authored-F",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "pressed": true,
+    "why": null,
+    "anchors": [
+     "anc.cg.repeated-measure",
+     "anc.cg.demonstration-opened"
+    ]
+   },
+   "at": "2026-09-06T20:16:32.053Z"
+  },
+  {
+   "name": "arrived-at-survey-start",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "label": "to-S",
+    "target": [
+     -26,
+     51.05,
+     12
+    ],
+    "arrive": 1,
+    "reached": true,
+    "finalDistance": 0.8152768453815251,
+    "elapsedMs": 2437,
+    "travelled": 9.111160278320312,
+    "from": [
+     -33.47407531738281,
+     52.78897476196289,
+     9.277058601379395
+    ],
+    "to": [
+     -26.349105834960938,
+     52.78921890258789,
+     11.263249397277832
+    ]
+   },
+   "at": "2026-09-06T20:16:34.722Z"
+  },
+  {
+   "name": "survey-actually-started",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "pressed": true,
+    "why": null,
+    "anchors": [
+     "anc.cg.repeated-measure",
+     "anc.cg.demonstration-opened",
+     "anc.cg.survey-started"
+    ]
+   },
+   "at": "2026-09-06T20:16:36.342Z"
+  },
+  {
+   "name": "the-body-actually-walked-the-SHORT-span",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "issued": "SHORT",
+    "actual": "SHORT",
+    "agrees": true,
+    "sampleCount": 8,
+    "polylineUnits": 13.730459653256743,
+    "walkedUnits": 15.648058680647528,
+    "shortDeviation": 0.5240209538501883,
+    "longDeviation": 6.388392340030093,
+    "why": null
+   },
+   "at": "2026-09-06T20:16:40.778Z"
+  },
+  {
+   "name": "a-real-trace-was-recorded",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "phase": "drawing",
+    "approached": false,
+    "samples": 16,
+    "lengthUnits": 15.111233773798741,
+    "walkedUnits": 15.648058680647528,
+    "testedPrefix": 0,
+    "tailRevision": 0,
+    "witnessOffered": false,
+    "witnessOccupied": false,
+    "acceptedSamples": 0,
+    "acceptedClass": null
+   },
+   "at": "2026-09-06T20:16:40.778Z"
+  },
+  {
+   "name": "span-offered",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "pressed": true,
+    "why": null,
+    "anchors": [
+     "anc.cg.repeated-measure",
+     "anc.cg.demonstration-opened",
+     "anc.cg.survey-started",
+     "anc.cg.trace-drawn",
+     "anc.cg.route-offered"
+    ]
+   },
+   "at": "2026-09-06T20:16:42.378Z"
+  },
+  {
+   "name": "short-span-holds-as-the-shipped-suite-expects",
+   "ok": true,
+   "required": false,
+   "detail": {
+    "holdReason": "reference-occluded-survey-housing",
+    "expectedByShippedSuite": [
+     "reference-occluded-survey-housing",
+     "reference-out-of-range"
+    ],
+    "agrees": true
+   },
+   "at": "2026-09-06T20:16:45.595Z"
+  },
+  {
+   "name": "arrived-inside-the-occupancy-cylinder",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "finalDistance": 0.541448907873918,
+    "occupancyRadius": 1.25
+   },
+   "at": "2026-09-06T20:16:48.198Z"
+  },
+  {
+   "name": "a-NEW-authored-reference-was-offered-by-this-F",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "ok": true,
+    "isNewOffer": true,
+    "problems": []
+   },
+   "at": "2026-09-06T20:16:49.815Z"
+  },
+  {
+   "name": "the-reference-was-actually-held-throughout",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "ok": true,
+    "occupiedThroughout": true,
+    "anyVacant": false,
+    "insideOccupancy": true,
+    "problems": []
+   },
+   "at": "2026-09-06T20:16:55.856Z"
+  },
+  {
+   "name": "SHORT-completed-as-the-held-reference-class",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "ok": true,
+    "mislabel": false,
+    "verdict": "SHORT-HELD-REFERENCE-COMPLETED",
+    "acceptedClass": "held-reference",
+    "problems": []
+   },
+   "at": "2026-09-06T20:16:56.069Z"
+  },
+  {
+   "name": "common-prerequisite-held-reference-proven",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "verdict": "SHORT-HELD-REFERENCE-PROVEN"
+   },
+   "at": "2026-09-06T20:16:56.069Z"
+  },
+  {
+   "name": "grounded-supported-E-reached-by-ordinary-keys",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "pose": {
+     "foot": [
+      -41.39181373859077,
+      50.988984337742814,
+      12.3487786909752
+     ],
+     "bodyCentre": [
+      -41.40382766723633,
+      52.788944244384766,
+      12.34877872467041
+     ],
+     "up": [
+      -0.0066744048030896765,
+      0.9999777259121946,
+      1.8719561665473904e-08
+     ],
+     "supported": true,
+     "groundOffsetUnits": 1.8
+    },
+    "common": {
+     "beat": "ch13-common",
+     "common": {
+      "stage": "holding-h",
+      "terraUnits": 0,
+      "comparisonProved": false,
+      "finalReferenceOffered": false,
+      "finalReferenceOccupied": false,
+      "workerUnits": 0,
+      "committed": false
+     },
+     "worker": {
+      "leg": "holding-h",
+      "travelled": 0,
+      "legLength": 0,
+      "held": false,
+      "sampledIndex": 0,
+      "permitted": null,
+      "position": {
+       "x": -40,
+       "y": 51.05,
+       "z": 12
+      }
+     },
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference"
+     ],
+     "shape": {
+      "hasDiagnostic": true,
+      "keys": [
+       "beat",
+       "installWatch",
+       "anchors",
+       "holdReason",
+       "worker",
+       "survey",
+       "common"
+      ]
+     }
+    },
+    "reached": true,
+    "footYSigned": 50.988984337742814
+   },
+   "at": "2026-09-06T20:17:07.983Z"
+  },
+  {
+   "name": "actual-common-stage-holding-h-with-reciprocal-reference-and-worker-atH",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "beat": "ch13-common",
+    "stage": "holding-h",
+    "anchors": [
+     "anc.cg.repeated-measure",
+     "anc.cg.demonstration-opened",
+     "anc.cg.survey-started",
+     "anc.cg.trace-drawn",
+     "anc.cg.route-offered",
+     "anc.cg.specific-hold",
+     "anc.cg.witness-held",
+     "anc.cg.revision-ready",
+     "anc.cg.route-tested",
+     "anc.cg.reciprocal-reference"
+    ],
+    "worker": {
+     "leg": "holding-h",
+     "travelled": 0,
+     "legLength": 0,
+     "held": false,
+     "sampledIndex": 0,
+     "permitted": null,
+     "position": {
+      "x": -40,
+      "y": 51.05,
+      "z": 12
+     }
+    },
+    "workerPosition": {
+     "x": -40,
+     "y": 51.05,
+     "z": 12
+    },
+    "workerPositionFinite": true,
+    "workerHorizontalToH": 0,
+    "workerVerticalToH": 0,
+    "workerAtH": true,
+    "hBounds": {
+     "radius": 1.25,
+     "vertical": 0.6
+    },
+    "providerShape": {
+     "hasDiagnostic": true,
+     "keys": [
+      "beat",
+      "installWatch",
+      "anchors",
+      "holdReason",
+      "worker",
+      "survey",
+      "common"
+     ]
+    },
+    "required": {
+     "beat": "ch13-common",
+     "stage": "holding-h",
+     "anchor": "reciprocal-reference",
+     "workerAtH": true
+    }
+   },
+   "at": "2026-09-06T20:17:07.985Z"
+  },
+  {
+   "name": "bundle-url-regex-actually-matches-and-rejects",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "bundleUrl": "http://127.0.0.1:34413/assets/index-BiDWGouH.js",
+    "urlRegex": "index-BiDWGouH\\.js$",
+    "matchesActualBundle": true,
+    "rejectsWrongBundle": true,
+    "escapeCheck": true
+   },
+   "at": "2026-09-06T20:17:08.734Z"
+  },
+  {
+   "name": "LP-A-and-LP-B-armed-without-relocation",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "bundle": "/assets/index-BiDWGouH.js",
+    "bundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+    "sinkState": "installed",
+    "lpA": {
+     "site": {
+      "lineNumber": 7839,
+      "columnNumber": 193729,
+      "byteOffset": 4442719
+     },
+     "breakpointId": "1:7839:193729:http://127.0.0.1:34413/assets/index-BiDWGouH.js",
+     "locations": [
+      {
+       "scriptId": "6",
+       "lineNumber": 7839,
+       "columnNumber": 193729
+      }
+     ],
+     "error": null,
+     "pausesExecution": false
+    },
+    "lpB": {
+     "site": {
+      "lineNumber": 7839,
+      "columnNumber": 219885
+     },
+     "breakpointId": "1:7839:219885:http://127.0.0.1:34413/assets/index-BiDWGouH.js",
+     "locations": [
+      {
+       "scriptId": "6",
+       "lineNumber": 7839,
+       "columnNumber": 219885
+      }
+     ],
+     "error": null,
+     "pausesExecution": false
+    },
+    "condition": {
+     "lpACombined": "(()=>{try{const s=globalThis.__cgXi;if(!s)return false;if(!s.fn&&typeof pwe!=='undefined'){s.fn=pwe;s.route=e;}s.push({k:'call',n:s.rec.length,t:performance.now(),prev:t,disp:i,foot:[A.x,A.y,A.z],corridor:g,routeLen:e.length});}catch(_){}return false;})()",
+     "lpB": "(()=>{try{const s=globalThis.__cgXi;if(!s)return false;s.push({k:'guard',n:s.rec.length,t:performance.now(),prevFoot:(g&&g.x!==undefined)?[g.x,g.y,g.z]:null,curFoot:(i&&i.x!==undefined)?[i.x,i.y,i.z]:null,delta:I,terra:(t&&t.terraUnits!==undefined)?t.terraUnits:null});}catch(_){}return false;})()",
+     "combinedNote": "function capture + record share ONE condition at the exact callee site to avoid a duplicate-location refusal"
+    },
+    "note": "Instrumentation deopt changes frame distribution; ACTUAL deltas remain actual.",
+    "scriptId": "6",
+    "parsedScripts": [
+     {
+      "url": "http://127.0.0.1:34413/assets/index-BiDWGouH.js",
+      "scriptId": "6"
+     }
+    ],
+    "exactResolution": {
+     "lpA": true,
+     "lpB": true,
+     "lpALocations": [
+      {
+       "scriptId": "6",
+       "lineNumber": 7839,
+       "columnNumber": 193729
+      }
+     ],
+     "lpBLocations": [
+      {
+       "scriptId": "6",
+       "lineNumber": 7839,
+       "columnNumber": 219885
+      }
+     ]
+    },
+    "pausedObserved": {
+     "count": 0,
+     "events": [],
+     "note": "OBSERVED, not assumed: every condition ends in false so the debugger should never pause."
+    }
+   },
+   "at": "2026-09-06T20:17:08.885Z"
+  },
+  {
+   "name": "vertex-1-crossed-with-bounded-positive-overshoot",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "finalS": 0.08885185628253289,
+    "supported": true,
+    "pulses": 1
+   },
+   "at": "2026-09-06T20:17:09.463Z"
+  },
+  {
+   "name": "vertex-2-crossed-with-bounded-positive-overshoot",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "finalS": 0.07495672036789358,
+    "supported": true,
+    "pulses": 1
+   },
+   "at": "2026-09-06T20:17:09.990Z"
+  },
+  {
+   "name": "vertex-3-crossed-with-bounded-positive-overshoot",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "finalS": 0.10623397724119599,
+    "supported": true,
+    "pulses": 2
+   },
+   "at": "2026-09-06T20:17:10.822Z"
+  },
+  {
+   "name": "vertex-4-crossed-with-bounded-positive-overshoot",
+   "ok": true,
+   "required": true,
+   "detail": {
+    "finalS": 0.05989033129305099,
+    "supported": true,
+    "pulses": 1
+   },
+   "at": "2026-09-06T20:17:11.372Z"
+  },
+  {
+   "name": "callee-credit-call-actually-entered-on-measured-leg",
+   "ok": true,
+   "required": false,
+   "detail": {
+    "calleeEntered": true,
+    "positiveDisplacementCalls": 138,
+    "lastObservedPrev": 0,
+    "finalCallReturn": "MISSING-final-call (never interpolated)",
+    "totalActualGain": 0,
+    "refusedByCeilingCount": 138,
+    "plateauAtSix": false,
+    "numericGapToRouteUnits": 18,
+    "zeroGainLabel": "QUALIFIED: an observed arcGain of 0 is an ACCOUNTING OBSERVATION, not a proven ceiling cause. Causality is claimed ONLY from the actual function replay below.",
+    "causalStatement": null
+   },
+   "at": "2026-09-06T20:17:11.414Z"
+  }
+ ],
+ "prerequisiteVerdict": "SHORT-HELD-REFERENCE-PROVEN",
+ "discriminator": {
+  "schema": "paravoxia.verifier.commonPhysicalDiscriminator.stage.v1",
+  "prerequisiteVerdict": "SHORT-HELD-REFERENCE-PROVEN",
+  "approach": {
+   "route": "S -> (-26,22) -> (-42,22) -> E(-42,12) [reversed qualified LONG tail]",
+   "legs": [
+    {
+     "label": "approach-S",
+     "target": [
+      -26,
+      51.05,
+      12
+     ],
+     "reached": true,
+     "finalDistance": 0.46931704838428023,
+     "pose": {
+      "foot": [
+       -26.01475101828866,
+       50.98973007207414,
+       11.53091523681094
+      ],
+      "bodyCentre": [
+       -26.0147647857666,
+       52.789730072021484,
+       11.530915260314941
+      ],
+      "up": [
+       -7.648598856492506e-06,
+       0.9999999999707494,
+       1.3057777886200236e-08
+      ],
+      "supported": true,
+      "groundOffsetUnits": 1.8
+     },
+     "distanceToH": 13.993113649060176
+    },
+    {
+     "label": "approach-N",
+     "target": [
+      -26,
+      51.05,
+      22
+     ],
+     "reached": true,
+     "finalDistance": 0.5416098270934202,
+     "pose": {
+      "foot": [
+       -26.014751013666235,
+       50.98897476201653,
+       21.45858960610025
+      ],
+      "bodyCentre": [
+       -26.0147647857666,
+       52.78897476196289,
+       21.45859146118164
+      ],
+      "up": [
+       -7.651166871341591e-06,
+       0.9999999999701988,
+       1.0306007715885935e-06
+      ],
+      "supported": true,
+      "groundOffsetUnits": 1.8
+     },
+     "distanceToH": 16.88348620831543
+    },
+    {
+     "label": "approach-W22",
+     "target": [
+      -42,
+      51.05,
+      22
+     ],
+     "reached": true,
+     "finalDistance": 0.8039681341512538,
+     "pose": {
+      "foot": [
+       -41.393633596999315,
+       50.98877460415915,
+       21.458589605886313
+      ],
+      "bodyCentre": [
+       -41.40565872192383,
+       52.788734436035156,
+       21.45859146118164
+      ],
+      "up": [
+       -0.0066806249580642655,
+       0.9999776843755602,
+       1.0307196257082554e-06
+      ],
+      "supported": true,
+      "groundOffsetUnits": 1.8
+     },
+     "distanceToH": 9.560707711004758
+    },
+    {
+     "label": "approach-E",
+     "target": [
+      -42,
+      51.05,
+      12
+     ],
+     "reached": true,
+     "finalDistance": 0.69070112866246,
+     "pose": {
+      "foot": [
+       -41.39181373859077,
+       50.988984337742814,
+       12.3487786909752
+      ],
+      "bodyCentre": [
+       -41.40382766723633,
+       52.788944244384766,
+       12.34877872467041
+      ],
+      "up": [
+       -0.0066744048030896765,
+       0.9999777259121946,
+       1.8719561665473904e-08
+      ],
+      "supported": true,
+      "groundOffsetUnits": 1.8
+     },
+     "distanceToH": 1.434849141271789
+    }
+   ],
+   "avoidedH": false
+  },
+  "atE": {
+   "pose": {
+    "foot": [
+     -41.39181373859077,
+     50.988984337742814,
+     12.3487786909752
+    ],
+    "bodyCentre": [
+     -41.40382766723633,
+     52.788944244384766,
+     12.34877872467041
+    ],
+    "up": [
+     -0.0066744048030896765,
+     0.9999777259121946,
+     1.8719561665473904e-08
+    ],
+    "supported": true,
+    "groundOffsetUnits": 1.8
+   },
+   "common": {
+    "beat": "ch13-common",
+    "common": {
+     "stage": "holding-h",
+     "terraUnits": 0,
+     "comparisonProved": false,
+     "finalReferenceOffered": false,
+     "finalReferenceOccupied": false,
+     "workerUnits": 0,
+     "committed": false
+    },
+    "worker": {
+     "leg": "holding-h",
+     "travelled": 0,
+     "legLength": 0,
+     "held": false,
+     "sampledIndex": 0,
+     "permitted": null,
+     "position": {
+      "x": -40,
+      "y": 51.05,
+      "z": 12
+     }
+    },
+    "anchors": [
+     "anc.cg.repeated-measure",
+     "anc.cg.demonstration-opened",
+     "anc.cg.survey-started",
+     "anc.cg.trace-drawn",
+     "anc.cg.route-offered",
+     "anc.cg.specific-hold",
+     "anc.cg.witness-held",
+     "anc.cg.revision-ready",
+     "anc.cg.route-tested",
+     "anc.cg.reciprocal-reference"
+    ],
+    "shape": {
+     "hasDiagnostic": true,
+     "keys": [
+      "beat",
+      "installWatch",
+      "anchors",
+      "holdReason",
+      "worker",
+      "survey",
+      "common"
+     ]
+    }
+   },
+   "reached": true,
+   "footYSigned": 50.988984337742814
+  },
+  "arming": {
+   "bundle": "/assets/index-BiDWGouH.js",
+   "bundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+   "sinkState": "installed",
+   "lpA": {
+    "site": {
+     "lineNumber": 7839,
+     "columnNumber": 193729,
+     "byteOffset": 4442719
+    },
+    "breakpointId": "1:7839:193729:http://127.0.0.1:34413/assets/index-BiDWGouH.js",
+    "locations": [
+     {
+      "scriptId": "6",
+      "lineNumber": 7839,
+      "columnNumber": 193729
+     }
+    ],
+    "error": null,
+    "pausesExecution": false
+   },
+   "lpB": {
+    "site": {
+     "lineNumber": 7839,
+     "columnNumber": 219885
+    },
+    "breakpointId": "1:7839:219885:http://127.0.0.1:34413/assets/index-BiDWGouH.js",
+    "locations": [
+     {
+      "scriptId": "6",
+      "lineNumber": 7839,
+      "columnNumber": 219885
+     }
+    ],
+    "error": null,
+    "pausesExecution": false
+   },
+   "condition": {
+    "lpACombined": "(()=>{try{const s=globalThis.__cgXi;if(!s)return false;if(!s.fn&&typeof pwe!=='undefined'){s.fn=pwe;s.route=e;}s.push({k:'call',n:s.rec.length,t:performance.now(),prev:t,disp:i,foot:[A.x,A.y,A.z],corridor:g,routeLen:e.length});}catch(_){}return false;})()",
+    "lpB": "(()=>{try{const s=globalThis.__cgXi;if(!s)return false;s.push({k:'guard',n:s.rec.length,t:performance.now(),prevFoot:(g&&g.x!==undefined)?[g.x,g.y,g.z]:null,curFoot:(i&&i.x!==undefined)?[i.x,i.y,i.z]:null,delta:I,terra:(t&&t.terraUnits!==undefined)?t.terraUnits:null});}catch(_){}return false;})()",
+    "combinedNote": "function capture + record share ONE condition at the exact callee site to avoid a duplicate-location refusal"
+   },
+   "note": "Instrumentation deopt changes frame distribution; ACTUAL deltas remain actual.",
+   "scriptId": "6",
+   "parsedScripts": [
+    {
+     "url": "http://127.0.0.1:34413/assets/index-BiDWGouH.js",
+     "scriptId": "6"
+    }
+   ],
+   "exactResolution": {
+    "lpA": true,
+    "lpB": true,
+    "lpALocations": [
+     {
+      "scriptId": "6",
+      "lineNumber": 7839,
+      "columnNumber": 193729
+     }
+    ],
+    "lpBLocations": [
+     {
+      "scriptId": "6",
+      "lineNumber": 7839,
+      "columnNumber": 219885
+     }
+    ]
+   },
+   "pausedObserved": {
+    "count": 0,
+    "events": [],
+    "note": "OBSERVED, not assumed: every condition ends in false so the debugger should never pause."
+   }
+  },
+  "vertices": [
+   {
+    "vertex": 1,
+    "target": [
+     -42,
+     51.05,
+     14
+    ],
+    "incomingDir": [
+     0,
+     1
+    ],
+    "pulses": [
+     {
+      "key": "KeyS",
+      "ms": 345,
+      "before": [
+       -41.39181371842667,
+       50.988984337877405,
+       12.348778690975143
+      ],
+      "after": [
+       -41.39146931782902,
+       50.98986548922894,
+       14.088851856282533
+      ],
+      "clampedDisplacement": 1.7400731993897987,
+      "sBefore": -1.6512213090248569,
+      "sAfter": 0.08885185628253289
+     }
+    ],
+    "crossed": true,
+    "finalS": 0.08885185628253289,
+    "finalFoot": [
+     -41.39146931782902,
+     50.98986548922894,
+     14.088851856282533
+    ],
+    "supported": true,
+    "commonBefore": {
+     "beat": "ch13-common",
+     "common": {
+      "stage": "holding-h",
+      "terraUnits": 0,
+      "comparisonProved": false,
+      "finalReferenceOffered": false,
+      "finalReferenceOccupied": false,
+      "workerUnits": 0,
+      "committed": false
+     },
+     "worker": {
+      "leg": "holding-h",
+      "travelled": 0,
+      "legLength": 0,
+      "held": false,
+      "sampledIndex": 0,
+      "permitted": null,
+      "position": {
+       "x": -40,
+       "y": 51.05,
+       "z": 12
+      }
+     },
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference"
+     ],
+     "shape": {
+      "hasDiagnostic": true,
+      "keys": [
+       "beat",
+       "installWatch",
+       "anchors",
+       "holdReason",
+       "worker",
+       "survey",
+       "common"
+      ]
+     }
+    },
+    "commonAfter": {
+     "beat": "ch13-common",
+     "common": {
+      "stage": "holding-h",
+      "terraUnits": 0,
+      "comparisonProved": false,
+      "finalReferenceOffered": false,
+      "finalReferenceOccupied": false,
+      "workerUnits": 0,
+      "committed": false
+     },
+     "worker": {
+      "leg": "holding-h",
+      "travelled": 0,
+      "legLength": 0,
+      "held": false,
+      "sampledIndex": 0,
+      "permitted": null,
+      "position": {
+       "x": -40,
+       "y": 51.05,
+       "z": 12
+      }
+     },
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference"
+     ],
+     "shape": {
+      "hasDiagnostic": true,
+      "keys": [
+       "beat",
+       "installWatch",
+       "anchors",
+       "holdReason",
+       "worker",
+       "survey",
+       "common"
+      ]
+     }
+    },
+    "poseAfter": {
+     "foot": [
+      -41.39146927752272,
+      50.989857860103285,
+      14.08885185628229
+     ],
+     "bodyCentre": [
+      -41.40347671508789,
+      52.789817810058594,
+      14.088851928710938
+     ],
+     "up": [
+      -0.006670798647320546,
+      0.9999777499751709,
+      4.023813758121768e-08
+     ],
+     "supported": true,
+     "groundOffsetUnits": 1.8
+    }
+   },
+   {
+    "vertex": 2,
+    "target": [
+     -42,
+     51.05,
+     16
+    ],
+    "incomingDir": [
+     0,
+     1
+    ],
+    "pulses": [
+     {
+      "key": "KeyS",
+      "ms": 395,
+      "before": [
+       -41.39146927752272,
+       50.989857860103285,
+       14.08885185628229
+      ],
+      "after": [
+       -41.391074705204645,
+       50.9898692898125,
+       16.074956720367894
+      ],
+      "clampedDisplacement": 1.9861049032797362,
+      "sBefore": -1.9111481437177105,
+      "sAfter": 0.07495672036789358
+     }
+    ],
+    "crossed": true,
+    "finalS": 0.07495672036789358,
+    "finalFoot": [
+     -41.391074705204645,
+     50.9898692898125,
+     16.074956720367894
+    ],
+    "supported": true,
+    "commonBefore": {
+     "beat": "ch13-common",
+     "common": {
+      "stage": "holding-h",
+      "terraUnits": 0,
+      "comparisonProved": false,
+      "finalReferenceOffered": false,
+      "finalReferenceOccupied": false,
+      "workerUnits": 0,
+      "committed": false
+     },
+     "worker": {
+      "leg": "holding-h",
+      "travelled": 0,
+      "legLength": 0,
+      "held": false,
+      "sampledIndex": 0,
+      "permitted": null,
+      "position": {
+       "x": -40,
+       "y": 51.05,
+       "z": 12
+      }
+     },
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference"
+     ],
+     "shape": {
+      "hasDiagnostic": true,
+      "keys": [
+       "beat",
+       "installWatch",
+       "anchors",
+       "holdReason",
+       "worker",
+       "survey",
+       "common"
+      ]
+     }
+    },
+    "commonAfter": {
+     "beat": "ch13-common",
+     "common": {
+      "stage": "holding-h",
+      "terraUnits": 0,
+      "comparisonProved": false,
+      "finalReferenceOffered": false,
+      "finalReferenceOccupied": false,
+      "workerUnits": 0,
+      "committed": false
+     },
+     "worker": {
+      "leg": "holding-h",
+      "travelled": 0,
+      "legLength": 0,
+      "held": false,
+      "sampledIndex": 0,
+      "permitted": null,
+      "position": {
+       "x": -40,
+       "y": 51.05,
+       "z": 12
+      }
+     },
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference"
+     ],
+     "shape": {
+      "hasDiagnostic": true,
+      "keys": [
+       "beat",
+       "installWatch",
+       "anchors",
+       "holdReason",
+       "worker",
+       "survey",
+       "common"
+      ]
+     }
+    },
+    "poseAfter": {
+     "foot": [
+      -41.391074705204645,
+      50.9898692898125,
+      16.074956720367894
+     ],
+     "bodyCentre": [
+      -41.403079986572266,
+      52.78982925415039,
+      16.0749568939209
+     ],
+     "up": [
+      -0.006669600759787788,
+      0.9999777579654938,
+      9.641833679369107e-08
+     ],
+     "supported": true,
+     "groundOffsetUnits": 1.8
+    }
+   },
+   {
+    "vertex": 3,
+    "target": [
+     -44,
+     51.05,
+     16
+    ],
+    "incomingDir": [
+     -1,
+     0
+    ],
+    "pulses": [
+     {
+      "key": "KeyA",
+      "ms": 400,
+      "before": [
+       -41.39107466490544,
+       50.989861660686756,
+       16.07495672036731
+      ],
+      "after": [
+       -43.35941630209333,
+       50.989101595811434,
+       16.074956720313068
+      ],
+      "clampedDisplacement": 1.9683416371878906,
+      "sBefore": -2.608925335094561,
+      "sAfter": -0.6405836979066706
+     },
+     {
+      "key": "KeyA",
+      "ms": 150,
+      "before": [
+       -43.35941620556074,
+       50.98909396795966,
+       16.074956720312485
+      ],
+      "after": [
+       -44.106233977241196,
+       50.98918993229116,
+       16.07495672032419
+      ],
+      "clampedDisplacement": 0.7468177716804547,
+      "sBefore": -0.6405837944392587,
+      "sAfter": 0.10623397724119599
+     }
+    ],
+    "crossed": true,
+    "finalS": 0.10623397724119599,
+    "finalFoot": [
+     -44.106233977241196,
+     50.98918993229116,
+     16.07495672032419
+    ],
+    "supported": true,
+    "commonBefore": {
+     "beat": "ch13-common",
+     "common": {
+      "stage": "holding-h",
+      "terraUnits": 0,
+      "comparisonProved": false,
+      "finalReferenceOffered": false,
+      "finalReferenceOccupied": false,
+      "workerUnits": 0,
+      "committed": false
+     },
+     "worker": {
+      "leg": "holding-h",
+      "travelled": 0,
+      "legLength": 0,
+      "held": false,
+      "sampledIndex": 0,
+      "permitted": null,
+      "position": {
+       "x": -40,
+       "y": 51.05,
+       "z": 12
+      }
+     },
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference"
+     ],
+     "shape": {
+      "hasDiagnostic": true,
+      "keys": [
+       "beat",
+       "installWatch",
+       "anchors",
+       "holdReason",
+       "worker",
+       "survey",
+       "common"
+      ]
+     }
+    },
+    "commonAfter": {
+     "beat": "ch13-common",
+     "common": {
+      "stage": "holding-h",
+      "terraUnits": 0,
+      "comparisonProved": false,
+      "finalReferenceOffered": false,
+      "finalReferenceOccupied": false,
+      "workerUnits": 0,
+      "committed": false
+     },
+     "worker": {
+      "leg": "holding-h",
+      "travelled": 0,
+      "legLength": 0,
+      "held": false,
+      "sampledIndex": 0,
+      "permitted": null,
+      "position": {
+       "x": -40,
+       "y": 51.05,
+       "z": 12
+      }
+     },
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference"
+     ],
+     "shape": {
+      "hasDiagnostic": true,
+      "keys": [
+       "beat",
+       "installWatch",
+       "anchors",
+       "holdReason",
+       "worker",
+       "survey",
+       "common"
+      ]
+     }
+    },
+    "poseAfter": {
+     "foot": [
+      -44.106233842523075,
+      50.98918230590244,
+      16.07495672032361
+     ],
+     "bodyCentre": [
+      -44.146385192871094,
+      52.788734436035156,
+      16.0749568939209
+     ],
+     "up": [
+      -0.022306305748900367,
+      0.9997511834070653,
+      9.644293766661158e-08
+     ],
+     "supported": true,
+     "groundOffsetUnits": 1.8
+    }
+   },
+   {
+    "vertex": 4,
+    "target": [
+     -44,
+     51.05,
+     18
+    ],
+    "incomingDir": [
+     0,
+     1
+    ],
+    "pulses": [
+     {
+      "key": "KeyS",
+      "ms": 398,
+      "before": [
+       -44.1062337078045,
+       50.98917467951373,
+       16.07495672032303
+      ],
+      "after": [
+       -44.10467332458568,
+       50.98909779380975,
+       18.05989033129305
+      ],
+      "clampedDisplacement": 1.9849342242891268,
+      "sBefore": -1.92504327967697,
+      "sAfter": 0.05989033129305099
+     }
+    ],
+    "crossed": true,
+    "finalS": 0.05989033129305099,
+    "finalFoot": [
+     -44.10467332458568,
+     50.98909779380975,
+     18.05989033129305
+    ],
+    "supported": true,
+    "commonBefore": {
+     "beat": "ch13-common",
+     "common": {
+      "stage": "holding-h",
+      "terraUnits": 0,
+      "comparisonProved": false,
+      "finalReferenceOffered": false,
+      "finalReferenceOccupied": false,
+      "workerUnits": 0,
+      "committed": false
+     },
+     "worker": {
+      "leg": "holding-h",
+      "travelled": 0,
+      "legLength": 0,
+      "held": false,
+      "sampledIndex": 0,
+      "permitted": null,
+      "position": {
+       "x": -40,
+       "y": 51.05,
+       "z": 12
+      }
+     },
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference"
+     ],
+     "shape": {
+      "hasDiagnostic": true,
+      "keys": [
+       "beat",
+       "installWatch",
+       "anchors",
+       "holdReason",
+       "worker",
+       "survey",
+       "common"
+      ]
+     }
+    },
+    "commonAfter": {
+     "beat": "ch13-common",
+     "common": {
+      "stage": "holding-h",
+      "terraUnits": 0,
+      "comparisonProved": false,
+      "finalReferenceOffered": false,
+      "finalReferenceOccupied": false,
+      "workerUnits": 0,
+      "committed": false
+     },
+     "worker": {
+      "leg": "holding-h",
+      "travelled": 0,
+      "legLength": 0,
+      "held": false,
+      "sampledIndex": 0,
+      "permitted": null,
+      "position": {
+       "x": -40,
+       "y": 51.05,
+       "z": 12
+      }
+     },
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference"
+     ],
+     "shape": {
+      "hasDiagnostic": true,
+      "keys": [
+       "beat",
+       "installWatch",
+       "anchors",
+       "holdReason",
+       "worker",
+       "survey",
+       "common"
+      ]
+     }
+    },
+    "poseAfter": {
+     "foot": [
+      -44.10467332458568,
+      50.98909779380975,
+      18.05989033129305
+     ],
+     "bodyCentre": [
+      -44.144798278808594,
+      52.78865051269531,
+      18.059890747070312
+     ],
+     "up": [
+      -0.022291641234949446,
+      0.9997515104919816,
+      2.309873667621096e-07
+     ],
+     "supported": true,
+     "groundOffsetUnits": 1.8
+    }
+   }
+  ],
+  "records": {
+   "count": 292,
+   "dropped": 0,
+   "calleeCalls": 146,
+   "callerGuards": 146,
+   "pairing": {
+    "calleeMinusCaller": 0,
+    "note": "ACTUAL callee entry implies the walked/support + reference guard passed. An ABSENT call does NOT identify which guard failed."
+   }
+  },
+  "analysis": {
+   "calleeEntered": true,
+   "positiveDisplacementCalls": 138,
+   "lastObservedPrev": 0,
+   "finalCallReturn": "MISSING-final-call (never interpolated)",
+   "totalActualGain": 0,
+   "refusedByCeilingCount": 138,
+   "plateauAtSix": false,
+   "numericGapToRouteUnits": 18,
+   "zeroGainLabel": "QUALIFIED: an observed arcGain of 0 is an ACCOUNTING OBSERVATION, not a proven ceiling cause. Causality is claimed ONLY from the actual function replay below.",
+   "causalStatement": null
+  },
+  "clearanceChain": {
+   "bodyBodyClearanceInCreditChain": false,
+   "note": "Body-body clearance is ABSENT from the pwe/Kme credit chain. Measured separately below; never fabricated as true.",
+   "measuredSeparately": {
+    "atFinalPose": {
+     "foot": [
+      -44.10467332458568,
+      50.98909779380975,
+      18.05989033129305
+     ],
+     "bodyCentre": [
+      -44.144798278808594,
+      52.78865051269531,
+      18.059890747070312
+     ],
+     "up": [
+      -0.022291641234949446,
+      0.9997515104919816,
+      2.309873667621096e-07
+     ],
+     "supported": true,
+     "groundOffsetUnits": 1.8
+    },
+    "method": "probe-measured distance only; no predicate call, no fabricated clearance=true"
+   }
+  },
+  "stoppedAt": null,
+  "commonAfterHold": {
+   "beat": "ch13-common",
+   "common": {
+    "stage": "holding-h",
+    "terraUnits": 0,
+    "comparisonProved": false,
+    "finalReferenceOffered": false,
+    "finalReferenceOccupied": false,
+    "workerUnits": 0,
+    "committed": false
+   },
+   "worker": {
+    "leg": "holding-h",
+    "travelled": 0,
+    "legLength": 0,
+    "held": false,
+    "sampledIndex": 0,
+    "permitted": null,
+    "position": {
+     "x": -40,
+     "y": 51.05,
+     "z": 12
+    }
+   },
+   "anchors": [
+    "anc.cg.repeated-measure",
+    "anc.cg.demonstration-opened",
+    "anc.cg.survey-started",
+    "anc.cg.trace-drawn",
+    "anc.cg.route-offered",
+    "anc.cg.specific-hold",
+    "anc.cg.witness-held",
+    "anc.cg.revision-ready",
+    "anc.cg.route-tested",
+    "anc.cg.reciprocal-reference"
+   ],
+   "shape": {
+    "hasDiagnostic": true,
+    "keys": [
+     "beat",
+     "installWatch",
+     "anchors",
+     "holdReason",
+     "worker",
+     "survey",
+     "common"
+    ]
+   }
+  },
+  "commonStagePrerequisite": {
+   "beat": "ch13-common",
+   "stage": "holding-h",
+   "anchors": [
+    "anc.cg.repeated-measure",
+    "anc.cg.demonstration-opened",
+    "anc.cg.survey-started",
+    "anc.cg.trace-drawn",
+    "anc.cg.route-offered",
+    "anc.cg.specific-hold",
+    "anc.cg.witness-held",
+    "anc.cg.revision-ready",
+    "anc.cg.route-tested",
+    "anc.cg.reciprocal-reference"
+   ],
+   "worker": {
+    "leg": "holding-h",
+    "travelled": 0,
+    "legLength": 0,
+    "held": false,
+    "sampledIndex": 0,
+    "permitted": null,
+    "position": {
+     "x": -40,
+     "y": 51.05,
+     "z": 12
+    }
+   },
+   "workerPosition": {
+    "x": -40,
+    "y": 51.05,
+    "z": 12
+   },
+   "workerPositionFinite": true,
+   "workerHorizontalToH": 0,
+   "workerVerticalToH": 0,
+   "workerAtH": true,
+   "hBounds": {
+    "radius": 1.25,
+    "vertical": 0.6
+   },
+   "providerShape": {
+    "hasDiagnostic": true,
+    "keys": [
+     "beat",
+     "installWatch",
+     "anchors",
+     "holdReason",
+     "worker",
+     "survey",
+     "common"
+    ]
+   },
+   "required": {
+    "beat": "ch13-common",
+    "stage": "holding-h",
+    "anchor": "reciprocal-reference",
+    "workerAtH": true
+   }
+  },
+  "urlBinding": {
+   "bundleUrl": "http://127.0.0.1:34413/assets/index-BiDWGouH.js",
+   "urlRegex": "index-BiDWGouH\\.js$",
+   "matchesActualBundle": true,
+   "rejectsWrongBundle": true,
+   "escapeCheck": true
+  },
+  "teardown": {
+   "removedBreakpoints": [
+    {
+     "breakpointId": "1:7839:193729:http://127.0.0.1:34413/assets/index-BiDWGouH.js",
+     "result": "removed"
+    },
+    {
+     "breakpointId": "1:7839:219885:http://127.0.0.1:34413/assets/index-BiDWGouH.js",
+     "result": "removed"
+    }
+   ],
+   "debuggerDisabled": true,
+   "pausedAfterWalk": 0,
+   "frozenRecordCount": 292
+  },
+  "replay": {
+   "ok": true,
+   "n": 146,
+   "replayedFrom": "frozen pre-teardown copy",
+   "liveGrewDuringReplay": 0,
+   "rows": [
+    {
+     "n": 0,
+     "prev": 0,
+     "disp": 0,
+     "foot": [
+      -41.39181371842667,
+      50.988984337877405,
+      12.348778690975143
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0
+    },
+    {
+     "n": 2,
+     "prev": 0,
+     "disp": 0,
+     "foot": [
+      -41.39181371842667,
+      50.988984337877405,
+      12.348778690975143
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0
+    },
+    {
+     "n": 4,
+     "prev": 0,
+     "disp": 0,
+     "foot": [
+      -41.39181371842667,
+      50.988984337877405,
+      12.348778690975143
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0
+    },
+    {
+     "n": 6,
+     "prev": 0,
+     "disp": 0,
+     "foot": [
+      -41.39181371842667,
+      50.988984337877405,
+      12.348778690975143
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0
+    },
+    {
+     "n": 8,
+     "prev": 0,
+     "disp": 0.08179950856429204,
+     "foot": [
+      -41.391798459637606,
+      50.988984337877405,
+      12.430578198116256
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179950856429204
+    },
+    {
+     "n": 10,
+     "prev": 0,
+     "disp": 0.08179950740336832,
+     "foot": [
+      -41.391783281504736,
+      50.98898815203633,
+      12.512377704022528
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179950740336832
+    },
+    {
+     "n": 12,
+     "prev": 0,
+     "disp": 0.08180046093981183,
+     "foot": [
+      -41.39176812353515,
+      50.98898815136341,
+      12.594178163557922
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180046093981183
+    },
+    {
+     "n": 14,
+     "prev": 0,
+     "disp": 0.08180046089656624,
+     "foot": [
+      -41.391752945401066,
+      50.98898815082508,
+      12.675978623046332
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180046089656624
+    },
+    {
+     "n": 16,
+     "prev": 0,
+     "disp": 0.08180046084793326,
+     "foot": [
+      -41.391737767266434,
+      50.98898815028676,
+      12.757779082486108
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180046084793326
+    },
+    {
+     "n": 18,
+     "prev": 0,
+     "disp": 0.08180046079751858,
+     "foot": [
+      -41.39172258913126,
+      50.988988149748444,
+      12.83957954187547
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180046079751858
+    },
+    {
+     "n": 20,
+     "prev": 0,
+     "disp": 0.08180046074525825,
+     "foot": [
+      -41.39170741099555,
+      50.988988149210144,
+      12.92138000121257
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180046074525825
+    },
+    {
+     "n": 22,
+     "prev": 0,
+     "disp": 0.08180046069107948,
+     "foot": [
+      -41.3916922328593,
+      50.988988148671844,
+      13.003180460495493
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180046069107948
+    },
+    {
+     "n": 24,
+     "prev": 0,
+     "disp": 0.08119764545717782,
+     "foot": [
+      -41.3916770547225,
+      50.99009441034058,
+      13.084370568159752
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08119764545717782
+    },
+    {
+     "n": 26,
+     "prev": 0,
+     "disp": 0.08239655708711088,
+     "foot": [
+      -41.39166772239301,
+      50.99000281806162,
+      13.166767073811215
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08239655708711088
+    },
+    {
+     "n": 28,
+     "prev": 0,
+     "disp": 0.08180236829834331,
+     "foot": [
+      -41.39165206053612,
+      50.98999519135596,
+      13.24856944025472
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236829834331
+    },
+    {
+     "n": 30,
+     "prev": 0,
+     "disp": 0.08180236816626714,
+     "foot": [
+      -41.391636842054446,
+      50.98998756169253,
+      13.33037180664956
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236816626714
+    },
+    {
+     "n": 32,
+     "prev": 0,
+     "disp": 0.08180236810142305,
+     "foot": [
+      -41.39162162357264,
+      50.98997993202911,
+      13.412174172979554
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236810142305
+    },
+    {
+     "n": 34,
+     "prev": 0,
+     "disp": 0.08180236803419862,
+     "foot": [
+      -41.3916064050907,
+      50.989972302365686,
+      13.493976539242325
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236803419862
+    },
+    {
+     "n": 36,
+     "prev": 0,
+     "disp": 0.08180236796451394,
+     "foot": [
+      -41.39159118660862,
+      50.989964672702264,
+      13.575778905435412
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236796451394
+    },
+    {
+     "n": 38,
+     "prev": 0,
+     "disp": 0.08180236789227308,
+     "foot": [
+      -41.39157596812641,
+      50.98995704303884,
+      13.657581271556257
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236789227308
+    },
+    {
+     "n": 40,
+     "prev": 0,
+     "disp": 0.08180236781738547,
+     "foot": [
+      -41.391560749644064,
+      50.98994941337543,
+      13.739383637602215
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236781738547
+    },
+    {
+     "n": 42,
+     "prev": 0,
+     "disp": 0.08180236773975158,
+     "foot": [
+      -41.39154553116158,
+      50.98994178371201,
+      13.821186003570539
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236773975158
+    },
+    {
+     "n": 44,
+     "prev": 0,
+     "disp": 0.08180236765927378,
+     "foot": [
+      -41.39153031267897,
+      50.9899341540486,
+      13.902988369458384
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236765927378
+    },
+    {
+     "n": 46,
+     "prev": 0,
+     "disp": 0.08180236757584543,
+     "foot": [
+      -41.39151509419621,
+      50.98992652438518,
+      13.984790735262802
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236757584543
+    },
+    {
+     "n": 48,
+     "prev": 0,
+     "disp": 0.08180236748935996,
+     "foot": [
+      -41.39149987571332,
+      50.989918894721775,
+      14.066593100980734
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236748935996
+    },
+    {
+     "n": 50,
+     "prev": 0,
+     "disp": 0.018924718256001262,
+     "foot": [
+      -41.3914846572303,
+      50.98991126505837,
+      14.085517811579711
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.018924718256001262
+    },
+    {
+     "n": 52,
+     "prev": 0,
+     "disp": 0.0033340882727483914,
+     "foot": [
+      -41.39146943874714,
+      50.98990363539496,
+      14.08885185638992
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0033340882727483914
+    },
+    {
+     "n": 54,
+     "prev": 0,
+     "disp": 7.62976986371752e-06,
+     "foot": [
+      -41.39146947905291,
+      50.98989600573156,
+      14.088851856283506
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.62976986371752e-06
+    },
+    {
+     "n": 56,
+     "prev": 0,
+     "disp": 7.629232131736899e-06,
+     "foot": [
+      -41.39146943874714,
+      50.9898883766059,
+      14.088851856283263
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.629232131736899e-06
+    },
+    {
+     "n": 58,
+     "prev": 0,
+     "disp": 7.629232125307264e-06,
+     "foot": [
+      -41.39146939844124,
+      50.98988074748024,
+      14.08885185628302
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.629232125307264e-06
+    },
+    {
+     "n": 60,
+     "prev": 0,
+     "disp": 7.6292321260580374e-06,
+     "foot": [
+      -41.3914693581352,
+      50.98987311835459,
+      14.088851856282776
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.6292321260580374e-06
+    },
+    {
+     "n": 62,
+     "prev": 0,
+     "disp": 7.6292321196659465e-06,
+     "foot": [
+      -41.39146931782902,
+      50.98986548922894,
+      14.088851856282533
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.6292321196659465e-06
+    },
+    {
+     "n": 64,
+     "prev": 0,
+     "disp": 7.629232127446975e-06,
+     "foot": [
+      -41.39146927752272,
+      50.989857860103285,
+      14.08885185628229
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.629232127446975e-06
+    },
+    {
+     "n": 66,
+     "prev": 0,
+     "disp": 0.08180427729882483,
+     "foot": [
+      -41.39145397842721,
+      50.98985023097764,
+      14.170656131794741
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180427729882483
+    },
+    {
+     "n": 68,
+     "prev": 0,
+     "disp": 0.08180236728075523,
+     "foot": [
+      -41.39143875994459,
+      50.98984260131422,
+      14.252458497304069
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236728075523
+    },
+    {
+     "n": 70,
+     "prev": 0,
+     "disp": 0.0818023671835175,
+     "foot": [
+      -41.39142354146183,
+      50.989834971650815,
+      14.334260862716159
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0818023671835175
+    },
+    {
+     "n": 72,
+     "prev": 0,
+     "disp": 0.08180236708265064,
+     "foot": [
+      -41.39140832297895,
+      50.9898273419874,
+      14.416063228027381
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236708265064
+    },
+    {
+     "n": 74,
+     "prev": 0,
+     "disp": 0.08180236697808897,
+     "foot": [
+      -41.391393104495926,
+      50.98981971232399,
+      14.497865593234042
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236697808897
+    },
+    {
+     "n": 76,
+     "prev": 0,
+     "disp": 0.08180236686969393,
+     "foot": [
+      -41.39137788601276,
+      50.989812082660585,
+      14.579667958332308
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236686969393
+    },
+    {
+     "n": 78,
+     "prev": 0,
+     "disp": 0.08180236675732518,
+     "foot": [
+      -41.39136266752947,
+      50.989804452997184,
+      14.661470323318206
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236675732518
+    },
+    {
+     "n": 80,
+     "prev": 0,
+     "disp": 0.08180236664083883,
+     "foot": [
+      -41.39134744904604,
+      50.989796823333776,
+      14.743272688187616
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236664083883
+    },
+    {
+     "n": 82,
+     "prev": 0,
+     "disp": 0.0818023665200839,
+     "foot": [
+      -41.391332230562476,
+      50.989789193670376,
+      14.825075052936272
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0818023665200839
+    },
+    {
+     "n": 84,
+     "prev": 0,
+     "disp": 0.08180236639490228,
+     "foot": [
+      -41.39131701207877,
+      50.98978156400698,
+      14.906877417559746
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236639490228
+    },
+    {
+     "n": 86,
+     "prev": 0,
+     "disp": 0.08180236626513056,
+     "foot": [
+      -41.39130179359494,
+      50.98977393434358,
+      14.988679782053449
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236626513056
+    },
+    {
+     "n": 88,
+     "prev": 0,
+     "disp": 0.07998341538620178,
+     "foot": [
+      -41.39128657511097,
+      50.99296302098878,
+      15.06859959331204
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.07998341538620178
+    },
+    {
+     "n": 90,
+     "prev": 0,
+     "disp": 0.08316298588060808,
+     "foot": [
+      -41.391303491294664,
+      50.99361903615478,
+      15.15175999000736
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08316298588060808
+    },
+    {
+     "n": 92,
+     "prev": 0,
+     "disp": 0.08318628600411299,
+     "foot": [
+      -41.39129169335515,
+      50.991543817791765,
+      15.234920386282946
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08318628600411299
+    },
+    {
+     "n": 94,
+     "prev": 0,
+     "disp": 0.08156442724597254,
+     "foot": [
+      -41.391250306963066,
+      50.989991308417274,
+      15.316470026342067
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08156442724597254
+    },
+    {
+     "n": 96,
+     "prev": 0,
+     "disp": 0.08180236736908272,
+     "foot": [
+      -41.39122701099798,
+      50.989983732612004,
+      15.398272390043195
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236736908272
+    },
+    {
+     "n": 98,
+     "prev": 0,
+     "disp": 0.08180236537963187,
+     "foot": [
+      -41.39121179250894,
+      50.98997610294868,
+      15.480074753651397
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236537963187
+    },
+    {
+     "n": 100,
+     "prev": 0,
+     "disp": 0.08180236521264903,
+     "foot": [
+      -41.39119657401976,
+      50.98996847328535,
+      15.561877117092617
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236521264903
+    },
+    {
+     "n": 102,
+     "prev": 0,
+     "disp": 0.08180236503954662,
+     "foot": [
+      -41.39118135553044,
+      50.98996084362203,
+      15.643679480360735
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236503954662
+    },
+    {
+     "n": 104,
+     "prev": 0,
+     "disp": 0.08180236486010087,
+     "foot": [
+      -41.391166137041,
+      50.98995321395871,
+      15.725481843449407
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236486010087
+    },
+    {
+     "n": 106,
+     "prev": 0,
+     "disp": 0.08180236467407725,
+     "foot": [
+      -41.39115091855141,
+      50.989945584295384,
+      15.807284206352055
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236467407725
+    },
+    {
+     "n": 108,
+     "prev": 0,
+     "disp": 0.08180236448123421,
+     "foot": [
+      -41.39113570006169,
+      50.98993795463207,
+      15.88908656906186
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180236448123421
+    },
+    {
+     "n": 110,
+     "prev": 0,
+     "disp": 0.0818023642813266,
+     "foot": [
+      -41.39112048157183,
+      50.98993032496875,
+      15.970888931571757
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0818023642813266
+    },
+    {
+     "n": 112,
+     "prev": 0,
+     "disp": 0.08180522509697344,
+     "foot": [
+      -41.39110526308185,
+      50.98992269530544,
+      16.052694154897363
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180522509697344
+    },
+    {
+     "n": 114,
+     "prev": 0,
+     "disp": 0.0189247147153455,
+     "foot": [
+      -41.39109004459172,
+      50.98991506564212,
+      16.071618861955677
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0189247147153455
+    },
+    {
+     "n": 116,
+     "prev": 0,
+     "disp": 0.0033379020827380545,
+     "foot": [
+      -41.39107482610146,
+      50.98990743597881,
+      16.074956720625504
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0033379020827380545
+    },
+    {
+     "n": 118,
+     "prev": 0,
+     "disp": 7.629769737344279e-06,
+     "foot": [
+      -41.391074866400125,
+      50.9898998063155,
+      16.074956720370224
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.629769737344279e-06
+    },
+    {
+     "n": 120,
+     "prev": 0,
+     "disp": 7.629232186571019e-06,
+     "foot": [
+      -41.39107482610146,
+      50.989892177189745,
+      16.07495672036964
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.629232186571019e-06
+    },
+    {
+     "n": 122,
+     "prev": 0,
+     "disp": 7.629232180178797e-06,
+     "foot": [
+      -41.39107478580266,
+      50.989884548064,
+      16.07495672036906
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.629232180178797e-06
+    },
+    {
+     "n": 124,
+     "prev": 0,
+     "disp": 7.629232180891905e-06,
+     "foot": [
+      -41.39107474550372,
+      50.98987691893825,
+      16.074956720368476
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.629232180891905e-06
+    },
+    {
+     "n": 126,
+     "prev": 0,
+     "disp": 7.62923218164255e-06,
+     "foot": [
+      -41.391074705204645,
+      50.9898692898125,
+      16.074956720367894
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.62923218164255e-06
+    },
+    {
+     "n": 128,
+     "prev": 0,
+     "disp": 7.629232182318132e-06,
+     "foot": [
+      -41.39107466490544,
+      50.989861660686756,
+      16.07495672036731
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.629232182318132e-06
+    },
+    {
+     "n": 130,
+     "prev": 0,
+     "disp": 0.0815047818350591,
+     "foot": [
+      -41.47257944638344,
+      50.989854031561016,
+      16.07495672036673
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0815047818350591
+    },
+    {
+     "n": 132,
+     "prev": 0,
+     "disp": 0.08135255445117015,
+     "foot": [
+      -41.55393199839802,
+      50.98983412061291,
+      16.07495672036643
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08135255445117015
+    },
+    {
+     "n": 134,
+     "prev": 0,
+     "disp": 0.0813195798727034,
+     "foot": [
+      -41.63525157589002,
+      50.98981444331069,
+      16.074956720364995
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0813195798727034
+    },
+    {
+     "n": 136,
+     "prev": 0,
+     "disp": 0.08130295484155836,
+     "foot": [
+      -41.716554528407876,
+      50.98979500501851,
+      16.074956720363577
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08130295484155836
+    },
+    {
+     "n": 138,
+     "prev": 0,
+     "disp": 0.08128563424873304,
+     "foot": [
+      -41.79784016039358,
+      50.989775824193,
+      16.074956720362188
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08128563424873304
+    },
+    {
+     "n": 140,
+     "prev": 0,
+     "disp": 0.08126768422363055,
+     "foot": [
+      -41.87910783743658,
+      50.98974166125818,
+      16.074956720360824
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08126768422363055
+    },
+    {
+     "n": 142,
+     "prev": 0,
+     "disp": 0.08124897152500521,
+     "foot": [
+      -41.96035680190412,
+      50.98970779647737,
+      16.074956720358323
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08124897152500521
+    },
+    {
+     "n": 144,
+     "prev": 0,
+     "disp": 0.08122966982109896,
+     "foot": [
+      -42.041586464798705,
+      50.9896742513333,
+      16.074956720355853
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08122966982109896
+    },
+    {
+     "n": 146,
+     "prev": 0,
+     "disp": 0.08120966109249245,
+     "foot": [
+      -42.12279611910414,
+      50.989641049681964,
+      16.074956720353416
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08120966109249245
+    },
+    {
+     "n": 148,
+     "prev": 0,
+     "disp": 0.08118891947647604,
+     "foot": [
+      -42.20398503194193,
+      50.98960821715942,
+      16.074956720351018
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08118891947647604
+    },
+    {
+     "n": 150,
+     "prev": 0,
+     "disp": 0.08116741816829692,
+     "foot": [
+      -42.28515244362928,
+      50.989575781314535,
+      16.074956720348656
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08116741816829692
+    },
+    {
+     "n": 152,
+     "prev": 0,
+     "disp": 0.08114512938747055,
+     "foot": [
+      -42.366297566703295,
+      50.98954377175166,
+      16.074956720346332
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08114512938747055
+    },
+    {
+     "n": 154,
+     "prev": 0,
+     "disp": 0.08112202434267923,
+     "foot": [
+      -42.447419584910186,
+      50.98951222028388,
+      16.074956720344055
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08112202434267923
+    },
+    {
+     "n": 156,
+     "prev": 0,
+     "disp": 0.08109807319559928,
+     "foot": [
+      -42.528517652158214,
+      50.9894811610977,
+      16.074956720341827
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08109807319559928
+    },
+    {
+     "n": 158,
+     "prev": 0,
+     "disp": 0.08107324502352192,
+     "foot": [
+      -42.609590891433285,
+      50.98945063093003,
+      16.074956720339646
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08107324502352192
+    },
+    {
+     "n": 160,
+     "prev": 0,
+     "disp": 0.08104750778059067,
+     "foot": [
+      -42.690638393675755,
+      50.98942066925828,
+      16.07495672033752
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08104750778059067
+    },
+    {
+     "n": 162,
+     "prev": 0,
+     "disp": 0.08100556946983584,
+     "foot": [
+      -42.77164395782826,
+      50.98939131850469,
+      16.074956720335457
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08100556946983584
+    },
+    {
+     "n": 164,
+     "prev": 0,
+     "disp": 0.0809780618363462,
+     "foot": [
+      -42.85262201458011,
+      50.989362622428544,
+      16.074956720333454
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0809780618363462
+    },
+    {
+     "n": 166,
+     "prev": 0,
+     "disp": 0.08094940415300078,
+     "foot": [
+      -42.933571413893745,
+      50.98933463157095,
+      16.07495672033152
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08094940415300078
+    },
+    {
+     "n": 168,
+     "prev": 0,
+     "disp": 0.0809197043360474,
+     "foot": [
+      -43.01449110707333,
+      50.989292139752386,
+      16.07495672032966
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0809197043360474
+    },
+    {
+     "n": 170,
+     "prev": 0,
+     "disp": 0.08088874531247807,
+     "foot": [
+      -43.095379841649944,
+      50.989250464561586,
+      16.074956720326714
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08088874531247807
+    },
+    {
+     "n": 172,
+     "prev": 0,
+     "disp": 0.0808568130590276,
+     "foot": [
+      -43.17623664441535,
+      50.98920966481644,
+      16.07495672032385
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0808568130590276
+    },
+    {
+     "n": 174,
+     "prev": 0,
+     "disp": 0.0808237124476123,
+     "foot": [
+      -43.25706034703454,
+      50.989169805830436,
+      16.074956720321076
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0808237124476123
+    },
+    {
+     "n": 176,
+     "prev": 0,
+     "disp": 0.0807894008922187,
+     "foot": [
+      -43.337849738586605,
+      50.989130957786664,
+      16.0749567203184
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0807894008922187
+    },
+    {
+     "n": 178,
+     "prev": 0,
+     "disp": 0.018341567296102212,
+     "foot": [
+      -43.356191302068034,
+      50.98914278716485,
+      16.074956720315832
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.018341567296102212
+    },
+    {
+     "n": 180,
+     "prev": 0,
+     "disp": 0.0032699029686250763,
+     "foot": [
+      -43.359461202873256,
+      50.989139025751285,
+      16.074956720315914
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0032699029686250763
+    },
+    {
+     "n": 182,
+     "prev": 0,
+     "disp": 4.504908888661897e-05,
+     "foot": [
+      -43.35941668822044,
+      50.98913210721861,
+      16.0749567203154
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 4.504908888661897e-05
+    },
+    {
+     "n": 184,
+     "prev": 0,
+     "disp": 7.62846259044694e-06,
+     "foot": [
+      -43.359416591689154,
+      50.9891244793668,
+      16.074956720314816
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.62846259044694e-06
+    },
+    {
+     "n": 186,
+     "prev": 0,
+     "disp": 7.628462587567988e-06,
+     "foot": [
+      -43.35941649515753,
+      50.989116851515,
+      16.074956720314233
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.628462587567988e-06
+    },
+    {
+     "n": 188,
+     "prev": 0,
+     "disp": 7.628462584419312e-06,
+     "foot": [
+      -43.3594163986256,
+      50.989109223663206,
+      16.07495672031365
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.628462584419312e-06
+    },
+    {
+     "n": 190,
+     "prev": 0,
+     "disp": 7.628462567330671e-06,
+     "foot": [
+      -43.35941630209333,
+      50.989101595811434,
+      16.074956720313068
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.628462567330671e-06
+    },
+    {
+     "n": 192,
+     "prev": 0,
+     "disp": 7.628462571376793e-06,
+     "foot": [
+      -43.35941620556074,
+      50.98909396795966,
+      16.074956720312485
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.628462571376793e-06
+    },
+    {
+     "n": 194,
+     "prev": 0,
+     "disp": 0.08108892404981821,
+     "foot": [
+      -43.440505128803224,
+      50.98908252541064,
+      16.074956720311903
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08108892404981821
+    },
+    {
+     "n": 196,
+     "prev": 0,
+     "disp": 0.08070048804294387,
+     "foot": [
+      -43.52120561630226,
+      50.98909189488851,
+      16.074956720312667
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08070048804294387
+    },
+    {
+     "n": 198,
+     "prev": 0,
+     "disp": 0.0806537041551039,
+     "foot": [
+      -43.60185931973713,
+      50.98910267353268,
+      16.07495672031386
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0806537041551039
+    },
+    {
+     "n": 200,
+     "prev": 0,
+     "disp": 0.08061376510064064,
+     "foot": [
+      -43.682473083921984,
+      50.98911482466716,
+      16.074956720315186
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08061376510064064
+    },
+    {
+     "n": 202,
+     "prev": 0,
+     "disp": 0.08057236737187742,
+     "foot": [
+      -43.763045450141696,
+      50.9891284505734,
+      16.074956720316653
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08057236737187742
+    },
+    {
+     "n": 204,
+     "prev": 0,
+     "disp": 0.08052945801584441,
+     "foot": [
+      -43.84357490672104,
+      50.98914366114733,
+      16.074956720318273
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08052945801584441
+    },
+    {
+     "n": 206,
+     "prev": 0,
+     "disp": 0.08048498219410838,
+     "foot": [
+      -43.92405988713804,
+      50.98916057446501,
+      16.07495672032006
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08048498219410838
+    },
+    {
+     "n": 208,
+     "prev": 0,
+     "disp": 0.08043888311994866,
+     "foot": [
+      -44.00449876807436,
+      50.98917931739011,
+      16.07495672032202
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08043888311994866
+    },
+    {
+     "n": 210,
+     "prev": 0,
+     "disp": 0.08039110199384285,
+     "foot": [
+      -44.084889867400896,
+      50.98920002622634,
+      16.07495672032417
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08039110199384285
+    },
+    {
+     "n": 212,
+     "prev": 0,
+     "disp": 0.018146770025617747,
+     "foot": [
+      -44.10303661787838,
+      50.98922666211528,
+      16.074956720326526
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.018146770025617747
+    },
+    {
+     "n": 214,
+     "prev": 0,
+     "disp": 0.00326163570772594,
+     "foot": [
+      -44.10629825358607,
+      50.98922664629248,
+      16.07495672032697
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.00326163570772594
+    },
+    {
+     "n": 216,
+     "prev": 0,
+     "disp": 6.403913463008602e-05,
+     "foot": [
+      -44.10623451610918,
+      50.989220437846264,
+      16.074956720326522
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 6.403913463008602e-05
+    },
+    {
+     "n": 218,
+     "prev": 0,
+     "disp": 7.627578562706945e-06,
+     "foot": [
+      -44.106234381392866,
+      50.989212811457456,
+      16.07495672032594
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.627578562706945e-06
+    },
+    {
+     "n": 220,
+     "prev": 0,
+     "disp": 7.627578549425631e-06,
+     "foot": [
+      -44.106234246676095,
+      50.98920518506867,
+      16.074956720325357
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.627578549425631e-06
+    },
+    {
+     "n": 222,
+     "prev": 0,
+     "disp": 7.627578536144343e-06,
+     "foot": [
+      -44.10623411195887,
+      50.989197558679905,
+      16.074956720324774
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.627578536144343e-06
+    },
+    {
+     "n": 224,
+     "prev": 0,
+     "disp": 7.627578522737589e-06,
+     "foot": [
+      -44.106233977241196,
+      50.98918993229116,
+      16.07495672032419
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.627578522737589e-06
+    },
+    {
+     "n": 226,
+     "prev": 0,
+     "disp": 7.62757850933086e-06,
+     "foot": [
+      -44.106233842523075,
+      50.98918230590244,
+      16.07495672032361
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.62757850933086e-06
+    },
+    {
+     "n": 228,
+     "prev": 0,
+     "disp": 7.627578503153974e-06,
+     "foot": [
+      -44.1062337078045,
+      50.98917467951373,
+      16.07495672032303
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 7.627578503153974e-06
+    },
+    {
+     "n": 230,
+     "prev": 0,
+     "disp": 0.08180620608585375,
+     "foot": [
+      -44.10617253792922,
+      50.98916705312505,
+      16.156762903183775
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180620608585375
+    },
+    {
+     "n": 232,
+     "prev": 0,
+     "disp": 0.08180619892685409,
+     "foot": [
+      -44.10611244579668,
+      50.989159402690014,
+      16.238569079682048
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180619892685409
+    },
+    {
+     "n": 234,
+     "prev": 0,
+     "disp": 0.08180619869364175,
+     "foot": [
+      -44.10605235364203,
+      50.989151752255964,
+      16.32037525594709
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180619869364175
+    },
+    {
+     "n": 236,
+     "prev": 0,
+     "disp": 0.08180619845187805,
+     "foot": [
+      -44.105992261465246,
+      50.98914410182291,
+      16.402181431970355
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180619845187805
+    },
+    {
+     "n": 238,
+     "prev": 0,
+     "disp": 0.0818061982012539,
+     "foot": [
+      -44.10593216926634,
+      50.989136451390834,
+      16.48398760774298
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0818061982012539
+    },
+    {
+     "n": 240,
+     "prev": 0,
+     "disp": 0.08180619794143884,
+     "foot": [
+      -44.105872077045305,
+      50.989128800959755,
+      16.56579378325577
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180619794143884
+    },
+    {
+     "n": 242,
+     "prev": 0,
+     "disp": 0.0818061976721061,
+     "foot": [
+      -44.105811984802145,
+      50.989121150529655,
+      16.647599958499214
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0818061976721061
+    },
+    {
+     "n": 244,
+     "prev": 0,
+     "disp": 0.08180429004478693,
+     "foot": [
+      -44.105751892536865,
+      50.98911350010055,
+      16.7294042261148
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08180429004478693
+    },
+    {
+     "n": 246,
+     "prev": 0,
+     "disp": 0.08179856771120467,
+     "foot": [
+      -44.10569180024946,
+      50.989105849672434,
+      16.811202771395216
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179856771120467
+    },
+    {
+     "n": 248,
+     "prev": 0,
+     "disp": 0.08179856741177334,
+     "foot": [
+      -44.105631707939935,
+      50.9890981992453,
+      16.893001316376186
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179856741177334
+    },
+    {
+     "n": 250,
+     "prev": 0,
+     "disp": 0.08179856674302106,
+     "foot": [
+      -44.105571615608284,
+      50.98909817821369,
+      16.974799861046147
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179856674302106
+    },
+    {
+     "n": 252,
+     "prev": 0,
+     "disp": 0.07865541110689614,
+     "foot": [
+      -44.10551165793878,
+      50.99440821277252,
+      17.053275804076204
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.07865541110689614
+    },
+    {
+     "n": 254,
+     "prev": 0,
+     "disp": 0.08320631682031028,
+     "foot": [
+      -44.105667398871525,
+      50.99716794356339,
+      17.136436196027695
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08320631682031028
+    },
+    {
+     "n": 256,
+     "prev": 0,
+     "disp": 0.08316040559844114,
+     "foot": [
+      -44.10571493643464,
+      50.997182145102904,
+      17.219596586826402
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08316040559844114
+    },
+    {
+     "n": 258,
+     "prev": 0,
+     "disp": 0.08320425805769803,
+     "foot": [
+      -44.10565416969198,
+      50.99448133347281,
+      17.302756976934155
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08320425805769803
+    },
+    {
+     "n": 260,
+     "prev": 0,
+     "disp": 0.0833357366695101,
+     "foot": [
+      -44.105485637046144,
+      50.98908075545999,
+      17.385917366303882
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.0833357366695101
+    },
+    {
+     "n": 262,
+     "prev": 0,
+     "disp": 0.07912868398891491,
+     "foot": [
+      -44.10522470388615,
+      50.989075199905805,
+      17.465045619872626
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.07912868398891491
+    },
+    {
+     "n": 264,
+     "prev": 0,
+     "disp": 0.08179856357479363,
+     "foot": [
+      -44.10516649678657,
+      50.989082766224115,
+      17.54684416238766
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179856357479363
+    },
+    {
+     "n": 266,
+     "prev": 0,
+     "disp": 0.08179856396871076,
+     "foot": [
+      -44.105106673593674,
+      50.989090368588705,
+      17.62864270412731
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179856396871076
+    },
+    {
+     "n": 268,
+     "prev": 0,
+     "disp": 0.08179856353901219,
+     "foot": [
+      -44.10504685036422,
+      50.98909797095493,
+      17.71044124543723
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179856353901219
+    },
+    {
+     "n": 270,
+     "prev": 0,
+     "disp": 0.08179856274028996,
+     "foot": [
+      -44.1049870270982,
+      50.98909794392825,
+      17.792239786301682
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179856274028996
+    },
+    {
+     "n": 272,
+     "prev": 0,
+     "disp": 0.08179856237587312,
+     "foot": [
+      -44.10492706914702,
+      50.9890979199059,
+      17.874038326703104
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179856237587312
+    },
+    {
+     "n": 274,
+     "prev": 0,
+     "disp": 0.08179856189708454,
+     "foot": [
+      -44.10486711116695,
+      50.989097895884846,
+      17.955836866625717
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179856189708454
+    },
+    {
+     "n": 276,
+     "prev": 0,
+     "disp": 0.08179856140075621,
+     "foot": [
+      -44.104807153158,
+      50.989097871865084,
+      18.03763540605198
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.08179856140075621
+    },
+    {
+     "n": 278,
+     "prev": 0,
+     "disp": 0.018924848054969634,
+     "foot": [
+      -44.104731936331106,
+      50.98909784784661,
+      18.056560104631668
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.018924848054969634
+    },
+    {
+     "n": 280,
+     "prev": 0,
+     "disp": 0.003330762138712553,
+     "foot": [
+      -44.10467224753226,
+      50.989097817825325,
+      18.05989033190185
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0.003330762138712553
+    },
+    {
+     "n": 282,
+     "prev": 0,
+     "disp": 1.0773213081724945e-06,
+     "foot": [
+      -44.10467332458568,
+      50.98909779380975,
+      18.05989033129305
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 1.0773213081724945e-06
+    },
+    {
+     "n": 284,
+     "prev": 0,
+     "disp": 0,
+     "foot": [
+      -44.10467332458568,
+      50.98909779380975,
+      18.05989033129305
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0
+    },
+    {
+     "n": 286,
+     "prev": 0,
+     "disp": 0,
+     "foot": [
+      -44.10467332458568,
+      50.98909779380975,
+      18.05989033129305
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0
+    },
+    {
+     "n": 288,
+     "prev": 0,
+     "disp": 0,
+     "foot": [
+      -44.10467332458568,
+      50.98909779380975,
+      18.05989033129305
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0
+    },
+    {
+     "n": 290,
+     "prev": 0,
+     "disp": 0,
+     "foot": [
+      -44.10467332458568,
+      50.98909779380975,
+      18.05989033129305
+     ],
+     "replayReturned": 0,
+     "err": null,
+     "gainOnReplay": 0,
+     "ceiling": 0
+    }
+   ],
+   "summary": {
+    "replayedCalls": 146,
+    "positiveDisplacementCalls": 138,
+    "positiveWithZeroReplayGain": 138,
+    "maxReplayGain": 0,
+    "interpretation": "A positive ACTUAL displacement that the REAL function returns with zero gain is a falsifiable causal result about the projection, measured on real captured points.",
+    "instrumentationOffBeforeReplay": true
+   }
+  }
+ },
+ "cleanup": {
+  "schema": "paravoxia.verifier.ownedSessionGuard.v1",
+  "probe": "common-physical-discriminator-probe.mjs",
+  "writtenAt": "2026-09-06T20:17:11.566Z",
+  "phase": "post-finally",
+  "supersedesForCleanupState": "summary.json .cleanup (captured pre-finally; its sessionStopped is a pre-cleanup value, not the outcome)",
+  "state": "stopped",
+  "cleanupCompleted": true,
+  "label": "arrival-common-short session",
+  "adopted": true,
+  "adoptedAtMs": 1788725765260,
+  "cleanupRequests": 1,
+  "sessionStopInvocations": 1,
+  "sessionStopped": true,
+  "cleanupError": null,
+  "cleanupReason": "probe-finally",
+  "stopsOnlyProbeOwnedSession": true,
+  "stopsRootPreview": false,
+  "killsProcesses": false,
+  "hidesFailureExitCode": false,
+  "note": "Recorded AFTER the finally block ran. This is the actual cleanup outcome of the browser session this probe owned. A stop-failed or never-requested state is reported honestly and does NOT alter the capture outcome, the retained evidence, or the process exit code. It says nothing about the game.",
+  "outcomeUnchanged": true
+ },
+ "closing": {
+  "ok": true,
+  "problems": []
+ },
+ "elapsedMs": 68211,
+ "verdict": "COMMON-CREDIT-CALLEE-ENTERED",
+ "numericGapToRouteUnits": 18,
+ "causalResult": {
+  "statement": "On the measured leg the callee routeProgressUnits was ENTERED 146 times, each paired 1:1 with the caller guard (0 dropped), so the walked/support and reference guards actually PASSED. 138 of those calls carried a positive ACTUAL per-update displacement, yet credited units never left 0: terraUnits read 0 after every one of vertices 1-4.",
+  "falsifiableEvidence": "The REAL callee, captured by reference from its own scope, was replayed with instrumentation removed and Debugger disabled, on the FROZEN copy of the exact captured arguments. All 138 positive-displacement calls returned gainOnReplay 0; maxReplayGain 0.",
+  "numericGap": {
+   "creditedUnits": 0,
+   "routeUnits": 18,
+   "gap": 18
+  },
+  "zeroGainLabelQualification": "chainReturns arcGain 0 alone is accounting only; the causal claim here rests on the actual function replay, not on the accounting label.",
+  "notClaimed": [
+   "no algorithm fix",
+   "no acceptance",
+   "no UX/taste/continuity claim",
+   "body-body clearance is ABSENT from this credit chain and was measured separately, never fabricated as true"
+  ],
+  "stateCaveat": "Instrumentation deopt changes frame distribution; the recorded deltas are still actual."
+ },
+ "walkQuality": {
+  "vertex1": 0.0889,
+  "vertex2": 0.075,
+  "vertex3": 0.1062,
+  "vertex4": 0.0599,
+  "boundMax": 0.35,
+  "allPositive": true,
+  "allSupported": true,
+  "ordinaryPulseFloorMs": 30
+ },
+ "retries": {
+  "run1": "stopped at a missing OCCUPANCY_VERTICAL_UNITS import AFTER passing grounded-E; preserved at captures/common-physical-discriminator/run1",
+  "run2": "single authorized concrete retry, completed end-to-end"
+ }
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "paravoxia.implementationRepairDirection.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "recordedAt": "2026-09-06T11:50:25.174164+00:00",
+  "author": "creative-producer under explicit standing user delegation",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceManifestSha256": "51b25376aa6c87dc428249fcfd907811c592bc9dfdaf00d82c53112593ea02c3",
+  "defectRegisterSha256": "cb15a48b97bd0d2797e2fa1447e5e6055565b508e8607ecc49f43cf0ff93ba5d",
+  "defectIds": [
+    "CG-IMPL-006",
+    "CG-IMPL-008"
+  ],
+  "owner": "integration-engineer",
+  "contractChangeRequired": false,
+  "boundedAction": "Reproduce and correct actual live terrain/render/support disagreement and home boot/foreground anchor loss; reproduce valid intermediate saved-survey entry through actual validator and chapter seam and fix only demonstrated failure. Preserve signedgeometry/fullphysicalproof/audioeligibility/agency/passivediagnostics and earliercontroller fixes. No newcreative direction.",
+  "evidenceRefs": [
+    "verification-world-interim-report.json",
+    "verifier-findings.json",
+    "producer-world-verification-review.json",
+    "producer-lifecycle-source-review.json",
+    "score-home-anchor-eligibility-interpretation.md"
+  ],
+  "scope": "Existing production-lock allowed paths only; no protected/sharedterrain/physics changes orpublication.",
+  "budgetDisposition": "Fifth integration pass overall: original implementation plus four bounded repairs, within chapter maxPatchLoops4. Ledger rows also include findings/signature checkpoints and are not patch counts."
+}

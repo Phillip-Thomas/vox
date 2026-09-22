@@ -1,0 +1,536 @@
+{
+  "kind": "score-lane-assembly-suggestions",
+  "revision": "scene-score-v1",
+  "author": "Score Director",
+  "status": "unsigned treatment; not runtime, schema registration or approval",
+  "treatmentRef": "score-treatment.md",
+  "inputRefs": [
+    "story-intent.md",
+    "decision-brief.json",
+    "../../story-runs/2026-09-06-common-ground/score-reconciliation.json",
+    "../../story-runs/2026-09-06-common-ground/arena-score-final-response.json",
+    "../../story-runs/2026-09-06-common-ground/arena-instrument-repair-score.md",
+    "../../story-runs/2026-09-06-common-ground/score-current-audio-grounding.md"
+  ],
+  "geometry": {
+    "sourceRef": "../../story-runs/2026-09-06-common-ground/geometry-instrument.json#/ranges/0/top3/0",
+    "qualificationRefs": [
+      "../../story-runs/2026-09-06-common-ground/selected-geometry-qualification.md",
+      "../../story-runs/2026-09-06-common-ground/selected-geometry-qualification.json",
+      "../../story-runs/2026-09-06-common-ground/head-geometry-qualification.md",
+      "../../story-runs/2026-09-06-common-ground/head-geometry-qualification.json",
+      "../../story-runs/2026-09-06-common-ground/staged-geometry-qualification.md",
+      "../../story-runs/2026-09-06-common-ground/staged-geometry-qualification.json"
+    ],
+    "range": 12,
+    "apparatusGroundedPose": [
+      -34,
+      51.05,
+      20
+    ],
+    "yawDegrees": 90,
+    "longSurveyUnits": 36,
+    "longRouteChangeReason": "literal stand blocks the base column used by the broad probe's 32-unit route",
+    "shortSurveyUnits": 16,
+    "commonPathUnits": 18,
+    "intermediateWitness": [
+      -34,
+      51.05,
+      10
+    ],
+    "terraFinalReference": [
+      -44,
+      51.05,
+      12
+    ],
+    "commonDensePointCount": 73,
+    "commonCoverageValidFromBothHeldReferences": true,
+    "intermediateWitnessValid": true,
+    "intermediateWitnessBodyClearanceUnits": 2,
+    "status": "Staged and connected-head CPU qualification PASS for the proposed geometry; exact scene contract signatures and runtime, live-world, lifecycle and audiovisual acceptance remain pending.",
+    "audioUsesCoordinates": false,
+    "qualificationSha256": {
+      "head-geometry-qualification.md": "49239bdc51af4b2488d0e5832a77ec881c991e4df468076f9984373a8ae1e4c9",
+      "head-geometry-qualification.json": "e64ce08ef8966324fd35d2028e53334224c2c22022939b4dc1530c0f70c4b4d1",
+      "staged-geometry-qualification.md": "4c3e3895336d9df21b167e62687d1311e37738556f89f2ecb98656a343be2c53",
+      "staged-geometry-qualification.json": "7cc0d63d843df60462a2fd55ba928bfd5656c20b4d20c31a581fec559532b7ff"
+    },
+    "workerCommonReference": [
+      -40,
+      51.05,
+      12
+    ],
+    "comparisonStart": [
+      -42,
+      51.05,
+      12
+    ],
+    "commonMaxDistanceFromWorkerReferenceUnits": 10.01,
+    "commonWorkerBodyClearanceUnits": 2,
+    "terraFinalReferenceBodyClearanceUnits": 2,
+    "positioningLegs": {
+      "outbound": "E -> H",
+      "return": "H -> E",
+      "eachWalkedUnits": 2,
+      "countsAsComparisonProof": false,
+      "changesScore": false,
+      "finalTest": "full independent E -> C remains required"
+    },
+    "connectedHeadAndGeneralContactRuleQualified": true
+  },
+  "listening": {
+    "heard": false,
+    "attempt": "current audit listening derivative submitted; tool explicitly reported unsupported audio input",
+    "sourceRef": "../../story-runs/2026-09-06-common-ground/score-current-audio-grounding.md",
+    "currentWavSha256": {
+      "audit": "b9f4af0f9024974a76c688b23aeab06bb3c8f733cc216ca1ff8e23638ba11417",
+      "hearth": "32f80b133c0f15592c34c257abbf26febebb03cbfa06f7310db7222282687047"
+    },
+    "provesCombinedMix": false
+  },
+  "musicalAuthority": {
+    "proposedAdapter": "main/src/story/commonGroundScore.ts",
+    "existingFacade": "main/src/story/storyScore.ts",
+    "setters": [
+      "setStoryScoreMoodOverride",
+      "setScoreBeat",
+      "setScoreIntensity"
+    ],
+    "localReleaseOrder": [
+      "setScoreBeat(null)",
+      "clearStoryScoreMoodOverride(chapterBeat)"
+    ],
+    "globalResetForLocalCleanup": false,
+    "newAudioGraph": false,
+    "newHitBundles": [],
+    "noteScheduling": "existing scoreEngine lookahead only; no note scheduling from rAF or deadline callbacks",
+    "moodPublication": "once per semantic variant edge; no repeated resubmission",
+    "tonic": {
+      "home": "existing live Tidegarden reference; no absolute key assertion",
+      "travel": "release story score to existing world conductor while gameplay continues",
+      "encounter": "proposed live tonic chain for ch13-survey and ch13-common; derive once from existing live/seed authority",
+      "voicing": "existing brain minimal-motion policy",
+      "era": "alive; existing era-gated instrument budget"
+    }
+  },
+  "moods": {
+    "restored-home": {
+      "chord": [
+        0,
+        4,
+        7,
+        10
+      ],
+      "progression": [
+        [
+          0,
+          4,
+          7,
+          10
+        ],
+        [
+          0,
+          7,
+          12
+        ]
+      ],
+      "pattern": [
+        0,
+        null,
+        null,
+        null,
+        7,
+        null,
+        null,
+        null
+      ],
+      "tempo": 56,
+      "wave": "triangle",
+      "octave": 12,
+      "baseline": 0.26,
+      "pad": 0.12,
+      "sub": 0.07,
+      "ost": 0.018,
+      "riser": 0,
+      "melody": {
+        "scale": [
+          0,
+          2,
+          4,
+          7,
+          9,
+          10,
+          12,
+          14
+        ],
+        "density": 0.12
+      }
+    },
+    "unreconciled": {
+      "chord": [
+        0,
+        6,
+        7
+      ],
+      "progression": [
+        [
+          0,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ]
+      ],
+      "pattern": [
+        0,
+        null,
+        null,
+        6,
+        null,
+        null,
+        7,
+        null
+      ],
+      "tempo": 58,
+      "wave": "square",
+      "octave": 24,
+      "baseline": 0.28,
+      "pad": 0.075,
+      "sub": 0.07,
+      "ost": 0.025,
+      "riser": 0
+    },
+    "demonstrating": {
+      "chord": [
+        0,
+        6,
+        7
+      ],
+      "progression": [
+        [
+          0,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ]
+      ],
+      "pattern": [
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        7,
+        null
+      ],
+      "tempo": 58,
+      "wave": "square",
+      "octave": 24,
+      "baseline": 0.24,
+      "pad": 0.065,
+      "sub": 0.065,
+      "ost": 0.018,
+      "riser": 0
+    },
+    "refused-hold": {
+      "chord": [
+        0,
+        1,
+        7
+      ],
+      "pattern": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "tempo": 58,
+      "wave": "square",
+      "octave": 24,
+      "baseline": 0.18,
+      "pad": 0.045,
+      "sub": 0.055,
+      "ost": 0,
+      "riser": 0
+    },
+    "revised": {
+      "chord": [
+        0,
+        6,
+        7
+      ],
+      "progression": [
+        [
+          0,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ]
+      ],
+      "pattern": [
+        0,
+        null,
+        null,
+        6,
+        null,
+        null,
+        null,
+        null
+      ],
+      "tempo": 58,
+      "wave": "square",
+      "octave": 24,
+      "baseline": 0.24,
+      "pad": 0.065,
+      "sub": 0.065,
+      "ost": 0.018,
+      "riser": 0
+    },
+    "independent-action-settled": {
+      "chord": [
+        0,
+        6,
+        7
+      ],
+      "progression": [
+        [
+          0,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ]
+      ],
+      "pattern": [
+        0,
+        null,
+        null,
+        6,
+        null,
+        null,
+        null,
+        7
+      ],
+      "tempo": 58,
+      "wave": "square",
+      "octave": 24,
+      "baseline": 0.24,
+      "pad": 0.065,
+      "sub": 0.065,
+      "ost": 0.018,
+      "riser": 0
+    }
+  },
+  "cueBindings": [
+    {
+      "id": "sc.cg.hearth-held",
+      "startAnchors": [
+        "CG-B0-hearth-holds",
+        "anc.cg.restored-entry"
+      ],
+      "endAnchors": [
+        "CG-01-return-chosen"
+      ],
+      "variant": "restored-home",
+      "trigger": "actual install plus available home score host, or current stable restored-home entry",
+      "restore": "steady variant only; no completion transient",
+      "note": "archived fault does not change music; no listen gate before invitation",
+      "relation": "after authoritative event",
+      "offsetMs": 0,
+      "offsetMeaning": "mood target request, not guaranteed note onset",
+      "hit": false
+    },
+    {
+      "id": "sc.cg.unreconciled",
+      "startAnchors": [
+        "CG-02-repeat-fails"
+      ],
+      "endAnchors": [
+        "CG-03-route-offered"
+      ],
+      "variant": "unreconciled",
+      "trigger": "actual mounted/performed renewed inspection world state; no camera-framing or screen-visibility predicate; never home archive or remote approach",
+      "relation": "after authoritative event",
+      "offsetMs": 0,
+      "offsetMeaning": "mood target request, not guaranteed note onset",
+      "hit": false
+    },
+    {
+      "id": "sc.cg.demonstrating",
+      "startAnchors": [
+        "CG-03-route-offered",
+        "CG-05-other-end",
+        "CG-06-his-test"
+      ],
+      "endAnchors": [
+        "CG-04-specific-hold",
+        "anc.cg.route-revised",
+        "CG-07-model-incomplete"
+      ],
+      "variant": "demonstrating",
+      "trigger": "real offered test, reciprocal crossing or final-test initiation; suppress duplicate same-variant publication",
+      "relation": "after authoritative event",
+      "offsetMs": 0,
+      "offsetMeaning": "mood target request, not guaranteed note onset",
+      "hit": false
+    },
+    {
+      "id": "sc.cg.refused",
+      "startAnchors": [
+        "CG-04-specific-hold"
+      ],
+      "endAnchors": [
+        "anc.cg.test-resumed",
+        "anc.cg.route-revised"
+      ],
+      "variant": "refused-hold",
+      "trigger": "first actual unsupported offered span; de-duplicate within held test; current visible failure reason never schedules another cue",
+      "relation": "after authoritative event",
+      "offsetMs": 0,
+      "offsetMeaning": "mood target request, not guaranteed note onset",
+      "hit": false
+    },
+    {
+      "id": "sc.cg.revised",
+      "startAnchors": [
+        "anc.cg.route-revised"
+      ],
+      "endAnchors": [
+        "CG-04-specific-hold",
+        "CG-05-other-end",
+        "CG-07-model-incomplete"
+      ],
+      "variant": "revised",
+      "trigger": "real changed-tail/new-offer state; no sample or valid-coordinate reward",
+      "relation": "after authoritative event",
+      "offsetMs": 0,
+      "offsetMeaning": "mood target request, not guaranteed note onset",
+      "hit": false
+    },
+    {
+      "id": "sc.cg.independent-settled",
+      "startAnchors": [
+        "CG-07-model-incomplete"
+      ],
+      "endAnchors": [
+        "anc.cg.final-texture-release"
+      ],
+      "variant": "independent-action-settled",
+      "trigger": "live first chapter completion from actual worker arrival and reciprocal proof",
+      "restore": "never start",
+      "repeat": "never start",
+      "relation": "after authoritative event",
+      "offsetMs": 0,
+      "offsetMeaning": "mood target request, not guaranteed note onset",
+      "hit": false
+    }
+  ],
+  "holds": {
+    "failedSpanReasons": [
+      "reference-out-of-range",
+      "reference-occluded-survey-housing",
+      "reference-occluded-other-solid",
+      "footing-invalid"
+    ],
+    "failedSpanScore": "enter refused-hold once on actual unsupported-test state; visible repair differs by reason",
+    "temporarySuspensions": [
+      "established-witness-vacated",
+      "temporary-body-clearance-blocked"
+    ],
+    "temporarySuspensionScore": "retain current texture with no mood restart; body/guidance show hold",
+    "recovery": "actual source revalidation/offer; no music, gaze or elapsed-time predicate",
+    "boundaryJitterOrRepeatedInvalidInput": "no new mood selection",
+    "firstTrySuccess": "skip unexperienced refused/revised states",
+    "rangeBackingOrProximityCue": false,
+    "positioningLegsScore": "E -> H and H -> E positioning retain current texture, add no cue or phrase restart and earn no comparison proof"
+  },
+  "finalTexture": {
+    "event": "CG-07-model-incomplete",
+    "eligibility": "fresh real completion event in current actor/world/run; not receipt read, hydration or optional repeat",
+    "immediateAtCommit": [
+      "logical completion",
+      "mandatory guidance retirement",
+      "full control and progression handback CG-08-open-ground"
+    ],
+    "maximumLiveSeconds": 5,
+    "releaseSeconds": 4.5,
+    "deadlineClock": "monotonic elapsed time from live completion; deadline only releases presentation intent",
+    "normalRelease": "setScoreBeat(null), then clear chapter override; use existing complementary authority fade",
+    "cancellations": [
+      "new-story",
+      "optional-survey-action",
+      "actor-change",
+      "world-change",
+      "reset",
+      "exit",
+      "pause",
+      "visibility-loss",
+      "music-mute",
+      "audio-unavailable"
+    ],
+    "cancelBehavior": "invalidate live token and deadline; release immediately through existing click-free authority/output handling; never resume or defer",
+    "separateCoda": false,
+    "hydrate": false,
+    "replay": false,
+    "deferUntilUnlock": false,
+    "intensityBoostToForceAttack": false,
+    "requiredIntegration": "bounded exception at existing storyDirector inactive-score cleanup, using chapter-local transient state; current deactivation otherwise clears immediately",
+    "persistedFields": [],
+    "newNoteScheduler": false
+  },
+  "guidance": {
+    "exactObjectiveSource": "story-intent.md#executable-objective-lifecycle",
+    "entry": "existing once-per-objective semantic acknowledgement; silent restoration",
+    "progress": "actual commit feedback only; trace sample/turn has no chime",
+    "failure": "distinct literal physical/reference reason; no score sting",
+    "completion": "one semantic acknowledgement; never doubled by scoreHit",
+    "priority": "speech/world contact/interaction evidence before score; reserve sparse spectrum/density",
+    "keysDoNotCreateMusic": [
+      "ch13:home:review",
+      "ch13:survey:witness",
+      "ch13:survey:witness-return",
+      "ch13:common:offer-final-reference",
+      "ch13:common:reference-return"
+    ],
+    "mandatoryAudioOnlyClues": false
+  },
+  "evidenceRequired": [
+    "deterministic state-edge selection and same-variant no-restart",
+    "actual distinct failures versus repeated witness suspension/resume",
+    "live install versus already-restored entry",
+    "active mid-chapter reload derives stable state; completed loads use world bed",
+    "final-texture deadline and full cancellation matrix; zero hydration/repeat replay",
+    "first-try and retry with both equally scored routes",
+    "combined current scene listening with speech/SFX and predecessor excerpts",
+    "immediate controls/progression with finite release and no orphaned voices",
+    "long hold/retry phrase inspection for stuck whole-passage repetition; no speculative engine expansion",
+    "required hardware/tier/mobile/reduced-motion/reset and three cold movie gates"
+  ],
+  "protectedReveals": [
+    "no alliance or forced awakening",
+    "no Worker9/third-consciousness motif or voice",
+    "no A5/6/7/8 fidelity or ontology spend",
+    "no station carrier continuity or surveillance inference",
+    "no threatened home",
+    "no unequal route moral or musical ranking"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-09-06T05:39:15.154810+00:00",
+  "purpose": "run-local listening transport derivative; originals unchanged",
+  "records": [
+    {
+      "original": "ch4-audit_current.wav",
+      "originalSha256": "b9f4af0f9024974a76c688b23aeab06bb3c8f733cc216ca1ff8e23638ba11417",
+      "derivative": "ch4-audit_current_listening.mp3",
+      "derivativeSha256": "0fe99f1d4377934a948337fda924c9eb49c6fafa9fd474ff761ebb532668a126",
+      "encoding": "MP3 96kbps stereo, source 44100Hz retained; no normalization or filters",
+      "bytes": 120729
+    },
+    {
+      "original": "ch9-hearth_current.wav",
+      "originalSha256": "32f80b133c0f15592c34c257abbf26febebb03cbfa06f7310db7222282687047",
+      "derivative": "ch9-hearth_current_listening.mp3",
+      "derivativeSha256": "0b197d8d9c6e2b917f5a561fa49b754347228f796e32e4871f7e1e419ba4b2b5",
+      "encoding": "MP3 96kbps stereo, source 44100Hz retained; no normalization or filters",
+      "bytes": 120729
+    }
+  ]
+}

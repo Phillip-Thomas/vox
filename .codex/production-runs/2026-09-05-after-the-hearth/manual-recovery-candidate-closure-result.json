@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 160324,
+  "stop_reason": "end_turn",
+  "session_id": "573274ba-4406-4ec2-9fe9-a8f3f4a0933d",
+  "total_cost_usd": 0.8503625000000001,
+  "usage": {
+    "input_tokens": 30,
+    "cache_creation_input_tokens": 36099,
+    "cache_read_input_tokens": 381381,
+    "output_tokens": 11838,
+    "output_tokens_details": {
+      "thinking_tokens": 2401
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 36099,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1687,
+        "cache_read_input_tokens": 41092,
+        "cache_creation_input_tokens": 1313,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1313
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2507,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002582,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 30,
+      "outputTokens": 11838,
+      "cacheReadInputTokens": 381381,
+      "cacheCreationInputTokens": 36099,
+      "webSearchRequests": 0,
+      "costUSD": 0.8477805000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2401,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 20,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: pass \u2014 physically valid recovery achieved; browser ran on real hardware. Completed 23:12:15Z, inside the original 23:16:59Z deadline.\n\nThe predecessor's FD refusal was the error, not a blocker: the shell launcher acquired FD9 and the node probe inherited it exactly as documented.\n\n**Gates observed**\n\n| Gate | Result | Value |\n|---|---|---|\n| control activeRole/action | pass | `manual-recovery-candidate-runtime` / `continue` |\n| current-build-identity-and-hardware-angle | pass | ANGLE (NVIDIA GB10/PCIe, OpenGL 4.5.0), headed |\n| manual-lane-no-autopilot | pass | `autopilotPresent:false` |\n| early-cut-route-REFUSED-credit-at-C | pass | terra **2.275022428217211** < 18 |\n| return-foot-support-and-retained-credit measured pre-forward | pass | see below |\n| physical-return-and-ordinary-retraversal-completed-18 | pass | terra **18**, reset/secondGrant/rail all false |\n| actual-Terra-walked-the-full-18-unit-common-span | pass | 18 / 18 |\n| vertex-3 bounded overshoot | fail | inherent to the deliberate corner-cutting route |\n| far-reference-offered-by-authored-F-at-T | fail | probe refused pressing F *because* vertex-3 failed; stage-only stop |\n\n**Measurements**\n- Measured turn foot z = **14.275022413379595** (reported as measured; not the static 15.82).\n- Return to E: actual foot `[-42.44660525560542, 50.98900435819689, 12.299745526716817]`, `supported=true`, retained credit **2.3069190151400694**, frontier z **14.30691901514007**, margin before frontier **2.007173488423252** \u2014 far outside the 0.6 tolerance band that stranded run10's 0.0989217724u.\n- Forward retraversal terra, all crossings supported: (-42,14)=2.3074568905598962 \u2192 (-42,16)=4 \u2192 (-44,16)=6.129400075486313 \u2192 (-44,18)=8.138787310224927 \u2192 (-46,18)=10.067443969195566 \u2192 (-48,18)=12 \u2192 (-48,16)=14.138090291224115 \u2192 (-48,14)=16.123346394526067 \u2192 (-48,12)=**18**.\n\n**Correction applied (private probe only)**: `ACTIVE_ROLE` rebound to `manual-recovery-candidate-runtime`; RET extended to E(-42,51.05,12); a pre-forward verification gate reading actual foot/support/retained credit with a hard stop when unmeasured (no synthetic foot); RETRA prepended with (-42,14) and `prevPt` seeded at E. No predicate widened, no tolerance relaxed, no grants, no teleports/rescues. Game source, contracts, launcher, and receipts untouched.\n\n**Visual**: `after-physical-return-and-retraversal.png` \u2014 non-blank, HUD present, objective copy actionable (`[F] Offer this end`). No blank/pop/missing-HUD defect in the frames read.\n\n**Cleanup**: owned session stopped (`reason=probe-finally`), zero owned chrome remnants, root preview 37395 still HTTP 200, heavy.lock inode 8397196 has 0 rows in `/proc/locks`.\n\n**Hashes**: source manifest `8962a7b2\u2026b46962` (verified live); probe `6772c5112c4a9cfbffb52e4ca4e8d6bdf2b87865a06881e5d4ca0d53c61d8975`, identical before and after execution; summary.json `01d4b941\u20267ae01`; trace.ndjson `5befb4b9\u202633beb4`.\n\n**Artifacts**\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/manual-credit-finale/recovery-candidate-run1`\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/recovery-candidate/`\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/logs/manual-recovery-candidate-closure/probe.log`\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/logs/manual-recovery-candidate-runtime/recovery-candidate-report.md`\n\nTwo scope notes: the F-offer/Worker18 corroboration did not run \u2014 it was gated behind the cut route's own vertex-3 failure, so that leg is unmeasured rather than negative, and I make no defect-closure claim about it. Prior evidence folders were not overwritten; `recovery-candidate-run1` was fresh.",
+  "ttft_ms": 2131,
+  "type": "result",
+  "duration_ms": 259974,
+  "uuid": "f91d3750-e19b-402e-beb4-13ab00d2890e",
+  "ttft_stream_ms": 1290,
+  "time_to_request_ms": 19,
+  "first_content_frame_ms": 1291,
+  "queued_turn_count": 0
+}

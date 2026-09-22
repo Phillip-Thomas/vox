@@ -1,0 +1,22 @@
+{
+  "ownerPid": 668822,
+  "pid": 668853,
+  "url": "http://127.0.0.1:33001/",
+  "manifest": {
+    "files": {
+      "assets/SpaceStationSandbox-b8lIOKX0.js": "b63ad74c98b1a97601fb293a73aafa895dcf52b07df72a639342b560766fa74f",
+      "assets/index-Ab4m4yq4.js": "1e1e1f42fa5cb3914887e1689d33b38860152d359524f01be8db670ac29f7871",
+      "assets/index-BIlQq2St.css": "c91e576a559767e0492defef88efdbcb4d663d3b821ce71c4718bc0294ada9af",
+      "assets/worldPrep.worker-D9jfWRDd.js": "5c34b2579d4869bbb97ca0d692cf14c2ed050c8983dce442c1ffcca1676bd0de",
+      "audio/music/deep_space_out_there.ogg": "6e02a32d963b84061cdeec66cc852e731e367c93ef572aa169b1baadbcdc20ba",
+      "audio/music/manifest.json": "453c4f17ce55bbdd29a8a943049dbd2f6a3e436fb4d0bba9e2e082f7945fea65",
+      "audio/music/menu_ambientmain.ogg": "9dbe685e40d6cc8876ff08938b011424b802c2757ac4052e3eb93f8634208969",
+      "audio/music/shimmer_dream_ambience.mp3": "e2dbd95fa7e4bcc9e31b861ee1471b64f2dfa2a1d6facc458ab634f952ca567e",
+      "audio/music/surface_project_utopia.ogg": "88d9956c98282523dd1a00fc6023ee01619818c4ce138c52816e0a39f837fa50",
+      "audio/music/warp_surreal_truth.mp3": "fe4a94a95aa8f281185f09818d1c9f4cb0da5cd70350bf13b43b5a3c779ce691",
+      "index.html": "4e57eed71b0f21c5066fcd0cdfc93fb0ae4e94bd49dc6c06aee0852a41ae2c99"
+    },
+    "sha256": "ae0211e4363c80494bbd42e8b04f25842269ee955616ab8ae21e797bafe8050f"
+  },
+  "source": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-departure-repair-20260909/source.json"
+}

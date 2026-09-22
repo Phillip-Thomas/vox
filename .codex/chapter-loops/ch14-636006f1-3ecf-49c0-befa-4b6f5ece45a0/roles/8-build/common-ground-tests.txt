@@ -1,0 +1,13 @@
+
+ RUN  v3.2.4 /home/thomasphillip/Projects/vox/main
+
+ ✓ src/story/commonGroundRoute.test.ts (62 tests) 17ms
+ ✓ src/story/commonGroundDirector.test.ts (130 tests) 1384ms
+   ✓ the standby she is sent to is ground she can actually stand on > REPRODUCES the stall: the pre-repair standby is over water, not ground  694ms
+   ✓ the standby she is sent to is ground she can actually stand on > keeps his body-clearance hold, and clears it when she has actually moved  425ms
+
+ Test Files  2 passed (2)
+      Tests  192 passed (192)
+   Start at  17:48:14
+   Duration  4.54s (transform 1.91s, setup 0ms, collect 3.02s, tests 1.40s, environment 0ms, prepare 135ms)
+

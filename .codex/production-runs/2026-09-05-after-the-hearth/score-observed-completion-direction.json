@@ -1,0 +1,118 @@
+{
+  "documentKind": "score-observed-completion-direction",
+  "director": "score",
+  "runId": "2026-09-05-after-the-hearth",
+  "authoredBy": "Score Director (/root/score_director)",
+  "authoredAt": "2026-09-06T20:27:50.093307Z",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "disposition": "route-bounded-implementation-fidelity-correction",
+  "implementationFidelityCorrectionWarranted": true,
+  "contractChangeRequired": false,
+  "scoreMeaningChanged": false,
+  "creativeAcceptance": false,
+  "authorizesSourceMutation": false,
+  "basis": "This direction now rests on an observed actual completion window plus the existing source audit, not on a null diagnostic alone. The audited foreground predicate makes story.active=false sufficient for suspension; normal done must not itself cancel the freshly eligible final token. That unconditional path conflicts with the existing retention exception and warrants bounded fidelity routing even though the exact dynamic clearing caller remains unrecorded.",
+  "existingContractClauses": [
+    {
+      "ref": "scene-contract.json#/score/cues/5/phraseIntent",
+      "text": "Only the actual live first completion, from his real arrival plus the earned reciprocal proof, changes spacing."
+    },
+    {
+      "ref": "scene-contract.json#/score/cues/5/barIntent",
+      "text": "Live only for at most five seconds measured on a monotonic clock from the live completion, then the existing 4.5 second release through the existing complementary authority fade; never restored, never repeated."
+    },
+    {
+      "ref": "scene-contract.json#/score/cues/5/mixIntent",
+      "text": "The release tail never owns camera, controls or progression; handback at anc.cg.handback is immediate and independent of it."
+    },
+    {
+      "ref": "scene-contract.json#/score/cues/5/silenceIntent",
+      "text": "No separate coda, no hydration, no replay, no deferral until unlock and no intensity boost to force an attack; new story, optional survey action, actor change, world change, reset, exit, pause, visibility loss, music mute and unavailable audio each invalidate the live token and release immediately."
+    },
+    {
+      "ref": "scene-contract.json#/reset/states/3/acceptanceCriterion",
+      "text": "Reset clears previous beat ownership. The single explicit exception is real first completion and its immediate handback/normal transition to done: it may create and finish the signed live-only token, at most five seconds then the existing 4.5-second release, without retaining any control or progression ownership. Pause, focus loss, quit, deep link, replay, sandbox, world or actor change, new story/optional survey, mute and unavailable audio cancel immediately. Any other beat exit cancels. No cancelled token resumes, hydrates or defers to unlock."
+    }
+  ],
+  "evidenceInputs": {
+    "producer-finale-observed-completion-review.json": "1a1f21ca85697acf5725e8165173024f0d453d71319541531cd4284f0ff3e4e3",
+    "score-final-completion-interpretation.json": "68d7615b704560eeb63e9061b3a30136ab2ad3548383ceb7a4a9d507f1077865",
+    "finale-lifecycle-audit.json": "45e5c70391c5aa303da5a4595c31e6050c0b48c2f54e48ab1ee78fef0417b048"
+  },
+  "observedWindow": {
+    "ref": "verifier/captures/finale-window/window-4/window.ndjson",
+    "sha256": "95e3a09bb90cadb14b4ed90a843b5af272e028a6dee720e4a42c45985ee5df1b",
+    "provenance": "Atomic window and artifact hashes reported/checked by producer-finale-observed-completion-review.json; this role reuses that completed measurement and does not recapture it.",
+    "retainedSamples": 847,
+    "atomicEdge": {
+      "index": 179,
+      "tMs": 62877.299999952316,
+      "wallMs": 1788726092396,
+      "terra": 18,
+      "worker": 18,
+      "committed": true,
+      "bothAnchors": true,
+      "beat": "done",
+      "active": false,
+      "textureAgeSeconds": 0.021199999928474426,
+      "nextSampleDeltaMs": 13.5,
+      "nextTexture": null,
+      "visibleAndFocusedAtBoth": true,
+      "audioRouteAtBoth": [
+        "game: direct (running)",
+        "game: direct (running)"
+      ]
+    },
+    "meaning": "At actual done/active=false, Terra18, worker18, committed and both AV anchors coexist with a live token aged about 21.2 ms; the next atomic sample 13.5 ms later reports no token. Visibility/focus remain true and the route description remains game: direct (running). These are runtime-state observations, not audible evidence."
+  },
+  "reusedSourceAudit": {
+    "ref": "finale-lifecycle-audit.json#/sourceRoutesEnumerated/handbackFrameSequence",
+    "driverSite": "main/src/story/StoryDirectorDriver.tsx:145-151",
+    "driverSha256": "284f981accdf1ecfaed567d0668329d084e353233b5d1e0cea295a9d60e4e32a",
+    "suspensionSite": "main/src/story/commonGroundDirector.ts:1751-1754",
+    "directorSha256": "3b2b95ccd1701b863348e147a8181a704c2ed73258467ea98617e06f0f25aba3",
+    "necessaryPredicate": "foreground includes story.active. Given the observed active=false, foreground is false regardless of the other conjuncts; when that earlier-priority callback executes, its !foreground branch calls suspension and cancels before the later normal post-done deadline carrier.",
+    "strength": "The static normal-done cancellation path is established by the reused audit and fits the newly observed next-sample clear. It is sufficient to identify an implementation conflict with the signed exception.",
+    "attributionLimit": "No recorded dynamic calling stack, cancel reason, paused value, music mute/volume or raw context transition identifies the sole clearing caller. A visible/focused window and running route string do not exclude every pause/audio alternative. Do not promote the audit measurement rule into a claim that all alternatives were dynamically excluded."
+  },
+  "routing": {
+    "to": "integration-engineer via producer",
+    "timing": "After the producer finishes or releases the currently active verification/source freeze and routes the bounded pass; this artifact edits no game source.",
+    "target": "Existing foreground/suspension and normal completion handback wiring identified in the audit; retain the existing Common Ground score adapter and deadline/release authority.",
+    "requiredBehavior": [
+      "Fresh earned completion and its normal transition to done must remain eligible for the existing bounded token. Story inactivity alone must not be treated as actual pause, visibility loss or quit for that token.",
+      "Do not make every inactive state eligible. Preserve actual pause, quit/menu exit, focus/visibility loss, mute/zero music volume, unavailable audio/context, reset, world/actor change, new story, optional survey, deep link, replay, sandbox and other beat-exit cancellations.",
+      "Retain immediate controls/progression and mandatory-guidance retirement; do not reactivate completed story logic, hold the actor/camera or delay done to keep music alive.",
+      "Continue the existing monotonic deadline and existing 4.5-second complementary release, using the existing release order and authority. A legitimate cancellation still ends the token early and never queues a later playback.",
+      "Preserve completed-save silence and actual first-completion eligibility after a mid-chapter Continue. No generic handback, restored receipt or optional repeat may create a token.",
+      "Preserve all six cues, note-dropping/humanization, current material and geometry. Do not force an attack, boost intensity, add a coda, or expand the engine to make the correction audible."
+    ],
+    "amendmentRationale": "The correction enforces the already signed distinction between logical completion and genuine cancellation. It changes no authored duration requirement, cue/anchor meaning, physical milestone, resource budget or reveal, so no creative contract amendment is indicated.",
+    "boundedValidation": [
+      "Targeted lifecycle checks distinguish otherwise eligible normal done from every actual cancellation condition; protect the token only for the signed completion exception.",
+      "After routed implementation, reuse one bounded atomic actual-completion window to record begin/clear reason, normal done, deadline/authority release and true cancellation state. Preserve immediate control/guidance handback and no replay.",
+      "For any subsequent audible judgment, retain owned output with defensible PCM-to-event alignment and actual audition. State evidence alone does not supply a score/taste pass."
+    ]
+  },
+  "audioLimits": {
+    "sameSessionOwnedWavRef": "verifier/captures/finale-window/window-4/owned-sink.wav",
+    "sha256": "766d304847b5037c9ea9bff1010b17e59b38ddb5b5844b6ca2c5a5419e60a24f",
+    "pcmVsProcessWallDifferenceSeconds": 1.891376417233559,
+    "exactPcmWallAlignmentProved": false,
+    "audibleMinimumRequired": false,
+    "fixedFiveSecondPerformanceRequired": false,
+    "guaranteedAttackRequired": false,
+    "heardByThisRole": false,
+    "audibleFailureOrSuccessClaim": false
+  },
+  "actionsThisRole": {
+    "newAudit": false,
+    "gameOrProbeChanges": false,
+    "contractOrSignatureChanges": false,
+    "newCouncilOrCreativeReview": false,
+    "gpuWork": false,
+    "audioMaterialChosen": false,
+    "geometryChanged": false
+  }
+}

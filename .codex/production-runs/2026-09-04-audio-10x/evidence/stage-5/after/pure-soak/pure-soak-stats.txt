@@ -1,0 +1,113 @@
+=== fullSoak 32min seed=5 (verdant): PASS ===
+  [PASS] finite-plans     every plan field finite
+  [PASS] chord-legality   242 transitions, mean displacement 3.12 st
+  [PASS] phrase-tabu      17 statements, 17 distinct
+  [PASS] mediant-ration   6 mediants (incl. pivot awe-chords) over 78 phrases (ration 1/phrase; paradox 2)
+  [PASS] mode-drift       12 drift steps, all single-accidental
+  [PASS] signal-smoothness worst normalized bar step 0.626 (limit 0.7)
+  [PASS] no-deadlock      heldNoLegal 0 bars, worst streak 0 (limit 12)
+  [PASS] bar-tabu         0 bypasses (budget 4), no unflagged repeat inside 32 bars
+  [PASS] bloom-paid       every planned bloom was paid for by a prior withhold
+  [PASS] section-pairs    12 sections, all pairs distinct
+  [PASS] bloom-budget     no unforced bloom inside a budget-0 section
+  · bars: 624
+  · phrases: 78
+  · chordChanges: 242
+  · distinctChords: 22
+  · mediants: 6
+  · landingPivots: 1
+  · stageBlooms: 0
+  · modeDrifts: 12
+  · melodyStatements: 17
+  · distinctStatements: 17
+  · barNovelty: 0.966
+  · tabuBypasses: 13
+  · barTabuBypasses: 0
+  · sections: 12
+  · blooms: 10
+  · commonToneRelaxes: 0
+  · worstSignalStep: 0.626
+  · modes: dorian:248 mixolydian:195 ionian:48 aeolian:133
+  · arrangement: BED:224 BUILD:112 BLOOM:128 EBB:96 REST:64
+  · globalBarNovelty(+voicing,+levels): 0.966  windowRepeats32: 19
+  · dupByState: {"BED":{"bars":224,"dup":0},"BUILD":{"bars":112,"dup":0},"BLOOM":{"bars":128,"dup":0},"EBB":{"bars":96,"dup":0},"REST":{"bars":64,"dup":21}}
+  · BLOOM episodes: 10 lengths(phrases)=[2,2,1,2,2,1,2,2,1,1] gaps(min)=[2.9,4.1,4.5,2.1,4.1,2.5,4.1,2.9,1.6]
+  · BUILD episodes: 10 lengths(phrases)=[1,1,1,1,1,1,3,1,3,1]
+  · statements: 17 gaps(phrases)=[7,1,1,8,11,2,3,6,13,2,1,4,7,1,3,1]
+  · sections: 12 repeatedPairs=0 bloomBudgets=[1,1,0,0,1,1,1,1,1,1,1,1] withheld=[lead,lead,,lead,shimmer,percussion,percussion,shimmer,percussion,lead,percussion,shimmer]
+
+=== fullSoak 32min seed=8 (frozen): PASS ===
+  [PASS] finite-plans     every plan field finite
+  [PASS] chord-legality   417 transitions, mean displacement 2.85 st
+  [PASS] phrase-tabu      30 statements, 30 distinct
+  [PASS] mediant-ration   15 mediants (incl. pivot awe-chords) over 132 phrases (ration 1/phrase; paradox 2)
+  [PASS] mode-drift       6 drift steps, all single-accidental
+  [PASS] signal-smoothness worst normalized bar step 0.688 (limit 0.7)
+  [PASS] no-deadlock      heldNoLegal 18 bars, worst streak 2 (limit 12)
+  [PASS] bar-tabu         0 bypasses (budget 4), no unflagged repeat inside 32 bars
+  [PASS] bloom-paid       every planned bloom was paid for by a prior withhold
+  [PASS] section-pairs    21 sections, all pairs distinct
+  [PASS] bloom-budget     no unforced bloom inside a budget-0 section
+  · bars: 1056
+  · phrases: 132
+  · chordChanges: 417
+  · distinctChords: 16
+  · mediants: 15
+  · landingPivots: 0
+  · stageBlooms: 0
+  · modeDrifts: 6
+  · melodyStatements: 30
+  · distinctStatements: 30
+  · barNovelty: 0.868
+  · tabuBypasses: 100
+  · barTabuBypasses: 0
+  · sections: 21
+  · blooms: 9
+  · commonToneRelaxes: 9
+  · worstSignalStep: 0.688
+  · modes: lydian:886 ionian:120 mixolydian:48 aeolian:2
+  · arrangement: BED:448 BUILD:128 BLOOM:128 EBB:104 REST:248
+  · globalBarNovelty(+voicing,+levels): 0.868  windowRepeats32: 94
+  · dupByState: {"BED":{"bars":448,"dup":5},"BUILD":{"bars":128,"dup":0},"BLOOM":{"bars":128,"dup":0},"EBB":{"bars":104,"dup":1},"REST":{"bars":248,"dup":133}}
+  · BLOOM episodes: 9 lengths(phrases)=[2,2,2,2,2,2,1,2,1] gaps(min)=[3.2,4.1,5.8,4.4,5.6,3.4,2.9,1.5]
+  · BUILD episodes: 9 lengths(phrases)=[1,2,3,2,1,3,1,1,2]
+  · statements: 30 gaps(phrases)=[3,2,3,5,3,3,1,6,4,1,2,4,8,1,5,3,1,2,15,19,4,9,5,1,6,3,2,6,1]
+  · sections: 21 repeatedPairs=0 bloomBudgets=[1,0,1,0,0,1,1,0,0,1,0,0,1,0,0,1,0,1,0,1,1] withheld=[ostinato,,shimmer,ostinato,lead,ostinato,shimmer,,,percussion,ostinato,,shimmer,,,percussion,,ostinato,,shimmer,percussion]
+
+=== fullSoak 32min seed=10 (volcanic): PASS ===
+  [PASS] finite-plans     every plan field finite
+  [PASS] chord-legality   264 transitions, mean displacement 2.95 st
+  [PASS] phrase-tabu      21 statements, 21 distinct
+  [PASS] mediant-ration   4 mediants (incl. pivot awe-chords) over 83 phrases (ration 1/phrase; paradox 2)
+  [PASS] mode-drift       10 drift steps, all single-accidental
+  [PASS] signal-smoothness worst normalized bar step 0.633 (limit 0.7)
+  [PASS] no-deadlock      heldNoLegal 0 bars, worst streak 0 (limit 12)
+  [PASS] bar-tabu         0 bypasses (budget 4), no unflagged repeat inside 32 bars
+  [PASS] bloom-paid       every planned bloom was paid for by a prior withhold
+  [PASS] section-pairs    13 sections, all pairs distinct
+  [PASS] bloom-budget     no unforced bloom inside a budget-0 section
+  · bars: 664
+  · phrases: 83
+  · chordChanges: 264
+  · distinctChords: 15
+  · mediants: 4
+  · landingPivots: 0
+  · stageBlooms: 0
+  · modeDrifts: 10
+  · melodyStatements: 21
+  · distinctStatements: 21
+  · barNovelty: 0.928
+  · tabuBypasses: 16
+  · barTabuBypasses: 0
+  · sections: 13
+  · blooms: 8
+  · commonToneRelaxes: 0
+  · worstSignalStep: 0.633
+  · modes: aeolian:179 dorian:162 mixolydian:275 ionian:48
+  · arrangement: BED:296 BUILD:120 BLOOM:72 EBB:88 REST:88
+  · globalBarNovelty(+voicing,+levels): 0.928  windowRepeats32: 31
+  · dupByState: {"BED":{"bars":296,"dup":2},"BUILD":{"bars":120,"dup":0},"BLOOM":{"bars":72,"dup":0},"EBB":{"bars":88,"dup":0},"REST":{"bars":88,"dup":46}}
+  · BLOOM episodes: 8 lengths(phrases)=[1,1,1,1,2,1,1,1] gaps(min)=[5.0,1.9,3.9,5.4,3.1,2.7,5.8]
+  · BUILD episodes: 8 lengths(phrases)=[1,1,1,3,1,2,3,3]
+  · statements: 21 gaps(phrases)=[3,1,3,5,4,1,2,2,6,4,9,1,4,2,13,1,6,8,1,5]
+  · sections: 13 repeatedPairs=0 bloomBudgets=[1,0,1,0,1,1,0,1,1,1,0,1,0] withheld=[ostinato,,percussion,ostinato,ostinato,ostinato,percussion,lead,ostinato,ostinato,,percussion,]

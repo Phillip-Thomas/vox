@@ -1,0 +1,47 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "continue",
+  "standingAuthorization": "Fix blockers and reduce repeated whole-movie work using the improved workflow.",
+  "scope": "Capture observation only: retain selected tree/wood, real camera/body/flight data, and actual saved browser state at semantic progress boundaries. Diagnostic checkpoints are explicitly noncertifying. Fresh context and continuity/control/media acceptance predicates, limits, provider and commissions unchanged. No hidden restore or progress mutation is added to acceptance.",
+  "status": "transport-tests-pass-runtime-capture-pending",
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/capture-diagnostics-20260909/previous-state.json",
+    "sha256": "91b0cc4136c3b7db1211444348fc156e60a4e1513082ad97d5ed155d4026d2db"
+  },
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.mjs",
+      "before": "eb547dcc7d73478b95545a09f2c01eaeb154c1b7ea47b8d73e6e70944e9868dc",
+      "after": "641bace8687416c0f1d893884efa134577439eb269c14361e4cd808e0567e132"
+    },
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.test.mjs",
+      "before": "0a9b037cab31c1eb2db99b00eea9a4f025979b8d5aa429c8905054b20cfe1e25",
+      "after": "deb94fa187be3513ea26cc1b1d6baf7dfbd056cb8aef07cb9df87abec67920a4"
+    }
+  ],
+  "tests": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/capture-diagnostics-20260909/tests.log",
+    "sha256": "c8da1054a87443ba39c57e3f5a6531844b76452d4207fce3d137e27fbab0f392"
+  },
+  "captureGateTests": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/capture-diagnostics-20260909/capture-case-tests.log",
+    "sha256": "8dbe26f391144acc53448294b979b965e4a4748724b3c94545bfbe85a2deca3f"
+  },
+  "retainedUsage": {
+    "roleLaunches": 16,
+    "modelTurns": 423,
+    "inputTokens": 846529,
+    "cacheReadTokens": 23679131,
+    "outputTokens": 174567
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "at": "2026-09-09T16:18:23.307Z"
+}

@@ -156,7 +156,7 @@ export function shouldPlaceCritter(
 export function countCritterVoxels(config: CritterConfig, density: number, terrainSeed: number): number {
   if (density <= 0) return 0;
   let n = 0;
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (!isCritterHomeVoxel(voxel, config)) continue;
     const [x, y, z] = voxel.position;
     if (!isVoxelFaceOpen(x, y, z)) continue;
@@ -368,7 +368,7 @@ export function buildCritterAgents(
     agents.push(agent);
   }
 
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (agents.length >= maxAgents) break;
     if (!isCritterHomeVoxel(voxel, config)) continue;
     const [x, y, z] = voxel.position;

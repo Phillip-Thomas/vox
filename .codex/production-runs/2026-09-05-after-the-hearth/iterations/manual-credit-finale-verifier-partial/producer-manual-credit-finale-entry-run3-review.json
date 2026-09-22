@@ -1,0 +1,21 @@
+{
+  "at": "2026-09-06T21:30:23.872230+00:00",
+  "captureRef": "verifier/captures/manual-credit-finale/entry-crossing-run3/summary.json",
+  "captureSha256": "e13cdca2fe8d16f08ea86ab6efd638247f8b55cdc274ade73d61d2d314bc37e7",
+  "classification": "Actual bounded positive corner evidence, not full-passage acceptance",
+  "candidateSourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "allRecordedGatesPassed": true,
+  "closing": {
+    "ok": true,
+    "problems": []
+  },
+  "actualCreditProgress": "Captured ordinary positive post-plane movement through four vertices reached8.240736572833711 from0.08099076028509. This surpasses retained baseline6freeze.",
+  "scopeLimits": [
+    "Fixture SHORT prerequisite, not continuous story or first-time naive manual UX.",
+    "Only first four corners measured; full18, earlycut refusal/physical recovery, Worker18 and finale not yet proven.",
+    "Source function replay is separate from actual call/next-state observations; no captured direct-return claim."
+  ],
+  "next": "Extend unchanged route to C, actual far-reference F and Worker18; negative/recovery and coldmovie/finale follow.",
+  "publicationAuthorized": false
+}

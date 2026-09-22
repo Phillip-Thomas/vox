@@ -1,0 +1,631 @@
+{
+  "before": "../.codex/production-runs/2026-09-04-audio-10x/evidence/stage-3/wav/A-dirty",
+  "after": "../.codex/production-runs/2026-09-04-audio-10x/evidence/stage-3/wav/B-brain",
+  "moods": 62,
+  "identical": 0,
+  "changed": 62,
+  "maxAbsDeltaLsb": 11230,
+  "worstResidualDbfs": -27.363250431658138,
+  "rows": [
+    {
+      "name": "a1-ramp",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0007322373393801965,
+      "firstDiffS": 0.5751700680272109,
+      "rmsDeltaDb": 1.181727957060594e-8,
+      "residualDbfs": -121.6624799859257,
+      "identical": false
+    },
+    {
+      "name": "a2-awakening",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0007482993197278912,
+      "firstDiffS": 0.43099773242630385,
+      "rmsDeltaDb": -4.165329473169499e-8,
+      "residualDbfs": -121.56824519509387,
+      "identical": false
+    },
+    {
+      "name": "a3-dawn",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.000758692365835223,
+      "firstDiffS": 0.20444444444444446,
+      "rmsDeltaDb": 2.609380438119307e-8,
+      "residualDbfs": -121.50834155820199,
+      "identical": false
+    },
+    {
+      "name": "a4-exhale",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0006547619047619047,
+      "firstDiffS": 0.11072562358276644,
+      "rmsDeltaDb": -2.0353561303087173e-8,
+      "residualDbfs": -122.14816466487073,
+      "identical": false
+    },
+    {
+      "name": "ch1-anomaly",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005243764172335601,
+      "firstDiffS": 0.10886621315192743,
+      "rmsDeltaDb": -1.5511110866901465e-10,
+      "residualDbfs": -123.11256717976205,
+      "identical": false
+    },
+    {
+      "name": "ch1-depth",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00044123204837490554,
+      "firstDiffS": 0.13392290249433106,
+      "rmsDeltaDb": -6.514517696309428e-8,
+      "residualDbfs": -123.86232820532769,
+      "identical": false
+    },
+    {
+      "name": "ch1-fixed",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00030517762660619804,
+      "firstDiffS": 0.6612925170068027,
+      "rmsDeltaDb": 3.728869217253289e-7,
+      "residualDbfs": -125.46347178767778,
+      "identical": false
+    },
+    {
+      "name": "ch1-iso",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005385487528344671,
+      "firstDiffS": 0.1218140589569161,
+      "rmsDeltaDb": 3.097873830556309e-7,
+      "residualDbfs": -122.9967484542639,
+      "identical": false
+    },
+    {
+      "name": "ch1-lift",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005640589569160997,
+      "firstDiffS": 0.268390022675737,
+      "rmsDeltaDb": -7.211299455930689e-8,
+      "residualDbfs": -122.7957536996951,
+      "identical": false
+    },
+    {
+      "name": "ch1-nav",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0004336734693877551,
+      "firstDiffS": 0.26972789115646256,
+      "rmsDeltaDb": -7.500306182151041e-8,
+      "residualDbfs": -123.9373701556162,
+      "identical": false
+    },
+    {
+      "name": "ch1-raster",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 2401,
+      "diffSampleFraction": 0.6124310279667422,
+      "firstDiffS": 0.19006802721088437,
+      "rmsDeltaDb": -0.0027942735632356746,
+      "residualDbfs": -37.04413611089349,
+      "identical": false
+    },
+    {
+      "name": "ch1-track",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00044501133786848074,
+      "firstDiffS": 0.6842630385487528,
+      "rmsDeltaDb": 2.1150526563478232e-7,
+      "residualDbfs": -123.82528793969983,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__bearing-claimed",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0013038548752834468,
+      "firstDiffS": 0.6019727891156462,
+      "rmsDeltaDb": 3.639241281209231e-8,
+      "residualDbfs": -119.15670614697645,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__cold-settled",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0004884731670445956,
+      "firstDiffS": 0.7511791383219955,
+      "rmsDeltaDb": 1.2277566685108501e-7,
+      "residualDbfs": -123.42059158004938,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__crossing-back",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0006415343915343915,
+      "firstDiffS": 0.670657596371882,
+      "rmsDeltaDb": 1.263608125963417e-7,
+      "residualDbfs": -122.23679926818379,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__fault-ledger",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00045445956160241875,
+      "firstDiffS": 0.29950113378684806,
+      "rmsDeltaDb": 2.971148148884611e-7,
+      "residualDbfs": -123.73404624725049,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__refused",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0003921012849584278,
+      "firstDiffS": 0.42857142857142855,
+      "rmsDeltaDb": -7.528344003483638e-8,
+      "residualDbfs": -124.37501604386787,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__relay-answer",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005319349962207105,
+      "firstDiffS": 0.46537414965986396,
+      "rmsDeltaDb": 8.691851978513399e-8,
+      "residualDbfs": -123.05041306247534,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__relay-ask",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005130385487528345,
+      "firstDiffS": 0.5214285714285715,
+      "rmsDeltaDb": -1.842190237213195e-7,
+      "residualDbfs": -123.20749871510033,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__seam-ebb",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0006179138321995465,
+      "firstDiffS": 0.6447392290249433,
+      "rmsDeltaDb": 3.615558555922546e-8,
+      "residualDbfs": -122.39971952774613,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__station-resolved",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0006075207860922147,
+      "firstDiffS": 0.41086167800453516,
+      "rmsDeltaDb": -1.8099548233461228e-7,
+      "residualDbfs": -122.47338728174657,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__transit-hold",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0006953892668178383,
+      "firstDiffS": 0.5766893424036281,
+      "rmsDeltaDb": 1.3440080015260755e-7,
+      "residualDbfs": -121.88671886761382,
+      "identical": false
+    },
+    {
+      "name": "ch2-approach",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005139833711262282,
+      "firstDiffS": 0.3651927437641723,
+      "rmsDeltaDb": -2.1657123892850497e-7,
+      "residualDbfs": -123.19950801400701,
+      "identical": false
+    },
+    {
+      "name": "ch2-color",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0004837490551776266,
+      "firstDiffS": 0.24154195011337867,
+      "rmsDeltaDb": 1.093031270707081e-7,
+      "residualDbfs": -123.4627974012305,
+      "identical": false
+    },
+    {
+      "name": "ch3-await-rest",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0004752456538170824,
+      "firstDiffS": 0.6105442176870748,
+      "rmsDeltaDb": 1.3340441652777145e-7,
+      "residualDbfs": -123.53981716042952,
+      "identical": false
+    },
+    {
+      "name": "ch3-dusk",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 11230,
+      "diffSampleFraction": 0.40312830687830686,
+      "firstDiffS": 0.10473922902494331,
+      "rmsDeltaDb": 0.07621039739928034,
+      "residualDbfs": -27.363250431658138,
+      "identical": false
+    },
+    {
+      "name": "ch3-forage",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 3867,
+      "diffSampleFraction": 0.05807539682539683,
+      "firstDiffS": 0.10687074829931972,
+      "rmsDeltaDb": 0.0035481584877129547,
+      "residualDbfs": -43.238903338126605,
+      "identical": false
+    },
+    {
+      "name": "ch3-gather",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005886243386243386,
+      "firstDiffS": 0.18616780045351475,
+      "rmsDeltaDb": 7.593590816215786e-8,
+      "residualDbfs": -122.61061654439712,
+      "identical": false
+    },
+    {
+      "name": "ch3-signal",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0006519274376417234,
+      "firstDiffS": 0.13807256235827664,
+      "rmsDeltaDb": 1.1731012692923289e-7,
+      "residualDbfs": -122.16700610361626,
+      "identical": false
+    },
+    {
+      "name": "ch3-thirst",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005668934240362812,
+      "firstDiffS": 0.14993197278911566,
+      "rmsDeltaDb": -1.9072621013765027e-7,
+      "residualDbfs": -122.77398450715238,
+      "identical": false
+    },
+    {
+      "name": "ch4-arrival",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0006528722600151172,
+      "firstDiffS": 0.3669387755102041,
+      "rmsDeltaDb": 1.8523606993472046e-7,
+      "residualDbfs": -122.16071653724683,
+      "identical": false
+    },
+    {
+      "name": "ch4-audit",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0006084656084656085,
+      "firstDiffS": 0.34024943310657596,
+      "rmsDeltaDb": 5.347687013987247e-8,
+      "residualDbfs": -122.46663833739069,
+      "identical": false
+    },
+    {
+      "name": "ch4-comply",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0004289493575207861,
+      "firstDiffS": 0.20383219954648527,
+      "rmsDeltaDb": -7.171524129886688e-8,
+      "residualDbfs": -123.98493848241776,
+      "identical": false
+    },
+    {
+      "name": "ch4-defy",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00029572940287226,
+      "firstDiffS": 0.24244897959183673,
+      "rmsDeltaDb": 3.4152120205215576e-7,
+      "residualDbfs": -125.60005363552432,
+      "identical": false
+    },
+    {
+      "name": "ch4-vigil",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005253212396069539,
+      "firstDiffS": 0.5867346938775511,
+      "rmsDeltaDb": -1.2249398949389808e-7,
+      "residualDbfs": -123.10474909516824,
+      "identical": false
+    },
+    {
+      "name": "ch5-maw",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.000582010582010582,
+      "firstDiffS": 0.1008843537414966,
+      "rmsDeltaDb": 7.12791361498465e-8,
+      "residualDbfs": -122.65968988934455,
+      "identical": false
+    },
+    {
+      "name": "ch6-dive",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0010515873015873017,
+      "firstDiffS": 0.23848072562358277,
+      "rmsDeltaDb": 1.7083467076720994e-7,
+      "residualDbfs": -120.09054536764171,
+      "identical": false
+    },
+    {
+      "name": "ch7-board",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0023270975056689344,
+      "firstDiffS": 0.13532879818594104,
+      "rmsDeltaDb": 0.0000037493130384850444,
+      "residualDbfs": -116.64085289259776,
+      "identical": false
+    },
+    {
+      "name": "ch7-board__cockpit",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005574452003023431,
+      "firstDiffS": 0.33294784580498865,
+      "rmsDeltaDb": 5.3177313386156415e-8,
+      "residualDbfs": -122.84697689456736,
+      "identical": false
+    },
+    {
+      "name": "ch7-board__hatch",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005735071806500378,
+      "firstDiffS": 0.37188208616780044,
+      "rmsDeltaDb": -4.003660840536321e-8,
+      "residualDbfs": -122.72361010023623,
+      "identical": false
+    },
+    {
+      "name": "ch7-board__outside",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.002294028722600151,
+      "firstDiffS": 0.15240362811791383,
+      "rmsDeltaDb": 0.0000036387240579407854,
+      "residualDbfs": -116.7030101869566,
+      "identical": false
+    },
+    {
+      "name": "ch7-board__vehicle-owner",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.000462962962962963,
+      "firstDiffS": 0.3300453514739229,
+      "rmsDeltaDb": 3.2224734167230986e-8,
+      "residualDbfs": -123.65353621070368,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.000286281179138322,
+      "firstDiffS": 0.7195011337868481,
+      "rmsDeltaDb": -7.971200017385403e-8,
+      "residualDbfs": -125.74107072596576,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__bench",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00032501889644746785,
+      "firstDiffS": 0.9110884353741496,
+      "rmsDeltaDb": -1.9290313604673243e-7,
+      "residualDbfs": -125.1899125852735,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__calibration",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0007842025699168556,
+      "firstDiffS": 0.1540362811791383,
+      "rmsDeltaDb": -2.2984404386776726e-7,
+      "residualDbfs": -121.36471608722806,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__diagnosis",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00031462585034013605,
+      "firstDiffS": 0.7195011337868481,
+      "rmsDeltaDb": 1.4356480006332055e-7,
+      "residualDbfs": -125.33105467592561,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__frame",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00039965986394557823,
+      "firstDiffS": 0.4473922902494331,
+      "rmsDeltaDb": 1.0197314293804867e-7,
+      "residualDbfs": -124.29209333723838,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__hover",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0006906651549508692,
+      "firstDiffS": 0.48718820861678,
+      "rmsDeltaDb": 8.860592889888338e-8,
+      "residualDbfs": -121.9163232414102,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__hull",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005687830687830688,
+      "firstDiffS": 0.36979591836734693,
+      "rmsDeltaDb": 6.390603883304144e-8,
+      "residualDbfs": -122.75953209841056,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__lift",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0006746031746031747,
+      "firstDiffS": 0.5219501133786848,
+      "rmsDeltaDb": -7.379898614289124e-8,
+      "residualDbfs": -122.01851489322706,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__route",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0007086167800453515,
+      "firstDiffS": 0.25133786848072565,
+      "rmsDeltaDb": -1.4865338691254253e-7,
+      "residualDbfs": -121.80488437707182,
+      "identical": false
+    },
+    {
+      "name": "ch8-crossing",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0007029478458049886,
+      "firstDiffS": 0.19775510204081634,
+      "rmsDeltaDb": 1.555436120009807e-7,
+      "residualDbfs": -121.83976765553001,
+      "identical": false
+    },
+    {
+      "name": "ch8-landfall",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.000677437641723356,
+      "firstDiffS": 0.14668934240362813,
+      "rmsDeltaDb": -9.850341768865229e-8,
+      "residualDbfs": -122.00030545431079,
+      "identical": false
+    },
+    {
+      "name": "ch8-launch",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0007794784580498867,
+      "firstDiffS": 0.17886621315192744,
+      "rmsDeltaDb": 7.609135196244111e-8,
+      "residualDbfs": -121.39095752548955,
+      "identical": false
+    },
+    {
+      "name": "ch9-hearth",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005281557067271354,
+      "firstDiffS": 0.5797052154195012,
+      "rmsDeltaDb": -1.2441579387199737e-7,
+      "residualDbfs": -123.08137893212458,
+      "identical": false
+    },
+    {
+      "name": "ch9-settle",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 4596,
+      "diffSampleFraction": 0.033178382464096746,
+      "firstDiffS": 0.08117913832199547,
+      "rmsDeltaDb": -0.011226466708745048,
+      "residualDbfs": -42.982643522421895,
+      "identical": false
+    },
+    {
+      "name": "crash",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005215419501133786,
+      "firstDiffS": 0.5756462585034013,
+      "rmsDeltaDb": 2.86301674434649e-7,
+      "residualDbfs": -123.13610623369682,
+      "identical": false
+    },
+    {
+      "name": "crawl",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0003127362055933484,
+      "firstDiffS": 0.5801133786848073,
+      "rmsDeltaDb": -9.97648679626324e-8,
+      "residualDbfs": -125.35721707323162,
+      "identical": false
+    },
+    {
+      "name": "deflect",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00041194255479969766,
+      "firstDiffS": 0.5316553287981859,
+      "rmsDeltaDb": -2.2409300107304243e-7,
+      "residualDbfs": -124.16063211830294,
+      "identical": false
+    },
+    {
+      "name": "descent",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005083144368858654,
+      "firstDiffS": 0.4130839002267574,
+      "rmsDeltaDb": 3.171166952650442e-8,
+      "residualDbfs": -123.2476742543249,
+      "identical": false
+    },
+    {
+      "name": "manifest",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00032029478458049887,
+      "firstDiffS": 0.7540362811791383,
+      "rmsDeltaDb": -1.1801994875614458e-7,
+      "residualDbfs": -125.25350002895799,
+      "identical": false
+    },
+    {
+      "name": "voyage",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 3046,
+      "diffSampleFraction": 0.40277021919879064,
+      "firstDiffS": 0.13555555555555557,
+      "rmsDeltaDb": 0.003070119776887217,
+      "residualDbfs": -37.90528674994079,
+      "identical": false
+    }
+  ]
+}

@@ -8,6 +8,8 @@ import {
   MODE_DEGREE_SETS,
   MODE_SCALES,
   modeTonicTriad,
+  modeChordPool,
+  chordAnchorPc,
   pcMod,
   plrTransform,
   tonnetzDistance,
@@ -17,6 +19,27 @@ import {
 } from './theory.ts';
 
 const MODES = Object.keys(MODE_SCALES) as ModeName[];
+
+describe('material chord vocabulary', () => {
+  it.each(MODES)('%s admits only diatonic added shapes and keeps motif anchors in the sounding chord', (mode) => {
+    for (const chord of modeChordPool(2, mode).filter((chord) => chord.shape)) {
+      const pitches = new Set([chord.rootPc, ...triadPcs(chord)]);
+      expect(isDiatonic(chord, 2, mode)).toBe(true);
+      for (const anchor of ['root', 'third', 'fifth'] as const) {
+        expect(pitches.has(chordAnchorPc(chord.rootPc, chord.quality, anchor, chord.shape))).toBe(true);
+      }
+    }
+  });
+
+  it('contains real suspensions, quartal stacks and four-note sevenths while keeping Ionian V triad-only', () => {
+    const pool = modeChordPool(0, 'ionian');
+    expect(new Set(pool.map((chord) => chord.shape))).toEqual(new Set([undefined, 'sus2', 'sus4', 'quartal', 'seventh']));
+    expect(pool.filter((chord) => chord.rootPc === 7).every((chord) => !chord.shape)).toBe(true);
+    for (const chord of pool.filter((chord) => chord.shape === 'seventh')) {
+      expect(new Set([chord.rootPc, ...triadPcs(chord)]).size).toBe(4);
+    }
+  });
+});
 
 describe('mode brightness chain', () => {
   it('orders neighbors exactly one accidental apart', () => {

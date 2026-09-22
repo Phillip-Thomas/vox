@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  resolveTransportHitQuantum,
   advanceTransportBar,
   barDurationSec,
   createTransport,
@@ -12,6 +13,31 @@ import {
   syncTransportTo,
   transportPositionAt
 } from './transport.ts';
+
+describe('bed composed-hit constraint law', () => {
+  it('honors desired and hard floors across a queued tempo/meter change', () => {
+    const t = createTransport(0, 60, METER_44);
+    requestTransportTempo(t, 120);
+    requestTransportMeter(t, METER_68);
+    const q = resolveTransportHitQuantum(t, { quantize: 'bar', desired: 4.2, notBefore: 4.3, capMs: 250 });
+    expect(q.time).toBeCloseTo(4.333333333);
+    expect(q.quantumLanded).toBe('step');
+    expect(q.fitsCap).toBe(true);
+    expect(t.barIndex).toBe(0);
+    expect(t.pendingBpm).toBe(120);
+  });
+
+  it('permits a nearer earlier beat only above the hard floor', () => {
+    const t = createTransport(0, 60);
+    expect(resolveTransportHitQuantum(t, { quantize: 'beat', desired: 1.2, notBefore: 0.9, capMs: 300, mayLead: true }).time).toBe(1);
+    expect(resolveTransportHitQuantum(t, { quantize: 'beat', desired: 1.2, notBefore: 1.1, capMs: 300, mayLead: true }).time).toBe(1.5);
+  });
+
+  it('surfaces an impossible cap instead of degrading below the explicit rung floor', () => {
+    const q = resolveTransportHitQuantum(createTransport(0, 60), { quantize: 'bar', desired: 0.1, notBefore: 0.1, capMs: 50, floorRung: 'beat' });
+    expect(q).toMatchObject({ time: 1, quantumLanded: 'beat', fitsCap: false, rungsDegraded: 1 });
+  });
+});
 import { PHRASE_BARS } from './tuning.ts';
 
 // 80 bpm, 4/4 → bar = 3.0 s, beat = 0.75 s. Anchored at t = 10.

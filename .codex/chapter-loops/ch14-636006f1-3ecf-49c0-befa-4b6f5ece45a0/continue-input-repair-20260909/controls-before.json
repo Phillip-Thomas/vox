@@ -1,0 +1,3110 @@
+{
+  "chapter": "ch14",
+  "manual": {
+    "route": "/?story=ch13-survey&journeyprobe=1&chapterjourney=1",
+    "beats": [
+      "ch14-record",
+      "ch14-scar",
+      "ch14-question",
+      "ch14-return"
+    ],
+    "completionMilestones": [
+      "story:ch14:complete"
+    ],
+    "acceptedMilestones": [
+      "story:ch14:record-opened",
+      "story:ch14:survey-indexed",
+      "story:ch14:scar-observed",
+      "story:ch14:question-survived",
+      "story:ch14:question-retained",
+      "story:ch14:return-selected",
+      "story:ch14:return-recorded",
+      "story:ch14:complete"
+    ],
+    "deltaPointers": [
+      "/unfinishedMap/opened",
+      "/unfinishedMap/indexed",
+      "/unfinishedMap/scar",
+      "/unfinishedMap/retained",
+      "/unfinishedMap/selected",
+      "/unfinishedMap/returned",
+      "/unfinishedMap/complete",
+      "/commonGround/bodyPose",
+      "/commonGround/diagnostic/survey",
+      "/commonGround/diagnostic/common",
+      "/interaction/published/active",
+      "/commonGround/diagnostic/holdReason",
+      "/commonGround/diagnostic/worker",
+      "/commonGround/diagnostic/attendance",
+      "/commonGround/diagnostic/coverage",
+      "/unfinishedMap/targets",
+      "/unfinishedMap/reach"
+    ],
+    "durablePointers": [
+      "/unfinishedMap/opened",
+      "/unfinishedMap/indexed",
+      "/unfinishedMap/scar",
+      "/unfinishedMap/question",
+      "/unfinishedMap/retained",
+      "/unfinishedMap/selected",
+      "/unfinishedMap/returned",
+      "/unfinishedMap/complete",
+      "/unfinishedMap/survey"
+    ],
+    "steps": [
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.4,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -45.6,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -46.18,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -47.6,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.18,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          17.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          16.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          15.82
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          14.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          13.82
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          12.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          11.82
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/diagnostic/common/comparisonProved",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.5,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44,
+          51.05,
+          12
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-offer-final-reference",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/diagnostic/common/committed",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/story/active",
+        "equals": false,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/ready",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch14-record",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/opened",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"visit-hull\"]"
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/indexed",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 2,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -2,
+          51.0,
+          -4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 3.8,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "targetPointer": "/unfinishedMap/targets/scar"
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch14-scar",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/scar",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"question-survived\"]"
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"retain\"]"
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/retained",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"entry-survey\"]"
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"return-survey\"]"
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/selected",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"close\"]"
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 2,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -2,
+          51.0,
+          -4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 1.3,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -15,
+          51,
+          9
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 1.3,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -25,
+          51,
+          12
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 1,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "targetPointer": "/unfinishedMap/targets/survey"
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch14-return",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/complete",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/story/active",
+        "equals": false,
+        "timeoutMs": 30000
+      }
+    ],
+    "maxSessionSeconds": 900,
+    "notes": [
+      "Diagnostic local coverage. Predecessor survey and reciprocal handback are earned using ordinary controls before baseline; earlier chapters are diagnostic prerequisites, not fresh continuity evidence."
+    ],
+    "readyPointer": "/unfinishedMap/ready",
+    "bootstrapSteps": [
+      {
+        "type": "wait",
+        "pointer": "/shell/sceneReady",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/worldBound",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/supported",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "canvas"
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.5,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -31.5,
+          51.05,
+          10
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-offer-route",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.2,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -26,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-survey-start",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -28,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -30,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -32,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -34,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -36,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -38,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -40,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-offer-span",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.3,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -34,
+          51.05,
+          10
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-hold-witness",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/story/beat",
+        "equals": "ch13-common",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.5,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44,
+          51.05,
+          12
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/diagnostic/common/stage",
+        "equals": "holding-h",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42,
+          51.05,
+          11.5
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          13.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          14.18
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          15.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          16.18
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.4,
+          51.05,
+          16.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -43.6,
+          51.05,
+          16.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.18,
+          51.05,
+          16.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.0,
+          51.05,
+          16.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.0,
+          51.05,
+          17.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.0,
+          51.05,
+          18.18
+        ]
+      }
+    ]
+  },
+  "continue": {
+    "route": "/?story=ch13-survey&journeyprobe=1&chapterjourney=1",
+    "beats": [
+      "ch14-record",
+      "ch14-scar",
+      "ch14-question",
+      "ch14-return"
+    ],
+    "completionMilestones": [
+      "story:ch14:complete"
+    ],
+    "acceptedMilestones": [
+      "story:ch14:record-opened",
+      "story:ch14:survey-indexed",
+      "story:ch14:scar-observed",
+      "story:ch14:question-survived",
+      "story:ch14:question-retained",
+      "story:ch14:return-selected",
+      "story:ch14:return-recorded",
+      "story:ch14:complete"
+    ],
+    "deltaPointers": [
+      "/unfinishedMap/opened",
+      "/unfinishedMap/indexed",
+      "/unfinishedMap/scar",
+      "/unfinishedMap/retained",
+      "/unfinishedMap/selected",
+      "/unfinishedMap/returned",
+      "/unfinishedMap/complete",
+      "/commonGround/bodyPose",
+      "/commonGround/diagnostic/survey",
+      "/commonGround/diagnostic/common",
+      "/interaction/published/active",
+      "/commonGround/diagnostic/holdReason",
+      "/commonGround/diagnostic/worker",
+      "/commonGround/diagnostic/attendance",
+      "/commonGround/diagnostic/coverage",
+      "/unfinishedMap/targets",
+      "/unfinishedMap/reach"
+    ],
+    "durablePointers": [
+      "/unfinishedMap/opened",
+      "/unfinishedMap/indexed",
+      "/unfinishedMap/scar",
+      "/unfinishedMap/question",
+      "/unfinishedMap/retained",
+      "/unfinishedMap/selected",
+      "/unfinishedMap/returned",
+      "/unfinishedMap/complete",
+      "/unfinishedMap/survey"
+    ],
+    "steps": [
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.4,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -45.6,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -46.18,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -47.6,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.18,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          17.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          16.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          15.82
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          14.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          13.82
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          12.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          11.82
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/diagnostic/common/comparisonProved",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.5,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44,
+          51.05,
+          12
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-offer-final-reference",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/diagnostic/common/committed",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/story/active",
+        "equals": false,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/ready",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch14-record",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/opened",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"visit-hull\"]"
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/indexed",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 1200
+      }
+    ],
+    "newActionSteps": [
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/ready",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 2,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -2,
+          51.0,
+          -4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 3.8,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "targetPointer": "/unfinishedMap/targets/scar"
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch14-scar",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/scar",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"question-survived\"]"
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"retain\"]"
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/retained",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"entry-survey\"]"
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"return-survey\"]"
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/selected",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"close\"]"
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 2,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -2,
+          51.0,
+          -4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 1.3,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -15,
+          51,
+          9
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 1.3,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -25,
+          51,
+          12
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 1,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "targetPointer": "/unfinishedMap/targets/survey"
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch14-return",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/complete",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/story/active",
+        "equals": false,
+        "timeoutMs": 30000
+      }
+    ],
+    "maxSessionSeconds": 900,
+    "notes": [
+      "Diagnostic local coverage. Predecessor survey and reciprocal handback are earned using ordinary controls before baseline; earlier chapters are diagnostic prerequisites, not fresh continuity evidence."
+    ],
+    "readyPointer": "/unfinishedMap/ready",
+    "bootstrapSteps": [
+      {
+        "type": "wait",
+        "pointer": "/shell/sceneReady",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/worldBound",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/supported",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "canvas"
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.5,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -31.5,
+          51.05,
+          10
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-offer-route",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.2,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -26,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-survey-start",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -28,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -30,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -32,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -34,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -36,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -38,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -40,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-offer-span",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.3,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -34,
+          51.05,
+          10
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-hold-witness",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/story/beat",
+        "equals": "ch13-common",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.5,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44,
+          51.05,
+          12
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/diagnostic/common/stage",
+        "equals": "holding-h",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42,
+          51.05,
+          11.5
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          13.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          14.18
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          15.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          16.18
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.4,
+          51.05,
+          16.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -43.6,
+          51.05,
+          16.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.18,
+          51.05,
+          16.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.0,
+          51.05,
+          16.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.0,
+          51.05,
+          17.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.0,
+          51.05,
+          18.18
+        ]
+      }
+    ],
+    "continue": {
+      "ctaSelector": "button:has-text(\"Continue\")",
+      "checkpointPointer": "/unfinishedMap/indexed",
+      "timeoutMs": 30000
+    }
+  },
+  "recovery": {
+    "route": "/?story=ch13-survey&journeyprobe=1&chapterjourney=1",
+    "beats": [
+      "ch14-record",
+      "ch14-scar",
+      "ch14-question",
+      "ch14-return"
+    ],
+    "completionMilestones": [
+      "story:ch14:complete"
+    ],
+    "acceptedMilestones": [
+      "story:ch14:record-opened",
+      "story:ch14:survey-indexed",
+      "story:ch14:scar-observed",
+      "story:ch14:question-survived",
+      "story:ch14:question-retained",
+      "story:ch14:return-selected",
+      "story:ch14:return-recorded",
+      "story:ch14:complete"
+    ],
+    "deltaPointers": [
+      "/unfinishedMap/opened",
+      "/unfinishedMap/indexed",
+      "/unfinishedMap/scar",
+      "/unfinishedMap/retained",
+      "/unfinishedMap/selected",
+      "/unfinishedMap/returned",
+      "/unfinishedMap/complete",
+      "/commonGround/bodyPose",
+      "/commonGround/diagnostic/survey",
+      "/commonGround/diagnostic/common",
+      "/interaction/published/active",
+      "/commonGround/diagnostic/holdReason",
+      "/commonGround/diagnostic/worker",
+      "/commonGround/diagnostic/attendance",
+      "/commonGround/diagnostic/coverage",
+      "/unfinishedMap/targets",
+      "/unfinishedMap/reach"
+    ],
+    "durablePointers": [
+      "/unfinishedMap/opened",
+      "/unfinishedMap/indexed",
+      "/unfinishedMap/scar",
+      "/unfinishedMap/question",
+      "/unfinishedMap/retained",
+      "/unfinishedMap/selected",
+      "/unfinishedMap/returned",
+      "/unfinishedMap/complete",
+      "/unfinishedMap/survey"
+    ],
+    "steps": [
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.4,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -45.6,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -46.18,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -47.6,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.18,
+          51.05,
+          18.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          17.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          16.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          15.82
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          14.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          13.82
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          12.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -48.0,
+          51.05,
+          11.82
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/diagnostic/common/comparisonProved",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.5,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44,
+          51.05,
+          12
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-offer-final-reference",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/diagnostic/common/committed",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/story/active",
+        "equals": false,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/ready",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch14-record",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/opened",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"visit-hull\"]"
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/indexed",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 1200
+      }
+    ],
+    "newActionSteps": [
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/ready",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 2,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -2,
+          51.0,
+          -4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 3.8,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "targetPointer": "/unfinishedMap/targets/scar"
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch14-scar",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/scar",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"question-survived\"]"
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"retain\"]"
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/retained",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"entry-survey\"]"
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"return-survey\"]"
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/selected",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "[data-ch14=\"close\"]"
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 2,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -2,
+          51.0,
+          -4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 1.3,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -15,
+          51,
+          9
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 1.3,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -25,
+          51,
+          12
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 1,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "targetPointer": "/unfinishedMap/targets/survey"
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch14-return",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/unfinishedMap/complete",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/story/active",
+        "equals": false,
+        "timeoutMs": 30000
+      }
+    ],
+    "maxSessionSeconds": 900,
+    "notes": [
+      "Diagnostic local coverage. Predecessor survey and reciprocal handback are earned using ordinary controls before baseline; earlier chapters are diagnostic prerequisites, not fresh continuity evidence."
+    ],
+    "readyPointer": "/unfinishedMap/ready",
+    "bootstrapSteps": [
+      {
+        "type": "wait",
+        "pointer": "/shell/sceneReady",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/worldBound",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/supported",
+        "equals": true,
+        "timeoutMs": 30000
+      },
+      {
+        "type": "click",
+        "selector": "canvas"
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.5,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -31.5,
+          51.05,
+          10
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-offer-route",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.2,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -26,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-survey-start",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -28,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -30,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -32,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -34,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -36,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -38,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -40,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.25,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42,
+          51.05,
+          12.3
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-offer-span",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.3,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -34,
+          51.05,
+          10
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/interaction/published/active/id",
+        "equals": "story-ch13-hold-witness",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "key",
+        "code": "KeyF",
+        "holdMs": 120
+      },
+      {
+        "type": "wait",
+        "pointer": "/story/beat",
+        "equals": "ch13-common",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.5,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44,
+          51.05,
+          12
+        ]
+      },
+      {
+        "type": "wait",
+        "pointer": "/commonGround/diagnostic/common/stage",
+        "equals": "holding-h",
+        "timeoutMs": 30000
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42,
+          51.05,
+          11.5
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          13.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          14.18
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          15.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.0,
+          51.05,
+          16.18
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -42.4,
+          51.05,
+          16.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -43.6,
+          51.05,
+          16.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.18,
+          51.05,
+          16.0
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.0,
+          51.05,
+          16.4
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.0,
+          51.05,
+          17.6
+        ]
+      },
+      {
+        "type": "settle",
+        "ms": 350
+      },
+      {
+        "type": "walk",
+        "posePointer": "/commonGround/bodyPose",
+        "timeoutMs": 30000,
+        "arriveWithin": 0.16,
+        "tickMs": 100,
+        "minProgress": 0.02,
+        "noProgressMs": 8000,
+        "target": [
+          -44.0,
+          51.05,
+          18.18
+        ]
+      }
+    ],
+    "pause": {
+      "pausedPointer": "/unfinishedMap/paused",
+      "resumeSelector": "button:has-text(\"Resume\")",
+      "timeoutMs": 10000
+    }
+  },
+  "continuity": {
+    "chapter": "ch14",
+    "maxSessionSeconds": 600,
+    "sampleMs": 250
+  },
+  "av": {
+    "chapter": "ch14",
+    "maxSessionSeconds": 600,
+    "sampleMs": 250
+  }
+}

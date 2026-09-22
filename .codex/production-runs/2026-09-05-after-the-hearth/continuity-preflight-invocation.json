@@ -1,0 +1,17 @@
+{
+  "role": "continuity-preflight",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-07T00:15:12.245405+00:00",
+  "commissionSha256": "b13f879972bb1807daab5d7875881664f9271abe891246c15470877e9e492553",
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "sourceFilesRehashedBefore": 103,
+  "deadlineAt": "2026-09-07T00:19:12.245375+00:00",
+  "scope": "Read-only existing continuity transport preflight; no GPU or source mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-07T00:16:51.877802+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "002bbf4c-267d-4661-81ac-879546a49637",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 103
+}

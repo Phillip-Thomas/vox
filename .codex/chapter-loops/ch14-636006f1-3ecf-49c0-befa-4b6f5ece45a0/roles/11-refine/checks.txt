@@ -1,0 +1,12 @@
+
+ RUN  v3.2.4 /home/thomasphillip/Projects/vox/main
+
+ ✓ src/story/unfinishedMapScore.test.ts (8 tests) 4ms
+ ✓ src/story/unfinishedMapState.test.ts (12 tests) 3ms
+ ✓ src/story/commonGroundScore.test.ts (15 tests) 9ms
+
+ Test Files  3 passed (3)
+      Tests  35 passed (35)
+   Start at  20:47:21
+   Duration  516ms (transform 235ms, setup 0ms, collect 330ms, tests 17ms, environment 0ms, prepare 124ms)
+

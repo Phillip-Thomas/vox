@@ -1,4 +1,5 @@
 import type { ArchetypeId } from '../../game/data/planetArchetypes.ts';
+import type { BiomeId } from '../../game/data/biomes.ts';
 import { seededUnit } from '../../utils/worldCoordinates.ts';
 import { setMusicChord } from '../musicPrimitives.ts';
 import {
@@ -8,10 +9,12 @@ import {
   MODE_CADENCE_ROOTS,
   MODE_DEGREE_SETS,
   modeTonicTriad,
+  modeChordPool,
   pcMod,
   tonnetzDistance,
   triadId,
   type ChordQuality,
+  type ChordShape,
   type ModeName,
   type TriadSpec
 } from './theory.ts';
@@ -40,6 +43,8 @@ import {
 } from './seededMusic.ts';
 import {
   ARCHETYPE_MODE_WEIGHTS,
+  BIOME_MODE_DRIFT_WEIGHT,
+  BIOME_MODE_PREFERENCE,
   BAND_SLEW_SEMIS,
   CADENCE_BIAS_P,
   CADENCE_START_POS,
@@ -83,6 +88,7 @@ import {
 // the same rail history. No Math.random anywhere.
 
 export interface HarmonyRails {
+  biomeWeights?: Partial<Record<BiomeId, number>>;
   /** Drama rail, 0..1 (musicPrimitives.tension). */
   tension: number;
   /** Kinetic rail, 0..1 — drives harmonic rhythm, never bpm. */
@@ -103,6 +109,7 @@ export interface HarmonyRails {
 export interface HarmonyChord {
   rootPc: number;
   quality: ChordQuality;
+  shape?: ChordShape;
   /** Color-tone intervals above the root, semitones (e.g. add9 → [14]). */
   colorIntervals: number[];
 }
@@ -171,6 +178,8 @@ export interface HarmonyBarEvent {
 }
 
 export interface AdvanceOptions {
+  /** The expanded vocabulary is earned at material; chip-era grammar stays unchanged. */
+  expandedVocabulary?: boolean;
   /** Arrangement override for the phrase shape (P3 wiring). */
   forcedShape?: CurveShape;
   /** A grid-scheduled hit/bloom lands this bar — mediants become permitted. */
@@ -240,6 +249,17 @@ export function derivePlanetKey(
   return { tonicPc, homeMode };
 }
 
+/**
+ * planetHomeRoot(seed) (audio-10x Stage 3, contract sc.chain.tonic-authority):
+ * the planet's tonic pitch class from the seed ALONE — the same draw the bed's
+ * harmony brain is born on, so a story chain pinned to it and the bed that
+ * resumes after it share one key by construction. Archetype weights only the
+ * mode, never the tonic.
+ */
+export function planetHomeRoot(planetSeed: number): number {
+  return derivePlanetKey(planetSeed).tonicPc;
+}
+
 export function createHarmonyBrain(planetSeed: number, opts?: CreateHarmonyOptions): HarmonyBrainState {
   const { tonicPc, homeMode } = derivePlanetKey(planetSeed, opts?.archetype);
   const tonicTriad = modeTonicTriad(tonicPc, homeMode);
@@ -275,10 +295,24 @@ export function harmonyBarsFor(energy: number): number {
 }
 
 /** Single-accidental mode drift at phrase boundaries (§6.2). */
+export function biomeModeDirectionBias(mode: ModeName, weights: HarmonyRails['biomeWeights']): number {
+  let vote = 0;
+  let total = 0;
+  const here = MODE_BRIGHTNESS_CHAIN.indexOf(mode);
+  for (const [biome, weight] of Object.entries(weights ?? {})) {
+    if (!Number.isFinite(weight) || weight <= 0) continue;
+    const preference = BIOME_MODE_PREFERENCE[biome as BiomeId];
+    if (!preference) continue;
+    vote += Math.sign(MODE_BRIGHTNESS_CHAIN.indexOf(preference) - here) * weight;
+    total += weight;
+  }
+  return total ? BIOME_MODE_DRIFT_WEIGHT * vote / total : 0;
+}
+
 function tryModeDrift(state: HarmonyBrainState, rails: HarmonyRails): ModeName | null {
   if (state.phrasesSinceModeDrift < MODE_DRIFT_MIN_PHRASES) return null;
   if (musicUnit(state.planetSeed, SALT_MODE_DRIFT, state.phraseIndex) >= MODE_DRIFT_P) return null;
-  const pBright = clamp01(0.5 + MODE_DRIFT_DIR_BIAS * (rails.warmth - rails.tension));
+  const pBright = clamp01(0.5 + MODE_DRIFT_DIR_BIAS * (rails.warmth - rails.tension) + biomeModeDirectionBias(state.mode, rails.biomeWeights));
   const bright = musicUnit(state.planetSeed, SALT_MODE_DIR, state.phraseIndex) < pBright;
   const idx = MODE_BRIGHTNESS_CHAIN.indexOf(state.mode) + (bright ? 1 : -1);
   if (idx < 0 || idx >= MODE_BRIGHTNESS_CHAIN.length) return null;
@@ -384,8 +418,10 @@ function changeChord(
 
   // 1. Candidate pool: the mode's degree set, plus rationed chromatic mediants.
   const pool = new Map<string, { triad: TriadSpec; mediant: boolean }>();
-  for (const degree of MODE_DEGREE_SETS[state.mode]) {
-    const triad = degreeTriad(state.tonicPc, degree);
+  const modalPool = opts?.expandedVocabulary
+    ? modeChordPool(state.tonicPc, state.mode)
+    : MODE_DEGREE_SETS[state.mode].map((degree) => degreeTriad(state.tonicPc, degree));
+  for (const triad of modalPool) {
     const id = triadId(triad);
     if (id !== currentId) pool.set(id, { triad, mediant: false });
   }
@@ -477,7 +513,7 @@ function changeChord(
 
   // 6. Score against the scheduled curve: argmin |T − target|, seeded tie-break.
   const scored: ScoredCandidate[] = set.map((c) => {
-    const dressed = colorAllowed(c.triad, state.tonicPc, state.mode) ? intent : 'none';
+    const dressed = c.triad.shape ? 'none' : colorAllowed(c.triad, state.tonicPc, state.mode) ? intent : 'none';
     const voicingMean = (c.lead.voicing.uppers[0] + c.lead.voicing.uppers[1] + c.lead.voicing.uppers[2]) / 3;
     const t = chordTension(c.triad, {
       tonicPc: state.tonicPc,
@@ -494,7 +530,8 @@ function changeChord(
   let chosen = contenders[0];
   let bestRank = -1;
   for (const c of contenders) {
-    const rank = seededUnit(seed, musicSalt(SALT_CHORD_TIEBREAK, bar) ^ Math.imul(triadIdx(c.triad) + 1, 668265263));
+    const shapeSalt = c.triad.shape ? ['sus2', 'sus4', 'quartal', 'seventh'].indexOf(c.triad.shape) + 1 : 0;
+    const rank = seededUnit(seed, musicSalt(SALT_CHORD_TIEBREAK, bar) ^ Math.imul(triadIdx(c.triad) + 1 + shapeSalt * 24, 668265263));
     if (rank > bestRank) {
       bestRank = rank;
       chosen = c;
@@ -502,10 +539,11 @@ function changeChord(
   }
 
   // 7. Commit.
-  const dressed = colorAllowed(chosen.triad, state.tonicPc, state.mode) ? intent : 'none';
+  const dressed = chosen.triad.shape ? 'none' : colorAllowed(chosen.triad, state.tonicPc, state.mode) ? intent : 'none';
   state.chord = {
     rootPc: chosen.triad.rootPc,
     quality: chosen.triad.quality,
+    ...(chosen.triad.shape ? { shape: chosen.triad.shape } : {}),
     colorIntervals: realizeColor(dressed, chosen.triad.quality)
   };
   state.voicing = chosen.lead.voicing;

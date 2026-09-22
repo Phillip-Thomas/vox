@@ -1,0 +1,63 @@
+{
+  "recipientDispositions": [
+    {
+      "noteId": "CG-A-CH-SC",
+      "from": "chapter",
+      "to": "score",
+      "by": "score",
+      "disposition": "accept",
+      "response": "Accept the bounded predicate and Terra-comparison amendments for candidate v2. Her wanted result now requires a maintained reference she cannot occupy while moving. The proposed before/after lines belong to that real reciprocal comparison, with the existing restrained demonstrating texture and no success hit, new melody or warmth. They do not advance the final musical change: CG-06 initiation remains restrained; CG-07 actual final arrival plus reciprocal proof alone permits changed spacing. Quiet continuous tracing receives no per-sample musical reward. Preserve the independently repeatable bank route versus witness-dependent bank route separately from the shared comparison. The 12- and 24-unit nominations remain new, unselected design values pending geometry, revised hashes and signatures; this disposition approves no range or layout.",
+      "evidenceRefs": [
+        "arena-chapter-reconciliation.md#cg-judge-005-make-terra-need-the-comparison",
+        "arena-chapter-reconciliation.md#cg-judge-004-keep-the-action-hers",
+        "arena-score-reconciliation.md#hold-and-anchor-mapping",
+        "score-reconciliation.json#chapter-to-score-01"
+      ]
+    },
+    {
+      "noteId": "CG-A-CIN-SC",
+      "from": "cinematography",
+      "to": "score",
+      "by": "score",
+      "disposition": "accept",
+      "response": "Accept one passive reference plate, equal finite range for all references, visible range limitation and the shared reciprocal span as bounded candidate amendments. The stronger staging makes his maintained position useful without taking away Terra's walking or looking. His final independent test must still satisfy current range, grounding and reference predicates; stored proof cannot grant unlimited sensing. The score will not anticipate resumed measurement or treat range entry as completion. Range, solid occlusion, unsafe ground and temporarily vacated witness retain distinct visible reasons; temporary witness loss does not restart musical refusal. No selected range, physical feasibility, current visual quality or listening result is approved here. Candidate-v2 reconciliation precedes the separate scene stage.",
+      "evidenceRefs": [
+        "arena-cinema-reconciliation.md",
+        "arena-score-reconciliation.md#response-to-cinematography",
+        "arena-score-reconciliation.md#hold-and-anchor-mapping",
+        "score-reconciliation.json#CG-CIN-SC-01"
+      ]
+    }
+  ],
+  "outgoingNotes": [
+    {
+      "id": "CG-A-SC-CH",
+      "from": "score",
+      "to": "chapter",
+      "kind": "bounded-predicate-and-anchor-constraint",
+      "severity": "high",
+      "requestedAction": "In candidate v2 and CG-D04/05/06, explicitly declare the selected new constant range after measurement, preserve bank-route versus common-comparison save semantics, and bind Terra's new lines to actual reciprocal evidence. First out-of-range offered-span failure may enter existing refused-hold once; repeated boundary/input activity must not restart it. Unsafe footing requires its own repair, while temporary loss of an established witness keeps the current texture and resumes without dramatic refusal. Reciprocal usefulness and final-test initiation remain demonstrating; only final actual arrival plus reciprocal proof changes the phrase. Preserve equal route treatment, no mandatory failure and quiet continuous tracing. Retain immediate control/progression handback, live-only maximum five-second final texture then existing 4.5-second release, all signed cancellations, no deferred/hydrated/repeat replay and no coda or additional hit. These are candidate amendments, not an approved geometry or scene contract.",
+      "status": "open",
+      "evidenceRefs": [
+        "arena-score-reconciliation.md",
+        "arena-chapter-reconciliation.md",
+        "score-reconciliation.json"
+      ]
+    },
+    {
+      "id": "CG-A-SC-CIN",
+      "from": "score",
+      "to": "cinematography",
+      "kind": "bounded-visible-causality-constraint",
+      "severity": "medium",
+      "requestedAction": "Carry the passive plate, readable fixed range and distinct range/solid/footing/vacated-witness evidence into candidate v2 without range sonification, proximity pitch, in-range attack, new light or optimal-position preview. Stage Terra's measurement as materially dependent on W-7744 while her movement and camera remain free; retained proof cannot make his subsequent test exempt from the same predicate. Let feet, reference and actual measurement state lead the reciprocal passage; do not visually or musically announce final agreement there. Final independent completion must remain understandable with the changed fifth absent and without a camera/listening dwell. Both nominated ranges and all layout/readability results remain pending measurement and revised signature. Preserve the existing final-tail cancellation/no-replay limits and no engine expansion.",
+      "status": "open",
+      "evidenceRefs": [
+        "arena-score-reconciliation.md",
+        "arena-cinema-reconciliation.md",
+        "score-reconciliation.json#CG-CIN-SC-01"
+      ]
+    }
+  ],
+  "scope": "Bounded predicate and Terra-story repair before exact story candidate v2; geometry pending; no runtime, original-treatment, frozen-signature or scene-stage mutation."
+}

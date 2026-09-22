@@ -1,0 +1,18 @@
+{
+  "role": "story-verifier",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T15:11:54.877551+00:00",
+  "commissionSha256": "7797e28a088c6a775dbb870e9026833c7b2e34cd72c13b6777ce434cafb8af8f",
+  "systemPromptSource": ".claude/agents/story-verifier.md",
+  "systemPromptSha256": "06216d09794dac2b5875897d6774a6b2aa11e851cb8a07d280123e5f0a96389f",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "sourceFilesRehashedBefore": 98,
+  "scope": "Bounded actual celestial flight/arrival telemetry for one ch13 return cycle; no source/build/contract edits or full verification claim",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T15:21:24.926540+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "570b5ab5-e1ab-419a-8bb5-61fa8c68d563",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 98
+}

@@ -1,0 +1,151 @@
+{
+  "schema": "paravoxia.verifier.commonEntryCrossing.ready.v1",
+  "role": "common-entry-crossing",
+  "status": "CPU-READY-NOT-RUN",
+  "at": "2026-09-06T20:24:11.340419+00:00",
+  "budget": {
+    "startedAt": "2026-09-06T20:20:45.604757+00:00",
+    "capMinutes": 20,
+    "deadlineUtc": "2026-09-06T20:40:45.604757+00:00",
+    "clockSource": "own invocation startedAt + 20min"
+  },
+  "scope": "Measurement preparation only. No game/material repair, no new creative interpretation, no source fix, no chapter acceptance.",
+  "copiedFrom": {
+    "dir": "verifier/probes/common-physical-discriminator/",
+    "originalsPreserved": true,
+    "originalProbeSha256": "99b165961c1b7291b4c512c82fae2c94a01573a1be41bcb7bcd0e7ba72c579de",
+    "originalFileCount": 12
+  },
+  "probeHashes": {
+    "cgContract.pinned.mjs": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+    "common-entry-crossing-probe.mjs": "5ba34a5027b022edf03475c62d1e160450d011ecc8413d5eb0181957f03c4733",
+    "commonPassageLogic.mjs": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+    "creditCallLogpoints.mjs": "c1e15bfb939b72380b5397fd976c54b71e7ed526b8ccf32210b05c903a2fc566",
+    "emit-report.py": "033e3b7955cb4458c9cd6a392117c5fea87271fc4c637f287680f2534765b4ef",
+    "entryObservation.mjs": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+    "ownedSession.pinned.mjs": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+    "pin.json": "7a3e4c8c927500f1ee86e42496f310ed39be9b9c9cc5564612f772f3f351fa10",
+    "run-once.sh": "25eb7e7bb82eb0a8bb49aa7076261901bf162736ae476ad80e0c11bcfcafc3c0",
+    "selftest.mjs": "226ef9380fee642dbe37cd0c6baa9009031320599acf38481f62a671ece0c250",
+    "shortSurveyLogic.mjs": "7e6fb3626d3b3dca9aeb49e6ee27f6be7a45512eefa2c7aebe76a100d6878d5b",
+    "sourceSnapshot.pinned.mjs": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20"
+  },
+  "selftest": {
+    "command": "node verifier/probes/common-entry-crossing/selftest.mjs",
+    "exit": 0,
+    "result": "OK"
+  },
+  "syntax": {
+    "command": "node --check common-entry-crossing-probe.mjs",
+    "result": "OK"
+  },
+  "correctedGates": [
+    {
+      "id": "grounded-supported-PRE-E-stand-before-plane-and-on-route",
+      "replaces": "grounded-supported-E-reached-by-ordinary-keys (hypot<=1.0 E vicinity)",
+      "why": "run2 began foot z12.3487786909752 (.3487787 BEYOND E z12) and x-41.39181373859077 (.6082 lateral off route x-42); E vicinity cannot prove a walked missing prefix",
+      "requires": {
+        "routeLateralMax": 0.18,
+        "footZMin": 11.2,
+        "footZMax": 11.95,
+        "strictlyBeforePlane": "footZ < 12",
+        "verticalMax": 0.25,
+        "supported": true,
+        "frame": "published bodyPose (foot); bodyCentre/up recorded, never substituted"
+      },
+      "onFailure": "STOP WITH FACTS: stoppedAt=pre-E-placement-unsupported, limitation recorded, NO accounting verdict"
+    },
+    {
+      "id": "actual-forward-E-plane-crossing-observed-by-armed-callee",
+      "why": "instrumentation is ARMED BEFORE the crossing so the prefix is observed, not inferred",
+      "requires": {
+        "footBeforeZ": "<12",
+        "footAfterZ": ">12 and <=12.35",
+        "supported": true,
+        "calleeRecordsAfter": "> calleeRecordsBefore",
+        "pulseFloorMs": 30,
+        "creditExpectation": "initial 0 then ACTUALLY INCREASING prefix; a frozen credit is RECORDED and dependent claims HALT"
+      }
+    },
+    {
+      "id": "vertex-N-crossed-with-bounded-positive-overshoot-AND-bounded-full-horizontal",
+      "replaces": "vertex-N-crossed-with-bounded-positive-overshoot (along-leg s>0 and support only)",
+      "why": "along-only gate admitted the .608 lateral off-route foot",
+      "requires": {
+        "alongLegS": "0 < s <= 0.35",
+        "fullHorizontalToVertex": "<= 0.35",
+        "supported": true,
+        "signedVertical": true,
+        "realGuardCalls": true
+      },
+      "loopFix": "stop condition now requires full horizontal inside bound, not along-leg alone"
+    }
+  ],
+  "ordinaryControl": {
+    "pulseFloorMs": 30,
+    "noSubframe": true,
+    "aimPoint": "vertex + incoming*0.10..0.15 is ordinary control, NOT game geometry",
+    "forbidden": [
+      "script pose",
+      "forced F",
+      "state writes",
+      "movie rail",
+      "blind reuse of .9 XZ arrival as literal entry"
+    ]
+  },
+  "cdpSites": {
+    "callee": {
+      "line": 7839,
+      "column": 193729
+    },
+    "caller": {
+      "line": 7839,
+      "column": 219885
+    },
+    "bundle": "index-BiDWGouH.js",
+    "bundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+    "exactResolutionRequired": true,
+    "pausesRequired": 0,
+    "drainRawFinally": true,
+    "breakpointsOffBeforePureReplay": true,
+    "accounting": {
+      "returnedCreditFromNextCall": "separate from retained pure function replay",
+      "bodiesClear": "ABSENT from credit chain; actual body distance measured independently",
+      "noZeroGainAsCeiling": "no causality claim without actual candidate projection/exact args"
+    }
+  },
+  "runtime": {
+    "headless": false,
+    "launcher": "verifier/probes/common-entry-crossing/run-once.sh",
+    "detachedWaitingLauncher": false,
+    "pgrepKills": false,
+    "note": "copied run-gpu.sh (detached 15s waiting loop) was REMOVED per commission; agent polls control INLINE",
+    "previewUrl": "http://127.0.0.1:34413/",
+    "newPreview": false,
+    "heavyLock": "inherited EXCLUSIVE flock fd 9",
+    "assertRealNvidia": true,
+    "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6"
+  },
+  "ownedPaths": [
+    "verifier/probes/common-entry-crossing/",
+    "logs/common-entry-crossing/",
+    "verifier/captures/common-entry-crossing/",
+    "common-entry-crossing-ready.json",
+    "common-entry-crossing-report.json",
+    "common-entry-crossing-report.md"
+  ],
+  "gpuGate": {
+    "requiredActiveRole": "common-entry-crossing",
+    "requiredAction": "continue",
+    "observedActiveRole": "finale-window-runtime",
+    "observedAction": "continue",
+    "granted": false
+  },
+  "notClaimed": [
+    "full 18-unit acceptance",
+    "COMMON success",
+    "chapter acceptance",
+    "full UX claim",
+    "before-plane aiming as post-plane proof"
+  ]
+}

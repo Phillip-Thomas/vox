@@ -1,0 +1,510 @@
+{
+  "schema": "paravoxia.chapterBrief.v1",
+  "chapter": "ch14",
+  "requestedAt": "2026-09-08T00:06:46.000Z",
+  "request": "Continue Paravoxia creatively after Common Ground, using the exact signed ch13 direction as narrative entry. The owner said be creative, be imaginative, keep it aligned with the plot thus far, take the game to the next level, and now do it all. Create one complete, distinctive next chapter through this fixed loop. Common Ground is implemented but runtime acceptance remains open; do not claim it accepted, turn W-7744 into an ally, consume a later awakening casually, or publish. Preserve existing story and dirty work. The three creative peers choose the chapter's meaning and presentation. Build a complete rough playable path first. The original first-playable deadline is 2026-09-08T01:36:46Z; the whole operation ends08:06:46Z. Keep every read and authored handoff compact. The technical binding is main/chapter-ch14-controls.json: the builder must author this config and the chapter journey/registry projections alongside implementation. This is ordinary browser control configuration, never fixture state. Root transport supports KeyF/KeyW etc, click, move and read-only snapshot wait actions; describeControlCapabilities exports action schema. The config has chapter and manual/recovery/continue/continuity/av objects. Manual config declares route, ordered beats, completionMilestones, acceptedMilestones, deltaPointers, durablePointers and steps. Continue adds checkpointPointer and visible Continue selector, followed by newActionSteps. Recovery adds observed pausedPointer, visible Resume selector and newActionSteps. AV and continuity use chapter plus maxSessionSeconds and sampleMs; no storage injection. Use the observe command the adapter provides; no software rasterization. Existing ch13 paths and canon may guide continuity; they are not evidence that ch14 passes. All work stays local until full verification and independent review.",
+  "authority": "Direct owner: do it all; earlier continue-story and routine reversible implementation/reviews/checks are authorized. Latest: ensure all agents and subagents have full permissions and do not ask routine permission questions.",
+  "provider": {
+    "provider": "claude",
+    "permissionMode": "full",
+    "models": {
+      "creative": "fable",
+      "mechanical": "opus"
+    }
+  },
+  "canon": [
+    {
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "sha256": "6e0e0660fcaddad30a0c89435d914171c6a8e322cd6036e8534dfacf3387721a",
+      "startLine": 15,
+      "endLine": 112
+    },
+    {
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "sha256": "6e0e0660fcaddad30a0c89435d914171c6a8e322cd6036e8534dfacf3387721a",
+      "startLine": 201,
+      "endLine": 299
+    },
+    {
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "sha256": "6e0e0660fcaddad30a0c89435d914171c6a8e322cd6036e8534dfacf3387721a",
+      "startLine": 1025,
+      "endLine": 1083
+    },
+    {
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "sha256": "6e0e0660fcaddad30a0c89435d914171c6a8e322cd6036e8534dfacf3387721a",
+      "startLine": 1249,
+      "endLine": 1290
+    }
+  ],
+  "references": [
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/recipe.json",
+      "sha256": "dc344ffde0ec37b6531f6185f6f845dc427cca00910c51353f961a25872b5a79"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/scene-contract.json",
+      "sha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54"
+    }
+  ],
+  "allowedPaths": [
+    "main/src/story/",
+    "main/src/game/systems/progressionSystem.ts",
+    "main/src/App.tsx",
+    "main/src/components/ch14/",
+    "main/chapter-registry.json",
+    "main/chapter-journey-contract.json",
+    "main/chapter-ch14-controls.json"
+  ],
+  "toolRefs": [
+    {
+      "path": "main/tools/chapter-loop/capture-case.mjs",
+      "sha256": "b185a523f306df2e4ca0a1209c8930bf45dbd687e501dbdf1c4cf78e720e1c3b"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "sha256": "00ebccf2862b2cffa4b97ff3ded0bfb559e65ac479e1bc1d64cecd02233fec0c"
+    },
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.mjs",
+      "sha256": "81566b33cf1a1465268818189497517a2335c9963ca6a8b58405a62af366280a"
+    },
+    {
+      "path": "main/tools/chapter-loop/tooling-preflight.mjs",
+      "sha256": "b8c2f0f9d9ae2d2220f21014692256171e5763e007da255d0e1e3c2f247a5a7f"
+    }
+  ],
+  "heavyLock": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "previewQuery": {
+    "kind": "normal-save",
+    "query": "?journeyprobe=1&profile=HIGH"
+  },
+  "verification": {
+    "preflight": {
+      "argv": [
+        "node",
+        "tools/chapter-loop/tooling-preflight.mjs",
+        "--chapter",
+        "{chapter}",
+        "--out",
+        "{out}"
+      ],
+      "cwd": "main",
+      "timeoutMs": 30000
+    },
+    "checks": [
+      {
+        "id": "typecheck",
+        "argv": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "resource": "cpu",
+        "dependencies": [
+          "main/src",
+          "main/tsconfig.json",
+          "main/tsconfig.node.json"
+        ]
+      }
+    ],
+    "build": {
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "main",
+      "timeoutMs": 600000,
+      "dependencies": [
+        "main/src",
+        "main/public",
+        "main/index.html",
+        "main/vite.config.ts"
+      ]
+    },
+    "dist": "main/dist",
+    "cases": [
+      {
+        "argv": [
+          "node",
+          "tools/chapter-loop/capture-case.mjs",
+          "--chapter",
+          "{chapter}",
+          "--case",
+          "manual",
+          "--config",
+          "main/chapter-ch14-controls.json",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 1200000,
+        "kind": "manual",
+        "report": "report.json",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "assertions": {
+          "ordinaryControls": {
+            "pointer": "/proof/ordinaryControls",
+            "equals": true
+          },
+          "acceptedAction": {
+            "pointer": "/proof/acceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": [],
+        "dependencies": [
+          "main/tools/chapter-loop",
+          "main/chapter-ch14-controls.json",
+          "main/chapter-journey-contract.json"
+        ]
+      },
+      {
+        "argv": [
+          "node",
+          "tools/chapter-loop/capture-case.mjs",
+          "--chapter",
+          "{chapter}",
+          "--case",
+          "recovery",
+          "--config",
+          "main/chapter-ch14-controls.json",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 1200000,
+        "kind": "recovery",
+        "report": "report.json",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "assertions": {
+          "interrupted": {
+            "pointer": "/proof/interrupted",
+            "equals": true
+          },
+          "recovered": {
+            "pointer": "/proof/recovered",
+            "equals": true
+          },
+          "acceptedAction": {
+            "pointer": "/proof/acceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": [],
+        "dependencies": [
+          "main/tools/chapter-loop",
+          "main/chapter-ch14-controls.json",
+          "main/chapter-journey-contract.json"
+        ]
+      },
+      {
+        "argv": [
+          "node",
+          "tools/chapter-loop/capture-case.mjs",
+          "--chapter",
+          "{chapter}",
+          "--case",
+          "continue",
+          "--config",
+          "main/chapter-ch14-controls.json",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 1200000,
+        "kind": "continue",
+        "report": "report.json",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "assertions": {
+          "clickedContinue": {
+            "pointer": "/proof/clickedContinue",
+            "equals": true
+          },
+          "stateEqual": {
+            "pointer": "/proof/stateEqual",
+            "equals": true
+          },
+          "newAcceptedAction": {
+            "pointer": "/proof/newAcceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": [],
+        "dependencies": [
+          "main/tools/chapter-loop",
+          "main/chapter-ch14-controls.json",
+          "main/chapter-journey-contract.json"
+        ]
+      },
+      {
+        "argv": [
+          "node",
+          "tools/chapter-loop/capture-case.mjs",
+          "--chapter",
+          "{chapter}",
+          "--case",
+          "continuity",
+          "--config",
+          "main/chapter-ch14-controls.json",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 1200000,
+        "kind": "continuity",
+        "report": "report.json",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "assertions": {
+          "earnedEntry": {
+            "pointer": "/proof/earnedEntry",
+            "equals": true
+          },
+          "earnedExit": {
+            "pointer": "/proof/earnedExit",
+            "equals": true
+          },
+          "noFixtures": {
+            "pointer": "/proof/noFixtures",
+            "equals": true
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": [],
+        "dependencies": [
+          "main/tools/chapter-loop",
+          "main/chapter-ch14-controls.json",
+          "main/chapter-journey-contract.json"
+        ]
+      },
+      {
+        "argv": [
+          "node",
+          "tools/chapter-loop/capture-case.mjs",
+          "--chapter",
+          "{chapter}",
+          "--case",
+          "av",
+          "--config",
+          "main/chapter-ch14-controls.json",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 1200000,
+        "kind": "av",
+        "report": "report.json",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "assertions": {
+          "videoDecodes": {
+            "pointer": "/proof/videoDecodes",
+            "equals": true
+          },
+          "audioDecodes": {
+            "pointer": "/proof/audioDecodes",
+            "equals": true
+          },
+          "framesNonblank": {
+            "pointer": "/proof/framesNonblank",
+            "equals": true
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "video.webm"
+          },
+          {
+            "kind": "audio",
+            "path": "audio.wav"
+          },
+          {
+            "kind": "frame",
+            "path": "frame.png"
+          }
+        ],
+        "dependencies": [
+          "main/tools/chapter-loop",
+          "main/chapter-ch14-controls.json",
+          "main/chapter-journey-contract.json"
+        ]
+      }
+    ],
+    "observe": {
+      "look": {
+        "argv": [
+          "node",
+          "tools/chapter-loop/capture-case.mjs",
+          "--chapter",
+          "{chapter}",
+          "--case",
+          "manual",
+          "--config",
+          "main/chapter-ch14-controls.json",
+          "--out",
+          "{out}",
+          "--build"
+        ],
+        "cwd": "main",
+        "timeoutMs": 1200000,
+        "kind": "manual",
+        "report": "report.json",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "assertions": {
+          "ordinaryControls": {
+            "pointer": "/proof/ordinaryControls",
+            "equals": true
+          },
+          "acceptedAction": {
+            "pointer": "/proof/acceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          },
+          "completePath": {
+            "pointer": "/proof/completePath",
+            "equals": true
+          }
+        },
+        "media": [],
+        "dependencies": [
+          "main/tools/chapter-loop",
+          "main/chapter-ch14-controls.json",
+          "main/chapter-journey-contract.json"
+        ]
+      },
+      "listen": {
+        "argv": [
+          "node",
+          "tools/chapter-loop/capture-case.mjs",
+          "--chapter",
+          "{chapter}",
+          "--case",
+          "av",
+          "--config",
+          "main/chapter-ch14-controls.json",
+          "--out",
+          "{out}",
+          "--build"
+        ],
+        "cwd": "main",
+        "timeoutMs": 1200000,
+        "kind": "av",
+        "report": "report.json",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "assertions": {
+          "videoDecodes": {
+            "pointer": "/proof/videoDecodes",
+            "equals": true
+          },
+          "audioDecodes": {
+            "pointer": "/proof/audioDecodes",
+            "equals": true
+          },
+          "framesNonblank": {
+            "pointer": "/proof/framesNonblank",
+            "equals": true
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "video.webm"
+          },
+          {
+            "kind": "audio",
+            "path": "audio.wav"
+          },
+          {
+            "kind": "frame",
+            "path": "frame.png"
+          }
+        ],
+        "dependencies": [
+          "main/tools/chapter-loop",
+          "main/chapter-ch14-controls.json",
+          "main/chapter-journey-contract.json"
+        ]
+      }
+    },
+    "recovery": {
+      "argv": [
+        "node",
+        "tools/chapter-loop/tooling-preflight.mjs",
+        "--chapter",
+        "{chapter}",
+        "--out",
+        "{out}"
+      ],
+      "cwd": "main",
+      "timeoutMs": 30000
+    }
+  }
+}

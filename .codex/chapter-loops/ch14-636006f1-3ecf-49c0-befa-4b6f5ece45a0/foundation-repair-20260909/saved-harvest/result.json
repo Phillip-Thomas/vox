@@ -1,0 +1,10 @@
+{
+  "kind": "noncertifying replay of captured diagnostic save",
+  "storageFile": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/foundation-repair-20260909/harvest-replay-storage.json",
+  "sourcePreview": "http://127.0.0.1:39671/",
+  "steps": [],
+  "samples": [],
+  "errors": [],
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "error": "Error: walk: walk tickMs must be 50..1000"
+}

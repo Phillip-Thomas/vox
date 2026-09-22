@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "paravoxia-decision-brief.schema.json",
+  "title": "Paravoxia decision brief",
+  "description": "Actual unresolved owner decisions and decisions resolved by existing hash-bound delegation. Empty sections need no synthetic questions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "runId",
+    "authoredBy",
+    "authoredAt",
+    "items"
+  ],
+  "properties": {
+    "schema": {
+      "const": "paravoxia.decisionBrief.v1"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authoredBy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authoredAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceIntentRef": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "question",
+          "options",
+          "recommended",
+          "decidedBy",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "creative",
+              "boundary",
+              "release"
+            ]
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "context": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "recommended": {
+            "type": "string",
+            "minLength": 1
+          },
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "path",
+                "symbol"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "symbol": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "why": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "decidedBy": {
+            "enum": [
+              "owner",
+              "delegate"
+            ]
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "decided"
+            ]
+          },
+          "decision": {
+            "type": "string"
+          },
+          "decidedAt": {
+            "type": "string"
+          },
+          "authorityRef": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          },
+          "delegationRationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

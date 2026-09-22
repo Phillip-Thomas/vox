@@ -1,0 +1,8 @@
+{
+  "schema": "paravoxia.chapterLoopOwnerRepair.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "failureSha256": "edf3123cd5f4cbba44bea9b274a3323ee66e9599cba0768e3f1adef7f4d03707",
+  "request": "continue",
+  "context": "Standing owner authorization: lets fix the blockers you encountered and finish it up; routine reversible implementation and checks require no repeat permission.",
+  "extraInfrastructureRetries": 1
+}

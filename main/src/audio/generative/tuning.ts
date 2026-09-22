@@ -292,6 +292,54 @@ export const SIDECHAIN_DEPTH = 0.35;
 
 /** Minimum lead time (s) for a grid-scheduled hit — never in the past, never reactive-late. */
 export const HIT_MIN_LEAD_S = 0.05;
+/**
+ * Composed sync (audio-10x Stage 3). A scheduled hit whose onset is within this
+ * of the audio clock is COMMITTED: a chain exit or reset may cancel hits further
+ * out, never one about to sound — the hand-back bloom fires on the very tick
+ * that exits its chain.
+ */
+export const HIT_CANCEL_GRACE_S = 0.05;
+/**
+ * The braam's bite (s): the attack of every braam tone, the `onsetAttackMs` a
+ * HitSchedule reports for the kind. Named so the sync trace and the render share
+ * one number.
+ */
+export const HIT_BRAAM_ATTACK_S = 0.35;
+/**
+ * Live-tonic window for a chain entry (bars): a pitch-locked chain reads the
+ * bed's tonic only if the bed published inside this many of its own bars, else
+ * it derives planetHomeRoot(seed). Contract sc.chain.tonic-authority.
+ */
+export const TONIC_LIVE_WINDOW_BARS = 8;
+/**
+ * applyRails dirty check: a smoothed-rail target is re-issued only when it
+ * moved by more than this relative (of |target|) or absolute amount. The param
+ * is already gliding to the last target, so skipping an identical re-issue is
+ * inaudible by construction; the residual 528 writes/s (evidence/stage-2
+ * deviation 11) came from re-issuing unchanged targets every 60 ms tick.
+ */
+export const RAILS_DIRTY_REL = 0.004;
+export const RAILS_DIRTY_ABS = 1e-4;
+/**
+ * Master switch for the applyRails dirty check. Off, every tick re-issues every
+ * rail exactly as the shipped instrument did (the render-identity baseline for
+ * the MOODS-as-constraints migration is captured with it off); on, unchanged
+ * targets are skipped. The two renders differ only at the automation float
+ * floor — asserted as a loudness/smoothness delta, never as a hash.
+ */
+export const RAILS_DIRTY_ENABLED = true;
+/**
+ * A bundle's SFX member is forward-scheduled to an exact audio time; the
+ * director posts it this far (s, beat clock) before that time so the post is
+ * never late on a dropped frame. Only bundled `playSfx` calls use it (C6).
+ */
+export const SFX_BUNDLE_ARM_LEAD_S = 0.08;
+/**
+ * bundleAt derivation (contract, Cinematography C6): the device term
+ * (ctx.outputLatency, else baseLatency, else 0) plus the music-path tail latency
+ * is clamped as a whole to this, sampled once at arming.
+ */
+export const LATENCY_COMP_MAX_S = 0.25;
 
 // --- The world-clock tick (§8.1, owner ruling #2 — P3 voice consumes these) --------------------------------
 
@@ -605,3 +653,240 @@ export const PAD_BRIGHT_PALETTE = 0.3;
 /** Bed fade when a story mood takes/returns authority, seconds. */
 export const BED_YIELD_FADE_S = 2.5;
 export const BED_RESUME_FADE_S = 4;
+
+// --- Stage 1 bed timbre and mastering (audio-10x; retune after LISTENING) ------------------------------
+//
+// The instrument under the notes. Harmony, arrangement and the era ladder are
+// untouched; these constants shape the pad ensemble, the drive stages, the
+// designed sub, the shared room and the music-bus glue. Every gain/cutoff/blend
+// they feed is written as a named slew through rampParamAt (SYMPHONY LAW).
+
+/** Pad ensemble voice count by quality tier (colour tones sound from voice 4 up). */
+export const PAD_VOICES_FULL = 5;
+export const PAD_VOICES_LEAN = 3;
+/** Saws per pad voice by tier. */
+export const PAD_UNISON_FULL = 6;
+export const PAD_UNISON_LEAN = 3;
+/** Symmetric unison offsets, cents (±); the lean tier uses the first (n−1)/2 pairs plus centre. */
+export const PAD_UNISON_CENTS: readonly number[] = [3, 9, 17];
+/** Per-saw pan spread (× era stereoWidth × slot in −1..1). */
+export const PAD_UNISON_PAN_SPREAD = 0.6;
+/** Octave-doubling saw level, dB below the voice. */
+export const PAD_OCTAVE_LEVEL_DB = -12;
+/** Per-voice lowpass: base + brightness span (replaces the one shared pad filter). */
+export const PAD_VOICE_LP_MIN_HZ = 520;
+export const PAD_VOICE_LP_SPAN_HZ = 2400;
+export const PAD_VOICE_LP_Q = 0.6;
+/** Seeded per-voice cutoff wander LFO band, Hz, and depth, Hz (× padChoir). */
+export const PAD_WANDER_HZ_MIN = 0.03;
+export const PAD_WANDER_HZ_MAX = 0.07;
+export const PAD_WANDER_DEPTH_HZ = 140;
+/** Attack breath: filtered-noise puff on every voicing retune (material+). */
+export const PAD_BREATH_LEVEL = 0.012;
+export const PAD_BREATH_S = 0.06;
+export const PAD_BREATH_HZ = 1800;
+export const PAD_BREATH_Q = 0.9;
+/** Drive curves (unity small-signal tanh, see generative/timbre.ts) per family. */
+export const DRIVE_PAD_K = 1.8;
+export const DRIVE_SUB_K = 1.2;
+export const DRIVE_LEAD_K = 1.5;
+/** Pad drive pre-gain, dB, and parallel wet blends. */
+export const DRIVE_PAD_PRE_DB = 6;
+export const DRIVE_PAD_WET_ALIVE = 0.45;
+/** Thermal worlds push the wet blend up by this fraction (drive, not level). */
+export const DRIVE_THERMAL_WET_LIFT = 0.2;
+export const DRIVE_SUB_WET = 0.35;
+export const DRIVE_LEAD_WET = 0.3;
+/** Designed sub path: highpass floor, lowpass ceiling, whole-bed mono-below crossover. */
+export const SUB_HP_HZ = 28;
+export const SUB_LP_HZ = 120;
+export const BED_XOVER_HZ = 120;
+/** Shared impulse generator (bed spaces + story convolver). */
+export const REVERB_PREDELAY_MS = 22;
+export const REVERB_HF_DAMP_HZ = 3200;
+export const REVERB_EARLY_TAPS = 8;
+export const REVERB_EARLY_WINDOW_MS: readonly [number, number] = [8, 60];
+export const REVERB_EARLY_LEVEL = 0.8;
+export const REVERB_LATE_LEVEL = 1;
+export const REVERB_LATE_ONSET_MS = 30;
+/** Music-bus glue before the (untouched) safety compressor. */
+export const GLUE_THRESH_DB = -18;
+export const GLUE_RATIO = 2.5;
+export const GLUE_ATTACK_S = 0.03;
+export const GLUE_RELEASE_S = 0.25;
+export const GLUE_KNEE_DB = 12;
+export const SOFTCLIP_K = 1.4;
+/**
+ * Chrome's DynamicsCompressor bakes a makeup gain in (pow(1/fullRangeGain, 0.6)).
+ * Measured +4.27 dB for the glue settings above (soak page
+ * measureGlueStaticGainDb); this trim returns the glue stage to unity static
+ * gain, so no makeup exists anywhere in the chain and an authored quiet survives.
+ */
+export const GLUE_MAKEUP_COMP_DB = -4.27;
+/** Loudness targets (summed bus −18 LUFS I; bed alone at alive 2.5 LU under; BLOOM short-term). */
+export const TARGET_LUFS_I = -18;
+export const TARGET_TP_DBTP = -1;
+export const BED_ALIVE_LUFS_I = -20.5;
+export const BLOOM_ST_LUFS = -14;
+/**
+ * Whole-bed level lift that fades in with padChoir (material+): the bed bus and
+ * both room returns scale by 1 − (1 − BED_ALIVE_LIFT)·padChoir. The chip eras
+ * (bare/colour) sit at padChoir 0 and are untouched by construction; the value
+ * lands the alive bed at BED_ALIVE_LUFS_I alone (measured, not asserted).
+ */
+export const BED_ALIVE_LIFT = 1.1;
+export const BED_ALIVE_LIFT_SLEW_S = 1.5;
+/** Signed v6: negative material-plus lean calibration at the existing bed/room trim. */
+export const BED_LEAN_BALANCE_DB = -1.25;
+/**
+ * Night trim on the alive bed, dB at full night. The shipped world mappings
+ * deepen the sub (SUB_NIGHT_GAIN_LIFT) and raise the shimmer
+ * (NIGHT_SHIMMER_GAIN_LIFT) as TEXTURE, but together they also lifted the night
+ * bed ~1.5 LU over the daylight reference — outside the unconditional
+ * BED_ALIVE_LUFS_I ±1 term. The trim rides the same padChoir-gated bed-bus rail
+ * as BED_ALIVE_LIFT (so bare/colour are untouched by construction), engages
+ * through dusk (daylight < BED_NIGHT_TRIM_DAYLIGHT_ONSET, smoothstep) and is
+ * full at night; every daylight ≥ onset render is bit-identical to before.
+ */
+export const BED_NIGHT_TRIM_DB = -2.0;
+export const BED_NIGHT_TRIM_DAYLIGHT_ONSET = 0.5;
+/** Named slews for every Stage 1 rail (95%-settled seconds). */
+export const DRIVE_WET_SLEW_S = 1.2;
+export const PAD_VOICE_LP_SLEW_S = 0.9;
+export const UNISON_PAN_SLEW_S = 1.5;
+export const PAD_VOICE_GAIN_SLEW_S = 1.2;
+export const XOVER_BLEND_SLEW_S = 1.5;
+export const SUB_DESIGN_SLEW_S = 1.4;
+
+// --- Stage 5 long form (audio-10x): section planner, whole-bar memory, the pulse, the BLOOM rail ---------
+//
+// Every knob below is APPEND-ONLY Stage 5 grammar (contract draft-v4 acceptanceCriteria[14..16]).
+// Nothing above this line changed; the chip eras (bare/colour) never reach a section with a
+// bloom budget, a pulse, or a lift, so their renders are untouched by construction.
+
+/** The layer a section withholds before its bloom (paid back when the bloom enters). */
+export type WithheldLayer = 'shimmer' | 'percussion' | 'lead' | 'ostinato';
+/** Register arc of a section: the voicing band's shape across its phrases. */
+export type RegisterArcName = 'rise' | 'fall' | 'arch' | 'plateau';
+/** Section length bounds, phrases (≈ 1.5–3 minutes at the shipped tempo band). */
+export const SECTION_PHRASES_MIN = 4;
+export const SECTION_PHRASES_MAX = 8;
+/** Bloom-budget draw per section: base + energy boost. The run's opening section always carries 1. */
+export const SECTION_BLOOM_P_BASE = 0.45;
+export const SECTION_BLOOM_P_ENERGY = 0.4;
+/** Consecutive budget-0 sections before a bloom is guaranteed (restraint has a ceiling too). */
+export const SECTION_MAX_DRY_RUN = 2;
+/** Extra statements per section besides the bloom's own (C418 law: entrances stay rare). */
+export const SECTION_STATEMENTS_MIN = 1;
+export const SECTION_STATEMENTS_MAX = 2;
+/** The opening section's BUILD starts on one of these phrase offsets (the planet introduces itself). */
+export const SECTION_INTRO_BUILD_PHRASES: readonly number[] = [2, 3];
+/** The opening gesture is compact: a one-phrase build (the planet introduces itself, then breathes). */
+export const SECTION_INTRO_BUILD_SPAN = 1;
+/** BUILD span, phrases (the shipped machine used exactly 1); energy weights the longer spans. */
+export const BUILD_SPAN_MIN = 1;
+export const BUILD_SPAN_MAX = 3;
+export const BUILD_SPAN_WEIGHTS: ReadonlyArray<readonly [span: number, weight: number, energyBoost: number]> = [
+  [1, 1, 0],
+  [2, 0.6, 0.9],
+  [3, 0.25, 0.9]
+];
+/** Planned BLOOM length, phrases (1 crest phrase, or crest + sustain). */
+export const BLOOM_PHRASES_MIN = 1;
+export const BLOOM_PHRASES_MAX = 2;
+export const BLOOM_TWO_PHRASE_P = 0.45;
+/** Register-arc amplitude on the voicing band, semitones (added to the drift clocks, clamped by REGISTER_SHIFT_MAX). */
+export const SECTION_REGISTER_SEMIS = 5;
+export const REGISTER_ARC_WEIGHTS: ReadonlyArray<readonly [arc: RegisterArcName, weight: number]> = [
+  ['rise', 1],
+  ['fall', 0.8],
+  ['arch', 1],
+  ['plateau', 0.7]
+];
+/** Density arc range across a section (ostinato cell length + percussion onsets). */
+export const SECTION_DENSITY_MIN = 0.25;
+export const SECTION_DENSITY_MAX = 1;
+/** Level multipliers while a layer is withheld ('percussion'/'lead' are silent until the bloom). */
+export const WITHHELD_LEVEL: Record<WithheldLayer, number> = { shimmer: 0.3, percussion: 0, lead: 0, ostinato: 0.5 };
+export const WITHHELD_LAYERS: readonly WithheldLayer[] = ['shimmer', 'percussion', 'lead', 'ostinato'];
+/** Probability a budget-0 section still withholds a layer (variation, not payment). */
+export const SECTION_WITHHOLD_DRY_P = 0.5;
+/** Recapitulation probability: the run's first statement chain returns once, transposed by the centre. */
+export const SECTION_RECAP_P = 0.4;
+/** Re-draws before the planner accepts a section whose (statementSchedule, registerArc) pair repeats. */
+export const SECTION_PLAN_MAX_TRIES = 12;
+/** Whole-bar fingerprint tabu window, bars; audited bypass budget per 32 minutes; variation tries. */
+export const BAR_TABU = 32;
+export const BAR_TABU_BYPASS_BUDGET = 4;
+export const BAR_TABU_BUDGET_MINUTES = 32;
+export const BAR_VARIATION_MAX_TRIES = 6;
+/** Level quantum in the bar fingerprint (0.05 lin ≈ 0.4 dB — below it two bars share a dynamic). */
+export const BAR_LEVEL_QUANTUM = 0.05;
+/** REST sub-swell amplitude (the sub-swell IS the REST gesture, owner ruling #4); peak bar bounds. */
+export const REST_SUB_SWELL = 0.18;
+export const REST_SWELL_PEAK_MIN = 2;
+export const REST_SWELL_PEAK_MAX = 5;
+/** Per-bar ostinato ornament probability (one note displaced an octave — still a chord/scale tone). */
+export const OST_ORNAMENT_P = 0.3;
+/** Percussion fill: extra onsets on a phrase's last bar; rotation swings per phrase (region still turns it). */
+export const PERC_FILL_K = 2;
+export const PERC_PHRASE_ROTATION_SLOTS = 4;
+/** Reality `detail` mixes into density: at detail 0 the mix floor keeps half the density. */
+export const DETAIL_DENSITY_FLOOR = 0.5;
+/** BLOOM rail (contract [16]): arrangement-level lift, dB, on pad/ostinato/texture/lead/percussion; sub separately. */
+export const BLOOM_RAIL_DB = 10.5;
+export const BLOOM_RAIL_SUB_DB = 4.5;
+/**
+ * Per-family shares of the rail: the pads and texture carry the swell; the short
+ * voices (ostinato, lead, percussion) lift less so note offsets at the crest never
+ * step the programme (smoothness battery) and the tune never shouts over the bed.
+ */
+export const BLOOM_RAIL_OSTINATO_DB = 5;
+export const BLOOM_RAIL_LEAD_DB = 3;
+export const BLOOM_RAIL_PERCUSSION_DB = 7;
+/** The crest: the bloom's first bars at full lift (the impact), then the groove settles to the sustain. */
+export const BLOOM_CREST_BARS = 2;
+/** The BUILD rises to this fraction of the lift; the crest jumps to 1 — the drop is a drop. */
+export const BUILD_LIFT_CAP = 0.2;
+/** Second BLOOM phrase sits at this fraction of the crest. */
+export const BLOOM_LIFT_SUSTAIN = 0.09836813546324956;
+/** Last bars of the final BLOOM phrase pre-release lift and pulse so the EBB is not a cliff. */
+export const BLOOM_PRE_RELEASE_BARS = 2;
+/** Largest bar-to-bar step of the lift / pulse envelopes (normalized; the symphony law, < SOAK 0.7). */
+export const LIFT_BAR_SLEW = 0.5;
+/** The pulse: level by state (× era sidechain gate), every PULSE_BUILD_BEAT_STEP-th felt beat in BUILD, every beat in BLOOM. */
+export const PULSE_LEVEL_BUILD = 0.5;
+export const PULSE_LEVEL_BLOOM = 1;
+export const PULSE_BUILD_BEAT_STEP = 2;
+/** Breath depth per unit pulse level (× SIDECHAIN_DEPTH): the dip the pulse carves out of the pads. */
+export const PULSE_BREATH_SCALE = 0.6;
+/**
+ * Pulse body: sine pitch-drop from PULSE_BODY_HZ_FROM to the chord root's sub, folded by
+ * octaves into [MIN, MAX). The band is exactly one octave so every root has one landing
+ * pitch in it (the treatment's 40–60 Hz band is narrower than an octave and cannot hold
+ * every pitch class — the body stays root-tuned rather than clamped off-pitch).
+ */
+export const PULSE_BODY_HZ_FROM = 80;
+export const PULSE_BODY_HZ_MIN = 40;
+export const PULSE_BODY_HZ_MAX = 80;
+export const PULSE_BODY_DECAY_S = 0.12;
+/** Pulse click (highpassed noise) and tail (bandpassed noise). */
+export const PULSE_CLICK_S = 0.002;
+export const PULSE_CLICK_HP_HZ = 2000;
+export const PULSE_TAIL_S = 0.06;
+export const PULSE_TAIL_BP_HZ = 200;
+/** Rim levels for the pulse voice (BED_*_LEVEL family). */
+export const BED_PULSE_BODY_LEVEL = 0.22;
+export const BED_PULSE_CLICK_LEVEL = 0.06;
+export const BED_PULSE_TAIL_LEVEL = 0.05;
+/** Oxygen (dive): strain rises as oxygen falls below the onset; thins the sub motif and rolls the pads off. */
+export const OXYGEN_STRAIN_ONSET = 0.5;
+export const OXYGEN_PAD_ROLLOFF = 0.5;
+export const OXYGEN_DENSITY_THIN = 0.5;
+/** Material+ biome vote in neighboring mode choice; never skips an accidental rung. */
+export const BIOME_MODE_DRIFT_WEIGHT = 0.2;
+export const BIOME_MODE_PREFERENCE = {
+  forest: 'dorian', grassland: 'mixolydian', coast: 'ionian',
+  highland: 'lydian', mesa: 'aeolian', cave: 'phrygian',
+  volcanic_scar: 'phrygian', crystal_field: 'lydian'
+} as const;

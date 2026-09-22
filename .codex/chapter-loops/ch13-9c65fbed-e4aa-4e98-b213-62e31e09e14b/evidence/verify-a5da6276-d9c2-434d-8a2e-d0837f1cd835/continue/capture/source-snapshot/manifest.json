@@ -1,0 +1,179 @@
+{
+  "schema": "paravoxia.verifier.sourceSnapshot.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "createdAt": "2026-09-07T01:04:14.130Z",
+  "purpose": "Retain the exact probe/library bytes this capture ran, so its probeSha256 stays reconstructable after later harness edits.",
+  "appliesTo": "THIS capture only. It says nothing about, and changes nothing in, earlier captures — those were taken before this feature existed.",
+  "repoRoot": "/home/thomasphillip/Projects/vox",
+  "entry": {
+    "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+    "absPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+    "sha256": "46496492de0645c43e1a01537cb5cf3453c33f324c2607754da01d9b086bff22"
+  },
+  "manifestSha256": "7130cc85fefdff5097c49f6a46e36a229c586c16f0a287290fd5e77aabd71bd7",
+  "manifestSha256Covers": "sha256 of {schema, files:[{path,sha256,bytes}]} ordered by path — source bytes only, no timestamps, no absolute paths",
+  "fileCount": 15,
+  "files": [
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/cgContract.pinned.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/cgContract.pinned.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/cgContract.pinned.mjs",
+      "bytes": 3620,
+      "sha256": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/continueClosure.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/continueClosure.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/continueClosure.mjs",
+      "bytes": 22195,
+      "sha256": "d6b6fbe1cb7d8a2a3dccce77d591b544c648f608c36e009804a5cf9d76bba33c",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "bytes": 98336,
+      "sha256": "46496492de0645c43e1a01537cb5cf3453c33f324c2607754da01d9b086bff22",
+      "importedBy": null,
+      "role": "entry"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earnedContinueLogic.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earnedContinueLogic.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earnedContinueLogic.mjs",
+      "bytes": 21749,
+      "sha256": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/entryObservation.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/entryObservation.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/entryObservation.mjs",
+      "bytes": 15207,
+      "sha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/liveCalibration.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/liveCalibration.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/liveCalibration.mjs",
+      "bytes": 21396,
+      "sha256": "0ca079a196fc35664a4b9ddc3c037b3225eb0b1ac96b786672e17ecf81322d32",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/ownedSession.pinned.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/ownedSession.pinned.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/ownedSession.pinned.mjs",
+      "bytes": 8253,
+      "sha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/pinned/commonPassageLogic.pinned.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/pinned/commonPassageLogic.pinned.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/pinned/commonPassageLogic.pinned.mjs",
+      "bytes": 45333,
+      "sha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/poseObservation.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/poseObservation.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/poseObservation.mjs",
+      "bytes": 9425,
+      "sha256": "35d26b067c154c17af834721e424c700d28f6ea4c17fb88ec24025c7823bccc8",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/sourceSnapshot.pinned.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/sourceSnapshot.pinned.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/sourceSnapshot.pinned.mjs",
+      "bytes": 15542,
+      "sha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/tangentSteering3d.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/tangentSteering3d.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/tangentSteering3d.mjs",
+      "bytes": 17964,
+      "sha256": "26c63b7dd602bfe926cd236e156d88c649795ffd5470aa52f4ef8c1a45d30d30",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": "main/tools/lib/evidence.mjs",
+      "snapshotPath": "files/main/tools/lib/evidence.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/main/tools/lib/evidence.mjs",
+      "bytes": 32877,
+      "sha256": "1997cf2a3e9db88ae6e1e474b76232a2589c78a58fe69a579b493b44e5aa5328",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": "main/tools/lib/pixel-laws.mjs",
+      "snapshotPath": "files/main/tools/lib/pixel-laws.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/main/tools/lib/pixel-laws.mjs",
+      "bytes": 13137,
+      "sha256": "300cb62e4a1f00b4ecdeee9a3c2a20858646be59602a3ed03c8e8377e79a423c",
+      "importedBy": "main/tools/lib/evidence.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": "main/tools/lib/previewServer.mjs",
+      "snapshotPath": "files/main/tools/lib/previewServer.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/main/tools/lib/previewServer.mjs",
+      "bytes": 6816,
+      "sha256": "b227bdaf92dc2ddd554a62746d96cd96625321f2ce7d94bc86265702346dedb2",
+      "importedBy": "main/tools/lib/evidence.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": "main/tools/lib/previewSnapshot.mjs",
+      "snapshotPath": "files/main/tools/lib/previewSnapshot.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/main/tools/lib/previewSnapshot.mjs",
+      "bytes": 2032,
+      "sha256": "de472f5bc8229730c35034851695d4ac267c57fc412e6de656210a65503cd977",
+      "importedBy": "main/tools/lib/previewServer.mjs",
+      "role": "imported-module"
+    }
+  ],
+  "externalSpecifiers": [
+    "node:fs",
+    "node:path",
+    "node:crypto",
+    "node:process",
+    "node:url",
+    "x",
+    "node:child_process",
+    "playwright-core",
+    "node:net",
+    "node:zlib",
+    "node:os"
+  ],
+  "unresolved": [],
+  "dynamicComputedImportSeen": true,
+  "excluded": [
+    "bare/package specifiers and node_modules (recorded in externalSpecifiers, not copied)",
+    "credentials, .env files, config secrets — none are in the probe import graph and none are read",
+    "game sources, build output, captures, and any whole-workspace copy"
+  ],
+  "limits": [
+    "Only statically resolvable relative/absolute imports are followed; a computed dynamic import cannot be resolved and is flagged by dynamicComputedImportSeen.",
+    "Specifiers are matched textually and comments/strings are NOT stripped, so an import-shaped phrase inside a comment can add a phantom entry to externalSpecifiers, or a commented-out local import to files/unresolved. The bias is deliberately toward over-recording: a snapshot may contain a module that was not executed, but it never omits one that was.",
+    "This is source provenance only. It proves nothing about the browser, the renderer, the game, or the outcome of the capture."
+  ],
+  "note": "Exact probe + library bytes of the EARNED return/Continue test (includes the pinned commonPassageLogic snapshot)."
+}

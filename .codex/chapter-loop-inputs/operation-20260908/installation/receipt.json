@@ -1,0 +1,100 @@
+{
+  "schema": "paravoxia.install.v1",
+  "files": [
+    {
+      "path": "main/src/state/appState.ts",
+      "before": "47672600401a5fbdd54920bf39a0ee1351ec0356f6bc00bbc1059d7c9af13fd6",
+      "after": "b3345fda6544cfa5e9aaa40b317257b536486cbc2d3ec1a0a1b112c72d0545ff"
+    },
+    {
+      "path": "main/src/state/appState.test.ts",
+      "before": "25f54db626c32301f163c54acad68c5cbef4cdd49053d5efc11e85d653183bc6",
+      "after": "7eacdd228e39afd312d9b7f5fc3548eae4e087d28866c6c002908e4a00153d07"
+    },
+    {
+      "path": "main/src/story/prologue/TerminalPrologue.tsx",
+      "before": "d7f841d94dfeb0414e71712656e146745b6905de908f810238a0c1c5a8d9b05b",
+      "after": "93d8b6a1e66a6f2f6578f00dd697a81e768d8c3933ed8ce610f8f45c5307ede1"
+    },
+    {
+      "path": "main/tools/chapter-loop/providers.mjs",
+      "before": "70f8d89692c2499072a51a3746525f23c069fd5deb233093d683e59382057aa4",
+      "after": "db11d6f6e6f091cb536a9502049404e582476066bcee041cfa1e74226d89a868"
+    },
+    {
+      "path": "main/tools/chapter-loop/permissions.test.mjs",
+      "before": null,
+      "after": "f22b14b2faca85d6fd57c327c725eaa497a35a10b0dad5b28f3eb14f04ec24c8"
+    },
+    {
+      "path": "main/tools/chapter-loop/renewal.mjs",
+      "before": null,
+      "after": "c29bcfd5673661937a1ded16d14072f344076384abe677dc98d53eb6562a738d"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "c49540607dd29da37ae58b87f1597d15176cc393128fb8c1ac6f00d4cacd5182",
+      "after": "4069ee8770bb8de8e2f78e73c9cc69d54c697026805d3a838b836566e27b1b29"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "bd1180deb077bcb31dee57c5e5bb927eaf24d0b31e8656981912395d0a74113a",
+      "after": "9e54a81f73046e6869a464ccbc66c56eb734abdce0275c2a60acdb1f561a2670"
+    },
+    {
+      "path": "main/tools/chapter-loop.mjs",
+      "before": "891dc0c44b4356f1da48c680352a6c29ce633f3836ca8a7c89810bd8be3c10cd",
+      "after": "724fdb9cd256454a21845f33475b8e17c5ab840bbe8cab78d73642f244204006"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": null,
+      "after": "00ebccf2862b2cffa4b97ff3ded0bfb559e65ac479e1bc1d64cecd02233fec0c"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.test.mjs",
+      "before": null,
+      "after": "d8e57c8ad1ff491cf4107d488f253259f8987f63a80c03a8743bf60e57ddc2c0"
+    },
+    {
+      "path": "main/tools/chapter-loop/tooling-preflight.mjs",
+      "before": null,
+      "after": "b8c2f0f9d9ae2d2220f21014692256171e5763e007da255d0e1e3c2f247a5a7f"
+    },
+    {
+      "path": "main/tools/chapter-loop/capture-case.mjs",
+      "before": null,
+      "after": "b185a523f306df2e4ca0a1209c8930bf45dbd687e501dbdf1c4cf78e720e1c3b"
+    },
+    {
+      "path": "main/tools/chapter-loop/evidence.mjs",
+      "before": "1180af47642e5c9ec8d1d8013c745d287eed8834e4e4342448e6efd2bf240c5e",
+      "after": "4683704c2f4debb3b75a43484bd4142bb4de26186048d6798c4448d6e542cf6b"
+    },
+    {
+      "path": "docs/chapter-loop.md",
+      "before": "f80e805b4b7a5fc60c50ba9952a05c6561f05e7dfbdb893607baa8568f5c3564",
+      "after": "c65499c6ff485590a898560da4a51672837ae8b3fe13a272bcc4ccfeb41acb6d"
+    },
+    {
+      "path": "docs/chapter-loop/brief.example.json",
+      "before": "00b94afcfdd9dcd2134733460aa2beccb6cefa94fd50afde6ae68228a84ee334",
+      "after": "52b8337904f87b985685636550359b9837b025d917bfb9568d210831c1ff992d"
+    }
+  ],
+  "checks": {
+    "chapterLoop": {
+      "command": "npm run chapter:loop:test",
+      "passed": true,
+      "tests": 99
+    },
+    "appState": {
+      "passed": true,
+      "tests": 4
+    },
+    "movieStartup": "/tmp/paravoxia-all-20260908/startup-proof/result.json",
+    "manualStartup": "/tmp/paravoxia-all-20260908/manual-startup-proof/report.json",
+    "independentReview": "/tmp/paravoxia-all-20260908/roles/repair-review/result.txt"
+  },
+  "deadlineAt": "2026-09-08T08:06:46.000Z"
+}

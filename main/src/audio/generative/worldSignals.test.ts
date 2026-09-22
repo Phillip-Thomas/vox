@@ -223,3 +223,23 @@ describe('macro-drift clocks (§7.3 — co-prime weather)', () => {
     expect(night.registerShift).toBeLessThan(day.registerShift);
   });
 });
+
+describe('oxygen under the dive (Stage 5 — the last dead mapping)', () => {
+  it('is identity with a full tank or on dry land, and strains smoothly under water', async () => {
+    const { resolveOxygenControls } = await import('./worldSignals.ts');
+    expect(resolveOxygenControls({ oxygen: 1, submergence: 1 }).strain).toBe(0);
+    expect(resolveOxygenControls({ oxygen: 0.1, submergence: 0 }).strain).toBe(0);
+    expect(resolveOxygenControls({ oxygen: 1, submergence: 0 }).densityScale).toBe(1);
+    expect(resolveOxygenControls({ oxygen: 1, submergence: 0 }).padBrightnessScale).toBe(1);
+    let prev = 0;
+    for (let o = 1; o >= 0; o -= 0.05) {
+      const c = resolveOxygenControls({ oxygen: o, submergence: 1 });
+      expect(c.strain).toBeGreaterThanOrEqual(prev);
+      expect(c.densityScale).toBeLessThanOrEqual(1);
+      expect(c.padBrightnessScale).toBeLessThanOrEqual(1);
+      expect(c.densityScale).toBeGreaterThan(0);
+      prev = c.strain;
+    }
+    expect(resolveOxygenControls({ oxygen: 0, submergence: 1 }).strain).toBe(1);
+  });
+});

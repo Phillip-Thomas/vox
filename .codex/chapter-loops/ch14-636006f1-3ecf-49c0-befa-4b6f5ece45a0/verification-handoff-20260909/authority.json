@@ -1,0 +1,52 @@
+{
+  "schema": "paravoxia.implementationVerification.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "request": "continue",
+  "verifyExistingImplementation": true,
+  "previousStateSha256": "3a1282f8ace00f909579a96d97a09e57d932e00580ae61ada8e123c8e6d9226e",
+  "files": [
+    {
+      "path": "docs/chapter-loop.md",
+      "before": "b46e8940fd24fe907ee00747168c25ed8fc61dc1990557206e59e938e847f245",
+      "after": "bd58523d3198282a6be7019cabfdcc5eed38dd23342885fed20546fdaf898d17"
+    },
+    {
+      "path": "main/tools/chapter-loop.mjs",
+      "before": "fc5a625c8dd209cbf78e35af58c06588100b2794cd8a1e74010819fe7a2cef21",
+      "after": "1b881894e958464e60a1488ee42d56ccebc0600382e127576805b97203e24df4"
+    },
+    {
+      "path": "main/tools/chapter-loop/composition-continuation.mjs",
+      "before": "d9975407b2d04235cdce68af7a955804e885ce209425fbb93c536948e7cfa4a8",
+      "after": "448ec7777745d8c6df456d94d75a6ed2b44d528c52bec5b3d98c791bbe4ecbf2"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": "e7120d0ac60d17151ac081ca17869ebc1f9d9cb17f1ef955d6efc52c59f84293",
+      "after": "70d6e4ee6e19ebc107d60d71e0f974d2063479a4180e0a47bd0c357c1b22ecf1"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "4bb235b3d4377b9689a163daea8e74d7858e745566e1c5083ac931ed9c477a5b",
+      "after": "27af0e86d1ce9e9c004cef07eff8dd67bd9a2e97e2c475656e2c0dbb1efb911c"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "00bf8ed61f9dd240d24717d55174e3e73a7ce2eba82ef9075ec4123606e29b29",
+      "after": "ed9cc45614ed1731a988a0601378843d6d7e9612de5e9cc9e91841267580bae4"
+    },
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.mjs",
+      "before": "1abcb189d1e79269a947f61419225260c8895989bcad45df650fb57c54e13964",
+      "after": "eb547dcc7d73478b95545a09f2c01eaeb154c1b7ea47b8d73e6e70944e9868dc"
+    }
+  ],
+  "validation": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/verification-handoff-20260909/validation.json",
+    "sha256": "b00872ffe0408f4fbab59bd55bc2b2fbfaef4ce5c2c7859c01cd6c04618b795b"
+  },
+  "handoff": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/verification-handoff-20260909/handoff.json",
+    "sha256": "86b014c350fcc2379a17548fd55d9cf7a4aef91e1cb0ef5509797140b0a69e8d"
+  }
+}

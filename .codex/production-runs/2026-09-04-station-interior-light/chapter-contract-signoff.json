@@ -1,0 +1,18 @@
+{
+  "schema": "paravoxia.directorSignoff.v1",
+  "director": "chapter",
+  "contractVersion": "draft-v1",
+  "contractSha256": "291e75b0c19294f68d00add730b8fedf9ae232288b5ecb744ff2f39d6a969cc1",
+  "disposition": "approve-with-notes",
+  "signedBy": "Chapter Director (Fable 5.1)",
+  "signedAt": "2026-09-04T22:27:27-04:00",
+  "notes": [
+    "Verified against story-intent.md, chapter-peer-notes.jsonl and chapter-reconciliation.jsonl: three objectives carry the shipped labels and work orders byte-for-byte (spaceStationStory.ts:240-278); feedback is one-shot, presentation-only, non-progressing; concourse-open is t=0 at the first occupiedCellId change into concourse in both modes; concourse-leave is recorded; no text signage and the lexicon stays unspent; hall and warehouse unnamed; silence recorded as unspent inventory; hall deck strip dropped, counter-to-concourse strip kept; non-goals and protected paths match the lock.",
+    "Binding correction, no contract change to intent, copy or reach: in story mode the departure prompt is StoryInteractionPrompt gated by the G3 objective's shipped reach 8 (spaceStationStory.ts:280), not AIRLOCK_REACH 9, which governs only the non-story AirlockPrompt (SpaceStationSandbox.tsx:404, hidden when storyMode). ev-return-lock and the airlock-return acceptance must be verified at reach 8; nobody may widen reach to satisfy the 9. My own intent carried the slip; correct the number at the next revision.",
+    "Controls hint is paraphrased in variants.desktop; the binding text is the existing line at SpaceStationSandbox.tsx:1427 verbatim: click to capture mouse · WASD walk · shift run · space jump. No other wording is authorized.",
+    "The [F] token must be presented through presentStoryGuidanceLine in main/src/story/ux/inputGlyphs.ts for the work order and the StoryInteractionPrompt (line 1260); extend its token table if needed, never fork. The contract names the module; this note names the function.",
+    "Silent airlock refusal before G3 is confirmed as shipped behavior and is canonical, not deferred; no refusal copy in any later run without a reopened contract.",
+    "The low-line presentation delay (0 to +0.8 s, full at +1.2 s) is bound numerically in the concourse-open acceptance; Integration should expose it as named constants beside THRESHOLD_FADE_SECONDS. The milestone still commits at t=0; only presentation is delayed.",
+    "hall-plain and racking-aisle are tagged beat station-interior-sandbox but are reachable in story mode; agency-free-interior covers both modes, so no change is required."
+  ]
+}

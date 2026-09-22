@@ -1,0 +1,11 @@
+{
+  "at": "2026-09-06T22:19:38.131349+00:00",
+  "decidedBy": "delegate",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "scope": "8min CPU-only preparation to resolve actual score expiry evidence gap identified by director; same run/source",
+  "sourceMutationAuthorized": false,
+  "gpuAuthorized": false,
+  "priorBudgetsNotRewritten": true,
+  "publicationAuthorized": false
+}

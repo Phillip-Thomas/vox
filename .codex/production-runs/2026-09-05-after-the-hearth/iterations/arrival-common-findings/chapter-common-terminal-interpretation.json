@@ -1,0 +1,77 @@
+{
+  "documentKind": "chapter-common-terminal-interpretation",
+  "director": "chapter",
+  "runId": "2026-09-05-after-the-hearth",
+  "authoredBy": "Codex chapter_intent — Chapter Director",
+  "authoredAt": "2026-09-06T16:22:49.161555+00:00",
+  "reviewedLiveContract": {
+    "version": "scene-v2",
+    "sha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e"
+  },
+  "reviewedSignedCandidate": {
+    "version": "scene-v3",
+    "sha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54"
+  },
+  "contractChangeRequired": false,
+  "disposition": "bounded-movie-steering-correction-is-implementation-work-within-unchanged-route",
+  "finding": "The 0.6-unit incoming/terminal overshoot is a movie-controller steering device, not signed creative geometry. The signed geometry is the existing common.vertices / CG_ROUTE_COMMON polyline, its unchanged C endpoint and required eighteen-unit actual ordered passage. Changing an aim offset does not by itself change that geometry or its proof.",
+  "authorityEvidence": [
+    {
+      "ref": "arrival-v3-candidate/scene-cinema-lane.json#/qualifiedGeometry/common/vertices",
+      "meaning": "Exact authored route vertices, including C=(-48,51.05,12)."
+    },
+    {
+      "ref": "arrival-v3-candidate/scene-cinema-lane.json#/commonGuide/geometrySource",
+      "meaning": "Exact CG_ROUTE_COMMON / qualified common.vertices; no route change or new search."
+    },
+    {
+      "ref": "arrival-v3-candidate/scene-contract.json#/story/agencyWindows/3",
+      "meaning": "Full eighteen-unit common route; movie fallback/rescue cannot supply proof."
+    },
+    {
+      "ref": "arrival-v3-candidate/scene-contract.json#/story/events/21/acceptanceCriterion",
+      "meaning": "Actual full E-to-C passage with maintained H reference, solid sight, support and clearance; no endpoint or elapsed-time substitute."
+    },
+    {
+      "ref": "arrival-v3-candidate/scene-contract.json#/guidance/objectives/13/acceptanceCriterion",
+      "meaning": "Actual full passage and discoverable manual route; no private rail knowledge or per-corner prompts."
+    },
+    {
+      "ref": "arrival-v3-candidate/scene-contract.json#/story/events/25/acceptanceCriterion",
+      "meaning": "Only actual independent E-to-C traversal starts the test; positioning has no credit."
+    },
+    {
+      "ref": "arrival-v3-candidate/scene-contract.json#/story/events/26/acceptanceCriterion",
+      "meaning": "Actual final arrival and earned reciprocal proof with the same physical rules."
+    }
+  ],
+  "implementationEvidence": {
+    "file": "main/src/story/commonGroundDirector.ts",
+    "sha256": "acc0d9cf6331f13f77bd95d29b3bd311033a382fcdc3bff3d9ab977297166c46",
+    "refs": [
+      "2130: CG_RAIL_CORNER_OVERSHOOT = 0.6",
+      "2147: RailRouteOptions.terminalOvershoot",
+      "2251-2267: railGoal derives offset steering goal from unchanged route[index]",
+      "2533: commonRailPlan selects terminalOvershoot",
+      "2193-2220: vertexReached checks actual incoming-plane passage at a turn"
+    ]
+  },
+  "auditRef": {
+    "file": "common-terminal-source-audit.json",
+    "sha256": "6bc39c2015c524eb096bbf3152eaef79e98313ced1aef8b2e9ad0c1771d26ed7"
+  },
+  "auditAuthorityDisposition": {
+    "acceptedAsDiagnostic": "The audit reports a real movie stall and a source/CPU explanation that its offset goal reaches an unsafe footprint. Preserve safety refusals. Its live branch equivalence, generated-versus-edited terrain and later vertex6/9 predictions retain their stated evidence limits.",
+    "notAcceptedAsCreativeAuthority": "The claims in conclusion, controlsThatMustPreserveUnsafeRejection[3] and railImplementationVsAuthoredGeometry that 0.6 is signed or every change to the terminal-overshoot device is a creative geometry decision are unsupported by the signed common route clauses. Source-hash freezing records implementation identity; it does not make each private steering constant an immutable authored coordinate.",
+    "notEstablished": "Failure of offset rail goals does not by itself establish that the original signed centre vertices or C must move. Manual traversal of those original vertices remains an independent pending check."
+  },
+  "permittedBoundary": "After explicit producer routing within the existing source boundary, the engineer may adjust the movie-only overshoot amount/direction or steering realization, including the terminal device, provided the unchanged physical route and proof actually succeed. This interpretation selects no numerical replacement or algorithm and grants no immediate source-mutation authority.",
+  "invariants": [
+    "Keep every authored common vertex, C placement, route/guide identity and full actual ordered18 unchanged; also preserve the signed survey route classes and reciprocal reference geometry.",
+    "Preserve actual incoming-corner traversal and strict honest return-to-unfinished-route recovery. No rounded-cut automatic credit, endpoint debt payment, skipped corners, later-leg pumping or virtual progress.",
+    "No wider arrival tolerance, unsafe-footprint/terrain/edge bypass, forged grounding/reference/clearance, teleport, nudge, timeout rescue or new required player action. Actual final C arrival remains necessary.",
+    "Keep current player agency, silent state reconstruction, Continue and score/copy/anchor meanings. Movie navigation remains an input generator, never a proof owner."
+  ],
+  "outgoingAimCaveat": "An outgoing-leg offset target is an unproved implementation candidate. Its ideal coordinate may lie on the incoming vertex plane, but the moving body can stop or turn short under control tolerance. A target dot-product calculation or dry target alone cannot prove actual incoming-corner passage, complete ordered movement or full capsule safety.",
+  "verificationRequired": "Producer routes any repair and its meaningful physical regressions. Prove actual control-driven movement through all affected corners and terminal C on the unchanged path, with support/footprint/edge/reference/body checks and honest route credit; show refusals remain refusals. Independently test manual original-vertex traversal and Continue. No source edit, contract change, GPU probe or runtime/creative acceptance is performed by this interpretation."
+}

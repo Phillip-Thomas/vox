@@ -3,6 +3,9 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
+  clearStoryTextChannel,
+  setWorkOrder,
+  showSystemLine,
   clearAuditLine,
   clearStoryText,
   getStoryText,
@@ -133,5 +136,18 @@ describe('story text bands', () => {
       'CONTACT LOGGED.'
     ]);
     expect(getStoryTextVersion()).toBeGreaterThan(before);
+  });
+});
+
+describe('owned track channel clearing', () => {
+  it('clears only the exact outgoing identity and leaves the next owner and objective intact', () => {
+    showCaption('outgoing'); const old = getStoryText().caption;
+    showCaption('incoming'); setWorkOrder(['HOLD POSITION.']); showSystemLine('system');
+    expect(clearStoryTextChannel('caption', old)).toBe(false);
+    expect(getStoryText().caption?.text).toBe('incoming');
+    const own = getStoryText().system;
+    expect(clearStoryTextChannel('system', own)).toBe(true);
+    expect(getStoryText().caption?.text).toBe('incoming');
+    expect(getStoryText().workorder).toEqual(['HOLD POSITION.']);
   });
 });

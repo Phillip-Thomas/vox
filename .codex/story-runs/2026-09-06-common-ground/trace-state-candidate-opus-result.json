@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 284258,
+  "stop_reason": "end_turn",
+  "session_id": "2c9879c3-f144-4e4b-9328-bcd10f304956",
+  "total_cost_usd": 1.5180345000000004,
+  "usage": {
+    "input_tokens": 34,
+    "cache_creation_input_tokens": 54095,
+    "cache_read_input_tokens": 658637,
+    "output_tokens": 25829,
+    "output_tokens_details": {
+      "thinking_tokens": 5652
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 54095,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 901,
+        "cache_read_input_tokens": 59316,
+        "cache_creation_input_tokens": 775,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 775
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1806,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001871,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 34,
+      "outputTokens": 25829,
+      "cacheReadInputTokens": 658637,
+      "cacheCreationInputTokens": 54095,
+      "webSearchRequests": 0,
+      "costUSD": 1.5161635000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 5652,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 22,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: candidate prepared, isolated, green \u2014 not integrated, not production-working.\n\n**Paths**\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/patch-candidates/trace-state/commonGroundTraceState.ts` \u2014 sha256 `751f8fad9d6614b5724582a9ca2e3b281735453e480303c4ab9b423e78703b3b`, 314 lines\n- `.../commonGroundTraceState.test.ts` \u2014 sha256 `0e5206e7211922507592f85d7e3a2159822a0cb97af7a8a952f53ed30788762c`, 211 lines\n- `.../README.md` \u2014 exact interface, pinned properties, remaining wiring\n\n**Results**: `vitest run --root <folder>` twice from clean state \u2014 15/15 pass, 1 file, ~270 ms, no watchers, no ENOSPC. `tsc --strict --noEmit` both files \u2014 0 errors. No failures occurred at the hashed state; none discarded. Stray vitest cache dir removed.\n\n**Scope respected**: nothing written to `main/src`; no import/registration; no canon, authority, validator or peer file touched; no build/browser/GPU; no full-repo verify. Only worktree footprint is the new untracked `patch-candidates/` folder (the 159 modified tracked files pre-date this session per `initial-worktree-status.txt`).\n\n**What it is**: pure TS, no Three/React/globals/side effects/timers. Two bounded survey slots (`accepted`/`working`) with sample and length caps checked and reported independently as honest stops that leave the slot unchanged; corners preserved, never decimated; `reviseTail` cost-free/repeatable and unable to cut the tested prefix, which only explicit voxel/support evidence lowers; `clearUncommitted` gated on explicit + stationary + at-start-reference and never touching `accepted`; renderer pose and resume both require caller ground/geometry predicates; commit emits completion once, repeats never replay; strict version/actor/world/malformed/oversized hydration to `null` with defensive copies; survey route class kept separate from the common reciprocal span/final reference. Route points serialize as tuples.\n\n**Limitations**: 525 combined lines, over the 450 target \u2014 no coverage removed to reach it. Zero numeric bounds committed; `TraceLimits`, witness radii and instrument range remain contract-supplied. Live `GroundPredicate`/`GeometryPredicate`, footstep source, route planning/trunk guard, persistence seam, director, marker, score coda and beat contracts are all unresolved and unwired.",
+  "ttft_ms": 1541,
+  "type": "result",
+  "duration_ms": 284590,
+  "uuid": "12f760e0-e7b5-46c4-84cf-5f77c8867cb6",
+  "ttft_stream_ms": 791,
+  "time_to_request_ms": 20,
+  "first_content_frame_ms": 791,
+  "queued_turn_count": 0
+}

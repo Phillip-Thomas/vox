@@ -1,0 +1,34 @@
+{
+  "compiledAt": "2026-09-05T21:10:54.948482+00:00",
+  "contractSha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a",
+  "ledgerSha256": "9ff5ab75ed51262fa3962a4c27954ec3c85bdfc420fca326c451d8e441314f0a",
+  "notes": 6,
+  "authenticRecipientReplies": 6,
+  "sources": [
+    {
+      "path": "chapter-peer-notes.jsonl",
+      "sha256": "9b39c018aa497ecc7c44211107d1d136128cdfeed309b809a0e7f2ac759a65cc"
+    },
+    {
+      "path": "chapter-reconciliation.jsonl",
+      "sha256": "a8c9d929ea57ca5934fe79290a33a1ebdfa5335e4468e9f2d3cb7ed2be341647"
+    },
+    {
+      "path": "score-peer-notes.jsonl",
+      "sha256": "0dcd5bae1a683b6e5bc8096dd92dff971928a2c42f4f87d0ba857af21990c67e"
+    },
+    {
+      "path": "score-reconciliation.jsonl",
+      "sha256": "1b934a03134d5456628d19a48b42b723baf0810e20ade220b74b502fc0614c7a"
+    },
+    {
+      "path": "cinematography-peer-notes.jsonl",
+      "sha256": "03d85f7ed9317ae3675547f72636901eb712a5130f85381b3cf3c3b9ea959d1b"
+    },
+    {
+      "path": "cinematography-reconciliation.jsonl",
+      "sha256": "c7c09a99deb776c207b1f0989729af41bd59d7f448bb9f0f38783c97eaa84bc4"
+    }
+  ],
+  "method": "All immutable original fields retained; only actual recipient status/response/disposition/respondedAt merged. No author or signature content supplied by root."
+}

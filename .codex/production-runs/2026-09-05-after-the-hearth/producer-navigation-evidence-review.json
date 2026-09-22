@@ -1,0 +1,148 @@
+{
+  "schema": "paravoxia.producerNavigationEvidenceReview.v1",
+  "authoredBy": "root producer inspecting retained actual evidence, not a substitute verifier final signature",
+  "reviewedAt": "2026-09-06T15:13:53.449465+00:00",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceFilesRehashed": 98,
+  "sourceUnchanged": true,
+  "sourceReports": [
+    {
+      "ref": "verification-navigation-report.json",
+      "sha256": "2cbbeeac5ad60f0a0787991edb8b76617d3983d3b25425f3c4a778804c1508a9"
+    },
+    {
+      "ref": "verification-navigation-report.md",
+      "sha256": "fced14ccd5f61ac2901b4122a0390bb53766a6699cc2443cb49e32761971843b"
+    },
+    {
+      "ref": "verifier-findings.json",
+      "sha256": "10177403cfaadd6c9e1447c3a6b421ef4eccd147bc407121eaa0ab2beef24883"
+    },
+    {
+      "ref": "producer-navigation-interim-review.json",
+      "sha256": "e4b1f0df058a498cc57b9a5a72a75e007e1b36f7839b2a5927af4a0c8eade00f"
+    },
+    {
+      "ref": "producer-navigation-verifier-interruption.json",
+      "sha256": "9a9fef08b4892cc960db5b487af850eb96ab868bccb04f581e314cb11abf7c5f"
+    },
+    {
+      "ref": "verifier/captures/navigation/survey-movie-1/summary.json",
+      "sha256": "13f1b9bef0ce24a734be316fac94084aca457398a73bc183cb5872e4026f0da9"
+    },
+    {
+      "ref": "verifier/captures/navigation/survey-movie-1/cleanup-receipt.json",
+      "sha256": "4432bb146340df4b482a30564ae9ee537b00d3f719310f8b87ceca0e9063c755"
+    },
+    {
+      "ref": "verifier/captures/partial-continue/run-5/summary.json",
+      "sha256": "dbd68de5012df5007aee0d6ad3ccd7efb13ac333aa1816039cee896b8a2e7411"
+    },
+    {
+      "ref": "verifier/captures/partial-continue/run-5/worldsave-pvx.v1.world.-1_-1.json",
+      "sha256": "5252dfd74a2391ecbae41b99a619703b9e25999f093fb733593094d97463f514"
+    },
+    {
+      "ref": "verifier/captures/partial-continue/run-5/worldsave-after-continue-pvx.v1.world.-1_-1.json",
+      "sha256": "5252dfd74a2391ecbae41b99a619703b9e25999f093fb733593094d97463f514"
+    },
+    {
+      "ref": "verifier/captures/partial-continue/earned-1/summary.json",
+      "sha256": "54fdd3f9ad9981bb3ef3209932d4c594eea787dc2776ea6e2914253b3d5b54f9"
+    },
+    {
+      "ref": "verifier/captures/partial-continue/earned-1/cleanup-receipt.json",
+      "sha256": "c3c0d9222c8cd51a8b73248f002b627835520cd07a349e7a5cafe230bb6c6c6e"
+    },
+    {
+      "ref": "verifier/captures/partial-continue/earned-2/summary.json",
+      "sha256": "017ce7ee985a6eaf9855811cac81d299a8ea7845b4407bf3c2992d93ad801151"
+    },
+    {
+      "ref": "verifier/captures/partial-continue/earned-2/cleanup-receipt.json",
+      "sha256": "9b4bbf70f1fb47c99c0c064b1f975efd8c561b6e2caaba1053f6f3b62a6f4c96"
+    },
+    {
+      "ref": "verifier/captures/manual-survey/manual-4/summary.json",
+      "sha256": "71df46f613edf76177ccc8fc54f755a23435e6ec01f5d34481f766cab57c3813"
+    },
+    {
+      "ref": "verifier/captures/manual-survey/manual-5/summary.json",
+      "sha256": "45b8992066e15907bea18a6c742cf094e0e9825db0d2f5ceada39058c4bd809d"
+    },
+    {
+      "ref": "verifier/captures/manual-survey/manual-5/cleanup-receipt.json",
+      "sha256": "e113afe3753fbdf8379cddc966e000a1dcce2020d03594a3c58779322250960b"
+    },
+    {
+      "ref": "standby-source-audit.json",
+      "sha256": "d3e8897dabf00390f01a96ca57268fd924ce5d94c74e9744e67d1ce174cf2e46"
+    },
+    {
+      "ref": "return-flight-source-audit.json",
+      "sha256": "bb411e5a55969c32fc4dc719a61ed5949c1e7c5821c2849666036757af53675f"
+    }
+  ],
+  "verifierInvocation": {
+    "role": "story-verifier",
+    "requestedModel": "opus",
+    "startedAt": "2026-09-06T14:11:21.882143+00:00",
+    "safeMode": true,
+    "permissionMode": "default",
+    "tools": [
+      "Bash",
+      "Read",
+      "Grep",
+      "Glob",
+      "Write",
+      "Edit"
+    ],
+    "systemPromptSource": ".claude/agents/story-verifier.md",
+    "systemPromptSha256": "06216d09794dac2b5875897d6774a6b2aa11e851cb8a07d280123e5f0a96389f",
+    "commissionSha256": "2d07d884e2590fb62ded2c774bd821d8a682ff9c1502808adb7e81ccbee4cace",
+    "scope": "Independent verification after exact-goal navigation and actual Continue bootstrap/data-preservation repair; same production run and retained prior failures; no game-source edits, taste verdict or publication",
+    "exitCode": 143,
+    "finishedAt": "2026-09-06T15:09:07.721009+00:00",
+    "sessionId": "09086097-d015-48af-ac24-8a1379858071",
+    "model": "claude-opus-5",
+    "actualTools": [
+      "Bash",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Read",
+      "Write"
+    ]
+  },
+  "isChapterAcceptance": false,
+  "claims": [
+    {
+      "claim": "Original movie route drawing stop passed through actual42samples35.308routeunits withoutrescue; later standby/bodyclearance stop is distinct.",
+      "status": "observed-specific-improvement"
+    },
+    {
+      "claim": "Incompletefixture actualOrigin save retains1305bytes5samplesdrawing exactly throughContinue SHA5252dfd74a2391ecbae41b99a619703b9e25999f093fb733593094d97463f514.",
+      "status": "observed-specific-improvement"
+    },
+    {
+      "claim": "Primary earnedreturn Continue remains unmeasured: two runs240.913s and420.993s neverearnOriginlanding. Laterdisplaydistance/flightphase cycles near50/descent thenfar/deep_space.",
+      "status": "observed-blocker-cause-pending"
+    },
+    {
+      "claim": "Manual4 shows3.648horizontalmovement plusverticalsettling. Manual5 liveness1.061isverticalonly, allcalibrationdirectionszero and noW/S/routeprogress. Neither provescornerrecovery orrouteclearance.",
+      "status": "limited-or-invalid-manual-evidence"
+    }
+  ],
+  "processQualification": [
+    "Broadverifier root-interrupted15:09:07exit143 aftermanual5browsercleanup. Retainedreports are partial before thisinterruption, not a completedindependentreview.",
+    "Manual2 andmanual3 root-aborted viaexactownedNodeSIGTERM; allrecordedowneddescendantPIDs gone afterward. Nootherprocess signalled androotpreviewretained.",
+    "Parent didnotreadhold/close beforemanual4/5; no morecaptures by thatrole. Freshboundedmanualandflightdiscriminatorroles ownseparatefolders andserializeGPUwithexclusivelock.",
+    "Earlybroadreports usedfuturewrittenAttimestamps; stream/filetiming distinguishesdocumentdraftmetadatafromactualcapture/invocationtimestamps. Originalversions retained ininterruptedarchive.",
+    "Priorfirst2currentcaptures usedsharedlock; laterexclusive corrected. No invented claim ofexclusiveacquisitionforoldcaptures.",
+    "Sourceaudits arecandidateinference, noCPUreplay/liveproof. Standbyauditworldidentitygap correctedbyraw0054. Returnunready300shellcandidate mustbereconciledwithlatercycles."
+  ],
+  "openDefectsNotAutomaticallyClosed": true,
+  "publicationAuthorized": false,
+  "next": "Complete boundedmanual andactualcelestialflightdiscriminators, then compile concrete scoped source repair decision withinstandinguserauthority; no newsource repair authorizedbythisreview."
+}

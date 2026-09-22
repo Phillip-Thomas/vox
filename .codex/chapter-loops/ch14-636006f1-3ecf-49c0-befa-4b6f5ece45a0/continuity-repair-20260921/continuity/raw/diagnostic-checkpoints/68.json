@@ -1,0 +1,49 @@
+{
+  "schema": "paravoxia.diagnosticCheckpoint.v1",
+  "noncertifying": true,
+  "wallMs": 1790046068412,
+  "url": "http://127.0.0.1:39685/?story=1&movie=1&journeyprobe=1&journeylane=continuous&journeymode=movie&profile=HIGH",
+  "story": {
+    "active": true,
+    "chapter": "ch7",
+    "beat": "ch7-board",
+    "runId": 1
+  },
+  "objective": {
+    "id": "board:pressure-seal",
+    "kind": "wait",
+    "markerLabel": "KESTREL · PRESSURE SEAL",
+    "workOrder": [
+      "PRESSURE BOUNDARY CLOSING."
+    ],
+    "requiresMarker": false,
+    "health": "ready",
+    "revision": 107
+  },
+  "storageState": {
+    "cookies": [],
+    "origins": [
+      {
+        "origin": "http://127.0.0.1:39685",
+        "localStorage": [
+          {
+            "name": "pvx.v1.world.-1,-1",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"structures\":[],\"campfires\":[],\"trees\":[],\"stones\":[[-8,25,-3],[-10,25,-3],[15,25,-4],[11,25,-5],[23,25,-10],[23,25,-6],[21,25,-7],[20,25,-6],[19,25,-6],[18,25,-6],[16,25,-6],[11,25,-8],[10,25,-7],[-3,25,-5],[-5,25,-1],[-9,25,1],[-11,25,5],[-11,25,10],[-1,25,-1],[-10,25,5],[-8,25,5],[-10,25,4]],\"forage\":[[-11,25,0],[-10,25,8],[-10,25,3]],\"flora\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.voxels",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"generationSchemaVersion\":1,\"fingerprint\":115629,\"removed\":[[6,25,-2],[-5,25,-2],[-6,25,-2]],\"added\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.player",
+            "value": "{\"pos\":[2.1120455265045166,52.789466857910156,-9.038714408874512],\"forward\":[0.08606818679889573,4.3279966191956316e-9,0.9962892487732419],\"pitch\":-0.1342837476709539}"
+          },
+          {
+            "name": "pvx.v1.global",
+            "value": "{\"inventory\":{\"wood\":1,\"stone\":39,\"berry\":2,\"iron_maw\":1},\"mawCharge\":0,\"era\":\"emergent\",\"milestones\":[\"story:started\",\"story:choice:dispenser:unlock\",\"story:choice:readings:trust\",\"story:choice:question:unknown\",\"story:name:moss\",\"story:choice:light:blinds\",\"story:choice:hum:ignore\",\"story:choice:diagnostic:replay\",\"story:choice:replay2:remember\",\"story:choice:thermal:hold\",\"story:choice:anomaly:ack\",\"story:debris-scattered:3\",\"story:tone:low\",\"story:cell:100\",\"story:prologue-seen\",\"story:debris:0\",\"story:debris:1\",\"story:ch1:track\",\"story:debris-stone-backfill:v2\",\"story:debris:2\",\"story:ch1:quota\",\"story:pod:0\",\"story:pod:1\",\"story:pod:2\",\"story:ch1:depth\",\"story:ch1:nav\",\"story:ch1:iso\",\"story:a1\",\"story:a2\",\"story:sense:health\",\"story:sense:inventory\",\"story:sense:temp\",\"story:a3\",\"story:sense:water\",\"story:ch3:shiplook\",\"story:ch3:drank\",\"story:sense:food\",\"story:ch3:ate\",\"story:ch3:signal\",\"story:ch4:constellations\",\"story:ch4:vigil\",\"story:ch4:arrived\",\"story:audit:fire-mismatch\",\"story:audit:life-mismatch\",\"story:audit:tree-mismatch\",\"story:ch4:audit-complete\",\"story:comply:fire-doused\",\"story:comply:organics-resolved\",\"story:comply:regression-settled\",\"story:ch4:compliance-complete\",\"story:defy:protected-tool-refused\",\"story:defy:refusal-available\",\"story:defy:refusal-committed\",\"story:ch4:refusal-complete\",\"story:a4\",\"story:a4:pond-response-visible\",\"story:a4:herd-route-visible\",\"story:a4:w7744-fault-recorded\",\"story:a4:field-pack-dropped\",\"story:a4:handback\",\"story:item:maw-repair-kit:acquired\",\"maw_repaired\",\"story:sense:maw\",\"story:maw:first-direction:lowered-and-listened\",\"story:maw:first-direction-resolved\",\"story:maw:pond-resonance-visible\",\"story:ch5:maw-repaired\",\"story:dive:waterline-entered\",\"story:capability:oxygen-online\",\"story:sense:oxygen\",\"story:dive:keel-sonar-revealed\",\"story:item:kestrel-keel-memory:acquired\",\"story:dive:surfaced-with-keel\",\"story:item:kestrel-keel-memory:banked\",\"story:ch6:keel-banked\",\"story:reconstruct:relationships-diagnosed-physical\",\"story:salvage:kestrel:claimed\",\"story:capability:jet-installed\",\"story:route:tidegarden:online\",\"story:reconstruct:calibration-completed-physical\",\"story:ch7:flight-ready\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1\",\"dayPhase\":0.6535791666668498,\"vitals\":{\"health\":100,\"hunger\":6.3006888888870956,\"thirst\":15.30103333332621,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":5,\"records\":[{\"id\":\"maw_repaired\",\"actorId\":\"local\",\"firstEvidenceSequence\":1,\"lastEvidenceSequence\":1,\"evidenceHistory\":[{\"id\":\"story:maw:repair-committed\",\"sequence\":1,\"observedAt\":1790046021619,\"worldId\":\"-1,-1\",\"sourceKey\":\"authored-maw-repair\"}],\"firstEvidenceAt\":1790046021619,\"lastEvidenceAt\":1790046021619},{\"id\":\"returned_with_keel_memory\",\"actorId\":\"local\",\"firstEvidenceSequence\":2,\"lastEvidenceSequence\":2,\"evidenceHistory\":[{\"id\":\"story:dive:keel-banked\",\"sequence\":2,\"sourceKey\":\"story-event\",\"data\":{\"oxygen\":100}}]},{\"id\":\"the_wreck_stands\",\"actorId\":\"local\",\"firstEvidenceSequence\":4,\"lastEvidenceSequence\":4,\"evidenceHistory\":[{\"id\":\"story:reconstruct:flight_ready\",\"sequence\":4,\"sourceKey\":\"ship-repair-stage\",\"data\":{\"stage\":\"flight_ready\"}}]},{\"id\":\"wreck_salvage_recovered\",\"actorId\":\"local\",\"firstEvidenceSequence\":3,\"lastEvidenceSequence\":3,\"evidenceHistory\":[{\"id\":\"story:reconstruct:wreck-salvage\",\"sequence\":3,\"sourceKey\":\"wreck-salvage\"}]}]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":3,\"records\":[{\"id\":\"wreck_scar_persistence\",\"actorId\":\"local\",\"firstEvidenceSequence\":1,\"lastEvidenceSequence\":2,\"evidenceHistory\":[{\"id\":\"wreck-scar:wrecked\",\"sequence\":1,\"worldId\":\"-1,-1\",\"sourceKey\":\"physical-wreck-scar\",\"data\":{\"stage\":\"wrecked\"}},{\"id\":\"wreck-scar:flight_ready\",\"sequence\":2,\"worldId\":\"-1,-1\",\"sourceKey\":\"physical-wreck-scar\",\"data\":{\"stage\":\"flight_ready\"}}],\"contradictionIds\":[],\"comparisonIds\":[],\"revisionHistory\":[{\"id\":\"attend:wreck-scar:wrecked\",\"kind\":\"attend\",\"sequence\":1,\"evidenceId\":\"wreck-scar:wrecked\"},{\"id\":\"attend:wreck-scar:flight_ready\",\"kind\":\"attend\",\"sequence\":2,\"evidenceId\":\"wreck-scar:flight_ready\"}],\"acknowledgement\":\"unacknowledged\",\"stage\":\"noticed\"}]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"flight_ready\",\"currentSystemId\":\"-1,-1\",\"currentWorldId\":\"-1,-1\",\"parkedPose\":{\"position\":[4,53.5,-6],\"quaternion\":[0,0.7071067811865475,0,0.7071067811865476]},\"systemPose\":{\"position\":[4,53.5,-6],\"quaternion\":[0,0.7071067811865475,0,0.7071067811865476],\"velocity\":[0,0,0]},\"locationMode\":\"surface\",\"repairHistory\":[{\"eventId\":\"story:reconstruct:bench_online\",\"from\":\"wrecked\",\"to\":\"bench_online\"},{\"eventId\":\"story:reconstruct:frame_restored\",\"from\":\"bench_online\",\"to\":\"frame_restored\"},{\"eventId\":\"story:reconstruct:hull_sealed\",\"from\":\"frame_restored\",\"to\":\"hull_sealed\"},{\"eventId\":\"story:reconstruct:lift_online\",\"from\":\"hull_sealed\",\"to\":\"lift_online\"},{\"eventId\":\"story:reconstruct:flight_ready\",\"from\":\"lift_online\",\"to\":\"flight_ready\"}]}}"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "body": {
+    "worldId": "-1,-1:a0",
+    "seed": 53955915,
+    "address": {
+      "system": {
+        "x": -1,
+        "y": -1
+      },
+      "index": 0
+    },
+    "systemPosition": [
+      -6772,
+      -1177,
+      -1191
+    ],
+    "quaternion": [
+      0.4776214163144893,
+      0.25291839948931594,
+      -0.8360849241600832,
+      -0.09419164224989446
+    ],
+    "boundRadius": 586.3707374492803,
+    "frame": {
+      "origin": [
+        432.5,
+        103,
+        0
+      ],
+      "half": [
+        432.5,
+        103,
+        103
+      ]
+    },
+    "berth": [
+      -6442.110683552648,
+      -1351.4088594682146,
+      -659.2323452550957
+    ],
+    "berthLocal": [
+      -642.5,
+      -96,
+      0
+    ],
+    "approachAxis": [
+      -0.5260114344160185,
+      0.39910291248619517,
+      -0.7510185324668355
+    ]
+  },
+  "samples": [
+    {
+      "elapsedMs": 210113,
+      "pose": {
+        "position": [
+          -5675.669156254826,
+          -975.7204822387195,
+          -1005.2940599415725
+        ],
+        "velocity": [
+          -108.42257579245579,
+          -19.90570785653657,
+          -18.365549067722867
+        ],
+        "quaternion": [
+          0.06830452721404924,
+          -0.6427791618290629,
+          -0.057707502553600805,
+          -0.7608148821030113
+        ]
+      },
+      "readout": {
+        "phase": "approach",
+        "distance": 921.0499888299735,
+        "hullDistance": 1130.0183447140155,
+        "offAxis": 1.4733884426892045,
+        "closingSpeed": 91.4416104294346,
+        "insideCorridor": false,
+        "canDock": false,
+        "blocker": "alignment",
+        "advisory": "off the corridor · come around to the lit approach"
+      }
+    },
+    {
+      "elapsedMs": 271265,
+      "pose": {
+        "position": [
+          -6790.803307411721,
+          -1178.5962174114334,
+          -1148.9011538379334
+        ],
+        "velocity": [
+          45.43548226594851,
+          -0.8711550869720693,
+          20.759413883864525
+        ],
+        "quaternion": [
+          0.010848353153400157,
+          -0.42619865431812626,
+          0.0033510448586630704,
+          0.9045583401802411
+        ]
+      },
+      "readout": {
+        "phase": "approach",
+        "distance": 625.4808528542709,
+        "hullDistance": 46.13485805572179,
+        "offAxis": 0.7364199336735914,
+        "closingSpeed": 41.82190627235947,
+        "insideCorridor": false,
+        "canDock": false,
+        "blocker": "alignment",
+        "advisory": "off the corridor · come around to the lit approach"
+      }
+    },
+    {
+      "elapsedMs": 332436,
+      "pose": {
+        "position": [
+          -6725.982485581167,
+          -1177.2547102423027,
+          -1187.1072059032952
+        ],
+        "velocity": [
+          4.706667413714988,
+          -0.15251934682726762,
+          -49.720817862969135
+        ],
+        "quaternion": [
+          0.0013871234515492447,
+          0.49101448984739615,
+          -0.0010835629714337277,
+          0.8711496269526369
+        ]
+      },
+      "readout": {
+        "phase": "approach",
+        "distance": 624.1512125950536,
+        "hullDistance": 46.182576329979774,
+        "offAxis": 0.8618053571998896,
+        "closingSpeed": -39.86809167589714,
+        "insideCorridor": false,
+        "canDock": false,
+        "blocker": "alignment",
+        "advisory": "off the corridor · come around to the lit approach"
+      }
+    },
+    {
+      "elapsedMs": 393590,
+      "pose": {
+        "position": [
+          -6768.401622160846,
+          -1177.0305456928659,
+          -1237.0042417040825
+        ],
+        "velocity": [
+          -49.743576190134526,
+          -0.038961036258270555,
+          -4.368891863012372
+        ],
+        "quaternion": [
+          -0.000008728921288809198,
+          0.963993106658501,
+          -0.00013464620386745125,
+          0.2659271932486367
+        ]
+      },
+      "readout": {
+        "phase": "approach",
+        "distance": 686.0713791284488,
+        "hullDistance": 46.14476688510091,
+        "offAxis": 0.9350353978800948,
+        "closingSpeed": -27.327050380518553,
+        "insideCorridor": false,
+        "canDock": false,
+        "blocker": "alignment",
+        "advisory": "off the corridor · come around to the lit approach"
+      }
+    },
+    {
+      "elapsedMs": 454786,
+      "pose": {
+        "position": [
+          -6817.277856368973,
+          -1177.0043634670378,
+          -1182.0140118553275
+        ],
+        "velocity": [
+          9.246933215422608,
+          -0.006842334485089252,
+          49.062025843026056
+        ],
+        "quaternion": [
+          -0.000013642573945311634,
+          0.7940947466960464,
+          -0.0000061587371228884365,
+          -0.6077939889845013
+        ]
+      },
+      "readout": {
+        "phase": "approach",
+        "distance": 666.6843381374234,
+        "hullDistance": 46.16093889150603,
+        "offAxis": 0.8236423329778805,
+        "closingSpeed": 43.67744237685588,
+        "insideCorridor": false,
+        "canDock": false,
+        "blocker": "alignment",
+        "advisory": "off the corridor · come around to the lit approach"
+      }
+    }
+  ]
+}

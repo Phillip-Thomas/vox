@@ -12,8 +12,8 @@ describe('movie autopilot safety boundary', () => {
     }
   });
 
-  it('keeps the legacy presentation-ladder development escape hatch separate', () => {
-    expect(allowsMovieTeleportRecovery('ch3-gather')).toBe(true);
+  it('forbids the retired presentation-ladder teleport escape hatch too', () => {
+    expect(allowsMovieTeleportRecovery('ch3-gather')).toBe(false);
     expect(allowsMovieTeleportRecovery(null)).toBe(false);
   });
 });

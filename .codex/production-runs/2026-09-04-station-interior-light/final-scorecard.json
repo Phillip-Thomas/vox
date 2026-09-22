@@ -1,0 +1,38 @@
+{
+  "schema": "paravoxia.creativeScorecard.v1",
+  "runId": "{{RUN_ID}}",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
+  "mode": "scene",
+  "rubricRef": "paravoxia-creative-cohesion@v1",
+  "categories": [
+    { "slug": "narrative_and_player_causality", "weight": 14, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
+    { "slug": "audiovisual_emotional_alignment", "weight": 16, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
+    { "slug": "cinematic_composition_and_lens", "weight": 14, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
+    { "slug": "score_coherence_and_sync", "weight": 12, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
+    { "slug": "palette_light_and_render_cohesion", "weight": 10, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
+    { "slug": "transition_and_state_integrity", "weight": 10, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
+    { "slug": "creative_ambition_and_specificity", "weight": 10, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
+    { "slug": "interaction_accessibility_and_variants", "weight": 6, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
+    { "slug": "performance_and_implementation_fidelity", "weight": 5, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
+    { "slug": "evidence_review_and_learning", "weight": 3, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] }
+  ],
+  "weightedScore": null,
+  "categoryFloor": null,
+  "fullCategoryCoverage": false,
+  "thresholds": {
+    "sceneWeighted": 4.75,
+    "sceneFloor": 4.3,
+    "flagshipWeighted": 4.8,
+    "flagshipFloor": 4.5
+  },
+  "openDefects": {
+    "critical": 0,
+    "high": 0,
+    "mediumUnaccepted": 0,
+    "low": 0
+  },
+  "decision": "template_incomplete",
+  "judge": "{{COHESION_JUDGE}}",
+  "judgedAt": "{{ISO_8601}}"
+}

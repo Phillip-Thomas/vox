@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "judge-verdict-pairwise-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "judge-verdict-pairwise-v1"
+    },
+    "rubricId": {
+      "const": "paravoxia-chapter-v1"
+    },
+    "bundleShaX": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "bundleShaY": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "audiovisual_emotional_alignment": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pX": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pY": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pTie": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "pX",
+            "pY",
+            "pTie"
+          ]
+        },
+        "narrative_and_player_causality": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pX": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pY": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pTie": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "pX",
+            "pY",
+            "pTie"
+          ]
+        },
+        "cinematic_composition_and_lens": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pX": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pY": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pTie": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "pX",
+            "pY",
+            "pTie"
+          ]
+        },
+        "score_coherence_and_sync": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pX": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pY": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pTie": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "pX",
+            "pY",
+            "pTie"
+          ]
+        },
+        "palette_light_and_render_cohesion": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pX": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pY": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pTie": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "pX",
+            "pY",
+            "pTie"
+          ]
+        },
+        "transition_and_state_integrity": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pX": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pY": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pTie": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "pX",
+            "pY",
+            "pTie"
+          ]
+        },
+        "creative_ambition_and_specificity": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pX": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pY": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "pTie": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "pX",
+            "pY",
+            "pTie"
+          ]
+        }
+      },
+      "required": [
+        "audiovisual_emotional_alignment",
+        "narrative_and_player_causality",
+        "cinematic_composition_and_lens",
+        "score_coherence_and_sync",
+        "palette_light_and_render_cohesion",
+        "transition_and_state_integrity",
+        "creative_ambition_and_specificity"
+      ]
+    },
+    "overall": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pX": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "pY": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "pTie": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "pX",
+        "pY",
+        "pTie"
+      ]
+    },
+    "decisiveEvidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "frames": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "observation": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "frames",
+          "observation"
+        ]
+      }
+    },
+    "injectionFlag": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema",
+    "rubricId",
+    "bundleShaX",
+    "bundleShaY",
+    "dimensions",
+    "overall",
+    "injectionFlag"
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "schema": "paravoxia.verifier.probePreparation.v1",
+  "role": "earned-continue-3d-runtime",
+  "status": "PREPARED-NOT-RUN",
+  "preparedAt": "2026-09-06T20:05:00Z",
+  "lane": "CPU-only preparation. No browser, no GPU, no build, no full suite, no game-source edit, no contract edit.",
+  "isAcceptance": false,
+  "isChapterVerification": false,
+  "runtimeClaim": null,
+  "acceptedActionClaim": null,
+  "gpuOwnership": {
+    "currentOwner": "common-exact-input-runtime",
+    "thisAgentTouchedGpu": false,
+    "thisAgentLaunchedBrowser": false,
+    "heavyLockOpened": false
+  },
+
+  "readFirst": {
+    "file": ".codex/production-runs/2026-09-05-after-the-hearth/producer-earned-prefix-and-pose-review.json",
+    "carriedForward": [
+      "savedPrefixExactlyEqual=true: the initial 18-point WorldSave prefix matches the later 19-point snapshot exactly; the extra sample is OBSERVED, not lost data.",
+      "The prior report's 16/18/19 framing is not restated anywhere in this preparation.",
+      "poseGap: the separate pvx.v1.world.-1,-1.player key was listed but its bytes were never retained.",
+      "newActionProved=false."
+    ]
+  },
+
+  "diagnosisOfTheFailedWalk": {
+    "claim": "PROBE STEERING DEFECT — NOT a game restore failure.",
+    "evidence": {
+      "source": "verifier/captures/arrival-common-earned/earned-1/summary.json",
+      "afterContinueUp": [0.9999999999998366, 1.805700191262614e-07, -5.424623164024718e-07],
+      "afterContinueFace": "+X",
+      "afterContinueBodyCentre": [52.78897476196289, 17.5, -20],
+      "surveyEndTarget": [-42, 51.05, 12],
+      "targetFace": "+Y",
+      "calibratedKeyDirections": {"KeyW": [-6.531735093470463e-05, 0.9999999978668219], "KeyS": [0.00030814990491848495, -0.9999999525218168], "KeyA": null, "KeyD": null},
+      "walkMs": 90387,
+      "bursts": 144,
+      "stopReason": "budget-exhausted",
+      "finalDistToE": 94.79155132353927
+    },
+    "mechanism": "walkTowards calibrated each key on [dx, dz] only and rejected any key whose XZ magnitude was <= 0.05. On the +X face the A/D keys move the body predominantly in world Y, so both were recorded null and the walk retained no lateral control. Distance and key choice were likewise XZ-only, and the target's +Y-face y=51.05 was invisible to the steering.",
+    "notInferred": "No conclusion about whether the game restored the pose correctly is drawn from this walk failure."
+  },
+
+  "ownedArtifacts": {
+    "newProbeDirectory": "verifier/probes/earned-continue-3d/",
+    "logs": "logs/earned-continue-3d-prep/",
+    "reports": ["earned-continue-3d-prep-report.json", "earned-continue-3d-prep-report.md"],
+    "nothingElseWritten": true
+  },
+
+  "originalsImmutable": {
+    "verifier/probes/arrival-common-earned/earned-continue-probe.mjs": {
+      "sha256": "4bc46bbce48ad757246b4f1ee19f9d29e08b201480639c0883c608ea8d5126c8",
+      "matchesEarned1ProbeSourceEntrySha": true
+    },
+    "verifier/probes/arrival-common-earned/earnedContinueLogic.mjs": {
+      "sha256": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1"
+    },
+    "verifier/captures/arrival-common-earned/earned-1/summary.json": {
+      "sha256": "5fb3c4ded210ca4f8de8a7595c6badbffb7e0548b5afad646bb01df3ed712040"
+    },
+    "verifier/captures/arrival-common-earned/earned-1/worldsave-pvx.v1.world.-1_-1.json": {
+      "sha256": "4d1bdd7a89c2c79258e04cdf3c9d8629c161d357a2d7d659424316c32f304f62",
+      "matchesProducerReviewSavedSha": true
+    },
+    "gameSourceModified": false,
+    "contractModified": false
+  },
+
+  "preparedFiles": [
+    {
+      "path": "verifier/probes/earned-continue-3d/earned-continue-3d-probe.mjs",
+      "sha256": "f0cf8172384b72b690fc1af32dce64ad2e36f1e28d4207bca68aef9ec720a1c9",
+      "origin": "copy of arrival-common-earned/earned-continue-probe.mjs (4bc46bb…) with the two documented changes",
+      "changes": [
+        "ACTIVE_ROLE -> earned-continue-3d-runtime; capture-path convention and cleanup labels renamed",
+        "walkTowards steering replaced with real 3D local-tangent control",
+        "player-pose byte retention at four lifecycle points",
+        "passive CDP DOMStorage observation attached before the save and detached in finally",
+        "requiredGates: restore alone is not a pass; an ACTUAL accepted [F] action is required",
+        "new findings EC3D-LATERAL-KEYS-DEAD, EC3D-ROUTE-STALLED, EC3D-POSE-WRITE-BEFORE-CONTINUE"
+      ]
+    },
+    {"path": "verifier/probes/earned-continue-3d/tangentSteering3d.mjs", "sha256": "1c1523c4480b1b290849a62102873d29f1d578f07052335943d0c8702ee65b6c", "origin": "NEW"},
+    {"path": "verifier/probes/earned-continue-3d/tangentSteering3d.selftest.mjs", "sha256": "2e90fb4e4ceaa1abf1e275bbea2420b4684a2a9607df59ebd0044be5ec5ad01d", "origin": "NEW"},
+    {"path": "verifier/probes/earned-continue-3d/poseObservation.mjs", "sha256": "35d26b067c154c17af834721e424c700d28f6ea4c17fb88ec24025c7823bccc8", "origin": "NEW"},
+    {"path": "verifier/probes/earned-continue-3d/earnedContinueLogic.mjs", "sha256": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1", "origin": "byte-identical copy, unchanged"},
+    {"path": "verifier/probes/earned-continue-3d/entryObservation.mjs", "sha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4", "origin": "byte-identical copy, unchanged"},
+    {"path": "verifier/probes/earned-continue-3d/selftest.mjs", "sha256": "f48e843bcac75def449fb17b0c4fefcba70f346ba2fa51a504f54e067556d9c6", "origin": "byte-identical copy, unchanged"},
+    {"path": "verifier/probes/earned-continue-3d/cgContract.pinned.mjs", "sha256": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5", "origin": "byte-identical copy, unchanged"},
+    {"path": "verifier/probes/earned-continue-3d/ownedSession.pinned.mjs", "sha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b", "origin": "byte-identical copy, unchanged"},
+    {"path": "verifier/probes/earned-continue-3d/sourceSnapshot.pinned.mjs", "sha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20", "origin": "byte-identical copy, unchanged"}
+  ],
+
+  "steeringRepair": {
+    "module": "tangentSteering3d.mjs",
+    "usesLivePublishedUp": true,
+    "projectsTargetDeltaOntoTangentPlane": true,
+    "projectsMeasuredKeyDisplacementOntoTangentPlane": true,
+    "tracksAllThreeCoordinates": true,
+    "arrivalDistance": "dist3 (full 3D); the XZ number is retained ONLY as finalDistXZToE_diagnosticOnly",
+    "recalibratesOnFaceOrUpChange": {"trigger": "basisStale — face-name change OR tilt > 12 deg", "recalibrationIsMeasured": true},
+    "keyUsabilityThreshold": "tangent-plane magnitude > 0.05 units (was: XZ magnitude)",
+    "boundedRouteAttempt": {"attempts": 1, "stopsOnMeasuredStall": true, "stallWindowBursts": 6, "noArbitraryGiantTimeout": true, "forcedActionOnObstacle": false},
+    "neverDoes": ["fabricate a pose", "call a rail setter", "call a state setter", "teleport", "grant a milestone"],
+    "footingSeparation": {
+      "auditSupported": "commonGround bridge `supported` — audit-plane footing; legitimately false off the audit plane and NOT read as broken planet physics",
+      "physicsGrounded": "NOT PUBLISHED by CommonGroundProbeSnapshot or pageReadState; recorded as null with physicsGroundedAvailable=false"
+    }
+  },
+
+  "poseObservation": {
+    "module": "poseObservation.mjs",
+    "key": "pvx.v1.world.<worldId>.player",
+    "shippedPath": "persistence.ts:451-466 savePlayerPose/loadPlayerPose; EfficientScene.tsx:336-380 consumes it",
+    "rawBytesRetainedAt": [
+      "before-navigation (pre-beforeunload)",
+      "after-beforeunload-and-menu-boot",
+      "menu-immediately-before-continue-click",
+      "after-real-continue"
+    ],
+    "filesEmittedAtRuntime": [
+      "playerpose-before-navigation.json",
+      "playerpose-after-beforeunload-menu-boot.json",
+      "playerpose-menu-before-continue.json",
+      "playerpose-after-continue.json",
+      "domstorage-events.json"
+    ],
+    "crossNavigationObservation": {
+      "method": "CDP DOMStorage.enable + domStorageItemAdded/Updated/Removed/Cleared",
+      "passive": true,
+      "monkeypatchesLocalStorage": false,
+      "changesAnyGameValue": false,
+      "distinguishes": "shipped-save write vs early menu-boot overwrite, by ordered timestamped events between probe-placed marks",
+      "ifUnavailable": "recorded as a declared gap; no page-side fallback is used"
+    },
+    "candidateOverwriteMechanismObservedNotAsserted": "App.tsx autosave effect cleanup calls doSave(false) -> savePlayerPose(world) on unmount, and a 20 s interval also calls savePlayerPose. Whether either lands in the menu-boot window is exactly what the CDP stream is there to observe; no cause is asserted here."
+  },
+
+  "sourceAuditCpuOnly": {
+    "scope": "read-only, narrow: only what locates observation points. No broader audit and no game-candidate work.",
+    "files": {
+      "main/src/game/systems/persistence.ts": {"sha256": "f01847c2695dcd636a3ba12f03b0b6e17ffc94614509a63097e19c21acd1f915", "lines": "445-466", "fact": "PlayerPose {pos, forward, pitch} is written to scopedWorldKey(world, '.player'); the WorldSave blob carries no pose."},
+      "main/src/components/EfficientScene.tsx": {"sha256": "ab95dfe4d2dbb59bbaa22e4fdf60faf8f4fa4f9fd959040bfe17fdb4a776f995", "lines": "320-385", "fact": "saved = storyAnchoredSpawn(storyAtMount) ? null : loadPlayerPose(...). If saved: setPlayerLook, then resumeIsSafe = isDryClearResumePosition(...); on false, findValidSpawnSite(radius 12) and otherwise arrivalPose.playerSurfacePosition."},
+      "main/src/story/storyState.ts": {"sha256": "e8802af8a93e4e82623c96f5d81053b2fd8b74027570dcdfa90b3478a9449915", "lines": "1132-1137", "fact": "storyAnchoredSpawn is true only for prologue and ch1 beats up to ch1-lift, so it is NOT a blanket ch13 anchor and the ch13 saved pose IS loaded."},
+      "main/src/App.tsx": {"sha256": "36abbf3822b828bc0e28f617ba0e5a1b436f39c2dab0b2e86e29683736b81980", "lines": "1419-1462", "fact": "doSave(withVoxels) calls saveGlobal/saveWorld/savePlayerPose; it is fired by beforeunload, by visibilitychange hidden, by a 20 s interval (pose+global), and by the effect cleanup as doSave(false)."}
+    },
+    "noSourceFixInferred": true,
+    "noSourceEdited": true
+  },
+
+  "gatesPreserved": {
+    "actualWorldSaveEquality": true,
+    "actorWorldIdentity": true,
+    "milestonesPreserved": true,
+    "noAnchorReplay": true,
+    "actualAcceptedNewAction": "NEWLY REQUIRED — report.requiredGates.actualAcceptedNewAction; a restore alone cannot be a pass",
+    "shippedMarkerAndGroundedArrivalAtE": "preserved: newActionGate still requires arrival plus the shipped [F] prompt actually offering the action",
+    "clampedPulseAndRuntimeBounds": "unchanged (450/350 ms calibration, 400/220 ms bursts, --walk-ms default 90000, --earn-ms 120000, --return-ms 180000)",
+    "pointerLockFocus": "unchanged: only ordinary semantic clicks and the live canvas rect; no forced click, no injected key state, no focus/permission edit"
+  },
+
+  "cpuVerification": {
+    "tangentSteering3dSelftest": {"command": "node verifier/probes/earned-continue-3d/tangentSteering3d.selftest.mjs", "exit": 0, "cases": 10, "checks": 45, "result": "all passed", "log": "logs/earned-continue-3d-prep/tangentSteering3d-selftest.log"},
+    "requiredCaseCoverage": [
+      "+X face: A/D produce NON-ZERO 3D displacement and are usable (the exact check earned-1's XZ calibration failed)",
+      "+X face: projection selects the world-Y key when the target delta is dominantly +Y",
+      "+Y face: the SAME helper selects an XZ key — no +X special case",
+      "face change +Y -> +X is stale and forces recalibration; a 20 deg same-face tilt is stale too",
+      "three-coordinate progress: along-leg / lateral / normal separated, 3D distance used",
+      "stall telemetry stops the attempt; degenerate inputs refuse instead of fabricating"
+    ],
+    "noMirroredImplementationAssertions": "the self-test imports the same module bytes the probe imports; it does not re-derive expected values with a parallel implementation",
+    "inheritedSelftest": {"command": "node verifier/probes/earned-continue-3d/selftest.mjs", "exit": 0, "result": "108/108 checks passed", "note": "reused because the copy inherits those modules unchanged; no full-suite rerun was performed", "log": "logs/earned-continue-3d-prep/inherited-selftest-108.log"},
+    "inlineProbeSelftest": {"command": "node verifier/probes/earned-continue-3d/earned-continue-3d-probe.mjs --self-test", "exit": 0, "log": "logs/earned-continue-3d-prep/probe-inline-selftest.log"},
+    "syntaxCheck": {"command": "node --check verifier/probes/earned-continue-3d/earned-continue-3d-probe.mjs", "exit": 0, "log": "logs/earned-continue-3d-prep/node-check.log"},
+    "importIdentity": {
+      "mainEntryImportsResolve": true,
+      "evidenceLib": "../../../../../../main/tools/lib/evidence.mjs — the new folder sits at the SAME directory depth as arrival-common-earned, so this and cgContract's RUN_DIR/REPO_ROOT/CAPTURES resolution are unchanged (proved by the successful --self-test, which executes the whole import graph)",
+      "pinnedHelpersCopiedNotShared": true
+    },
+    "cleanup": "unchanged owned-session guard: finally block detaches the CDP observer, stops only the OWNED session, never the root preview, re-hashes the source manifest before and after, and writes cleanup-receipt.json"
+  },
+
+  "proposedRuntimeCommand": {
+    "status": "NOT RUN — placeholders must be substituted by the runtime owner at release",
+    "shape": "flock -x <ABS_HEAVY_LOCK_PATH> -c 'node .codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/earned-continue-3d/earned-continue-3d-probe.mjs --url <CURRENT_ROOT_PUBLISHED_URL> --expect-source-manifest <CURRENT_SOURCE_MANIFEST_SHA256> --heavy-lock <ABS_HEAVY_LOCK_PATH> --heavy-lock-fd <INHERITED_FD> --role earned-continue-3d-runtime --out <ABSOLUTE_FRESH_CAPTURE_DIR>'",
+    "requiresRootToPublish": [
+      "verifier-control.json activeRole = earned-continue-3d-runtime (this role does not exist in control yet)",
+      "the CURRENT source-manifest sha and served index/bundle hashes, re-hashed at release",
+      "the GPU / heavy lock, currently owned by common-exact-input-runtime"
+    ],
+    "serialization": "one fresh serialized measurement, after approval of these concrete files"
+  },
+
+  "learnedTimingsAndFixtureLabelsPreserved": {
+    "entryFixture": "?story=ch13-return&journeyprobe=1&debug=1&movie=1 — labelled prerequisite; seeds the ch13-return entry ONLY and never story:ch13-origin-landed",
+    "railStallHandover": "15 s no-sample-growth handover to ordinary keys (established VF4-SURVEY-STALL-1 behaviour)",
+    "originLandingReference": "earned-1 measured returnMs=73763 to the earned Origin landing; budgets are unchanged from the learned run",
+    "continueSettle": "6 s menu settle, 60 s post-Continue readiness poll, 2 s fps windows — all unchanged",
+    "labels": ["prerequisite-fixture", "actual-shipped-save", "actual-continue-ui", "scripted-input", "actual-interaction"]
+  },
+
+  "unresolvedObservationGaps": [
+    {"id": "GAP-SPAWN-BRANCH", "detail": "EfficientScene.tsx's saved-pose validation/fallback branch (resumeIsSafe vs findValidSpawnSite vs arrivalPose.playerSurfacePosition) publishes no marker and is NOT observable from outside. The probe can only measure the RESULTING position and classify it as resumed-at-saved-pose / resumed-at-arrival-fallback / resumed-at-neither. No source change is proposed to close this."},
+    {"id": "GAP-ARRIVAL-FALLBACK-POSE", "detail": "arrivalPose.playerSurfacePosition is not exposed to the probe, so spawnVsSavedPose.arrivalFallbackPose will be null and the 'resumed-at-arrival-fallback' classification cannot be confirmed on this run."},
+    {"id": "GAP-PHYSICS-GROUNDED", "detail": "Neither CommonGroundProbeSnapshot nor pageReadState publishes a physics ground-contact flag. footingReading will report physicsGrounded=null / physicsGroundedAvailable=false. Audit-plane `supported` is reported separately and false there is not a broken-physics claim."},
+    {"id": "GAP-CDP-DOMSTORAGE-UNPROVEN", "detail": "CDP DOMStorage attachment has NOT been exercised against a live browser in this CPU-only preparation. If it fails at runtime, the probe records available=false plus the error and the save-write vs early-overwrite ordering stays unobserved; no fallback is used."},
+    {"id": "GAP-A-D-ON-PLUS-X-UNMEASURED", "detail": "earned-1 recorded no usable A/D displacement on the +X face, so the CPU case for that geometry uses a synthetic 2.23-unit +Y displacement. Whether the shipped controls actually move the body laterally on that face is an OPEN RUNTIME QUESTION, and EC3D-LATERAL-KEYS-DEAD exists to record a negative answer honestly rather than read it as an obstacle."}
+  ],
+
+  "explicitNonClaims": [
+    "No runtime was executed; no capture exists; nothing here is a verification or an acceptance.",
+    "No claim that the game restores the pose correctly, and no claim that it does not.",
+    "The 90 s navigation failure is attributed to probe steering and is NOT offered as proof of a game restore failure.",
+    "No accepted action is claimed.",
+    "No source fix is inferred or proposed."
+  ]
+}

@@ -1,0 +1,249 @@
+{
+  "schema": "paravoxia.verifier.earnedContinueProbePrep.v1",
+  "role": "story-verifier (mechanical harness preparation)",
+  "model": "claude-opus-5",
+  "preparedAtUtc": "2026-09-06T16:36:42.820214+00:00",
+  "runId": "2026-09-05-after-the-hearth",
+  "isCaptureResult": false,
+  "isVerification": false,
+  "isAcceptance": false,
+  "statement": "A probe COPY plus owned helpers were prepared and CPU-self-tested. NOTHING was run against a browser, a GPU or the game. No earned Continue has been tested; no claim of readiness for any capture result is made here.",
+  "boundSource": {
+    "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "manifestFilesRehashedNow": 99,
+    "manifestIntactNow": true,
+    "previewObservedDuringPrep": "http://127.0.0.1:38007/ (root-owned, never started or stopped by this role)",
+    "runtimeUrlBinding": "--url is compared to whatever preview-ownership.json publishes at actual release; no port is hardcoded in the probe."
+  },
+  "ownedPaths": [
+    "verifier/probes/earned-continue/",
+    "logs/earned-continue-prep/",
+    "earned-continue-probe-prep-report.json",
+    "earned-continue-probe-prep-report.md"
+  ],
+  "notTouched": {
+    "partialContinueProbeSha256": "fb1d4e2f528845a2ba8a4695f4a3a7e24a83ad1151a408718a0f33899a7b4d8d",
+    "partialContinueProbeUnchanged": true,
+    "partialContinueCaptures": [
+      "earned-1",
+      "earned-2",
+      "run-1",
+      "run-2",
+      "run-3",
+      "run-4",
+      "run-5"
+    ],
+    "manualRoleFileSha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+    "manualRoleFilesEdited": false,
+    "sharedProbesEdited": false,
+    "gameOrCanonicalMetadataEdited": false,
+    "sharedHeavyLockOpenedDuringPrep": false,
+    "gpuOrBrowserUsedDuringPrep": false,
+    "old38803or40131BuildsUsed": false
+  },
+  "preparedFiles": [
+    {
+      "path": "verifier/probes/earned-continue/earned-continue-probe.mjs",
+      "sha256": "9cf273eb8213f9e26ab83ae9ce5145df366fd487fb2bb53b804b69db641ffa69"
+    },
+    {
+      "path": "verifier/probes/earned-continue/earnedContinueLogic.mjs",
+      "sha256": "71973321e6229b720e8eff4370c0a6f21adce96a63324cb51a06a12c2ac696b7"
+    },
+    {
+      "path": "verifier/probes/earned-continue/selftest.mjs",
+      "sha256": "7522468a11598ce7c273749dd271795c89dd9d77e72eaefe3fcf9f05842e7514"
+    },
+    {
+      "path": "verifier/probes/earned-continue/pinned/commonPassageLogic.pinned.mjs",
+      "sha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c"
+    },
+    {
+      "path": "verifier/probes/earned-continue/pinned/pin.json",
+      "sha256": "9adaa45f63cf1de433956eba6b7f259c1acf23be3f027c6615b03c21e7d40577"
+    }
+  ],
+  "pin": {
+    "why": "The manual COMMON role owns commonPassageLogic.mjs and edited it at 16:25:52Z during this prep window; the earned lane imports the PINNED byte copy, never the live file.",
+    "pinnedSha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+    "importedSymbols": [
+      "heavyLockOwnership",
+      "fetchServedIdentity",
+      "previewBindingDecision",
+      "preflightDecision",
+      "identityVerdict",
+      "promptOffersF"
+    ]
+  },
+  "selfTests": [
+    {
+      "command": "node verifier/probes/earned-continue/selftest.mjs",
+      "exitCode": 0,
+      "checks": "69/69 passed",
+      "logPath": "logs/earned-continue-prep/selftest.log",
+      "logSha256": "4880bbead2724c385f4ae836e2e9697dbb7e1dd2454708ecf3b6c166bae859a4"
+    },
+    {
+      "command": "node verifier/probes/earned-continue/earned-continue-probe.mjs --self-test",
+      "exitCode": 0,
+      "logPath": "logs/earned-continue-prep/probe-self-test.log",
+      "logSha256": "c53cf7ff5b310bf4225f1ed982cab9b827e5f0abf899a47affd028e907017d56"
+    },
+    {
+      "command": "node verifier/probes/earned-continue/earned-continue-probe.mjs --out prep-refusal-check  (no bindings)",
+      "exitCode": 1,
+      "expected": "PREFLIGHT-REFUSED before any browser",
+      "refusals": [
+        "control activeRole=common-manual-focused, not earned-continue",
+        "--url required",
+        "heavy lock fd required",
+        "--expect-source-manifest required",
+        "served bytes never fetched"
+      ],
+      "logPath": "logs/earned-continue-prep/no-args-refusal.log",
+      "logSha256": "d09ac896cbc3a40d1a74bdce571c7b6853c0925b8a9f880a2f5b9237087a5568",
+      "receipt": "logs/earned-continue-prep/preflight-refusal-no-bindings.json"
+    },
+    {
+      "command": "node verifier/probes/earned-continue/earned-continue-probe.mjs --out prep-served-identity-check --url http://127.0.0.1:38007/ --expect-source-manifest dc63...36c",
+      "exitCode": 1,
+      "expected": "served bytes fetched and bound, then refused on the two root-controlled prerequisites",
+      "servedIndexSha256": "1f699b4ab3edd8c792de8516920309f9a69c0e77152ec4d21041f4e561430260",
+      "servedBundleSha256": "4f39f1ea60795e31e681c55c1b339af4a05590ec315e5cc0d712aab7a43b0ec4",
+      "previewBindingOk": true,
+      "remainingRefusals": [
+        "verifier control activeRole=common-manual-focused, not earned-continue",
+        "exclusive shared heavy lock not provably held (no inherited fd)"
+      ],
+      "logPath": "logs/earned-continue-prep/served-identity-check.log",
+      "logSha256": "b75ac1fdf00c4a5ec459535373f1a977943109a03bd48c6e5efd41db72cba746",
+      "receipt": "logs/earned-continue-prep/preflight-served-identity-bound.json"
+    }
+  ],
+  "logHashes": [
+    {
+      "path": "logs/earned-continue-prep/selftest.log",
+      "sha256": "4880bbead2724c385f4ae836e2e9697dbb7e1dd2454708ecf3b6c166bae859a4"
+    },
+    {
+      "path": "logs/earned-continue-prep/probe-self-test.log",
+      "sha256": "c53cf7ff5b310bf4225f1ed982cab9b827e5f0abf899a47affd028e907017d56"
+    },
+    {
+      "path": "logs/earned-continue-prep/no-args-refusal.log",
+      "sha256": "d09ac896cbc3a40d1a74bdce571c7b6853c0925b8a9f880a2f5b9237087a5568"
+    },
+    {
+      "path": "logs/earned-continue-prep/served-identity-check.log",
+      "sha256": "b75ac1fdf00c4a5ec459535373f1a977943109a03bd48c6e5efd41db72cba746"
+    },
+    {
+      "path": "logs/earned-continue-prep/preflight-refusal-no-bindings.json",
+      "sha256": "c1e8937e0ffd858bfc9d87e6022eaa8f66835e1b503ce780b2a590a61672cfe3"
+    },
+    {
+      "path": "logs/earned-continue-prep/preflight-served-identity-bound.json",
+      "sha256": "af33ef530f9bd4482d7fe19f203e3e89dbfdb501088d027ffe124fcffc806149"
+    }
+  ],
+  "preparedRuntimeCommand": {
+    "note": "PREPARED ONLY \u2014 do not run while the manual COMMON role is active. The shared lock is acquired by the INVOKER and inherited on fd 9; the probe never opens it.",
+    "shell": "exec 9>>/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock\nflock -n -x 9 || { echo 'heavy lock busy'; exit 1; }\nURL=$(python3 -c \"import json;print(json.load(open('verifier/artifacts/preview-ownership.json'))['url'])\")\nnode verifier/probes/earned-continue/earned-continue-probe.mjs \\\n  --out earned-continue-1 \\\n  --url \"$URL\" \\\n  --expect-source-manifest dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c \\\n  --heavy-lock /home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock \\\n  --heavy-lock-fd 9 \\\n  --role earned-continue \\\n  --min-samples 4 --return-ms 180000 --earn-ms 120000 --walk-ms 90000",
+    "flags": {
+      "--out": "required, unique, refused if non-empty",
+      "--url": "required, must equal root-published preview url",
+      "--expect-source-manifest": "required, must equal the live manifest file hash",
+      "--heavy-lock": "absolute shared lock path",
+      "--heavy-lock-fd": "inherited descriptor (9) of an ALREADY-acquired exclusive flock",
+      "--role": "must equal verifier-control.activeRole"
+    },
+    "cpuOnlyCommands": [
+      "node verifier/probes/earned-continue/selftest.mjs",
+      "node verifier/probes/earned-continue/earned-continue-probe.mjs --self-test"
+    ]
+  },
+  "lanePlan": [
+    {
+      "phase": "0-preflight (no browser)",
+      "does": "root readiness + control action/activeRole + inherited exclusive flock receipt + ACTUAL served index/bundle byte hashes + dynamic 99-file source rehash + non-empty capture refusal; writes preflight.json then throws PREFLIGHT-REFUSED if anything is unbound."
+    },
+    {
+      "phase": "1-earned return",
+      "does": "?story=ch13-return&journeyprobe=1&debug=1&movie=1 (labelled INITIAL prerequisite fixture; NO preseeded origin-landed). Watches the movie-scripted physical flight, sampling beat/objective/world/fired anchors and the NAMED signedSceneAv anchorId+activationSequence+history as a time series."
+    },
+    {
+      "phase": "1-gate",
+      "does": "earnedOriginGate: story:ch13-origin-landed latched, live activePlanetId handed off from the departure body, locationMode=surface, controlMode=fps, grounded supported=true with a finite bodyPose, a live rAF-measured frame rate >= --min-fps, and NON-EMPTY NAMED AV anchor history. FAILURE STOPS THE LANE before any drawing, save, Continue or [F]."
+    },
+    {
+      "phase": "2-partial drawing",
+      "does": "movie rail plus ORDINARY shipped WASD bursts (labelled scripted-input) until >=4 real samples in phase=drawing; checkpointPurity CATCHES the capture at once and refuses if route-offered/route-tested already fired."
+    },
+    {
+      "phase": "3-shipped save",
+      "does": "same-tab navigation fires App.tsx beforeunload -> doSave(true) -> saveWorld/saveGlobal; the ACTUAL per-world and global localStorage bytes are copied out to files BEFORE the browser closes."
+    },
+    {
+      "phase": "4-real Continue",
+      "does": "plain boot with NO story deep link and no movie rail (continueBootDecision proves it), storage retained (key set compared), then a real click on the landing CTA -> LandingMenu.startOrContinueStory -> beginStory -> storyEntryPoint. The menu label alone is never treated as proof."
+    },
+    {
+      "phase": "5-restoration proof",
+      "does": "worldIdentityVerdict (storage key prefix, world id, seed, live activePlanetId at save vs after Continue, actor milestones), overwriteVerdict (earned samples still on disk), replayVerdict (no already-earned anchor re-activated, no pending re-queue, installWatch unchanged) and an AV delta across the boundary."
+    },
+    {
+      "phase": "6-NEW physical action",
+      "does": "ordinary WASD to the remaining drawing end E, then [F] ONLY when the shipped primary prompt literally offers it (newActionGate); acceptance is read as NEWLY FIRED NAMED anchors and an advanced AV activation sequence (newAnchorEligibility)."
+    },
+    {
+      "phase": "7-cleanup",
+      "does": "owned session try/finally + post-finally receipt, root preview never stopped, dynamic source rehash AFTER the capture written to source-rehash.json."
+    }
+  ],
+  "divergencesFromCopiedParent": [
+    "entry changed from ?story=ch13-survey to ?story=ch13-return with an earned-origin gate (the survey deep link cannot seed story:ch13-origin-landed, which is why run-5 resumed at the departure body)",
+    "the parent's walk-to-W 'earn the landing after Continue' rescue branch was REMOVED: in this lane a resume anywhere but ch13-survey on the same body is the measurement, not something to walk around",
+    "the parent's secondary Pause -> Quit-to-Menu phase was REMOVED because its fallback used a Playwright FORCED click",
+    "[F] is now gated on the shipped primary prompt instead of pressed unconditionally",
+    "AV is read as the nested NAMED signedSceneAv object (anchorId / anchorEvent / activationSequence / activationHistoryAnchorIds) sampled over time; the raw Object.keys count used by the flight lane is retained only as rawKeyCountIsNotEvidence",
+    "commonGround diagnostic reads keep the NESTED paths and add installWatch; the flat s.anchors path used by the flight lane measured null",
+    "preflight, capture-dir refusal, served-byte binding, heavy-lock receipt, live FPS and dynamic before/after source rehash added",
+    "finding ids renamed PC-* -> EC-* so this lane's findings can never be confused with the preserved partial-continue evidence"
+  ],
+  "evidenceReadDuringPrep": [
+    {
+      "ref": "producer-partial-continue-review.json",
+      "used": "run-5 findings PC-SAVE-OVERWRITTEN / PC-CONTINUE-RESUME-POINT, the saved -1,-1 vs restored -1,-1:p1 world split, and the fixture-incompleteness limitation"
+    },
+    {
+      "ref": "producer-focused-evidence-review.json",
+      "used": "flight lane conclusion (Origin envelope entered then departure reset, originLanded false) and the manual lane's fixture/report qualifications"
+    },
+    {
+      "ref": "verifier/captures/handoff-standby/flight-1/run.json + logs/handoff-standby-verifier/flight-1/telemetry.jsonl",
+      "used": "the 73 791 ms earned landing on this same frozen source/preview: beat ch13-survey, objective ch13:survey:start, activePlanetId handoff -1,-1:p1 -> -1,-1. This is the prerequisite that unblocks the lane; it is NOT this lane's result."
+    }
+  ],
+  "remainingLiveSteps": [
+    "root must publish activeRole=earned-continue (or an equivalent slot) in verifier-control.json; today it is common-manual-focused and the probe refuses",
+    "the invoker must acquire the exclusive shared flock and pass it in on fd 9; the probe opens no lock",
+    "--url and --expect-source-manifest must be taken from whatever root publishes AT ACTUAL RELEASE, not from the values observed during this prep",
+    "one headed run on the NVIDIA GB10 with a fresh --out; every phase above is unexecuted"
+  ],
+  "knownLimitations": [
+    "NOTHING here is a capture result: no earned Continue has been tested and no restoration, no-overwrite, no-replay or new-anchor claim is made",
+    "the ch13-return deep link remains a labelled PREREQUISITE FIXTURE; this lane proves nothing about a continuous station/home journey into ch13",
+    "the movie rail is scripted input; the flight is not evidence of unassisted play, and any ordinary WASD assistance is labelled scripted-input in the report",
+    "flight-1 landed in 73.8 s once; the earlier earned-1/earned-2 lanes did not land at all, so --return-ms 180000 may still expire and stop the lane at the gate",
+    "the earn phase inherits the known VF4-SURVEY-STALL-1 rail stall and hands over to ordinary keys after 15 s of no growth",
+    "live FPS is measured with a passive rAF counter, not __game.metrics(): adding ?agent=1 would install the scriptable AgentCamera bridge and change what draws",
+    "previewBindingDecision compares the served index and the ONE published bundle plus root's matched-file COUNT; the remaining built files are unmeasured",
+    "if the manual COMMON role edits commonPassageLogic.mjs again, this lane keeps the PINNED bytes; a future re-pin is a deliberate act with a new pin.json"
+  ],
+  "unresolvedIssues": [
+    "BLOCKING: the lane cannot run at all until root grants the active role and the inherited heavy lock (both refusals are live right now).",
+    "UNKNOWN: whether the shipped resume ladder lands an earned save in ch13-survey at all. run-5 showed a lawful resume into ch13-return on the sibling body when origin-landed was absent; with the milestone present the resume point is untested and the lane may legitimately stop at EC-CONTINUE-RESUME-POINT.",
+    "UNKNOWN: whether the shipped save writes the earned survey samples for the Origin world key when the drawing is earned after a real flight; run-5's PC-SAVE-OVERWRITTEN was observed with the incomplete fixture and must not be assumed to transfer.",
+    "UNVERIFIED-BY-ME: the exact target coordinate E = [-42, 51.05, 12] is inherited from the parent probe; I did not re-derive it from the current authored route, and a wrong end point would surface as a walk that never arrives rather than as a false pass."
+  ]
+}

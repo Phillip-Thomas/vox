@@ -1,0 +1,79 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "well keep grinding through the blockers, being sure to eliminate stuff that doesnty make sense rather than add to the pile",
+  "contributor": "root orchestrator, mechanical capture-route correction",
+  "scope": "Remove the automated outbound shortcut through a measured unsupported shoreline section. Reuse the two existing dry return waypoints in reverse order for manual/recovery/Continue. Remove the redundant 350ms wait after the walk has already proved stable arrival. Prioritize failed manual case. No gameplay, controller, arrival radius, accepted-action predicate, creative stage, or budget change.",
+  "status": "config-valid-current-runtime-pending",
+  "files": [
+    {
+      "path": "main/chapter-ch14-controls.json",
+      "before": "365c91d819139538c16a44180ac30e2543bed5590dcc66e9f0fc16dac9e38886",
+      "after": "ba3e2bfefd93989992ba3da77d8dd5abc64853a8d3ff61c55d2bfad16cbd5dbf"
+    }
+  ],
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/previous-state.json",
+    "sha256": "4b7d29ff574b7355c15e32d704c5a554ee8bf78f8972e432a8d42e18441307cb"
+  },
+  "priorFailure": {
+    "stage": "verify-final",
+    "message": "Probe manual failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T03:07:42.847Z"
+  },
+  "diagnosis": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/result.json",
+    "sha256": "0258fd08e5a4fbadccc58937a1e70d939ff0bd57b38fe7f07132d76584d35acd"
+  },
+  "transport": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/transport.json",
+    "sha256": "957e488566ee7b1f20d4b32093b6a0ae83e664287df56a318affc23afb7e9f60"
+  },
+  "routeChanges": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/route-change.json",
+    "sha256": "bf4f9d7f35963900b984958d399b1c73c8085e959ef1ac3e9226c9abfd15fc78"
+  },
+  "validation": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/config-validation.log",
+    "sha256": "e415a3b4aa84ff1232ef2e03769bf58f0ef8af3be97eba913e86e41480e6d1a1"
+  },
+  "caseOrder": {
+    "before": [
+      "continue",
+      "manual",
+      "recovery",
+      "continuity",
+      "av"
+    ],
+    "after": [
+      "manual",
+      "continue",
+      "recovery",
+      "continuity",
+      "av"
+    ]
+  },
+  "priorUsage": {
+    "roleLaunches": 13,
+    "modelTurns": 360,
+    "inputTokens": 716201,
+    "cacheReadTokens": 21611568,
+    "outputTokens": 126408
+  },
+  "addedUsage": {
+    "roleLaunches": 1,
+    "modelTurns": 54,
+    "inputTokens": 97254,
+    "cacheReadTokens": 1955208,
+    "outputTokens": 36030
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "at": "2026-09-09T03:21:46.057Z"
+}

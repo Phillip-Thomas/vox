@@ -1,0 +1,12 @@
+{
+  "at": "2026-09-06T19:58:23.076851+00:00",
+  "from": "common-exact-input-runtime",
+  "to": "finale-window-runtime",
+  "priorInvocationFinished": true,
+  "cleanupRef": "verifier/captures/common-exact-input/attempt-2/location-resolution.json",
+  "cleanupSha256": "934dc50210775f06b4f9702fd24a8de790cad88d9c25c233ecf8b28ced5375ae",
+  "kernelExclusiveLockFree": true,
+  "all99SourceUnchanged": true,
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "scope": "One combined finale capture after explicitprivate corrections. COMMON physical diagnostic can prepareCPU only."
+}

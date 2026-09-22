@@ -1,0 +1,56 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "b944a2ea1340f6492d6532698c1cb75da4ce72c76389902d4fb2180d2e109fed",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": false,
+    "acceptedAction": 0,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [
+    "ordinaryControls",
+    "acceptedAction",
+    "completePath"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-5/raw/cleanup.json",
+      "sha256": "c39827253898cc132ea5f88364a3cc707cfb8c6076ef83b47e5dc8d48bc46493"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-5/raw/observations.json",
+      "sha256": "6b140e9dd0d31a012d383725587946def74bbfa573a64543d4a6bf0e1d529cbc"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-5/raw/provenance.json",
+      "sha256": "e255ce724c8df0885ae4c2ea26e1750f6ab1d8a54e0f2b9e6013dad1315967e0"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-5/raw/trace.ndjson",
+      "sha256": "595bc81af62e215d542a301408e0c7cb637436548ed1e26c5c79754fdffee6ad"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "Walk stopped making progress toward its target"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "5cbab8913b1e0f155232d321ad75770b73c447cffad065aaa3145a8ec62799a3",
+    "buildSha256": "e232f2e1db7f0cd78d7d525b7e3db5aa069366db5a3ac314c107697022a8f56a",
+    "transportSha256": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820"
+  }
+}

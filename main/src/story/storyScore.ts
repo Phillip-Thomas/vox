@@ -1,5 +1,25 @@
 import type { StoryBeat } from './storyState.ts';
-import { setScoreMood, unlockScore, type ScoreMood } from '../audio/scoreEngine.ts';
+import {
+  cancelPendingScheduledHits,
+  getScoreMoodTonic,
+  noteImmediateHit,
+  readLiveBedTonic,
+  resolveScorePlanetHomeRoot,
+  scheduleHit,
+  scoreHit,
+  SCORE_ROOT_HZ,
+  setScoreMood,
+  unlockScore,
+  type HitSchedule,
+  type ScheduleHitKind,
+  type ScoreMood
+} from '../audio/scoreEngine.ts';
+import type { HitQuantize } from '../audio/generative/transport.ts';
+import type { HitQuantumRung } from '../audio/generative/hitSchedule.ts';
+import type { MoodVoicingPolicy } from '../audio/generative/moodConstraint.ts';
+import { LATENCY_COMP_MAX_S, SFX_BUNDLE_ARM_LEAD_S } from '../audio/generative/tuning.ts';
+import { tailLatencyForSampleRate } from '../audio/mix/mixTuning.ts';
+import { peekAudioContext } from '../audio/audioCore.ts';
 
 // --- The story score ---------------------------------------------------------------------
 //
@@ -135,6 +155,19 @@ export type Chapter10ScoreVariant =
   | 'transit-hold'
   | 'seam-ebb'
   | 'station-resolved';
+
+/** One owning-beat table for live selection and the 62-entry authored census. */
+export const CH10_VARIANT_BEAT: Readonly<Record<Chapter10ScoreVariant, StoryBeat>> = Object.freeze({
+  'cold-settled': 'ch10-cold', 'fault-ledger': 'ch10-cold', refused: 'ch10-cold',
+  'crossing-back': 'ch10-ask', 'relay-ask': 'ch10-ask', 'relay-answer': 'ch10-ask', 'bearing-claimed': 'ch10-ask',
+  'transit-hold': 'ch10-transit', 'seam-ebb': 'ch10-transit', 'station-resolved': 'ch10-transit'
+});
+
+/** Existing authored physical sequences plus the signed composed timelines.
+ * The early fixed/track/raster clocks and all player controls remain unchanged. */
+export const COMPOSED_TIMELINE_BEATS: ReadonlySet<StoryBeat> = new Set([
+  'descent', 'ch1-lift', 'a1-ramp', 'a2-awakening', 'a3-dawn', 'a4-exhale', 'ch5-maw'
+]);
 
 /**
  * Chapter 10. Additive only: the frozen MOODS schema above is untouched, and
@@ -407,6 +440,524 @@ const CH7_BOARDING_MOODS: Readonly<Record<Chapter7BoardingScoreVariant, ScoreMoo
   })
 };
 
+/**
+ * Read-only inventory of every authored mood entry (the MOODS table plus the
+ * chapter 7 and chapter 10 variant tables), for the render-identity harness.
+ * Variants render under their owning beat through setStoryScoreMoodOverride —
+ * the same path they take live — so a hash of each entry is a hash of what the
+ * instrument plays for it. Defensive copies; nothing here can mutate a table.
+ */
+export interface StoryScoreMoodInventoryEntry {
+  /** Stable name: the beat id, or `<beat>/<variant>` for a variant mood. */
+  name: string;
+  beat: StoryBeat;
+  variant: string | null;
+  mood: ScoreMood;
+  /** Historical identity keys remain available for original literal-hash comparisons. */
+  legacyName?: string;
+  /** Full authored Ch10 entries use the carrier-present form; live false/true controls are separate fixtures. */
+  carrierAlive?: boolean;
+}
+
+export function listStoryScoreMoodInventory(): StoryScoreMoodInventoryEntry[] {
+  const entries: StoryScoreMoodInventoryEntry[] = [];
+  for (const beat of Object.keys(MOODS) as StoryBeat[]) {
+    entries.push({ name: beat, beat, variant: null, mood: cloneMood(MOODS[beat]!) });
+  }
+  for (const variant of Object.keys(CH7_RECONSTRUCTION_MOODS) as Chapter7ReconstructionScoreVariant[]) {
+    entries.push({
+      name: `ch7-reconstruct/${variant}`,
+      beat: 'ch7-reconstruct',
+      variant,
+      mood: getChapter7ReconstructionScoreMood(variant)
+    });
+  }
+  for (const variant of Object.keys(CH7_BOARDING_MOODS) as Chapter7BoardingScoreVariant[]) {
+    entries.push({
+      name: `ch7-board/${variant}`,
+      beat: 'ch7-board',
+      variant,
+      mood: getChapter7BoardingScoreMood(variant)
+    });
+  }
+  for (const variant of Object.keys(CH10_MOODS) as Chapter10ScoreVariant[]) {
+    // The resolve renders its full literal (carrier alive) so the inventory
+    // hashes what the authored entry says, not the pre-answer filtered form.
+    entries.push({
+      name: `${CH10_VARIANT_BEAT[variant]}/${variant}`,
+      legacyName: `ch10-ask/${variant}`,
+      beat: CH10_VARIANT_BEAT[variant],
+      variant,
+      carrierAlive: true,
+      mood: getChapter10ScoreMood(variant, true)
+    });
+  }
+  return entries;
+}
+
+
+// --- Stage 3 (audio-10x): the ten composed-sync anchors and their caps ---------------------------
+//
+// Contract scene-contract.json draft-v3 syncAnchors / score.cues. Every row is a
+// scene-contract anchor id, never a timestamp: the kind, the written quantum,
+// the cap ({ms} literal or {beats: 1} = one published beat of the beat's own
+// mood, an EXPRESSION so a tempo retune moves the cap with the beat), whether
+// the onset may lead the desired time, and the lowest rung the degrade chain
+// may reach. `HIT_CAP_MS` is the derived table the scheduler and the fit test
+// read. Sites are recorded for the audit; the live line numbers move.
+
+export type StoryHitAnchorId =
+  | 'anc.track.unbolt'
+  | 'anc.a1.color-stabilizes'
+  | 'anc.a2.feed-wall-falls'
+  | 'anc.a2.hand-back'
+  | 'anc.descent.impact'
+  | 'anc.lift.perspective-issued'
+  | 'anc.a3.first-blade'
+  | 'anc.a3.material-lands'
+  | 'anc.maw.repair-answer'
+  | 'anc.a4.life-front';
+
+export type StoryHitCap = { readonly ms: number } | { readonly beats: 1 };
+
+export interface StoryHitAnchor {
+  /** The beat whose mood tempo is the grid ("beat means the mood's own tempo"). */
+  beat: StoryBeat;
+  site: string;
+  kind: ScheduleHitKind;
+  quantize: HitQuantize;
+  cap: StoryHitCap;
+  /** ±cap: the nearer earlier quantum is admitted (the lift ruling). */
+  mayLead?: boolean;
+  /** Lowest rung the degrade chain may reach; 'beat' rows never degrade to the step. */
+  floorRung?: HitQuantumRung;
+  /** The bundle's SFX member, if any (C6: forward-scheduled to the music onset). */
+  sfx: 'storyAwaken' | 'shipCrash' | 'storyGlitch' | null;
+}
+
+export const STORY_HIT_ANCHORS: Readonly<Record<StoryHitAnchorId, StoryHitAnchor>> = Object.freeze({
+  'anc.track.unbolt': { beat: 'ch1-track', site: 'storyDirector.ts ch1-track entry', kind: 'bloom', quantize: 'beat', cap: { ms: 450 }, sfx: 'storyAwaken' },
+  'anc.a1.color-stabilizes': { beat: 'a1-ramp', site: 'storyDirector.ts tickA1Ramp landing', kind: 'bloom', quantize: 'beat', cap: { ms: 400 }, sfx: null },
+  'anc.a2.feed-wall-falls': { beat: 'a2-awakening', site: 'storyDirector.ts tickA2 liberation', kind: 'braam', quantize: 'beat', cap: { beats: 1 }, floorRung: 'beat', sfx: 'storyAwaken' },
+  'anc.a2.hand-back': { beat: 'a2-awakening', site: 'storyDirector.ts tickA2 handoff', kind: 'bloom', quantize: 'beat', cap: { beats: 1 }, floorRung: 'beat', sfx: null },
+  'anc.descent.impact': { beat: 'descent', site: 'storyDirector.ts tickDescent impact', kind: 'impact', quantize: 'beat', cap: { ms: 400 }, sfx: 'shipCrash' },
+  'anc.lift.perspective-issued': { beat: 'ch1-lift', site: 'storyDirector.ts tickCh1Lift snap', kind: 'braam', quantize: 'beat', cap: { ms: 400 }, mayLead: true, sfx: 'storyGlitch' },
+  'anc.a3.first-blade': { beat: 'a3-dawn', site: 'storyDirector.ts tickA3 wave start', kind: 'bloom', quantize: 'bar', cap: { ms: 2750 }, sfx: null },
+  'anc.a3.material-lands': { beat: 'a3-dawn', site: 'storyDirector.ts tickA3 landing', kind: 'bloom', quantize: 'bar', cap: { ms: 2750 }, sfx: null },
+  'anc.maw.repair-answer': { beat: 'ch5-maw', site: 'signedSceneAvRuntime.ts applyScore', kind: 'bloom', quantize: 'beat', cap: { ms: 450 }, sfx: null },
+  'anc.a4.life-front': { beat: 'a4-exhale', site: 'emergentStoryDirector.ts tickA4', kind: 'bloom', quantize: 'beat', cap: { beats: 1 }, floorRung: 'beat', sfx: 'storyAwaken' }
+});
+
+export const STORY_HIT_ANCHOR_IDS = Object.keys(STORY_HIT_ANCHORS) as StoryHitAnchorId[];
+
+/** One published beat at `tempo`, ms. */
+export const beatMs = (tempo: number): number => 60000 / tempo;
+
+/** The mood tempo an anchor's grid runs at (the beat's authored MOODS entry). */
+export function storyHitAnchorTempo(id: StoryHitAnchorId): number {
+  const mood = MOODS[STORY_HIT_ANCHORS[id].beat];
+  if (!mood) throw new Error(`anchor ${id}: beat ${STORY_HIT_ANCHORS[id].beat} has no MOODS entry`);
+  return mood.tempo;
+}
+
+/** The cap table, ms, keyed by anchor id — {beats: 1} rows resolve against the live MOODS tempo. */
+export const HIT_CAP_MS: Readonly<Record<StoryHitAnchorId, number>> = Object.freeze(
+  Object.fromEntries(
+    STORY_HIT_ANCHOR_IDS.map((id) => {
+      const cap = STORY_HIT_ANCHORS[id].cap;
+      return [id, 'ms' in cap ? cap.ms : beatMs(storyHitAnchorTempo(id)) * cap.beats];
+    })
+  ) as Record<StoryHitAnchorId, number>
+);
+
+// --- Stage 3: pitch-locked tonic chains (contract sc.chain.tonic-authority) ------------------------
+//
+// One harmonic truth across beats: a chain reads its tonic ONCE at entry and
+// holds it until the chain exits to bed-led play, so interval identity inside
+// the chain is exact. Derivation, frozen by the contract:
+//   prologue    — planetHomeRoot(seed) UNCONDITIONALLY (the deployment notice
+//                 sounds in the planet's key before the planet is seen; a
+//                 `?story=` jump cannot break the plant, nothing but the seed
+//                 is consulted);
+//   colour, dusk, vigil, reconstruct — the live bed's tonic if the bed leads and
+//                 published within TONIC_LIVE_WINDOW_BARS, else planetHomeRoot(seed);
+//   ch10        — 'absolute', offset 0: the literal MOODS roots untransposed. The
+//                 station has no key; the seed is NOT consulted.
+// Unchained beats hold the current tonic (no jump) and adopt the bed's centre
+// when the bed leads at entry. A mid-chain reload has no live bed and re-derives
+// planetHomeRoot(seed): interval identity is preserved, absolute pitch across a
+// reload inside a chain is (per the intent) not protected. Zero save fields.
+
+export type TonicChainId = 'prologue' | 'colour' | 'dusk' | 'vigil' | 'reconstruct' | 'ch10';
+export type TonicChainPolicy = 'seed' | 'live' | 'absolute';
+
+export const MOOD_TONIC_CHAINS: Readonly<Partial<Record<StoryBeat, TonicChainId>>> = Object.freeze({
+  crawl: 'prologue', manifest: 'prologue', voyage: 'prologue', deflect: 'prologue', crash: 'prologue',
+  descent: 'prologue', 'ch1-fixed': 'prologue', 'ch1-track': 'prologue', 'ch1-raster': 'prologue',
+  'ch1-depth': 'prologue', 'ch1-nav': 'prologue', 'ch1-iso': 'prologue', 'ch1-lift': 'prologue',
+  'ch1-anomaly': 'prologue', 'a1-ramp': 'prologue',
+  'ch2-color': 'colour', 'ch2-approach': 'colour', 'a2-awakening': 'colour',
+  'ch3-dusk': 'dusk', 'ch3-await-rest': 'dusk', 'a3-dawn': 'dusk',
+  'ch4-vigil': 'vigil', 'ch4-arrival': 'vigil', 'ch4-audit': 'vigil', 'ch4-comply': 'vigil', 'ch4-defy': 'vigil', 'a4-exhale': 'vigil',
+  'ch7-reconstruct': 'reconstruct', 'ch7-board': 'reconstruct',
+  'ch10-cold': 'ch10', 'ch10-ask': 'ch10', 'ch10-transit': 'ch10'
+});
+
+export const TONIC_CHAIN_POLICY: Readonly<Record<TonicChainId, TonicChainPolicy>> = Object.freeze({
+  prologue: 'seed',
+  colour: 'live',
+  dusk: 'live',
+  vigil: 'live',
+  reconstruct: 'live',
+  ch10: 'absolute'
+});
+
+/** The ch10 chain's frozen offset: literal roots, untransposed. */
+export const CH10_TONIC_OFFSET_SEMIS = 0;
+
+// --- Stage 3: MOODS-as-constraints voicing policy per entry ----------------------------------------
+//
+// Default policy for every entry not listed. Commit A of the migration ships
+// 'literal' (render-hash identical to the shipped stacks); commit B flips it to
+// 'brain'. The overrides are canon regardless of the default: chords written as
+// subtraction may never be re-voiced fuller, a4's one-member-at-a-time opening
+// keeps its order, and every ch10 mood (the station has no key and the carrier
+// is a fixed pitch) renders its literal.
+export const MOOD_DEFAULT_VOICING: MoodVoicingPolicy = 'brain';
+
+export const MOOD_VOICING_OVERRIDES: Readonly<Partial<Record<StoryBeat, MoodVoicingPolicy>>> = Object.freeze({
+  'ch4-comply': 'subtractive',
+  'a4-exhale': 'ordered',
+  'ch10-cold': 'literal',
+  'ch10-ask': 'literal',
+  'ch10-transit': 'literal'
+});
+
+/** ch10 variant moods that are subtractions (the ch4-comply law); they render literal under the ch10 beat rule. */
+export const CH10_SUBTRACTIVE_VARIANTS: ReadonlySet<Chapter10ScoreVariant> = new Set(['refused', 'seam-ebb']);
+
+export function resolveMoodVoicingPolicy(beat: StoryBeat): MoodVoicingPolicy {
+  return MOOD_VOICING_OVERRIDES[beat] ?? MOOD_DEFAULT_VOICING;
+}
+
+/**
+ * The carrier as a fixed frequency: a pure function of the shipped
+ * ch10-ask/relay-answer entry (its unreleased final tone, CH10_CARRIER_DEGREE)
+ * under the ch10 chain's absolute offset. Survives every variant, beat boundary
+ * and mid-transit reload with zero save fields because nothing but the table
+ * is consulted.
+ */
+export const CH10_CARRIER_HZ = SCORE_ROOT_HZ * Math.pow(2, (CH10_CARRIER_DEGREE + CH10_TONIC_OFFSET_SEMIS) / 12);
+
+interface HeldTonicChain {
+  id: TonicChainId;
+  tonicSemis: number;
+}
+let heldChain: HeldTonicChain | null = null;
+/** The tonic the last beat was voiced under (unchained beats hold it). */
+let currentTonicSemis = 0;
+
+/** The chain currently held (null in bed-led / unchained play). Read-only inspection. */
+export function getHeldTonicChain(): Readonly<HeldTonicChain> | null {
+  return heldChain ? { ...heldChain } : null;
+}
+
+/** Derive a chain's tonic at entry per TONIC_CHAIN_POLICY (pure over the engine's live reads). */
+export function deriveChainTonic(chain: TonicChainId): number {
+  switch (TONIC_CHAIN_POLICY[chain]) {
+    case 'absolute':
+      return CH10_TONIC_OFFSET_SEMIS;
+    case 'seed':
+      return resolveScorePlanetHomeRoot();
+    case 'live':
+      return readLiveBedTonic() ?? resolveScorePlanetHomeRoot();
+  }
+}
+
+/**
+ * Resolve the tonic a beat is voiced under and update the held chain. Pure in
+ * its decision given (heldChain, chain membership, live reads); the engine reads
+ * are the only inputs that are not the beat id.
+ */
+export function resolveBeatTonic(beat: StoryBeat): { tonicSemis: number; chain: TonicChainId | null; cancelledPending: number } {
+  const chain = MOOD_TONIC_CHAINS[beat] ?? null;
+  let cancelled = 0;
+  let tonic: number;
+  if (chain) {
+    if (heldChain?.id === chain) {
+      tonic = heldChain.tonicSemis; // member → member keeps the held tonic and its pending hits
+    } else {
+      if (heldChain) cancelled = cancelPendingScheduledHits(); // chain → chain: the old chain exits
+      tonic = deriveChainTonic(chain);
+      heldChain = { id: chain, tonicSemis: tonic };
+    }
+  } else {
+    if (heldChain) {
+      cancelled = cancelPendingScheduledHits(); // chain exit to bed-led / unchained play
+      heldChain = null;
+    }
+    tonic = readLiveBedTonic() ?? currentTonicSemis;
+  }
+  currentTonicSemis = tonic;
+  return { tonicSemis: tonic, chain, cancelledPending: cancelled };
+}
+
+// --- Stage 3: the story-side arming façade (bundleAt derivation, C6) --------------------------------
+//
+// Directors arm a bundle ONCE at the ruling's arming tick and receive the
+// beat-clock target every presentation member reads through its `>=` guard.
+// State (milestones, advanceToBeat, commits, receipts) never waits — only the
+// presentation bundle chases. Cinematography's derivation, verbatim:
+//   bundleAt = beatClock + (audioTime − armedAt) + latencyComp
+//   latencyComp = clamp(device + LATENCY_COMP_MUSIC_PATH_S, 0, LATENCY_COMP_MAX_S)
+//   device = ctx.outputLatency if finite and > 0, else ctx.baseLatency if finite, else 0
+// sampled once at arming and applied identically to every image member. A null
+// schedule (no transport) keeps today's behaviour exactly: the target is the
+// desired time and `fireStoryHitFallback` plays the reflex `scoreHit`.
+// C6 (amended): the bundle's SFX member is forward-scheduled to
+// audioTime + LATENCY_COMP_MUSIC_VS_SFX_S so its audible onset coincides with
+// the audible music onset the image targets; unbundled playSfx is untouched.
+
+export interface StoryBundleLatency {
+  deviceS: number;
+  /** LATENCY_COMP_MUSIC_PATH_S at the selected sample-rate key (measured table, never derived). */
+  musicPathS: number;
+  /** LATENCY_COMP_MUSIC_VS_SFX_S at the selected key — the SFX member's forward offset. */
+  musicVsSfxS: number;
+  totalS: number;
+  /** The pinned table key chosen for ctx.sampleRate (nearest), named in the capture overlay. */
+  sampleRateKey: number;
+  contextSampleRate: number | null;
+}
+
+export interface StoryHitArm {
+  anchorId: StoryHitAnchorId;
+  schedule: HitSchedule | null;
+  /** Beat-clock delay from the arming tick to the presentation bundle. */
+  bundleDelayS: number;
+  /** Beat-clock delay after which the SFX member should be POSTED (it is scheduled to `sfxAudioTime`). */
+  sfxArmDelayS: number;
+  /** Exact audio-clock start for the SFX member (null = fallback, fire at the bundle tick). */
+  sfxAudioTime: number | null;
+  /**
+   * The audible music onset on the AUDIO clock (audioTime + latencyComp), fixed at
+   * arming. The beat clock can only lose time on a dropped frame, so a guard that
+   * also watches this target fires no earlier than the beat-clock guard would on a
+   * perfect frame loop and no later than the onset itself under a hitch.
+   */
+  audibleAudioTime: number | null;
+  latency: StoryBundleLatency;
+  /** True when no transport answered and the site keeps its shipped immediate timing. */
+  fallback: boolean;
+  fitsCap: boolean;
+}
+
+export interface StoryBundleTraceEntry {
+  seq: number;
+  anchorId: StoryHitAnchorId;
+  beat: StoryBeat | null;
+  armedBeatClock: number;
+  desiredDelayS: number;
+  notBeforeDelayS: number | null;
+  bundleAt: number;
+  arm: StoryHitArm;
+  perfNow: number;
+  schedulingArmAt: { beatClock: number; perfNow: number; audioTime: number | null };
+  /** Actual causal state events; prearming a future timeline is never a commit. */
+  authoredCommitAt: { beatClock: number; perfNow: number; audioTime: number | null } | null;
+  authoredCommits: { beatClock: number; perfNow: number; audioTime: number | null; cause: 'immediate' | 'timeline'; members: readonly string[] }[];
+  /** Historical alias for the first authored commit, retained for old evidence readers. */
+  stateAt: { beatClock: number; perfNow: number } | null;
+  fired: { beatClock: number; perfNow: number; audioTime: number | null } | null;
+  sfxPosted: { beatClock: number; perfNow: number; audioTime: number | null; atAudioTime: number | null } | null;
+}
+const BUNDLE_TRACE_MAX = 32;
+let bundleTrace: StoryBundleTraceEntry[] = [];
+let bundleTraceSeq = 0;
+
+export function resolveBundleLatency(ctx: { outputLatency?: number; baseLatency?: number; sampleRate?: number } | null): StoryBundleLatency {
+  const out = ctx?.outputLatency;
+  const base = ctx?.baseLatency;
+  const deviceS = Number.isFinite(out) && (out as number) > 0 ? (out as number) : Number.isFinite(base) ? (base as number) : 0;
+  const contextSampleRate = Number.isFinite(ctx?.sampleRate) ? (ctx!.sampleRate as number) : null;
+  const tail = tailLatencyForSampleRate(contextSampleRate ?? 44100);
+  const totalS = Math.min(LATENCY_COMP_MAX_S, Math.max(0, deviceS + tail.musicPathS));
+  return {
+    deviceS,
+    musicPathS: tail.musicPathS,
+    musicVsSfxS: tail.musicVsSfxS,
+    totalS,
+    sampleRateKey: tail.pinnedRate,
+    contextSampleRate
+  };
+}
+
+export interface ArmStoryHitOptions {
+  /** The director's beat clock at the arming tick. */
+  beatClock: number;
+  /** Desired onset, seconds after the arming tick (the timeline constant; default 0). */
+  desiredDelayS?: number;
+  /** Hard floor, seconds after the arming tick (the a2 HUD-death / a3 caption holds). */
+  notBeforeDelayS?: number;
+}
+
+/**
+ * Arm one contracted hit. Returns the timing the site's presentation bundle
+ * chases; the hit itself is already scheduled on the grid (or, with no
+ * transport, left for `fireStoryHitFallback` at the bundle tick).
+ */
+export function armStoryHit(anchorId: StoryHitAnchorId, options: ArmStoryHitOptions): StoryHitArm {
+  const row = STORY_HIT_ANCHORS[anchorId];
+  const desiredDelayS = Math.max(0, options.desiredDelayS ?? 0);
+  const ctx = peekAudioContext();
+  const now = ctx?.currentTime ?? 0;
+  const latency = resolveBundleLatency(ctx);
+  const schedule = scheduleHit(row.kind, row.quantize, {
+    anchorId,
+    desired: now + desiredDelayS,
+    notBefore: options.notBeforeDelayS != null ? now + Math.max(0, options.notBeforeDelayS) : undefined,
+    capMs: HIT_CAP_MS[anchorId],
+    mayLead: row.mayLead,
+    floorRung: row.floorRung
+  });
+  let arm: StoryHitArm;
+  if (!schedule) {
+    noteImmediateHit(row.kind, anchorId);
+    arm = {
+      anchorId, schedule: null, bundleDelayS: desiredDelayS, sfxArmDelayS: desiredDelayS, sfxAudioTime: null,
+      audibleAudioTime: null, latency, fallback: true, fitsCap: true
+    };
+  } else {
+    const bundleDelayS = (schedule.audioTime - schedule.armedAt) + latency.totalS;
+    const sfxAudioTime = schedule.audioTime + latency.musicVsSfxS;
+    arm = {
+      anchorId, schedule, bundleDelayS,
+      sfxArmDelayS: Math.max(0, bundleDelayS - latency.totalS - SFX_BUNDLE_ARM_LEAD_S),
+      sfxAudioTime, audibleAudioTime: schedule.audioTime + latency.totalS, latency, fallback: false,
+      fitsCap: Math.abs(schedule.slackMs) <= HIT_CAP_MS[anchorId] + 1e-6
+    };
+  }
+  const perfNow = typeof performance !== 'undefined' ? performance.now() : 0;
+  bundleTrace.push({
+    seq: ++bundleTraceSeq, anchorId, beat: activeBeat, armedBeatClock: options.beatClock, desiredDelayS,
+    notBeforeDelayS: options.notBeforeDelayS ?? null, bundleAt: options.beatClock + arm.bundleDelayS, arm,
+    perfNow, schedulingArmAt: { beatClock: options.beatClock, perfNow, audioTime: ctx?.currentTime ?? null },
+    authoredCommitAt: null, authoredCommits: [], stateAt: null, fired: null, sfxPosted: null
+  });
+  if (bundleTrace.length > BUNDLE_TRACE_MAX) bundleTrace.splice(0, bundleTrace.length - BUNDLE_TRACE_MAX);
+  return arm;
+}
+
+/**
+ * True when the audio clock has reached a bundle's fixed-at-arming audible onset
+ * (false with no context or in fallback). Directors OR this with their beat-clock
+ * `>=` guard: the beat clock only lags the audio clock (dropped frames), so the
+ * union fires no earlier than a perfect frame loop would and never after the
+ * onset by more than one frame. `leadS` shifts the target earlier (the SFX post).
+ */
+export function bundleAudioClockDue(audibleAudioTime: number | null, leadS = 0): boolean {
+  if (audibleAudioTime == null) return false;
+  const now = peekAudioContext()?.currentTime;
+  return now != null && now >= audibleAudioTime - leadS;
+}
+
+/** Both fixed targets must be due. An audio clock that continues through a
+ * render hitch cannot skip an authored timeline; a faster scene cannot lead
+ * its sound. Any resulting lateness is measured, never hidden by retiming. */
+export function bundlePresentationDue(beatClock: number, bundleAt: number, audibleAudioTime: number | null): boolean {
+  return beatClock >= bundleAt && (audibleAudioTime == null || bundleAudioClockDue(audibleAudioTime));
+}
+
+/** The no-transport fallback at the bundle tick: today's reflex hit, exactly (impact = boom + braam). */
+export function fireStoryHitFallback(anchorId: StoryHitAnchorId): void {
+  const kind = STORY_HIT_ANCHORS[anchorId].kind;
+  if (kind === 'impact') {
+    scoreHit('boom');
+    scoreHit('braam');
+  } else {
+    scoreHit(kind);
+  }
+}
+
+/** Record the tick a site's state members (milestone, advanceToBeat, commit, receipt, stage) executed. */
+export function noteStoryBundleState(anchorId: StoryHitAnchorId, beatClock: number, cause?: 'immediate' | 'timeline'): void {
+  const entry = [...bundleTrace].reverse().find((e) => e.anchorId === anchorId);
+  if (!entry) return;
+  const census = STORY_BUNDLE_MEMBERS[anchorId];
+  const resolvedCause = cause ?? (census.immediateState.length ? 'immediate' : 'timeline');
+  const members = resolvedCause === 'immediate' ? census.immediateState : census.timelineState;
+  if (members.length === 0 || entry.authoredCommits.some(event => event.cause === resolvedCause)) return;
+  const at = { beatClock, perfNow: typeof performance !== 'undefined' ? performance.now() : 0, audioTime: peekAudioContext()?.currentTime ?? null };
+  entry.authoredCommits.push({ ...at, cause: resolvedCause, members });
+  if (!entry.authoredCommitAt) { entry.authoredCommitAt = at; entry.stateAt = at; }
+}
+
+/**
+ * Bundle census (contract acceptanceCriteria[8], Chapter condition NEW 6):
+ * Scheduling an authored future landing is not its causal commit. Immediate
+ * state stays on the causing input; timeline state stays at the named landing.
+ * Presentation and SFX retain their existing shared target.
+ */
+export interface StoryBundleMembers {
+  armedAt: 'beat-entry' | 'first-live-tick' | 'event';
+  state: readonly string[];
+  immediateState: readonly string[];
+  timelineState: readonly string[];
+  image: readonly string[];
+  sfx: readonly ('storyAwaken' | 'shipCrash' | 'storyGlitch')[];
+}
+function bundleMembers(armedAt: StoryBundleMembers['armedAt'], immediateState: readonly string[], timelineState: readonly string[], image: readonly string[], sfx: StoryBundleMembers['sfx']): StoryBundleMembers {
+  return { armedAt, immediateState, timelineState, state: [...immediateState, ...timelineState], image, sfx };
+}
+export const STORY_BUNDLE_MEMBERS: Readonly<Record<StoryHitAnchorId, StoryBundleMembers>> = Object.freeze({
+  'anc.track.unbolt': bundleMembers('beat-entry', ['setWorkOrder(track)'], ['markMilestone(ch1Track)', 'advanceToBeat(ch1-raster)'], ['setLensRig(ch1-track)', 'letterbox origin'], ['storyAwaken']),
+  'anc.a1.color-stabilizes': bundleMembers('beat-entry', [], ['setVoxelRealityStage(color)', 'clearVoxelRealityOverrides', 'desat 0', 'glitch 0', 'markMilestone(a1)', 'advanceToBeat(ch2-color)'], [], []),
+  'anc.a2.feed-wall-falls': bundleMembers('beat-entry', [], ['HUD-death work-order/violation/DPR clear'], ['FOV liberation origin', 'treatment decay origin', 'setStoryMoveScale unfreeze origin'], ['storyAwaken']),
+  'anc.a2.hand-back': bundleMembers('beat-entry', [], ['setStoryLookMode(free)', 'setStoryTargetDpr(null)', 'treatment 0', 'markMilestone(a2)', 'advanceToBeat(ch3-gather)'], [], []),
+  'anc.descent.impact': bundleMembers('first-live-tick', [], ['descentImpacted'], ['flash 1', 'glitch 1', 'scanRoll 0.8', 'descent curve origin'], ['shipCrash']),
+  'anc.lift.perspective-issued': bundleMembers('beat-entry', [], ['liftSnapped'], ['setStoryTargetDpr(null)', 'glitch 0.8', 'scanRoll 0.5'], ['storyGlitch']),
+  'anc.a3.first-blade': bundleMembers('beat-entry', [], [], ['setLifeReveal wave origin'], []),
+  'anc.a3.material-lands': bundleMembers('beat-entry', [], ['setVoxelRealityStage(material)', 'clearVoxelRealityOverrides', 'clearLifeReveal', 'markMilestone(a3)', 'advanceToBeat(ch3-thirst)'], [], []),
+  'anc.maw.repair-answer': bundleMembers('event', ['repair receipt', 'repair commit', 'anchor activation'], [], ['intensity step', 'answer cue rail (postFx entry effects)'], []),
+  'anc.a4.life-front': bundleMembers('event', ['commitA4Alive', 'setScoreIntensity(0.8)'], [], ['caption', 'lifeProgress origin'], ['storyAwaken'])
+});
+
+/** Record the tick a bundle's presentation members fired (evidence: image-vs-onset). */
+export function noteStoryBundleFired(anchorId: StoryHitAnchorId, beatClock: number): void {
+  const entry = [...bundleTrace].reverse().find((e) => e.anchorId === anchorId && !e.fired);
+  if (!entry) return;
+  entry.fired = {
+    beatClock,
+    perfNow: typeof performance !== 'undefined' ? performance.now() : 0,
+    audioTime: peekAudioContext()?.currentTime ?? null
+  };
+}
+
+/** Record the tick a bundle's SFX member was posted and the audio time it was scheduled to. */
+export function noteStoryBundleSfxPosted(anchorId: StoryHitAnchorId, beatClock: number, atAudioTime: number | null): void {
+  const entry = [...bundleTrace].reverse().find((e) => e.anchorId === anchorId && !e.sfxPosted);
+  if (!entry) return;
+  entry.sfxPosted = {
+    beatClock,
+    perfNow: typeof performance !== 'undefined' ? performance.now() : 0,
+    audioTime: peekAudioContext()?.currentTime ?? null,
+    atAudioTime
+  };
+}
+
+export function getStoryBundleTrace(): readonly StoryBundleTraceEntry[] {
+  return bundleTrace;
+}
+
+if (typeof window !== 'undefined') {
+  (window as unknown as { __voxBundleDiag?: () => unknown }).__voxBundleDiag = () => ({
+    trace: bundleTrace,
+    heldChain,
+    tonic: getScoreMoodTonic(),
+    caps: HIT_CAP_MS
+  });
+}
+
 let activeBeat: StoryBeat | null = null;
 let moodOverride: { beat: StoryBeat; mood: ScoreMood } | null = null;
 
@@ -441,14 +992,16 @@ export function getChapter7BoardingScoreMood(
  */
 export function setStoryScoreMoodOverride(beat: StoryBeat, next: ScoreMood): void {
   moodOverride = { beat, mood: cloneMood(next) };
-  if (activeBeat === beat) setScoreMood(moodOverride.mood);
+  if (activeBeat === beat) setScoreMood(moodOverride.mood, { voicingPolicy: resolveMoodVoicingPolicy(beat) });
 }
 
 export function clearStoryScoreMoodOverride(beat?: StoryBeat): boolean {
   if (!moodOverride || (beat && moodOverride.beat !== beat)) return false;
   const clearedBeat = moodOverride.beat;
   moodOverride = null;
-  if (activeBeat === clearedBeat) setScoreMood(MOODS[clearedBeat] ?? null);
+  if (activeBeat === clearedBeat) {
+    setScoreMood(MOODS[clearedBeat] ?? null, { voicingPolicy: resolveMoodVoicingPolicy(clearedBeat) });
+  }
   return true;
 }
 
@@ -463,13 +1016,26 @@ export function hasStoryScoreMoodOverride(beat: StoryBeat): boolean {
  */
 export function setScoreBeat(beat: StoryBeat | null): void {
   activeBeat = beat;
-  setScoreMood(beat ? getStoryScoreMood(beat) : null);
+  if (!beat) {
+    // Sandbox / story over / deep-link seam: the chain drops and every pending
+    // scheduled hit outside the commit grace is cancelled (contract reset-score).
+    heldChain = null;
+    cancelPendingScheduledHits();
+    setScoreMood(null);
+    return;
+  }
+  const { tonicSemis } = resolveBeatTonic(beat);
+  setScoreMood(getStoryScoreMood(beat), { tonicSemis, voicingPolicy: resolveMoodVoicingPolicy(beat) });
 }
 
 /** Test/lifecycle seam; Story run reset may also use this before a clean replay. */
 export function resetStoryScoreRuntime(): void {
   activeBeat = null;
   moodOverride = null;
+  heldChain = null;
+  currentTonicSemis = 0;
+  bundleTrace = [];
+  cancelPendingScheduledHits();
 }
 
 function mood(value: ScoreMood): ScoreMood {

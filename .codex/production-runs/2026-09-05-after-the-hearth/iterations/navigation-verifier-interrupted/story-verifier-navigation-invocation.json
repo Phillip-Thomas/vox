@@ -1,0 +1,31 @@
+{
+  "role": "story-verifier",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T14:11:21.882143+00:00",
+  "safeMode": true,
+  "permissionMode": "default",
+  "tools": [
+    "Bash",
+    "Read",
+    "Grep",
+    "Glob",
+    "Write",
+    "Edit"
+  ],
+  "systemPromptSource": ".claude/agents/story-verifier.md",
+  "systemPromptSha256": "06216d09794dac2b5875897d6774a6b2aa11e851cb8a07d280123e5f0a96389f",
+  "commissionSha256": "2d07d884e2590fb62ded2c774bd821d8a682ff9c1502808adb7e81ccbee4cace",
+  "scope": "Independent verification after exact-goal navigation and actual Continue bootstrap/data-preservation repair; same production run and retained prior failures; no game-source edits, taste verdict or publication",
+  "exitCode": 143,
+  "finishedAt": "2026-09-06T15:09:07.721009+00:00",
+  "sessionId": "09086097-d015-48af-ac24-8a1379858071",
+  "model": "claude-opus-5",
+  "actualTools": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+  ]
+}

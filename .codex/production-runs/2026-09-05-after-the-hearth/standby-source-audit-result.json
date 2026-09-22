@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 402780,
+  "stop_reason": "end_turn",
+  "session_id": "8c83849e-21f9-4a8c-abaa-2b9796683ed7",
+  "total_cost_usd": 2.7224790000000003,
+  "usage": {
+    "input_tokens": 70,
+    "cache_creation_input_tokens": 104709,
+    "cache_read_input_tokens": 1873276,
+    "output_tokens": 29470,
+    "output_tokens_details": {
+      "thinking_tokens": 10257
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 104709,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1332,
+        "cache_read_input_tokens": 96908,
+        "cache_creation_input_tokens": 7801,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 7801
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1556,
+      "outputTokens": 19,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0016510000000000001,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 70,
+      "outputTokens": 29470,
+      "cacheReadInputTokens": 1873276,
+      "cacheCreationInputTokens": 104709,
+      "webSearchRequests": 0,
+      "costUSD": 2.7208280000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 10257,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 48,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done. Artifacts written; source proven unmutated.\n\n## Answer to the bounded question\n\n**The rail is issuing a walk the navigator silently converts into a zero-length route, so no movement control is ever pressed.**\n\nChain, all from frozen source at the manifest hashes:\n\n1. `commonGroundDirector.ts:1950` \u2014 `CG_STANDBY_CLEAR_OF_E = E.z - 3` \u2192 **(-42, 51.05, 9)**. It is arithmetic, not authored geometry: not in `CG_POSES`, not on any of the three routes, and `CommonGroundWorld.tsx:142` plants no ground (footing is a *live* terrain read), so unlike every pose it was never terrain-qualified.\n2. `VOXEL_SCALE = 2` \u2192 `worldToGrid` puts z=9 in the cell centred **z=10**; her body is in the cell centred **z=12**, one cell away.\n3. `agentSurfaceNavigation.ts:420` \u2014 a **non-dry** requested goal is silently substituted by the nearest dry cell within 8 cells (16 units). **Her own cell is in that set.** `:651` picks nearest-first, not cheapest-first, and the start cell is trivially reachable.\n4. `:742` \u2014 `path.length === 1` \u21d2 `mode = 'direct'`, `reason = 'already-at-resolved-goal'`.\n5. `primitives.ts:1546` \u21d2 **`routeAction: 'direct'`** \u2705; `:1222` the exact-goal handoff *refuses* (3 units \u226b half-cell); `:1607` the lone waypoint is her own cell centre, inside the 0.2 dead zone \u21d2 **all four movement controls cleared**; `:2400` `pushing === false` \u21d2 **`stillTime 0`** \u2705 and the unstick never arms \u21d2 **`nudges 0`** \u2705. `walkToward` still measures 3.16 > 0.6, so arrival is never declared and the plan republishes forever.\n6. `commonGroundActor.ts:249` \u2014 he holds because his *next* step closes inside 1 unit (separation 1.0026) and is authored never to displace her. Mutual deadlock.\n\nRuled out with reasons: `world-navigation-unavailable`, `different-face-direct-fallback`, `unreachable`, physical obstruction-while-pushing, `screeningSettling`, arrive-radius tightness, and \"press F Reopen\" (it removes neither the column nor the clearance geometry).\n\n**Unmeasured:** *why* the (-42,\u00b7,10) column is not dry (water vs. blocked vs. unsupported vs. edge-margin). Root's raw0054 pixels are consistent but load-bearing on nothing here. The planner's literal `reason` string is inferred from `mode='direct'` plus exclusion, not read. I scoped a CPU-only repro and **did not run it** \u2014 the only run-local seed belongs to the partial-continue fixture and isn't proven to be this world; the number would have looked like proof of the wrong world.\n\n**Smallest live discriminator:** one read-only frame at the stall pose logging `planAgentSurfaceRoute(...)`'s `{mode, reason, waypoints.length, resolvedGoal, requestedGoalWasWet}` plus dry/wet/support for cells (-42,10), (-44,10), (-40,10), (-42,8), (-42,12).\n\n**Repair scope, recommendation only (nothing authorized):** A \u2014 author/qualify the standby pose; B \u2014 make a start-cell-resolved route a *refusal* rather than a silent `direct` (shared code, another owner); C \u2014 footing-qualify rail targets at publish time.\n\nFiles: `standby-source-audit.json`, `standby-source-audit.md`, `standby-source-audit/scratch/hashes-{before,after}.json`. 98/98 files match the manifest before (14:34:29Z) and after (14:40:25Z); before == after, zero drift.",
+  "ttft_ms": 1694,
+  "type": "result",
+  "duration_ms": 402581,
+  "uuid": "86f6929a-0d71-4426-9d23-b9b1038da265",
+  "ttft_stream_ms": 820,
+  "time_to_request_ms": 39,
+  "first_content_frame_ms": 821,
+  "queued_turn_count": 0
+}

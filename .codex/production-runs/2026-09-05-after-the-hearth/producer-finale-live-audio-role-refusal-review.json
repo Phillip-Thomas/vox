@@ -1,0 +1,10 @@
+{
+  "at": "2026-09-06T22:46:46.186189+00:00",
+  "classification": "Prebrowser role-binding refusal; no gameplay/audiofailure",
+  "captureRef": "verifier/captures/manual-credit-finale/authority-seam-live-audio-unique",
+  "actualSourceDrift": [],
+  "reason": "Private EXPECT.activeRole finale-authority-seam-runtime differs from renamed control finale-authority-seam-live-audio. Newgesture andskipcounter code notexecutedagainstbrowser.",
+  "actualCleanup": "Childexit1 in278ms beforebrowser-pid. Pulse sinkunloadedverifiedgone/defaultunchanged. Outer reportsbrowserteardownunprovenbecause nobrowser wascreated; no staleownedbrowser inferred.",
+  "next": "Keep canonical probe role finale-authority-seam-runtime unchanged and use exactmatchingrootlauncher. One5min actualexecution task; original12minbudgethistoryretained.",
+  "publicationAuthorized": false
+}

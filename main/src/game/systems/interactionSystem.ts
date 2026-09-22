@@ -22,7 +22,18 @@ export type InteractionId =
   | 'story-ch10-fault-read' | 'story-ch10-fabrication-attempt'
   | 'story-ch10-relay-query' | 'story-ch10-bearing-claim'
   // post-station return: deliver the issued component to the second hearth
-  | 'story-ch12-install-bonded-cell';
+  | 'story-ch12-install-bonded-cell'
+  // chapter 13: review, choose, offer, start, offer the span, revise, hold an
+  // end, and offer the far end back. Every one of them is a physical act at a
+  // real place; none of them is a menu.
+  | 'story-ch13-fault-review' | 'story-ch13-choose-return'
+  | 'story-ch13-offer-route' | 'story-ch13-survey-start' | 'story-ch13-offer-span'
+  | 'story-ch13-revise-tail' | 'story-ch13-hold-witness'
+  | 'story-ch13-offer-final-reference'
+  /** After the handback: he is still there, and will look at another route. */
+  | 'story-ch13-repeat-survey'
+  // The Unfinished Map: all three actions revalidate physical attendance.
+  | 'story-ch14-record' | 'story-ch14-scar' | 'story-ch14-return';
 
 export interface ActiveInteraction {
   id: InteractionId;

@@ -1,0 +1,70 @@
+{
+  "schema": "paravoxia.objectiveLifecycleEvidence.v1",
+  "runId": "{{RUN_ID}}",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
+  "sourceRevision": "{{GIT_SHA}}",
+  "capturedAt": "{{ISO_8601}}",
+  "objectives": [
+    {
+      "objectiveId": "replace-objective",
+      "kind": "interact",
+      "enterAnchorRef": "replace-anchor-start",
+      "clearAnchorRef": "replace-anchor-end",
+      "markerLabel": "{{REPLACE_WITH_EXACT_DIRECTIONAL_MARKER_LABEL}}",
+      "workOrder": [
+        "{{REPLACE_WITH_ROUTE_OR_CONTEXT_INSTRUCTION}}",
+        "{{REPLACE_WITH_EXACT_ACTION_AND_INPUT}}"
+      ],
+      "entryCount": null,
+      "markerObservations": [],
+      "missingMarkerFrames": null,
+      "lifecycleStates": [],
+      "feedbackEmissionsPerEntry": [],
+      "feedbackPresentationOnly": false,
+      "progressionChangedByFeedback": null,
+      "activeAfterClear": null,
+      "variants": {
+        "desktop": {
+          "status": "not_run",
+          "variantId": "variant-desktop",
+          "markerLabel": "{{REPLACE_WITH_EXACT_DIRECTIONAL_MARKER_LABEL}}",
+          "workOrderActionable": false,
+          "evidenceRefs": []
+        },
+        "mobile": {
+          "status": "not_run",
+          "variantId": "variant-mobile",
+          "markerLabel": "{{REPLACE_WITH_EXACT_DIRECTIONAL_MARKER_LABEL}}",
+          "workOrderActionable": false,
+          "evidenceRefs": []
+        },
+        "reducedMotion": {
+          "status": "not_run",
+          "variantId": "variant-reduced-motion",
+          "markerLabel": "{{REPLACE_WITH_EXACT_DIRECTIONAL_MARKER_LABEL}}",
+          "workOrderActionable": false,
+          "evidenceRefs": []
+        },
+        "lowestQuality": {
+          "status": "not_run",
+          "variantId": "quality-potato",
+          "markerLabel": "{{REPLACE_WITH_EXACT_DIRECTIONAL_MARKER_LABEL}}",
+          "workOrderActionable": false,
+          "evidenceRefs": []
+        }
+      },
+      "resetResults": [
+        { "trigger": "beat-exit", "status": "not_run", "activeAfterReset": null, "evidenceRefs": [] },
+        { "trigger": "deep-link", "status": "not_run", "activeAfterReset": null, "evidenceRefs": [] },
+        { "trigger": "replay", "status": "not_run", "activeAfterReset": null, "evidenceRefs": [] },
+        { "trigger": "pause", "status": "not_run", "activeAfterReset": null, "evidenceRefs": [] },
+        { "trigger": "quit", "status": "not_run", "activeAfterReset": null, "evidenceRefs": [] },
+        { "trigger": "focus-loss", "status": "not_run", "activeAfterReset": null, "evidenceRefs": [] },
+        { "trigger": "completion", "status": "not_run", "activeAfterReset": null, "evidenceRefs": [] },
+        { "trigger": "sandbox", "status": "not_run", "activeAfterReset": null, "evidenceRefs": [] }
+      ],
+      "evidenceRefs": []
+    }
+  ]
+}

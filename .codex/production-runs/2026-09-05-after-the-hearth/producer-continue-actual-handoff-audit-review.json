@@ -1,0 +1,82 @@
+{
+  "at": "2026-09-06T22:37:22.001333+00:00",
+  "reportRef": "continue-actual-handoff-audit.json",
+  "actualInvocationRef": "continue-actual-handoff-audit-invocation.json",
+  "sourceHashesMatch": {
+    "main/src/components/EfficientScene.tsx": true,
+    "main/src/utils/spawnValidation.ts": true,
+    "main/src/utils/worldArrival.ts": true,
+    "main/src/state/systemFlight.ts": true
+  },
+  "leadingSourcePath": "EfficientScene.tsx523-524 uses parked-ship egress instead of initialPlayerPosition whenever landedShipPos is nonnull; saved on-foot pose can be bypassed. Live selector/bodywriter activation still unmeasured.",
+  "newRetainedEvidence": {
+    "globalSaveSha256": "39b7b52a75c50fd2b807eb2f052ac66dd9844e783141be8da0808d8e06aaf9d8",
+    "shipRestoration": {
+      "version": 1,
+      "repairStage": "flight_ready",
+      "currentSystemId": "-1,-1",
+      "currentWorldId": "-1,-1",
+      "parkedPose": {
+        "position": [
+          53.5,
+          16,
+          -16
+        ],
+        "quaternion": [
+          -0.5,
+          -0.5,
+          0.5,
+          -0.5
+        ]
+      },
+      "systemPose": {
+        "position": [
+          53.5,
+          16,
+          -16
+        ],
+        "quaternion": [
+          -0.5,
+          -0.5,
+          0.5,
+          -0.5
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ]
+      },
+      "locationMode": "surface",
+      "repairHistory": []
+    },
+    "actualSavedPoses": [
+      {
+        "key": "pvx.v1.world.-1,-1.player",
+        "pos": [
+          -32.12171936035156,
+          52.797115325927734,
+          19.285409927368164
+        ],
+        "sha256": "4c011952848786ef4574aa0e0dfb4674f34680351dbc46a148a32cc3e8391925"
+      },
+      {
+        "key": "pvx.v1.world.-1,-1:p1.player",
+        "pos": [
+          9.5020751953125,
+          51.07872772216797,
+          -8
+        ],
+        "sha256": "51a0de8a8c473ae00d9d934da2e0e33f6471fb9fe821e3c033397af992bb95c4"
+      }
+    ]
+  },
+  "qualifications": [
+    "Audit says no parked-ship record captured: false. globalsave.json shipRestoration contains Origin parked position[53.5,16,-16] and quaternion[-.5,-.5,.5,-.5], surface state. system trace roundedshippos54 is not exactstored53.5.",
+    "Missing explicitface is not inherently a defect. This real parked ship is near+Xsurface; do not force top-face egress merely because authoredsurvey is on+Y or genericarrivalquery uses top. Preserve legitimate docking/egress physics.",
+    "Claimed52.78897476196289 exactmatchto currentpreclicksavedY is false: current savedOrigincentreY52.797115325927734, siblingoldposeY51.07872772216797. A common settledaltitude is not proof of valueprovenance/axisremap.",
+    "PriorCPUvalidationreplay on earlierpose does not falsify every live safety fallback in currentcapture. Actualcandidatecontext/selector/writer must be measured.",
+    "Scope leadingdefect is validsavedpose versusparkedegress precedence onContinue. Separate siblingpose-scopewrite remains unproved. No sourcepatch/contractchange fromthisaudit alone."
+  ],
+  "publicationAuthorized": false
+}

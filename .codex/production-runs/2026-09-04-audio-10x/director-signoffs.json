@@ -1,0 +1,27 @@
+{
+  "schema": "paravoxia.directorSignoffs.v1",
+  "contractRevision": "draft-v4",
+  "contractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+  "sameRevision": true,
+  "chapter": {
+    "disposition": "approve-with-notes",
+    "revision": "draft-v4",
+    "contractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+    "signedBy": "chapter-director (Claude Fable 5.1) run 2026-09-04-audio-10x",
+    "signedAt": "2026-09-05T07:42:18-04:00"
+  },
+  "score": {
+    "disposition": "approve-with-notes",
+    "revision": "draft-v4",
+    "contractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+    "signedBy": "score-director (Claude Fable 5.1) run 2026-09-04-audio-10x",
+    "signedAt": "2026-09-05T07:46:00-04:00"
+  },
+  "cinematography": {
+    "disposition": "approve-with-notes",
+    "revision": "draft-v4",
+    "contractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+    "signedBy": "cinematography-director (Claude Fable 5.1) run 2026-09-04-audio-10x",
+    "signedAt": "2026-09-05T07:42:02-04:00"
+  }
+}

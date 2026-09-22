@@ -1,0 +1,114 @@
+{
+  "schema": "capture-bundle-v1",
+  "subject": {
+    "id": "ch9@manual",
+    "kind": "paravoxia-chapter",
+    "prompt": null
+  },
+  "capture": {
+    "lane": "external",
+    "tier": "swiftshader-low",
+    "adapter": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+    "headed": false,
+    "resolution": {
+      "w": 1280,
+      "h": 720
+    },
+    "seed": "manual:HIGH",
+    "deterministic": false,
+    "motionRequired": true,
+    "clock": "wall-since-settle",
+    "buildSha": "b631a52",
+    "viewport": "1280x720",
+    "loop": {
+      "looping": false,
+      "periodSeconds": null
+    }
+  },
+  "build": {
+    "compileOk": true,
+    "runtimeOk": true
+  },
+  "frames": [
+    {
+      "file": "frames/f0000_t2.00s_opening-2.0s.png",
+      "role": "keyframe",
+      "voxRole": "still",
+      "label": "opening-2.0s",
+      "frame": 0,
+      "simTime": 2.003,
+      "salience": 1,
+      "sha256": "05a0852132c074232ff484fe16d7a007118165f0c8e1e5ad1152e5df5cb56b02",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.9512,
+        "meanLuma": 0.611,
+        "maxLuma": 0.9277,
+        "contrast": 0.2105,
+        "clipped": 0,
+        "nearBlack": 0.0004,
+        "colorfulness": 0.2521,
+        "blank": false,
+        "meanLuma255": 155.8
+      },
+      "beat": "ch9-hearth",
+      "hudFile": "hud/f0000_t2.00s_opening-2.0s.png"
+    },
+    {
+      "file": "frames/f0001_t46.09s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 1,
+      "simTime": 46.088,
+      "salience": 0.5,
+      "sha256": "4f3e648b2f27ec0f88ca5c09e09589957a1c46c9285a703c0717cc026b48d28c",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.9484,
+        "meanLuma": 0.5876,
+        "maxLuma": 0.9163,
+        "contrast": 0.2073,
+        "clipped": 0,
+        "nearBlack": 0.0011,
+        "colorfulness": 0.2476,
+        "blank": false,
+        "meanLuma255": 149.85
+      },
+      "beat": "ch9-hearth",
+      "hudFile": "hud/f0001_t46.09s_strip.png"
+    }
+  ],
+  "sheet": {
+    "file": "sheet.png",
+    "tileW": 480,
+    "tileH": 270,
+    "tiles": 1,
+    "sha256": "56608ded2fd15feb426966d20d851db4030b23ac02b0930efa29ce35335b71bf"
+  },
+  "digest": {
+    "file": "digest.md",
+    "sha256": "60d25068e5790fb1e36337f6c941adbd85aaeebdabb3665e7664b47f23a3634b"
+  },
+  "provenance": {
+    "generator": "paravoxia-chapter-evidence@v1",
+    "generatedAt": "2026-09-06T04:55:34.859Z",
+    "chapter": "ch9",
+    "lane": "manual",
+    "beats": [
+      "ch9-hearth"
+    ],
+    "videos": [],
+    "sessions": [
+      {
+        "id": "ch9-hearth",
+        "url": "/?story=ch9-hearth&journeyprobe=1&profile=HIGH",
+        "frames": 2,
+        "bursts": 0,
+        "pageErrors": [],
+        "reachedExit": false,
+        "completedEvents": []
+      }
+    ],
+    "bundleSha256": "f5595dcd7f2b309bddcb622a4a8c36772aa388d7c7b649ffbb15624439cc05a5"
+  }
+}

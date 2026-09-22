@@ -1,0 +1,26 @@
+{
+  "schema": "paravoxia.directorRepairDirection.v1",
+  "director": "chapter",
+  "runId": "2026-09-04-audio-10x",
+  "contractVersion": "draft-v4",
+  "contractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+  "defectIds": ["stage-6-klaxon-site-drift", "stage-6-second-alarm-site-unruled", "stage-6-caption-table-review"],
+  "contractChangeRequired": false,
+  "boundedActions": [
+    "RULING 1 (klaxon ember site) — CONFIRMED. The ember parity member binds to the ch3-signal klaxon repeat: the `playSfx('terminalAlarm')` inside the `if (d.signalKlaxons < SIGNAL.klaxonRepeats ...)` block of `tickSignal()` in main/src/story/storyDirector.ts. Add `pulseAuditEmber()` on that same tick, immediately beside the playSfx call, inside the block (so it fires exactly SIGNAL.klaxonRepeats times, never per frame). Live line at 2026-09-05T08:06-04:00: :2029 (the README's :1887 and the contract's :1881 are the same site; a concurrent session is moving storyDirector.ts, so bind by the block, not by number). The contract's colour-role valueRef 'storyDirector.ts:1881' is a stale line citation of an unchanged term, not a term change; carry a site-description ('the signalKlaxons block of tickSignal') into the next amendment's text.",
+    "RULING 2 (second alarm site) — NO EMBER, NO CAPTION, NO CONTRACT TERM. The other `playSfx('terminalAlarm')` (live :1402) is the a2-awakening violation flood inside `tickA2()`: ~20 alarms at a 400→70 ms cadence, each paired with `pushViolation(A2_VIOLATION_LINES[...])`. (a) No ember: the audit band is not on screen in a2 — the band is the ch3 'text on air' surface, and the ember rides the band (AuditBand.tsx header already records this). The flood's parity is the violation band lines plus the shipped flash, which is what the contract's scarcity clause ('exactly three times in the run, once per ch3-signal klaxon') already fixes. (b) No caption: a2-awakening is in VOICE_SILENT_BEATS and therefore in SOUND_CAPTION_SILENT_BEATS by reference, so `isSoundCaptionSilentBeat('a2-awakening')` is already true and the emitter's gate handles it with no per-site code. Dramatically this is correct, not incidental: the violation lines ARE the institutional text of that moment, one caption per cue kind would only restart a single [ALARM] hold twenty times, and the panic reads through density of REGULATION lines, not through a bracket. If Stage 4/6 integration wires captions at the sfx emit path, it must still route through isSoundCaptionSilentBeat rather than special-case this site. Label if it were ever un-silenced: '[ALARM]' (the alarm row, trigger terminalAlarm) — recorded here so nobody invents a second label.",
+    "TABLE REVIEW (soundCaptionTable.ts, full read) — ACCEPTED AS-IS, zero label/register edits. Labels: [ALARM] [STATIC] [IMPACT] [HATCH], all institutional, all name a sound and no speaker; no label contains a person, a pronoun, a name, or a cause-diagnosis. [GLITCH] is absent and [STATIC] carries terminalCorrupt + storyGlitch. The 'lowercase' register appears only in the type — no row carries it, which is the law (lowercase never enters this surface). All seven null-label rows are institutional with a stated parity carrier; narrator-utterance is null 'by law' — correct. Silence set = VOICE_SILENT_BEATS by reference + ['ch1-lift'] — correct and matches CN-R4. Test: `npx vitest run src/components/hud/soundCaptionTable.test.ts` → 11/11 passing. One non-blocking wording note, NOT edited (rationale field, outside the label/register scope): the alarm row's parityCarrier says the violation band AND the ember 'fire on the same tick' — in fact a2 has the band-less flood (violation lines + flash) and ch3 has the ember with no violation band; a future comment pass may say 'ch3: the audit-band ember; a2: the violation lines and flash'."
+  ],
+  "evidenceRefs": [
+    "evidence/stage-6/README.md",
+    "main/src/story/storyDirector.ts (tickSignal signalKlaxons block, live :2029; tickA2 violation flood, live :1402 — verified 2026-09-05T08:06-04:00)",
+    "main/src/story/AuditBand.tsx:26-36 (band-less klaxon parity note)",
+    "main/src/audio/voice/voiceGrammar.ts:281-286 (VOICE_SILENT_BEATS includes a2-awakening)",
+    "main/src/components/hud/soundCaptionTable.ts (full read)",
+    "vitest soundCaptionTable.test.ts 11/11 pass, 2026-09-05T08:06:51-04:00",
+    "scene-contract.json draft-v4 role-audit-ember usage + focalAccent.scarcityIntent ('exactly three times ... once per ch3-signal klaxon')"
+  ],
+  "verificationRoute": "Integration binds pulseAuditEmber() beside the ch3 playSfx; story-verifier proves exactly three ember frames at ch3-signal (?story=ch3-signal&movie=1 frame capture, ember pixels inside the band only) and zero ember frames across a2-awakening; unit-assert isSoundCaptionSilentBeat('a2-awakening') === true and that no caption event posts during the a2 flood in the emitter test. Cinematography reads the ember frames; Chapter reads none (no copy changed).",
+  "authoredBy": "chapter-director (Claude Fable 5.1)",
+  "authoredAt": "2026-09-05T08:08:00-04:00"
+}

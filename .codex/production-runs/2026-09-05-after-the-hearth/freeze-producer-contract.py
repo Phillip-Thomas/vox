@@ -1,0 +1,22 @@
+from pathlib import Path
+import json, hashlib, datetime
+s=Path(__file__).resolve().parent
+c=json.loads((s/'scene-contract.final-candidate.json').read_text());lock=json.loads((s/'production-lock.json').read_text())
+c['production']['mutationBoundary']=lock['mutationBoundary'];c['production']['allowedPaths']=lock['allowedPaths'];c['production']['protectedPaths']=lock['protectedPaths'];c['production']['canonicalPreviewUrl']=None;c['production']['frozenAt']=datetime.datetime.now(datetime.timezone.utc).isoformat();c['status']='frozen'
+c['production']['authorityRefs'] += ['production-lock.json','producer-boundary-amendment.json','../../story-runs/2026-09-06-common-ground/final-scorecard-v2.json']
+c['story']['nonNegotiableCanon']=[('Existing shipped chapter copy and receipt identities remain unchanged. New ch13 copy follows the signed council-v2 candidate and its register, including the two added Terra comparison lines; this is not a limit of two new lines in the entire chapter.' if x=='Existing shipped chapter copy and receipts are unchanged; only the two new Terra lines are added.' else x) for x in c['story']['nonNegotiableCanon']]
+score=next(x for x in c['reset']['states'] if x['id']=='reset-score')
+score['resetValue']='Prior beat score ownership released. Only a freshly earned final completion may retain the separately bounded live texture for at most five seconds before existing 4.5-second release; every other reset leaves no pending token or override.'
+score['acceptanceCriterion']='Reset clears previous beat ownership. The single explicit exception is real first completion and its immediate handback/normal transition to done: it may create and finish the signed live-only token, at most five seconds then the existing 4.5-second release, without retaining any control or progression ownership. Pause, focus loss, quit, deep link, replay, sandbox, world or actor change, new story/optional survey, mute and unavailable audio cancel immediately. Any other beat exit cancels. No cancelled token resumes, hydrates or defers to unlock.'
+effect=next(x for x in c['reset']['states'] if x['id']=='reset-effect')
+effect['resetValue']='Transient beat presentation ownership released; saved accepted trace and persistent local tester remain under their world-scoped ownership on completion and later Origin visits.'
+effect['acceptanceCriterion']='Every trigger clears transient beat effects without deleting persisted earned facts. Completion retires required guidance but retains the accepted route, apparatus and local tester with an optional repeat. World departure/sandbox removes chapter presentation from that world; return restores durable local state without replaying completion or installation.'
+for a in c['story']['agencyWindows']:
+ if a['id']=='aw.cg.common-reciprocal':a['mandatoryPath']='After the worker physically moves E to separate H, walk the full eighteen-unit common E-to-C route using the reference he holds there; then walk to separate T, explicitly offer and occupy that far reference while he physically returns H to E and independently tests the complete E-to-C route. Both two-unit positioning legs earn no proof.'
+launch=next(o for o in c['guidance']['objectives'] if o['id']=='ch13:return:launch')
+launch['targetContract']['evidenceFields'] += ['controlId','controlAvailable','controlInputActive']
+launch['variantIntent']='Desktop held Space and the equivalent touch flight control use the same actual boarded-control readiness and ignition/lift predicate. There is no world target or directional marker at any quality tier or under reduced motion; the exact label and standing work order remain visible.'
+launch['targetContract']['completionCriterion'] += ' Raw completion is control-input evidence: an accepted named control input, finite ordered input/completion times, and a different actual control state before and after the input, bound to the real predicate transition; an authored timed bundle cannot satisfy it.'
+c['production']['authorityRefs']=[(ref.split('#sha256=')[0]+'#sha256='+hashlib.sha256((s/ref.split('#sha256=')[0]).resolve().read_bytes()).hexdigest() if '#sha256=' in ref else ref) for ref in c['production']['authorityRefs']]
+(s/'scene-contract.json').write_text(json.dumps(c,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'sha256':hashlib.sha256((s/'scene-contract.json').read_bytes()).hexdigest(),'anchors':len(c['syncAnchors']),'shots':len(c['shots']),'scoreCues':len(c['score']['cues']),'objectives':len(c['guidance']['objectives'])}))

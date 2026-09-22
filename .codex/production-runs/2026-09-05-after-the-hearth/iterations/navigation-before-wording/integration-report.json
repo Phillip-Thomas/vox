@@ -1,0 +1,183 @@
+{
+  "schema": "paravoxia.implementationReport.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "authoredBy": "root producer compiling two actual engineer reports; not an engineer or reviewer signature",
+  "compiledAt": "2026-09-06T14:00:05.969881+00:00",
+  "isAcceptance": false,
+  "isChapterVerificationComplete": false,
+  "publicationAuthorized": false,
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "contractVersion": "scene-v2",
+  "contractChangeRequired": false,
+  "sourceReports": [
+    {
+      "ref": "integration-navigation-repair-report.json",
+      "sha256": "6118437e0c04f0a2b6c6e7ab5335fada264b7eb75e65c6730d32f533940ba8c0"
+    },
+    {
+      "ref": "navigation-closure-report.json",
+      "sha256": "0d3344ccffbc24f7ced3e05f373c426b40f8df0752cef6ecc231ce334c41ef7e"
+    },
+    {
+      "ref": "integration-navigation-repair-invocation.json",
+      "sha256": "17f4e7e1132069e978438b0ee10a4af2cd440162d581d2a763b07b2402b4edcb"
+    },
+    {
+      "ref": "integration-navigation-closure-invocation.json",
+      "sha256": "441242e191b8d526a3a29caf509daf67b16610775f1fa4dac2cfeebe661df1cd"
+    }
+  ],
+  "repairDispositionRef": "producer-navigation-preclosure-review.json",
+  "testTotals": {
+    "preRepairV2Baseline": 3091,
+    "baselineFiles": 349,
+    "files": 350,
+    "tests": 3139,
+    "addedByThisPass": 48,
+    "removed": 0,
+    "contributions": {
+      "mainRepairAdded": 46,
+      "producerReviewClosureAdded": 2
+    },
+    "precisionNote": "Main report testsChanged2 includes a revision of the foreign-actor test added in this same repair; it is not evidence of two pre-existing tests changed. Original empty-restore case was made to invoke the real restore lifecycle. No test deletion reported; suite total independently checked in final verify log."
+  },
+  "changedPaths": [
+    {
+      "path": "main/src/story/autopilot/primitives.ts",
+      "beforeSha256": "4cce7261ba455e28a31d77f300e339d5dd907c00c691208b824a058f723313ca",
+      "afterSha256": "a6da0551072c1a39eaa7ce1d91e1546122955b4a9682ec2ccffb1cdf3c7da4ae",
+      "created": false,
+      "inAllowedPaths": true
+    },
+    {
+      "path": "main/src/story/autopilot/primitives.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "158f5ac9451b00c37dc535ee9e1ef4c727b5b8f4f20364c7e85ee92428ad2f2d",
+      "created": true,
+      "inAllowedPaths": true
+    },
+    {
+      "path": "main/src/story/commonGroundState.ts",
+      "beforeSha256": "2094b261328143dda5cfc198aa2791fceb470fefcf006e7cb06e7669d55db2bf",
+      "afterSha256": "900da8a2a52a93cfce206748fb7a0a4ee6763db3c4a513deb85a8bc732b35784",
+      "created": false,
+      "inAllowedPaths": true,
+      "closureBeforeSha256": "681846b7e66a9577596fe07639212a32640baac3bd44c7f14fc994251f1e87a6"
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.ts",
+      "beforeSha256": "5688b86ebf06fd3a963693026e9933b1286079cf508747588f9f3a238814d6b3",
+      "afterSha256": "23bd8ea59f156d9ba5c801e77acc353bd023cabbfde77af7a04cf195c2db921f",
+      "created": false,
+      "inAllowedPaths": true
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.test.ts",
+      "beforeSha256": "58bc30b4d7ef208002aa448f48cd523d73115c48e979faa46311e94de9143008",
+      "afterSha256": "3dc70095f2aefcfb526b4cf289659bb625cbcc81f0a7742cc7d05c11e10f67ec",
+      "created": false,
+      "inAllowedPaths": true,
+      "closureBeforeSha256": "8584dc5c44320252f206776371c7bba53ed62c2910fd2b3181ca4720999087ac"
+    },
+    {
+      "path": "main/src/game/systems/persistence.ts",
+      "beforeSha256": "c8d51b1d6055ba221cb910f3eb4cb28c943ac1dd037581a8c1acfa97a0765404",
+      "afterSha256": "f68be69f922abe670bf8a0a12246ad87ebb705e42b49ffd95466c6ca9cb631d7",
+      "created": false,
+      "inAllowedPaths": true
+    },
+    {
+      "path": "main/src/game/systems/persistence.test.ts",
+      "beforeSha256": "c0c2b159b08b12d689bbac403e40069d21a2fdc5bfba6c45ace7dfe38063d734",
+      "afterSha256": "9c1dd65d948c17b37c12b26781966f7b36ee5b3aeca34c64cd3a333c4e99517a",
+      "created": false,
+      "inAllowedPaths": true
+    }
+  ],
+  "sourceFilesRehashed": 98,
+  "checks": [
+    {
+      "command": "npx vitest run src/story/commonGroundDirector.test.ts src/story/commonGroundState.test.ts src/game/systems/persistence.test.ts src/story/world/CommonGroundWorld.test.tsx src/story/storyState.test.ts",
+      "cwd": "/home/thomasphillip/Projects/vox/main",
+      "purpose": "focused regression on the affected lifetime",
+      "startedAt": "2026-09-06T13:55:42+00:00",
+      "finishedAt": "2026-09-06T13:55:45+00:00",
+      "exitCode": 0,
+      "testFiles": 5,
+      "tests": 217,
+      "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/after-fix-focused.log",
+      "logSha256": "e8e85f71908b4650b2d5e74731f8d95fc42f1126d69ea6a4860eefc8e9db375e",
+      "name": "focused-closure",
+      "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/after-fix-focused.log"
+    },
+    {
+      "command": "npm run verify",
+      "cwd": "/home/thomasphillip/Projects/vox/main",
+      "purpose": "composite gate; run ONCE after the final source edit",
+      "startedAt": "2026-09-06T13:56:19+00:00",
+      "finishedAt": "2026-09-06T13:57:22+00:00",
+      "exitCode": 0,
+      "testFiles": 350,
+      "tests": 3139,
+      "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/verify-navigation-closure.log",
+      "logSha256": "50328eae96e3b0eea16ed042b962dde646e493c9900e68d477a9d931d6322ce7",
+      "covers": [
+        "catalog:check",
+        "scene:av:check",
+        "creative:workflow:check",
+        "chapter:registry:check",
+        "chapter:journey:check",
+        "typecheck",
+        "preview:check",
+        "audio:diagnostic-check",
+        "story:ladder:check",
+        "guidance:target-check",
+        "story:authority",
+        "test",
+        "audio:check",
+        "build"
+      ],
+      "redundantStandaloneRerunsPerformed": false,
+      "name": "composite-verify",
+      "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/verify-navigation-closure.log"
+    },
+    {
+      "command": "npm run story:ux:check",
+      "cwd": "/home/thomasphillip/Projects/vox/main",
+      "purpose": "story UX check required by the current boundary",
+      "startedAt": "2026-09-06T13:57:25+00:00",
+      "finishedAt": "2026-09-06T13:57:27+00:00",
+      "exitCode": 0,
+      "testFiles": 9,
+      "tests": 94,
+      "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/story-ux-check.log",
+      "logSha256": "602a0d7ad371fe3ad9f300f8ca37c96ecf5e74a46d6f3f2d48fe49ab4c848dec",
+      "name": "story-ux-check",
+      "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/story-ux-check.log"
+    }
+  ],
+  "preservation": {
+    "unexpectedFinalDrift": [],
+    "preclosureReviewRef": "producer-navigation-preclosure-review.json",
+    "parentReportedTemporaryScopeDeviation": "A temporary __continue-counterfactual.test.ts outside allowedPaths was created and removed; no pre-existing bytes there were overwritten. Kept in the original report. Closure reused only its two authorized source paths.",
+    "historicalGitIncidentRef": "lifecycle-mutation-cleanup-deviation.json"
+  },
+  "resolvedSourceReview": [
+    "Terminal exact-goal navigation uses real control output and certified neighboring support at the same height; target-specific cache handles subunit target changes.",
+    "Late restore replaces only an empty placeholder; unhydrated and rejected saved data survives autosave.",
+    "A present read invalidates stale known-empty ownership; genuine newer work remains authoritative.",
+    "Explicit chapter-only clear remains durable and preserves construction/other-world state."
+  ],
+  "counterfactualRefs": [
+    "tmp/runtime-seam-result.json",
+    "tmp/continue-counterfactual-result.json",
+    "logs/navigation-closure/counterfactual-summary.json"
+  ],
+  "limitations": [
+    "No hardware, rendering, hearing, full chapter, movie or manual acceptance from source tests.",
+    "The incomplete old deep-link fixture lawfully resumes departure without an origin-landed receipt; actual earned return must be used for valid Continue proof.",
+    "All open implementation/creative defects remain open until current independent evidence and reviews close them.",
+    "HABITAT-CARRY-SYMMETRY remains an unmeasured source observation outside this repair; no expansion or fix claimed."
+  ],
+  "nextAction": "Fresh root source/implementation gate, then independent full verify/build, new immutable preview and physical chapter evidence."
+}

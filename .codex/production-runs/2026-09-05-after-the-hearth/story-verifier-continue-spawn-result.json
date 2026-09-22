@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 309639,
+  "stop_reason": "end_turn",
+  "session_id": "35bb3b5e-24ab-4ecc-a0b0-2059599c3ed6",
+  "total_cost_usd": 1.6217965000000003,
+  "usage": {
+    "input_tokens": 62,
+    "cache_creation_input_tokens": 51322,
+    "cache_read_input_tokens": 1030317,
+    "output_tokens": 23630,
+    "output_tokens_details": {
+      "thinking_tokens": 4562
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 51322,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1613,
+        "cache_read_input_tokens": 53938,
+        "cache_creation_input_tokens": 1451,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1451
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2293,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002358,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 62,
+      "outputTokens": 23630,
+      "cacheReadInputTokens": 1030317,
+      "cacheCreationInputTokens": 51322,
+      "webSearchRequests": 0,
+      "costUSD": 1.6194385000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 4562,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 39,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: Phase A **pass** (build + missing typecheck green, recorded). Phase B **blocked, not run** \u2014 GPU correctly never started; root still holds with the old preview.\n\n## Phase A measurements\n\n| check | command / cwd | UTC | exit |\n|---|---|---|---|\n| missing node typecheck | `npx tsc --noEmit -p tsconfig.node.json --pretty false`, `main` | 23:25:56Z | **0** |\n| build | `npm run build`, `main` | 23:26:21\u219223:26:27Z | **0** |\n\n- Source manifest `2de3fa2a\u2026` **verified**; all three candidate source hashes match the source review.\n- dist: 11 files, buildHash `974ddaa6\u2026`, index `74025800\u2026`, bundle `/assets/index-Ddqg7x9Y.js`.\n- Recorded in `logs/continue-spawn-verifier/build-ready.json` (commands, cwd, UTC, exits, log+source+all dist hashes).\n\n**Reuse honored, not relabeled.** The source review confirms the engineer's app typecheck covers the final candidate, and I re-hashed both reused logs (`cc8a7fda\u2026`, `30cfb58b\u2026`) as byte-identical before reusing. I ran *only* the genuinely missing `tsconfig.node.json` portion. No full verify run.\n\nI verified that check was real rather than a no-op: its 0.785 s runtime is legitimate because `tsconfig.node.json` includes exactly one file (`vite.config.ts`) with `skipLibCheck`.\n\n## Two findings worth your attention\n\n1. **Your build could not have clobbered root's preview** \u2014 root serves an immutable snapshot from `/tmp/paravoxia-preview-KRdICI/dist`, not `main/dist`. I confirmed this *before* building. My bundle `index-Ddqg7x9Y.js` \u2260 baseline `index-C1X65dZp.js`, so 37395 is demonstrably the old baseline.\n\n2. **The exit-gate hazard is real and now closed.** Root's addendum landed mid-run; I confirmed it in source: the probe writes `summary.json` (line 1557) but sets `exitCode = 1` only in the catch (line 1564). A bare probe argv would have exited 0 with `actualAcceptedNewAction=false`, letting `creative:repair:check` run the full suite and report **passed with no player action**. Fixed in my private launcher only \u2014 it runs the real probe, then post-checks the same fresh capture. Fail-closed selftest: hazard\u219293, all-held\u21920, probe-nonzero\u219293, missing capture\u219292.\n\n## Phase B readiness (prepared, blocked)\n\nProbe copied to `verifier/probes/continue-spawn-candidate/` at the **same depth** (its `../../../../../../main` import still resolves); selftest **108/108**. No minified bundle pins present or attached \u2014 only verifier-helper source pins. All original bounds (flight 180 s / earn 120 s / walk 90 s), raw `beforeunload` saves, CTA-click-before-runtime-wait, full point equality, and 5 s per-rAF tail preserved. Launcher takes the shared heavy lock on **FD9** then `node` inherits it; `--role continue-spawn-verifier`.\n\n**Block:** `verification-ready.json` flipped `ready: true` bound to `2de3fa2a\u2026` (gate checks 1764), but `verifier-control.json` still reads `action: hold` with the old preview (`37395`, index `a9b8803\u2026`, build `0a18affc\u2026`). Root's instruction is explicit that GPU stays held until the new preview *and* root inspection of the verdict handling. So I stopped rather than binding a probe to a stale bundle.\n\n**Artifacts** (all RUN-relative to `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth`): `logs/continue-spawn-verifier/{build-ready.json,build.log,build-command.txt,node-typecheck.log,node-typecheck-command.txt,exit-gate-selftest.log}`; `verifier/probes/continue-spawn-candidate/{run-continue-spawn.sh (c91bdba9\u2026), repair-check-plan.json (18302fc3\u2026)}`; `verification-continue-spawn-progress.md` (root notified there before invoking, as required).\n\nNot done, and awaiting your handoff: the actual earned Continue + new grounded [F], `creative:repair:check` (plan written but **not invoked** \u2014 root inspects first), and the single `--final` verify. No source touched, no server started or killed, no report.json/md written yet since no runtime verdict exists. No taste, defect-closure or chapter-acceptance claim.",
+  "ttft_ms": 2072,
+  "type": "result",
+  "duration_ms": 527097,
+  "uuid": "6563ad07-58c1-4179-bb3a-1d1aee371f66",
+  "ttft_stream_ms": 817,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 1207,
+  "queued_turn_count": 0
+}

@@ -1,0 +1,10 @@
+{
+  "ownerPid": 4132127,
+  "serverPid": 4132138,
+  "url": "http://127.0.0.1:41981/",
+  "entryUrl": "http://127.0.0.1:41981/?story=ch13-survey&journeyprobe=1&profile=HIGH",
+  "entry": "Supported manual diagnostic route through CommonGround into Chapter14; not a fresh full-story proof.",
+  "build": "322030545cb3b38a54040863b92cdff886eaa1513ed891480818bb85f97c3d7c",
+  "candidateSha256": "b3c09da4612e74b2fe2b206fa140ca36215c54ae311c786cc9309c5b11ccb10a",
+  "startedAt": "2026-09-09T01:29:29.597Z"
+}

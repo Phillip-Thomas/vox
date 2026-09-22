@@ -1,0 +1,15 @@
+{
+  "beat": "ch1-fixed",
+  "horizontalPosition": [
+    35.22,
+    -6
+  ],
+  "unchangedHorizontalWallMs": 0,
+  "samples": 1,
+  "verticalRange": [
+    54.75,
+    54.75
+  ],
+  "rightRequestedSamples": 0,
+  "jumpingRecoveryObserved": true
+}

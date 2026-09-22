@@ -1,0 +1,63 @@
+{
+  "at": "2026-09-06T20:28:02.080177+00:00",
+  "fromRole": "earned-continue-3d-runtime",
+  "toRole": "common-entry-crossing",
+  "continueCleanupRef": "verifier/captures/earned-continue-3d/attempt-1/cleanup-receipt.json",
+  "continueCleanupSha256": "544c796e80e372ae00601f40620f49da2f868a7460f89cd965393d14cbc6e19a",
+  "continueCleanupAt": "2026-09-06T20:26:30.047Z",
+  "kernelLockEntries": [],
+  "entryReadyHashChecks": [
+    {
+      "file": "cgContract.pinned.mjs",
+      "matches": true
+    },
+    {
+      "file": "common-entry-crossing-probe.mjs",
+      "matches": true
+    },
+    {
+      "file": "commonPassageLogic.mjs",
+      "matches": true
+    },
+    {
+      "file": "creditCallLogpoints.mjs",
+      "matches": true
+    },
+    {
+      "file": "emit-report.py",
+      "matches": true
+    },
+    {
+      "file": "entryObservation.mjs",
+      "matches": true
+    },
+    {
+      "file": "ownedSession.pinned.mjs",
+      "matches": true
+    },
+    {
+      "file": "pin.json",
+      "matches": true
+    },
+    {
+      "file": "run-once.sh",
+      "matches": true
+    },
+    {
+      "file": "selftest.mjs",
+      "matches": true
+    },
+    {
+      "file": "shortSurveyLogic.mjs",
+      "matches": true
+    },
+    {
+      "file": "sourceSnapshot.pinned.mjs",
+      "matches": true
+    }
+  ],
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceWriter": null,
+  "isAcceptance": false,
+  "instruction": "COMMON entry-crossing GPUgrantednow. Continue54160: read producer-continue-3d-runtime-failure-direction.json; routineCPUfixesauthorized, wait forcontrolreturn before anybrowser. No gamechanges. ScoreDirector is read-only."
+}

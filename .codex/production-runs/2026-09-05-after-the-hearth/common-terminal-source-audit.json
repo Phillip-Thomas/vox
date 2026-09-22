@@ -1,0 +1,227 @@
+{
+  "schema": "paravoxia.audit.commonTerminalSourceAudit.v1",
+  "run": "2026-09-05-after-the-hearth",
+  "role": "read-only mechanical source auditor (opus)",
+  "writtenAtUtc": "2026-09-06T16:17:33Z",
+  "acceptance": {
+    "isAcceptance": false,
+    "isChapterVerification": false,
+    "isPublication": false,
+    "note": "Diagnosis only. No repair is authorized; Root must review before any seventh material repair. No visual, audible or taste claim is made."
+  },
+  "scope": {
+    "owned": [
+      "common-terminal-source-audit.json",
+      "common-terminal-source-audit.md",
+      "verifier/probes/common-terminal-audit/",
+      "logs/common-terminal-audit/"
+    ],
+    "mutations": "none outside the owned paths; no game/contract/manifest/defect/probe edits, no source instrumentation, no main/src tempfile, no build, no GPU, no browser, no verify",
+    "frozenSourceManifest": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c (99 files, unmodified by this audit)"
+  },
+  "measuredInput": {
+    "captures": [
+      "verifier/captures/handoff-standby/journey-common-1",
+      "verifier/captures/handoff-standby/journey-common-2"
+    ],
+    "run2": {
+      "outcome": "FAIL-STALL",
+      "beat": "ch13-common",
+      "stage": "holding-h",
+      "holdReason": null,
+      "railCursor": 3,
+      "railAction": "walk",
+      "railReason": "walking the common span",
+      "railTarget": [-44.6, 51.05, 16],
+      "arriveRadius": 0.35,
+      "bodyCentre": [-43.88100051879883, 52.788719177246094, 15.937448501586914],
+      "bodyPose": [-43.84527201840541, 50.989073802662645, 15.93744833817136],
+      "up": [-0.019849166885233416, 0.9998029858796952, 9.07864191988541e-08],
+      "groundOffsetUnits": 1.8,
+      "supported": true,
+      "worldBound": true,
+      "terraUnits": 5.845336820616744,
+      "workerAtH": [-40, 51.05, 12],
+      "teleportNudgesTotal": 0
+    },
+    "run1TerraUnits": 5.79476,
+    "notOldStandby": "Both runs actually earn route-tested, enter COMMON, place W-7744 at H and fire anc.cg.reciprocal-reference. The survey standby repair holds. This is a NEW, distinct COMMON-rail stall and is not a manual-input failure (no player input is involved; the movie rail drives it)."
+  },
+  "conclusion": {
+    "oneLine": "The fifth repair's exact-goal handoff is CORRECTLY REFUSED at COMMON vertex 3 because the 0.6 signed corner overshoot pushes the capsule footprint onto a water column at (-46, ., 16); the navigator therefore keeps the snapped cell centre (-44, 52.85, 16) as the steering target, and the closest approach to the published goal while steering is live is 0.4356 > arriveRadius 0.35 — unsatisfiable, exactly the CG-IMPL-010 shape, with a safety refusal rather than pure arithmetic as its cause.",
+    "safetyRefusalIsCorrect": true,
+    "railImplementationOnly": false,
+    "authoredGeometryImplicated": true
+  },
+  "mechanism": [
+    {
+      "step": 1,
+      "claim": "The published goal is railGoal(CG_ROUTE_COMMON, 3, 0.6) = (-44.6, 51.05, 16).",
+      "class": "evidence",
+      "source": "main/src/story/commonGroundDirector.ts railGoal/routeTurnsAt/legDirection + commonRailPlan (CG_RAIL_CORNER_OVERSHOOT 0.6, arrive CG_RAIL_ROUTE_ARRIVE 0.35); reproduced bit-exactly against the captured rail.target"
+    },
+    {
+      "step": 2,
+      "claim": "The shipped planner terminates on waypoint (-44, 52.85, 16) — a snapped cell centre carrying PLAYER_CENTER_CLEARANCE — with reason dry-surface-path / already-at-resolved-goal, requestedGoalWasWet false, waterCrossing null.",
+      "class": "evidence",
+      "source": "planAgentSurfaceRoute over createLiveAgentSurfaceTerrain(50, 3215739679, '-1,-1') with nextNavigationStep's option set"
+    },
+    {
+      "step": 3,
+      "claim": "Tangential offset goal-terminal is 0.6 on the x axis. reach = VOXEL_SCALE/2 - PLAYER_CAPSULE_RADIUS = 0.5, so exactGoalFootprintColumns returns exactly one extra column: (-46, ., 16).",
+      "class": "evidence",
+      "source": "main/src/story/autopilot/primitives.ts exactGoalFootprintColumns, evaluated on the measured up"
+    },
+    {
+      "step": 4,
+      "claim": "certifyColumn(-46, ., 16) returns null: the shipped planner reports mode 'unreachable', reason 'start-column-not-traversable'. Cell (-23, 8) has terrain.isWaterVoxel true at cy 25 (the surface layer) over solid at cy 24 — a shoreline one cell west of the COMMON corner.",
+      "class": "evidence",
+      "source": "logs/common-terminal-audit/column-cause.json"
+    },
+    {
+      "step": 5,
+      "claim": "terminalExactGoalHandoff therefore returns { handoff: false, refusal: 'footprint-not-certified' }. This is the guard doing its job: standing off-centre there puts half the capsule over water.",
+      "class": "evidence (planner+terrain) / inference (the handoff function itself was transcribed, not imported)",
+      "source": "main/src/story/autopilot/primitives.ts terminalExactGoalHandoff"
+    },
+    {
+      "step": 6,
+      "claim": "applyTerminalExactGoal returns the snapped waypoint untouched, so steerFreeToward aims at (-44, 52.85, 16) and releases all four controls inside NAVIGATION_STEER_DEAD_ZONE 0.2 of it, while walkToward only arrives on the distance to (-44.6, 51.05, 16).",
+      "class": "evidence",
+      "source": "main/src/story/autopilot/primitives.ts applyTerminalExactGoal, NAVIGATION_STEER_DEAD_ZONE; commonGroundDirector.ts applyCommonGroundRail -> ctx.walkToward(goal, plan.arriveRadius)"
+    },
+    {
+      "step": 7,
+      "claim": "Tangential goal-to-steer-target distance is 0.6356 (not 0.6): the local up is tilted -0.0198 in x, and discarding the normal component of the 1.8-unit convention gap between the authored foot goal 51.05 and the clearance-carrying waypoint 52.85 injects an extra 0.0357 of TANGENTIAL offset along the tilt. Closest approach while steering is 0.6356 - 0.2 = 0.4356 > 0.35.",
+      "class": "evidence",
+      "source": "measured up + measured goal/waypoint frames; arithmetic in logs/common-terminal-audit/repro.json"
+    },
+    {
+      "step": 8,
+      "claim": "The measured pose corroborates the model exactly: body is 0.1777 from the snapped vertex (< dead zone 0.2), 0.7598 from the published goal (> 0.35), and terraUnits 5.845337 is 0.154663 short of the 6 walked units that vertex 3 represents — the same shortfall as the body's own x offset from -44.",
+      "class": "evidence",
+      "source": "trace.ndjson final sample; CG_ROUTE_COMMON leg lengths 2+2+2"
+    },
+    {
+      "step": 9,
+      "claim": "vertexReached at a turning vertex requires along >= 0, i.e. the body must physically cross the x = -44 plane. Parked at x = -43.845 it never does, so railCursor never advances and no further goal is ever published. Zero nudges and stillTime 0 are consistent: the stuck watchdog only counts stillness while a control is pushing, and the navigator issues none.",
+      "class": "evidence",
+      "source": "main/src/story/commonGroundDirector.ts vertexReached; integration-navigation-repair-report.md section 1 (same disarm argument)"
+    }
+  ],
+  "commonVsSurvey": {
+    "finding": "This is NOT a sign/negative-axis, quantization or parity asymmetry. Every SURVEY (CG_ROUTE_LONG) turn vertex, including the negative-x overshoots at -28.6, -30.6, -32.6 and -42.6, certifies its footprint column and takes the handoff (closest approach 0.0, arrival satisfiable). The COMMON polyline is simply authored closer to unsafe landform at its western end.",
+    "surveyVerticesTested": [1, 2, 3, 4, 5, 6, 8, 13, 18],
+    "surveyHandoffTaken": "all",
+    "commonVerticesFailing": [
+      { "vertex": 3, "vertexPoint": [-44, 51.05, 16], "goal": [-44.6, 51.05, 16], "column": [-46, null, 16], "cause": "surface WATER at cell (-23,8)", "closestApproach": 0.4356, "arriveRadius": 0.35 },
+      { "vertex": 6, "vertexPoint": [-48, 51.05, 18], "goal": [-48.6, 51.05, 18], "column": [-50, null, 18], "cause": "planet face edge / edge margin at cell (-25,9) — x = -50 is the planetSize-50 face boundary; column is dry solid but not traversable", "closestApproach": 0.4356, "arriveRadius": 0.35 },
+      { "vertex": 9, "vertexPoint": [-48, 51.05, 12], "goal": [-48, 51.05, 11.4], "column": [-48, null, 10], "cause": "surface WATER at cell (-24,5)", "closestApproach": 0.4011, "arriveRadius": 0.35, "note": "TERMINAL vertex C: overshoot comes from RailRouteOptions.terminalOvershoot = CG_RAIL_CORNER_OVERSHOOT, and there is no outgoing leg to redirect it along." }
+    ],
+    "commonVerticesPassing": [
+      { "vertex": 2, "column": [-42, null, 18], "handoff": true },
+      { "vertex": 4, "column": [-44, null, 20], "handoff": true }
+    ],
+    "consequence": "Terra stalls at vertex 3 first. Even if vertex 3 were made reachable, vertices 6 and 9 stall next. Three of the COMMON rail's published goals are unsatisfiable on this world."
+  },
+  "sourceFilesAndSymbolsNeeded": {
+    "main/src/story/autopilot/primitives.ts": [
+      "terminalExactGoalHandoff", "exactGoalFootprintColumns", "applyTerminalExactGoal",
+      "tangentAxes", "nextNavigationStep (certifyColumn closure, cursor/handoff gate)",
+      "NAVIGATION_STEER_DEAD_ZONE", "steerFreeToward"
+    ],
+    "main/src/story/commonGroundDirector.ts": [
+      "commonRailPlan", "railWaypoint", "railGoal", "routeTurnsAt", "legDirection",
+      "vertexReached", "reconstructRouteCursor", "applyCommonGroundRail",
+      "CG_RAIL_CORNER_OVERSHOOT", "CG_RAIL_ROUTE_ARRIVE", "RailRouteOptions.terminalOvershoot"
+    ],
+    "main/src/story/commonGroundState.ts": ["CG_ROUTE_COMMON", "CG_ROUTE_LONG", "CG_POSES", "CG_COMMON_ROUTE_UNITS", "routeProgressUnits"],
+    "main/src/utils/cubeGravityConstants.ts": ["VOXEL_SCALE", "PLAYER_CAPSULE_RADIUS", "voxelCoordToWorld"],
+    "main/src/utils/agentSurfaceNavigation.ts": ["planAgentSurfaceRoute", "worldToGrid", "start-column-not-traversable"],
+    "main/src/utils/agentSurfaceNavigationRuntime.ts": ["createLiveAgentSurfaceTerrain"]
+  },
+  "regressionTestsThatWouldFailOnCurrentCode": [
+    {
+      "id": "RT-1",
+      "file": "main/src/story/commonGroundDirector.test.ts (or a new rail-reachability test)",
+      "assertion": "For every index i of CG_ROUTE_COMMON that the rail can publish, the published railGoal must be reachable: with the shipped planner over the shipped terrain, the terminal waypoint's exact-goal handoff must be taken, OR |tangential(goal, terminalWaypoint)| - NAVIGATION_STEER_DEAD_ZONE <= arriveRadius.",
+      "currentResult": "FAILS at i = 3, 6, 9 (0.4356, 0.4356, 0.4011 vs 0.35).",
+      "note": "The same assertion PASSES for every CG_ROUTE_LONG vertex, so it is a real discriminator and not a blanket tightening."
+    },
+    {
+      "id": "RT-2",
+      "file": "main/src/story/autopilot/primitives.test.ts",
+      "assertion": "A rail goal whose exact-goal handoff is refused must not be published with an arriveRadius the steering seam cannot satisfy: assert refusal implies (offsetFromSnappedCentre - 0.2) <= arriveRadius.",
+      "currentResult": "FAILS for the COMMON vertex-3 fixture; the existing tests only assert the refusal itself (footprint-not-certified at lines 656/704/707/729/774), never that the refusal leaves a satisfiable walk.",
+      "note": "This is the missing invariant: the fifth repair made the handoff correct but left the REFUSAL path with the original CG-IMPL-010 deadlock intact."
+    },
+    {
+      "id": "RT-3",
+      "file": "main/src/story/autopilot/primitives.test.ts",
+      "assertion": "Tangential offset must be computed on the LIVE tilted up: with up = (-0.019849, 0.999803, ~0) and a 1.8-unit foot/clearance convention gap, the effective tangential offset is 0.6356, not 0.6.",
+      "currentResult": "Not asserted anywhere today; the shipped reasoning uses the flat-up 0.6 - 0.2 = 0.4 figure.",
+      "note": "Does not change the verdict, but the margin analysis in the fifth repair is a lower bound and should be stated as such."
+    }
+  ],
+  "controlsThatMustPreserveUnsafeRejection": [
+    "certifyColumn must keep calling planAgentSurfaceRoute with maxVisitedCells 1 and differentFaceFallback 'unreachable'; no widening of the probe.",
+    "'footprint-not-certified' and 'footprint-height-mismatch' at (-46,.,16), (-50,.,18) and (-48,.,10) must remain REFUSALS in any future test fixture — they are the water/face-edge guard working.",
+    "The existing refusal tests (goal-substituted-for-safety, water-leg, goal-outside-terminal-cell, footprint-height-mismatch) must stay unchanged.",
+    "NAVIGATION_STEER_DEAD_ZONE stays 0.2; CG_RAIL_ROUTE_ARRIVE stays 0.35; CG_RAIL_CORNER_OVERSHOOT stays a signed 0.6; CG_COMMON_ROUTE_UNITS stays 18.",
+    "routeProgressUnits' displacement-bounded credit, the full-ordered-path requirement and the strict-corner (along >= 0) recovery must be preserved: nothing here justifies relaxing them."
+  ],
+  "explicitlyNotProposed": [
+    "larger arrival radius", "endpoint credit", "nudges", "teleport",
+    "unsafe-goal bypass", "relaxation of the full ordered path",
+    "any previous CG-009 endpoint allowance"
+  ],
+  "railImplementationVsAuthoredGeometry": {
+    "verdict": "BOTH are implicated; a rail-only correction is provably insufficient at the terminal vertex.",
+    "railSide": "At turning vertices 3 and 6 the overshoot direction is the INCOMING leg direction. An overshoot taken along the OUTGOING leg instead would still satisfy vertexReached (along = 0.6 * (in.out) = 0 >= 0 at a right-angle turn, distance 0.6 <= arrive+0.6+1) while landing the footprint on the route's own next cell, which certifies. This is a rail-implementation option and is stated as an OBSERVATION, not a proposed repair.",
+    "geometrySide": "At vertex 9 (C, the terminal) there is no outgoing leg; RailRouteOptions.terminalOvershoot points south into the water column (-48, ., 10). No choice of overshoot DIRECTION exists there. Either the terminal-overshoot device or the authored placement of C / the western end of CG_ROUTE_COMMON must change. Any such change is a creative-geometry decision (the 18-unit signed physical span, the 8 units outside the fixed reference and the E-C six-unit separation are load-bearing), and belongs to the Chapter Director, not to this audit.",
+    "authorization": "None. Root must review before any seventh material repair."
+  },
+  "reproduction": {
+    "probe": "verifier/probes/common-terminal-audit/common-terminal-repro.mjs",
+    "probeSha256": "d46bc0c138530a1730f6978ac1e6b0075038e3df1d33227418b36038b5a47ee5",
+    "columnProbe": "verifier/probes/common-terminal-audit/column-cause.mjs",
+    "columnProbeSha256": "1208609351cdfab9b7ca6a70e6a3af746e2f569286b748e3cf783cec5e506983",
+    "output": "logs/common-terminal-audit/repro.json",
+    "outputSha256": "b344b7146084a209fa232a90f6d6738cdabf058b60b9ccca91c6bf3cd56874ef",
+    "columnOutput": "logs/common-terminal-audit/column-cause.json",
+    "columnOutputSha256": "93a7c85939104f76f0a70fc51f81e9f544856578ea59919438c57b4e539cf58b",
+    "reusedBundle": {
+      "path": "verifier/probes/handoff-standby-repair/bundle/repro.mjs",
+      "sha256": "a093c75f2023a03f720af4ac3a37fd6f4d7e459f4c9323e901a477650ed8ab00",
+      "provenance": "Built by the CG-IMPL-012 standby-terrain-repro pattern; re-used byte-for-byte here, NOT rebuilt. Re-exports shipped symbols only."
+    },
+    "world": { "seed": 3215739679, "worldId": "-1,-1", "planetSize": 50, "voxelScale": 2, "up": "measured live up, face from surfaceFaceFromUp" },
+    "limitation": "CPU reconstruction of GENERATED terrain and the shipped planner only. voxelSystem is empty in this process, so live persisted/player-edited voxels are NOT represented; a column certified or refused here could in principle differ live. No GPU, browser, build or full verify was run. terminalExactGoalHandoff / exactGoalFootprintColumns / railGoal were TRANSCRIBED from frozen source (the bundle does not export them) — their equivalence to the shipped functions is inference; the planner and terrain calls they make are evidence."
+  },
+  "sourceHashes": {
+    "main/src/story/autopilot/primitives.ts": "a6da0551072c1a39eaa7ce1d91e1546122955b4a9682ec2ccffb1cdf3c7da4ae",
+    "main/src/story/commonGroundDirector.ts": "acc0d9cf6331f13f77bd95d29b3bd311033a382fcdc3bff3d9ab977297166c46",
+    "main/src/story/commonGroundState.ts": "7a3c03fb73cb715116ddbf1952fc2c312f52d1dac68b765b8097f4becdb0452e"
+  },
+  "minimalFutureLiveDiscriminator": {
+    "needed": "Only to close the one CPU-vs-live gap (persisted voxels at (-46,.,16)).",
+    "probe": "One hardware journey capture at ch13-common that publishes, from the LIVE runtime, the exact-goal handoff refusal string and the certifyColumn result for the terminal footprint column, alongside the already-published rail target and cursor.",
+    "expected": "refusal = 'footprint-not-certified', column = (-46, ., 16). If the live refusal is instead 'footprint-height-mismatch' or the handoff is TAKEN, this audit's cause is wrong and the stall is elsewhere.",
+    "cost": "one existing cg-journey-probe run plus one additional published diagnostic field; no new repair, no new geometry."
+  },
+  "evidenceVsInference": {
+    "evidence": [
+      "Captured rail target, cursor, arriveRadius, poses, up, terraUnits, action, nudge count (trace.ndjson/summary.json, run 1 and 2).",
+      "railGoal(CG_ROUTE_COMMON,3,0.6) reproducing the captured target bit-exactly.",
+      "Shipped planAgentSurfaceRoute + shipped live terrain returning 'unreachable / start-column-not-traversable' for (-46,.,16), (-50,.,18), (-48,.,10) and traversable for every survey column.",
+      "terrain.isWaterVoxel true at the surface layer of cells (-23,8) and (-24,5).",
+      "Source constants and control flow read from the frozen files."
+    ],
+    "inference": [
+      "That the transcribed terminalExactGoalHandoff / exactGoalFootprintColumns / railGoal are behaviourally identical to the shipped ones.",
+      "That the live runtime took the 'footprint-not-certified' branch (not observed live; the capture publishes no refusal string).",
+      "That vertices 6 and 9 would stall next — never reached in the captures because vertex 3 stalls first.",
+      "That an outgoing-leg overshoot would certify at vertices 3 and 6 (arithmetic + column certification, not a live measurement)."
+    ]
+  }
+}

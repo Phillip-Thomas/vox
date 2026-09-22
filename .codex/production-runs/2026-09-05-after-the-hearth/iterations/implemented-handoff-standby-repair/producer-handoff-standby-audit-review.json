@@ -1,0 +1,68 @@
+{
+  "schema": "paravoxia.producerCausalAuditReview.v1",
+  "reviewedAt": "2026-09-06T15:34:50.527502+00:00",
+  "author": "root producer",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceFilesChecked": 98,
+  "sourceDrift": [],
+  "auditInvocation": {
+    "role": "handoff-standby-source-auditor",
+    "requestedModel": "opus",
+    "startedAt": "2026-09-06T15:25:00.544091+00:00",
+    "commissionSha256": "ed8a59c68e2b369082f0b9da53204b18416bab3c6fa252c95fd41dfffb3ecf57",
+    "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+    "sourceFilesRehashedBefore": 98,
+    "scope": "Read-only causal source diagnosis for measured return handoff reset and standby physical target; no game edits, GPU or acceptance",
+    "exitCode": 0,
+    "finishedAt": "2026-09-06T15:33:20.815485+00:00",
+    "model": "claude-opus-5",
+    "sessionId": "06ec2502-1afa-4a76-bc0e-b9ff3f23ffa3",
+    "isError": false,
+    "sourceDrift": [],
+    "sourceFilesRehashedAfter": 98
+  },
+  "evidenceRefs": [
+    {
+      "ref": "handoff-standby-source-audit.json",
+      "sha256": "46541ec44fd4f64c52ec233410f969f966adcaffa52cc097da5901c765b7a4d1"
+    },
+    {
+      "ref": "handoff-standby-source-audit.md",
+      "sha256": "85a655ecf613c626de3348b425588f9f7501a0be1c7dd030e1d94dce8fc659cd"
+    },
+    {
+      "ref": "logs/handoff-standby-audit/resolver-repro.log",
+      "sha256": "805346d2980fe83d32c6c2637c36fddcd2c96b0f6b1edae06f2eb6da782588b2"
+    },
+    {
+      "ref": "verifier/probes/handoff-standby-audit/resolver-repro.mjs",
+      "sha256": "89b38975ad16ac5c718381dc33abdc0ca8b3dab84dbae24371b806acc4141226"
+    },
+    {
+      "ref": "flight-discriminator-report.json",
+      "sha256": "29996b32f82cd405ebb9cf52c44d138b8aaeaedafcfccdd68511f29c6be3776d"
+    },
+    {
+      "ref": "producer-focused-evidence-review.json",
+      "sha256": "883c493ef91b23b1925beaccedadc7304248719a8a7a515b736cf0dbc6fb5994"
+    }
+  ],
+  "taskA": {
+    "disposition": "Accept precise runtime-resolver correction route for implementation, not live acceptance",
+    "evidence": "Executed real tidegardenRoute resolver maps committed Origin/ch13-return to departure; ch10/ch8 controls stable. Root read exact current resolver/table. Telemetry supports actual Origin commit then departure reclaim. Audit source trace identifies ShipController mutator by state differences; direct live call instrumentation was not performed.",
+    "boundedSeam": "Add missing ch13-return destination in existing runtime crossing table, preserve boot resolver and all flight/landing predicates."
+  },
+  "taskB": {
+    "disposition": "Retain observed stall and require actual footing/route reproduction; REJECT proposed long-route standby and independent off-lattice-cause claim",
+    "reasons": [
+      "Suggested(-42,51.05,20) and22 lie on LONG survey W will test. They only clear COMMON/E-to-H and would themselves block offered survey. Same standby has survey and common callsites.",
+      "Odd/off-lattice coordinate alone does not explain freeze: current fifth repair already safely supports exact off-grid targets when physically valid. Requested unsafecell->currentdrycell substitution is still a candidate requiring actual sampler/planner proof. No terrain replay was executed by this audit.",
+      "Candidate clearance must use entire CURRENT offered polyline and actor approach/positioning, and actualbody footprint, not only COMMON vertices or desiredpoint. Actual reachable authored W was manually occupied and may be considered, with physical timing/route qualification."
+    ],
+    "boundedSeam": "Chapter-local standby selection with real dryfooting/arrival/actualroute clearance; no changed signedgeometry or sharednav safety."
+  },
+  "correctionReceipt": "Root objection sent15:31:51 in verifier-inbox; audit did not read it before final. Original reports retained, not rewritten. This producer disposition governs repair routing.",
+  "isChapterAcceptance": false,
+  "acceptedExceptions": []
+}

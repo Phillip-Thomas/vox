@@ -1,0 +1,53 @@
+{
+  "beat": "ch4-vigil",
+  "settleS": 8,
+  "samples": 3,
+  "samplesTaken": [
+    {
+      "elapsedS": 5.004400000095368,
+      "fps": 60.14707057674525,
+      "writesPerS": 588.4821357093514,
+      "perMethodPerS": {
+        "value=": 0.8,
+        "cancelAndHoldAtTime": 58.7,
+        "setTargetAtTime": 527.7,
+        "setValueAtTime": 0.4,
+        "exponentialRampToValueAtTime": 0.4,
+        "linearRampToValueAtTime": 0.4
+      }
+    },
+    {
+      "elapsedS": 5.015,
+      "fps": 60.01994017946162,
+      "writesPerS": 590.6281156530409,
+      "perMethodPerS": {
+        "value=": 0.8,
+        "cancelAndHoldAtTime": 59.8,
+        "setTargetAtTime": 528.8,
+        "setValueAtTime": 0.4,
+        "exponentialRampToValueAtTime": 0.4,
+        "linearRampToValueAtTime": 0.4
+      }
+    },
+    {
+      "elapsedS": 5.0133999999761585,
+      "fps": 60.03909522508306,
+      "writesPerS": 590.417680618757,
+      "perMethodPerS": {
+        "value=": 1,
+        "cancelAndHoldAtTime": 60,
+        "setTargetAtTime": 528.2,
+        "setValueAtTime": 0.4,
+        "exponentialRampToValueAtTime": 0.4,
+        "linearRampToValueAtTime": 0.4
+      }
+    }
+  ],
+  "summary": {
+    "medianWritesPerS": 590.417680618757,
+    "maxWritesPerS": 590.6281156530409,
+    "contextState": "running",
+    "beatLive": true
+  },
+  "generatedAt": "2026-09-05T10:55:01.115Z"
+}

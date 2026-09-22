@@ -1,0 +1,2129 @@
+--- a/main/src/story/StoryDirectorDriver.tsx
++++ b/main/src/story/StoryDirectorDriver.tsx
+@@ -41,10 +41,19 @@
+ import { publishStoryBoundaryTelemetry } from './storyBoundaryTelemetry.ts';
+ import { tickChapter10FreePlayEntry, CH10_MOVIE_FREEPLAY_GRACE_SECONDS } from './emergentStoryDirector.ts';
+ import {
++  getCommonGroundProbeSnapshot,
+   suspendCommonGroundPresentation,
+   tickCommonGroundEntry,
+-  tickCommonGroundFreePlay
++  tickCommonGroundFreePlay,
++  type CommonGroundProbeSnapshot
+ } from './commonGroundDirector.ts';
++
++declare global {
++  interface Window {
++    /** Read-only ch13 diagnostic, installed only under a probe/debug query. */
++    __paravoxiaCommonGround?: { snapshot: () => CommonGroundProbeSnapshot };
++  }
++}
+ import {
+   stationReturnMarkerTarget,
+   stationReturnObjective,
+@@ -111,6 +120,24 @@
+     return () => setSignedSceneAvPaused(true);
+   }, [paused]);
+ 
++  // Chapter 13's read-only probe surface, and ONLY under an explicit probe or
++  // debug query. Players never set these; normal play never installs it, and it
++  // is removed on unmount. It exposes one function that returns a copy of state
++  // this chapter already computes for gameplay — no setter, no handle, no
++  // preparation, no mutable reference — because the existing journey probe can
++  // see the player and the AV rail but nothing of this chapter's route, holds or
++  // grounded-pose frame, which is precisely the seam a real measurement missed.
++  useEffect(() => {
++    if (typeof window === 'undefined') return undefined;
++    const params = new URLSearchParams(window.location.search);
++    const wanted = params.get('journeyprobe') === '1'
++      || params.get('chapterjourney') === '1'
++      || params.get('debug') === '1';
++    if (!wanted) return undefined;
++    window.__paravoxiaCommonGround = { snapshot: () => getCommonGroundProbeSnapshot() };
++    return () => { delete window.__paravoxiaCommonGround; };
++  }, []);
++
+   const earlyTicked = useRef(false);
+   useFrame((state, rawDt) => {
+     const story = getStoryStateSnapshot();
+--- a/main/src/story/commonGroundDirector.ts
++++ b/main/src/story/commonGroundDirector.ts
+@@ -18,7 +18,11 @@
+ import { getHabitatWorldState } from '../game/systems/habitatSystem.ts';
+ import { getLocalActorId } from '../game/playerActors.ts';
+ import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
+-import { getPlayerWorldPosition } from '../state/playerFrame.ts';
++import { getPlayerUp, getPlayerWorldPosition } from '../state/playerFrame.ts';
++import {
++  PLAYER_CAPSULE_HALF_HEIGHT,
++  PLAYER_CAPSULE_RADIUS
++} from '../utils/cubeGravityConstants.ts';
+ import { getSpaceFlightSnapshot } from '../state/spaceFlight.ts';
+ import { getSystemFlightSnapshot } from '../state/systemFlight.ts';
+ import { readSystemCompanionBodyTarget } from '../state/systemCompanionBodyTargets.ts';
+@@ -40,6 +44,7 @@
+   cancelCommonGroundFinalTexture,
+   commonGroundFinalTextureHolds,
+   enterCommonGroundScoreBeat,
++  getCommonGroundScoreDiagnostic,
+   releaseCommonGroundScore,
+   resetCommonGroundScoreRuntime,
+   releaseCommonGroundMood,
+@@ -175,6 +180,20 @@
+    * receipt; the walked span is measured only from actual displacement.
+    */
+   railTraversal: CommonGroundRailTraversal | null;
++  /**
++   * Anchors whose physical fact happened but whose AV activation has not been
++   * accepted yet. Ordered by when the facts occurred; never a progression
++   * source, never a claim that an anchor activated.
++   */
++  pendingAnchors: string[];
++  /**
++   * A COPY of the last plan the screening rail actually executed.
++   *
++   * Recorded by `applyCommonGroundRail` so an observer can read what the
++   * controller did without RUNNING the controller. It is written by the rail and
++   * by nothing else, and read by the probe and by nothing else.
++   */
++  lastPublishedPlan: CommonGroundRailPlan | null;
+ }
+ 
+ const runtime: CommonGroundRuntime = {
+@@ -193,7 +212,9 @@
+   localTester: false,
+   completionWasRestored: false,
+   resumeUnits: 0,
+-  railTraversal: null
++  railTraversal: null,
++  pendingAnchors: [],
++  lastPublishedPlan: null
+ };
+ 
+ export function resetCommonGroundRuntime(options: { clearWorlds?: boolean } = {}): void {
+@@ -211,6 +232,8 @@
+   runtime.completionWasRestored = false;
+   runtime.resumeUnits = 0;
+   runtime.railTraversal = null;
++  runtime.lastPublishedPlan = null;
++  clearPendingAnchors();
+   resetCommonGroundActor();
+   resetCommonGroundScoreRuntime();
+   if (options.clearWorlds) clearAllCommonGroundWorlds();
+@@ -352,7 +375,7 @@
+   const once = options.once ?? true;
+   if (once && runtime.firedAnchors.has(anchorId)) return false;
+   runtime.firedAnchors.add(anchorId);
+-  activateSignedSceneAnchorById(anchorId);
++  requestAnchorActivation(anchorId);
+   const mood = CG_ANCHOR_MOOD[anchorId];
+   const beat = runtime.beat;
+   if (mood && beat) {
+@@ -383,6 +406,70 @@
+ }
+ 
+ /**
++ * Ask the signed AV rail to activate an anchor, and REMEMBER A REFUSAL.
++ *
++ * The rail is entered by the shared story director AFTER each chapter's own
++ * beat-entry seam (`emergentStoryDirector`: `enterCommonGroundBeat(beat)` then
++ * `enterSignedSceneAvBeat(beat)`), so an anchor published at entry is offered
++ * to a runtime whose active beat is still the previous one, and it is refused.
++ * The old code discarded that boolean while having already spent this module's
++ * one-shot latch, so `anc.cg.home-steady` could never activate at all — on a
++ * hydrated entry, on a deep link, or in a continuous journey. Measured
++ * (VF-ANCHOR-OBS-1): both real F acts performed, both milestones set, the
++ * activation history empty.
++ *
++ * A refusal is not a fact that stopped being true. It is queued, in the order
++ * the facts actually happened, and retried while this chapter still owns the
++ * beat. NOTHING IS BYPASSED: the retry is the same `activateSignedSceneAnchorById`
++ * call, subject to the same ordering, beat membership and one-shot rules, so an
++ * anchor the rail legitimately refuses stays unactivated and is simply never
++ * reported as having happened.
++ */
++function requestAnchorActivation(anchorId: string): void {
++  if (activateSignedSceneAnchorById(anchorId)) {
++    const at = runtime.pendingAnchors.indexOf(anchorId);
++    if (at >= 0) runtime.pendingAnchors.splice(at, 1);
++    return;
++  }
++  if (!runtime.pendingAnchors.includes(anchorId)) runtime.pendingAnchors.push(anchorId);
++}
++
++/**
++ * Drop anything still waiting. Called at every transition that ends the frame
++ * this queue belongs to: a beat change, a run change, a pause, a visibility
++ * loss, an actor or world change, a reset and the chapter's release.
++ */
++function clearPendingAnchors(): void {
++  runtime.pendingAnchors = [];
++}
++
++/**
++ * Retry, ONCE, on the next frame of the same beat.
++ *
++ * The window is exactly the seam it exists to cross and not one frame more.
++ * Whatever this leaves unactivated is a genuine refusal — an ordering rule, a
++ * one-shot latch, a beat that has moved on — and it is dropped, never carried.
++ * That is what keeps this from becoming a deferred acknowledgement: nothing here
++ * can hold an install receipt across a pause, a mute, an unavailable audio host
++ * or a Continue and then publish it when the coast clears, because the queue is
++ * empty again the moment it has been read.
++ *
++ * The audio eligibility authorities are untouched either way: the mood, the
++ * completion texture and their cancellations are decided by `noteAnchor` at the
++ * instant of the fact, not by whether the AV rail accepted the anchor.
++ */
++function drainPendingAnchors(): void {
++  if (runtime.pendingAnchors.length === 0) return;
++  const pending = runtime.pendingAnchors;
++  runtime.pendingAnchors = [];
++  for (const anchorId of pending) {
++    activateSignedSceneAnchorById(anchorId);
++  }
++  // One retry. A second refusal is a refusal.
++  runtime.pendingAnchors = [];
++}
++
++/**
+  * Muted, silent, or no audio output at all, at the completion edge.
+  *
+  * Settings alone are not the question. A context that was never unlocked, or is
+@@ -503,6 +590,14 @@
+ 
+   // The acknowledgement belongs to the real install boundary and is spent at
+   // most once. A hydrated entry never reaches this line.
++  //
++  // AND IT IS PUBLISHED HERE, AT THE BOUNDARY, WHICH IS BEFORE THE STEADY ENTRY
++  // IT CAUSES. The receipt is signed at order 0 and the steady entry at order 1,
++  // and the rail refuses an anchor that would rewind an already newer one. The
++  // two are published in that causal order — the install reactivates the beat,
++  // and the beat seam then publishes the entry on the following frame — and the
++  // pending queue retries them in the same order, so the one live
++  // acknowledgement can no longer be thrown away by arriving second.
+   if (runtime.installWatch === 'live-install' && !runtime.installAcknowledged) {
+     runtime.installAcknowledged = true;
+     noteAnchor('anc.cg.cell-installed');
+@@ -547,6 +642,9 @@
+   if (runtime.installWatch === 'unknown') {
+     runtime.completionWasRestored = hasMilestone(STORY_MILESTONES.ch13Complete, getLocalActorId());
+   }
++  // A pending activation belongs to the beat whose fact produced it. Carrying it
++  // across a boundary would offer it to a rail that has already moved on.
++  if (leaving !== beat) clearPendingAnchors();
+   runtime.beat = isCommonGroundBeat(beat) ? beat : null;
+   runtime.elapsed = 0;
+   runtime.publishedObjectiveId = null;
+@@ -563,6 +661,9 @@
+   const beat = runtime.beat;
+   if (!beat) return;
+   runtime.elapsed += Math.max(0, dt);
++  // The rail is entered after this chapter's beat seam, so an entry anchor is
++  // published one frame before the runtime can accept it.
++  drainPendingAnchors();
+   tickCommonGroundScore(dt);
+   switch (beat) {
+     case 'ch13-home':
+@@ -582,9 +683,53 @@
+   }
+ }
+ 
+-function player(): CommonGroundPoint {
++/**
++ * Capsule centre -> grounded body origin, in the walker's own gravity frame.
++ *
++ * THE ONE COORDINATE SEAM OF THIS CHAPTER, and it is a physical fact rather than
++ * a tolerance. `getPlayerWorldPosition()` publishes the Rapier body's origin,
++ * which is the CENTRE of the capsule collider `EfficientPlayer` mounts
++ * (`CapsuleCollider [PLAYER_CAPSULE_HALF_HEIGHT, PLAYER_CAPSULE_RADIUS]`). Every
++ * pose this chapter was authored against — `CG_POSES`, the three routes, the
++ * sockets, the occupancy cylinders, the footing columns — is a GROUNDED body
++ * origin: the point the feet contact. The two differ by the half-height plus the
++ * lower cap radius, along the LOCAL up, because this is a cube-gravity world and
++ * "down" is not `-Y` on five of its six faces.
++ *
++ * Reading the raw centre was wrong everywhere, not merely at the rail's arrival
++ * radius: `CommonGroundWorld`'s footing samples `cell(y - 1.05)`, so a centre
++ * 1.8 above the ground column samples the EMPTY cell above it and reports
++ * unsupported — which silently refused the survey start, every trace sample,
++ * every witness offer and the far-reference offer. The shared walker
++ * (`surfaceGaitDistance`) meanwhile measures tangential range, so it stopped on
++ * horizontal distance while this module judged full 3D from 1.8 units up. One
++ * conversion here makes the walker, the terrain and the contract agree.
++ *
++ * NOTHING IS WIDENED, CLAMPED OR SKIPPED. The vertical term stays in every
++ * comparison, so a jumping or floating body is still not standing anywhere: it
++ * is simply measured from where her feet actually are.
++ */
++export const CG_PLAYER_GROUND_OFFSET = PLAYER_CAPSULE_HALF_HEIGHT + PLAYER_CAPSULE_RADIUS;
++
++/**
++ * Where the player's feet ACTUALLY are, this frame.
++ *
++ * Exported for the physical regressions, which must place a capsule centre and
++ * assert against the ground plane rather than standing a body of zero height on
++ * the mark.
++ */
++export function commonGroundPlayerPose(): CommonGroundPoint {
+   const position = getPlayerWorldPosition();
+-  return { x: position.x, y: position.y, z: position.z };
++  const up = getPlayerUp();
++  return {
++    x: position.x - up.x * CG_PLAYER_GROUND_OFFSET,
++    y: position.y - up.y * CG_PLAYER_GROUND_OFFSET,
++    z: position.z - up.z * CG_PLAYER_GROUND_OFFSET
++  };
++}
++
++function player(): CommonGroundPoint {
++  return commonGroundPlayerPose();
+ }
+ 
+ function onOrigin(): boolean {
+@@ -1512,11 +1657,15 @@
+   reason: 'pause' | 'visibility-loss' | 'exit' | 'reset' | 'world-change' | 'actor-change'
+ ): void {
+   cancelCommonGroundFinalTexture(reason);
++  // A suspension ends the frame the retry belongs to. An acknowledgement that
++  // was refused before a pause is not published after it.
++  clearPendingAnchors();
+   const snapshot = readCommonGroundLive(currentWorldId());
+   if (snapshot) releaseLiveOccupancy(snapshot);
+ }
+ 
+ export function releaseCommonGroundChapter(): void {
++  clearPendingAnchors();
+   releaseCommonGroundScore(runtime.beat);
+   releaseCommonGroundActor();
+   runtime.beat = null;
+@@ -1561,6 +1710,112 @@
+   };
+ }
+ 
++/**
++ * READ-ONLY probe snapshot for an independent verifier. Never a progression
++ * source, and never a preparation.
++ *
++ * The existing journey probe can see the player, the worker, receipts and the
++ * AV rail, but nothing of this chapter's own route state — so an independent
++ * measurement could not tell a real survey from a synthetic fixture, could not
++ * see which hold was live, and could not distinguish the capsule centre from
++ * the grounded pose the predicates actually use. That is exactly the seam
++ * VF-RAIL-2 turned out to be.
++ *
++ * Everything below is a copy of a value this module already computes for
++ * gameplay. There is no setter, no handle, no mutable reference and nothing
++ * that can be reached by normal play: `StoryDirectorDriver` publishes it only
++ * under an explicit probe/debug query parameter.
++ */
++export interface CommonGroundProbeSnapshot {
++  beat: StoryBeat | null;
++  /** The raw Rapier capsule centre, as published by the physics body. */
++  bodyCentre: readonly [number, number, number];
++  /** The grounded body origin every predicate in this chapter measures from. */
++  bodyPose: readonly [number, number, number];
++  /** The live local up the conversion above used. */
++  up: readonly [number, number, number];
++  groundOffsetUnits: number;
++  /** Whether the mounted world actually supports her at that grounded pose. */
++  supported: boolean | null;
++  worldBound: boolean;
++  /**
++   * The last plan the screening rail ACTUALLY EXECUTED, copied, or null.
++   *
++   * NOT a fresh call to the planner. `commonGroundRailPlan` advances the ordered
++   * traversal cursor, so asking it what it would do IS the controller taking a
++   * step: a probe that called it would steer the run it claims to be watching,
++   * and in manual play it would run a controller nobody started. Null here means
++   * exactly what it says — no rail has published a plan on this run — and never
++   * a plan invented for the reader.
++   */
++  rail: {
++    action: CommonGroundRailAction;
++    target: readonly [number, number, number] | null;
++    interactionId: string | null;
++    reason: string;
++    arriveRadius: number;
++  } | null;
++  /**
++   * The screening controller's ordered cursor index, or null when no traversal
++   * is in progress. CONTROLLER STATE, exposed only so an observer can tell a
++   * stalled walk from a walked one; no predicate reads it and reading it here
++   * cannot advance it.
++   */
++  railCursor: number | null;
++  /**
++   * The chapter's own score state, copied from the existing pure diagnostic:
++   * which beat it is scoring, the mood actually current, and how far the
++   * live-only completion texture has run. Reading it starts, cancels and
++   * schedules nothing.
++   */
++  score: {
++    beat: StoryBeat | null;
++    mood: string | null;
++    finalTextureSeconds: number | null;
++  };
++  diagnostic: Record<string, unknown>;
++  pendingAnchors: readonly string[];
++}
++
++export function getCommonGroundProbeSnapshot(): CommonGroundProbeSnapshot {
++  const centre = getPlayerWorldPosition();
++  const up = getPlayerUp();
++  const pose = commonGroundPlayerPose();
++  const ground = footing();
++  const plan = runtime.lastPublishedPlan;
++  return {
++    beat: runtime.beat,
++    bodyCentre: [centre.x, centre.y, centre.z],
++    bodyPose: [pose.x, pose.y, pose.z],
++    up: [up.x, up.y, up.z],
++    groundOffsetUnits: CG_PLAYER_GROUND_OFFSET,
++    // A read of the world's own predicate at a pose. It allocates nothing in the
++    // chapter and writes nothing anywhere.
++    supported: ground ? ground.isSupported(pose) : null,
++    worldBound: binding !== null,
++    rail: plan
++      ? {
++          action: plan.action,
++          target: plan.target ? [plan.target[0], plan.target[1], plan.target[2]] : null,
++          interactionId: plan.interactionId,
++          reason: plan.reason,
++          arriveRadius: plan.arriveRadius
++        }
++      : null,
++    railCursor: runtime.railTraversal ? runtime.railTraversal.index : null,
++    score: (() => {
++      const scoreState = getCommonGroundScoreDiagnostic();
++      return {
++        beat: scoreState.beat,
++        mood: scoreState.mood,
++        finalTextureSeconds: scoreState.finalTextureSeconds
++      };
++    })(),
++    diagnostic: getCommonGroundDiagnostic(),
++    pendingAnchors: [...runtime.pendingAnchors]
++  };
++}
++
+ // --- rail plan ------------------------------------------------------------------------
+ //
+ // The ch13 rails use the SAME predicates and the SAME actions the player uses.
+@@ -1936,132 +2191,166 @@
+       }
+       return { ...HOLD, action: 'fly', reason: 'crossing to Origin' };
+     }
+-    case 'ch13-survey': {
+-      const survey = snapshot.survey;
+-      if (survey.phase === 'idle') {
+-        const worker = commonGroundActorPosition();
+-        return distanceBetween(body, worker) > CG_ACTOR_REACH
+-          ? walkTo(worker, 'approaching W-7744', CG_RAIL_BODY_ARRIVE)
+-          : act('story-ch13-offer-route', worker, 'offering to demonstrate a route', CG_RAIL_BODY_ARRIVE);
+-      }
+-      if (survey.phase === 'awaiting-start') {
+-        // ARRIVE, THEN RECORD.
+-        //
+-        // The resolver offers this two units out and a player may take it
+-        // there. The rail must not, because the FIRST SAMPLE IS WRITTEN AT THE
+-        // BODY'S ACTUAL POSE: recording two units short of the start, on the
+-        // approach line in from his inspection pose, put the opening samples in
+-        // the survey housing's shadow and stopped his first-try test on an
+-        // occlusion the authored route does not contain.
+-        //
+-        // So the approach is aimed a step THROUGH the start along the route's
+-        // own first leg. The clean side of the start is the side the route
+-        // leaves by, and aiming through it puts the settling body there instead
+-        // of behind it. The act reach is the aim plus the stop radius, so the
+-        // body can never settle outside the reach it is waiting on.
+-        if (distanceBetween(body, CG_POSES.S) > CG_RAIL_START_AIM + CG_RAIL_ROUTE_ARRIVE) {
+-          return walkTo(
+-            routeHeadApproach(CG_ROUTE_LONG_RAIL), 'walking to the survey start', CG_RAIL_ROUTE_ARRIVE
+-          );
+-        }
+-        return act('story-ch13-survey-start', CG_POSES.S, 'beginning the recording', CG_RAIL_ROUTE_ARRIVE);
+-      }
+-      if (survey.phase === 'drawing') {
+-        // The measured LONG route: supported end to end from the fixed
+-        // reference, so a screening demonstrates the first-try-legal class
+-        // without needing the contingent witness to exist.
+-        // A PLAYER may offer the span anywhere inside the resolver's reach; the
+-        // rail waits until the body has actually ARRIVED at the authored end,
+-        // so the span it demonstrates is the whole walked route rather than one
+-        // that stops two units short of it. This tightens only what the rail
+-        // does, never what the resolver offers.
+-        if (distanceBetween(body, CG_POSES.E) <= CG_RAIL_POSE_ARRIVE
+-          && (survey.working?.samples.length ?? 0) >= 2) {
+-          return act('story-ch13-offer-span', CG_POSES.E, 'offering the walked span');
+-        }
+-        // Ordered traversal, keyed to the revision so a reopened tail is
+-        // rebuilt from his actual last tested pose rather than replayed.
+-        const options: RailRouteOptions = {
+-          arrive: CG_RAIL_ROUTE_ARRIVE,
+-          // The end of this span is a PLACE she has to be near, not a walked
+-          // total, and the fixed reference's range is tight at that corner, so
+-          // the traversal stops at the authored end instead of past it.
+-          terminalOvershoot: 0
+-        };
+-        const key = railRouteKey(`survey-long:${survey.working?.tailRevision ?? 0}`, CG_ROUTE_LONG_RAIL);
+-        return walkTo(
+-          railWaypoint(CG_ROUTE_LONG_RAIL, body, key, options),
+-          'walking the demonstrated route',
+-          CG_RAIL_ROUTE_ARRIVE
+-        );
+-      }
+-      // STAND CLEAR OF HIS TEST. Her last recorded sample is under her own feet,
+-      // and that sample is on the span he now has to walk. A body in the way
+-      // holds him rather than displacing her, so the honest answer is ordinary
+-      // movement off the trace — NOT an intermediate witness, which repairs a
+-      // reference she cannot reach and never repairs her own obstruction.
+-      if (standingOnHisTest(snapshot, body)) {
+-        return walkTo(CG_STANDBY_CLEAR_OF_E, 'standing clear of the span he is testing');
+-      }
+-      if (survey.hold.reason && survey.hold.reason !== 'footing-invalid'
+-        && survey.hold.reason !== 'body-clearance' && !survey.witness?.offered) {
+-        return distanceBetween(body, CG_POSES.W) > CG_POINT_REACH
+-          ? walkTo(CG_POSES.W, `repairing ${survey.hold.reason} by occupying the marked reference`)
+-          : act('story-ch13-hold-witness', CG_POSES.W, 'offering the intermediate reference');
+-      }
+-      if (survey.hold.reason === 'reference-vacant') {
+-        return walkTo(survey.witness?.pose ?? CG_POSES.W, 'returning to the marked reference');
+-      }
+-      if (survey.hold.reason === 'footing-invalid') {
+-        const point = lastTestedPoint(survey.working);
+-        if (!point) return { ...HOLD, reason: 'no tested point to revise from' };
+-        return distanceBetween(body, point) > CG_POINT_REACH
+-          ? walkTo(point, 'returning to the last tested point')
+-          : act('story-ch13-revise-tail', point, 'reopening the untested span');
+-      }
+-      return { ...HOLD, reason: 'following his test' };
+-    }
++    case 'ch13-survey':
+     case 'ch13-common': {
+-      const common = snapshot.common;
+-      if (!common.comparisonProved) {
+-        if (common.stage !== 'holding-h') {
+-          // STAND CLEAR. He walks E -> H, and his first step is off the pose she
+-          // would otherwise be standing on; a body in the way holds him forever
+-          // rather than displacing her, so the honest instruction is to move.
+-          return walkTo(CG_STANDBY_CLEAR_OF_E, 'standing clear while he takes the reference');
+-        }
+-        // The span is measured in WALKED UNITS, so this traversal walks through
+-        // every corner and through the far end. It earns nothing by arriving:
+-        // `routeProgressUnits` still credits only actual displacement inside the
+-        // corridor, frame by frame.
+-        const options: RailRouteOptions = {
+-          arrive: CG_RAIL_ROUTE_ARRIVE,
+-          terminalOvershoot: CG_RAIL_CORNER_OVERSHOOT
+-        };
+-        const key = railRouteKey('common', CG_ROUTE_COMMON);
+-        return walkTo(
+-          railWaypoint(CG_ROUTE_COMMON, body, key, options),
+-          'walking the common span',
+-          CG_RAIL_ROUTE_ARRIVE
+-        );
++      // BOTH OF THESE BEATS HAPPEN ON FOOT.
++      //
++      // The causal owner of the boarded entry is the deep-link seeding in
++      // `storyState.initStoryFromSave`, which is repaired at source. This is the
++      // screening's own recovery, not a substitute for it: if a rail ever finds
++      // itself holding surface FLIGHT controls during an on-foot beat, walking
++      // does nothing at all and the run stalls forever (measured: 243 s, zero
++      // displacement, W-7744 mounted 44 m away). Leaving a landed ship is the
++      // shipped ordinary action a player takes here, through the same
++      // `exitShip` the ch13-return branch below already uses.
++      //
++      // It is NOT a per-frame auto-disembark: this plan is reached only by the
++      // screening rail, only inside these two beats, and only while the ship is
++      // parked on the surface with flight controls held. A player's own
++      // boarding during free movement is never touched, no milestone is
++      // granted, and nothing here advances the chapter.
++      const onFootFlight = getSpaceFlightSnapshot();
++      if (onFootFlight.controlMode === 'flight' && onFootFlight.phase === 'surface') {
++        return { ...HOLD, action: 'exit-ship', reason: 'leaving the landed ship for an on-foot beat' };
+       }
+-      if (!common.finalReferenceOffered) {
+-        // The offer is only accepted from INSIDE the occupancy cylinder, so the
+-        // rail closes to its stop radius before pressing rather than spending
+-        // the cadence on attempts the transaction will refuse.
+-        return distanceBetween(body, CG_POSES.T) > CG_RAIL_POSE_ARRIVE
+-          ? walkTo(CG_POSES.T, 'walking to the far reference')
+-          : act('story-ch13-offer-final-reference', CG_POSES.T, 'offering the far end');
+-      }
+-      return common.finalReferenceOccupied
+-        ? { ...HOLD, reason: 'holding the far reference while he tests' }
+-        : walkTo(CG_POSES.T, 'returning to the far reference');
++      return beat === 'ch13-survey'
++        ? surveyRailPlan(snapshot, body)
++        : commonRailPlan(snapshot, body);
+     }
+     default:
+       return HOLD;
+   }
+ }
+ 
++function surveyRailPlan(
++  snapshot: CommonGroundSnapshot,
++  body: CommonGroundPoint
++): CommonGroundRailPlan {
++  const survey = snapshot.survey;
++if (survey.phase === 'idle') {
++  const worker = commonGroundActorPosition();
++  return distanceBetween(body, worker) > CG_ACTOR_REACH
++    ? walkTo(worker, 'approaching W-7744', CG_RAIL_BODY_ARRIVE)
++    : act('story-ch13-offer-route', worker, 'offering to demonstrate a route', CG_RAIL_BODY_ARRIVE);
++}
++if (survey.phase === 'awaiting-start') {
++  // ARRIVE, THEN RECORD.
++  //
++  // The resolver offers this two units out and a player may take it
++  // there. The rail must not, because the FIRST SAMPLE IS WRITTEN AT THE
++  // BODY'S ACTUAL POSE: recording two units short of the start, on the
++  // approach line in from his inspection pose, put the opening samples in
++  // the survey housing's shadow and stopped his first-try test on an
++  // occlusion the authored route does not contain.
++  //
++  // So the approach is aimed a step THROUGH the start along the route's
++  // own first leg. The clean side of the start is the side the route
++  // leaves by, and aiming through it puts the settling body there instead
++  // of behind it. The act reach is the aim plus the stop radius, so the
++  // body can never settle outside the reach it is waiting on.
++  if (distanceBetween(body, CG_POSES.S) > CG_RAIL_START_AIM + CG_RAIL_ROUTE_ARRIVE) {
++    return walkTo(
++      routeHeadApproach(CG_ROUTE_LONG_RAIL), 'walking to the survey start', CG_RAIL_ROUTE_ARRIVE
++    );
++  }
++  return act('story-ch13-survey-start', CG_POSES.S, 'beginning the recording', CG_RAIL_ROUTE_ARRIVE);
++}
++if (survey.phase === 'drawing') {
++  // The measured LONG route: supported end to end from the fixed
++  // reference, so a screening demonstrates the first-try-legal class
++  // without needing the contingent witness to exist.
++  // A PLAYER may offer the span anywhere inside the resolver's reach; the
++  // rail waits until the body has actually ARRIVED at the authored end,
++  // so the span it demonstrates is the whole walked route rather than one
++  // that stops two units short of it. This tightens only what the rail
++  // does, never what the resolver offers.
++  if (distanceBetween(body, CG_POSES.E) <= CG_RAIL_POSE_ARRIVE
++    && (survey.working?.samples.length ?? 0) >= 2) {
++    return act('story-ch13-offer-span', CG_POSES.E, 'offering the walked span');
++  }
++  // Ordered traversal, keyed to the revision so a reopened tail is
++  // rebuilt from his actual last tested pose rather than replayed.
++  const options: RailRouteOptions = {
++    arrive: CG_RAIL_ROUTE_ARRIVE,
++    // The end of this span is a PLACE she has to be near, not a walked
++    // total, and the fixed reference's range is tight at that corner, so
++    // the traversal stops at the authored end instead of past it.
++    terminalOvershoot: 0
++  };
++  const key = railRouteKey(`survey-long:${survey.working?.tailRevision ?? 0}`, CG_ROUTE_LONG_RAIL);
++  return walkTo(
++    railWaypoint(CG_ROUTE_LONG_RAIL, body, key, options),
++    'walking the demonstrated route',
++    CG_RAIL_ROUTE_ARRIVE
++  );
++}
++// STAND CLEAR OF HIS TEST. Her last recorded sample is under her own feet,
++// and that sample is on the span he now has to walk. A body in the way
++// holds him rather than displacing her, so the honest answer is ordinary
++// movement off the trace — NOT an intermediate witness, which repairs a
++// reference she cannot reach and never repairs her own obstruction.
++if (standingOnHisTest(snapshot, body)) {
++  return walkTo(CG_STANDBY_CLEAR_OF_E, 'standing clear of the span he is testing');
++}
++if (survey.hold.reason && survey.hold.reason !== 'footing-invalid'
++  && survey.hold.reason !== 'body-clearance' && !survey.witness?.offered) {
++  return distanceBetween(body, CG_POSES.W) > CG_POINT_REACH
++    ? walkTo(CG_POSES.W, `repairing ${survey.hold.reason} by occupying the marked reference`)
++    : act('story-ch13-hold-witness', CG_POSES.W, 'offering the intermediate reference');
++}
++if (survey.hold.reason === 'reference-vacant') {
++  return walkTo(survey.witness?.pose ?? CG_POSES.W, 'returning to the marked reference');
++}
++if (survey.hold.reason === 'footing-invalid') {
++  const point = lastTestedPoint(survey.working);
++  if (!point) return { ...HOLD, reason: 'no tested point to revise from' };
++  return distanceBetween(body, point) > CG_POINT_REACH
++    ? walkTo(point, 'returning to the last tested point')
++    : act('story-ch13-revise-tail', point, 'reopening the untested span');
++}
++  return { ...HOLD, reason: 'following his test' };
++}
++
++function commonRailPlan(
++  snapshot: CommonGroundSnapshot,
++  body: CommonGroundPoint
++): CommonGroundRailPlan {
++  const common = snapshot.common;
++if (!common.comparisonProved) {
++  if (common.stage !== 'holding-h') {
++    // STAND CLEAR. He walks E -> H, and his first step is off the pose she
++    // would otherwise be standing on; a body in the way holds him forever
++    // rather than displacing her, so the honest instruction is to move.
++    return walkTo(CG_STANDBY_CLEAR_OF_E, 'standing clear while he takes the reference');
++  }
++  // The span is measured in WALKED UNITS, so this traversal walks through
++  // every corner and through the far end. It earns nothing by arriving:
++  // `routeProgressUnits` still credits only actual displacement inside the
++  // corridor, frame by frame.
++  const options: RailRouteOptions = {
++    arrive: CG_RAIL_ROUTE_ARRIVE,
++    terminalOvershoot: CG_RAIL_CORNER_OVERSHOOT
++  };
++  const key = railRouteKey('common', CG_ROUTE_COMMON);
++  return walkTo(
++    railWaypoint(CG_ROUTE_COMMON, body, key, options),
++    'walking the common span',
++    CG_RAIL_ROUTE_ARRIVE
++  );
++}
++if (!common.finalReferenceOffered) {
++  // The offer is only accepted from INSIDE the occupancy cylinder, so the
++  // rail closes to its stop radius before pressing rather than spending
++  // the cadence on attempts the transaction will refuse.
++  return distanceBetween(body, CG_POSES.T) > CG_RAIL_POSE_ARRIVE
++    ? walkTo(CG_POSES.T, 'walking to the far reference')
++    : act('story-ch13-offer-final-reference', CG_POSES.T, 'offering the far end');
++}
++  return common.finalReferenceOccupied
++    ? { ...HOLD, reason: 'holding the far reference while he tests' }
++    : walkTo(CG_POSES.T, 'returning to the far reference');
++}
++
+ /**
+  * The structural surface a ch13 rail needs. Declared here rather than importing
+  * `RailRuntime`, because `autopilot/primitives.ts` reaches the beat contracts
+@@ -2103,6 +2392,16 @@
+ export function applyCommonGroundRail(ctx: CommonGroundRailContext): CommonGroundRailPlan {
+   ctx.clearControls();
+   const plan = commonGroundRailPlan();
++  // The one place a plan is published, because it is the one place a plan is
++  // acted on. The read-only probe reports THIS, rather than asking the planner
++  // again and thereby stepping the controller it is supposed to be watching.
++  runtime.lastPublishedPlan = {
++    action: plan.action,
++    target: plan.target ? [plan.target[0], plan.target[1], plan.target[2]] : null,
++    interactionId: plan.interactionId,
++    reason: plan.reason,
++    arriveRadius: plan.arriveRadius
++  };
+   const flight = ctx.getSpaceFlightSnapshot();
+   switch (plan.action) {
+     case 'walk': {
+--- a/main/src/story/commonGroundDirector.test.ts
++++ b/main/src/story/commonGroundDirector.test.ts
+@@ -16,9 +16,33 @@
+ import * as THREE from 'three';
+ import { resetProgression, hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
+ import { commitHabitatCorePlacement, resetHabitats } from '../game/systems/habitatSystem.ts';
+-import { getPlayerWorldPosition, setPlayerWorldPosition } from '../state/playerFrame.ts';
++import {
++  getPlayerUp,
++  getPlayerWorldPosition,
++  setPlayerUp,
++  setPlayerWorldPosition
++} from '../state/playerFrame.ts';
+ import { resolveStoryInteraction } from './storyInteractions.ts';
+-import { STORY_MILESTONES, completeChapter13 } from './storyState.ts';
++import {
++  enterShip,
++  exitShip,
++  getSpaceFlightSnapshot,
++  resetTravel
++} from '../state/spaceFlight.ts';
++import {
++  activateSignedSceneAnchorById,
++  enterSignedSceneAvBeat,
++  getSignedSceneAvDebugSnapshot,
++  resetSignedSceneAvRuntime
++} from './signedSceneAvRuntime.ts';
++// The REAL shared gait, not a chord: the rail's arrival radii and the walker's
++// stop radius have to be the same measurement or the movie stalls on the mark.
++import { surfaceGaitDistance } from './autopilot/primitives.ts';
++import {
++  STORY_MILESTONES,
++  completeChapter13,
++  completeStory
++} from './storyState.ts';
+ import {
+   acceptTestedRoute,
+   accumulateTraceDistance,
+@@ -45,6 +69,9 @@
+ } from './commonGroundRoute.ts';
+ import {
+   applyCommonGroundRail,
++  CG_PLAYER_GROUND_OFFSET,
++  getCommonGroundProbeSnapshot,
++  commonGroundPlayerPose,
+   type CommonGroundRailContext,
+   commitCommonGroundDemonstrationOffer,
+   commitCommonGroundFaultReview,
+@@ -66,7 +93,9 @@
+   isCommonGroundBeat,
+   registerCommonGroundWorld,
+   resetCommonGroundRuntime,
+-  tickCommonGround
++  suspendCommonGroundPresentation,
++  tickCommonGround,
++  tickCommonGroundEntry
+ } from './commonGroundDirector.ts';
+ import { resolveStoryObjectiveGuidance } from './storyObjectiveGuidance.ts';
+ import {
+@@ -95,7 +124,27 @@
+   isSupported: point => Math.abs(point.y - 51.05) < 0.001
+ };
+ 
++/**
++ * Stand a REAL BODY on a pose.
++ *
++ * `setPlayerWorldPosition` publishes the Rapier capsule's CENTRE, and the
++ * chapter's poses are grounded body origins. The earlier helper wrote the
++ * authored y straight into the body — a body of zero height — so every rail,
++ * footing, occupancy and socket assertion in this file ran at vertical offset 0
++ * and the whole suite was blind to the live 1.8-unit capsule (VF-RAIL-2). Tests
++ * now place the centre where the physics actually puts it, along the live up.
++ */
+ function standAt(point: { x: number; y: number; z: number }): void {
++  const up = getPlayerUp();
++  setPlayerWorldPosition(new THREE.Vector3(
++    point.x + up.x * CG_PLAYER_GROUND_OFFSET,
++    point.y + up.y * CG_PLAYER_GROUND_OFFSET,
++    point.z + up.z * CG_PLAYER_GROUND_OFFSET
++  ));
++}
++
++/** Raw capsule-centre placement, for the seam's own regressions only. */
++function standCapsuleCentreAt(point: { x: number; y: number; z: number }): void {
+   setPlayerWorldPosition(new THREE.Vector3(point.x, point.y, point.z));
+ }
+ 
+@@ -109,6 +158,9 @@
+ let unbind: (() => void) | null = null;
+ 
+ beforeEach(() => {
++  // The published up is a module singleton; a face test must not leak into the
++  // next case's coordinate frame.
++  setPlayerUp(new THREE.Vector3(0, 1, 0));
+   resetProgression();
+   resetHabitats();
+   clearAllCommonGroundWorlds();
+@@ -1127,6 +1179,8 @@
+ const SCREENING_DWELL_SECONDS = 0.85;
+ /** An ordinary walking pace, in units per second. */
+ const RAIL_WALK_SPEED = 4.5;
++/** The authored grounded plane every ch13 pose sits on. */
++const GROUND_PLANE_Y = CG_POSES.S.y;
+ 
+ interface RailAct {
+   readonly id: string;
+@@ -1161,16 +1215,36 @@
+       ctx.controls.sprint = false;
+       ctx.controls.interact = false;
+     },
+-    /** Faithful to the shared walker: stop inside `stop`, never teleport. */
++    /**
++     * Faithful to the shared walker AND to the body it walks.
++     *
++     * Two things the earlier stub got wrong, and VF-RAIL-2 is what they cost.
++     * It measured a straight 3D chord where `walkToward` measures
++     * `surfaceGaitDistance` — tangential range in the walker's own gravity
++     * frame, plus only the rise/drop it cannot step — and it LERPED the body at
++     * the goal in three dimensions, which quietly sank the capsule centre onto
++     * a ground-authored pose and produced a body of zero height. The real body
++     * is a capsule whose centre rests one standing offset above the surface it
++     * is on; gravity owns that axis and the walk owns the tangent.
++     */
+     walkToward: (goal: THREE.Vector3, stop: number) => {
+       const from = getPlayerWorldPosition().clone();
+-      const distance = from.distanceTo(goal);
++      const up = getPlayerUp();
++      const distance = surfaceGaitDistance(goal, from, up, new THREE.Vector3());
+       if (distance > stop) {
+-        const step = Math.min(RAIL_WALK_SPEED * dt, distance);
+-        const next = from.clone().lerp(goal, step / distance);
+-        pathUnits += from.distanceTo(next);
+-        maxStep = Math.max(maxStep, from.distanceTo(next));
+-        setPlayerWorldPosition(next);
++        const toGoal = goal.clone().sub(from);
++        toGoal.addScaledVector(up, -toGoal.dot(up));
++        const tangential = toGoal.length();
++        if (tangential > 1e-9) {
++          const step = Math.min(RAIL_WALK_SPEED * dt, tangential);
++          const next = from.clone().addScaledVector(toGoal.divideScalar(tangential), step);
++          // Stay on the fixture's ground: the collider rests here, it does not
++          // fly down onto an authored mark.
++          next.addScaledVector(up, GROUND_PLANE_Y + CG_PLAYER_GROUND_OFFSET - next.dot(up));
++          pathUnits += from.distanceTo(next);
++          maxStep = Math.max(maxStep, from.distanceTo(next));
++          setPlayerWorldPosition(next);
++        }
+       }
+       return distance; // the real walker reports the distance BEFORE it moves
+     },
+@@ -1274,7 +1348,8 @@
+       if (plan.reason !== 'walking the demonstrated route' || !plan.target) continue;
+       const index = goalVertexIndex(CG_ROUTE_LONG, plan.target);
+       if (targeted[targeted.length - 1] !== index) targeted.push(index);
+-      const body = getPlayerWorldPosition();
++      // HER FEET, not the capsule centre 1.8 units above them.
++      const body = commonGroundPlayerPose();
+       CG_ROUTE_LONG.forEach((point, at) => {
+         if (Math.hypot(body.x - point.x, body.y - point.y, body.z - point.z) <= 0.6) reached.add(at);
+       });
+@@ -1344,7 +1419,8 @@
+       if (plan.reason !== 'walking the common span' || !plan.target) continue;
+       const index = goalVertexIndex(CG_ROUTE_COMMON, plan.target);
+       if (targeted[targeted.length - 1] !== index) targeted.push(index);
+-      const body = getPlayerWorldPosition();
++      // HER FEET, not the capsule centre 1.8 units above them.
++      const body = commonGroundPlayerPose();
+       CG_ROUTE_COMMON.forEach((point, at) => {
+         if (Math.hypot(body.x - point.x, body.y - point.y, body.z - point.z) <= 0.6) reached.add(at);
+       });
+@@ -1381,7 +1457,7 @@
+     const harness = createRailHarness(0.05);
+     harness.run(600, () => commonGroundSnapshot().common.stage === 'holding-h');
+     harness.run(200, () => {
+-      const body = getPlayerWorldPosition();
++      const body = commonGroundPlayerPose();
+       return goalVertexIndex(CG_ROUTE_COMMON, [body.x, body.y, body.z]) >= 5;
+     });
+     const midUnits = commonGroundSnapshot().common.terraUnits;
+@@ -1473,3 +1549,692 @@
+     void worker;
+   });
+ });
++
++// --- CG-IMPL-006: the live body is a capsule, and its centre is not a pose ----
++//
++// VF-RAIL-2 measured Terra standing ON the survey start for four and a half
++// minutes while the rail's arrival gate could never close: `getPlayerWorldPosition`
++// publishes the Rapier capsule CENTRE (half-height 1.3 + radius 0.5 = 1.8 above
++// the contact point) and every ch13 pose is a grounded body origin. The 3026
++// tests could not see it because they stood a body of zero height on the mark.
++//
++// These regressions place a REAL centre, against the REAL voxel-column footing
++// rule the mounted world uses, and assert from the feet.
++
++/**
++ * The mounted world's actual support test (`CommonGroundWorld.createFooting`):
++ * the column under `y - 1.05`, the cell above it empty, sampled at the body
++ * disc's centre and four lateral offsets. Voxel scale is 2, so the ch13 ground
++ * column is cell 25 and its top face is world y 51.
++ */
++const voxelGround: CommonGroundFooting = {
++  revision: 'voxel-fixture',
++  isSupported: point => {
++    const column = (x: number, z: number): boolean => {
++      if (Math.round((point.y - 1.05) / 2) !== 25) return false;
++      // A flat, solid authored plot around the chapter's poses.
++      return x >= -60 && x <= -10 && z >= -10 && z <= 40;
++    };
++    return column(point.x, point.z)
++      && column(point.x + 0.5, point.z) && column(point.x - 0.5, point.z)
++      && column(point.x, point.z + 0.5) && column(point.x, point.z - 0.5);
++  }
++};
++
++/** The residual the hardware measured: she rests a shade below the nominal plane. */
++const MEASURED_REST_RESIDUAL = 0.06;
++
++describe('the chapter reads the actual physical body, not an idealized mark', () => {
++  it('derives the grounded pose from the real capsule constants and the live up', () => {
++    // The exact figures from `EfficientPlayer`'s CapsuleCollider.
++    expect(CG_PLAYER_GROUND_OFFSET).toBeCloseTo(1.8, 10);
++
++    standCapsuleCentreAt({ x: -26, y: 52.85, z: 12 });
++    expect(commonGroundPlayerPose().y).toBeCloseTo(51.05, 10);
++
++    // The hardware sample: centre 52.79 over an authored plane of 51.05.
++    standCapsuleCentreAt({ x: -26.13, y: 52.79, z: 12 });
++    const feet = commonGroundPlayerPose();
++    expect(feet.y).toBeCloseTo(51.05 - MEASURED_REST_RESIDUAL, 6);
++    expect(distanceFrom(feet, CG_POSES.S)).toBeLessThan(0.2);
++    // ...while the raw centre is 1.7+ away and can never satisfy a subunit gate.
++    expect(distanceFrom(getPlayerWorldPosition(), CG_POSES.S)).toBeGreaterThan(1.7);
++  });
++
++  it('reads the pose along the LIVE up, so another cube face is not a fall', () => {
++    setPlayerUp(new THREE.Vector3(1, 0, 0));
++    standCapsuleCentreAt({ x: 51.05 + CG_PLAYER_GROUND_OFFSET, y: -26, z: 12 });
++    const feet = commonGroundPlayerPose();
++    expect(feet.x).toBeCloseTo(51.05, 10);
++    expect(feet.y).toBeCloseTo(-26, 10);
++  });
++
++  it('begins the recording from a real standing body, at the measured rest height', () => {
++    unbind?.();
++    unbind = registerCommonGroundWorld({ worldId: '', footing: voxelGround, extraSolids: [] });
++    enterCommonGroundBeat('ch13-survey');
++    commonGroundSnapshot().survey.phase = 'awaiting-start';
++
++    // The exact hardware body: capsule centre 52.79 beside S.
++    standCapsuleCentreAt({ x: -26.13, y: 52.79, z: 12 });
++    expect(voxelGround.isSupported(commonGroundPlayerPose())).toBe(true);
++    expect(commitCommonGroundSurveyStart()).toBe(true);
++    expect(commonGroundSnapshot().survey.phase).toBe('drawing');
++    // The first sample is written under her FEET, on the ground she is standing
++    // on — not 1.8 units up in the air where the capsule's origin is.
++    const first = commonGroundSnapshot().survey.working?.samples[0];
++    expect(first?.y).toBeCloseTo(51.05 - MEASURED_REST_RESIDUAL, 6);
++  });
++
++  it('refuses a body of zero height: the old fixture is not a standing player', () => {
++    unbind?.();
++    unbind = registerCommonGroundWorld({ worldId: '', footing: voxelGround, extraSolids: [] });
++    enterCommonGroundBeat('ch13-survey');
++    commonGroundSnapshot().survey.phase = 'awaiting-start';
++
++    // Exactly what `standAt` used to do: the CENTRE placed on the authored pose.
++    // Her feet would then be 1.8 units inside the ground, which is not a place a
++    // body can be, and the mounted world's footing says so.
++    standCapsuleCentreAt(CG_POSES.S);
++    expect(voxelGround.isSupported(commonGroundPlayerPose())).toBe(false);
++    expect(commitCommonGroundSurveyStart()).toBe(false);
++    expect(commonGroundRailPlan().action).toBe('walk');
++  });
++
++  it('grants nothing to a jumping body: standing is standing', () => {
++    unbind?.();
++    unbind = registerCommonGroundWorld({ worldId: '', footing: voxelGround, extraSolids: [] });
++    enterCommonGroundBeat('ch13-survey');
++    commonGroundSnapshot().survey.phase = 'awaiting-start';
++
++    // Mid-jump over the mark: horizontally perfect, vertically airborne.
++    standCapsuleCentreAt({ x: CG_POSES.S.x, y: CG_POSES.S.y + CG_PLAYER_GROUND_OFFSET + 1.2, z: CG_POSES.S.z });
++    expect(voxelGround.isSupported(commonGroundPlayerPose())).toBe(false);
++    expect(commitCommonGroundSurveyStart()).toBe(false);
++    // The rail keeps walking rather than pressing: no phantom arrival.
++    expect(commonGroundRailPlan().action).toBe('walk');
++
++    // She lands. Nothing was granted while she was in the air, and the same
++    // ordinary act now works from the same horizontal place.
++    standAt(CG_POSES.S);
++    expect(commitCommonGroundSurveyStart()).toBe(true);
++  });
++
++  it('refuses the far reference to a body hovering over the occupancy cylinder', () => {
++    unbind?.();
++    unbind = registerCommonGroundWorld({ worldId: '', footing: voxelGround, extraSolids: [] });
++    enterCommonGroundBeat('ch13-common');
++    const snapshot = commonGroundSnapshot();
++    snapshot.common.comparisonProved = true;
++
++    standCapsuleCentreAt({ x: CG_POSES.T.x, y: CG_POSES.T.y + CG_PLAYER_GROUND_OFFSET + 1.4, z: CG_POSES.T.z });
++    expect(commitCommonGroundFinalReferenceOffer()).toBe(false);
++    standAt(CG_POSES.T);
++    expect(commitCommonGroundFinalReferenceOffer()).toBe(true);
++  });
++
++  it('agrees with the shared gait: where the walker stops, the rail can act', () => {
++    // The seam VF-RAIL-2 exposed is a DISAGREEMENT between two measurements.
++    // `walkToward` stops on `surfaceGaitDistance` (tangential range, since the
++    // 1.8-unit drop is well inside GAIT_STEP_DOWN); the director judged full 3D
++    // from the capsule centre. Both must now name the same body.
++    const centre = new THREE.Vector3(
++      CG_POSES.S.x + 0.3, CG_POSES.S.y + CG_PLAYER_GROUND_OFFSET, CG_POSES.S.z
++    );
++    const goal = new THREE.Vector3(CG_POSES.S.x, CG_POSES.S.y, CG_POSES.S.z);
++    const gait = surfaceGaitDistance(goal, centre, new THREE.Vector3(0, 1, 0), new THREE.Vector3());
++    expect(gait).toBeCloseTo(0.3, 6);
++
++    setPlayerWorldPosition(centre);
++    expect(distanceFrom(commonGroundPlayerPose(), CG_POSES.S)).toBeCloseTo(0.3, 6);
++    // The old comparison, for the record: 1.82 from a walker that had stopped.
++    expect(getPlayerWorldPosition().distanceTo(goal)).toBeGreaterThan(1.8);
++  });
++
++  it('walks the long survey to a real F on the mark, from a real capsule body', () => {
++    unbind?.();
++    unbind = registerCommonGroundWorld({ worldId: '', footing: voxelGround, extraSolids: [] });
++    enterCommonGroundBeat('ch13-survey');
++    standAt({ x: CG_POSES.W.x + 5, y: CG_POSES.W.y, z: CG_POSES.W.z });
++
++    const harness = createRailHarness(0.05);
++    harness.run(600, () => commonGroundSnapshot().survey.phase === 'drawing');
++
++    // The act the hardware could never reach, now reached by a body whose
++    // centre is 1.8 units above every authored mark it walks to.
++    expect(harness.acts.map(act => act.id)).toContain('story-ch13-survey-start');
++    expect(commonGroundSnapshot().survey.phase).toBe('drawing');
++    expect(getPlayerWorldPosition().y).toBeCloseTo(CG_POSES.S.y + CG_PLAYER_GROUND_OFFSET, 6);
++  });
++});
++
++// --- CG-IMPL-007: the screening's own recovery from a boarded on-foot beat ---
++
++describe('an on-foot ch13 beat is never walked from inside the ship', () => {
++  afterEach(() => {
++    resetTravel();
++  });
++
++  it('leaves a landed ship on the two on-foot beats, and only then walks', () => {
++    // The boot owner is repaired in `storyState`; this is the rail refusing to
++    // stall if it ever holds flight controls during a beat that is walked.
++    for (const beat of ['ch13-survey', 'ch13-common'] as const) {
++      resetTravel();
++      enterCommonGroundBeat(beat);
++      standAt(CG_POSES.E);
++      expect(commonGroundRailPlan().action, `${beat} on foot`).not.toBe('exit-ship');
++
++      expect(enterShip()).toBe(true);
++      expect(getSpaceFlightSnapshot()).toMatchObject({ phase: 'surface', controlMode: 'flight' });
++      const boarded = commonGroundRailPlan();
++      expect(boarded.action, beat).toBe('exit-ship');
++      // It grants nothing on the way out.
++      expect(boarded.interactionId).toBeNull();
++      expect(hasMilestone(STORY_MILESTONES.ch13RouteTested), beat).toBe(false);
++      expect(hasMilestone(STORY_MILESTONES.ch13Complete), beat).toBe(false);
++
++      // And the shipped exit is what the rail body actually presses.
++      const ctx = {
++        controls: { forward: false, jump: false, sprint: false, interact: false },
++        _goalScratch: new THREE.Vector3(),
++        clearControls: () => undefined,
++        walkToward: () => 0,
++        getPlayerWorldPosition: () => getPlayerWorldPosition(),
++        enterShip: () => undefined,
++        exitShip: () => { exitShip(); },
++        getSpaceFlightSnapshot,
++        performStoryInteraction: () => false
++      };
++      applyCommonGroundRail(ctx as unknown as CommonGroundRailContext);
++      expect(getSpaceFlightSnapshot(), beat)
++        .toMatchObject({ phase: 'surface', controlMode: 'fps' });
++      expect(commonGroundRailPlan().action, `${beat} recovered`).not.toBe('exit-ship');
++    }
++  });
++
++  it('does not disembark anybody on the beats that are flown', () => {
++    // ch13-return is the beat that boards, lifts, crosses and lands. Its own
++    // exit-ship branch belongs to the landing, not to holding flight controls,
++    // and nothing above may have reached it.
++    resetTravel();
++    enterCommonGroundBeat('ch13-return');
++    markMilestone(STORY_MILESTONES.ch13ReturnChosen);
++    expect(enterShip()).toBe(true);
++    const plan = commonGroundRailPlan();
++    // Not on the origin in this fixture, so it is still the launch/crossing
++    // sequence — never an immediate disembark.
++    expect(plan.action).not.toBe('exit-ship');
++    expect(getSpaceFlightSnapshot()).toMatchObject({ controlMode: 'flight' });
++  });
++});
++
++// --- CG-IMPL-008: the home anchors, through the REAL signed AV runtime -------
++//
++// No spy, no always-success mock. These drive `signedSceneAvRuntime` itself, in
++// the exact order the shared story director uses it, and read its own
++// activation history. VF-ANCHOR-OBS-1 measured a hydrated ch13-home performing
++// both real F acts, setting both milestones, and activating nothing at all.
++
++/**
++ * The shipped beat seam, in its real order.
++ *
++ * `emergentStoryDirector.enterEmergentBeat` calls `enterCommonGroundBeat(beat)`
++ * FIRST and `enterSignedSceneAvBeat(beat)` after it, so anything this chapter
++ * publishes at entry is offered to a rail still sitting on the previous beat.
++ * Reproducing that order is the whole point: reversing it here would hide the
++ * defect exactly as the old always-success spy did.
++ */
++function enterBeatThroughTheRealSeam(beat: 'ch13-home' | 'ch13-return' | 'ch13-survey' | 'ch13-common'): void {
++  enterCommonGroundBeat(beat);
++  enterSignedSceneAvBeat(beat, 'quit');
++}
++
++function activatedAnchors(): string[] {
++  return getSignedSceneAvDebugSnapshot().activationHistoryAnchorIds;
++}
++
++/** The prior station-continuation contract's receipts. Read, never reissued. */
++function seedPriorBoundaryReceipts(): void {
++  markMilestone('story:ch11-station-departed');
++  markMilestone('story:ch12-bonded-cell-installed');
++  markMilestone('story:ch12-hearth-restored');
++}
++
++function standTidegardenHome(): void {
++  resetSystemFlightForInterstellarArrival({
++    system: STORY_COORDINATE,
++    locationMode: 'surface',
++    activePlanetId: TIDEGARDEN_WORLD_ID,
++    pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
++  });
++  resetTravel();
++  expect(commitHabitatCorePlacement({
++    actorId: 'local',
++    worldId: TIDEGARDEN_WORLD_ID,
++    shelterId: 'ch13-anchor-fixture',
++    cell: [0, 0, 0],
++    supportCell: [0, -1, 0],
++    position: [-20, 51.05, 30],
++    up: [0, 1, 0],
++    eventId: 'ch13-anchor-fixture'
++  })).toBe(true);
++  standAt({ x: -20, y: 51.05, z: 31 });
++}
++
++describe('the home anchors activate from their real facts, in the signed order', () => {
++  beforeEach(() => {
++    resetSignedSceneAvRuntime('sandbox');
++  });
++
++  afterEach(() => {
++    resetSignedSceneAvRuntime('sandbox');
++    resetTravel();
++  });
++
++  it('publishes the ONE live install acknowledgement before the steady entry', () => {
++    // A session that watched the pre-install state and then saw the receipt
++    // appear is the only session that earns the acknowledgement.
++    completeStory();
++    standTidegardenHome();
++    expect(tickCommonGroundEntry(0.016)).toBe(false); // pre-install: nothing yet
++    expect(activatedAnchors()).toEqual([]);
++
++    seedPriorBoundaryReceipts();
++    // The install boundary itself: the receipt appears, the watch sees the edge,
++    // the beat re-activates and the one acknowledgement is published.
++    expect(tickCommonGroundEntry(0.016)).toBe(true);
++    // `reactivateStoryAtBeat` publishes synchronously, so the shared director's
++    // whole beat seam has ALREADY run inside that call: this chapter's entry
++    // published the steady anchor (refused — the rail was still on the previous
++    // beat, and it is queued), the rail then arrived at ch13-home, and only then
++    // did the install boundary above publish its receipt. The receipt is signed
++    // at order 0 and the steady entry at order 1, and that is the order they
++    // reach the rail.
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toEqual(['anc.cg.cell-installed', 'anc.cg.home-steady']);
++
++    // Exactly one acknowledgement, however many frames run.
++    tickCommonGroundEntry(0.016);
++    tickCommonGround(0.016);
++    expect(activatedAnchors().filter(id => id === 'anc.cg.cell-installed')).toHaveLength(1);
++
++    // And the later real F acts still carry their own anchors.
++    standAt({ x: -20, y: 51.05, z: 31 });
++    expect(commitCommonGroundFaultReview()).toBe(true);
++    expect(commitCommonGroundReturnChoice()).toBe(true);
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toEqual([
++      'anc.cg.cell-installed',
++      'anc.cg.home-steady',
++      'anc.cg.fault-reviewed',
++      'anc.cg.return-chosen'
++    ]);
++  });
++
++  it('restores a hydrated entry silently and STILL activates every later anchor', () => {
++    // The measured defect. A restored save cannot produce the live install
++    // receipt, and the contract says it must not: "a hydrated entry is steady
++    // and silent and consumes no second cell". That may not make the rest of
++    // the beat unreachable.
++    seedPriorBoundaryReceipts();
++    enterBeatThroughTheRealSeam('ch13-home');
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toEqual(['anc.cg.home-steady']);
++    expect(activatedAnchors()).not.toContain('anc.cg.cell-installed');
++
++    standAt({ x: -20, y: 51.05, z: 31 });
++    expect(commitCommonGroundFaultReview()).toBe(true);
++    tickCommonGround(0.016);
++    expect(commitCommonGroundReturnChoice()).toBe(true);
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toEqual([
++      'anc.cg.home-steady',
++      'anc.cg.fault-reviewed',
++      'anc.cg.return-chosen'
++    ]);
++    // And the release is the one the score contract binds to return-chosen:
++    // handed back to the world conductor, no beat and no override held.
++    expect(getCommonGroundScoreDiagnostic().beat).toBeNull();
++    expect(getCommonGroundScoreDiagnostic().mood).toBeNull();
++  });
++
++  it('does not spend a refused activation: the fact is retried, never faked', () => {
++    seedPriorBoundaryReceipts();
++    // The rail is NOT at the beat yet — exactly the live seam order.
++    enterCommonGroundBeat('ch13-home');
++    expect(activatedAnchors()).toEqual([]);
++    // The old code latched here and the anchor was gone forever.
++    enterSignedSceneAvBeat('ch13-home', 'quit');
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toEqual(['anc.cg.home-steady']);
++    // The retry is idempotent: it does not republish on later frames.
++    tickCommonGround(0.016);
++    tickCommonGround(0.016);
++    expect(activatedAnchors().filter(id => id === 'anc.cg.home-steady')).toHaveLength(1);
++  });
++
++  it('blocks the entry on a missing receipt, the wrong world and the wrong actor', () => {
++    completeStory();
++    standTidegardenHome();
++
++    // Missing receipt: no install, no entry, no anchor.
++    markMilestone('story:ch11-station-departed');
++    expect(tickCommonGroundEntry(0.016)).toBe(false);
++    expect(activatedAnchors()).toEqual([]);
++
++    // All receipts, but she is not on Tidegarden's surface on foot.
++    seedPriorBoundaryReceipts();
++    resetSystemFlightForInterstellarArrival({
++      system: STORY_COORDINATE,
++      locationMode: 'surface',
++      activePlanetId: STORY_PRIMARY_WORLD_ID,
++      pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
++    });
++    expect(tickCommonGroundEntry(0.016)).toBe(false);
++    expect(activatedAnchors()).toEqual([]);
++
++    // Another actor's saved chapter never grafts onto this one.
++    const foreign = commonGroundSnapshot(TIDEGARDEN_WORLD_ID);
++    expect(foreign.actorId).toBe('local');
++    clearCommonGroundWorld(TIDEGARDEN_WORLD_ID);
++    stageCommonGroundWorldPayload(TIDEGARDEN_WORLD_ID, {
++      version: 1,
++      actorId: 'somebody-else',
++      worldId: TIDEGARDEN_WORLD_ID,
++      home: { faultReviewed: true, returnChosen: true },
++      survey: {
++        phase: 'idle', accepted: null, working: null, witness: null,
++        hold: { reason: null, atIndex: -1 }, approached: false, testedIndex: -1,
++        workerPose: null, revisionReady: false
++      },
++      common: {
++        stage: 'none', terraUnits: 0, comparisonProved: false,
++        finalReferenceOffered: false, workerUnits: 0, workerPose: null, committed: false
++      }
++    });
++    expect(commonGroundSnapshot(TIDEGARDEN_WORLD_ID).home.faultReviewed).toBe(false);
++  });
++
++  it('is replay- and reset-safe: a new run re-earns its anchors from zero', () => {
++    seedPriorBoundaryReceipts();
++    enterBeatThroughTheRealSeam('ch13-home');
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toEqual(['anc.cg.home-steady']);
++
++    resetCommonGroundRuntime({ clearWorlds: true });
++    resetSignedSceneAvRuntime('sandbox');
++    expect(activatedAnchors()).toEqual([]);
++    // Nothing pending survives a reset and re-fires into the next run.
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toEqual([]);
++
++    enterBeatThroughTheRealSeam('ch13-home');
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toEqual(['anc.cg.home-steady']);
++  });
++
++  it('never defers an acknowledgement across a pause, a mute or a Continue', () => {
++    // The retry window is the one frame of the entry seam and nothing more.
++    // A refusal that survives it is a refusal: it is dropped, so no install
++    // receipt can be held back and then published when the coast clears.
++    seedPriorBoundaryReceipts();
++    enterCommonGroundBeat('ch13-home');           // published; the rail is elsewhere
++    expect(activatedAnchors()).toEqual([]);
++    suspendCommonGroundPresentation('pause');     // the frame it belonged to ends
++    enterSignedSceneAvBeat('ch13-home', 'quit');
++    tickCommonGround(0.016);
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toEqual([]);
++    // ...and the local latch is not a claim that it activated.
++    expect((getCommonGroundDiagnostic().anchors as string[])).toContain('anc.cg.home-steady');
++  });
++
++  it('drops a pending activation at a beat transition rather than carrying it', () => {
++    seedPriorBoundaryReceipts();
++    enterCommonGroundBeat('ch13-home');
++    enterCommonGroundBeat('ch13-return');
++    enterSignedSceneAvBeat('ch13-return', 'quit');
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).not.toContain('anc.cg.home-steady');
++  });
++
++  it('lets a first-try legal survey reach route-tested with no contingency at all', () => {
++    // The same category error, downstream: the signed contingent anchors were
++    // treated as prerequisites, so a route that never needed a hold, a witness
++    // or a revision could never publish the anchor for completing.
++    enterBeatThroughTheRealSeam('ch13-survey');
++    // Every act below is the live resolver's, pressed by the screening rail
++    // through the shared performer: the offer, the start, the walk and the span.
++    standAt({ x: CG_POSES.W.x + 5, y: CG_POSES.W.y, z: CG_POSES.W.z });
++    const harness = createRailHarness(0.05);
++    harness.run(400, () => commonGroundSnapshot().survey.phase === 'drawing');
++    harness.run(6000, () => commonGroundSnapshot().survey.phase === 'tested');
++    expect(commonGroundSnapshot().survey.phase).toBe('tested');
++    expect(commonGroundSnapshot().survey.accepted?.routeClass).toBe('fixed-reference');
++
++    const fired = activatedAnchors();
++    expect(fired).toContain('anc.cg.route-offered');
++    expect(fired).toContain('anc.cg.route-tested');
++    // ...and no contingency was invented to get there.
++    for (const contingent of [
++      'anc.cg.specific-hold', 'anc.cg.witness-held', 'anc.cg.witness-vacated',
++      'anc.cg.test-resumed', 'anc.cg.tail-reopened', 'anc.cg.route-revised'
++    ]) {
++      expect(fired, contingent).not.toContain(contingent);
++    }
++  });
++});
++
++// --- the common beat, with a real body and an honest fixture ----------------
++
++describe('the reciprocal comparison measures a real standing body', () => {
++  it('accrues her passage while she actually walks it, and not before', () => {
++    unbind?.();
++    unbind = registerCommonGroundWorld({ worldId: '', footing: voxelGround, extraSolids: [] });
++    enterCommonGroundBeat('ch13-common');
++    standAt(CG_POSES.E);
++    const harness = createRailHarness(0.05);
++    // He takes the reference at H first — the rail steps her clear of his leg
++    // rather than being displaced — and her span is not measured until he has.
++    harness.run(1200, () => commonGroundSnapshot().common.stage === 'holding-h');
++    expect(commonGroundSnapshot().common.stage).toBe('holding-h');
++    expect(commonGroundSnapshot().common.terraUnits).toBe(0);
++
++    harness.run(4000, () => commonGroundSnapshot().common.comparisonProved);
++    expect(commonGroundSnapshot().common.terraUnits).toBeCloseTo(CG_COMMON_ROUTE_UNITS, 3);
++    expect(commonGroundSnapshot().common.comparisonProved).toBe(true);
++    // Her feet ended on the far end of the authored span.
++    expect(distanceFrom(commonGroundPlayerPose(), CG_POSES.C)).toBeLessThan(1);
++  });
++
++  it('measures nothing at all for a body of zero height', () => {
++    // The old fixture, restated as the negative it is: a centre standing on the
++    // authored plane has its feet inside the ground, the walked segment is not
++    // supported, and no unit of the comparison may be credited to it.
++    unbind?.();
++    unbind = registerCommonGroundWorld({ worldId: '', footing: voxelGround, extraSolids: [] });
++    enterCommonGroundBeat('ch13-common');
++    standAt({ x: CG_POSES.E.x, y: CG_POSES.E.y, z: CG_POSES.E.z - 3 });
++    for (let frame = 0; frame < 400; frame += 1) tickCommonGround(0.05);
++    expect(commonGroundSnapshot().common.stage).toBe('holding-h');
++
++    for (const point of CG_ROUTE_COMMON) {
++      standCapsuleCentreAt(point);
++      tickCommonGround(0.05);
++    }
++    expect(commonGroundSnapshot().common.terraUnits).toBe(0);
++    expect(commonGroundSnapshot().common.comparisonProved).toBe(false);
++  });
++
++  it('tells an unearned debug fixture apart from a real survey behind it', () => {
++    // A deep link into ch13-common is a SYNTHETIC state: the survey it claims to
++    // follow was never walked. The chapter says so rather than pretending, and
++    // it grants nothing for standing in it.
++    enterCommonGroundBeat('ch13-common');
++    standAt(CG_POSES.E);
++    tickCommonGround(0.05);
++    const diagnostic = getCommonGroundDiagnostic();
++    expect((diagnostic.survey as Record<string, unknown>).acceptedSamples).toBe(0);
++    expect((diagnostic.survey as Record<string, unknown>).acceptedClass).toBeNull();
++    expect((diagnostic.common as Record<string, unknown>).comparisonProved).toBe(false);
++    expect(hasMilestone(STORY_MILESTONES.ch13RouteTested)).toBe(false);
++    expect(hasMilestone(STORY_MILESTONES.ch13Complete)).toBe(false);
++    // ...and a hydrated Continue that DID earn one is a different state, read
++    // from the same accessor.
++    const snapshot = commonGroundSnapshot();
++    snapshot.survey.working = createTraceSlot({ ...CG_POSES.S, corner: true });
++    appendTraceSample(snapshot.survey.working, { ...CG_POSES.E, corner: false });
++    markTestedPrefix(snapshot.survey.working, 2);
++    acceptTestedRoute(snapshot, 'fixed-reference');
++    expect((getCommonGroundDiagnostic().survey as Record<string, unknown>).acceptedClass)
++      .toBe('fixed-reference');
++  });
++});
++
++// --- read-only observability -------------------------------------------------
++
++describe('the chapter can be observed without being touched', () => {
++  it('reports the real capsule centre, the grounded pose and the frame between', () => {
++    unbind?.();
++    unbind = registerCommonGroundWorld({ worldId: '', footing: voxelGround, extraSolids: [] });
++    enterCommonGroundBeat('ch13-survey');
++    standCapsuleCentreAt({ x: -26.13, y: 52.79, z: 12 });
++
++    const probe = getCommonGroundProbeSnapshot();
++    expect(probe.beat).toBe('ch13-survey');
++    expect(probe.bodyCentre[1]).toBeCloseTo(52.79, 6);
++    expect(probe.bodyPose[1]).toBeCloseTo(52.79 - CG_PLAYER_GROUND_OFFSET, 6);
++    expect(probe.up).toEqual([0, 1, 0]);
++    expect(probe.groundOffsetUnits).toBeCloseTo(1.8, 10);
++    expect(probe.supported).toBe(true);
++    expect(probe.worldBound).toBe(true);
++    expect(probe.pendingAnchors).toEqual([]);
++    // No rail has run, so there is no plan — not an invented one.
++    expect(probe.rail).toBeNull();
++    // And the chapter's own score state, so a verifier can record the mood that
++    // is actually current and how far the live completion texture has run.
++    expect(probe.score.beat).toBe('ch13-survey');
++    expect(probe.score.finalTextureSeconds).toBeNull();
++    expect(probe.score.mood).toBe(getCommonGroundScoreDiagnostic().mood);
++  });
++
++  it('reports the plan the rail EXECUTED, and never runs the planner itself', () => {
++    // Observer effect. `commonGroundRailPlan` advances the ordered traversal
++    // cursor, so a probe that called it would steer the run it is watching —
++    // and in manual play would run a controller nobody started.
++    unbind?.();
++    unbind = registerCommonGroundWorld({ worldId: '', footing: voxelGround, extraSolids: [] });
++    enterCommonGroundBeat('ch13-survey');
++    commonGroundSnapshot().survey.phase = 'drawing';
++    commonGroundSnapshot().survey.working = createTraceSlot({ ...CG_POSES.S, corner: true });
++    standAt(CG_POSES.S);
++
++    const harness = createRailHarness(0.05);
++    harness.run(40);
++    const executed = getCommonGroundProbeSnapshot().rail;
++    expect(executed).not.toBeNull();
++    expect(executed?.reason).toBe('walking the demonstrated route');
++
++    // Put the body ON a later vertex, where one call to the planner WOULD
++    // consume vertices and move the cursor on.
++    standAt(CG_ROUTE_LONG[3]);
++    const cursorBefore = getCommonGroundProbeSnapshot().railCursor;
++    expect(cursorBefore).not.toBeNull();
++    const stateBefore = JSON.stringify(getCommonGroundDiagnostic());
++    const bodyBefore = commonGroundPlayerPose();
++    const railBefore = getCommonGroundProbeSnapshot().rail;
++
++    // A hundred reads move nothing: not the cursor, not the body, not a unit,
++    // not an anchor, not a milestone.
++    for (let read = 0; read < 100; read += 1) getCommonGroundProbeSnapshot();
++    expect(getCommonGroundProbeSnapshot().railCursor).toBe(cursorBefore);
++    expect(JSON.stringify(getCommonGroundDiagnostic())).toBe(stateBefore);
++    expect(commonGroundPlayerPose()).toEqual(bodyBefore);
++    expect(getCommonGroundProbeSnapshot().rail).toEqual(railBefore);
++    expect(hasMilestone(STORY_MILESTONES.ch13RouteTested)).toBe(false);
++
++    // (That the rail itself DOES advance this cursor is proved by the ordered
++    // traversal cases above; this one is only about the observer.)
++  });
++
++  it('is a copy, and cannot be used to change anything', () => {
++    enterCommonGroundBeat('ch13-survey');
++    standAt(CG_POSES.S);
++    applyCommonGroundRail(createRailHarness(0.05).ctx as unknown as CommonGroundRailContext);
++    const before = getCommonGroundProbeSnapshot();
++    (before.pendingAnchors as string[]).push('anc.cg.route-tested');
++    (before.diagnostic as Record<string, unknown>).beat = 'ch13-common';
++    if (before.rail?.target) {
++      (before.rail.target as unknown as number[])[0] = 999;
++      before.rail.interactionId = 'story-ch13-survey-start';
++    }
++    const after = getCommonGroundProbeSnapshot();
++    expect(after.pendingAnchors).toEqual([]);
++    expect(after.diagnostic.beat).toBe('ch13-survey');
++    expect(after.rail?.target?.[0]).not.toBe(999);
++    // And no milestone, anchor or unit moved because it was read.
++    expect(hasMilestone(STORY_MILESTONES.ch13RouteTested)).toBe(false);
++  });
++});
++
++// --- CG-IMPL-008, mid-beat Continue: an earned predecessor is not a pending one
++
++describe('a Continue that already earned an anchor does not block the next one', () => {
++  beforeEach(() => {
++    resetSignedSceneAvRuntime('sandbox');
++  });
++
++  afterEach(() => {
++    resetSignedSceneAvRuntime('sandbox');
++  });
++
++  it('activates return-chosen after a restore that already reviewed the fault', () => {
++    // The mid-beat Continue the anchor ledger cannot see: the review really
++    // happened, in an earlier session, and its receipt is durable. The AV rail
++    // clears activatedAnchorIds at beat entry, so anc.cg.fault-reviewed (order 2,
++    // required) is unactivated in THIS runtime and must not be replayed - while
++    // the new, real return-choice F must still carry its own anchor.
++    markMilestone(STORY_MILESTONES.ch13FaultReviewed);
++    const snapshot = commonGroundSnapshot();
++    snapshot.home.faultReviewed = true;
++
++    enterBeatThroughTheRealSeam('ch13-home');
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toEqual(['anc.cg.home-steady']);
++
++    expect(commitCommonGroundReturnChoice()).toBe(true);
++    tickCommonGround(0.016);
++    expect(hasMilestone(STORY_MILESTONES.ch13ReturnChosen)).toBe(true);
++    expect(activatedAnchors()).toContain('anc.cg.return-chosen');
++    // ...and the review it did not perform is NOT replayed into the ledger.
++    expect(activatedAnchors()).not.toContain('anc.cg.fault-reviewed');
++  });
++
++  it('still refuses the next anchor when its predecessor was never earned', () => {
++    // The exemption is a RECEIPT, not a bypass. With no review receipt at all,
++    // the return choice cannot be committed and its anchor cannot activate.
++    enterBeatThroughTheRealSeam('ch13-home');
++    tickCommonGround(0.016);
++    expect(commitCommonGroundReturnChoice()).toBe(false);
++    expect(activateSignedSceneAnchorById('anc.cg.return-chosen')).toBe(false);
++    expect(activatedAnchors()).toEqual(['anc.cg.home-steady']);
++  });
++
++  it('resumes a mid-common Continue: an earned crossing is not a pending one', () => {
++    // The same shape one beat later. A save taken after the reciprocal crossing
++    // and reloaded before the far-reference offer holds the crossing's receipt;
++    // it must not be replayed, and the offer she then actually makes must still
++    // publish.
++    markMilestone(STORY_MILESTONES.ch13ReciprocalCrossed);
++    enterBeatThroughTheRealSeam('ch13-common');
++    const snapshot = commonGroundSnapshot();
++    snapshot.common.stage = 'holding-h';
++    snapshot.common.terraUnits = CG_COMMON_ROUTE_UNITS;
++    snapshot.common.comparisonProved = true;
++    standAt(CG_POSES.T);
++    expect(commitCommonGroundFinalReferenceOffer()).toBe(true);
++    tickCommonGround(0.016);
++    expect(activatedAnchors()).toContain('anc.cg.final-reference-offered');
++    expect(activatedAnchors()).not.toContain('anc.cg.reciprocal-crossed');
++  });
++});
+--- a/main/src/story/commonGroundRoute.ts
++++ b/main/src/story/commonGroundRoute.ts
+@@ -440,6 +440,29 @@
+  * Endpoint proximity is NOT progress. A body must actually traverse the span,
+  * so progress advances only while the body is near the segment it claims to be
+  * walking, and never jumps ahead of the segment it has reached.
++ *
++ * THE FRONTIER RULE IS DELIBERATE, and the recorded manual-corner risk
++ * (`producer-manual-corner-risk.json`) is its cost, not a defect in it.
++ * `commonGroundRoute.test.ts` reproduces that risk from real per-frame
++ * displacement: turning 0.18 units before the first vertex leaves every later
++ * projection permanently beyond `previousUnits + displacement`, so the credited
++ * span holds at four while the body walks the remaining fourteen units, and
++ * three hundred further units of walking on and looping at the far end recover
++ * nothing at all.
++ *
++ * The same tests show that is a LOCK ONLY IF THE BODY NEVER GOES BACK. Walking
++ * back along the route to the frontier it actually reached and re-traversing
++ * from there credits the full eighteen units exactly — ordinary movement, no
++ * reset, no second F, no new marker, and the four units earned before the
++ * deviation are retained throughout.
++ *
++ * The cheaper reconciliation — letting the frontier creep toward the body's own
++ * projection at walking pace — was implemented, measured and REMOVED: it pays
++ * for the omitted wedge with displacement spent anywhere in the corridor,
++ * including a wiggle at the far end, which the chapter's signed reading of
++ * `#/story/events/21` and `#/guidance/objectives/13` forbids. Making the
++ * recovery cheaper is a creative question about the cost of a steering error,
++ * not an implementation defect, and it is reported rather than decided here.
+  */
+ export function routeProgressUnits(
+   route: readonly CommonGroundPoint[],
+--- a/main/src/story/commonGroundRoute.test.ts
++++ b/main/src/story/commonGroundRoute.test.ts
+@@ -281,6 +281,147 @@
+   });
+ });
+ 
++// --- the recorded manual-corner risk, reproduced from real displacement ------
++//
++// `producer-manual-corner-risk.json`: a director test turned at z 15.82, before
++// the vertex at z 16, and the credited span stalled at 4 units while the body
++// went on walking the rest of the route. The browser never reached this, so the
++// reproduction is here, at walking pace, from the body's own frame-by-frame
++// displacement.
++//
++// The conclusion is NOT a source repair. It is that the recorded stall is a lock
++// only for a body that never goes back: returning to its own frontier and
++// re-traversing credits the full eighteen units exactly, with the progress
++// earned before the deviation retained. Everything below is the evidence for
++// that, including the adversarial cases a cheaper reconciliation would have
++// broken.
++
++describe('a steering error costs a re-walk, and nothing cheaper pays for it', () => {
++  const STEP = 4.5 / 60; // an ordinary walking pace at 60 Hz
++
++  /** Walk a piecewise path at walking pace, feeding real per-frame displacement. */
++  function stroll(
++    waypoints: readonly { x: number; z: number }[],
++    start: { x: number; y: number; z: number },
++    units = 0
++  ): { at: { x: number; y: number; z: number }; units: number; walked: number } {
++    let at = { ...start };
++    let walked = 0;
++    for (const waypoint of waypoints) {
++      const goal = { x: waypoint.x, y: CG_POSES.E.y, z: waypoint.z };
++      for (let guard = 0; guard < 20000; guard += 1) {
++        const remaining = Math.hypot(goal.x - at.x, goal.z - at.z);
++        if (remaining <= 1e-9) break;
++        const step = Math.min(STEP, remaining);
++        const next = {
++          x: at.x + ((goal.x - at.x) * step) / remaining,
++          y: at.y,
++          z: at.z + ((goal.z - at.z) * step) / remaining
++        };
++        const displacement = Math.hypot(next.x - at.x, next.z - at.z);
++        walked += displacement;
++        at = next;
++        units = routeProgressUnits(CG_ROUTE_COMMON, at, units, displacement);
++      }
++    }
++    return { at, units, walked };
++  }
++
++  const FORWARD = CG_ROUTE_COMMON.slice(1).map(point => ({ x: point.x, z: point.z }));
++  /** The recorded body: it turns 0.18 units early, then walks every later leg. */
++  const EARLY_TURN: readonly { x: number; z: number }[] = [
++    { x: -42, z: 15.82 }, { x: -44, z: 16 }, { x: -44, z: 18 }, { x: -46, z: 18 },
++    { x: -48, z: 18 }, { x: -48, z: 16 }, { x: -48, z: 14 }, { x: -48, z: 12 }
++  ];
++
++  it('credits an exactly walked route exactly, at walking pace', () => {
++    const clean = stroll(FORWARD, CG_POSES.E);
++    expect(clean.walked).toBeCloseTo(CG_COMMON_ROUTE_UNITS, 6);
++    expect(clean.units).toBeCloseTo(CG_COMMON_ROUTE_UNITS, 6);
++  });
++
++  it('REPRODUCES the recorded stall: 17.83 units walked, 4 credited', () => {
++    const early = stroll(EARLY_TURN, CG_POSES.E);
++    expect(early.walked).toBeCloseTo(17.83, 1);
++    expect(early.units).toBeCloseTo(4, 6);
++  });
++
++  it('will not be paid off by wiggling at the far end, or by an unrelated loop', () => {
++    // This is the distinction the chapter's reading turns on: reaching a later
++    // segment and moving about there is not the omitted ground.
++    const early = stroll(EARLY_TURN, CG_POSES.E);
++    const wiggled = stroll([
++      { x: -48, z: 12.5 }, { x: -48, z: 12 }, { x: -48, z: 12.5 }, { x: -48, z: 12 }
++    ], early.at, early.units);
++    expect(wiggled.units).toBeCloseTo(4, 6);
++
++    const looped = stroll([
++      { x: -20, z: 30 }, { x: -20, z: 40 }, { x: -30, z: 40 }, { x: -30, z: 30 }
++    ], { x: -30, y: CG_POSES.E.y, z: 30 }, early.units);
++    expect(looped.walked).toBeGreaterThan(30);
++    expect(looped.units).toBeCloseTo(4, 6);
++  });
++
++  it('IS RECOVERABLE by ordinary movement: back to the frontier, then forward', () => {
++    // No reset, no second F, no new marker, no prompt: she walks back along the
++    // route she can see, reaches the ground she actually left, and walks it.
++    const early = stroll(EARLY_TURN, CG_POSES.E);
++    expect(early.units).toBeCloseTo(4, 6);
++
++    const back = stroll([
++      { x: -48, z: 14 }, { x: -48, z: 16 }, { x: -48, z: 18 }, { x: -46, z: 18 },
++      { x: -44, z: 18 }, { x: -44, z: 16 }, { x: -42, z: 16 }
++    ], early.at, early.units);
++    // Walking BACK earns nothing beyond the frontier it returns to.
++    expect(back.units).toBeGreaterThanOrEqual(4);
++    expect(back.units).toBeLessThan(4.2);
++
++    const again = stroll([
++      { x: -44, z: 16 }, { x: -44, z: 18 }, { x: -46, z: 18 }, { x: -48, z: 18 },
++      { x: -48, z: 16 }, { x: -48, z: 14 }, { x: -48, z: 12 }
++    ], back.at, back.units);
++    expect(again.units).toBeCloseTo(CG_COMMON_ROUTE_UNITS, 6);
++    // And the whole eighteen was actually walked, twice over the tail.
++    expect(early.walked + back.walked + again.walked).toBeGreaterThan(CG_COMMON_ROUTE_UNITS);
++  });
++
++  it('retains the progress earned before the deviation, throughout', () => {
++    const early = stroll(EARLY_TURN, CG_POSES.E);
++    // The four units before the corner are a fact and stay one: standing,
++    // backtracking and looping all leave them exactly where they were.
++    expect(routeProgressUnits(CG_ROUTE_COMMON, early.at, early.units, 0)).toBeCloseTo(4, 6);
++    const backwards = stroll([{ x: -48, z: 18 }], early.at, early.units);
++    expect(backwards.units).toBeCloseTo(4, 6);
++  });
++
++  it('is not confused by a parallel leg two units away', () => {
++    // The common route doubles back on itself: the -44 leg runs beside the -42
++    // leg, and the -48 leg beside the -46 one. A body on the first must never be
++    // credited the arc of the segment it merely happens to be near.
++    const onFirstLeg = stroll([{ x: -42, z: 15 }], CG_POSES.E);
++    expect(onFirstLeg.units).toBeCloseTo(3, 6);
++    // Standing between the two legs, one unit from each, earns no jump.
++    const between = routeProgressUnits(
++      CG_ROUTE_COMMON, { x: -43, y: CG_POSES.E.y, z: 16 }, onFirstLeg.units, 0.075
++    );
++    expect(between).toBeLessThanOrEqual(onFirstLeg.units + 0.075 + 1e-9);
++  });
++
++  it('survives a Continue: the credited span is a number, not a cursor', () => {
++    // A save taken mid-passage restores the units she had actually walked, and
++    // the next step continues from the body's real position rather than
++    // replaying the span or granting the remainder.
++    const partial = stroll([{ x: -42, z: 16 }, { x: -44, z: 16 }], CG_POSES.E);
++    expect(partial.units).toBeCloseTo(6, 6);
++    const resumed = stroll([{ x: -44, z: 18 }], partial.at, partial.units);
++    expect(resumed.units).toBeCloseTo(8, 6);
++    // A restored number with the body somewhere else entirely earns nothing.
++    expect(routeProgressUnits(
++      CG_ROUTE_COMMON, { x: -20, y: CG_POSES.E.y, z: 40 }, partial.units, 0.075
++    )).toBeCloseTo(partial.units, 6);
++  });
++});
++
+ describe('the body is what walks, not a foot point', () => {
+   it('refuses a grounded path that passes under the apparatus backing', () => {
+     // The backing's underside is at y=51.35 and the ground is at 51.05, so a
+--- a/main/src/story/signedSceneAvRuntime.ts
++++ b/main/src/story/signedSceneAvRuntime.ts
+@@ -535,15 +535,12 @@
+   if (anchor.order < currentOrder && !isLateDirectReceipt) return false;
+   const beatAnchors = anchorsByBeat.get(activeBeat) ?? [];
+   const earlierRequiredAnchorPending = beatAnchors.some(candidate => (
+-    candidate.order < anchor.order
+-    && isPendingOrderedAnchor(candidate)
+-    && !activatedAnchorIds.has(candidate.id)
++    candidate.order < anchor.order && stillWaitingOn(candidate, anchor)
+   ));
+   if (earlierRequiredAnchorPending) return false;
+-  if (!isBeatEntry && !isOptionalAnchor(anchor) && !isDirectReceiptAnchor(anchor)) {
+-    const nextRequiredAnchor = beatAnchors.find(candidate => (
+-      isPendingOrderedAnchor(candidate) && !activatedAnchorIds.has(candidate.id)
+-    ));
++  if (!isBeatEntry && !isOptionalAnchor(anchor) && !isDirectReceiptAnchor(anchor)
++    && !CONDITIONAL_ANCHORS.has(anchor.id)) {
++    const nextRequiredAnchor = beatAnchors.find(candidate => stillWaitingOn(candidate, anchor));
+     if (nextRequiredAnchor?.id !== anchor.id) return false;
+   }
+   if (isLateDirectReceipt) {
+@@ -583,6 +580,111 @@
+     || RELOCATED_OPTIONAL_ANCHORS.has(anchor.id);
+ }
+ 
++/**
++ * Signed anchors that MAY NOT HAPPEN, and therefore cannot be prerequisites.
++ *
++ * Ordering is the invariant that makes a physical transaction inspectable, and
++ * none of it is removed here: an anchor listed below still has its signed order,
++ * still cannot rewind an already newer shot, and still fires only from its real
++ * producer. What is corrected is a category error — treating an event the
++ * contract itself declares conditional as a gate every LATER event must wait
++ * behind. When the condition does not occur, the rest of the beat is refused
++ * forever, and the local producer spends its one-shot latch on the refusal.
++ *
++ * Each id is here because the signed scene-v2 contract says so, in these words:
++ *
++ *   `anc.cg.cell-installed` — "/syncAnchors/0" is "the actual live install
++ *     receipt from the prior station-continuation contract", and its acceptance
++ *     criterion states that "a hydrated entry is steady and silent and consumes
++ *     no second cell". A restored save or a valid deep link therefore CANNOT
++ *     produce it, while "/syncAnchors/1" (home-steady) must still "restore the
++ *     steady home variant on hydrated entry" and "/guidance/objectives/0" must
++ *     still reach the review objective "without replaying the transaction".
++ *     Measured (VF-ANCHOR-OBS-1): a hydrated ch13-home performed both real F
++ *     acts and set both milestones while no home anchor ever activated.
++ *
++ *   `anc.cg.revision-ready` and the eight anchors whose signed event text begins
++ *     "Contingent:" — "/syncAnchors/12" says "No refusal is required, no F has
++ *     committed yet ... A valid current route may remain unchanged";
++ *     "/syncAnchors/13" says "any supported route, including the measured long
++ *     route, may complete without this anchor. Do not force failure"; and
++ *     "/syncAnchors/19" says "first-try success is legal". A first-try legal
++ *     route would otherwise never reach route-tested, and a common span walked
++ *     without a reference lapse would never reach `anc.cg.complete`.
++ *
++ * `signedSceneAvRuntime.test.ts` asserts this set against the compiled contract
++ * so a future anchor cannot drift out of it silently.
++ */
++const CONDITIONAL_ANCHORS: ReadonlySet<string> = new Set([
++  'anc.cg.cell-installed',
++  'anc.cg.revision-ready',
++  'anc.cg.specific-hold',
++  'anc.cg.witness-held',
++  'anc.cg.witness-vacated',
++  'anc.cg.test-resumed',
++  'anc.cg.tail-reopened',
++  'anc.cg.route-revised',
++  'anc.cg.reference-vacated',
++  'anc.cg.reference-resumed'
++]);
++
++/** True when the contract declares this anchor conditional rather than required. */
++export function isConditionalSignedAnchor(anchorId: string): boolean {
++  return CONDITIONAL_ANCHORS.has(anchorId);
++}
++
++/**
++ * Durable receipts that make a REQUIRED anchor's event ALREADY TRUE.
++ *
++ * A beat entry clears `activatedAnchorIds`, which is right: this runtime's
++ * ledger is per-entry, and an anchor that did not happen in this session did not
++ * happen in this session. But "not in this ledger" is not the same as "has not
++ * happened", and conflating them makes a mid-beat Continue refuse the NEXT
++ * action: a save taken after the fault review and reloaded before the return
++ * choice has the review's receipt in the milestone ledger, must not replay it,
++ * and must still be able to publish the return choice the player actually makes.
++ *
++ * This map is consulted ONLY to answer "is that predecessor still pending?".
++ * It never activates anything, writes no activation history, replays no cue or
++ * shot, and manufactures no receipt: an anchor whose event is already true is
++ * simply not a thing later anchors are waiting for. The ids are the chapter's
++ * own committed milestones, the same strings its director marks.
++ */
++const RECEIPT_SATISFIED_ANCHORS: Readonly<Record<string, string>> = Object.freeze({
++  // Each anchor's own committed receipt.
++  'anc.cg.fault-reviewed': 'story:ch13-fault-reviewed',
++  'anc.cg.return-chosen': 'story:ch13-return-chosen',
++  'anc.cg.origin-landed': 'story:ch13-origin-landed',
++  'anc.cg.route-tested': 'story:ch13-route-tested',
++  'anc.cg.reciprocal-crossed': 'story:ch13-reciprocal-crossed',
++  'anc.cg.complete': 'story:ch13-complete',
++  // And the legal transaction chain each of those receipts IMPLIES, by the same
++  // doctrine `progressionAnchorsForBeat` already states: a later durable receipt
++  // implies every earlier physical receipt that had to precede it. These are
++  // implications of the chapter's own predicates, not conveniences:
++  //   the Origin landing cannot exist without the boarding and the lift;
++  'anc.cg.hatch-boarded': 'story:ch13-origin-landed',
++  'anc.cg.lift-committed': 'story:ch13-origin-landed',
++  //   an ACCEPTED, tested route cannot exist without the inspection that opened
++  //   it, the offer, the grounded start, the drawn trace and the offered span;
++  'anc.cg.repeated-measure': 'story:ch13-route-tested',
++  'anc.cg.demonstration-opened': 'story:ch13-route-tested',
++  'anc.cg.survey-started': 'story:ch13-route-tested',
++  'anc.cg.trace-drawn': 'story:ch13-route-tested',
++  'anc.cg.route-offered': 'story:ch13-route-tested',
++  //   her eighteen-unit crossing is only creditable while he MAINTAINS the
++  //   reference at H, so the crossing's receipt implies he reached it;
++  'anc.cg.reciprocal-reference': 'story:ch13-reciprocal-crossed',
++  //   and the completion implies her far-reference offer and his own test.
++  'anc.cg.final-reference-offered': 'story:ch13-complete',
++  'anc.cg.independent-test': 'story:ch13-complete'
++});
++
++function anchorReceiptAlreadyHeld(anchor: SignedAnchor): boolean {
++  const milestone = RECEIPT_SATISFIED_ANCHORS[anchor.id];
++  return milestone != null && hasMilestone(milestone, getLocalActorId());
++}
++
+ function progressionEntryForAnchor(anchor: SignedAnchor): ProgressionAnchor | undefined {
+   if (!activeBeat) return undefined;
+   return progressionAnchorsForBeat(activeBeat).find(entry => entry.anchorId === anchor.id);
+@@ -599,7 +701,24 @@
+ }
+ 
+ function isPendingOrderedAnchor(anchor: SignedAnchor): boolean {
+-  return !isOptionalAnchor(anchor) && !isMissingDirectReceiptAnchor(anchor);
++  return !isOptionalAnchor(anchor)
++    && !isMissingDirectReceiptAnchor(anchor)
++    && !CONDITIONAL_ANCHORS.has(anchor.id);
++}
++
++/**
++ * Is `candidate` something `activating` still has to wait for?
++ *
++ * An anchor is never a prerequisite for ITSELF: its own receipt is committed
++ * immediately before it is published, which is the correct order, and reading
++ * that as "already satisfied, therefore not the next required one" would refuse
++ * the very act that just happened.
++ */
++function stillWaitingOn(candidate: SignedAnchor, activating: SignedAnchor): boolean {
++  if (candidate.id === activating.id) return true;
++  if (!isPendingOrderedAnchor(candidate)) return false;
++  if (activatedAnchorIds.has(candidate.id)) return false;
++  return !anchorReceiptAlreadyHeld(candidate);
+ }
+ 
+ interface ProgressionAnchor {
+--- a/main/src/story/signedSceneAvRuntime.test.ts
++++ b/main/src/story/signedSceneAvRuntime.test.ts
+@@ -9,6 +9,7 @@
+   enterSignedSceneAvBeat,
+   getSignedSceneAvContract,
+   getSignedSceneAvDebugSnapshot,
++  isConditionalSignedAnchor,
+   resetSignedSceneAvRuntime,
+   setSignedSceneAvDocumentVisible,
+   setSignedSceneAvFocused,
+@@ -964,3 +965,84 @@
+     }
+   });
+ });
++
++describe('conditional signed anchors are not prerequisites for the ones after them', () => {
++  it('covers every anchor the contract itself declares Contingent, and only ch13', () => {
++    // Drift guard. The set inside the runtime is written out by id so each entry
++    // can carry its contract citation; this asserts it against the compiled
++    // contract so a new contingent anchor cannot quietly become a gate.
++    const contract = getSignedSceneAvContract();
++    const contingent = contract.anchors
++      .filter(anchor => /^contingent\b/i.test(anchor.event))
++      .map(anchor => anchor.id);
++    expect(contingent.length).toBeGreaterThan(0);
++    for (const id of contingent) {
++      expect(isConditionalSignedAnchor(id), id).toBe(true);
++    }
++    // The two the contract declares conditional in prose rather than by prefix.
++    expect(isConditionalSignedAnchor('anc.cg.cell-installed')).toBe(true);
++    expect(isConditionalSignedAnchor('anc.cg.revision-ready')).toBe(true);
++    // Nothing else in any contract is exempted.
++    const conditional = contract.anchors.filter(anchor => isConditionalSignedAnchor(anchor.id));
++    expect(conditional).toHaveLength(contingent.length + 2);
++    for (const anchor of conditional) {
++      expect(anchor.beat.startsWith('ch13'), anchor.id).toBe(true);
++    }
++  });
++
++  it('still refuses a REQUIRED anchor whose ordered predecessor has not happened', () => {
++    // The order guard is not removed. ch13-common's own required chain must
++    // still be walked in order.
++    resetSignedSceneAvRuntime('sandbox');
++    enterSignedSceneAvBeat('ch13-common');
++    // reciprocal-crossed (21) before reciprocal-reference (20): refused.
++    expect(activateSignedSceneAnchorById('anc.cg.reciprocal-crossed')).toBe(false);
++    expect(activateSignedSceneAnchorById('anc.cg.reciprocal-reference')).toBe(true);
++    expect(activateSignedSceneAnchorById('anc.cg.reciprocal-crossed')).toBe(true);
++    // ...and a conditional one that never happened does not block the next
++    // required anchor after it.
++    expect(activateSignedSceneAnchorById('anc.cg.final-reference-offered')).toBe(true);
++    expect(activateSignedSceneAnchorById('anc.cg.independent-test')).toBe(true);
++    expect(activateSignedSceneAnchorById('anc.cg.complete')).toBe(true);
++    expect(getSignedSceneAvDebugSnapshot().activationHistoryAnchorIds)
++      .not.toContain('anc.cg.reference-vacated');
++  });
++
++  it('does not let an unearned receipt excuse an ordered predecessor', () => {
++    // The receipt map answers "has this already happened?", never "may this be
++    // skipped?". With no receipts at all the required chain is unchanged.
++    resetProgression();
++    resetSignedSceneAvRuntime('sandbox');
++    enterSignedSceneAvBeat('ch13-common');
++    expect(activateSignedSceneAnchorById('anc.cg.final-reference-offered')).toBe(false);
++    expect(activateSignedSceneAnchorById('anc.cg.complete')).toBe(false);
++    expect(getSignedSceneAvDebugSnapshot().activationHistoryAnchorIds).toEqual([]);
++  });
++
++  it('treats an ALREADY EARNED predecessor as done, without replaying it', () => {
++    // A mid-beat Continue: the crossing really happened in an earlier session
++    // and its receipt is durable. It must not be replayed into this ledger, and
++    // it must not block the offer the player makes now.
++    resetProgression();
++    markMilestone('story:ch13-reciprocal-crossed');
++    resetSignedSceneAvRuntime('sandbox');
++    enterSignedSceneAvBeat('ch13-common');
++    expect(activateSignedSceneAnchorById('anc.cg.final-reference-offered')).toBe(true);
++    const history = getSignedSceneAvDebugSnapshot().activationHistoryAnchorIds;
++    expect(history).toEqual(['anc.cg.final-reference-offered']);
++    expect(history).not.toContain('anc.cg.reciprocal-reference');
++    expect(history).not.toContain('anc.cg.reciprocal-crossed');
++  });
++
++  it('lets a hydrated ch13-home reach its later anchors without the live install receipt', () => {
++    resetSignedSceneAvRuntime('sandbox');
++    enterSignedSceneAvBeat('ch13-home');
++    // The live install receipt cannot exist on a restored entry, and the signed
++    // acceptance says it must stay silent there.
++    expect(activateSignedSceneAnchorById('anc.cg.home-steady')).toBe(true);
++    expect(activateSignedSceneAnchorById('anc.cg.fault-reviewed')).toBe(true);
++    expect(activateSignedSceneAnchorById('anc.cg.return-chosen')).toBe(true);
++    expect(getSignedSceneAvDebugSnapshot().activationHistoryAnchorIds)
++      .not.toContain('anc.cg.cell-installed');
++  });
++});
+--- a/main/src/story/storyState.ts
++++ b/main/src/story/storyState.ts
+@@ -39,7 +39,8 @@
+ import {
+   debugStartInDescent,
+   debugStartInSpace,
+-  resetTravel
++  resetTravel,
++  restoreFlightAtLocation
+ } from '../state/spaceFlight.ts';
+ import {
+   bootstrapTidegardenHabitatDebug,
+@@ -825,6 +826,22 @@
+     // chapter's entry facts include it and the player may fly back to it.
+     bootstrapTidegardenHabitatDebug();
+     bootstrapOriginLaunchDebug();
++    // AND SHE IS ON FOOT, BECAUSE BOTH BEATS ARE.
++    //
++    // `bootstrapOriginLaunchDebug` ends in `restoreBoardedSurfaceFlight` — the
++    // right staging for ch8-launch and ch10-transit, which BEGIN in the cockpit,
++    // and the wrong one here: ch13-survey opens after the landing and the
++    // disembark that ch13-return performs, and ch13-common after the whole
++    // survey. Left boarded, the entry published an on-foot beat over surface
++    // FLIGHT controls, where walk input does nothing, and nothing in the chapter
++    // could recover it (measured: 243 s of exactly zero displacement).
++    //
++    // This restores control ownership only, exactly as the landfall bootstrap
++    // does for its own disembarked surface state. It is a rehearsal seeding the
++    // boundary it is not playing: no exit receipt is issued, no listener fires,
++    // no milestone is granted, and the landed Kestrel is still parked here to be
++    // boarded again by the ordinary interaction.
++    restoreFlightAtLocation('surface');
+   } else if (param === 'ch10-transit') {
+     // The transit launches from the first world at the wreck, in ch8 grammar.
+     // The hearth is still reconstructed: the player may fly home to it, and the
+--- a/main/src/story/storyState.test.ts
++++ b/main/src/story/storyState.test.ts
+@@ -838,3 +838,68 @@
+     expect(storyAnchoredSpawn({ active: false, chapter: 'ch1', beat: 'ch1-fixed', runId: 1 })).toBe(false);
+   });
+ });
++
++// --- CG-IMPL-007: an on-foot beat may not be entered inside the ship ---------
++
++describe('the ch13 direct entries agree with the beat they enter', () => {
++  afterEach(() => {
++    vi.unstubAllGlobals();
++  });
++
++  it('boots the two Origin audit-site beats ON FOOT, with the landed ship still there', () => {
++    // VF-DEEPLINK-1: `bootstrapOriginLaunchDebug` ends in
++    // `restoreBoardedSurfaceFlight`, which is exactly right for the beats that
++    // BEGIN in the cockpit and exactly wrong for these two, which begin after
++    // ch13-return has landed and disembarked. Left boarded, the entry published
++    // an on-foot beat over surface flight controls and walk input did nothing
++    // at all — 243 seconds of measured zero displacement, unrecoverable.
++    for (const beat of ['ch13-survey', 'ch13-common'] as const) {
++      vi.stubGlobal('window', { location: { search: `?story=${beat}` } });
++      initStoryFromSave();
++      expect(getStoryStateSnapshot(), beat).toMatchObject({
++        active: true, chapter: 'ch13', beat
++      });
++      expect(getSpaceFlightSnapshot(), beat)
++        .toMatchObject({ phase: 'surface', controlMode: 'fps' });
++      // The ship is still parked at the audit site, in the authored system, so
++      // she can board it again by the ordinary interaction and fly home.
++      expect(getSystemFlightSnapshot(), beat).toMatchObject({
++        activePlanetId: STORY_PRIMARY_WORLD_ID,
++        locationMode: 'surface'
++      });
++    }
++  });
++
++  it('grants no ch13 proof by stepping out: only the prior beats it seeds', () => {
++    vi.stubGlobal('window', { location: { search: '?story=ch13-survey' } });
++    initStoryFromSave();
++    // The rehearsal seeds the boundary it is NOT playing.
++    expect(hasMilestone(STORY_MILESTONES.ch13FaultReviewed)).toBe(true);
++    expect(hasMilestone(STORY_MILESTONES.ch13ReturnChosen)).toBe(true);
++    // ...and nothing this beat exists to earn.
++    expect(hasMilestone(STORY_MILESTONES.ch13OriginLanded)).toBe(false);
++    expect(hasMilestone(STORY_MILESTONES.ch13RouteTested)).toBe(false);
++    expect(hasMilestone(STORY_MILESTONES.ch13ReciprocalCrossed)).toBe(false);
++    expect(hasMilestone(STORY_MILESTONES.ch13Complete)).toBe(false);
++  });
++
++  it('leaves the two ch13 hearth beats and every boarded rehearsal exactly as they were', () => {
++    // The home and the return open on foot at the restored second hearth and
++    // always did; the repair must not have reached them.
++    for (const beat of ['ch13-home', 'ch13-return'] as const) {
++      vi.stubGlobal('window', { location: { search: `?story=${beat}` } });
++      initStoryFromSave();
++      expect(getSpaceFlightSnapshot(), beat)
++        .toMatchObject({ phase: 'surface', controlMode: 'fps' });
++    }
++    // The beats that genuinely begin in the cockpit still do. Chapter 8's
++    // launch and chapter 10's transit share the same Origin staging helper, and
++    // a repair that reached them would have broken two other chapters.
++    for (const beat of ['ch8-launch', 'ch10-transit'] as const) {
++      vi.stubGlobal('window', { location: { search: `?story=${beat}` } });
++      initStoryFromSave();
++      expect(getSpaceFlightSnapshot(), beat)
++        .toMatchObject({ phase: 'surface', controlMode: 'flight' });
++    }
++  });
++});

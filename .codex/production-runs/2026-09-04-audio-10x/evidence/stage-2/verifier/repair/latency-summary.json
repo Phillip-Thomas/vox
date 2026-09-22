@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-09-05T11:52:40.523Z",
+  "glue": true,
+  "quality": "full",
+  "tail": "shipped",
+  "renders": {},
+  "sweeps": null,
+  "tailLatencyByRate": {
+    "44100": {
+      "music": {
+        "latencyS": 0.025215419501133787,
+        "latencySamples": 1112,
+        "peak": 0.03908189386129379,
+        "sampleRate": 44100
+      },
+      "sfx": {
+        "latencyS": 0.010340136054421769,
+        "latencySamples": 456,
+        "peak": 0.04959714412689209,
+        "sampleRate": 44100
+      }
+    },
+    "48000": {
+      "music": {
+        "latencyS": 0.024666666666666667,
+        "latencySamples": 1184,
+        "peak": 0.03428460657596588,
+        "sampleRate": 48000
+      },
+      "sfx": {
+        "latencyS": 0.01,
+        "latencySamples": 480,
+        "peak": 0.0495971217751503,
+        "sampleRate": 48000
+      }
+    }
+  },
+  "tailLatency": {
+    "music": {
+      "latencyS": 0.025215419501133787,
+      "latencySamples": 1112,
+      "peak": 0.03908189386129379,
+      "sampleRate": 44100
+    },
+    "sfx": {
+      "latencyS": 0.010340136054421769,
+      "latencySamples": 456,
+      "peak": 0.04959714412689209,
+      "sampleRate": 44100
+    }
+  }
+}

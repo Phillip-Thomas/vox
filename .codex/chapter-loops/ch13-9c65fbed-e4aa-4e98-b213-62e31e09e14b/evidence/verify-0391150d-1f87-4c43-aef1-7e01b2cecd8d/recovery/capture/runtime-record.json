@@ -1,0 +1,141 @@
+{
+ "schema": "paravoxia.verifier.finaleWindowRuntime.v2",
+ "startedAt": "2026-09-07T00:59:21.396Z",
+ "outcome": "INCOMPLETE-EVIDENCE-RETAINED",
+ "outcomeIsAcceptance": false,
+ "audibleClaim": "none — this wrapper records bytes; it makes no audible, causal or acceptance claim",
+ "actualOrder": "lock-fd validated -> sink created -> sink index resolved -> browser child -> ownership verified -> recorder started -> probe waited -> probe stopped+reaped -> sink unloaded",
+ "sessionStartMs": 1788742761396,
+ "sessionDeadlineMs": 1788742866396,
+ "maxSessionS": 105,
+ "sinkName": "paravoxia_finale_window",
+ "sinkIndex": 16750,
+ "moduleId": "536870913",
+ "browserPid": null,
+ "defaultSinkBefore": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+ "defaultSinkAfter": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+ "heavyLock": {
+  "fd": 3,
+  "lockPath": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "ok": true,
+  "problems": [],
+  "fdTarget": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock"
+ },
+ "ownership": null,
+ "ownershipRecheck": null,
+ "recorder": null,
+ "probe": null,
+ "probeTeardown": {
+  "reason": "finally",
+  "requestedAtMs": 1788742761672,
+  "stopFileWritten": true,
+  "signals": [],
+  "exitCode": 1,
+  "signalCode": null,
+  "waitedMs": 0,
+  "receipt": null,
+  "forced": false,
+  "browserTeardownProven": false,
+  "probeConsoleBytes": 963,
+  "probeLogTail": "[finale-window] FAILED: Error: source drift: [{\"group\":\"aux\",\"path\":\"main/package.json\",\"expected\":\"2bf78b0d7e14bf89fa31c93790fd77325839ff147e5d7761535a2a540aedd812\",\"actual\":\"d3b5fa7125d0e87b89bf16094ed9d275bae6a4543cbf3220973b9b0df480e5d5\"}]\n    at main (file:///home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/finale-window-probe.mjs:396:35)\n    at file:///home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/finale-window-probe.mjs:738:3\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:655:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n"
+ },
+ "coverage": {
+  "sampleCount": 0,
+  "edgeWallMs": null,
+  "recorderStartWallMs": null,
+  "recorderStopWallMs": null,
+  "requiredFromWallMs": null,
+  "requiredToWallMs": null,
+  "preEdgeCoveredMs": null,
+  "postEdgeCoveredMs": null,
+  "complete": false,
+  "reason": "no-completion-edge-in-window"
+ },
+ "phases": [
+  {
+   "name": "heavy-lock-fd-validated",
+   "atMs": 1788742761397,
+   "sinceStartMs": 1,
+   "fd": 3,
+   "childFd": 3,
+   "target": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock"
+  },
+  {
+   "name": "default-sink-read",
+   "atMs": 1788742761404,
+   "sinceStartMs": 8,
+   "defaultSink": "alsa_output.platform-NVDA2014_00.hdmi-stereo"
+  },
+  {
+   "name": "owned-sink-created",
+   "atMs": 1788742761411,
+   "sinceStartMs": 15,
+   "moduleId": "536870913"
+  },
+  {
+   "name": "owned-sink-index-resolved",
+   "atMs": 1788742761418,
+   "sinceStartMs": 22,
+   "sinkIndex": 16750
+  },
+  {
+   "name": "probe-launched",
+   "atMs": 1788742761420,
+   "sinceStartMs": 24,
+   "probePid": 2518751,
+   "childLockFd": 3
+  },
+  {
+   "name": "probe-stopped",
+   "atMs": 1788742761672,
+   "sinceStartMs": 276,
+   "reason": "finally",
+   "exitCode": 1,
+   "signalCode": null,
+   "forced": false,
+   "browserTeardownProven": false
+  }
+ ],
+ "spawnErrors": [],
+ "teardownErrors": [],
+ "incompleteCleanup": [
+  "no probe cleanup-receipt.json: the probe-owned browser teardown is UNPROVEN"
+ ],
+ "errors": [
+  "Error: probe never published browser-pid.json; refusing to record without a verified owner\n    at runCombinedCapture (file:///home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/finale-window-runtime.mjs:414:37)",
+  "recording does not provably cover the window: no-completion-edge-in-window"
+ ],
+ "sinkIndexResolution": {
+  "ok": true,
+  "index": 16750,
+  "reason": "resolved-exact-numeric-index",
+  "name": "paravoxia_finale_window"
+ },
+ "childCommand": {
+  "execPath": "/home/linuxbrew/.linuxbrew/Cellar/node/25.6.1/bin/node",
+  "args": [
+   "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/finale-window-probe.mjs",
+   "--out",
+   "../../../../chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-0391150d-1f87-4c43-aef1-7e01b2cecd8d/recovery/capture",
+   "--unmuted",
+   "--pulse-sink",
+   "paravoxia_finale_window",
+   "--heavy-lock",
+   "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+   "--heavy-lock-fd",
+   "3"
+  ],
+  "childLockFd": 3,
+  "parentLockFd": 3
+ },
+ "sinkTeardown": {
+  "moduleId": "536870913",
+  "unloaded": true,
+  "verifiedGone": true,
+  "afterProbeExit": true
+ },
+ "defaultSinkUnchanged": true,
+ "cleanupComplete": false,
+ "endedAt": "2026-09-07T00:59:21.691Z",
+ "wholeSessionS": 0.295
+}

@@ -1,0 +1,90 @@
+{
+  "schema": "paravoxia.shippedUxBaseline.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "sceneId": "common-ground",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "capturedAt": "2026-09-06T04:16:51.213775+00:00",
+  "contextRef": "main/src/story/ux/README.md",
+  "sourceFiles": [
+    {
+      "path": "main/src/story/stationReturnStory.ts",
+      "sha256": "5844152757cd0788df28d349dae6eee092bdbc09df8e3c487111c71bbfe37b49",
+      "snapshotPath": "evidence/source-before/main/src/story/stationReturnStory.ts"
+    },
+    {
+      "path": "main/src/story/ux/README.md",
+      "sha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85",
+      "snapshotPath": "evidence/source-before/main/src/story/ux/README.md"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "sha256": "485860f85e20727d30008c94a8f5d22f888ca888c78e5b740f38853d39a5c4e8",
+      "snapshotPath": "evidence/source-before/main/src/story/ux/objectiveDirector.ts"
+    },
+    {
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "sha256": "e8a076e2280ae4761d9ddba5b6d76682ee3e59636140c3ca6960bef15e548322",
+      "snapshotPath": "evidence/source-before/main/src/story/ux/feedbackCues.ts"
+    },
+    {
+      "path": "main/src/story/StoryDirectorDriver.tsx",
+      "sha256": "46ed17413bbd37ecf5cadfa9b5b2feb67f694931f34b010ec3e3004a66e28c8c",
+      "snapshotPath": "evidence/source-before/main/src/story/StoryDirectorDriver.tsx"
+    },
+    {
+      "path": "main/src/story/world/TidegardenSettlementWorld.tsx",
+      "sha256": "a1b8ff5292c38e6dbe1319708810573d4e28fbfcbe0006034b8ecaad7264122c",
+      "snapshotPath": "evidence/source-before/main/src/story/world/TidegardenSettlementWorld.tsx"
+    },
+    {
+      "path": "main/src/game/spaceStation/spaceStationStory.ts",
+      "sha256": "c688c184c5a309955be711f2f459cd7cac6baa9cffb9a1a4a7696e293b7b9e9a",
+      "snapshotPath": "evidence/source-before/main/src/game/spaceStation/spaceStationStory.ts"
+    },
+    {
+      "path": "main/src/components/spaceStation/StationStoryPanel.tsx",
+      "sha256": "dd5c5221d8e24c4d077564a3c77ad53b8c93c5743dd51e86c8ddd60041581f60",
+      "snapshotPath": "evidence/source-before/main/src/components/spaceStation/StationStoryPanel.tsx"
+    }
+  ],
+  "objectiveContract": {
+    "sourceRef": "main/src/story/ux/objectiveDirector.ts",
+    "stableObjectiveIds": true,
+    "markerMatching": "exact",
+    "requiresActionableWorkOrder": true,
+    "feedbackPresentationOnly": true,
+    "feedbackAdvancesProgression": false,
+    "feedbackEmissionsPerEntry": 1,
+    "healthStates": [
+      "idle",
+      "ready",
+      "missing-marker"
+    ]
+  },
+  "markerAndWorkOrderMap": [
+    {
+      "objectiveId": "station:return:tidegarden",
+      "kind": "travel",
+      "markerLabel": "TIDEGARDEN \u00b7 SECOND HEARTH",
+      "workOrder": [
+        "RETURN TO TIDEGARDEN.",
+        "DELIVER THE BONDED CELL TO THE SECOND HEARTH."
+      ]
+    },
+    {
+      "objectiveId": "hearth:return:install-cell",
+      "kind": "interact",
+      "markerLabel": "SECOND HEARTH \u00b7 INSTALL BONDED CELL",
+      "workOrder": [
+        "DELIVER THE BONDED CELL TO THE SECOND HEARTH.",
+        "[F] INSTALL THE SEALED CELL."
+      ]
+    }
+  ],
+  "basis": "Exact current source inventory; station return/install not exercised by these pre-change frame fixtures. Original distinction retained.",
+  "inventoryRef": "../../story-runs/2026-09-06-common-ground/shipped-ux-baseline.json",
+  "limitations": [
+    "Current audio/visual work is uncommitted and independently owned.",
+    "No new chapter is implemented or rendered."
+  ]
+}

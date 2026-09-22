@@ -1,0 +1,449 @@
+{
+  "brief": {
+    "chapter": "ch14",
+    "request": "Continue Paravoxia creatively after Common Ground, using the exact signed ch13 direction as narrative entry. The owner said be creative, be imaginative, keep it aligned with the plot thus far, take the game to the next level, and now do it all. Create one complete, distinctive next chapter through this fixed loop. Common Ground is implemented but runtime acceptance remains open; do not claim it accepted, turn W-7744 into an ally, consume a later awakening casually, or publish. Preserve existing story and dirty work. The three creative peers choose the chapter's meaning and presentation. Build a complete rough playable path first. The original first-playable deadline is 2026-09-08T01:36:46Z; the whole operation ends08:06:46Z. Keep every read and authored handoff compact. The technical binding is main/chapter-ch14-controls.json: the builder must author this config and the chapter journey/registry projections alongside implementation. This is ordinary browser control configuration, never fixture state. Root transport supports KeyF/KeyW etc, click, move and read-only snapshot wait actions; describeControlCapabilities exports action schema. The config has chapter and manual/recovery/continue/continuity/av objects. Manual config declares route, ordered beats, completionMilestones, acceptedMilestones, deltaPointers, durablePointers and steps. Continue adds checkpointPointer and visible Continue selector, followed by newActionSteps. Recovery adds observed pausedPointer, visible Resume selector and newActionSteps. AV and continuity use chapter plus maxSessionSeconds and sampleMs; no storage injection. Use the observe command the adapter provides; no software rasterization. Existing ch13 paths and canon may guide continuity; they are not evidence that ch14 passes. All work stays local until full verification and independent review.",
+    "authority": "Direct owner: do it all; earlier continue-story and routine reversible implementation/reviews/checks are authorized. Latest: ensure all agents and subagents have full permissions and do not ask routine permission questions.",
+    "allowedPaths": [
+      "main/src/components/ui/LandingMenu.tsx",
+      "main/src/components/ui/LandingMenu.test.tsx",
+      "main/src/story/storyState.ts",
+      "main/src/story/storyState.test.ts"
+    ],
+    "references": [
+      {
+        "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/recipe.json",
+        "sha256": "dc344ffde0ec37b6531f6185f6f845dc427cca00910c51353f961a25872b5a79"
+      },
+      {
+        "path": ".codex/production-runs/2026-09-05-after-the-hearth/scene-contract.json",
+        "sha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54"
+      }
+    ]
+  },
+  "recipe": {
+    "schema": "paravoxia.chapterRecipe.v1",
+    "chapter": "ch14",
+    "anchors": [
+      "anc.um.record-opened",
+      "anc.um.scar-observed",
+      "anc.um.question-retained",
+      "anc.um.return-selected",
+      "anc.um.return-recorded",
+      "anc.um.handback"
+    ],
+    "lanes": {
+      "plan": {
+        "schema": "paravoxia.chapterLoopRole.v1",
+        "summary": "Direction for ch14, The Unfinished Map: Terra turns an incomplete shared proof into her first deliberately unfinished field record. Source-supported design only; ch13 runtime acceptance and ch14 implementation remain unverified.",
+        "verdict": "PASS",
+        "evidence": [
+          {
+            "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/recipe.json",
+            "sha256": "dc344ffde0ec37b6531f6185f6f845dc427cca00910c51353f961a25872b5a79"
+          },
+          {
+            "path": ".codex/production-runs/2026-09-05-after-the-hearth/scene-contract.json",
+            "sha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54"
+          },
+          {
+            "path": "main/src/story/wreckScarObservation.ts",
+            "sha256": "a2c8a7477a9ce80d1c0a39644f2161e970c7e42b7ad242bbf2f6dc9c76b439c7"
+          },
+          {
+            "path": "main/src/story/beats/ch13/ch13-common.ts",
+            "sha256": "68368540c33cb2c49eca1802c9b559fb3cc2562951577a9a86846314b969686c"
+          }
+        ],
+        "findings": [],
+        "keep": [
+          "The earned reciprocal crossing changes how Terra investigates; W-7744's account remains his own.",
+          "The repaired hull retains its scar, giving the chapter a physical subject already present in the game.",
+          "Completion requires the player to use the record they assembled."
+        ],
+        "direction": {
+          "title": "The Unfinished Map",
+          "dramaticQuestion": "Can Terra make a useful account of a place without pretending that the account finishes it?",
+          "entryState": {
+            "boundary": "After actual ch13 completion and immediate handback, on foot at Origin. Never infer completion from chapter selection, elapsed time or W-7744's presence.",
+            "earnedFacts": [
+              "Terra crossed using the end W-7744 held and then maintained the separate reference for his independently completed test.",
+              "The chosen survey geometry and repeatability persist.",
+              "W-7744's local record remains LOCAL RECORD: PASSAGE OBSERVED. MODEL INCOMPLETE.",
+              "The Tidegarden hearth remains restored; existing construction, inventory, repairs and terrain persist."
+            ],
+            "opening": "Once ch13 guidance retires, offer a quiet optional action at the retained survey: Begin a field record. Terra owns the decision: 'i want to know what else a record leaves out.' The invitation can remain pending."
+          },
+          "primaryGameplayIdea": {
+            "name": "Pair observations without merging their claims",
+            "experience": "The player builds a two-place field record by physically visiting the completed survey and the existing repaired-hull scar. Each entry separates what was observed from what remains unanswered. The completed record becomes a small, usable index of those visited places.",
+            "boundedImplementation": "Use existing embodied movement, physical reach, explicit interaction, story persistence, objective markers and a chapter-local record panel. Add authored content and bounded chapter state within owned paths. No freehand map, terrain analysis, new sensing, new renderer or procedural inference is required.",
+            "meaningfulChoice": "At the hull, the player chooses which supported question heads their record: 'what survived the repair?' or 'what did the repair change?' Both preserve the observed scar and repaired condition. The selection persists as the record's heading and determines which entry is initially expanded; neither grants superior evidence."
+          },
+          "playerActions": [
+            {
+              "beat": "ch14-record",
+              "action": "At the retained common passage, explicitly begin the record. Inspect a compact entry containing Terra's earned crossing and the attributed local test result.",
+              "result": "The record contains only the route actually completed, including its retained limits. It neither copies W-7744's interiority nor extends his proof to other ground."
+            },
+            {
+              "beat": "ch14-scar",
+              "action": "Walk to the existing repaired hull and reach its scar. Press the chapter's observation action while physically present.",
+              "result": "Add the present observation: the repair works and the scar remains. Earlier optional scar observations may be displayed if earned, but no missed repair stage is required or retrospectively awarded."
+            },
+            {
+              "beat": "ch14-question",
+              "action": "Choose the question that will head the field record, then explicitly retain both entries.",
+              "result": "The two places remain separate, attributed observations. Terra says, 'i can keep the question with the thing.' No explanatory answer appears."
+            },
+            {
+              "beat": "ch14-return",
+              "action": "Select the survey entry in the record and choose Return to this place. Close the panel and physically walk back using the existing objective marker.",
+              "result": "On actual arrival, press F to add the return visit. This final use commits chapter completion: the record has helped Terra return to something she has not finished understanding."
+            }
+          ],
+          "signatureMoment": "At the repaired hull, the player retains the scar alongside the functioning repair, then selects the earlier survey entry. The same record that could have been a verdict becomes a way back. The player closes it and walks; the final proof of its usefulness is arriving at the place it remembers.",
+          "recovery": {
+            "pause": "Pause and focus loss stop progression. Visible Resume restores the current objective without creating observations.",
+            "continue": "Continue restores the earned entries, chosen question and pending destination. Revalidate actor, world and physical reach before the next observation or return receipt.",
+            "interruptedTravel": "Leaving the route or world preserves all entries. Guidance resumes toward the real destination when applicable; no timeout completes travel.",
+            "existingSaves": "Previously recorded scar stages never produce a dead mandatory prompt. The ch14 present-visit receipt is distinct from the optional three-stage accomplishment.",
+            "changedTerrain": "Resolve existing anchors against current world state. Do not rebuild pristine terrain or move the player through obstructions. An unreachable required anchor is a feasibility defect to fix within scope.",
+            "panel": "Closing the record retains committed entries and returns movement and look immediately. An uncommitted heading choice can be reopened."
+          },
+          "cameraHandback": "Keep the player-owned embodied view during travel and observations. The record panel releases pointer capture only while open; closing it restores the established gameplay input flow without changing position or view direction. Completion clears mandatory guidance immediately. Cinema owns framing and presentation; Score owns musical treatment. Neither presentation completion nor audio is a progression predicate.",
+          "exitState": {
+            "physical": "Terra stands at the retained Origin survey after a real return journey. Free movement and optional ch13 repeat remain available.",
+            "durableChange": "A reviewable two-place field record retains source attribution, the chosen unanswered question and an actual return-visit receipt. Its visited-place navigation remains usable after completion.",
+            "characterChange": "Terra now makes records that invite further investigation instead of treating successful action as a final explanation.",
+            "limits": "W-7744 remains a bounded local tester. The chapter does not move him, recruit him, require a new reply or alter his accepted record."
+          },
+          "permittedRevelations": [
+            "Terra can deliberately preserve an unanswered question beside an observation.",
+            "The functioning repaired hull still bears its existing scar.",
+            "A personally assembled record can support return without claiming comprehensive knowledge."
+          ],
+          "openPromises": [
+            "W-7744's larger allegiance, later recurrence, greater-threat recognition and independent awakening.",
+            "Worker 9's eventual identification and the emergent third consciousness; no new attributed voice, memory or motif.",
+            "First interstellar warp and A5 Light.",
+            "The constellation index, seeded worlds, Makers, authorship and Paradox Lens.",
+            "Common Ground runtime acceptance, which remains separate from its signed narrative authority."
+          ],
+          "builderHandoff": "Author the complete four-beat path, registry and journey projections, and main/chapter-ch14-controls.json. Manual control steps must earn both visits, select and retain a heading, select the return entry, walk back and commit the final visit. Continue and recovery must resume before an unearned action and then perform that action visibly. Bind real snapshot pointers and visible selectors after implementation; use adapter observation and ordinary browser controls without storage injection. Runtime, media and independent acceptance remain subsequent gates."
+        },
+        "anchors": [
+          "anc.um.record-opened",
+          "anc.um.scar-observed",
+          "anc.um.question-retained",
+          "anc.um.return-selected",
+          "anc.um.return-recorded",
+          "anc.um.handback"
+        ],
+        "anchorEvents": [
+          {
+            "id": "anc.um.record-opened",
+            "event": "Explicit interaction at the completed survey creates Terra's field record after ch13 handback."
+          },
+          {
+            "id": "anc.um.scar-observed",
+            "event": "Actual physical attendance at the existing repaired-hull scar adds the present observation."
+          },
+          {
+            "id": "anc.um.question-retained",
+            "event": "The player commits a heading and retains both distinct entries with the unanswered question visible."
+          },
+          {
+            "id": "anc.um.return-selected",
+            "event": "The player selects the survey entry as a destination and receives ordinary navigation guidance."
+          },
+          {
+            "id": "anc.um.return-recorded",
+            "event": "Actual arrival and explicit interaction add the return visit and commit completion exactly once."
+          },
+          {
+            "id": "anc.um.handback",
+            "event": "Mandatory guidance retires immediately; the record and optional survey remain usable."
+          }
+        ],
+        "session": "01a07ecf-87b1-7fd2-95ff-31f4b587f2f4"
+      },
+      "cinema": {
+        "schema": "paravoxia.chapterLoopRole.v1",
+        "summary": "Cinematography direction for The Unfinished Map: a persistent composition of working repair, surviving scar and unanswered question, followed by a player-controlled return. Source-only direction from the supplied packet; visual references were not inspected, and runtime acceptance remains open.",
+        "verdict": "PASS",
+        "direction": {
+          "title": "The Unfinished Map",
+          "visualArgument": "Let the player see that a useful account can leave something unresolved. Preserve the physical places around the record so that reading remains part of visiting.",
+          "spatialReadability": {
+            "survey": "Begin only after actual ch13 completion and handback. Place the quiet record invitation at the retained passage interaction, preserving the chosen route geometry and its limits. Keep the occupied ground and route legible; W-7744 is neither the destination nor a new conversational prompt.",
+            "hull": "Use the existing scar as the observation target. Locate the reachable interaction where the scar and adjoining repaired surface can be seen together under current terrain conditions. Preserve existing collision and construction; do not substitute an immaculate hull or reposition the player.",
+            "return": "Use the ordinary objective marker only after explicit destination selection. Identify the retained survey destination consistently in the record and the world. Arrival requires physical reach and F; marker visibility, camera gaze and elapsed travel never count as arrival."
+          },
+          "blockingAndFraming": {
+            "view": "Retain embodied movement and player-owned look throughout. No cuts, automatic turns, zooms or borrowed perception.",
+            "actors": "Do not move W-7744 to frame the chapter. His existing local activity may remain visible without acknowledgment, accompaniment or a new reply.",
+            "record": "Use a compact side panel with an open world view beside it. Separate the two place entries through spacing and explicit attribution. Render Terra's owned words in lowercase and W-7744's existing procedural record in capitals. Never give the panel a comprehensive map silhouette or fill unvisited ground.",
+            "legibility": "Give text a quiet opaque backing and stable contrast. Keep the selected destination, committed heading and next action readable without relying on color. Keep essential content and controls within the available viewport."
+          },
+          "signatureMoment": {
+            "name": "The scar beside the question",
+            "composition": "At the hull, the existing repair and its scar occupy the world view while the record holds their present observation beside the chosen unanswered question. Below, the separate survey entry offers Return to this place. The world supplies the unresolved subject; the panel supplies a useful but limited account.",
+            "emotionalReveal": "On retention, leave the observation and question visible together as Terra says, 'i can keep the question with the thing.' Selecting the survey then changes the record from something read into something used. Closing it exposes the full world and the route back.",
+            "ordinaryPlay": "Build the opportunity through a reachable observation position and compact panel, not a precise camera angle. Observation eligibility remains physical rather than gaze-dependent. Looking away never blocks progress. The committed observation and question remain reviewable, and the scar remains available to revisit, so the moment does not depend on catching a transient animation.",
+            "restraint": "No scar glow, revelation flash, explanatory overlay or new visible property. The functioning repair and surviving mark carry the composition."
+          },
+          "paletteLightAndMotion": {
+            "palette": "Retain Origin's established living palette and existing hull materials. Use restrained neutral panel surfaces; give both heading choices equal visual weight.",
+            "light": "Use existing environmental illumination. Do not change time of day, relight the scar as a supernatural object or introduce an awakening treatment. Keep interface contrast reliable when the surrounding world is dark.",
+            "motion": "Travel supplies the principal motion. Entries appear locally without a full-screen transition. Retention settles into a stable layout; destination selection uses the existing marker treatment. No camera easing, victory burst or motion that must finish before input resumes."
+          },
+          "anchorTreatment": [
+            {
+              "anchor": "anc.um.record-opened",
+              "treatment": "After explicit survey interaction, open the compact record on the earned passage entry. Preserve the existing view direction and show the route's retained limits with its attributed local result."
+            },
+            {
+              "anchor": "anc.um.scar-observed",
+              "treatment": "Actual attendance and observation add the present hull entry. Keep the scar's surrounding repaired surface visible when the player faces it; do not replay earlier repair stages."
+            },
+            {
+              "anchor": "anc.um.question-retained",
+              "treatment": "Keep the chosen question adjacent to the hull observation and both places distinct. Display Terra's owned line without covering the world subject. Neither choice receives a brighter treatment or stronger flourish."
+            },
+            {
+              "anchor": "anc.um.return-selected",
+              "treatment": "Clearly identify the survey as the selected destination and expose ordinary guidance. Let the player close the panel immediately and choose their own path."
+            },
+            {
+              "anchor": "anc.um.return-recorded",
+              "treatment": "At real arrival and explicit interaction, add a restrained return-visit receipt to the survey entry. The familiar ground is the final image; no new tableau or acknowledgment from W-7744 is required."
+            },
+            {
+              "anchor": "anc.um.handback",
+              "treatment": "Retire mandatory guidance immediately with completion. Preserve movement, look, optional survey and record access. No end card or timed coda."
+            }
+          ],
+          "interruptionAndHandback": {
+            "panel": "Release pointer capture only while the panel is open. Closing restores the established gameplay input flow without changing position or view direction. Never hold input for a caption or transition.",
+            "pause": "Pause and focus loss freeze progression. Visible Resume restores the current objective and presentation state without earning an observation.",
+            "continue": "Restore committed entries, heading and selected destination directly into their steady presentation. Do not replay the retention reveal or completion treatment. Revalidate world, actor and reach for the next action.",
+            "exploration": "Allow departure, detours and repeated inspection. Retain the pending destination without escalating reminders. Returning to the relevant world restores applicable guidance.",
+            "scoreBoundary": "Provide anchor events to Score without prescribing a new motif. Visual timing and audio completion never gate progression."
+          },
+          "acceptanceFocus": [
+            "Inspect the hull composition from ordinary standing views, including a player looking away, and confirm the panel remains readable without forced framing.",
+            "Verify that current terrain permits both required visits and that a closed panel returns movement and look immediately.",
+            "Check interrupted travel, Resume and Continue for stable committed content without replayed reveals or invented receipts.",
+            "Judge ch14 using its own playable and media evidence; ch13 narrative authority does not establish either chapter's runtime acceptance."
+          ]
+        },
+        "anchors": [
+          "anc.um.record-opened",
+          "anc.um.scar-observed",
+          "anc.um.question-retained",
+          "anc.um.return-selected",
+          "anc.um.return-recorded",
+          "anc.um.handback"
+        ],
+        "evidence": [],
+        "findings": [],
+        "keep": [
+          "The working repair and surviving scar share one ordinary, revisitable composition.",
+          "The record's usefulness is demonstrated by a real return journey.",
+          "W-7744's attributed account and the player's embodied view remain independent."
+        ],
+        "session": "01a07ed6-5fe6-7b43-883b-1be2dac364fe"
+      },
+      "score-plan": {
+        "schema": "paravoxia.chapterLoopRole.v1",
+        "summary": "A restrained score direction for The Unfinished Map: an existing phrase becomes useful through separation, return and changed spacing. Grounded in the supplied canon and Chapter direction; no audio audition, implementation or runtime acceptance is claimed.",
+        "verdict": "PASS",
+        "direction": {
+          "title": "The Unfinished Map — room for the question",
+          "principle": "Carry Common Ground's unfinished musical account into Terra's voluntary investigation. The transformation is from a phrase heard at a proof to a phrase recognized on returning to that place. Player actions determine its appearances; elapsed travel never manufactures an emotional arc.",
+          "motif": "Reuse the established unresolved audit square's pitch order and interval identity. Introduce no new character motif. In ch14, isolate its opening fragment and leave the remainder absent until the actual return. This is Terra recalling the retained survey, never evidence of W-7744's presence, thoughts or allegiance. Do not quote a hidden chip voice or assign music to Worker 9.",
+          "harmony": "Retain the existing phrase's harmonic field and unresolved tones. At the hull, suspend that field rather than modulating into a discovery theme. On the final return, restore the existing support beneath the phrase while preserving its unresolved interval. Arrival becomes audible through restored context, without a major-mode conversion, dominant-tonic victory cadence or suggestion that the question has been answered.",
+          "rhythm": "Use the source phrase's established pulse internally, but remove continuous accompaniment between its appearances. Widen phrase gaps as the record takes shape. Never synchronize footsteps, require timed interactions, restart a pulse on every observation attempt or accelerate toward an objective. Rapid actions suppress stale cues instead of compressing them into a flourish.",
+          "timbre": "Use one quiet, softened voice already belonging to the mature score, retaining enough of the audit square's articulation to make recognition possible. At the scar, expose existing environmental sound without adding a metallic memory effect, heartbeat, whisper or second musical persona. The final return uses the same voice and register; its difference is spacing and harmonic support.",
+          "anchorTreatment": [
+            {
+              "anchor": "anc.um.record-opened",
+              "cause": "Explicit creation of the field record at the completed survey, after ch13 handback.",
+              "music": "Allow one low-level opening fragment of the existing square, followed by open silence. If ch13's permitted release is still audible, let it retire; omit this fragment rather than overlap or restart the preceding ending. Merely approaching or reopening the panel produces no phrase."
+            },
+            {
+              "anchor": "anc.um.scar-observed",
+              "cause": "Physical attendance and the explicit present-observation action at the repaired hull.",
+              "music": "Retire any remaining ch14 musical support with a short soft fade. Give the working repair and retained scar a score-free interval. The observation appears immediately; silence is presentation, never a timed requirement."
+            },
+            {
+              "anchor": "anc.um.question-retained",
+              "cause": "The player commits either heading and retains both entries.",
+              "music": "Preserve the silence. Both questions receive exactly the same treatment, gain and duration. The committed words carry the decision; no correctness chime or harmonic reward grades the choice."
+            },
+            {
+              "anchor": "anc.um.return-selected",
+              "cause": "The player selects the survey entry as the real destination.",
+              "music": "Do not play the missing phrase or promise arrival. Keep travel open to the existing environmental soundscape. Selection supplies navigation, not musical completion."
+            },
+            {
+              "anchor": "anc.um.return-recorded",
+              "cause": "Actual arrival followed by explicit interaction commits the return visit exactly once.",
+              "music": "Permit one quiet statement of the existing square with its internal identity intact and more air between gestures. Restore its harmonic support without resolving the outstanding interval. Recognition now follows the player's demonstrated use of the record."
+            },
+            {
+              "anchor": "anc.um.handback",
+              "cause": "Mandatory guidance retires immediately after the committed visit.",
+              "music": "Return controls independently of the cue. Let the final statement sound for at most four seconds from return-recorded, then fade over two seconds, with earlier cancellation available. Add no coda. If events arrive late or out of order, discard stale musical starts."
+            }
+          ],
+          "mix": "Keep the chapter layer beneath locomotion, interaction feedback and environmental detail. Use a narrow, stable musical image without positional calls toward W-7744 or unvisited locations. Cap simultaneous ch14 material at one phrase voice and its quiet harmonic support. Transition by subtraction; do not stack layers, increase bass weight or raise loudness to mark completion. Exact levels require listening in the implemented scene.",
+          "interruptionAndReentry": "Pause and focus loss suspend chapter audio and cancel pending one-shots without advancing story state. Resume restores the current ambient context without replaying anchor cues. Continue restores earned record state silently, including completed saves. Leaving Origin cancels local score material; returning restores ambience, not skipped phrases. Panel close, reopening, repeated F presses and optional ch13 surveys never retrigger ch14's completion statement. Only a newly earned return receipt may start it.",
+          "freeExploration": "No countdown, proximity swell or travel loop pressures the player toward the hull or back to the survey. Wandering can remain musically uneventful. After handback, the record remains useful without becoming a repeatable music reward.",
+          "laneBoundaries": "Chapter owns actions, attribution, receipts and progression. Cinema owns framing, panel presentation and visual emphasis. Score requests no camera motion, light change, forced stillness, new dialogue or alternate event anchors. Audio readiness, silence duration and cue completion never gate play. Keep implementation chapter-local without a shared audio-engine rewrite.",
+          "earnedRelease": "The relief is recognizing a place through a record that preserved its limits. The player earns changed spacing by returning and recording the visit; music neither resolves the inquiry nor enlarges W-7744's local agreement."
+        },
+        "anchors": [
+          "anc.um.record-opened",
+          "anc.um.scar-observed",
+          "anc.um.question-retained",
+          "anc.um.return-selected",
+          "anc.um.return-recorded",
+          "anc.um.handback"
+        ],
+        "evidence": [],
+        "findings": [],
+        "keep": [
+          "Both retained questions receive identical musical weight.",
+          "The actual return visit earns recognition without a victory cadence.",
+          "Silence leaves the functioning repair and its surviving scar available to the player's attention.",
+          "Common Ground's runtime acceptance remains open."
+        ],
+        "session": "01a07ed6-6073-7210-beba-b99b8fefd049"
+      }
+    }
+  },
+  "findings": {
+    "findings": [
+      {
+        "severity": "major",
+        "description": "A real Continue restores equal Chapter14 record data but forces Tidegarden and leaves the Origin-only chapter unready; no newly accepted action after Continue.",
+        "evidence": [
+          {
+            "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/report.json",
+            "sha256": "4f3afb77f357640d00a225d966ec536f8897ff8f70296e78dff5d899019e95fc"
+          }
+        ]
+      },
+      {
+        "severity": "major",
+        "description": "The player preview used manual ?story=ch14-record, which parseStoryParam rejects. Root is replacing this unsupported entry with an ordinarily earned browser checkpoint bound to passing Continue proof. No game debug seed is needed.",
+        "evidence": [
+          {
+            "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/motion-handback-20260909/status.json",
+            "sha256": "13a30c447ba478c9bc22dd1b9599b4095b4e2d4111136284f8f0d40b9fbde1ba"
+          }
+        ]
+      }
+    ],
+    "keep": [
+      "Approved Chapter14 recipe and all text, score and staging",
+      "The verified movement driver, normal input authority, grounded arrival, reciprocal route and Origin identity requirements",
+      "Completed manual and pause/resume evidence retained as historical source-bound evidence"
+    ]
+  },
+  "evidence": {
+    "schema": "paravoxia.chapterImplementationEvidence.v1",
+    "acceptance": false,
+    "chapter": "ch14",
+    "gameSource": "db47d1bfea2811f4b6e3505b6297556b2729f2e8fa458a9c73756672f43c54ee",
+    "composer": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/result.json",
+      "sha256": "8a4daf16cc6bb240a3f4a17d214b9e9f64fcaf2c9d1144a18d9e530388da9645"
+    },
+    "artifacts": [
+      {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/completion-20260908/implementation-evidence.json",
+        "sha256": "7e71e746a0bc330d98b92e272bd1461f0ed0bbaefd4211e30e761a93675b30af"
+      }
+    ],
+    "media": [
+      {
+        "kind": "video",
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/video.webm",
+        "sha256": "2412e48721055ee3be261cf9655cb9901f880ee3955f6ec33717ab9924f3913e"
+      },
+      {
+        "kind": "audio",
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/audio.wav",
+        "sha256": "13496f96f86a70da1525f076babb785ab0d837e957f45a309b2ff8b9296047ae"
+      },
+      {
+        "kind": "frame",
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/frame.png",
+        "sha256": "8d376522ed90dd5bbeda5c10a059316b8e54f55bd845aa1cc918de476ff52618"
+      }
+    ],
+    "scope": "Retained implementation observations, not final verification or independent acceptance. Look13 predates composer source edits. Listen3 inner capture passed its then-bound obligations; outer gateway failed with a subsequently fixed pooled socket error. Preserve that failed outer result.",
+    "note": "Retained implementation observations only; final verification and independent acceptance remain pending."
+  },
+  "mediaPerception": {
+    "command": [
+      "node",
+      "/home/thomasphillip/Projects/vox/main/tools/chapter-loop/perceive-media.mjs",
+      "--scope",
+      "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/12-refine/media-scope.json"
+    ],
+    "arguments": "--file <supplied audio/video path> --question <bounded question> --start <seconds> --seconds <up to 60>",
+    "available": true,
+    "note": "Native audio/video perception through Gemini, supplied media only. Use it to listen and inspect motion; make your own existing role judgment. Cite source media. Tool receipts record model, exact bytes, segment and usage. Prior reviews and hidden planning are never tool inputs."
+  },
+  "continueFrom": {
+    "request": "fix them",
+    "scope": "One newly owner-commissioned correctness repair; not another creative exploration. Root owns and has prepared review-entry transport. You own only the supplied game paths. Do not edit tools, commissions, evidence, runner state or unrelated source.",
+    "diagnosis": "LandingMenu uses storyCompleted=hasCompletedStory() and storyInProgress=!storyCompleted&&canContinueStory(). hasCompletedStory intentionally checks the historical ch9Hearth milestone, including during later chapters (existing tests assert this). startOrContinueStory then calls onReturnToStorySite; App returnToCompletedStorySite calls beginStory() but forces TIDEGARDEN_WORLD_ID. The real Continue trace restored ch14-scar record equality but activePlanetId=-1,-1:p1, so unfinishedMap origin() correctly rejects it. Validate this source chain; fix menu Continue selection so an unfinished current story takes precedence over the historical completed arc. Preserve completed-story/free-play behavior and early-game behavior.",
+    "validation": "Add a focused meaningful regression test exercising Continue selection with ch9 completion plus unfinished ch10/ch13/ch14, and true terminal/fresh saves. Use affected checks and TypeScript. Do not weaken origin, readiness, arrival or accepted-action tests. No GPU work: runner will perform fresh capture after your source handoff.",
+    "evidence": [
+      {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/manual/report.json",
+        "sha256": "32c0d93b1b8a3a78e1b4789ff54d5f3b6b417993f3e6432ca40b2ad6457f9ab1"
+      },
+      {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/recovery/report.json",
+        "sha256": "240424449802bccd335e63660eb7d360b8d1952618ea023c27c8404e9d63827a"
+      },
+      {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/report.json",
+        "sha256": "4f3afb77f357640d00a225d966ec536f8897ff8f70296e78dff5d899019e95fc"
+      }
+    ],
+    "preserves": "No audio, story, route or motion edits requested. Previous refiner audio corrections remain. The chapter is unaccepted until remaining real checks and independent reviews pass.",
+    "reviewEntry": "Root exports actual context.storageState before the successful Continue reload and only supplies it to the blind player after that same case proves equality and a new action. Origin relocation is transport-only for immutable preview port changes; saved values are unmodified. No unsupported direct-entry or progress setter."
+  },
+  "ownerDefectRepair": {
+    "request": "fix them",
+    "instruction": "The owner explicitly commissioned this one additional, narrowly scoped correctness repair after the prior completed refinement. Preserve all prior work and counters. Fix only the named defects in the supplied allowedPaths; no optional creative changes or further repair passes."
+  },
+  "stage": "refine",
+  "outputDirectory": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/12-refine",
+  "repo": "/home/thomasphillip/Projects/vox",
+  "executionBudget": {
+    "firstPlayableDeadlineAt": "2026-09-08T22:03:28.000Z",
+    "operationDeadlineAt": "2026-09-09T04:33:28.000Z",
+    "mode": "adaptive",
+    "progressFile": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/12-refine/budget.json",
+    "tokenPolicy": "advisory",
+    "targets": {
+      "roleWorkItems": 60,
+      "roleMinutes": 45,
+      "totalWorkItems": 400,
+      "roleLaunches": 14
+    },
+    "remainingTokens": {
+      "inputTokens": 423646,
+      "cacheReadTokens": 0,
+      "outputTokens": 156017
+    },
+    "note": "Scheduling targets trigger checkpointing and focus on completion, never process termination. Historical spend and overruns remain visible."
+  }
+}

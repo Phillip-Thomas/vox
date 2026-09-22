@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "handoffSha256": "6ea6459253324ed334e25423b7ef8842f0df91457991e855ed97045c7b9f917f",
+  "checks": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/packet-dedup-repair/tests.log",
+      "sha256": "63608512b4ac9fba398f9b74b23675d907093c63c01510452b06bf90c9ed2b5b"
+    }
+  ],
+  "meaning": "105 adapter tests passed. Creative outputs appear once in recipe; repair provenance stays in retained source receipt. Original 48000 byte cap enforced."
+}

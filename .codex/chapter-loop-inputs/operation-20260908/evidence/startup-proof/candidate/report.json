@@ -1,0 +1,958 @@
+{
+  "label": "candidate",
+  "url": "http://127.0.0.1:41427/?story=crash&movie=1&journeyprobe=1&profile=HIGH",
+  "kind": "diagnostic-transition-only",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "errors": [],
+  "trace": [
+    {
+      "at": 1788827257352,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827257606,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827257858,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827258111,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827258364,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827258620,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827258872,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827259125,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827259377,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827259630,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827259882,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827260135,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827260405,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827260671,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827262741,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827262998,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827263251,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827263504,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827263793,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827264048,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827264300,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827264606,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827264859,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827265111,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827265365,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827265617,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827265926,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827266179,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827266432,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827266684,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827267050,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827267308,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827267606,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827267858,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827268140,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827268393,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827268645,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827268926,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827269178,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827269431,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827269684,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827269936,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827270189,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827270442,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827270694,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827270947,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827271199,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827271452,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827271704,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827271957,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827272210,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827272462,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827272714,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827272967,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827273221,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827273474,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827273726,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827273979,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827274231,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827274483,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827274736,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827274990,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827275242,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    }
+  ],
+  "descentObserved": true,
+  "success": true,
+  "earnedContinuity": false,
+  "contextClosed": true
+}

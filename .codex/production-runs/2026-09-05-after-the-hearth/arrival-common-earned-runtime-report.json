@@ -1,0 +1,388 @@
+{
+  "schema": "paravoxia.verifier.earnedContinueRuntime.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "role": "arrival-common-earned",
+  "author": "independent story-verifier (opus)",
+  "at": "2026-09-06T18:40:00Z",
+  "isAcceptance": false,
+  "isChapterVerification": false,
+  "publicationAuthorized": false,
+  "verdict": "PARTIAL — the earned Origin landing and the ordinary Continue lane were MEASURED and passed their gates; the final NEW-ACTION step is a MEASURED PREREQUISITE FAILURE (body could not reach E). Stopped at the first impossible prerequisite; no rescue attempted.",
+
+  "preparedVersusRun": {
+    "prepared": [
+      "verifier/probes/arrival-common-earned/earned-continue-probe.mjs (+ pinned helpers) — prepared 2026-09-06, never executed before this run",
+      "verifier/probes/arrival-common-manual/* — NOT this role; not run here"
+    ],
+    "actuallyRun": [
+      "ONE primary earned partial-Continue lane: verifier/captures/arrival-common-earned/earned-1"
+    ],
+    "notRun": [
+      "no second/retry lane",
+      "no manual COMMON, no full story, no variants, no listening pass, no cold-run set",
+      "no full verify rerun (root's log e57a9dab… retained; explicitly not required)"
+    ]
+  },
+
+  "command": {
+    "startedUtc": "2026-09-06T18:24:44Z",
+    "lockAcquiredUtc": "2026-09-06T18:24:44Z",
+    "endedUtc": "2026-09-06T18:27:52Z",
+    "node": "v25.6.1",
+    "nodeExitCode": 1,
+    "nodeExitCodeMeaning": "the probe re-threw its own prerequisite failure; this is the probe's honest refusal, NOT a role-completion state",
+    "roleCompletion": "completed — evidence written, browser stopped, source rehashed, report filed",
+    "shell": "exec 9>/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock ; flock -w60 -x 9 ; node …",
+    "argv": [
+      "node", "verifier/probes/arrival-common-earned/earned-continue-probe.mjs",
+      "--url", "http://127.0.0.1:34413/",
+      "--expect-source-manifest", "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+      "--heavy-lock", "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+      "--heavy-lock-fd", "9",
+      "--role", "arrival-common-earned",
+      "--out", "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/arrival-common-earned/earned-1"
+    ],
+    "commandReceipt": "logs/arrival-common-earned-runtime/earned-1-command.txt",
+    "stdout": "logs/arrival-common-earned-runtime/earned-1-stdout.log"
+  },
+
+  "guards": {
+    "activeRoleFromControl": "arrival-common-earned",
+    "roleMatched": true,
+    "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sourceHashesRehashedBeforeCapture": 99,
+    "sourceHashesRehashedAfterCapture": 99,
+    "sourceMismatchesBefore": 0,
+    "sourceMismatchesAfter": 0,
+    "sourceStableAcrossCapture": true,
+    "auxiliaryToolingRehash": {
+      "checked": 5,
+      "matched": 4,
+      "mismatch": {
+        "path": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-delta.run-profile.json",
+        "recorded": "a0b0ecdd0df08f1866af39fb74645bc8eea1c05b008cf1e8856de60edc1444c2",
+        "observed": "605fb2efc36901bc9c012bda0a0d6e7552003888dd5f959420d612f5e57ae828",
+        "disposition": "EXACTLY the drift producer-nonbinding-auxiliary-observation.json recorded and permitted; UNUSED delta profile, active profile is paravoxia-creative-chapter@v1. Reported separately as required. Not part of the probe's own gate (rehashSourceManifest reads only the 99-path hashes map). No full-verify rerun performed."
+      }
+    },
+    "servedIdentity": {
+      "url": "http://127.0.0.1:34413/",
+      "httpIndexStatus": 200,
+      "title": "Paravoxia",
+      "indexSha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207",
+      "bundlePath": "/assets/index-BiDWGouH.js",
+      "bundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+      "matchesPreviewOwnership": true,
+      "matchesVerifierControl": true,
+      "verifiedLiveBeforeUse": true
+    },
+    "heavyLock": {
+      "path": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+      "fd": 9,
+      "mode": "flock -w60 -x 9 (exclusive, inherited descriptor)",
+      "owned": true,
+      "problems": [],
+      "procLock": {"kind": "FLOCK", "scope": "ADVISORY", "mode": "WRITE", "pid": 1871186, "inode": 8397196},
+      "openedByProbe": false
+    },
+    "gpu": {
+      "headed": true,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "swiftshader": false,
+      "display": ":0"
+    },
+    "previewOwnership": "root-production-preview; probe never started, stopped or rebuilt it (rootPreviewUntouched=true)"
+  },
+
+  "instrumentationCorrections": {
+    "pinnedContractCorrection": {
+      "kind": "instrumentation, NOT a game repair",
+      "file": "verifier/probes/arrival-common-earned/cgContract.pinned.mjs (owned private dependency)",
+      "beforeSha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+      "afterSha256": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5",
+      "beforeCopy": "logs/arrival-common-earned-runtime/cgContract.pinned.mjs.before",
+      "change": "SIGNED_CONTRACT_SHA256 4dbf722b…ff88e (scene-v2) -> 5ef85a32…7eec54 (scene-v3), plus the two matching scene-v2 words in the header comment and the throw string. Nothing else.",
+      "sharedOriginalAfterEdit": {"path": "verifier/probes/lib/cgContract.mjs", "sha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551", "unchanged": true},
+      "pinManifest": {"path": "verifier/probes/arrival-common-earned/pinned/pin.json", "beforeSha256": "45be04a4e5f28000c6829e081258b3c21a04af15ee1f04ee2a79a12df50cbcbd", "afterSha256": "99869a4dc5571601762ba573d61f9d8c83604f20346207b191ab9f984a4132d6", "beforeCopy": "logs/arrival-common-earned-runtime/pin.json.before"},
+      "runtimeEffectOnThisLane": "NONE — earned-continue-probe.mjs imports only ART/CAPTURES/RUN_DIR/REPO_ROOT/MAIN from that module and never calls loadContract(). No predicate, geometry or acceptance changed.",
+      "cpuSuitesRerunAfterEdit": [
+        {"cmd": "node verifier/probes/arrival-common-earned/selftest.mjs", "exit": 0, "result": "108/108", "log": "logs/arrival-common-earned-runtime/selftest-after-pin.log"},
+        {"cmd": "node verifier/probes/arrival-common-earned/earned-continue-probe.mjs --self-test", "exit": 0, "result": "OK", "log": "logs/arrival-common-earned-runtime/probe-selftest-after-pin.log"}
+      ]
+    },
+    "entryHarnessDefectsInspected": [
+      {
+        "defect": "stale early canvas rectangle click (arrival-common-manual/reference-1: 300x150 read, 150,75 clicked, settled canvas 1280x720)",
+        "presentInThisLane": false,
+        "evidence": "This lane's ONLY click is page.click('button[aria-describedby=\"landing-story-subtitle\"]') at earned-continue-probe.mjs:758 — a semantic selector whose box Playwright resolves at click time. No boundingBox()/getBoundingClientRect() read, no coordinate click, no page.mouse.*, no requestPointerLock anywhere in the lane.",
+        "changeMade": "none"
+      },
+      {
+        "defect": "commandedUnits stall detector comparing a clamped 400 ms pulse to 25% of FULL remaining distance",
+        "presentInThisLane": false,
+        "evidence": "walkTowards (earned-continue-probe.mjs:362-402) has no stall detector. It ends only on arrived / hold-off-distance / stop-condition / budget-exhausted / no-key-produced-displacement (a per-burst measured displacement, not a fraction of the residual).",
+        "changeMade": "none"
+      }
+    ],
+    "materialGameRepairsConsumed": 0,
+    "gamePatches": 0,
+    "sharedProbeOrContractEdits": 0
+  },
+
+  "gateConfirmation": {
+    "helperRequires": [
+      "story:ch13-origin-landed actually latched (nothing preseeded)",
+      "landedActivePlanetId === '-1,-1' EXACTLY (a merely different planet is refused by name)",
+      "locationMode === 'surface' AND controlMode === 'fps'",
+      "supported === true and a finite 3-number grounded bodyPose",
+      "measured live fps >= minFps (operational threshold 15)",
+      "anc.cg.origin-landed present in the NAMED signedSceneAv.activationHistoryAnchorIds (a non-empty lift-only history is refused, raw history preserved)",
+      "anc.cg.origin-landed present in the CHAPTER fired-anchor array; a null chapter read is refused as UNMEASURED",
+      "Object.keys(av).length retained only as avRawKeyCountIsNotEvidence"
+    ],
+    "confirmedBySourceRead": true,
+    "confirmedByCpuDiscriminators": "8 discriminating cases in the prepared selftest (wrong planet 3,7; near-miss -1,-1:p2; lift-only AV history; chapter-only; AV-only; null chapter read; exact earned all-state passes; unavailable AV bridge refused) — all green in the 108/108 rerun."
+  },
+
+  "lane": {
+    "captureDir": "verifier/captures/arrival-common-earned/earned-1",
+    "entryUrl": "http://127.0.0.1:34413/?story=ch13-return&journeyprobe=1&debug=1&movie=1",
+    "prerequisiteFixture": "?story=ch13-return seeds ONLY the ch13-return entry milestones (fault-reviewed / return-chosen). It does NOT seed story:ch13-origin-landed. Verified in the boot read: milestone absent, avHistory empty, activePlanetId '-1,-1:p1' (the DEPARTURE body).",
+
+    "phase0_earnedOriginLanding": {
+      "outcome": "PASS — physically earned",
+      "returnMs": 73763,
+      "ladder": [
+        {"atMs": 4,     "beat": "ch13-return", "objective": null,                 "world": "-1,-1:p1", "controlMode": "fps",    "firedAnchors": null, "avHistory": [], "originLandedMilestone": false},
+        {"atMs": 2012,  "beat": "ch13-return", "objective": "ch13:return:board",  "world": "-1,-1:p1", "controlMode": "flight", "firedAnchors": ["anc.cg.hatch-boarded"], "avHistory": [], "markerLabel": "Kestrel hatch · board"},
+        {"atMs": 2772,  "beat": "ch13-return", "objective": "ch13:return:launch", "world": "-1,-1:p1", "controlMode": "flight", "avHistory": ["anc.cg.hatch-boarded"], "markerLabel": "Kestrel controls · lift"},
+        {"atMs": 3604,  "beat": "ch13-return", "objective": "ch13:return:origin", "world": "-1,-1:p1", "locationMode": "atmosphere", "phase": "descent", "speed": 2.37, "avHistory": ["anc.cg.hatch-boarded", "anc.cg.lift-committed"], "markerLabel": "Origin · audit site"},
+        {"atMs": 73763, "beat": "ch13-survey", "objective": "ch13:survey:start", "world": "-1,-1", "locationMode": "surface", "controlMode": "fps", "avHistory": ["anc.cg.hatch-boarded", "anc.cg.lift-committed", "anc.cg.origin-landed", "anc.cg.repeated-measure"], "firedAnchors": ["anc.cg.hatch-boarded", "anc.cg.lift-committed", "anc.cg.origin-landed", "anc.cg.demonstration-opened", "anc.cg.repeated-measure"], "originLandedMilestone": true, "markerLabel": "Survey start · begin a route"}
+      ],
+      "gate": {
+        "ok": true,
+        "problems": [],
+        "landedActivePlanetId": "-1,-1",
+        "isExactSignedOrigin": true,
+        "bootActivePlanetId": "-1,-1:p1",
+        "locationMode": "surface",
+        "controlMode": "fps",
+        "supported": true,
+        "bodyPose": [-33.89654149090149, 50.989516503392146, 8.339135164415396],
+        "fps": 60.3,
+        "avHasOriginLanded": true,
+        "chapterHasOriginLanded": true,
+        "avHistoryCount": 4,
+        "avActivationSequence": 4
+      },
+      "milestonesCh13AtLanding": ["story:ch13-fault-reviewed", "story:ch13-origin-landed"],
+      "note": "Board -> lift -> descent -> landing was flown by the shipped movie rail (scripted input on the same virtual controls a player presses). NOT reported as a zero-rescue movie success. Nothing preseeded the landing.",
+      "frame": {"file": "0000a-origin-landed.png", "sha256": "c24a775fb6c8b52783149949035683d1a03e56be40f7d84232750e857b50b79d"}
+    },
+
+    "phase1_partialSurveyDrawing": {
+      "outcome": "PASS — real partial drawing caught before offer/route-test",
+      "earnMs": 1727,
+      "objectiveId": "ch13:survey:draw",
+      "markerLabel": "Survey end · demonstrate a route",
+      "hudText": "CURRENT OBJECTIVE | Survey end · demonstrate a route | Walk your route to the survey end. | [F] Offer the recorded span.",
+      "surveyAtCheckpointRead": {"phase": "drawing", "samples": 6, "lengthUnits": 4.444286721512583, "walkedUnits": 6.076628446412372, "testedPrefix": 0, "witnessOffered": false, "acceptedSamples": 0, "acceptedClass": null},
+      "checkpointPurity": {"reached": true, "pure": true, "impure": [], "catchNow": true},
+      "routeTestedMilestonePresent": false,
+      "anchorsAtCheckpoint": ["anc.cg.hatch-boarded", "anc.cg.lift-committed", "anc.cg.origin-landed", "anc.cg.demonstration-opened", "anc.cg.repeated-measure", "anc.cg.survey-started"],
+      "fps": 57.7,
+      "samplesAcceptedInterpretation": "The commissioned '>= 4 accepted samples before route-offered/tested' is met by the WORKING drawing: the serialized save carries 18 working samples with real per-sample coordinates and walkedAt times. survey.acceptedSamples is 0 and acceptedClass is null BY DESIGN at this checkpoint — that field only becomes non-zero after the span is offered and route-tested, which is exactly what this partial capture must precede. No credit is claimed from acceptedSamples.",
+      "frames": [
+        {"file": "0000-movie-rail-state.png", "sha256": "9510739b6ba483cb77ebad1a9deb7ecd178a6ebb71070b2b2386c8a569c3ce5f"},
+        {"file": "0001-earned-partial-drawing.png", "sha256": "dda0aadcb863ed40e7ba720b536b429994233902d95b8f199889f350ebd8106e"}
+      ]
+    },
+
+    "phase2_actualSave": {
+      "outcome": "PASS — real shipped beforeunload autosave",
+      "shippedPath": "App.tsx beforeunload -> doSave(true) -> saveWorld / savePlayerPose / saveGlobal -> serializeCommonGroundForWorld",
+      "trigger": "same-tab navigation to http://127.0.0.1:34413/?journeyprobe=1&debug=1 (no story deep link, localStorage retained)",
+      "noHandConstructedPayload": true,
+      "storageKeysBeforeNavigation": ["pvx.v1.world.-1,-1:p1", "pvx.v1.world.-1,-1:p1.voxels", "pvx.v1.world.-1,-1", "pvx.v1.world.-1,-1.player", "pvx.v1.world.-1,-1.voxels", "pvx.v1.global", "pvx.v1.world.-1,-1:p1.player"],
+      "storageKeysAfterNavigation": ["pvx.v1.world.-1,-1:p1", "pvx.v1.world.-1,-1:p1.voxels", "pvx.v1.world.-1,-1", "pvx.v1.world.-1,-1.player", "pvx.v1.world.-1,-1.voxels", "pvx.v1.global", "pvx.v1.world.-1,-1:p1.player"],
+      "droppedKeys": [],
+      "rawWorldBytes": [
+        {"key": "pvx.v1.world.-1,-1", "presaveBytes": 582, "presaveSha256": "35193d0ec17c58703ea7edbda3757c482755b18e94aee459e2468465af202542", "postsaveBytes": 2753, "postsaveSha256": "4d1bdd7a89c2c79258e04cdf3c9d8629c161d357a2d7d659424316c32f304f62", "seed": 3215739679, "hasCommonGround": true, "commonGroundSha256": "05b6efb32dd01587b49fe62a9a81daa175aaf5014d90ddb5e27e8f7a8c9df8ef"},
+        {"key": "pvx.v1.world.-1,-1:p1", "presaveBytes": 568, "presaveSha256": "267863465c490f400eda84627736ff07ef31ad5e44f0f51e0efcc625bdb3a3c9", "postsaveBytes": 568, "postsaveSha256": "267863465c490f400eda84627736ff07ef31ad5e44f0f51e0efcc625bdb3a3c9", "seed": 1600321158, "hasCommonGround": false}
+      ],
+      "saveProof": "the -1,-1 world blob grew 582 -> 2753 bytes and gained a commonGround section at the navigation: the autosave demonstrably executed rather than being assumed",
+      "globalSave": {"key": "pvx.v1.global", "bytes": 3500, "sha256": "ac87e22da7f1a702e4359ad77d4a509e678f600f501df932d4b963469a01258b", "milestoneCount": 91, "lastPlanetWorldId": "-1,-1", "originLandedMilestoneInSave": true, "routeTestedMilestoneInSave": false, "shipRestoration.parkedPose.position": [53.5, 20, -20]},
+      "savedCommonGround": {"version": 1, "actorId": "local", "worldId": "-1,-1", "survey.phase": "drawing", "survey.accepted": null, "survey.working.samples": 18, "survey.working.walkedUnits": 18.019295766570284, "survey.working.routeClass": null, "survey.working.testedPrefixCount": 0, "survey.working.offeredEndIndex": null, "survey.witness": null, "common.stage": "none", "common.committed": false},
+      "firstSavedSamples": [
+        {"x": -26.550793701756184, "y": 50.9897796631766, "z": 12.342609372023514, "corner": true, "walkedAt": 0},
+        {"x": -26.23207078540987, "y": 50.98982162482171, "z": 13.401818223544689, "corner": true, "walkedAt": 1.3314923233448739},
+        {"x": -26.462725671846474, "y": 50.98972244269967, "z": 13.921151094245873, "corner": true, "walkedAt": 2.3949318020658037}
+      ],
+      "capturedFiles": ["worldsave-presave-pvx.v1.world.-1_-1.json", "worldsave-presave-pvx.v1.world.-1_-1_p1.json", "worldsave-pvx.v1.world.-1_-1.json", "worldsave-pvx.v1.world.-1_-1_p1.json", "globalsave.json"]
+    },
+
+    "phase3_ordinaryContinue": {
+      "outcome": "PASS — ordinary Continue, correct world, no overwrite, no replay",
+      "menuUrl": "http://127.0.0.1:34413/?journeyprobe=1&debug=1",
+      "noStoryDeepLink": true,
+      "noMovie": true,
+      "noReseed": true,
+      "noForcedQuit": true,
+      "menuUi": {"title": "Paravoxia", "cta": "▶ Continue", "subtitle": "STORY COMPLETE · RETURN TO YOUR WORLD", "landingMenuPresent": true},
+      "click": {"selector": "button[aria-describedby=\"landing-story-subtitle\"]", "label": "▶ Continue", "shippedPath": "LandingMenu.startOrContinueStory -> beginStory() -> storyEntryPoint()", "ordinaryClick": true, "forcedPointerLock": false},
+      "afterClickMs": 2061,
+      "restored": {"beat": "ch13-survey", "objectiveId": "ch13:survey:draw", "markerLabel": "Survey end · demonstrate a route", "hudPresent": true, "activePlanetId": "-1,-1", "locationMode": "surface", "controlMode": "fps", "milestoneCount": 91, "fps": 59.3},
+      "workingPrefixRetained": {
+        "savedWorkingSamples": 18,
+        "samplesOnDiskAfterContinue": 19,
+        "livePhaseAfterContinue": "drawing",
+        "liveSamplesAfterContinue": 19,
+        "liveLengthUnits": 16.01973329251884,
+        "liveWalkedUnits": 19.40165874924319,
+        "testedPrefix": 0,
+        "verdict": "RETAINED — the original working prefix is present and no earned sample was lost"
+      },
+      "overwriteVerdict": {"ok": true, "problems": [], "savedSamples": 18, "samplesOnDiskAfterContinue": 19, "bytesChanged": true, "note": "A changed sha is not itself a failure (a legitimate resume rewrites the blob); losing earned samples is. None were lost."},
+      "worldIdentityVerdict": {"ok": true, "problems": [], "savedKey": "pvx.v1.world.-1,-1", "restoredKey": "pvx.v1.world.-1,-1", "actorId": "local", "lostMilestones": []},
+      "replayVerdict": {"noReplay": true, "replayedAnchorIds": [], "replayedCueAnchorIds": [], "replayedPendingAnchorIds": [], "installWatchChanged": false},
+      "avDeltaAcrossContinue": {"addedAnchorIds": [], "droppedAnchorIds": [], "sequenceBefore": 4, "sequenceAfter": 0, "beatBefore": "ch13-survey", "beatAfter": "ch13-survey", "activeAfter": true, "anchorIdAfter": null},
+      "storageAfterContinue": [
+        {"key": "pvx.v1.world.-1,-1", "bytes": 2887, "sha256": "cb7778e06d712adba444d1a32ec80b0cffa8dd3a96528f15e1b2198843723456", "hasCommonGround": true, "commonGroundSha256": "ecfa9901fd49c23a90e8ffda13db29dcd2c6c935a8550066a510a3bfd9841164", "surveyPhase": "drawing", "savedSamples": 19},
+        {"key": "pvx.v1.world.-1,-1:p1", "bytes": 126, "sha256": "385aa706ccb73249ac5b68e5c415438f01e951bcdca897f5c783ec9a53be3618", "hasCommonGround": false, "surveyPhase": null, "savedSamples": 0}
+      ],
+      "rawObservationsNotClaimedAsFailures": [
+        "survival.samplesSurvived=false and walkedUnitsSurvived=false in the raw summary compare the 6-sample CHECKPOINT READ against the 19 after Continue. The count went UP, not down; the authoritative comparison is savedSamples 18 -> 19 on disk (overwriteVerdict.ok=true). Reported verbatim so the raw booleans are not misread as loss.",
+        "The -1,-1:p1 (departure-body) blob shrank 568 -> 126 bytes across the Continue boot. This role did not investigate it; it is recorded as a raw byte fact, not a claim.",
+        "signedSceneAv.activationSequence resets 4 -> 0 with an empty history after Continue. The prepared helper already states an empty restored history proves no replay ONLY when the restore actually resumed; the restore did resume (beat/objective/world/drawing all correct)."
+      ],
+      "frames": [
+        {"file": "0002-landing-menu-continue.png", "sha256": "e51f3192a91d222ae6285988e8cc0bc1bd54ac585f0a70d1a21a2e437049a6d5"},
+        {"file": "0003-after-continue.png", "sha256": "8f58aca816e25bf98e938da8afcee0c9ac49b0bb177660d3f11ee4694a712d4a"}
+      ]
+    },
+
+    "phase4_newActionAfterContinue": {
+      "outcome": "PREREQUISITE FAILURE — MEASURED, NOT REPAIRED",
+      "findingId": "EC-NEW-ACTION-NOT-OFFERED",
+      "error": "the shipped new action is not available to press: the body never actually arrived at the span end by ordinary movement",
+      "target_E": [-42, 51.05, 12],
+      "bodyAtContinue": [52.78897476196289, 17.5, -20],
+      "finalBody": [52.789756774902344, 17.4931697845459, 12.583277702331543],
+      "finalDistToE_XZ": 94.79155132353927,
+      "hudMarkerDistanceAtContinue": "104m (read off frame 0003 — the shipped marker itself reports the body is ~104 m from 'survey end · demonstrate a route')",
+      "bursts": 144,
+      "walkMs": 90387,
+      "stopReason": "budget-exhausted",
+      "arrived": false,
+      "promptsAtEnd": [],
+      "fPromptOffered": false,
+      "surveyUnchangedDuringWalk": {"samples": 19, "lengthUnits": 16.01973329251884, "walkedUnitsRoseTo": 120},
+      "measuredCauses": [
+        {
+          "id": "P4-A",
+          "observation": "Continue resumed the body at the stored SHIP parked pose, not at the survey. globalSave.shipRestoration.parkedPose.position is [53.5, 20, -20]; the body appeared at [52.789, 17.5, -20]. The survey working samples sit near x≈-26, y≈51, z≈12-16. That is ~95 units (XZ) / 104 m by the shipped marker away from the objective.",
+          "claim": "raw measurement of where the ordinary Continue placed the body. This role does NOT call it a defect; whether resuming at the parked ship is intended is a design question for the chapter owner."
+        },
+        {
+          "id": "P4-B",
+          "observation": "supported === false for the ENTIRE post-Continue sequence — all 148 journey entries (4 calibration + 144 walk bursts, 90.4 s) report supported false or null. Contrast: at the earned landing supported was true.",
+          "claim": "OBJECTIVE ANOMALY. An ungrounded body for 90 s of continuous ordinary movement is not a taste judgement. Cause NOT established by this role; no game source was inspected or patched."
+        },
+        {
+          "id": "P4-C",
+          "observation": "The body's local up vector after Continue is [1.0, 1.8e-07, -5.4e-07] (+X), whereas at the survey site it was [-2.5e-04, 1.0, 3.1e-09] (+Y). bodyCentre[0] stayed pinned at 52.789 for all 144 bursts while bodyPose[0] stayed 50.989 (= 52.789 - 1.8 groundOffsetUnits along +X).",
+          "claim": "the resume placed the body on a differently-oriented face of the voxel planet from the one carrying the survey."
+        },
+        {
+          "id": "P4-D",
+          "observation": "HARNESS LIMITATION, demonstrated. walkTowards measures displacement and distance in the WORLD XZ plane only (distXZ; calibration d = [dx, dz]). On a +X-up face the tangent plane is Y-Z. KeyA actually moved the body 2.231 units in Y (17.500 -> 15.269) and KeyD moved it back (15.269 -> 17.500), but both were scored as 0.0004 / 0.0008 'moved' and recorded as dir=null, so chooseKey was left with only KeyW/KeyS (±Z). Z converged to the target's z within 16 bursts and the remaining 95 units of X were unreachable by construction.",
+          "claim": "this lane's mover cannot navigate a non-+Y-up face. Combined with P4-B (never grounded) the 'reach E' prerequisite was IMPOSSIBLE for this harness."
+        }
+      ],
+      "actionTaken": "STOPPED at the first impossible prerequisite, per commission. State retained exactly; capture directory kept intact (nothing removed).",
+      "notDone": [
+        "no repeat run, no longer budget, no timeout or endpoint rescue",
+        "no afterContinue walk-W rescue",
+        "no pose injection, no direct store/API/anchor write, no missing-plane credit, no invented pending state",
+        "no up-aware rewrite of walkTowards: that is new movement/geometry capability, not a correction of a demonstrated harness error, and it would not resolve P4-B (never grounded)",
+        "no game patch"
+      ],
+      "frame": {"file": "0004-at-survey-end.png", "sha256": "96f613a1c8970827cdd464db5a6677b915c3cef2f1dda58f38a429615b972ad1", "note": "filename is the probe's prepared label; the body was NOT at the survey end"}
+    }
+  },
+
+  "entryObservation": {
+    "clicksObservedByThePageObserver": 0,
+    "note": "the observer was installed after ready; this lane's entry is the movie rail, and the single Continue click happened in the SECOND page load after the observer's page was gone. Reported as UNMEASURED, not as a clean-click claim.",
+    "pointerLockChanges": 0,
+    "pointerLockErrors": 0,
+    "forcedPointerLock": false,
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "consoleDropped": 0,
+    "focusState": {"hasFocus": true, "visibilityState": "visible", "pointerLockElement": null, "userActivationIsActive": true},
+    "touchState": {"maxTouchPoints": 0, "touchJoystickMounted": false, "pointerFine": true},
+    "policyState": {"inputPolicy": {"moveSpeedScale": 1, "lookMode": "free"}},
+    "consoleWarnings": [
+      "[shader-warmup] initial render released without complete preparation {outcome: timeout, elapsedMs: 529.5, compiledTargets: 2, worldMountedAtMs: null}",
+      "[shader-warmup] initial render released without complete preparation {outcome: timeout, elapsedMs: 3353.8, compiledTargets: 8, worldMountedAtMs: null}",
+      "[shader-warmup] GPU readiness wait {outcome: timeout, startedAt: 7363.6, elapsedMs: 511.7, polls: 14}",
+      "using deprecated parameters for the initialization function; pass a single object instead (x2)"
+    ]
+  },
+
+  "measuredGates": {
+    "earnedOriginGate": "PASS",
+    "checkpointPurity": "PASS (partial, pre-offer, pre-route-test)",
+    "continueBootDecision": "PASS (no dropped storage keys, no deep reseed)",
+    "worldIdentityVerdict": "PASS",
+    "overwriteVerdict": "PASS (no earned sample lost)",
+    "replayVerdict": "PASS (no replayed anchor by name)",
+    "newActionGate": "FAIL — prerequisite (physical arrival at E) never met",
+    "fpsAtLanding": 60.3,
+    "fpsAtCheckpoint": 57.7,
+    "fpsAfterContinue": 59.3,
+    "fpsThresholdIsOperationalOnly": true
+  },
+
+  "objectiveVisualDefects": [],
+  "framesRead": [
+    {"file": "0001-earned-partial-drawing.png", "beat": "ch13-survey", "finding": "renders; correct HUD objective/marker copy; daylight; no blank/black/pop"},
+    {"file": "0003-after-continue.png", "beat": "ch13-survey", "finding": "renders; planet -1,-1 seed 3215739679 matches the saved blob; HUD marker 'survey end · demonstrate a route · 104m'; night sky (different planet face from the drawing site — descriptive, not a defect claim)"},
+    {"file": "0004-at-survey-end.png", "beat": "ch13-survey", "finding": "renders; no blank/black frame; marker text partly occluded by the debug=1 World-Coordinates panel, which is a probe fixture overlay, not a shipped HUD defect"}
+  ],
+
+  "cleanup": {
+    "receipt": "verifier/captures/arrival-common-earned/earned-1/cleanup-receipt.json",
+    "phase": "post-finally",
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "cleanupError": null,
+    "cleanupReason": "finally",
+    "sessionStopInvocations": 1,
+    "stopsOnlyProbeOwnedSession": true,
+    "rootPreviewUntouched": true,
+    "rootPreviewUrl": "http://127.0.0.1:34413/",
+    "foreignProcessesStopped": 0,
+    "abandonedBrowsers": 0,
+    "verifiedAfterRun": "no earned-continue-probe process remains"
+  },
+
+  "unknowns": [
+    "Whether a real player (who can turn the view with the mouse) could walk from the post-Continue ship pose to the survey end is UNMEASURED — this probe never turns and its mover is XZ-planar.",
+    "The cause of supported===false for 90 s after Continue is UNKNOWN. No game source was read or changed for it.",
+    "Whether resuming at the ship parked pose ~104 m from the live objective marker is intended is a chapter-design question, not decided here.",
+    "The -1,-1:p1 blob shrinking 568 -> 126 bytes across the Continue boot is uninvestigated.",
+    "The three [shader-warmup] timeout warnings are recorded, not diagnosed.",
+    "The 18 -> 19 sample increase across the save/Continue boundary is recorded, not explained.",
+    "No manual COMMON, full-story, variant, listening, taste or chapter acceptance is implied by anything above."
+  ],
+
+  "notClaimed": [
+    "no chapter acceptance",
+    "no gameplay acceptance beyond the specific measured lifecycle steps",
+    "no publication authorization",
+    "no zero-rescue movie success (the flight and drawing were scripted input on the shipped rail and are labelled as such)",
+    "no repetition of the historical run-4/run-5 overwrite attribution: the root qualification governs and NOTHING in this report rests on that narrative. The overwrite question here is answered ONLY by this run's own bytes (savedSamples 18 -> 19 on disk, no loss)."
+  ]
+}

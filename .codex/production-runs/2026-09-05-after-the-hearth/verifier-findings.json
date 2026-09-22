@@ -1,0 +1,188 @@
+{
+  "schema": "paravoxia.verifierFindings.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "authoredBy": "independent story-verifier (fresh navigation-repair continuation)",
+  "writtenAt": "2026-09-06T14:53:31+00:00",
+  "isAcceptance": false,
+  "isChapterVerificationComplete": false,
+  "publicationAuthorized": false,
+  "supersedes": "verifier-findings.prior-source-51b25376.json and all pre-repair findings, which remain retained as PRIOR-SOURCE evidence only",
+  "sourceUnderTest": {
+    "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+    "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+    "contractVersion": "scene-v2",
+    "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+    "sourceFilesIndependentlyRehashed": 98,
+    "sourceRehashMismatches": 0,
+    "previewUrl": "http://127.0.0.1:38803/",
+    "previewOwnedBy": "root-production-preview",
+    "indexSha256": "ca7b448b72cc17407fc843afffe4808df7fc12ea5203a47b77ceece1c6dedc71",
+    "bundlePath": "/assets/index-CbB2rmHN.js",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "rendererClass": "hardware"
+  },
+  "resolved": [
+    {
+      "id": "VF-NAV-RESOLVED-1",
+      "title": "Terminal exact-goal navigation regression is physically passed",
+      "priorDefectRefs": [
+        "CG-IMPL-010"
+      ],
+      "status": "RESOLVED-BY-MEASUREMENT",
+      "evidence": "verifier/captures/navigation/survey-movie-1/summary.json",
+      "detail": "On the pre-repair d9e36ae3 source the survey physically started 4 samples then snapped ~0.75 short of off-grid goals at multiple turns. On this source the same shipped rail walks 150.915 units (105.843 horizontal), net displacement 68.533, through the first and subsequent x/z turns, reaching 6 consecutive signed anchors. teleportNudgesTotal = 0, pageErrors = 0, pose source resolved at 457 ms with 0 source switches. Root independently observed the same run at 42 samples / ~35.31 route units, testedPrefix 41.",
+      "measuredNotInferred": true
+    },
+    {
+      "id": "VF-NAV-RESOLVED-2",
+      "title": "Destructive pre-hydration save no longer overwrites a real partial drawing",
+      "priorDefectRefs": [
+        "CG-IMPL-011",
+        "CG-IMPL-008"
+      ],
+      "status": "RESOLVED-BY-MEASUREMENT",
+      "scope": "INCOMPLETE-FIXTURE DATA PRESERVATION ONLY. This is explicitly NOT a valid earned Continue success.",
+      "evidence": [
+        "verifier/captures/partial-continue/run-5/worldsave-pvx.v1.world.-1_-1.json",
+        "verifier/captures/partial-continue/run-5/worldsave-after-continue-pvx.v1.world.-1_-1.json"
+      ],
+      "detail": "Pre-repair run-4 showed a 1186-byte 4-sample Origin drawing overwritten by a 606-byte idle save after Continue, with the sibling world selected. On this source the shipped beforeunload->doSave wrote 1305 bytes sha256 5252dfd74a2391ecbae41b99a619703b9e25999f093fb733593094d97463f514 with commonGround survey.phase=drawing and 5 samples carrying real walkedAt progression (0, 1.248, 1.739, 2.721, 3.457). After clicking the REAL landing Continue button with storage retained and no deep link, the same key is byte-identical: 1305 bytes, same sha256, commonGround present, phase drawing, 5 samples. Boot and menu did not overwrite the original saved drawing.",
+      "measuredNotInferred": true
+    }
+  ],
+  "openBlockers": [
+    {
+      "id": "VF-NAV-BLOCK-1",
+      "title": "ch13-return Origin approach never lands: a repeating ~38.4 s orbital loop",
+      "severity": "blocker",
+      "status": "OPEN-NEW-ON-THIS-SOURCE",
+      "beat": "ch13-return",
+      "objectiveId": "ch13:return:origin",
+      "markerLabel": "Origin \u00b7 audit site",
+      "anchorsReached": [
+        "anc.cg.hatch-boarded",
+        "anc.cg.lift-committed"
+      ],
+      "anchorNotReached": "anc.cg.origin-landed",
+      "milestoneNotEarned": "story:ch13-origin-landed",
+      "evidence": [
+        "verifier/captures/partial-continue/earned-2/summary.json",
+        "verifier/captures/partial-continue/earned-2/0000a-origin-landed.png",
+        "verifier/captures/partial-continue/earned-1/summary.json"
+      ],
+      "detail": "Booting ?story=ch13-return&movie=1 the signed ladder correctly boards (anc.cg.hatch-boarded at 2541 ms) and commits lift (anc.cg.lift-committed at 4560 ms), then enters ch13:return:origin. The ship genuinely flies: 412 marker-distance samples over 420 s. It is NOT a stalled body. It is a closed loop: the approach descends to a minimum of 50-51 m from the Origin audit site and then resets to ~2550 m, repeating 10 times with a period of ~38.4 s. Measured minima at 41.1, 79.4, 117.7, 155.2, 193.5, 231.8, 269.2, 306.7, 344.2, 382.6 s (all 50-51 m); measured maxima at 78.4, 116.7, 154.1, 192.4, 230.8, 268.2, 305.5, 343.1, 381.5, 418.9 s (all 2515-2562 m). Flight mode alternates descent/flight (54 samples) and deep_space/flight (358 samples). story:ch13-origin-landed never fires in 420 s. No rescue, teleport or grant was used or counted.",
+      "stallPredicateNote": "Deliberately NOT reported as a body stall. The commission requires distinguishing a stationary seated body during MOVING flight from real stagnation; the body is correctly seated at [9.75, 51.10, -8] the whole time while the SHIP moves 2500 m per cycle. The discriminator used is the marker's own distance readout, not the body pose.",
+      "reportingCorrection": "My probe's own first-vs-last summary field flightDistanceTrend says 'CLOSING' (2730 m -> 51 m). That label is naive and must not be quoted: it compares only endpoints and hides the oscillation. The per-sample profile above is the accurate statement.",
+      "blocks": [
+        "valid earned Continue (restored drawing -> NEW physical action)",
+        "continuous ch13-return -> ch13-survey sequence",
+        "three cold focused journeys",
+        "station-departure -> home -> ch13 -> final without reseed",
+        "full story movie from beginning"
+      ],
+      "causeConfidence": "not diagnosed; no source cause claimed"
+    },
+    {
+      "id": "VF-NAV-BLOCK-2",
+      "title": "ch13-survey never reaches anc.cg.route-tested; held at revision-ready standing-clear",
+      "severity": "blocker",
+      "status": "OPEN",
+      "beat": "ch13-survey",
+      "objectiveId": "ch13:survey:test",
+      "anchorsReached": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.revision-ready"
+      ],
+      "anchorNotReached": "anc.cg.route-tested",
+      "evidence": [
+        "verifier/captures/navigation/survey-movie-1/summary.json",
+        "verifier/captures/navigation/survey-movie-1/0106-stall-fail.png"
+      ],
+      "detail": "6 of the 7 non-contingent anchors for this beat are physically reached. The beat then holds: player [-41.98, 52.79, 12.16], W-7744 [-42, 51, 13.2] (~1 m apart), auditWorker.walk 0, autopilot.routeAction 'direct', stillTime 0, playerMovedUnitsInWindow 0 AND actorMovedUnitsInWindow 0 across a 150 s window. The beat never advances to ch13-common.",
+      "lifecycleObservation": "ch13:survey:revise activates at 44026 ms on anc.cg.revision-ready and is replaced 217 ms later at 44243 ms by ch13:survey:test \u2014 the revise objective is cleared by the same anchor that raised it. The standing ch13:survey:test copy asserts 'W-7744 is testing the offered route' while W-7744's walk is 0.",
+      "candidateNotCause": "Root's source pointer: commonGroundDirector.ts:1950 CG_STANDBY_CLEAR_OF_E = E.z - 3 = z9. The rail target at the hold is [-42, 51.05, 9] while the body sits at z 12.16. The unmet request is a real MOVE to the standby cell, which points at target footing/navigability at that cell. NOT MEASURED by me; recorded as a candidate only.",
+      "withdrawn": "I earlier framed 'the rail never presses [F] Reopen' as the cause. Withdrawn per root: standing-clear is a deliberate choice to remove body obstruction, so declining to reopen is not the fault. The standing prompt is retained only as an observation.",
+      "causeConfidence": "not diagnosed; no source cause claimed"
+    }
+  ],
+  "notDefects": [
+    {
+      "id": "VF-NAV-NOTADEFECT-1",
+      "title": "Continue landing in ch13-return on the sibling world is LAWFUL for the incomplete fixture",
+      "detail": "I provisionally read the post-Continue world -1,-1:p1 (seed 1600321158) with objective 'Kestrel hatch \u00b7 board' as a world-selection defect, because the preserved drawing lives in -1,-1 (seed 3215739679). Checking scene-contract.json BEFORE filing shows ch13:return:board is an authored objective with exactly that markerLabel and workOrder ['Follow the hatch marker.','[F] Board the Kestrel.']. The old ch13-survey fixture seeds ch13-fault-reviewed and ch13-return-chosen but NOT ch13-origin-landed, so resuming ch13-return is the correct ladder answer. GlobalSave lastPlanetWorldId correctly reads '-1,-1'. RETRACTED BEFORE FILING; no defect raised. Root's 14:22Z correction independently agrees."
+    }
+  ],
+  "harnessErrorsNotGameFailures": [
+    {
+      "id": "VF-NAV-PROBEERR-1",
+      "detail": "partial-continue-probe.mjs run-5 Phase 4a walked toward W-7744's ORIGIN coordinates [-34,51.05,10] while still in the departure world, 'arrived' beside fauna (0.985 u horizontal, 2.284 u 3D vs 3.4 u reach) and recorded originLanded false. That is my harness using the wrong target for that beat, not a game failure. It invalidates only the run-5 Phase 4a leg and does not touch the byte-level preservation result, which is measured from stored bytes. Frame 0003b-after-walk-to-W.png retained.",
+      "invalidates": [
+        "run-5 phase 4a only"
+      ]
+    },
+    {
+      "id": "VF-NAV-PROBEERR-2",
+      "detail": "My statement that partial-continue-probe.mjs 'already implements the earned return path' was WRONG. It boots ?story=ch13-survey (line 263) and only walks to W AFTER Continue (line 475). Corrected; run-5 is re-scoped to incomplete-fixture data preservation only. A new run-local copy verifier/probes/partial-continue-earned/earned-return-continue-probe.mjs (sha256 a9fefa6b61043d6658c983235271e29df0b0bf6089430ad8e7a249f24e93220e) boots ch13-return and earns the landing before drawing.",
+      "invalidates": [
+        "one written claim, no measurement"
+      ]
+    },
+    {
+      "id": "VF-NAV-PROBEERR-3",
+      "detail": "First self-test gate was piped into tail, so the reported $? was tail's status, not node's. Re-run writing directly to a file gives ACTUAL node exit 0 with 25/25 and 41/41 passed: logs/verifier-navigation/selftest.log sha256 efaa7f1d6485afd0bb6fa675f98a3faaa743f2c3bea0d0333f2cb99725d3c619. The gate genuinely passed; only the exit-code evidence was sloppy.",
+      "invalidates": []
+    },
+    {
+      "id": "VF-NAV-PROBEERR-4",
+      "detail": "earned-2/failure.json records probe name 'partial-continue-probe.mjs' because the field is inherited from the copied parent. The actual entry point is earned-return-continue-probe.mjs, as recorded correctly in that capture's source-snapshot. Cosmetic provenance defect in my own artifact.",
+      "invalidates": []
+    }
+  ],
+  "processCompliance": {
+    "gameSourceEdits": 0,
+    "contractEdits": 0,
+    "creativeEdits": 0,
+    "publication": "none",
+    "previewsStartedByVerifier": 0,
+    "rootPreviewEverStopped": false,
+    "timeoutRescuesGranted": 0,
+    "teleportsOrProgressGrants": 0,
+    "forgedMilestonesOrSignatures": 0,
+    "heavyLockProvenance": "The two earliest GPU probes acquired the lock with flock -s (SHARED) instead of the commissioned exclusive -n. Recorded rather than hidden: they ran strictly serially, one owned browser at a time, and fuser showed no other holder during either, so no overlap occurred. All later heavy jobs used exclusive flock -n. A queued exclusive retry waited ~16 minutes for an unrelated Paraform job (harness/perform.mjs) rather than bypassing it; that job was never killed.",
+    "cleanupReceipts": "Every capture has a post-finally cleanup-receipt.json with state=stopped, sessionStopped=true, cleanupError=null, stopsRootPreview=false.",
+    "failedCapturesPreserved": [
+      "partial-continue/run-1",
+      "run-2",
+      "run-3",
+      "run-4",
+      "earned-1",
+      "earned-2"
+    ]
+  },
+  "unmeasured": [
+    "Manual early-corner / ordinary return-to-frontier recovery (check 3): gated behind VF-NAV-BLOCK-1/2; NOT attempted, therefore unmeasured rather than failed.",
+    "Three cold focused journeys (first-try long-fixed and short-hold).",
+    "Actual station-departure -> home install/restoration -> ch13 -> final without reseed.",
+    "Full story movie FROM BEGINNING with zero rescues.",
+    "11 of 17 objective lifecycles and 20 of 28 anchors: only 6 objectives and 6 anchors (survey) plus 2 anchors (return) were observed. Conditional/reset/clear/ready anchors unobserved.",
+    "Two WorldSave bounded route slots, reference distance/LOS/occupancy/reentry/gaze independence, body clearance/water/hole/obstacle/unsafe footing, suffix revision and actor pose, one-way physical proof.",
+    "Terra E->C 18, W H->E2 uncredited then E->C 18, T/F occupancy, accepted S->E persistence, guide-only-after-H-ready, one objectiveID preparing->ready.",
+    "Mobile, reduced-motion and lowest-tier visible guidance and focal parity; desktop only was exercised.",
+    "Cold high AND low hardware resource/handback budgets; fixed lights, camera 75 alive, no creation +/-2 s verbs.",
+    "All scene-v2 audio eligibility/cancel/5-monotonic/4.5-release conditions and control handbacks.",
+    "HUD-suppressed percept media were captured for the survey run only; no separately captured percept set exists for the return-loop capture.",
+    "Reset matrix (deep link, replay, pause/focus, quit-to-menu, completion, inactive sandbox)."
+  ],
+  "explicitNonClaims": [
+    "NO hearing claim of any kind is made. No audio was heard, and no live browser cue-synchronisation was measured. No offline WAV mux was performed or relied upon.",
+    "No visual-taste, beauty, pacing or creative-acceptance judgement is made anywhere.",
+    "No FPS or hardware budget figure is reported, because none was measured in this pass.",
+    "Quit-to-Menu remains UNEXERCISED: the Pause button was again not clickable normally (8 s intercept timeout) and responded only to a forced dispatch, which is labelled diagnostic and is never counted as normal player acceptance.",
+    "Passing static checks proves none of the gameplay, rendering, hearing, budget or creative properties above."
+  ],
+  "timestampCorrection": "writtenAt originally recorded as 2026-09-06T14:56:00+00:00, which was AHEAD of the actual clock. Corrected to the real wall-clock time of authoring per root's 14:55Z note. No other field changed."
+}

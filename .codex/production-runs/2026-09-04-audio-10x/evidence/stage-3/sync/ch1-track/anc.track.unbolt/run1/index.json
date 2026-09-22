@@ -1,0 +1,86 @@
+{
+  "anchor": {
+    "anchorId": "anc.track.unbolt",
+    "fallback": false,
+    "quantumLanded": "beat",
+    "audioTime": 9.429217391304345,
+    "armedAt": 9.173333333333334,
+    "slackMs": 205.8840579710104,
+    "capMs": 450,
+    "onsetAttackMs": 90,
+    "bundleAt": 0.3125510579710111,
+    "armedBeatClock": 0,
+    "latency": {
+      "deviceS": 0.032,
+      "musicPathS": 0.024667,
+      "musicVsSfxS": 0.014667000000000001,
+      "totalS": 0.056667,
+      "sampleRateKey": 48000,
+      "contextSampleRate": 48000
+    },
+    "stateAtBeatClock": 0,
+    "firedBeatClock": 0.31589999997615814,
+    "sfxPostedBeatClock": 0.1832000000476837,
+    "sfxAudioTime": 9.443884391304344,
+    "sfxPostedAudioTime": 9.354666666666667,
+    "firedAudioTime": 9.490666666666666,
+    "firedPerf": 10215.5,
+    "armedPerf": 9900.700000047684,
+    "audibleOnsetPerf": 10213.05105797101,
+    "imageVsOnsetMs": 4.782275362321897,
+    "imageVsOnsetFrames": 0.28693652173931383,
+    "imageVsOnsetPerfMs": 2.448942028990132,
+    "fireLatenessBeatClockMs": 3.3489420051470153,
+    "stateNotLaterThanImage": true,
+    "sfxScheduledAhead": 0.08921772463767752,
+    "onsetVsBundle": 0,
+    "frameAtFire": 465,
+    "frameTimesAroundFire": [
+      -32.15,
+      -15.55,
+      1.15,
+      17.85,
+      34.55,
+      51.15,
+      67.85
+    ],
+    "frameGapAtFireMs": 16.7,
+    "anchorWindow": {
+      "frames": 235,
+      "meanGapMs": 17.02,
+      "maxGapMs": 66.6,
+      "fps": 58.7
+    }
+  },
+  "strip": [
+    {
+      "k": 0,
+      "file": "ch1-track/anc.track.unbolt/run1/f+0.jpg",
+      "epochS": 1788615865.041541,
+      "msFromFire": 3518.3,
+      "msFromAudibleOnset": 3520.8
+    },
+    {
+      "k": 1,
+      "file": "ch1-track/anc.track.unbolt/run1/f+1.jpg",
+      "epochS": 1788615865.057988,
+      "msFromFire": 3534.8,
+      "msFromAudibleOnset": 3537.2
+    },
+    {
+      "k": 2,
+      "file": "ch1-track/anc.track.unbolt/run1/f+2.jpg",
+      "epochS": 1788615865.074613,
+      "msFromFire": 3551.4,
+      "msFromAudibleOnset": 3553.9
+    },
+    {
+      "k": 3,
+      "file": "ch1-track/anc.track.unbolt/run1/f+3.jpg",
+      "epochS": 1788615865.091389,
+      "msFromFire": 3568.2,
+      "msFromAudibleOnset": 3570.6
+    }
+  ],
+  "note": "k=0 is the screencast frame nearest the presentation fire tick; msFromAudibleOnset is measured against schedule.perfTime + latencyComp (the post-tail audible music onset). The SFX member is scheduled to sfxAudioTime = audioTime + musicVsSfx, i.e. the same audible instant."
+}

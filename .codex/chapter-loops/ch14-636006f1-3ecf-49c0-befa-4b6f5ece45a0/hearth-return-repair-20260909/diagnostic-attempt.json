@@ -1,0 +1,28 @@
+{
+  "schema": "paravoxia.chapterDiagnosticAttempt.v1",
+  "status": "authentication-failed-no-runtime-work",
+  "session": "58896aca-7a52-4eb7-964d-1ce3e2ad8bac",
+  "dispatch": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/verifier/dispatch.json",
+    "sha256": "6eb71d2f83e9164b312f004c99e203b1cb6781620e018f20149c5607736daa5b"
+  },
+  "transport": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/verifier/transport.json",
+    "sha256": "e377b9fd2dd7862edba8242c0b634f933dcd0e1fe6d7ff40720d4b79c714698c"
+  },
+  "transcript": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/verifier/transcript.jsonl",
+    "sha256": "9a54f9f0e4848a86a524e6a13816b9950a6ab077444c717618f26c2c8038c8f3"
+  },
+  "usage": {
+    "roleLaunches": 0,
+    "modelTurns": 1,
+    "inputTokens": 0,
+    "cacheReadTokens": 0,
+    "outputTokens": 0
+  },
+  "roleLaunches": 1,
+  "terminalAccounting": true,
+  "scope": "One authorized story-verifier launch to run a focused checkpoint replay. Provider rejected authentication before API work; runtime/root deterministic check is separate, no independent acceptance.",
+  "at": "2026-09-09T16:06:47.935Z"
+}

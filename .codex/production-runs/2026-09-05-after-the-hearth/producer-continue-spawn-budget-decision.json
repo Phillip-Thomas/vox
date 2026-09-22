@@ -1,0 +1,47 @@
+{
+  "schema": "paravoxia.producerDelegatedBudgetDecision.v1",
+  "author": "creative-producer",
+  "decidedAt": "2026-09-06T23:15:21.182511+00:00",
+  "decidedBy": "delegate",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "directUserInstruction": "continue authorized chapter work autonomously; auto approve routine implementation, reviews, reversible fixes and checks",
+  "personallyReviewedByUser": false,
+  "productionRunUnchanged": true,
+  "baseRunProfileRef": "paravoxia-creative-chapter@v1",
+  "baseProfilePath": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-chapter.run-profile.json",
+  "baseProfileSha256": "f6ce3f3cea205b307fb0f19beb5c0390947c5d854b8090254c7b8f5c28ae1654",
+  "baseProfileEdited": false,
+  "completedMaterialRepairLoops": 8,
+  "runLocalBudgetOverride": {
+    "field": "executionBudget.maxPatchLoops",
+    "baseValue": 4,
+    "previousValueForThisRun": 8,
+    "valueForThisRun": 9,
+    "additionalMaterialRepairsAuthorized": 1
+  },
+  "decision": "One bounded ninth fidelity repair to CG-IMPL-011 for the now-measured saved walking pose overridden by parked egress. No new creative direction or score repair.",
+  "wallBudgetSeconds": 1200,
+  "previousBoundedOverrideRef": "producer-manual-credit-finale-budget-decision.json",
+  "previousBoundedOverrideSha256": "7035dce5cc7628522a0d2846291aa655c0dd8d372b26ea2fb7b0603f7f6a7f57",
+  "evidenceRefs": [
+    "producer-continue-pose-handoff-closure-review.json",
+    "continue-pose-handoff-closure-report.json",
+    "producer-manual-recovery-candidate-review.json"
+  ],
+  "conditions": [
+    "Finished verifier and actual browser cleanup before single source writer; no capture while source changes.",
+    "Only explicit narrow boundary paths; preserve all other dirty work.",
+    "Preserve validated matching on-foot Continue and lawful future real ship egress; no safety bypass or top-face force.",
+    "Preserve exact arrival/route predicates, geometry, grounded support, full18 credit and no grants/rescues.",
+    "Meaningful focused regressions, independent actual Continue plus new accepted action, then one stable full suite and affected independent acceptance.",
+    "No profile/workflow rewrite, further blanket repair, publication or accepted exceptions."
+  ],
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "contractChangeRequired": false,
+  "acceptedDefectExceptions": [],
+  "publicationAuthorized": false,
+  "sourceMutationAuthorizedNow": true,
+  "sourceHandoffAt": "2026-09-06T23:15:21.182511+00:00",
+  "finalDirectionRef": "continue-spawn-repair-direction.json"
+}

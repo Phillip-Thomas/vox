@@ -1,0 +1,54 @@
+{
+  "schema": "paravoxia.chapterImplementationEvidence.v1",
+  "acceptance": false,
+  "chapter": "ch14",
+  "gameSource": "db47d1bfea2811f4b6e3505b6297556b2729f2e8fa458a9c73756672f43c54ee",
+  "composer": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/result.json",
+    "sha256": "8a4daf16cc6bb240a3f4a17d214b9e9f64fcaf2c9d1144a18d9e530388da9645"
+  },
+  "artifacts": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/8-build/result.json",
+      "sha256": "255c379d5859e21a49a9fdae4b5ff92e3e240d91ae87eff3ce44dad4c1f80966"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/result.json",
+      "sha256": "8a4daf16cc6bb240a3f4a17d214b9e9f64fcaf2c9d1144a18d9e530388da9645"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/composition.json",
+      "sha256": "3445d32a12dc14c6f0ee8d431c38df9e99efd48c7b4147b7c6ff827a6e6c759d"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/report.json",
+      "sha256": "95ad13ad14a2de5655c99ce77162807aa7deeba38f75ec56de7dee33263c61e6"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/report.json",
+      "sha256": "4e44281095cfe161fbd1ad115f488e7f7e2fde91275ebf3096a2c71045b148d4"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/raw/provenance.json",
+      "sha256": "943c5239c1d016fae3575428be62a8fdedb2e44c569216f5655be463cd18c16e"
+    }
+  ],
+  "media": [
+    {
+      "kind": "video",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/video.webm",
+      "sha256": "2412e48721055ee3be261cf9655cb9901f880ee3955f6ec33717ab9924f3913e"
+    },
+    {
+      "kind": "audio",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/audio.wav",
+      "sha256": "13496f96f86a70da1525f076babb785ab0d837e957f45a309b2ff8b9296047ae"
+    },
+    {
+      "kind": "frame",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/frame.png",
+      "sha256": "8d376522ed90dd5bbeda5c10a059316b8e54f55bd845aa1cc918de476ff52618"
+    }
+  ],
+  "scope": "Retained implementation observations, not final verification or independent acceptance. Look13 predates composer source edits. Listen3 inner capture passed its then-bound obligations; outer gateway failed with a subsequently fixed pooled socket error. Preserve that failed outer result."
+}

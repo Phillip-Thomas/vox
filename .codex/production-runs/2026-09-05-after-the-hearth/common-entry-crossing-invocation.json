@@ -1,0 +1,16 @@
+{
+  "role": "common-entry-crossing",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T20:20:45.604757+00:00",
+  "commissionSha256": "1102fc5b4521d508add143f50ee77c8aa21f83f580d9e66ee5e0c2743bc83724",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "Correct actual E-entry and fullvertex geometric proof, observe earnedprefix then positivepostplane accounting; CPU preparation then serializedGPU; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T20:31:03.553474+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "1e5753b7-f365-4a61-9fb6-091f8d1e7f36",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

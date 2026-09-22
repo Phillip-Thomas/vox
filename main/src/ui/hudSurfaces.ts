@@ -48,6 +48,11 @@ export const HUD_SURFACE_IDS = [
   // Story captions and voice
   'story-caption',
   'audit-band',
+  // Bracketed cue captions for the accessibility promise. Layer 'informational',
+  // deliberately NOT 'caption': the sweep must forbid it from ever sitting under
+  // `story-caption` or `audit-band`, because an institutional sound name and a
+  // lowercase interior caption sharing a strip would collapse the two registers.
+  'sound-caption',
   // Regulation feed (chapters 1-2)
   'feed-work-order',
   'feed-camera-status',
@@ -87,7 +92,15 @@ export const HUD_SURFACE_IDS = [
   'touch-dpad',
   'touch-dpad-actions',
   // Screening chrome (movie mode only)
-  'movie-status'
+  'movie-status',
+  // Space station interior (SpaceStationSandbox interior branch). Appended under
+  // production lock 2026-09-04-station-interior-light revision R1.
+  'station-story-hud',
+  'station-prompt',
+  'station-crosshair',
+  'station-marker',
+  'station-controls-hint',
+  'station-sandbox-hud'
 ] as const;
 
 export type HudSurfaceId = typeof HUD_SURFACE_IDS[number];

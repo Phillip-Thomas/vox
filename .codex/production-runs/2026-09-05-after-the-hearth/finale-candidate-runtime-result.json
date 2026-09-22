@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 254805,
+  "stop_reason": "end_turn",
+  "session_id": "21c8666e-dfba-49b4-a18b-f989e023d130",
+  "total_cost_usd": 1.34998,
+  "usage": {
+    "input_tokens": 60,
+    "cache_creation_input_tokens": 45638,
+    "cache_read_input_tokens": 776572,
+    "output_tokens": 20118,
+    "output_tokens_details": {
+      "thinking_tokens": 2935
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 45638,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1638,
+        "cache_read_input_tokens": 46548,
+        "cache_creation_input_tokens": 3157,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3157
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1999,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002064,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 60,
+      "outputTokens": 20118,
+      "cacheReadInputTokens": 776572,
+      "cacheCreationInputTokens": 45638,
+      "webSearchRequests": 0,
+      "costUSD": 1.347916,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2935,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 35,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: pass \u2014 one actual candidate finale state+audio window obtained, clean teardown. Observation only, no acceptance claim.** (22:04:03Z \u2192 22:09:09Z, inside the authorized 10 min.)\n\n**Import fault \u2014 copy depth confirmed, prior \"missing baseline dependency\" diagnosis false.** The baseline `verifier/probes/finale-window/` uses `../lib/` correctly at its depth; my private copy sits one level deeper under `manual-credit-finale/`. Fixed 3 sites (probe:423, closure-checks:106, :254) to `../../lib/ownedSession.mjs`. `main/tools` imports left at 7 levels.\n\n**Pre-GPU sweep caught a second and third stale pin, so zero launches were wasted on them:** all relative specifiers resolved via `import.meta.resolve`, all 8 named bindings proven present, `node --check` clean on all four files; whole PIN compared to control/ownership/manifest/contract \u2014 manifest, contract, URL, index, bundlePath, bundleSha all matched; `sourceFileCount: 99` \u2192 **100** (manifest has 100 game paths) and `activeRole` \u2192 `finale-candidate-runtime`.\n\n| measurement | value |\n|---|---|\n| session | headed, ANGLE **NVIDIA GB10/PCIe OpenGL 4.5.0**, no SwiftShader, root preview 37395 reused, browser pid 2230833 published by probe, launcher exit 0, 78.4 s |\n| heavy lock | inherited fd 9, dev/ino `66306:8397196` both sides, `/proc/locks` WRITE 2230808, `flock -w 30 -x`, released |\n| window seal | `window-complete`, edge `complete+handback+committed-terra18-worker18` @ 63380.8 ms |\n| coverage | pre-edge **2.99 s** (cfg 3000 ms, ring untruncated), post-edge **11.50 s**, 848 atomic rAF records, capHit false, 0 sample/page errors |\n| edge conjuncts | Terra 18 \u00b7 Worker 18 \u00b7 committed \u00b7 comparisonProved \u00b7 finalReferenceOffered \u00b7 `anc.cg.complete` + `anc.cg.handback` \u00b7 pendingAnchors [] |\n| story/control at seal | active false, chapter `complete`, beat `done`, objectiveId null, avActive false, avSuspended false |\n| audio | owned numeric null sink (mod 536870913 / idx 16435), default sink untouched, WAV 12.3 MB 2ch/44.1 k/69.85 s, peak 10355, RMS 1313.2 |\n| teardown | cleanup ok, browser gone, recorder exit 0, 0 null-sink modules left, default sink restored |\n\n**Unmeasured (not game failure):** eligible-finale **token/deadline/release** \u2014 no such live field exists on any shipped diagnostic surface in this build; `score.finalTextureSeconds` present-flag true, value null was recorded instead. The three previously-known missing signals (cancellation reason/site, AudioContext state/mute, App.tsx foreground conjuncts) remain unobservable.\n\n**Recorded uncertainty:** WAV clock starts at recorder start; window clock is page-relative rAF. Not hardware-synchronised, so PCM\u2194event alignment is accurate only to the recorder-start offset. No hearing/taste verdict drawn from the numeric envelope.\n\n**Cancellation variant:** not attempted \u2014 optional, permitted only after the normal window, and the remaining honest clock was insufficient. No deadline extension invented. No failed attempts to retain this task.\n\n**Artifacts**\n- `.../verifier/captures/manual-credit-finale/finale-candidate-1/` (window.ndjson, summary.json, runtime-record.json, owned-sink.wav, browser-pid.json, cleanup-receipt.json, 4 PNGs, probe-snapshot/)\n- `.../logs/finale-candidate-runtime/{launcher.log,finale-candidate-1.log}`\n- `.../verifier/probes/manual-credit-finale/finale-candidate-runtime/run-finale-candidate.sh`\n- `.../finale-candidate-runtime-report.json` \u00b7 `.md`\n\nSource unchanged, 100 files rehashed, 0 mismatches \u2014 manifest `8962a7b2\u2026`, contract `5ef85a32\u2026` (scene-v3), index `a9b88038\u2026`, bundle `68c8be84\u2026`. No producer/control/invocation/archive edits, no captures removed, no verify rerun, no publishing.",
+  "ttft_ms": 1424,
+  "type": "result",
+  "duration_ms": 330538,
+  "uuid": "812664cf-b4ad-438d-8e2d-b172cbf63c78",
+  "ttft_stream_ms": 728,
+  "time_to_request_ms": 21,
+  "first_content_frame_ms": 728,
+  "queued_turn_count": 0
+}

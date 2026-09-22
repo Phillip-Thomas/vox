@@ -1,0 +1,62 @@
+{
+  "repoRoot": "/home/thomasphillip/Projects/vox",
+  "orchestrationAndAuthority": [
+    "CLAUDE.md",
+    "main/story-authority.json"
+  ],
+  "runtimeBeatAndRegistry": [
+    "main/src/story/storyState.ts",
+    "main/src/story/beats/registry.ts",
+    "main/src/story/beats/index.ts",
+    "main/src/story/beats/ch4/ch4-arrival.ts",
+    "main/src/story/beats/ch10/ch10-cold.ts",
+    "main/src/story/beats/ch10/ch10-ask.ts",
+    "main/src/story/beats/ch10/ch10-transit.ts"
+  ],
+  "copyAndObjectives": [
+    "main/src/story/storyScript.ts",
+    "main/src/story/storyText.ts",
+    "main/src/story/storyDirector.ts",
+    "main/src/story/emergentStoryDirector.ts",
+    "main/src/story/emergentAudit.ts",
+    "main/src/story/world/EmergentAuditSites.tsx",
+    "main/src/story/beats/objectivePrimitives.ts",
+    "main/src/story/beats/ch5/objective-ch5-maw.ts",
+    "main/src/story/beats/ch9/objective-ch9-settle.ts",
+    "main/src/story/storyInteractions.ts",
+    "main/src/game/systems/interactionSystem.ts"
+  ],
+  "stationSidecarAndReturn": [
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/station-continuation-contract.md",
+    "main/src/game/spaceStation/spaceStationStory.ts",
+    "main/src/game/spaceStation/spaceStationVendors.ts",
+    "main/src/components/spaceStation/StationStoryPanel.tsx",
+    "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+    "main/src/components/spaceStation/SpaceStationLighting.tsx",
+    "main/src/story/stationReturnStory.ts",
+    "main/src/story/stationReturnStory.test.ts",
+    "main/src/story/world/TidegardenSettlementWorld.tsx"
+  ],
+  "audio": [
+    "main/src/story/storyScore.ts",
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/evidence/score/ch10-score-report.json",
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/evidence/score/ (all wav + json)",
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/ch10-score-probe.mjs",
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/ch10-score-repair-probe.mjs",
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/mood-regression.mjs",
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/audio-report.md",
+    ".codex/production-runs/2026-09-04-audio-10x/README.md",
+    ".codex/production-runs/2026-09-05-after-the-hearth/audio-report.md"
+  ],
+  "priorRunState": [
+    ".codex/production-runs/2026-09-05-after-the-hearth/README.md"
+  ],
+  "notReadByDesign": [
+    "main/PARAVOXIA_STORY_BIBLE.md",
+    "main/STORY.md",
+    "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+    "PARAVOXIA_PROGRESSION.md",
+    "PARAVOXIA_CH4_PLAN.md",
+    ".codex/story-runs/2026-09-06-common-ground/ (proposed candidate)"
+  ]
+}

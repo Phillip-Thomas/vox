@@ -1,0 +1,16 @@
+{
+  "iteration": 3,
+  "startedAt": "2026-09-06T05:32:25.941199+00:00",
+  "sourceJudge": "iterations/council-v1/final-scorecard.json",
+  "verifiedWeightedScore": 4.633,
+  "verdict": "revise",
+  "runtimeMutated": false,
+  "repairs": {
+    "CG-JUDGE-001": "F01 one-cell exact current truth repaired; validation refresh pending final scoped docs amendment",
+    "CG-JUDGE-003": "bounded independent Chapter/Cinema arena refinement reconciled by Score; finite CPU comparison pending",
+    "CG-JUDGE-004": "quiet tracing and self-owned objective acceptance proposed by Chapter",
+    "CG-JUDGE-005": "material reciprocal comparison and sparse Terra response proposed by Chapter",
+    "CG-JUDGE-006": "pass2 corrected prior inference; no back-credit; preserved all reports"
+  },
+  "next": "measure proposed arena; exact v2 three signatures before delegated adoption; final independent judgment"
+}

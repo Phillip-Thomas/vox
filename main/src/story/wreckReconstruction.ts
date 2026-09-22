@@ -1,3 +1,5 @@
+import { beatCh7Reconstruct } from './beats/ch7/ch7-reconstruct.ts';
+import { normalizeFacts } from './beats/objectivePrimitives.ts';
 import type { ActorId } from '../game/playerActors.ts';
 import {
   WRECK_SALVAGE_MILESTONE,
@@ -90,50 +92,14 @@ export function getWreckReconstructionAction(actorId?: ActorId): WreckReconstruc
 }
 
 export function getWreckReconstructionGuidance(actorId?: ActorId): WreckReconstructionGuidance {
-  if (!hasWreckDiagnosisReceipt(actorId)) {
-    return {
-      id: 'diagnose',
-      kind: 'interact',
-      markerLabel: 'WRECK SCAR · TRACE RELATIONSHIPS',
-      workOrder: ['FOLLOW THE WRECK MARKER.', 'AIM AT THE SCAR. [F] TRACE RELATIONSHIPS.']
-    };
-  }
-
-  const stage = getShipRepairStage();
-  const target = nextShipRepairStage(stage);
-  if (!target || target === 'wrecked') {
-    if (!hasReconstructionCalibrationReceipt(actorId)) {
-      return {
-        id: 'calibrating',
-        kind: 'wait',
-        markerLabel: 'KESTREL · CALIBRATING',
-        workOrder: ['FLIGHT CALIBRATION IN PROGRESS.'],
-        requiresMarker: false
-      };
-    }
-    return {
-      id: 'ready',
-      kind: 'wait',
-      markerLabel: 'WRECK · FLIGHT READY',
-      workOrder: ['FLIGHT CONTROLS CALIBRATED.'],
-      requiresMarker: false
-    };
-  }
-  const action = getWreckReconstructionAction(actorId);
-  if (action) {
-    return {
-      id: `repair:${target}`,
-      kind: 'interact',
-      markerLabel: `WRECK BENCH · ${action.verb.toUpperCase()}`,
-      workOrder: [`RETURN TO THE WRECK BENCH.`, `[F] ${action.verb.toUpperCase()}.`]
-    };
-  }
-  return {
-    id: `craft:${target}`,
-    kind: 'craft',
-    markerLabel: `WRECK BENCH · CRAFT ${craftLabel(target)}`,
-    workOrder: ['RETURN TO THE WRECK BENCH.', `[C] OPEN FABRICATOR. CRAFT ${craftLabel(target)}.`]
-  };
+  const target = nextShipRepairStage(getShipRepairStage());
+  const objective = beatCh7Reconstruct.objective!(normalizeFacts({ reconstruction: {
+    diagnosed: hasWreckDiagnosisReceipt(actorId), target,
+    calibrated: hasReconstructionCalibrationReceipt(actorId),
+    action: getWreckReconstructionAction(actorId),
+    craftLabel: target && target !== 'wrecked' ? craftLabel(target) : ''
+  } }));
+  return { ...objective, id: objective.id.replace(/^reconstruct:/, '') };
 }
 
 /** Execute a previously resolved action through the finite canonical transactions. */

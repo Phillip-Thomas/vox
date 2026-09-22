@@ -1,0 +1,52 @@
+[
+  {
+    "path": "main/tools/chapter-loop.mjs",
+    "before": "321e193370a091e6022775175d717f25985663bdbd2b1863ee2bef2b8e37ab75",
+    "after": "8dd26720eaf6ddb052299af1c30283dffa0a19b77aefaf95a9ba681d838fee65"
+  },
+  {
+    "path": "main/tools/chapter-loop/budget.mjs",
+    "before": "f49f0483f14c2b270d3a03405193c895708cbd3a8379e186bb6a287b43d2e033",
+    "after": "a866f18fddc6e2d1336caa19983718f5a74afc48cd47b78a5f3773c08c0ed294"
+  },
+  {
+    "path": "main/tools/chapter-loop/capture-case.mjs",
+    "before": "b185a523f306df2e4ca0a1209c8930bf45dbd687e501dbdf1c4cf78e720e1c3b",
+    "after": "e1363737eb5dee2803c960099a0189f2b7a461d8f15ca233c445c79279c97ae3"
+  },
+  {
+    "path": "main/tools/chapter-loop/control-capture.mjs",
+    "before": "00ebccf2862b2cffa4b97ff3ded0bfb559e65ac479e1bc1d64cecd02233fec0c",
+    "after": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820"
+  },
+  {
+    "path": "main/tools/chapter-loop/runner.mjs",
+    "before": "33603bd92c12b27f48d2a6365cebb08f605df94e793dc3c719f1b79827ebe615",
+    "after": "7dc211021965d004daae6d045424c82c592f50c81e4eadfaeb7aa2af8a1c9e1f"
+  },
+  {
+    "path": "main/tools/chapter-loop/runtime-capture.test.mjs",
+    "before": "bb6093c356b9393dc4cb19a097d4f7f037773e49e33def3d538b41e3f1dd3abf",
+    "after": "84139bac5096c206c4305b23917df8ecd91e433429ee0d3f0b2fb6c2a5a0b04c"
+  },
+  {
+    "path": "main/tools/chapter-loop/capture-case.test.mjs",
+    "before": null,
+    "after": "46a9973164e85cf55b8ce2e46355bd1d3b140409728e9a14ccc167e530f7b63a"
+  },
+  {
+    "path": "main/tools/chapter-loop/finish-renewal.mjs",
+    "before": null,
+    "after": "0252d6abb9719c769ff3e252f01ce165acd7c2885444d591a3e897a2a8f213e6"
+  },
+  {
+    "path": "main/tools/chapter-loop/finish-renewal.test.mjs",
+    "before": null,
+    "after": "991e34ce3c852e21bfba00f1e2f498a27a2da2269fdcce9f59b5aad92aa2284c"
+  },
+  {
+    "path": "docs/chapter-loop/control-config.md",
+    "before": null,
+    "after": "451fd7774bc54b3d3f74355d655532d6f23466448ae0649f3dc9e459f0718b23"
+  }
+]

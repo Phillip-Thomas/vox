@@ -1,0 +1,68 @@
+{
+  "schema": "paravoxia.productionLock.v1",
+  "runId": "2026-09-04-station-interior-light",
+  "mode": "scene",
+  "status": "locked",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "runProfileRef": "paravoxia-creative-scene@v1",
+  "releaseCandidate": false,
+  "authority": [
+    {
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "section": "OWNER GATE LIFT 2026-07-28",
+      "sha256": "88f85610c81eb3deae605ea01c0d2f53994487048e0d6029fb3240b1d51909de"
+    },
+    {
+      "path": "CLAUDE.md",
+      "section": "Story scope",
+      "sha256": "d47d2f0b5670d801193c5f4c182b37af7da8313d5d8e4bbf55c4418eebc34d93"
+    }
+  ],
+  "mutationBoundary": "bounded-runtime",
+  "allowedPaths": [
+    ".codex/production-runs/2026-09-04-station-interior-light/",
+    "main/src/components/spaceStation/",
+    "main/src/game/spaceStation/spaceStationDressing.ts",
+    "main/src/game/spaceStation/spaceStationShell.ts",
+    "main/src/game/spaceStation/spaceStationArchitecture.ts",
+    "main/src/game/spaceStation/spaceStationDressing.test.ts",
+    "main/src/game/spaceStation/spaceStationShell.test.ts",
+    "main/src/game/spaceStation/spaceStationArchitecture.test.ts",
+    "main/src/game/spaceStation/spaceStationDevFlag.ts",
+    "main/tools/spaceStation-shots.mjs",
+    "main/src/ui/hudSurfaces.ts",
+    "main/tools/creative-triad-gate.mjs"
+  ],
+  "protectedPaths": [
+    "main/src/audio/",
+    "main/src/components/audio/",
+    "main/public/audio/",
+    "main/src/components/PostFX.tsx",
+    "main/src/story/storyDirector.ts",
+    "main/src/story/StoryDirectorDriver.tsx",
+    "main/src/story/storyText.ts",
+    "main/src/game/spaceStation/spaceStationStory.ts",
+    "firebase.json",
+    ".firebaserc"
+  ],
+  "lockedBeats": [
+    "station-interior-sandbox",
+    "ch11-station-story-interior"
+  ],
+  "currentRestrictions": {
+    "storyCeiling": "ch11-station",
+    "postArrivalStoryMutationAllowed": true,
+    "copyChangeDecisionRefs": [],
+    "protectedAudioPaths": [
+      "main/src/audio/",
+      "main/src/components/audio/",
+      "main/public/audio/"
+    ],
+    "openGateRefs": [
+      "headed-real-gpu-exposure-taste"
+    ]
+  },
+  "canonicalPreviewUrl": "http://127.0.0.1:4321",
+  "publishAllowed": false,
+  "frozenAt": "2026-09-04T21:50:39-04:00"
+}

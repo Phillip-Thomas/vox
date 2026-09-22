@@ -1,0 +1,134 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "compiledAt": "2026-09-06T17:43:53.752873+00:00",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "productionScope": {
+    "status": "passed",
+    "evidenceRefs": [
+      "implementation.diff",
+      "implementation-source-manifest.json",
+      "production-lock.json",
+      "producer-boundary-completion.json",
+      "producer-concurrent-validation-tooling-review.json"
+    ]
+  },
+  "creativeContract": {
+    "status": "passed",
+    "evidenceRefs": [
+      "contract-gate-pass.json",
+      "scene-v3-contract-gate.log",
+      "final-contract-gate-pass.json",
+      "scene-v3-final-contract-gate.log",
+      "director-signoffs.json"
+    ]
+  },
+  "typecheck": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/arrival-common-metadata-closure/verify.log"
+    ]
+  },
+  "tests": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/arrival-common-metadata-closure/verify.log"
+    ]
+  },
+  "build": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/arrival-common-metadata-closure/verify.log"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npm --prefix main run scene:av:check",
+      "commandAsReported": "npm --prefix main run scene:av:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/arrival-common-metadata-closure/scene-av-check.log",
+      "evidenceSha256": "5a093e5629c166485aec490e591c5217149852333b4cc726478c2dfd5eb0a5f1"
+    },
+    {
+      "command": "npm --prefix main run chapter:registry:check",
+      "commandAsReported": "npm --prefix main run chapter:registry:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/arrival-common-metadata-closure/chapter-registry-check.log",
+      "evidenceSha256": "63d2098e42a51ec027bd147b0869fcfe164c546b86e7526cab424065907ce4b5"
+    },
+    {
+      "command": "npm --prefix main run story:authority",
+      "commandAsReported": "npm --prefix main run story:authority",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/arrival-common-metadata-closure/story-authority.log",
+      "evidenceSha256": "674a8248d269b8a863d77e818d72d74a874ab392ffee5afcbfbf64a93ef1a034"
+    },
+    {
+      "command": "npm --prefix main run catalog:check",
+      "commandAsReported": "npm --prefix main run catalog:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/arrival-common-metadata-closure/catalog-check.log",
+      "evidenceSha256": "d4fa8765ef0712ca47020a9df56cfa743b49a33c857e2387d8d729f847d97a4a"
+    },
+    {
+      "command": "npm --prefix main run test -- src/story/signedSceneAvRuntime.test.ts src/story/commonGroundDirector.test.ts src/story/autopilot/primitives.test.ts",
+      "commandAsReported": "npm --prefix main run test -- src/story/signedSceneAvRuntime.test.ts src/story/commonGroundDirector.test.ts src/story/autopilot/primitives.test.ts",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/arrival-common-metadata-closure/focused-metadata-tests.log",
+      "evidenceSha256": "9cdc6135b3072bf19158e1d20f5bfb30a066d65a0608262834730c438b03a522"
+    },
+    {
+      "command": "npm --prefix main run story:ux:check",
+      "commandAsReported": "npm --prefix main run story:ux:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/arrival-common-metadata-closure/story-ux-check.log",
+      "evidenceSha256": "00fdda939ce993171ffbfd86c02a8f6f0735be30027125a92e041c1a489e369d"
+    },
+    {
+      "command": "npm --prefix main run verify",
+      "commandAsReported": "npm --prefix main run verify",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/arrival-common-metadata-closure/verify.log",
+      "evidenceSha256": "61ac5d146f212eafcc93e797ebcadd03c05747beca4b7c3624d977892d90f670",
+      "componentScriptSource": "main/package.json#scripts.verify",
+      "componentScript": "npm run catalog:check && npm run scene:av:check && npm run creative:workflow:check && npm run chapter:registry:check && npm run chapter:journey:check && npm run typecheck && npm run preview:check && npm run audio:diagnostic-check && npm run story:ladder:check && npm run guidance:target-check && npm run story:authority && npm run test && npm run audio:check && npm run build",
+      "componentScriptSourceSha256": "5b06a5d53d6dc633de1d7bc61667ab762a04daf0fc65d88d1d6f79f1df9f7a3a",
+      "componentScriptSnapshotRef": "iterations/concurrent-validation-tooling/current/main/package.json",
+      "currentPackageSha256": "2bf78b0d7e14bf89fa31c93790fd77325839ff147e5d7761535a2a540aedd812"
+    },
+    {
+      "command": "npm --prefix main run creative:workflow:check",
+      "commandAsReported": "npm --prefix main run creative:workflow:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/arrival-common-metadata-closure/creative-workflow-check-postdrift.log",
+      "evidenceSha256": "c10c1eaf7983659984c10ae1b82a38e6d999989e1322a37b26ea90151d9314d3"
+    }
+  ],
+  "scope": "Final arrival/common implementation checks. Independent full verify, actual manual/movie/AV/hardware evidence and creative acceptance remain pending.",
+  "externalSourceChanges": {
+    "reviewRef": "producer-concurrent-validation-tooling-review.json",
+    "reviewSha256": "61c6095b0abaeb21ce189a3658826220aab6086365766e6a93331fb60cb420da",
+    "hashes": {
+      "main/tools/creative-triad-gate.mjs": "23b347b7d7f8ae67c87d3e0eff14baf80d6e9e80cb2255bff81bc91a555e66bf"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "at": "2026-09-06T21:27:48.224798+00:00",
+  "acceptedForPrivateCandidateRepinAndRuntime": true,
+  "acceptedForGameplay": false,
+  "sourceFilesRehashed": 100,
+  "unexpectedSourceDrift": [],
+  "actualRole": {
+    "role": "continue-controller-final-preflightor",
+    "requestedModel": "opus",
+    "startedAt": "2026-09-06T21:20:43.085819+00:00",
+    "commissionSha256": "6d33d8a3f4d9f2cbe221bd8712e4c350cade676f5d8ae19dc58e87f28f0e1e46",
+    "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+    "sourceFrozen": false,
+    "sourceReference": "iterations/implemented-arrival-common-repair/source",
+    "scope": "Narrow private preflight correction of three remaining concrete executable probe defects identified by root; additional8minute CPU commission under standing authorization, no material game repair or GPU",
+    "exitCode": 0,
+    "finishedAt": "2026-09-06T21:26:48.582192+00:00",
+    "model": "claude-opus-5",
+    "sessionId": "5de8dc3d-9521-4076-b4a4-5a05edfad027",
+    "isError": false,
+    "gameSourceMutationAuthorized": false
+  },
+  "verified": [
+    "Reported6probe hashes and6log hashes match; affected42/74/48/36 checks pass.",
+    "Harvest factory defined before sampler installation/click and shared actual implementation exercised with throwing mocked-page paths.",
+    "Directed-burst actual live-up helper called; missing or unusable stamp clears direction; no synthetic world-up in directed loop.",
+    "Completeness uses retained-frame tail and harvest/cap state, rather than wallpoll alone."
+  ],
+  "qualifications": [
+    "Helper dataClass game-failure for no valid foot/HUD or short retained tail is NOT accepted as a causal game restore failure. Treat these as runtime-not-observed or capture-incomplete until actual shipped action/cause proves otherwise. This preserves owner timeout classification.",
+    "A complete timing window alone does not prove beat/world/seed field availability or equality; inspect frame errors, missing fields and actual transitions separately.",
+    "No actual Continue or newly accepted action has been measured on this candidate; source/bundle/role repin and serialized runtime still required."
+  ],
+  "archiveRef": "iterations/continue-controller-final-preflight",
+  "next": "Use corrected private probe for one fresh actual earned Continue, after exclusive GPU handoff. Preserve full saved point equality and newly accepted authorized F as separate required gates.",
+  "publicationAuthorized": false
+}

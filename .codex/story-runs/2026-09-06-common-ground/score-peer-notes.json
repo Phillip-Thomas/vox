@@ -1,0 +1,66 @@
+{
+  "notes": [
+    {
+      "id": "score-to-chapter-01",
+      "from": "score",
+      "to": "chapter",
+      "beat": "ch13-common",
+      "anchor": "CG-05-other-end / CG-06-his-test / CG-07-model-incomplete",
+      "kind": "anchor-contract",
+      "severity": "high",
+      "evidence": [
+        "chapter-story-treatment.md: Two solutions with different persistence; CG-05, CG-06 and CG-07 distinguish reciprocal usefulness, test initiation and actual completion.",
+        "score-story-treatment.md: The Unrepeated Order changes phrase spacing after an independently completed physical act; its score never proves acceptance."
+      ],
+      "requestedAction": "Adopt the continuous walked trace and reciprocal witness mechanism. Keep both route classes equally complete and musically unranked. In the candidate, distinguish holding the other end, starting his final test and completing that test as separate physical facts. Bind the changed audit phrase to CG-07 actual arrival plus reciprocal proof, not CG-06 clearance or motion initiation. The reciprocal passage itself remains playable over the restrained demonstration texture; no new duet or cooperation-success cue.",
+      "status": "open"
+    },
+    {
+      "id": "score-to-chapter-02",
+      "from": "score",
+      "to": "chapter",
+      "beat": "ch13-home",
+      "anchor": "CG-B0-hearth-holds / CG-01-return-chosen",
+      "kind": "reveal-and-lifecycle",
+      "severity": "medium",
+      "evidence": [
+        "chapter-story-treatment.md: home review reuses the stored A4 fault and explicitly rejects an incoming summons.",
+        "score-story-treatment.md: live restoration and already-restored entry have different transient behavior; the audit figure enters only after visible renewed inspection."
+      ],
+      "requestedAction": "Keep the archived fault review under settled home/world sound, with ordinary once-per-objective entry feedback only. Do not give the stored record a transmission sound or bring back the audit theme at home. Retire the live install acknowledgement before publishing the invitation; on restored saves omit the completion transient entirely. The audit reprise begins at the actual Origin inspection, preserving the voluntary departure and excluding a musical summons.",
+      "status": "open"
+    },
+    {
+      "id": "score-to-cinematography-01",
+      "from": "score",
+      "to": "cinematography",
+      "beat": "ch13-survey / ch13-common",
+      "anchor": "anc.cg.route-proposed / anc.cg.independent-correction",
+      "kind": "substantive-direction-objection",
+      "severity": "high",
+      "evidence": [
+        "cinematography-story-treatment.md: selected direction requires three manufactured markers and an independently moved final marker.",
+        "chapter-story-treatment.md: recommendation replaces placed apparatus with a continuous bodily trace and exchanged witness positions; the reciprocal comparison occurs on both route classes.",
+        "score-story-treatment.md: the dramatic mechanism is making room for another's act, not rewarding sequential placements."
+      ],
+      "requestedAction": "Choose Chapter's walked trace and reciprocal bodies as the scene's mechanism and climax. Reframe the proposal/refusal/revision around actual trace geometry and the maintained witness position; replace the mandatory marker-handling hero action with W-7744 maintaining Terra's reference and then completing his own grounded test. Keep your clear feet, sighting direction, failure locus and unchanged living landscape. Do not average the proposals by adding three marker placements ahead of the trace. Any minimal reference apparatus must serve this chosen mechanism, without its own collection or placement gate.",
+      "status": "open"
+    },
+    {
+      "id": "score-to-cinematography-02",
+      "from": "score",
+      "to": "cinematography",
+      "beat": "ch13-common / completed Origin free play",
+      "anchor": "anc.cg.shared-route-tested / CG-08-open-ground",
+      "kind": "aftermath-and-timing",
+      "severity": "medium",
+      "evidence": [
+        "cinematography-story-treatment.md: aftermath permits a safe departure toward the work area and eventual retirement.",
+        "chapter-story-treatment.md: completed route and a bounded local repeat interaction remain available on Origin.",
+        "score-story-treatment.md: current scheduler can omit a calm ostinato attack; musical phrase change cannot guarantee an instantaneous audible punctuation."
+      ],
+      "requestedAction": "Prefer Chapter's locally repeatable aftermath: retain the one actor at a safe Origin test position with optional repeat interaction, without a farewell shot or retirement that removes the promised experiment. Show the completed route and separate accounts as persistent evidence. Do not hold camera or player control waiting for the changed fifth; the physical completion must read with that attack absent. Clear transient scene/score ownership at handback and let ordinary world sound continue.",
+      "status": "open"
+    }
+  ]
+}

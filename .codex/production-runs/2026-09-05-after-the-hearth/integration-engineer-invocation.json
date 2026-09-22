@@ -1,0 +1,31 @@
+{
+  "role": "integration-engineer",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T07:12:57.942970+00:00",
+  "safeMode": true,
+  "permissionMode": "default",
+  "tools": [
+    "Bash",
+    "Read",
+    "Grep",
+    "Glob",
+    "Write",
+    "Edit"
+  ],
+  "systemPromptSha256": "eb952794e99c14cffb7eb6be0543977e31ee2d14adc3417fc9adfdfcd67bdbc8",
+  "commissionSha256": "17dc1cfff605dffbc199da0ab58fc4797a28d69d45d52b16fd78f19263af2c3c",
+  "scope": "signed Common Ground runtime integration; no publication or GPU probes",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T08:22:53.154676+00:00",
+  "sessionId": "7bf11b90-87c3-410c-bf15-fd2ac154caa0",
+  "model": "claude-opus-5",
+  "actualTools": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+  ],
+  "isError": false
+}

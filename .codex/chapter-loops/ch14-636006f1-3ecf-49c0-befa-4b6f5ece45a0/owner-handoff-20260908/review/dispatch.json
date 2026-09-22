@@ -1,0 +1,12 @@
+{
+  "ticket": "b9223d4a-134a-4a60-a66f-fdc046634601",
+  "at": "2026-09-08T02:16:54.903Z",
+  "task": {
+    "id": "provider-handoff-review",
+    "seconds": 240,
+    "writes": false,
+    "task": "Review ONLY /home/thomasphillip/Projects/vox/main/tools/chapter-loop/provider-handoff.mjs (under100 lines), firstPlayableDeadline in budget.mjs and corresponding stopReason plus policySeal in runner.mjs (read at most40lines total there). User explicitly said RUN THAT BITCH after being told Fable quota blocked; standing authority says all routine decisions approved, no permission questions. Parent announced move of THIS run to Codex creative gpt-6-astra/mechanical gpt-5.6-sol, fullpermissions; new90min first-playable window from actual owner request02:13:32UTC, original8h deadline08:06:46UTC retained, sameid/history/token caps and spent counters. Checked handoff only first zero-content HTTP429 plan rejection, consumes existing infrastructure recovery. Assess correctness of guards/accounting/no game writes. No broad reads, no tests, no other agents. Output compact JSON verdict PASS or REVISE, blockers only with exact lines. Max600words. This is engineering review, not a creative role."
+  },
+  "permissionMode": "full",
+  "model": "opus"
+}

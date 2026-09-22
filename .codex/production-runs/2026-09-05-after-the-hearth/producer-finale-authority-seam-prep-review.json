@@ -1,0 +1,17 @@
+{
+  "at": "2026-09-06T22:24:42.660578+00:00",
+  "reportRef": "finale-authority-seam-prep-report.json",
+  "acceptedForRuntime": false,
+  "actualProblems": [
+    "run-seam.mjs only checks env/fstat, not actual root control or sharedlock identity/contender; proposed command locks unrelated verifier/artifacts/heavy.lock. Never use it.",
+    "Launcher deliberately does not run a capture; prepared scenario labels are not implemented.",
+    "B4 is clearScoreIntensityOverride, E4 is setScoreBeat. Actual setScoreMood is LY. $Z is scheduled-hit cancellation, not audio authority crossfade. Claimed unresolved owning seam looked at wrong function.",
+    "Actual LY: const t=!Ka (wasLeading), then Ka=e==null, context i=jZ?WI:null; t!==!Ka invokes mMA(!Ka,i.currentTime). WI=context, jZ=built. Source scoreEngine.ts1712\u20131735 supports names.",
+    "Cancel ngA(e) parameter can be observed at entry even though not persisted. Discarding reason does not make raw entry argument unavailable.",
+    "Pin coordinates are1-basedline7840; CDP needs0-based7839 and first executable statement, not declaration. Null guards do not guard all undeclared names/TDZ.",
+    "Broad perframe logpoints can reach4000 beforecompletion; restrict near-deadline calls and explicit dropped counts."
+  ],
+  "priorArchiveRef": "iterations/finale-authority-seam-partial-prep",
+  "sourceDrift": [],
+  "next": "Focused correction within ORIGINAL8minute CPU deadline, then runtime owner must prove actual attachment before capture."
+}

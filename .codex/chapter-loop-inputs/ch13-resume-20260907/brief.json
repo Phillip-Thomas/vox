@@ -1,0 +1,688 @@
+{
+  "schema": "paravoxia.chapterBrief.v1",
+  "chapter": "ch13",
+  "request": "Continue the existing Common Ground chapter using the newly installed bounded Chapter Loop. Preserve the signed three-director scene-v3 direction and all existing implementation. Start with actual pause/Resume recovery, then real Continue, manual common traversal, AV and earned continuity. Do not replay planning, overwrite previous captures, expand the plot or publish. Missing observable evidence stays inconclusive.",
+  "authority": "Direct owner: now continue using this new workflow. Routine reversible checks and one refinement are authorized within the installed ceilings.",
+  "provider": {
+    "provider": "claude",
+    "models": {
+      "creative": "fable",
+      "mechanical": "opus"
+    }
+  },
+  "canon": [
+    {
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "sha256": "6e0e0660fcaddad30a0c89435d914171c6a8e322cd6036e8534dfacf3387721a",
+      "startLine": 30,
+      "endLine": 121
+    }
+  ],
+  "references": [
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/reference-ch9-bundle/frames/f0000_t6.90s_opening-2.0s.png",
+      "sha256": "4c1e03703e03780a15749e26ec11e78e44165d0613cbdba30b07ec94db7a4c3f"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/reference-ch9-bundle/hud/f0000_t6.90s_opening-2.0s.png",
+      "sha256": "d9b9e6a978119d5115e372c4805a2ed27ca55006f4adf9c3a32e28dce29c54eb"
+    }
+  ],
+  "allowedPaths": [
+    "main/chapter-journey-contract.json",
+    "main/chapter-registry.json",
+    "main/src/App.test.tsx",
+    "main/src/App.tsx",
+    "main/src/components/EfficientScene.tsx",
+    "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+    "main/src/components/spaceStation/StationScreeningDriver.tsx",
+    "main/src/game/spaceStation/spaceStationStory.test.ts",
+    "main/src/game/spaceStation/spaceStationStory.ts",
+    "main/src/game/spaceStation/spaceStationUndock.test.ts",
+    "main/src/game/spaceStation/spaceStationUndock.ts",
+    "main/src/game/systems/interactionSystem.test.ts",
+    "main/src/game/systems/interactionSystem.ts",
+    "main/src/game/systems/persistence.test.ts",
+    "main/src/game/systems/persistence.ts",
+    "main/src/story/StoryDebugPanel.tsx",
+    "main/src/story/StoryDirectorDriver.test.tsx",
+    "main/src/story/StoryDirectorDriver.tsx",
+    "main/src/story/auditWorkerPresence.test.ts",
+    "main/src/story/auditWorkerPresence.ts",
+    "main/src/story/autopilot/primitives.test.ts",
+    "main/src/story/autopilot/primitives.ts",
+    "main/src/story/autopilot/rail-ch13-common.ts",
+    "main/src/story/autopilot/rail-ch13-home.ts",
+    "main/src/story/autopilot/rail-ch13-return.ts",
+    "main/src/story/autopilot/rail-ch13-survey.ts",
+    "main/src/story/autopilot/rails.ts",
+    "main/src/story/beats/allContracts.test.ts",
+    "main/src/story/beats/beatRegistry.test.ts",
+    "main/src/story/beats/ch13/ch13-common.ts",
+    "main/src/story/beats/ch13/ch13-home.ts",
+    "main/src/story/beats/ch13/ch13-return.ts",
+    "main/src/story/beats/ch13/ch13-survey.ts",
+    "main/src/story/beats/ch13/index.ts",
+    "main/src/story/beats/definitions.ts",
+    "main/src/story/beats/index.ts",
+    "main/src/story/beats/markerTargets.ts",
+    "main/src/story/beats/metadata.generated.ts",
+    "main/src/story/beats/objectivePrimitives.ts",
+    "main/src/story/beats/railDiscipline.test.ts",
+    "main/src/story/beats/screeningParity.test.ts",
+    "main/src/story/beats/worldHandles.ts",
+    "main/src/story/commonGroundActor.ts",
+    "main/src/story/commonGroundDirector.test.ts",
+    "main/src/story/commonGroundDirector.ts",
+    "main/src/story/commonGroundRoute.test.ts",
+    "main/src/story/commonGroundRoute.ts",
+    "main/src/story/commonGroundScore.test.ts",
+    "main/src/story/commonGroundScore.ts",
+    "main/src/story/commonGroundState.test.ts",
+    "main/src/story/commonGroundState.ts",
+    "main/src/story/emergentScoreDirector.test.ts",
+    "main/src/story/emergentScoreDirector.ts",
+    "main/src/story/emergentStoryDirector.test.ts",
+    "main/src/story/emergentStoryDirector.ts",
+    "main/src/story/emergentStoryEvents.test.ts",
+    "main/src/story/emergentStoryEvents.ts",
+    "main/src/story/generatedSceneAvRuntime.json",
+    "main/src/story/signedSceneAvRuntime.test.ts",
+    "main/src/story/signedSceneAvRuntime.ts",
+    "main/src/story/stationReturnStory.test.ts",
+    "main/src/story/stationReturnStory.ts",
+    "main/src/story/storyBoundaryTelemetry.test.ts",
+    "main/src/story/storyBoundaryTelemetry.ts",
+    "main/src/story/storyDirector.test.ts",
+    "main/src/story/storyDirector.ts",
+    "main/src/story/storyInteractions.test.ts",
+    "main/src/story/storyInteractions.ts",
+    "main/src/story/storyObjectiveGuidance.test.ts",
+    "main/src/story/storyObjectiveGuidance.ts",
+    "main/src/story/storyScore.test.ts",
+    "main/src/story/storyScore.ts",
+    "main/src/story/storyState.test.ts",
+    "main/src/story/storyState.ts",
+    "main/src/story/storyWorldHandles.ts",
+    "main/src/story/tidegardenRoute.ts",
+    "main/src/story/ux/feedbackCues.test.ts",
+    "main/src/story/ux/feedbackCues.ts",
+    "main/src/story/ux/objectiveCommandFeedback.test.ts",
+    "main/src/story/ux/objectiveCommandFeedback.ts",
+    "main/src/story/ux/objectiveEventFeedback.test.ts",
+    "main/src/story/ux/objectiveEventFeedback.ts",
+    "main/src/story/world/AuditWorker.tsx",
+    "main/src/story/world/CommonGroundWorld.test.tsx",
+    "main/src/story/world/CommonGroundWorld.tsx",
+    "main/src/story/world/StoryWorldProps.tsx",
+    "main/src/story/world/TidegardenSettlementWorld.tsx",
+    "main/src/utils/playerSpawnSelection.test.ts",
+    "main/src/utils/playerSpawnSelection.ts"
+  ],
+  "toolRefs": [
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/cgContract.pinned.mjs",
+      "sha256": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/continueClosure.mjs",
+      "sha256": "d6b6fbe1cb7d8a2a3dccce77d591b544c648f608c36e009804a5cf9d76bba33c"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/continueClosure.selftest.mjs",
+      "sha256": "43389c6c503ed02d0ef23db7dad9f27b4a20659c7fe97e445a878ff3805c90e6"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "sha256": "46496492de0645c43e1a01537cb5cf3453c33f324c2607754da01d9b086bff22"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earnedContinueLogic.mjs",
+      "sha256": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/entryAdaptation.selftest.mjs",
+      "sha256": "ce43423be89f30af093a39afadd1ed9c8c9d1160f0ca0f47d2a16029a2872f10"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/entryObservation.mjs",
+      "sha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/groundFrame.selftest.mjs",
+      "sha256": "f30ae2947fc6e8c991c2ab49d6bf5a9957d07e78e0ba5d08d32859661bd803ec"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/liveCalibration.mjs",
+      "sha256": "0ca079a196fc35664a4b9ddc3c037b3225eb0b1ac96b786672e17ecf81322d32"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/liveCalibration.selftest.mjs",
+      "sha256": "22893baf1d058d2b420d3f2ec1ddd38f47dd7f6d902c7d78135070199ceb630f"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/ownedSession.pinned.mjs",
+      "sha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/pinned/commonPassageLogic.pinned.mjs",
+      "sha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/pinned/pin.json",
+      "sha256": "99869a4dc5571601762ba573d61f9d8c83604f20346207b191ab9f984a4132d6"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/poseObservation.mjs",
+      "sha256": "35d26b067c154c17af834721e424c700d28f6ea4c17fb88ec24025c7823bccc8"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/preflightFaults.selftest.mjs",
+      "sha256": "d03f509b6aa5c2c159a4cef05917c78edc5f8cd5694a4bd53dbb496456e85f58"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/repair-check-plan.json",
+      "sha256": "1a3e7552e567ad1f5c2a403f7556bad89ef4c63b7b10a177e8d1a2d5aaf95acb"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/selftest.mjs",
+      "sha256": "f48e843bcac75def449fb17b0c4fefcba70f346ba2fa51a504f54e067556d9c6"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/sourceSnapshot.pinned.mjs",
+      "sha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/strict-verdict-gate.mjs",
+      "sha256": "4cdf744e17b35260e77692b0d7c7b498ad5ac0fe5761763715819d0e14fa79c0"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/tangentSteering3d.mjs",
+      "sha256": "26c63b7dd602bfe926cd236e156d88c649795ffd5470aa52f4ef8c1a45d30d30"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/tangentSteering3d.selftest.mjs",
+      "sha256": "2e90fb4e4ceaa1abf1e275bbea2420b4684a2a9607df59ebd0044be5ec5ad01d"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/audio-isolation-plan.json",
+      "sha256": "80598be940380c4c9f7c2530602597215ea110931ad0843ada2cc803d21424ba"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/authority-pins-corrected.json",
+      "sha256": "339e41fe7db4242c869aa0f96e18dc137ad538c1ed20c557a7982ec890707be3"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/candidate-pins.json",
+      "sha256": "f56a5eec5948619973892e3b1f813442eee85d8aa5bb97f8b269eb898c4a1ffc"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/closure-checks.mjs",
+      "sha256": "1dcc5c25a336ea06351322b9a66c4f8fd7c29d0949fb03f40c0da1b4325c8b72"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/finale-window-probe.mjs",
+      "sha256": "e00be580efb78eb19037a308b43387a9a2c1a445d3f0fbad5f6bdc9c2655297b"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/finale-window-runtime.mjs",
+      "sha256": "a312accb54ba8af745a8c660c5ff23eff0132d385f0ddf0c5c8b4e5609d922b2"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/run-seam.mjs",
+      "sha256": "01862ef3615237b163d9af3c018b1500e22a48541418c6b312a214e9578a0c63"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/seamLogpoints.mjs",
+      "sha256": "4166fc90d16451dc6377914bccc8edfc04490823072b6627be9f94ac7f54cd49"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/windowSampler.mjs",
+      "sha256": "c984535db45b4f8717b57e335d2cb2b1f6e93dfa579485f651b24a5b79ff5c68"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/cgContract.pinned.mjs",
+      "sha256": "c9fa84cf77edc4126725f3cea29ef8241341f715874adf84115966877935c4ca"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "sha256": "4e68b0563ed74cbfbebe38df9b1222472dd29aec4f8a5fd1a68d5cb5686cf0b3"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/commonPassageLogic.mjs",
+      "sha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/creditCallLogpoints.mjs",
+      "sha256": "5b31a347dd6bdc8a9bcfe3bf9ec0d19b9c0cb9523d2dba521a630e7173dd60f6"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/entryObservation.mjs",
+      "sha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/ownedSession.pinned.mjs",
+      "sha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/pin.json",
+      "sha256": "7a3e4c8c927500f1ee86e42496f310ed39be9b9c9cc5564612f772f3f351fa10"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/selftest.mjs",
+      "sha256": "27f043e3173f1243a132b64827907535311e7ff71dd55663c2f3695f23e6e570"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/shortSurveyLogic.mjs",
+      "sha256": "7e6fb3626d3b3dca9aeb49e6ee27f6be7a45512eefa2c7aebe76a100d6878d5b"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/sourceSnapshot.pinned.mjs",
+      "sha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20"
+    },
+    {
+      "path": "main/tools/chapter-evidence.mjs",
+      "sha256": "3cb028df7f8a2b5b3542628bd3d489d65f7154b3789064fa63f57799fc4d43c4"
+    },
+    {
+      "path": "main/tools/chapter-journey-probe.mjs",
+      "sha256": "5cff4370c8618c7f06707b5926804222895734e000d1f1b941278e52ad82c77e"
+    },
+    {
+      "path": "main/tools/lib/evidence.mjs",
+      "sha256": "1997cf2a3e9db88ae6e1e474b76232a2589c78a58fe69a579b493b44e5aa5328"
+    },
+    {
+      "path": "main/tools/lib/previewServer.mjs",
+      "sha256": "b227bdaf92dc2ddd554a62746d96cd96625321f2ce7d94bc86265702346dedb2"
+    }
+  ],
+  "heavyLock": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "previewQuery": {
+    "kind": "diagnostic",
+    "query": "?story=ch13-home"
+  },
+  "verification": {
+    "build": {
+      "argv": [
+        "node",
+        "tools/chapter-loop/legacy-capture.mjs",
+        "--case",
+        "source",
+        "--legacy",
+        "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+        "--out",
+        "{out}"
+      ],
+      "cwd": "main",
+      "timeoutMs": 600000
+    },
+    "dist": ".codex/chapter-loop-inputs/ch13-resume-20260907/dist",
+    "cases": [
+      {
+        "argv": [
+          "node",
+          "tools/chapter-loop/legacy-capture.mjs",
+          "--case",
+          "recovery",
+          "--legacy",
+          "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 180000,
+        "kind": "recovery",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "report": "report.json",
+        "assertions": {
+          "interrupted": {
+            "pointer": "/proof/interrupted",
+            "equals": true
+          },
+          "recovered": {
+            "pointer": "/proof/recovered",
+            "equals": true
+          },
+          "acceptedAction": {
+            "pointer": "/proof/acceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": []
+      },
+      {
+        "argv": [
+          "node",
+          "tools/chapter-loop/legacy-capture.mjs",
+          "--case",
+          "continue",
+          "--legacy",
+          "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "continue",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "report": "report.json",
+        "assertions": {
+          "clickedContinue": {
+            "pointer": "/proof/clickedContinue",
+            "equals": true
+          },
+          "stateEqual": {
+            "pointer": "/proof/stateEqual",
+            "equals": true
+          },
+          "newAcceptedAction": {
+            "pointer": "/proof/newAcceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": []
+      },
+      {
+        "argv": [
+          "node",
+          "tools/chapter-loop/legacy-capture.mjs",
+          "--case",
+          "manual",
+          "--legacy",
+          "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "manual",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "report": "report.json",
+        "assertions": {
+          "ordinaryControls": {
+            "pointer": "/proof/ordinaryControls",
+            "equals": true
+          },
+          "acceptedAction": {
+            "pointer": "/proof/acceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": []
+      },
+      {
+        "argv": [
+          "node",
+          "tools/chapter-loop/legacy-capture.mjs",
+          "--case",
+          "av",
+          "--legacy",
+          "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "av",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "report": "report.json",
+        "assertions": {
+          "videoDecodes": {
+            "pointer": "/proof/videoDecodes",
+            "equals": true
+          },
+          "audioDecodes": {
+            "pointer": "/proof/audioDecodes",
+            "equals": true
+          },
+          "framesNonblank": {
+            "pointer": "/proof/framesNonblank",
+            "equals": true
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "video.webm"
+          },
+          {
+            "kind": "audio",
+            "path": "audio.wav"
+          },
+          {
+            "kind": "frame",
+            "path": "frame.png"
+          }
+        ]
+      },
+      {
+        "argv": [
+          "node",
+          "tools/chapter-loop/legacy-capture.mjs",
+          "--case",
+          "continuity",
+          "--legacy",
+          "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "continuity",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "report": "report.json",
+        "assertions": {
+          "earnedEntry": {
+            "pointer": "/proof/earnedEntry",
+            "equals": true
+          },
+          "earnedExit": {
+            "pointer": "/proof/earnedExit",
+            "equals": true
+          },
+          "noFixtures": {
+            "pointer": "/proof/noFixtures",
+            "equals": true
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": []
+      }
+    ],
+    "observe": {
+      "look": {
+        "argv": [
+          "node",
+          "tools/chapter-loop/legacy-capture.mjs",
+          "--case",
+          "manual",
+          "--legacy",
+          "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "manual",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "report": "report.json",
+        "assertions": {
+          "ordinaryControls": {
+            "pointer": "/proof/ordinaryControls",
+            "equals": true
+          },
+          "acceptedAction": {
+            "pointer": "/proof/acceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          },
+          "completePath": {
+            "pointer": "/proof/completePath",
+            "equals": true
+          }
+        },
+        "media": []
+      },
+      "listen": {
+        "argv": [
+          "node",
+          "tools/chapter-loop/legacy-capture.mjs",
+          "--case",
+          "av",
+          "--legacy",
+          "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+          "--out",
+          "{out}",
+          "--preview",
+          "{preview}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "av",
+        "schema": "paravoxia.chapterLoopProbe.v1",
+        "report": "report.json",
+        "assertions": {
+          "videoDecodes": {
+            "pointer": "/proof/videoDecodes",
+            "equals": true
+          },
+          "audioDecodes": {
+            "pointer": "/proof/audioDecodes",
+            "equals": true
+          },
+          "framesNonblank": {
+            "pointer": "/proof/framesNonblank",
+            "equals": true
+          },
+          "hardware": {
+            "pointer": "/proof/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/proof/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "video.webm"
+          },
+          {
+            "kind": "audio",
+            "path": "audio.wav"
+          },
+          {
+            "kind": "frame",
+            "path": "frame.png"
+          }
+        ]
+      }
+    },
+    "recovery": {
+      "argv": [
+        "node",
+        "tools/chapter-loop/legacy-capture.mjs",
+        "--case",
+        "source",
+        "--legacy",
+        "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+        "--out",
+        "{out}"
+      ],
+      "cwd": "main",
+      "timeoutMs": 600000
+    }
+  },
+  "continuation": {
+    "authority": {
+      "path": ".codex/chapter-loop-inputs/ch13-resume-20260907/owner-resume.json",
+      "sha256": "2db7ef36daa4a8a1c56f35aeac727feed619361299a1f09606f00d7a832f115d"
+    },
+    "contract": {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/scene-contract.json",
+      "sha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54"
+    },
+    "signoffs": [
+      {
+        "path": ".codex/production-runs/2026-09-05-after-the-hearth/chapter-v3-contract-signoff.json",
+        "sha256": "c10ebc505864ed359e082f3508f3734e1f8aa39933076b68247decf463ddbe18"
+      },
+      {
+        "path": ".codex/production-runs/2026-09-05-after-the-hearth/score-v3-contract-signoff.json",
+        "sha256": "4fc22a69da9fd575bca43a46f200ae5fc297864cb351f05b9324ac84cfdad3f1"
+      },
+      {
+        "path": ".codex/production-runs/2026-09-05-after-the-hearth/cinematography-v3-contract-signoff.json",
+        "sha256": "3d94ddadc099bee9d2ed0cf61933c7711847c6fdb75a6a849aec2f9ff1059954"
+      }
+    ],
+    "sourceManifest": {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/implementation-source-manifest.json",
+      "sha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63"
+    },
+    "priorUsage": {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/owner-requested-waste-audit-metrics.json",
+      "sha256": "2cc209fb8498a17308e0700c4fff6ec2c805933c877d51729898c747e162b15e"
+    }
+  }
+}

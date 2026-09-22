@@ -5,6 +5,8 @@ import { getPlayerPose } from '../../game/systems/playerPoseSystem.ts';
 import { getLocalActorId } from '../../game/playerActors.ts';
 import { getStoryInputPolicy } from '../storyInputPolicy.ts';
 import { getSideFacing, getSideLens } from '../sideLens.ts';
+import { getPlayerUp, getPlayerWorldPosition } from '../../state/playerFrame.ts';
+import { storyNow } from '../storyClock.ts';
 import { getFeedRuntime } from '../feedRuntime.ts';
 
 // --- The raster-era worker sprite ---------------------------------------------------
@@ -22,7 +24,8 @@ const SUIT_DIM = '#8d9a93';
 const _pos = new THREE.Vector3();
 const _quat = new THREE.Quaternion();
 const _face = new THREE.Vector3();
-const _FORWARD = new THREE.Vector3(0, 0, 1);
+const _right = new THREE.Vector3();
+const _basis = new THREE.Matrix4();
 
 const SideWorkerAvatar: React.FC = () => {
   const groupRef = useRef<THREE.Group>(null);
@@ -34,7 +37,9 @@ const SideWorkerAvatar: React.FC = () => {
   }), []);
   const box = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
 
-  useFrame(({ clock }) => {
+  const reducedMotion = useMemo(() => typeof window === 'undefined' ? null : window.matchMedia('(prefers-reduced-motion: reduce)'), []);
+
+  useFrame(() => {
     const group = groupRef.current;
     if (!group) return;
     const lens = getSideLens();
@@ -56,19 +61,24 @@ const SideWorkerAvatar: React.FC = () => {
       group.visible = false;
       return;
     }
-    _pos.set(pose.position[0], pose.position[1], pose.position[2]);
-    group.position.copy(_pos);
+    _pos.copy(getPlayerWorldPosition());
+    const up = getPlayerUp();
+    group.position.copy(_pos).addScaledVector(up, -0.83);
 
     // Face the last-moved direction along the travel axis.
     _face.copy(lens.travelAxis).multiplyScalar(getSideFacing()).normalize();
-    _quat.setFromUnitVectors(_FORWARD, _face);
+    _right.crossVectors(up, _face).normalize();
+    _basis.makeBasis(_right, up, _face);
+    _quat.setFromRotationMatrix(_basis);
     group.quaternion.slerp(_quat, 0.25);
 
     // Walk bob (the era's whole animation budget).
-    const moving = pose.action === 'walk' || pose.action === 'sprint';
-    const bob = moving ? Math.abs(Math.sin(clock.elapsedTime * 9)) * 0.14 : 0;
-    group.children.forEach(child => {
-      child.position.y = (child.userData.baseY as number) + bob;
+    const moving = !reducedMotion?.matches && (pose.action === 'walk' || pose.action === 'sprint');
+    const step = moving ? Math.sin(storyNow() * 0.009) : 0;
+    group.children.forEach((child, index) => {
+      // Alternate swing feet while one stance sole stays at the terrain plane.
+      const lift = index === 3 ? Math.max(0, step) * 0.04 : index === 4 ? Math.max(0, -step) * 0.04 : 0;
+      child.position.y = (child.userData.baseY as number) + lift;
     });
   });
 

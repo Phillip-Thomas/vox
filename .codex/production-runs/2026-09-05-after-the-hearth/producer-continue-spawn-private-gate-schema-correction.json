@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-06T23:39:14.549668+00:00",
+  "action": "Root corrected private launcher verdict schema during verifier ready/poll-only handoff; actual independent browser verification remains owned by role.",
+  "reason": "Verifier used nonexistent telemetry.samples[].frame.capsule; actual telemetry.frames[].capsule contains pre-click and delayed-jump frames. Entire valid postclick5s window now checked.",
+  "sourceChanged": false,
+  "gamePredicatesChanged": false,
+  "privateGateSha256": "4cdf744e17b35260e77692b0d7c7b498ad5ac0fe5761763715819d0e14fa79c0",
+  "planSha256": "1a3e7552e567ad1f5c2a403f7556bad89ef4c63b7b10a177e8d1a2d5aaf95acb",
+  "archivedBeforeRef": "iterations/implemented-continue-spawn-repair/strict-verdict-gate-before-schema-correction.mjs",
+  "minimumRuntimeTailMs": 5000,
+  "qualification": "5unit displacement guard is coarse instrument rejection, not gameplay or final acceptance tolerance. Actual displacement must be reviewed.",
+  "extraBudgetMinutes": 0
+}

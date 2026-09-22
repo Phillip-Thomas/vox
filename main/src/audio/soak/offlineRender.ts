@@ -1,11 +1,18 @@
 import type { ArchetypeId } from '../../game/data/planetArchetypes.ts';
 import { buildPlanetProfile } from '../../game/PlanetProfile.ts';
 import type { StoryBeat } from '../../story/storyState.ts';
-import { getStoryScoreMood, setScoreBeat } from '../../story/storyScore.ts';
+import {
+  clearStoryScoreMoodOverride,
+  getStoryScoreMood,
+  setScoreBeat,
+  setStoryScoreMoodOverride
+} from '../../story/storyScore.ts';
+import type { ScoreMood } from '../scoreEngine.ts';
 import {
   createOfflineMusicChain,
   createOfflineMusicRuntimeChain,
-  rampParamAt
+  rampParamAt,
+  type OfflineMusicTailMode
 } from '../audioCore.ts';
 import {
   beginOfflineBedRender,
@@ -31,10 +38,12 @@ import { deriveMotifGenome } from '../generative/motif.ts';
 import {
   getMusicChord,
   getMusicPrimitives,
+  resetMusicPrimitives,
   setMusicPrimitiveTargets,
   tickMusicPrimitives
 } from '../musicPrimitives.ts';
 import { createOfflineMusicEngineRuntime } from '../musicEngine.ts';
+import type { BedQualityTier } from '../generative/timbre.ts';
 import {
   NEUTRAL_PLANET_MOOD,
   resolveMusicMix,
@@ -49,7 +58,22 @@ import {
   type SoakScenarioName,
   type SoakScript
 } from '../generative/soak.ts';
-import { analyzeChannels, type AudioAnalysis } from './audioAnalysis.ts';
+import {
+  beginSfxOffline,
+  type OfflineSfxRim,
+  type SfxEvent
+} from '../sfxEngine.ts';
+import type { OxygenAudioPlan } from '../oxygenAudio.ts';
+import { renderVoiceInto, type OfflineVoiceOptions, type VoiceChain } from '../voice/voiceBus.ts';
+import { resolveMixSnapshot } from '../mix/mixSnapshot.ts';
+import {
+  analyzeChannels,
+  analyzeLoudness,
+  type AudioAnalysis,
+  type LoudnessAnalysis
+} from './audioAnalysis.ts';
+
+import type { BedSignals } from '../generative/worldSignals.ts';
 
 // --- Offline renders of the REAL engines (P4 harness, browser-only) --------------------------------
 //
@@ -73,6 +97,92 @@ const OFFLINE_HIT_LOOKAHEAD_S = 0.12;
 const OFFLINE_STORY_DEFAULT_ERA = 1;
 /** One oversized tick snaps the slewed primitives to their targets before t=0. */
 const OFFLINE_PRIMITIVES_SNAP_S = 10;
+/** Scripted SFX cues are instantiated inside the same scheduler horizon. */
+const OFFLINE_SFX_LOOKAHEAD_S = 0.12;
+/** Default seed for the offline SFX rim's noise. */
+export const DEFAULT_SFX_RENDER_SEED = 0x5f3a91;
+
+/** Non-`SfxEvent` cues the rim also renders: the body clock and the loops. */
+export type SfxControlEvent = 'oxygenPulse' | 'jetpack' | 'shipThrust' | 'submerge';
+
+export interface SfxCueParams {
+  /** oxygenPulse: the Chapter 6 body-clock plan fields. */
+  pulseGain?: number;
+  criticalBreathGain?: number;
+  criticalBreathDurationSeconds?: number;
+  /** jetpack: loop on/off and drive. */
+  active?: boolean;
+  intensity?: number;
+  /** shipThrust level, or submerge amount, 0..1. */
+  level?: number;
+  amount?: number;
+}
+
+/** One scripted diegetic cue: what fires, when, at what strength. */
+export interface SfxScriptCue {
+  t: number;
+  event: SfxEvent | SfxControlEvent;
+  params?: SfxCueParams;
+  position?: AudioPosition;
+  listener?: SfxListener;
+  room?: RoomPresetId;
+  quality?: 'full' | 'lean';
+  variation?: boolean;
+}
+
+export interface VoiceScriptCue extends Omit<OfflineVoiceOptions, 'startTime' | 'chord'> {
+  t: number;
+  chord?: OfflineVoiceOptions['chord'];
+}
+
+const SFX_CONTROL_EVENTS: ReadonlySet<string> = new Set<SfxControlEvent>([
+  'oxygenPulse',
+  'jetpack',
+  'shipThrust',
+  'submerge'
+]);
+
+function fireSfxCue(rim: OfflineSfxRim, cue: SfxScriptCue): void {
+  const params = cue.params ?? {};
+  if (cue.room) rim.buses.setRoom?.(cue.room, cue.quality ?? 'full', cue.t);
+  switch (cue.event) {
+    case 'oxygenPulse': {
+      const plan: OxygenAudioPlan = {
+        active: true,
+        oxygen: 0,
+        urgency: 1,
+        pulseIntervalSeconds: 1,
+        pulseGain: params.pulseGain ?? 0,
+        criticalBreathGain: params.criticalBreathGain ?? 0,
+        criticalBreathDurationSeconds: params.criticalBreathDurationSeconds ?? 0
+      };
+      rim.playOxygenPulse(plan, cue.t);
+      return;
+    }
+    case 'jetpack':
+      rim.setJetpackActive(params.active ?? false, params.intensity ?? 1, cue.t);
+      return;
+    case 'shipThrust':
+      rim.setShipThrust(params.level ?? 0, cue.t);
+      return;
+    case 'submerge':
+      rim.setSubmerged(params.amount ?? 0, cue.t);
+      return;
+    default:
+      rim.play(cue.event, cue.t, { position: cue.position, listener: cue.listener, variation: cue.variation });
+  }
+}
+
+/** Reject a script that names an event no rim path can render. */
+export function validateSfxScript(script: readonly SfxScriptCue[]): void {
+  for (const cue of script) {
+    if (!Number.isFinite(cue.t) || cue.t < 0) {
+      throw new Error(`SFX cue '${cue.event}' has a non-finite time`);
+    }
+    if (SFX_CONTROL_EVENTS.has(cue.event)) continue;
+    if (!cue.event) throw new Error('SFX cue is missing an event');
+  }
+}
 
 export type HitKind = 'braam' | 'bloom' | 'boom';
 
@@ -109,6 +219,8 @@ async function driveOffline(
 }
 
 export interface BedRenderOptions {
+  /** Diagnostic harness only; records dispatch and driving rails without altering scheduling. */
+  captureStressDiagnostics?: boolean;
   planetSeed: number;
   archetype?: ArchetypeId;
   paletteBrightness?: number;
@@ -128,6 +240,44 @@ export interface BedRenderOptions {
   driveLegacyMusic?: boolean;
   /** Diagnostic-only stem isolation; the default renders the shipped combined mix. */
   auditStem?: 'combined' | 'bed' | 'story' | 'legacy';
+  /**
+   * Stage 0 combined render: scripted diegetic cues rendered by the offline
+   * SFX rim, joined at the post-compressor master exactly as the live SFX
+   * sub-master joins it.
+   */
+  sfxScript?: readonly SfxScriptCue[];
+  voiceScript?: readonly VoiceScriptCue[];
+  /** Seed for the offline rim's noise; the same seed replays bit-identically. */
+  sfxSeed?: number;
+  /**
+   * SFX-only baseline: hold the music bus at silence while the rim renders.
+   * The music graph is still built and driven, so the render's timing and the
+   * compressor's state match the combined pass.
+   */
+  musicSilent?: boolean;
+  /**
+   * Return the module-global music rails to their cold-start values before
+   * building the graph. A harness page runs many renders; without this, render
+   * N inherits render N-1's rails and no replay hash is stable.
+   */
+  resetGlobalsBeforeRender?: boolean;
+  /**
+   * Stage 1 music-bus glue (glue compressor + soft clip before the safety
+   * compressor). Default true = the shipped chain. `false` renders the chain
+   * without the glue stage — the bare-era regression compares that render
+   * against the pre-Stage-1 instrument, which had no glue at all.
+   */
+  musicBusGlue?: boolean;
+  /** Stage 1 bed quality tier for the render (default 'full'). */
+  bedQuality?: BedQualityTier;
+  /** Mastering-tail selection (Stage 2 evidence; default 'shipped'). */
+  tail?: OfflineMusicTailMode;
+  /**
+   * Stage 2 duck traces: `false` mutes the SFX sub-master while every scripted
+   * cue still fires and ducks, so the music's duck envelope can be measured
+   * against an un-ducked render of the same script-free bed.
+   */
+  sfxAudible?: boolean;
 }
 
 export interface BedRenderResult {
@@ -135,16 +285,30 @@ export interface BedRenderResult {
   analysis: AudioAnalysis;
   report: SoakReport;
   bars: number;
+  /** Scripted SFX cues the rim fired (0 unless `sfxScript` was given). */
+  sfxCuesFired: number;
+  diagnosticTrace?: {
+    cues: import('./stemDiagnostics.ts').OfflineCueTrace[];
+    signals: { atS: number; signals: BedSignals }[];
+  };
+}
+
+export interface CombinedRenderResult extends BedRenderResult {
+  loudness: LoudnessAnalysis;
 }
 
 /** Render the generative bed offline: real rim, real scheduler core, audited. */
 export async function renderBedOffline(opts: BedRenderOptions): Promise<BedRenderResult> {
+  if (opts.resetGlobalsBeforeRender) resetMusicPrimitives();
   const ctx = new OfflineAudioContext(
     2,
     Math.round(opts.seconds * RENDER_SAMPLE_RATE),
     RENDER_SAMPLE_RATE
   );
-  const runtimeChain = createOfflineMusicRuntimeChain(ctx);
+  const runtimeChain = createOfflineMusicRuntimeChain(ctx, {
+    glue: opts.musicBusGlue ?? true,
+    tail: opts.tail ?? 'shipped'
+  });
   const out = runtimeChain.bus;
   const auditStem = opts.auditStem ?? 'combined';
   const bedOut = ctx.createGain();
@@ -177,6 +341,24 @@ export async function renderBedOffline(opts: BedRenderOptions): Promise<BedRende
   hitChain.gain.value = HIT_BUS_GAIN;
   hitChain.connect(bedOut);
 
+  if (opts.musicSilent) out.gain.value = 0;
+  const sfxScript = [...(opts.sfxScript ?? [])].sort((a, b) => a.t - b.t);
+  validateSfxScript(sfxScript);
+  const sfxRim =
+    sfxScript.length > 0
+      ? beginSfxOffline(ctx, runtimeChain.sfx, opts.sfxSeed ?? DEFAULT_SFX_RENDER_SEED, {
+          storyLead: () => signalsNow.storyLeads
+        })
+      : null;
+  // Duck traces: the cues still fire (and duck the music) but are inaudible.
+  if (opts.sfxAudible === false) runtimeChain.sfx.setOutput(0, 0);
+  const pendingSfx = [...sfxScript];
+  const pendingVoice = [...(opts.voiceScript ?? [])].sort((a, b) => a.t - b.t);
+  const voiceSlots: ({ rung: OfflineVoiceOptions['rung']; chain: VoiceChain } | undefined)[] = [];
+  let sfxCuesFired = 0;
+  const diagnosticTrace: BedRenderResult['diagnosticTrace'] = opts.captureStressDiagnostics
+    ? { cues: [], signals: [] } : undefined;
+
   const script = opts.script ?? makeSoakScript(opts.scenario, opts.planetSeed, opts.seconds);
   const pendingCues = [...(opts.hitCues ?? [])].sort((a, b) => a.atSec - b.atSec);
   let bars = 0;
@@ -188,6 +370,7 @@ export async function renderBedOffline(opts: BedRenderOptions): Promise<BedRende
   const conductor = beginOfflineBedRender(ctx, bedOut, opts.planetSeed, {
     archetype: opts.archetype,
     paletteBrightness: opts.paletteBrightness,
+    quality: opts.bedQuality,
     suppressTransientVoices: opts.continuousControlAudit,
     onBar: (plan, barTime) => {
       bars++;
@@ -232,6 +415,26 @@ export async function renderBedOffline(opts: BedRenderOptions): Promise<BedRende
   try {
     const buffer = await driveOffline(ctx, opts.seconds, (now) => {
       signalsNow = script(now);
+      diagnosticTrace?.signals.push({ atS: now, signals: { ...signalsNow } });
+      runtimeChain.applySnapshot(resolveMixSnapshot({ phase: 'playing', storyLead: signalsNow.storyLeads, submergence: signalsNow.submergence,
+        era: signalsNow.era, stage: signalsNow.stage, station: false, quality: opts.bedQuality ?? 'full' }), now);
+      while (pendingVoice.length > 0 && pendingVoice[0].t <= now + OFFLINE_SFX_LOOKAHEAD_S) {
+        const cue = pendingVoice.shift()!;
+        const slot = opts.bedQuality === 'lean' ? 0 : Math.max(0, Math.min(1, cue.slot ?? 0));
+        let current = voiceSlots[slot];
+        if (current && current.rung !== cue.rung) { current.chain.disconnect(); current = undefined; }
+        const voice = renderVoiceInto(ctx, runtimeChain.sfx.input('voice'), { ...cue, startTime: cue.t, chord: cue.chord ?? getMusicChord(), runSeed: cue.runSeed ?? opts.planetSeed }, current?.chain);
+        voiceSlots[slot] = { rung: cue.rung, chain: voice.chain };
+        runtimeChain.sfx.duck('voice', { storyLead: signalsNow.storyLeads }, cue.t);
+      }
+      // Diegetic cues instantiate inside the same 120 ms horizon the score's
+      // own hits use, so a cue can never be baked against a stale graph.
+      while (sfxRim && pendingSfx.length > 0 && pendingSfx[0].t <= now + OFFLINE_SFX_LOOKAHEAD_S) {
+        const cue = pendingSfx.shift()!;
+        fireSfxCue(sfxRim, cue);
+        diagnosticTrace?.cues.push({ cue, dispatchedAtS: now });
+        sfxCuesFired++;
+      }
       if (renderRealStoryHandoff && signalsNow.storyLeads !== storyScoreLeading) {
         storyScoreLeading = signalsNow.storyLeads;
         setScoreBeat(storyScoreLeading ? opts.storyHandoffBeat! : null);
@@ -291,9 +494,12 @@ export async function renderBedOffline(opts: BedRenderOptions): Promise<BedRende
       buffer,
       analysis: analyzeChannels(channels, buffer.sampleRate),
       report: auditSoakLog(collector.finish()),
-      bars
+      bars,
+      sfxCuesFired,
+      ...(diagnosticTrace ? { diagnosticTrace } : {})
     };
   } finally {
+    for (const slot of voiceSlots) slot?.chain.disconnect();
     if (renderRealStoryHandoff) {
       endOfflineScoreRender();
       setScoreBeat(null);
@@ -304,9 +510,34 @@ export async function renderBedOffline(opts: BedRenderOptions): Promise<BedRende
   }
 }
 
+export interface CombinedRenderOptions extends BedRenderOptions {
+  sfxScript: readonly SfxScriptCue[];
+}
+
+/**
+ * The Stage 0 combined render: the shipped music chain PLUS a scripted SFX cue
+ * list joined post-compressor, i.e. the mix the player's output route actually
+ * carries. Everything the bed driver already does — soak audit, story handoff,
+ * legacy rim — is unchanged; the SFX rim rides alongside it.
+ */
+export async function renderCombinedOffline(
+  opts: CombinedRenderOptions
+): Promise<CombinedRenderResult> {
+  const result = await renderBedOffline(opts);
+  const channels = Array.from({ length: result.buffer.numberOfChannels }, (_, c) =>
+    result.buffer.getChannelData(c)
+  );
+  return {
+    ...result,
+    loudness: analyzeLoudness(channels, result.buffer.sampleRate)
+  };
+}
+
 export interface StoryBeatRenderOptions {
   beat: StoryBeat;
   seconds: number;
+  /** Actual OfflineAudioContext rate, for per-rate latency/onset proof. */
+  sampleRate?: number;
   /** Intensity rail script (the director's own timeline stand-in). */
   intensityAt?: (tSec: number) => number;
   /** Reflex punctuation at absolute times (legacy scoreHit semantics). */
@@ -331,6 +562,22 @@ export interface StoryBeatRenderOptions {
    * prologue score). Omitted = score instrument only.
    */
   legacyScene?: MusicScene;
+  /** Stage 1 glue stage on the offline music chain (default true = shipped chain). */
+  musicBusGlue?: boolean;
+  /** Mastering-tail selection (Stage 2 evidence; default 'shipped'). */
+  tail?: OfflineMusicTailMode;
+  /**
+   * Render this exact mood under `beat` instead of the beat's MOODS entry — the
+   * path the ch10 variant moods (refused, seam-ebb, …) take live through
+   * setStoryScoreMoodOverride. Cleared when the render ends.
+   */
+  moodOverride?: ScoreMood;
+  /**
+   * Stage 3 harness hook: called at every offline drive checkpoint with the
+   * context and its current time, AFTER the score scheduler stepped — the
+   * place a probe arms `scheduleHitOffline` against the live offline grid.
+   */
+  onDriveStep?: (ctx: OfflineAudioContext, now: number) => void;
 }
 
 export interface StoryBeatRenderResult {
@@ -342,17 +589,22 @@ export interface StoryBeatRenderResult {
 export async function renderStoryBeatOffline(
   opts: StoryBeatRenderOptions
 ): Promise<StoryBeatRenderResult> {
+  const sampleRate = opts.sampleRate ?? RENDER_SAMPLE_RATE;
   const ctx = new OfflineAudioContext(
     2,
-    Math.round(opts.seconds * RENDER_SAMPLE_RATE),
-    RENDER_SAMPLE_RATE
+    Math.round(opts.seconds * sampleRate),
+    sampleRate
   );
-  const out = createOfflineMusicChain(ctx);
+  const out = createOfflineMusicChain(ctx, {
+    glue: opts.musicBusGlue ?? true,
+    tail: opts.tail ?? 'shipped'
+  });
   // The real story path: the beat's MOODS entry takes the instrument. With a
   // planet given, the planet's tune haunts the beat (§10.5).
   if (opts.planetSeed != null) {
     setScorePlanetGenome(deriveMotifGenome(opts.planetSeed, opts.archetype), opts.planetSeed);
   }
+  if (opts.moodOverride) setStoryScoreMoodOverride(opts.beat, opts.moodOverride);
   setScoreBeat(opts.beat);
   // Era-authentic audition: snap the primitives era rail BEFORE the first
   // scheduler pass so the render opens at the requested fidelity rung instead
@@ -388,6 +640,7 @@ export async function renderStoryBeatOffline(
       if (opts.intensityAt) setScoreIntensity(opts.intensityAt(now));
       tickMusicPrimitives(OFFLINE_DRIVE_STEP_S);
       stepOfflineScoreRender(ctx, now);
+      opts.onDriveStep?.(ctx, now);
       if (legacyMusic && opts.legacyScene != null) {
         const legacyMix = resolveMusicMix(
           opts.legacyScene,
@@ -420,6 +673,7 @@ export async function renderStoryBeatOffline(
   } finally {
     endOfflineScoreRender();
     setScoreBeat(null);
+    if (opts.moodOverride) clearStoryScoreMoodOverride(opts.beat);
     if (opts.planetSeed != null) setScorePlanetGenome(null);
     if (opts.era != null) {
       // Restore the module-global primitives for any later render in this page.
@@ -428,3 +682,5 @@ export async function renderStoryBeatOffline(
     }
   }
 }
+import type { AudioPosition, SfxListener } from '../sfx/spatialSfx.ts';
+import type { RoomPresetId } from '../mix/mixSnapshot.ts';

@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 210628,
+  "stop_reason": "end_turn",
+  "session_id": "8fd929fd-9569-4f9a-8a59-7bd301b9c720",
+  "total_cost_usd": 1.4612085000000001,
+  "usage": {
+    "input_tokens": 42,
+    "cache_creation_input_tokens": 56399,
+    "cache_read_input_tokens": 878461,
+    "output_tokens": 18250,
+    "output_tokens_details": {
+      "thinking_tokens": 2146
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 56399,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1462,
+        "cache_read_input_tokens": 59634,
+        "cache_creation_input_tokens": 2761,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2761
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1468,
+      "outputTokens": 12,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0015279999999999998,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 42,
+      "outputTokens": 18250,
+      "cacheReadInputTokens": 878461,
+      "cacheCreationInputTokens": 56399,
+      "webSearchRequests": 0,
+      "costUSD": 1.4596805000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2146,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 26,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "622 words (tables inflate the count; prose body is well under). Done.\n\n**VERDICT: pass** \u2014 3/3 current-mood offline excerpts rendered, decoded, hashed, verified clean. 0 NaN, 0 clip, 0 silence, 0 smoothness violations, 0 probe failures. **OFFLINE RENDER, NOT a listening / live combined-AV / performance acceptance. Nothing was heard.**\n\n**Measurements** (each WAV re-decoded with system `ffprobe` and re-hashed on disk; all `pcm_s16le` 2ch 44100 Hz 16-bit 10.000000 s 1,764,044 B, matching the in-page encode byte-for-byte):\n\n| excerpt | beat / mood source | era | intensity | seed | mix | sha256(12) | peak | rms (dBFS) | LUFS | dBTP | corr | maxStep | NaN/clip/\u2265FS/silence/smooth |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| ch4-audit_current | `ch4-audit` MOODS | 1 | 0.42 (authored baseline) | none | score+legacy `deepSpace`, glue on, tail shipped | `b9f4af0f9024` | 0.25598 | 0.078688 (\u221222.08) | \u221222.58 | \u221211.83 | 0.981 | 0.01433 | 0/0/0/0s/0 |\n| ch9-hearth_current | `ch9-hearth` MOODS | 1 | 0.28 (authored baseline) | none | same | `32f80b133c0f` | 0.27199 | 0.073205 (\u221222.71) | \u221222.40 | \u221211.31 | 0.917 | 0.01970 | 0/0/0/0s/0 |\n| ch10-station-resolved_current | `ch10-transit` + `getChapter10ScoreMood('station-resolved', carrierAlive=true)` override | 1 | **0.24 \u2014 not its authored 0.44** | none | same | `438abbace216` | 0.28020 | 0.074715 (\u221222.53) | \u221222.50 | \u221211.05 | 0.949 | 0.01952 | 0/0/0/0s/0 |\n\nPer-second RMS dBFS and full resolved mood tables (tempo/wave/chord/progression/pattern/pad/sub/ost/riser/octave) are in the JSON and `moods-resolved.json`.\n\n**Objective defects:** none. No engine failure surfaced, so nothing was fixed.\n\n**Scope limits recorded in the report:** music bus only (no SFX/voice \u2014 does not satisfy the 2026-09-04 \"combined renders only\" law); flat intensity rail; era pinned to 1 (no per-beat era table exists in source); no planet seed, so the \u00a710.5 planet-tune filter is absent; ch10's 0.24 rail differs from its 0.44 baseline.\n\n**Isolation:** `git status` + `find -newermt` confirm zero writes under `main/` (source, `dist`, `renders`). Probe esbuild-bundles current source to `tmp/`, serves it from its own ephemeral-port node server with a checked title identity, one headless Chromium with `--disable-gpu --use-gl=swiftshader` (no GPU/canvas), server and browser both closed. No dev watcher. Prior artifacts including `shipped-audio-baseline.json` untouched. Wall time ~5 min.\n\n**Artifacts**\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/current-audio-baseline-probe.mjs`\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/current-audio-baseline-report.md`\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/current-audio-baseline-report.json`\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/evidence/current-audio-baseline/` (3 `*.wav`, report JSON with 14-file source-hash manifest, `moods-resolved.json`)\n- scratch: `/home/thomasphillip/Projects/vox/tmp/current-audio-baseline/`",
+  "ttft_ms": 1599,
+  "type": "result",
+  "duration_ms": 215637,
+  "uuid": "77bc29ab-6bb6-4455-ae85-9dd889974a4a",
+  "ttft_stream_ms": 801,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 801,
+  "queued_turn_count": 0
+}

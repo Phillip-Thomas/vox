@@ -44,8 +44,6 @@ export const SPACE_DOME_RENDER_ORDER = -1000;
 export const CONSTELLATION_TUNING = {
   /** cells per cube-face axis (6 * grid^2 candidate cells; 3 -> 54) */
   grid: 3,
-  /** fraction of cells hosting a figure (54 * 0.18 ~ 10 figures sky-wide) */
-  figureOdds: 0.18,
   /** node core tightness (14000 -> sigma ~0.48 deg: a crisp star point) */
   nodeCoreSize: 14000,
   /** dim wide halo lobe around each node (1800 -> sigma ~1.35 deg) */
@@ -64,6 +62,18 @@ export const CONSTELLATION_TUNING = {
   lineRevealStart: 0.18,
   lineRevealEnd: 0.7
 } as const;
+
+// Sparse authored coverage on every cube face. A probability over 54 cells
+// cannot guarantee a figure above the player; the old GPU hash left five of
+// six sampled directions empty. Shapes and colours still vary per cell.
+export const CONSTELLATION_HOST_CELLS = [
+  [0, 0, 0], [0, 1, 2],
+  [1, 0, 2], [1, 2, 1],
+  [2, 1, 1],
+  [3, 0, 1], [3, 2, 0],
+  [4, 1, 0], [4, 2, 2],
+  [5, 0, 0], [5, 1, 2]
+] as const;
 
 /** Format a number as a GLSL float literal (floor-safe: always has a '.'). */
 function glslFloat(n: number): string {
@@ -239,7 +249,6 @@ const FRAG = /* glsl */ `
   // varies, so different sky regions already read subtly distinct. Nothing
   // gameplay-facing yet — it just seeds future region-specific meaning.
   #define CONST_GRID           ${glslFloat(CONSTELLATION_TUNING.grid)}
-  #define CONST_FIGURE_ODDS    ${glslFloat(CONSTELLATION_TUNING.figureOdds)}
   #define CONST_NODE_CORE      ${glslFloat(CONSTELLATION_TUNING.nodeCoreSize)}
   #define CONST_NODE_HALO      ${glslFloat(CONSTELLATION_TUNING.nodeHaloSize)}
   #define CONST_NODE_HALO_GAIN ${glslFloat(CONSTELLATION_TUNING.nodeHaloGain)}
@@ -280,9 +289,11 @@ const FRAG = /* glsl */ `
     cubeFace(dir, face, uv);
     vec2 pc   = (uv + 1.0) * 0.5 * CONST_GRID;      // [0, GRID)² on this face
     vec2 cell = floor(pc);
+    if (!(${CONSTELLATION_HOST_CELLS.map(([face, x, y]) =>
+      `(face == ${glslFloat(face)} && all(equal(cell, vec2(${glslFloat(x)}, ${glslFloat(y)}))))`
+    ).join(' || ')})) return vec3(0.0);
     vec3 seed = vec3(cell, face * 9.7 + 1.3);
     vec3 h    = hash33(seed);
-    if (h.x > CONST_FIGURE_ODDS) return vec3(0.0);  // most cells host no figure
 
     // Regional style: warm amber ↔ cool phosphor line + node tint; member count.
     float style   = h.z;

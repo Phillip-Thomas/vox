@@ -1,0 +1,159 @@
+{
+ "schema": "paravoxia.verifier.finaleWindowFdRuntime.v1",
+ "at": "2026-09-06T20:16:30Z",
+ "commissionStartedAtUtc": "2026-09-06T20:07:09Z",
+ "clockCapMinutes": 20,
+ "verdict": "FAIL-TO-MEASURE \u2014 private FD-check repair COMPLETE and proven; combined finale measurement NOT obtained: root reassigned activeRole to common-physical-discriminator at 2026-09-06T20:13:56Z, mid-window.",
+ "isAcceptance": false,
+ "sourceHashes": {
+  "manifestBefore": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "manifestAfter": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "contractBefore": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "contractAfter": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "gameFilesRehashed": 99,
+  "gameSourceClean": true,
+  "toleratedAuxiliaryDrift": 1
+ },
+ "repair1_verifyHeavyLock": {
+  "causeConfirmed": "execFileSync('readlink',['-f','/proc/self/fd/9']) resolved /proc/self inside the SPAWNED readlink, not the owning probe.",
+  "observedOldReaderInHeldChild": "/proc/2017103/fd/9",
+  "observedNewReaderInHeldChild": "/tmp/finale-window-fdcheck-2017088-11f881cd.lock",
+  "oldReaderCouldNeverMatchLockPath": true,
+  "fix": "in-process fs.readlinkSync + fstatSync/statSync dev+inode identity; kernel FLOCK WRITE check retained; contention accepts ONLY flock exit 1, spawn errors/signals/other statuses recorded as INCONCLUSIVE and refused.",
+  "exercisedAgainst": "ACTUAL exported verifyHeavyLock in real Node children with inherited exclusive fd 9 on a unique temporary lock (production heavy lock untouched).",
+  "cases": 7,
+  "failed": 0,
+  "caseResults": [
+   {
+    "name": "A-held-exclusive-inherited-fd9",
+    "pass": true,
+    "why": "owned=true problems=[] contention={\"attempted\":true,\"conclusive\":true,\"status\":1,\"signal\":null,\"acquiredBySecondProcess\":false,\"note\":\"second flock -n exited 1: refused, the lock is genuinely held\"}"
+   },
+   {
+    "name": "B-missing-fd-refused",
+    "pass": true,
+    "why": "[\"fd 72 not open in this process (pid 2017105): ENOENT\"]"
+   },
+   {
+    "name": "B2-wrong-fd-unrelated-pipe-refused",
+    "pass": true,
+    "why": "[\"fd 8 points at pipe:[259126259], not /tmp/finale-window-fdcheck-2017088-11f881cd.lock\",\"fd 8 is dev/inode 15:259126259, but /tmp/finale-window-fdcheck-2017088-11f881cd.lock is 66306:266096\"]"
+   },
+   {
+    "name": "C-wrong-fd-target-refused",
+    "pass": true,
+    "why": "[\"fd 8 points at /tmp/finale-window-fdcheck-2017088-11f881cd.other, not /tmp/finale-window-fdcheck-2017088-11f881cd.lock\",\"fd 8 is dev/inode 66306:266102, but /tmp/finale-window-fdcheck-2017088-11f881cd.lock is 66306:266096\"]"
+   },
+   {
+    "name": "D-unheld-fd9-refused",
+    "pass": true,
+    "why": "problems=[\"no kernel lock recorded for the lock file inode\",\"CONTENTION PROOF FAILED: a second process took the lock, so this run is NOT exclusive\"] contention={\"attempted\":true,\"conclusive\":true,\"status\":0,\"signal\":null,\"acquiredBySecondPr"
+   },
+   {
+    "name": "E1-no-fd-refused",
+    "pass": true,
+    "why": "[\"no --heavy-lock-fd (the lock must be INHERITED, not taken here)\"]"
+   },
+   {
+    "name": "E2-no-lock-path-refused",
+    "pass": true,
+    "why": "[\"no --heavy-lock path\"]"
+   }
+  ],
+  "harnessFaultsRetained": [
+   "fd-check-result.attempt1-testfault.json (fd 8 held capture pipe)",
+   "fd-check-result.attempt2-testfault.json (fd 21 open on /dev/null)",
+   "fd-check-result.attempt3-testfault.json (exec 21>&- still reopened by node)"
+  ],
+  "harnessFaultNote": "All three were faults in MY harness, not in verifyHeavyLock: the probe correctly REFUSED each. Resolved by having the child select a descriptor it has PROVEN closed."
+ },
+ "repair2_samplerInstallerBinding": {
+  "discoveredBy": "window-3 first attempt, only reachable once the lock fix let the run pass validation and launch a browser.",
+  "symptom": "TypeError: Cannot read properties of undefined (reading 'inventory') at finale-window-probe.mjs:492",
+  "causeConfirmed": "playwright-core evaluates a STRING pageFunction as an EXPRESSION and ignores the second argument. buildInstallerSource() returned '(cfg) => {...}', which evaluated to a FUNCTION value (serialised to undefined). The installer NEVER RAN.",
+  "proof": "logs/finale-window-fd-runtime/evaluate-semantics-check.mjs on the shipped headed chrome: string-with-arg form left window.__marker null; invoked-expression form returned the object and set the marker to 7.",
+  "fix": "evaluate `(${buildInstallerSource()})(${JSON.stringify(windowCfg)})` and hard-fail when installed!==true. buildInstallerSource itself unchanged, so its fixtures stay valid.",
+  "downstreamEffectExplained": "'sink ownership refused: no-stream-on-owned-sink' was a CONSEQUENCE of the probe crashing before the game produced audio; it is NOT evidence about game audio.",
+  "producerConcurrence": "verifier-control.json instruction at 20:13:56Z independently authorizes exactly this CPU correction."
+ },
+ "affectedRerun": {
+  "selfTestChecks": 33,
+  "selfTestResult": "PASS",
+  "focusedChecks": 31,
+  "focusedResult": "31/31 PASS",
+  "rerunAfter": "both the lock fix and the installer fix",
+  "fullGameVerificationRun": false
+ },
+ "measurementAttempts": [
+  {
+   "attempt": "window-3 (first)",
+   "dir": "verifier/captures/finale-window/window-3-failed-installer-binding",
+   "startedUtc": "20:11:51",
+   "endedUtc": "20:13:22",
+   "reachedPhases": [
+    "heavy-lock-fd-validated",
+    "default-sink-read",
+    "owned-sink-created",
+    "owned-sink-index-resolved",
+    "probe-launched",
+    "browser-pid-observed",
+    "probe-stopped"
+   ],
+   "significance": "FIRST run in this lane ever to pass heavy-lock validation and launch a real browser; windows 1 and 2 never reached launch.",
+   "browserPid": 2018970,
+   "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+   "headless": false,
+   "unmuted": true,
+   "outcome": "probe crashed at sampler install (repair2); wrapper refused to record; browser+sink torn down."
+  },
+  {
+   "attempt": "window-3 (second)",
+   "dir": "verifier/captures/finale-window/window-3",
+   "startedUtc": "20:14:59",
+   "endedUtc": "20:15:46",
+   "outcome": "REFUSED BY ROLE GATE before browser launch: control.activeRole=common-physical-discriminator, this lane needs finale-window-runtime.",
+   "note": "Not a repeat of any prior fault. Root reassigned sole GPU authority at 20:13:56Z."
+  }
+ ],
+ "measurementsNotObtained": {
+  "terra18": "MISSING",
+  "worker18": "MISSING",
+  "committed": "MISSING",
+  "bothAvAnchors": "MISSING",
+  "atomicEdgeRecord": "MISSING",
+  "outputWav": "MISSING",
+  "wavDurationEnergy": "MISSING",
+  "recordingIntervalToEdgeMapping": "MISSING",
+  "canvasClickGesture": "NOT REACHED",
+  "finalTextureTokenTiming": "MISSING",
+  "cancellationReason": "MISSING (no shipped hook; unchanged)",
+  "audioContextMutePauseState": "MISSING (no shipped hook; unchanged)"
+ },
+ "noInferenceClaimed": "No finale, audibility, cancellation-cause, taste or defect conclusion is drawn. No state-only substitute was run. Game predicates unchanged.",
+ "ownedResourceCleanliness": {
+  "leakedNullSinkModules": 0,
+  "defaultSinkBefore": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+  "defaultSinkAfter": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+  "defaultMonitorOrMicTouched": false,
+  "foreignProcessesKilled": false,
+  "ownedBrowsersRunning": 0,
+  "tempLocksRemoved": true,
+  "productionHeavyLockUntouched": true
+ },
+ "producerFilesEdited": "none (no *-invocation.json, verifier-control.json, prior report or iteration touched)",
+ "blockedOn": "activeRole must return to finale-window-runtime before the combined capture can be attempted; probe is now repaired and ready.",
+ "artifactSha256": {
+  "verifier/probes/finale-window/finale-window-probe.mjs": "356fa23a3d840fa108ec7ab2be24a8fc92d46baec0c898727a5534a4862ba73a",
+  "logs/finale-window-fd-runtime/fd-check.mjs": "9084f3b5c2ae2d32b4e7438161b2584362493e803ac7e76b19c51811c1971862",
+  "logs/finale-window-fd-runtime/run-fd-check.mjs": "8e120e6c403e88f09676c9fa6cb4369c40064d0342ef7f9742a12d13ed977d01",
+  "logs/finale-window-fd-runtime/fd-check-result.json": "aa70f37681851ff21d99c07d087c0d5402e4ceccee327021ca37ed1ccc31e08a",
+  "logs/finale-window-fd-runtime/evaluate-semantics-check.mjs": "b3a61b5b35a238064a4d8670c657929b6115e02108e559ff8abd932926019fdd",
+  "logs/finale-window-fd-runtime/prepared-cli-window3.txt": "dcca7ee4d432afe848a4a94860d4f932333f3b76f96dc2a7341bcacaaf648cba",
+  "verifier/captures/finale-window/window-3-failed-installer-binding/probe-console.log": "217298148356e7e10fe2a10507cc5e122c6697f04eb0dd2b0f49e751e819f51b",
+  "verifier/captures/finale-window/window-3-failed-installer-binding/runtime-record.json": "66c1863c85308eb6c7d0862b323434412cb6511c5f63238b4db2161a89e66907",
+  "verifier/captures/finale-window/window-3-failed-installer-binding/browser-pid.json": "cb35e7bb8ac8f83d598ed5f3d695dab9ffbb80781c7f16574793bd3c14963d2f",
+  "verifier/captures/finale-window/window-3-failed-installer-binding/cleanup-receipt.json": "dde7f99cf508ccc165ed93277d60350c09aa2012c4ba29b853f61f3d25eb7693",
+  "verifier/captures/finale-window/window-3/probe-console.log": "07cd15a2012ba53accfd32c21614a6a74a17d1808fb7591371c53b71143501dd",
+  "verifier/captures/finale-window/window-3/runtime-record.json": "7997fc63a62e828a5a1183f792e23a3fe39df37674a730d4725c5b03ce0470dc"
+ }
+}

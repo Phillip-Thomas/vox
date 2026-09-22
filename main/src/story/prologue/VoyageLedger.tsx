@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { VOYAGE_DECK, VOYAGE_NAMING, VOYAGE_SETTINGS, VOYAGE_STRANGE_LINES, type LedgerStat } from '../storyScript.ts';
+import { voiceVisibleText } from '../../audio/voice/voicePresentation.ts';
 import { applyChoice, createDeckRun, nextCard, type VoyageCard } from '../voyageDeck.ts';
 import { applyVoyageOutcome } from '../voyageOutcome.ts';
 import {
@@ -183,6 +184,7 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
         firedStrangeRef.current.add(idx);
         const text = name ? line.text.replace('{name}', name) : line.text;
         setStrange({ voice: line.voice, text });
+        if (line.voice === 'system') voiceVisibleText(`voyage:${idx}`, text, text.length, 'terminal');
       }
       if (t >= 1) {
         const rationOption = VOYAGE_SETTINGS.rations.options.find(o => o.id === rationsRef.current)!;

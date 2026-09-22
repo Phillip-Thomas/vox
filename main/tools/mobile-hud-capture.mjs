@@ -34,10 +34,10 @@ async function enterStory(page) {
   await page.goto(url.toString(), { waitUntil: 'domcontentloaded', timeout: 30_000 });
   await page.waitForFunction(() => (
     window.__paravoxiaAppState?.phase === 'playing'
-    || [...document.querySelectorAll('button')].some(button => button.textContent?.includes('Play Now') && !button.disabled)
+    || [...document.querySelectorAll('button')].some(button => button.textContent?.includes('Free Play') && !button.disabled)
   ), undefined, { timeout: 60_000 });
   if (!await page.evaluate(() => window.__paravoxiaAppState?.phase === 'playing')) {
-    await page.getByRole('button', { name: /Play Now/i }).click({ force: true });
+    await page.getByRole('button', { name: /Free Play/i }).click({ force: true });
   }
   await page.waitForFunction(expectedBeat => (
     window.__paravoxiaAppState?.phase === 'playing'

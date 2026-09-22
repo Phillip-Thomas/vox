@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { getGraphicsQuality } from '../config/graphicsSettings';
+import { getGraphicsQuality, getQualityProfile } from '../config/graphicsSettings';
 import { getVoxelRealityEffects, lifeFieldsHidden } from '../game/systems/realityRenderSystem';
 import { isStoryWorldSeed } from '../story/world/storyWorld.ts';
 import { storyLifeDormant } from '../story/storyState.ts';
@@ -17,6 +17,7 @@ import {
   countFaunaVoxels,
   createFaunaGeometry,
   createFaunaMaterial,
+  faunaDetailForProfile,
   faunaStructureClearanceCells,
   prepareFaunaInstanceAttributes,
   updateFaunaAgents,
@@ -38,7 +39,9 @@ interface FaunaFieldProps {
   playerPosition?: THREE.Vector3;
   /** When provided, ground fauna avoid terrain submerged below the waterline. */
   planetSize?: number;
+  /** Spread initial species builds across frames; every authored species still mounts. */
   progressiveMount?: boolean;
+  onInitialMountComplete?: () => void;
 }
 
 const HEADROOM = 12;
@@ -54,7 +57,8 @@ export default function FaunaField({
   planetProfile,
   playerPosition,
   planetSize,
-  progressiveMount = false
+  progressiveMount = false,
+  onInitialMountComplete
 }: FaunaFieldProps) {
   const quality = getGraphicsQuality();
   const density = quality.faunaDensity;
@@ -80,6 +84,15 @@ export default function FaunaField({
   const [visibleKindCount, setVisibleKindCount] = useState(
     progressiveMount ? 1 : FAUNA_KINDS.length
   );
+  const mountedKinds = useMemo(() => new Set<FaunaKind>(), [profile, density]);
+  const kindMounted = useCallback((kind: FaunaKind) => {
+    if (mountedKinds.has(kind)) return;
+    mountedKinds.add(kind);
+    if (mountedKinds.size === FAUNA_KINDS.length) onInitialMountComplete?.();
+  }, [mountedKinds, onInitialMountComplete]);
+  useEffect(() => {
+    if (density <= 0) onInitialMountComplete?.();
+  }, [density, onInitialMountComplete]);
   useEffect(() => {
     if (!progressiveMount || visibleKindCount >= FAUNA_KINDS.length) return undefined;
     const frame = window.requestAnimationFrame(() => {
@@ -101,6 +114,7 @@ export default function FaunaField({
           playerPosition={playerPosition}
           profile={profile}
           obstacles={obstacles}
+          onInitialMountComplete={kindMounted}
         />
       ))}
     </>
@@ -113,7 +127,8 @@ function FaunaLayer({
   terrainSeed,
   playerPosition,
   profile,
-  obstacles
+  obstacles,
+  onInitialMountComplete
 }: {
   kind: FaunaKind;
   density: number;
@@ -121,8 +136,12 @@ function FaunaLayer({
   playerPosition?: THREE.Vector3;
   profile: FaunaProfile;
   obstacles: FaunaNavigationObstacles;
+  onInitialMountComplete: (kind: FaunaKind) => void;
 }) {
-  const geometry = useMemo(() => (density > 0 ? createFaunaGeometry(kind, profile) : null), [density, kind, profile]);
+  const geometry = useMemo(
+    () => (density > 0 ? createFaunaGeometry(kind, profile, faunaDetailForProfile(getQualityProfile())) : null),
+    [density, kind, profile]
+  );
   const material = useMemo(() => (density > 0 ? createFaunaMaterial(kind, profile) : null), [density, kind, profile]);
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const agentsRef = useRef<FaunaAgent[]>([]);
@@ -175,16 +194,19 @@ function FaunaLayer({
 
   useEffect(() => {
     if (density <= 0) return;
-    growCapacity(neededCapacity());
+    const needed = neededCapacity();
+    growCapacity(needed);
+    if (needed === 0) onInitialMountComplete(kind);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [density, terrainSeed, profile]);
+  }, [density, terrainSeed, profile, onInitialMountComplete]);
 
   useEffect(() => {
     if (capacity <= 0) return;
     rebuild();
     signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
+    if (meshRef.current) onInitialMountComplete(kind);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [capacity, profile]);
+  }, [capacity, profile, onInitialMountComplete]);
 
   useEffect(() => {
     windAppliedRef.current = false;

@@ -1,0 +1,62 @@
+{
+  "at": "2026-09-06T20:22:35.195993+00:00",
+  "fromRole": "finale-window-runtime",
+  "toRole": "earned-continue-3d-runtime",
+  "commonPriorFinished": "2026-09-06T20:17:51.387753+00:00",
+  "actualFinaleRuntimeRef": "verifier/captures/finale-window/window-4/runtime-record.json",
+  "actualFinaleRuntimeSha256": "15ac452d999aa6776093cfc36338598c91339774f7bd4c5efd63b72e6f52ac55",
+  "actualFinaleEnded": "2026-09-06T20:21:47.412Z",
+  "browserGone": true,
+  "cleanupComplete": true,
+  "kernelLockEntries": [],
+  "preparedContinueHashChecks": [
+    {
+      "path": "verifier/probes/earned-continue-3d/cgContract.pinned.mjs",
+      "matches": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/earned-continue-3d-probe.mjs",
+      "matches": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/earnedContinueLogic.mjs",
+      "matches": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/entryObservation.mjs",
+      "matches": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/groundFrame.selftest.mjs",
+      "matches": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/ownedSession.pinned.mjs",
+      "matches": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/poseObservation.mjs",
+      "matches": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/selftest.mjs",
+      "matches": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/sourceSnapshot.pinned.mjs",
+      "matches": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/tangentSteering3d.mjs",
+      "matches": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/tangentSteering3d.selftest.mjs",
+      "matches": true
+    }
+  ],
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceWriter": null,
+  "instruction": "GPUgranted for corrected earnedContinue/newF lane; finale90655 remainingaudioanalysis is CPU-only. Entry-crossing61973 staysCPUuntilnextactualhandoff. No permissionquestion needed.",
+  "isAcceptance": false
+}

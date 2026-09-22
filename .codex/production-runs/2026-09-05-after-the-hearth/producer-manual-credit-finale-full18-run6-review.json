@@ -1,0 +1,35 @@
+{
+  "at": "2026-09-06T21:38:45.619449+00:00",
+  "captureRef": "verifier/captures/manual-credit-finale/full18-run6/summary.json",
+  "captureSha256": "4d9021f3f61884eff0d042297f995ef6c8c4939d51eadfcfc042b36e6f28811b",
+  "classification": "Actual full Terra18 proven, reciprocal completion not proven",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "actualFullTerraPassage": {
+    "terraUnits": 18,
+    "vertices": 9,
+    "completedAt": "2026-09-06T21:38:04.672Z",
+    "source": "actual-Terra-walked-the-full-18-unit-common-span gate; all9observedvertexcrossings",
+    "ordinaryMovement": true,
+    "noProgressGrant": true
+  },
+  "farReference": {
+    "pressedF": false,
+    "horizontalToT": 0.0953670898996206,
+    "verticalToT": 4.20932018446252,
+    "supported": false,
+    "observation": "Grounded arrival gate withheld F; comparison succeeded but reciprocal Worker passage did not start. Need actual landed approach with valid occupancy, not a grant."
+  },
+  "qualifications": [
+    "Probe applies .35 at T; signed occupancy is1.25horizontal/.6vertical. Current4.209vertical is invalid under either, so no false F refusal conclusion yet. Private harness must not impose newprecision.",
+    "Fixture/known route control does not prove first-time naiveUX or continuousstory.",
+    "Negative earlycut and physical recovery, Worker18/finale remain open.",
+    "Legacy SHORT setup verdict/exit0 does not upgrade incomplete finalhandoff."
+  ],
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "closing": {
+    "ok": true,
+    "problems": []
+  },
+  "next": "Preserve candidate source; inspect actual approach/settling and finish same authorized boundedruntime.",
+  "publicationAuthorized": false
+}

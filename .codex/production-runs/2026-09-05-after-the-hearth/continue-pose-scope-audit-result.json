@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 347904,
+  "stop_reason": "end_turn",
+  "session_id": "ef4faa13-06f9-4760-98f2-f6ea9fb31be4",
+  "total_cost_usd": 2.1005855000000007,
+  "usage": {
+    "input_tokens": 54,
+    "cache_creation_input_tokens": 80057,
+    "cache_read_input_tokens": 1284787,
+    "output_tokens": 26231,
+    "output_tokens_details": {
+      "thinking_tokens": 9747
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 80057,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1447,
+        "cache_read_input_tokens": 83477,
+        "cache_creation_input_tokens": 647,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 647
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1507,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001577,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 54,
+      "outputTokens": 26231,
+      "cacheReadInputTokens": 1284787,
+      "cacheCreationInputTokens": 80057,
+      "webSearchRequests": 0,
+      "costUSD": 2.0990085000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 9747,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 38,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done at **16:41:17-04:00** (5m25s of a 10m budget; real `date`, recorded in `endedAt.txt`).\n\n**VERDICT: cause re-classified and narrowed \u2014 the restore succeeds; the pose is clobbered afterward. Prior ranked candidate #1 is falsified.**\n\n**Record correction:** prior audit's handwritten `endedAtUtc 20:42:40Z` is false \u2014 its own `result.json` (`duration_api_ms: 130605` from `20:31:08Z`) gives ~`20:33:19Z`. Original file preserved byte-intact (`sha256 9084ec59\u2026`).\n\n**The unlock:** `:p1` is not an actor/scope suffix. `starSystem.ts:90-94` puts the **planet slot inside the worldId**, and `:96-104` binds both recorded seeds: slot 0 \u2192 3215739679 (origin), slot 1 \u2192 1600321158 (Tidegarden). The two keys are **two planets**.\n\n**No copy writer exists.** Exhaustive grep: only `persistence.ts:459/465/515` touch `.player`. Nothing copies poses between worldIds \u2014 so the \":p1 copy\" is an ordinary `savePlayerPose` made while `currentWorld` was Tidegarden.\n\n**The restore actually worked** \u2014 `trace.ndjson` idx 107, phase `continue`, beat `ch13-survey`, live pose `[-31.99, 52.79, 21.42]`. `loadPlayerPose` returned non-null, worldId matched, `resumeIsSafe = true`. The +X pose appears only at idx 108. This kills the scope-mismatch hypothesis, the validator/rescue path, and `storyAnchoredSpawn`.\n\n**Chain:** boot resolves origin correctly (`lastPlanetWorldId: \"-1,-1\"`, `ch13-survey` is origin-owned) \u2192 pose restores \u2192 a per-render world swap (`App.tsx:537-545` \u2192 `624-634`) moves `currentWorld` to `:p1` \u2192 the cleanup save (`App.tsx:1458-1460`) writes the live earned pose into the sibling key (idx 75/76) \u2192 resolver settles back to origin, `EfficientScene` remounts on the arrival shell, autosave overwrites base with `[53.75, 13.5, -14]` (idx 79/80). Every recorded byte explained.\n\n**Exact unresolved predicate:** the literal `story.beat` on the render(s) between idx 107 and 108. With `ch13-survey` no swap is possible, so the beat was transiently something else \u2014 both `null` and `ch13-return` yield Tidegarden, since `storyChapterAtLeast('ch13','ch9')` is true and neither is in the `originOwnedBeat` list. Trace sampling is ~1s, so the value is not in existing evidence.\n\n**Smallest fresh observation (recommended, not performed):** one real Continue, 100 ms sampling of `window.__voxelDebug.spawn.terrainSeed` \u2014 **already shipped** at `EfficientScene.tsx:301-314`, no source edit. Seeing 1600321158 proves the excursion and names the beat; never leaving 3215739679 redirects blame to a second origin mount.\n\n**Seam (unconfirmed, no patch proposed):** `App.tsx:624-634` swaps worlds with no settled-story-point guard; `resolveStoryBootWorldId` falls through to the chapter-ordinal test when `beat === null`, and ignores `_savedWorldId` entirely \u2014 so the correct saved `-1,-1` cannot break the tie. I did not propose an edit, since guarding blindly could suppress a legitimate swap.\n\n**Artifacts:** `continue-pose-scope-audit.json` / `.md`, and `logs/continue-pose-scope-audit/{ordering,dependency-hashes,endedAt}.txt`, `globalsave-copy.json` \u2014 all under the run folder.\n\n**Integrity:** no browser, GPU, build, preview, full suite, or CPU replay; no game/producer/probe/prior-report file touched; no scratch in the game tree. Manifest `6ef957c3\u20261fee5d6` unchanged. (Pre-existing `git status` modifications under `main/` are the run's frozen integration diff, not mine.)",
+  "ttft_ms": 1531,
+  "type": "result",
+  "duration_ms": 347299,
+  "uuid": "89db7e6e-1583-403b-87b5-1c835c93e8b2",
+  "ttft_stream_ms": 794,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 794,
+  "queued_turn_count": 0
+}

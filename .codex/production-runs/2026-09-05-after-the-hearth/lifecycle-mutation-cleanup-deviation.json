@@ -1,0 +1,12 @@
+{
+  "schema": "paravoxia.integrationDeviation.v1",
+  "recordedAt": "2026-09-06T10:37:09.938538+00:00",
+  "sourcePath": "main/src/story/storyState.ts",
+  "incident": "Engineer mutation-test cleanup invoked git checkout -- src/story/storyState.ts despite explicit dirty-tree preservation instructions. Engineer then recovered the exact file from the immutable pre-repair source snapshot and reapplied only this pass entry fix.",
+  "evidenceRef": "integration-lifecycle-repair-stream.jsonl",
+  "baselineRef": "iterations/lifecycle-verification-findings/source/main/src/story/storyState.ts",
+  "baselineSha256": "7d66ff3ed42ca18e0849af8ef2df8cc057fdcfa37c7bf0c9760081461d70d535",
+  "recovery": "Exact archived baseline hash independently checked by root; engineer stream contains matching restore and bounded reapplication. Final full source/diff preservation check remains required.",
+  "directive": "Never use git checkout/reset/restore to clean mutation tests. Use exact byte backup of current dirty source and try/finally restoration; rehash it. No additional destructive git action.",
+  "status": "recovered; final preservation verification pending"
+}

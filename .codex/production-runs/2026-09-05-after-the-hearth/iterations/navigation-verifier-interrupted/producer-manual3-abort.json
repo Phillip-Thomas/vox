@@ -1,0 +1,36 @@
+{
+  "schema": "paravoxia.producerProbeAbort.v1",
+  "requestedAt": "2026-09-06T15:05:09.699705+00:00",
+  "targetPid": 1421598,
+  "argv": [
+    "node",
+    "manual-survey-probe.mjs",
+    "--out",
+    "manual-3",
+    "--watch-ms",
+    "90000"
+  ],
+  "cwd": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-survey",
+  "signal": "SIGTERM",
+  "ownedDescendantPids": [
+    1421609,
+    1421703,
+    1421704,
+    1421738,
+    1421739,
+    1421743,
+    1421794,
+    1421828,
+    1421829,
+    1421939
+  ],
+  "reason": "Manual3 accepts uninitialized body[0,0,0], fails input liveness, deliberately continues invalid arrivals and treats later spawn displacement as calibration. No valid corner or clearance test is possible in this attempt.",
+  "gameFailureClaim": false,
+  "chapterAcceptance": false,
+  "sourceMutation": false,
+  "unrelatedProcessesSignalled": false,
+  "cleanupVerified": true,
+  "checkedAt": "2026-09-06T15:07:06.464448+00:00",
+  "remainingLiveOwnedPids": [],
+  "reapedOrZombieOwnedPids": []
+}

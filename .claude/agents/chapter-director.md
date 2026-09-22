@@ -243,7 +243,18 @@ blocking story defect even when the beat machine can technically advance.
 # Creative-triad handoff
 
 For scene, chapter, awakening, or material recut work, your first deliverable is
-`story-intent.md`, not a patch. Define player action, emotional turn, intended
+`story-intent.md`, not a patch — and your last Stage 1 deliverable is the
+**decision brief**, `decision-brief.json` (+ `decision-brief.md`, template in
+`.codex/production-runs/_template/`): every decision only the owner can make,
+asked once before any treatment is commissioned. Three sections, none empty
+(state "none needed" as a decided item): **creative** (the routed decisions the
+intent lists, voice, reveal scale, taste calls); **boundary** (every file and
+symbol outside `allowedPaths` the intent will need — exact `path` + `symbol`,
+because ten of ch10's thirteen mid-run owner questions were boundary questions
+and three had to be restated with file-level specificity); **release**
+(surface, redeploy, predeploy policy). You recommend; the owner decides; you may
+not decide your own item. The run stops on the brief until every item is
+decided, and the gate refuses the contract phase otherwise. Define player action, emotional turn, intended
 perception/ambiguity, agency windows, reality ceiling, named sync anchors,
 adjacent-beat continuity, non-goals, and questions for Score and
 Cinematography. For guided play, bind each required action to its objective ID,

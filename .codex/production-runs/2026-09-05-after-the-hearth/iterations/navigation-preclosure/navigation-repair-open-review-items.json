@@ -1,0 +1,39 @@
+{
+  "recordedAt": "2026-09-06T13:35:36.831397+00:00",
+  "purpose": "Single current checklist to avoid tail-only inbox reads dropping earlier required review findings. Current source is actively being edited; statuses are observations at this timestamp, not final judgments.",
+  "items": [
+    {
+      "id": "NAV-HEIGHT",
+      "status": "Candidate now checks resolved normal height; final review pending",
+      "required": "certifyColumn self-route still accepts anydryresolvedheight. Compare actual expectedterminalbody/footprintheight; prove dryraisedwalltop/dryloweredbottom cannot authorize unsafeoffcentrefinalapproach.",
+      "ref": "integration-inbox13:25:42 item1; currentprimitives certifyColumn callback hasnoheightcomparison"
+    },
+    {
+      "id": "NAV-RUNTIME-SEAM",
+      "status": "Actual autopilotTick regression and behavioral counterfactual now pass repaired/fail prior source; final hashes pending",
+      "required": "At leastone test exercisesactualautopilotTick/walkToward/nextNavigationStep wiring, or true shared runtimestepwithoutduplicatedconsumption/steering. Removing runtimehandoffmustfailbehaviorally. Current20helpertests do not.",
+      "ref": "integration-inbox13:23runtime-entryrequest"
+    },
+    {
+      "id": "NAV-EXACT-CACHE",
+      "status": "candidate corrected; regression/final review pending",
+      "required": "Bindexacttargetwithcachedcertification andtestsame-plan <=1unittargetchange. Preserve routecache cadence."
+    },
+    {
+      "id": "SAVE-ENTRY-BEFORE-RESTORE",
+      "status": "OPEN: immediate save after staging but before hydration, plus foreign payload loaded from disk",
+      "required": "Resolve the two exact interleavings in integration-inbox entry13:41:38. Current settled-on-read flag still makes the placeholder authoritative before pending data is consumed; foreign-actor test bypasses this flag and leaves local payload on disk."
+    },
+    {
+      "id": "SAVE-SCOPED-CLEAR",
+      "status": "candidate corrected; regression/final review pending",
+      "required": "Explicitchapteronlyclear plus save/reload doesnotresurrectpayload orclearconstruction/otherworld."
+    }
+  ],
+  "reporting": [
+    "Report initialtestsgroundframe correction and initialAPI-absencecounterfactual honestly.",
+    "Record temporaryout-of-boundary __continue-counterfactual.test.ts preexistence/cleanup; no furtherunroutedsourcepaths.",
+    "No game/hardware acceptance from thissource/checks. Rootalone ownsmanifest/gate/readiness."
+  ],
+  "updatedAt": "2026-09-06T13:44:44.787023+00:00"
+}

@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 275566,
+  "stop_reason": "end_turn",
+  "session_id": "b6455e6a-431e-465e-9cc9-47d0d39c3207",
+  "total_cost_usd": 1.509434,
+  "usage": {
+    "input_tokens": 48,
+    "cache_creation_input_tokens": 52411,
+    "cache_read_input_tokens": 840202,
+    "output_tokens": 22489,
+    "output_tokens_details": {
+      "thinking_tokens": 3482
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 52411,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1700,
+        "cache_read_input_tokens": 56400,
+        "cache_creation_input_tokens": 2364,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2364
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2688,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002758,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 48,
+      "outputTokens": 22489,
+      "cacheReadInputTokens": 840202,
+      "cacheCreationInputTokens": 52411,
+      "webSearchRequests": 0,
+      "costUSD": 1.5066760000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 3482,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 30,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Foreign pre-existing Chromium (`paraform-managed-webgpu`, port 9333) is present and untouched \u2014 not mine, not killed. I created no capture directory and no browser.\n\n**VERDICT: FAIL-TO-RUN (Phase B not startable within the fixed deadline). Phase A gates implemented, selftested, and ready. No pass or acceptance claimed.**\n\n## What I did this continuation\n\nImplemented all five missing mandatory items from `verification-continue-spawn-runtime-review.txt` in my **private** launcher chain only (no source change, no game-state mutation, no preview started/stopped, no duplicate 15-test):\n\n| review item | implementation | selftest |\n|---|---|---|\n| 1. post-finally cleanup + source | reads `cleanup-receipt.json` (not `summary.cleanupPreFinally`): `state===\"stopped\"`, `cleanupCompleted`, `sessionStopped`, no `cleanupError`; `source-rehash.json` `stableAcrossCapture` + `before.intact` + `after.intact` | missing receipt 93, not-stopped 93, source-changed 93, missing rehash 93 |\n| 2. true point-prefix equality | index-by-index `JSON.stringify` of **full** saved sample objects from raw `worldsave-<key>.json` vs first N of `worldsave-after-continue-<key>.json`, plus `worldId`/`seed` from the same bytes; appended points legitimate; `survival.overwrite` (counts + whole-blob sha) retained as an explicitly named diagnostic only | identical prefix + 3 appended PASS; mutated point 93; lost points 93; worldId/seed mismatch 93 |\n| 3. scoped centre-to-centre pose | scoped key `savedPrimary.key + '.player'` from `menuBeforeContinueClick`, compared **centre-to-centre** against `telemetry.samples[].frame.capsule` inside the complete Continue telemetry; unscoped `.player` foot-vs-centre no longer used as position proof | ~100u ship jump 93; ordinary vertical settling PASS |\n| 4. fail-closed exit | missing **or** false prefix/pose/cleanup/source fails, not just `allHeld`; mandatory new-[F] / `route-offered` / no-replay identities kept strictly | new [F] not accepted 93; incomplete 5s telemetry 93; probe exit 7 \u2192 93; no `summary.json` \u2192 92 |\n| 5. no duplicate focused tests | plan `checks: []`; `tools/repair-check.mjs` itself mandates and appends `['npm','run','verify']` to the final group, so the full suite runs exactly once under `--final` after the runtime step | n/a |\n\nOne correction retained in the log rather than erased: the first \"seed mismatch\" selftest row exited 0 because my **fixture** wrote the same seed to both files; re-run with genuinely differing bytes it exits 93. Raw before/after both preserved.\n\n## Why Phase B did not run\n\n- Control polled every 10 s on the **current** file; flipped `hold \u2192 continue` at `23:39:24.514427Z` (observed 23:39:29Z).\n- Remaining to the absolute `23:45:21.343614Z` deadline: **334 s**.\n- Declared phase bounds alone: flight 180 + earn 120 + walk 90 = **390 s**, before boot, landing, beforeunload save, Continue, the 5 s telemetry tail, the new [F], cleanup, and the appended `npm run verify`.\n- 334 < 390. Starting would require shortening the original bounds (prohibited) and would strand a headed GB10 browser holding the shared heavy lock with no completed post-finally receipt. **No GPU acquired, no heavy lock taken, no browser launched, no capture dir created, no foreign process killed.**\n\n## Artifacts\n\n- `\u2026/verifier/probes/continue-spawn-candidate/strict-verdict-gate.mjs` \u2014 `60f76cf8\u2026`\n- `\u2026/verifier/probes/continue-spawn-candidate/run-continue-spawn.sh` \u2014 `79ccbf54\u2026`\n- `\u2026/verifier/probes/continue-spawn-candidate/repair-check-plan.json` \u2014 `9d2517e8\u2026`\n- `\u2026/logs/continue-spawn-verifier/strict-gate-selftest.log` (14 cases + correction)\n- `\u2026/verification-continue-spawn-progress.md` (prior progress preserved above the timestamped supersede)\n\nPhase B is ready to run unchanged against preview `127.0.0.1:34825` (`2de3fa2a\u2026` / `74025800\u2026` / `4b41a7d5\u2026`); the exact exported-env + `creative:repair:check --final` invocation is recorded at the end of the progress file. No taste, defect-closure or chapter-acceptance claim.",
+  "ttft_ms": 1515,
+  "type": "result",
+  "duration_ms": 336435,
+  "uuid": "8086ac37-b1f8-40a5-b2b3-59cd6f536760",
+  "ttft_stream_ms": 769,
+  "time_to_request_ms": 20,
+  "first_content_frame_ms": 769,
+  "queued_turn_count": 0
+}

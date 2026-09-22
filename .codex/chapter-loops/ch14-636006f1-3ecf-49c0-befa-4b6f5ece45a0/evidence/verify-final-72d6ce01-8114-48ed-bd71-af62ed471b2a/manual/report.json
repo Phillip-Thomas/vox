@@ -1,0 +1,70 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "8979a2070a217491696ba883403758111a8c2a842e44551eb4639e29ada61168",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": false,
+    "acceptedAction": 0,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [
+    "ordinaryControls",
+    "acceptedAction",
+    "completePath"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-72d6ce01-8114-48ed-bd71-af62ed471b2a/manual/raw/cleanup.json",
+      "sha256": "73f0c4f2177edd744ba46d1508bd0b0504452a0bcdcfa8a5ce2c847d95383e83"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-72d6ce01-8114-48ed-bd71-af62ed471b2a/manual/raw/frame-4.png",
+      "sha256": "00838a35aa93202bf345ffa073f2264641155e24f1d89f47ff8576c4879ea655"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-72d6ce01-8114-48ed-bd71-af62ed471b2a/manual/raw/frame-5.png",
+      "sha256": "0e51a270bc6289537b3b335bd1c8b4cdac229a03e48d41db2b53c285f498863f"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-72d6ce01-8114-48ed-bd71-af62ed471b2a/manual/raw/observations.json",
+      "sha256": "02d70aaaf1320eb43ef05d7a9cbf06afb6d73811964576950b60d6bbbf29c08c"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-72d6ce01-8114-48ed-bd71-af62ed471b2a/manual/raw/provenance.json",
+      "sha256": "5545800983d3ca350060a2749c84c10faf63ebb61ea136663c039b796fbefa49"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-72d6ce01-8114-48ed-bd71-af62ed471b2a/manual/raw/trace.ndjson",
+      "sha256": "2b9acb17e87383a0b46c71a8aec147557416f17e421ec0e357c2894906db101e"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-72d6ce01-8114-48ed-bd71-af62ed471b2a/manual/raw/walk-calibration.ndjson",
+      "sha256": "de3eee7dfa96e8cb2018fbc2342b2e3ac11423eaa0d850b1857a589b55d0b779"
+    }
+  ],
+  "reviewEntry": null,
+  "media": [],
+  "mediaTimeline": null,
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "Walk stopped making progress toward its target"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "58eac848a8852fb4961e2faf12b90bae565ff0f8ba093e246b511f801dde4ee1",
+    "buildSha256": "fabdd0a0eb26fd9a49b8c4fcf3b8b309643d7ad6d77c5ddabd44168937d4c89a",
+    "transportSha256": "65fd4f66511ea94458f2f5d83421920d16af1802b693a16a1b810c40761a39d7"
+  }
+}

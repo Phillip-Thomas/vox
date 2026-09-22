@@ -1,0 +1,62 @@
+{
+  "documentKind": "chapter-corner-candidate-disposition",
+  "runId": "2026-09-05-after-the-hearth",
+  "director": "chapter",
+  "authoredBy": "Codex chapter_intent — Chapter Director",
+  "authoredAt": "2026-09-06T10:56:17.105218+00:00",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "disposition": "object-to-inspected-implementation-candidate",
+  "candidateCompatibleWithContract": false,
+  "contractChangeRequired": false,
+  "contractChangeExplanation": "Correcting this implementation to preserve the existing ordered full-passage proof requires no amendment. Accepting endpoint movement as payment for an earlier omitted route portion would relax v2 and cannot be authorized as a clarification; that alternative is not approved.",
+  "inspectedSource": {
+    "file": "main/src/story/commonGroundRoute.ts",
+    "symbol": "routeProgressUnits",
+    "sha256": "d7e5bbc38e2ea321c18db1366cc6a8dbcd2806029fc670b1a82bd825ac8d813a",
+    "lineRefs": [
+      "451",
+      "479-487",
+      "489-536"
+    ],
+    "laterSourceNotice": "At artifact write, the actively edited file had advanced to SHA256 6025bc4c55098bb3bffc54dd04134fa3b666ef71361e22bba1a9b3fad7a1f1ff. This disposition assesses only the explicitly inspected d7e5bbc3 candidate; it does not approve or reject those later bytes."
+  },
+  "inspectedTests": {
+    "file": "main/src/story/commonGroundRoute.test.ts",
+    "sha256": "600b35ce80d7c64310e9513956c5464039eec8b717d3985bf01dfcffd203f264",
+    "lineRefs": [
+      "332-356",
+      "365-404"
+    ]
+  },
+  "riskRefs": [
+    "producer-manual-corner-risk.json",
+    "chapter-manual-corner-interpretation.md"
+  ],
+  "defectRefs": [
+    "defects.json#CG-IMPL-009"
+  ],
+  "defectTracking": "Root assigned CG-IMPL-009 (high, implementation-fidelity) to this incompatible candidate within the active lifecycle pass. This is separate from the conditional original manual-corner risk and the movie-controller defect CG-IMPL-005.",
+  "contractClauses": [
+    "scene-contract.json#/guidance/objectives/13/acceptanceCriterion",
+    "scene-contract.json#/story/agencyWindows/3/mandatoryPath",
+    "scene-contract.json#/story/agencyWindows/3/fallbackSemantics",
+    "scene-contract.json#/story/agencyWindows/3/rescueSemantics",
+    "scene-contract.json#/story/events/21/acceptanceCriterion",
+    "scene-contract.json#/syncAnchors/21/acceptanceCriterion"
+  ],
+  "finding": "The candidate uses proximity to a later arc plus any positive in-corridor displacement to settle a small progress lag. That proves extra distance, not that the omitted route was traversed. Its 0.6 allowance permits this distinction to disappear near C.",
+  "staticCounterexample": {
+    "initialState": "Body at C=(-48,51.05,12), credited units17.6915, nearest arc18, lag0.3085; the earlier corner remains omitted.",
+    "movement": "Move x between -48 and -48.075 repeatedly at unchanged y51.05/z12. These are lateral movements beside C, not a return to the missing corner.",
+    "sourceConsequence": "The closest point remains C (arc18); distance remains within the corridor; lag is positive and below0.6. Each0.075 displacement therefore adds min(displacement,lag) to credited units until18. A subsequent return to C can satisfy physical arrival without repairing the omitted portion.",
+    "classification": "Direct static consequence of the inspected formula, not a browser observation or an executed test."
+  },
+  "testInterpretation": "The inspected recovery test at lines345-356 takes the early-turn route to C, walks from z12 to z12.4 on the final leg and returns to C, then expects eighteen credited units and at least eighteen total travelled units. It never revisits the omitted corner near (-42,16). Therefore its passing criterion embodies the disputed distance-debt rule rather than demonstrating recovery through unfinished ground. The separate whole-leg-skip and distant-loop cases do not disprove this small-lag endpoint counterexample.",
+  "boundedRequirement": "Preserve ordinary manual recovery and already earned valid progress, but only actual eligible traversal of unfinished ordered route may close its missing proof. Extra displacement at C, a late-leg backtrack or unrelated loop cannot purchase omitted earlier ground. Maintain the full actual eighteen-unit common passage, route order, real H reference, support, solid sight, body clearance, physical final arrival, silent valid Continue and all existing agency/score/copy constraints. Prescribe no new field, numerical allowance, gameplay rule, source patch, target or required action.",
+  "verificationRequired": "Root routes any bounded correction. Relevant independent verification must distinguish actual return to and traversal of the unfinished route from endpoint/late-leg pumping and must still prove ordinary manual play, full-route completion and Continue. No runtime acceptance or independent manual-failure claim is made by this source review.",
+  "defectIds": [
+    "CG-IMPL-009"
+  ],
+  "permittedCorrectionBoundary": "Correction may withdraw the new allowance if the original honest return-to-frontier recovery already satisfies signed intent. The original risk was conditional, not a requirement to change valid behavior or add automatic credit for rounded cuts. No particular algorithm or new progress entitlement is mandated."
+}

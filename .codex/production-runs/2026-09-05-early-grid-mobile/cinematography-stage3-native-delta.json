@@ -1,0 +1,1189 @@
+{
+  "schema": "paravoxia.cinematographyStage3NativeDelta.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "proposalVersion": "early-cinema-stage3-v1",
+  "authoredBy": "cinematography-director",
+  "authoredAt": "2026-09-05T20:08:07.996023+00:00",
+  "status": "peer-reviewed-lane-delta-ready-for-actual-candidate-compilation-unsigned",
+  "actualContractVersion": null,
+  "actualContractSha256": null,
+  "contractChangeRequired": true,
+  "baseTreatment": {
+    "path": "cinematography-treatment.json",
+    "sha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b"
+  },
+  "baseReadingCopy": {
+    "path": "cinematography-treatment.md",
+    "sha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8"
+  },
+  "preserveFirstBlades": true,
+  "inputBindings": [
+    {
+      "path": "cinematography-treatment.md",
+      "sha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8"
+    },
+    {
+      "path": "cinematography-treatment.json",
+      "sha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b"
+    },
+    {
+      "path": "cinematography-preparatory-notes.jsonl",
+      "sha256": "1df2ae871dd5c46775401875999468c5804eab4558ebb317fcee34f35bdb4710"
+    },
+    {
+      "path": "score-treatment.md",
+      "sha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77"
+    },
+    {
+      "path": "score-treatment.json",
+      "sha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d"
+    },
+    {
+      "path": "score-preparatory-notes.jsonl",
+      "sha256": "c2bd20652736e4f288d7caad674c2d75457b67c185e6b28c64267b8f5c90fc03"
+    },
+    {
+      "path": "chapter-stage3-proposal.md",
+      "sha256": "8ab4385e6a08d60a657975fb67196b4d09058d04b92a84e48066c2e4ea2b5115"
+    },
+    {
+      "path": "chapter-stage3-proposal.json",
+      "sha256": "0402d9d566a729acb1c01eff4125c0f9b5d06ea1d45aa6f6ac08f8c0f23dd116"
+    },
+    {
+      "path": "chapter-native-contract-contribution.json",
+      "sha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9"
+    },
+    {
+      "path": "chapter-stage3-preparatory-notes.jsonl",
+      "sha256": "22597973617ec79700cdb7a3583c3e90a0fab896179939c2405d7e1565689a44"
+    }
+  ],
+  "sourceCorrections": [
+    "Frozen first treatment statement that existing track parenthetical caption/timestamp or early journal archive could be preserved was incorrect. Actual source only held the first/fifth text in REGULATION_VOICE.track; first/fifth relocation is a newly contracted presentation event, not preservation of an existing caption publisher.",
+    "Captured track caption is not proof of a dedicated track publisher; inherited fixed-cut caption can persist into track. Source precedence and explicit channel clear govern.",
+    "No hidden voiceVisibleText or imaginary journal API is required. Existing StoryCaptions system path voices visible uppercase text; caption path stays silent."
+  ],
+  "peerDispositions": {
+    "chapter": "approve-with-exact-amendments-for-candidate-compilation",
+    "score": "approve-with-exact-amendments-for-candidate-compilation",
+    "openCreativeDissent": [],
+    "notSameHashSignoff": true
+  },
+  "nativeFieldOperations": [
+    {
+      "operation": "replace",
+      "path": "cinematography",
+      "value": {
+        "treatmentRef": "cinematography-stage3-native-delta.json",
+        "thesis": "A readable bolted frame: real pickup, real harvest and a visible camera crossing earn the existing unbolt.",
+        "currentCutRefs": [
+          "base.desktop.fixed",
+          "base.portrait.fixed",
+          "base.portrait.offscreen",
+          "base.desktop.raster",
+          "base.portrait.raster",
+          "base.desktop.descent",
+          "base.portrait.track.start",
+          "base.portrait.track.mid",
+          "base.desktop.depth",
+          "base.portrait.depth"
+        ],
+        "adjacentSceneRefs": [
+          "base.desktop.descent",
+          "base.desktop.depth",
+          "base.portrait.depth"
+        ],
+        "cameraLineage": [
+          "lens-rig"
+        ],
+        "paletteRef": "palette.early.regulation-mono",
+        "shotOrder": [
+          "shot.early.descent-arrival",
+          "shot.early.fixed-pickup",
+          "shot.early.fixed-harvest",
+          "shot.early.fixed-cross",
+          "shot.early.track-unbolt",
+          "shot.early.raster-salvage",
+          "shot.early.raster-fiber",
+          "shot.early.raster-complete-hold",
+          "shot.early.depth-handback"
+        ]
+      }
+    },
+    {
+      "operation": "replaceById",
+      "path": "shots",
+      "id": "shot.early.track-unbolt",
+      "value": {
+        "id": "shot.early.track-unbolt",
+        "beat": "ch1-track",
+        "startAnchorRef": "early.coverage.transfer",
+        "endAnchorRef": "early.raster.ready",
+        "focalHierarchy": {
+          "primary": "Same worker in newly acquired camera",
+          "secondary": "Rig learning to keep the worker centered",
+          "allowedAmbiguity": "Unresolved monochrome terrain remains strange; required action and physical support never remain ambiguous.",
+          "subjectOccupancyIntent": "Preserve existing 1.93-world-unit mesh height, approximately 8 percent of reference image height; complete body plus 18px safe edges and 14px UI gap.",
+          "horizonIntent": "Retain current side-rig horizon and terrain slope; viewport principal-point fitting only when measured occupied rails require it.",
+          "negativeSpaceIntent": "Clear travel corridor and future camera direction; no instruction column through worker/target."
+        },
+        "cameraAuthority": "lens-rig",
+        "framing": {
+          "scale": "wide",
+          "blocking": "Start from the actually presented destination fixed frame. Existing anc.track.unbolt starts6500ms smoothstep and7000ms envelope. Same worker remains focal; exactly one existing caption lane carries system first sentence0..2800ms, empty2800..3250ms, silent parenthetical3250..6450ms, empty6450..7000ms. HOLD POSITION is the only standing action, unvoiced; no journal or static explanatory paragraph.",
+          "screenDirection": {
+            "axis": "existing SideLens.travelAxis is screen-right; up from current player/lens frame",
+            "movement": "both horizontal directions preserve legal row and last moved facing",
+            "continuityRule": "No axis reversal, pre-unbolt follow or new camera stack."
+          },
+          "desktopSafeArea": "Use existing measured StoryCaptions lane and canonical work-order rail; reserve full caption52/36-character maximum rectangle for its whole lifetime,14px clear of worker/status/work-order; no track ledger.",
+          "mobileSafeArea": "At390x844 current caption font15px,lineheight23.25px,safe width354px,padding16px imply at most2lines/46.5px. Actual full-line bounds and14px clearance govern; safe insets and orientation use shared fitted projection. No shrink/truncation/time extension or new HUD.",
+          "exitComposition": "Owned parenthetical clears6450ms, leaving550ms of caption-free worker/rig resolution before unchanged7000ms raster release; no stale system/caption or hidden voice remains."
+        },
+        "lens": {
+          "startFovDeg": 75,
+          "endFovDeg": 75,
+          "durationMs": 0,
+          "easing": "constant measured vertical perspective FOV",
+          "focusTarget": "Existing rig anchor plus focusLift1.4; fixed anchor comes from single coverage sample, continuous anchor follows current player.",
+          "physicalIntent": {
+            "mappingStatus": "not-applicable",
+            "character": "Executable perspective FOV; no physical filmback/focal-length equivalence claimed.",
+            "focalLengthMm": null,
+            "filmbackWidthMm": null,
+            "focusDistance": null,
+            "depthOfFieldIntent": "No depth-of-field pass or blur change.",
+            "shutterMotionIntent": "No motion-blur addition; hard coverage change or existing smoothstep rig motion."
+          },
+          "mobileCropRisk": "Body-safe projected intervals replace fixed24; short landscape may use minimal same-camera vertical view offset from measured reserved rails."
+        },
+        "motion": {
+          "mode": "rig-blend",
+          "durationMs": 6500,
+          "easing": "smoothstep k*k*(3-2*k)",
+          "target": "Start from the actual destination fixed frame; anc.track.unbolt fires existing 6500ms smoothstep blend and 7000ms letterbox envelope.",
+          "rollPolicy": "No authored roll; preserve normalized rig/player up.",
+          "inputBlend": "Existing moveSpeedScale0 horizontal hold over rasterPolicy; inherited jump/mining permissions preserved. No blanket input disable.",
+          "collisionPlan": "Keep physical camera eye/rig and player capsule; view-offset fit cannot lower eye into terrain. Validate destination-frame occlusion.",
+          "occlusionPlan": "One target, real row, measured body/label/controls rectangles; no foreground cosmetic mask."
+        },
+        "transition": {
+          "type": "rig-blend",
+          "declaredCut": false,
+          "reason": "Existing perception sequence continues through one LensRig.",
+          "durationMs": 6500,
+          "easing": "smoothstep k*k*(3-2*k)"
+        },
+        "paletteRef": "palette.early.regulation-mono",
+        "effects": {
+          "realityStage": "bare",
+          "effectCeiling": [
+            "existing bare regulation feed treatment",
+            "existing natural descent impact",
+            "existing traversal static",
+            "existing track letterbox"
+          ],
+          "grade": {
+            "intent": "Unchanged regulation mono through original planet/reality authorities.",
+            "presetRef": null,
+            "exposureIntent": "No new exposure, contrast, saturation or clip mask.",
+            "resetRef": "reset.early.grade"
+          },
+          "lighting": {
+            "intent": "Existing noon/site world illumination; fixed light cardinality.",
+            "sourceRefs": [
+              "main/src/utils/planetArtDirection.ts",
+              "main/src/game/systems/realityRenderSystem.ts"
+            ],
+            "atmosphereIntent": "No fog/sky/atmosphere change.",
+            "resetRef": "reset.early.lighting"
+          },
+          "postEffects": []
+        },
+        "agency": {
+          "agencyWindowRefs": [
+            "agency.early.track"
+          ],
+          "movement": "blended",
+          "look": "director",
+          "interaction": "player",
+          "handBackAnchorRef": "early.raster.ready",
+          "handBackBehavior": "Preserve current input policy and the actual existing raster release; no focus snap or new movement hold."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "resetRef": "reset.early.camera",
+        "evidenceRefs": [
+          "base.portrait.track.mid",
+          "cinematography-treatment.md#capture-and-acceptance-direction",
+          "chapter-stage3-proposal.md",
+          "capture.early.track-text"
+        ]
+      }
+    },
+    {
+      "operation": "replaceById",
+      "path": "shots",
+      "id": "shot.early.raster-fiber",
+      "value": {
+        "id": "shot.early.raster-fiber",
+        "beat": "ch1-raster",
+        "startAnchorRef": "early.raster.salvage-complete",
+        "endAnchorRef": "early.raster.quota-complete",
+        "focalHierarchy": {
+          "primary": "One actual yielding BIOFIBER patch",
+          "secondary": "Worker; finite strip and wreck memory",
+          "allowedAmbiguity": "Unresolved monochrome terrain remains strange; required action and physical support never remain ambiguous.",
+          "subjectOccupancyIntent": "Preserve existing 1.93-world-unit mesh height, approximately 8 percent of reference image height; complete body plus 18px safe edges and 14px UI gap.",
+          "horizonIntent": "Retain current side-rig horizon and terrain slope; viewport principal-point fitting only when measured occupied rails require it.",
+          "negativeSpaceIntent": "Clear travel corridor and future camera direction; no instruction column through worker/target."
+        },
+        "cameraAuthority": "lens-rig",
+        "framing": {
+          "scale": "wide",
+          "blocking": "One ordinary-picker-matched yielding BIOFIBER patch while actual total remains outstanding. End at true required receipts0/1/2 AND fiber6 AND stone4 conjunction. No objective or shot action entry if already genuinely satisfied.",
+          "screenDirection": {
+            "axis": "existing SideLens.travelAxis is screen-right; up from current player/lens frame",
+            "movement": "both horizontal directions preserve legal row and last moved facing",
+            "continuityRule": "No axis reversal, pre-unbolt follow or new camera stack."
+          },
+          "desktopSafeArea": "Existing left56 work rail, body18px inside actual viewport/safe insets, measured text/target gap14px; compact bottom ledger clear of captions.",
+          "mobileSafeArea": "Reference portrait work area (18,124,354,40), ledger y632-652 above measured control top666; actual safe-area/obstacle solver owns values, 14px gaps.",
+          "exitComposition": "Actual quota conjunction clears the BIOFIBER designation and imperative within2presentedframes. Continue same camera into completed hold; do not show another harvest order."
+        },
+        "lens": {
+          "startFovDeg": 75,
+          "endFovDeg": 75,
+          "durationMs": 0,
+          "easing": "constant measured vertical perspective FOV",
+          "focusTarget": "Existing rig anchor plus focusLift1.4; fixed anchor comes from single coverage sample, continuous anchor follows current player.",
+          "physicalIntent": {
+            "mappingStatus": "not-applicable",
+            "character": "Executable perspective FOV; no physical filmback/focal-length equivalence claimed.",
+            "focalLengthMm": null,
+            "filmbackWidthMm": null,
+            "focusDistance": null,
+            "depthOfFieldIntent": "No depth-of-field pass or blur change.",
+            "shutterMotionIntent": "No motion-blur addition; hard coverage change or existing smoothstep rig motion."
+          },
+          "mobileCropRisk": "Body-safe projected intervals replace fixed24; short landscape may use minimal same-camera vertical view offset from measured reserved rails."
+        },
+        "motion": {
+          "mode": "track",
+          "durationMs": 0,
+          "easing": "existing locked or direct continuous follow; no added ease",
+          "target": "Real total six fiber/four stone; zero length if genuinely satisfied; preserve six-second minimum and 2.5-second conjunction hold.",
+          "rollPolicy": "No authored roll; preserve normalized rig/player up.",
+          "inputBlend": "Preserve existing side-look authority; no mouse rewrite; movement belongs to player except inherited descent/track holds.",
+          "collisionPlan": "Keep physical camera eye/rig and player capsule; view-offset fit cannot lower eye into terrain. Validate destination-frame occlusion.",
+          "occlusionPlan": "One target, real row, measured body/label/controls rectangles; no foreground cosmetic mask."
+        },
+        "transition": {
+          "type": "continuous",
+          "declaredCut": false,
+          "reason": "Existing perception sequence continues through one LensRig.",
+          "durationMs": 0,
+          "easing": "instant or continuous existing state"
+        },
+        "paletteRef": "palette.early.regulation-mono",
+        "effects": {
+          "realityStage": "bare",
+          "effectCeiling": [
+            "existing bare regulation feed treatment",
+            "existing natural descent impact",
+            "existing traversal static",
+            "existing track letterbox"
+          ],
+          "grade": {
+            "intent": "Unchanged regulation mono through original planet/reality authorities.",
+            "presetRef": null,
+            "exposureIntent": "No new exposure, contrast, saturation or clip mask.",
+            "resetRef": "reset.early.grade"
+          },
+          "lighting": {
+            "intent": "Existing noon/site world illumination; fixed light cardinality.",
+            "sourceRefs": [
+              "main/src/utils/planetArtDirection.ts",
+              "main/src/game/systems/realityRenderSystem.ts"
+            ],
+            "atmosphereIntent": "No fog/sky/atmosphere change.",
+            "resetRef": "reset.early.lighting"
+          },
+          "postEffects": []
+        },
+        "agency": {
+          "agencyWindowRefs": [
+            "agency.early.raster"
+          ],
+          "movement": "player",
+          "look": "director",
+          "interaction": "player",
+          "handBackAnchorRef": "early.depth.handoff",
+          "handBackBehavior": "Preserve current input policy and the actual existing raster release; no focus snap or new movement hold."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "resetRef": "reset.early.camera",
+        "evidenceRefs": [
+          "base.desktop.raster",
+          "cinematography-treatment.md#capture-and-acceptance-direction"
+        ]
+      }
+    },
+    {
+      "operation": "appendAfterId",
+      "path": "shots",
+      "afterId": "shot.early.raster-fiber",
+      "value": {
+        "id": "shot.early.raster-complete-hold",
+        "beat": "ch1-raster",
+        "startAnchorRef": "early.raster.quota-complete",
+        "endAnchorRef": "early.depth.handoff",
+        "focalHierarchy": {
+          "primary": "Worker in the now-completed work strip",
+          "secondary": "Quiet row and compact completed quota ledger; no designation",
+          "allowedAmbiguity": "Unresolved monochrome world remains; no ambiguity that collection is complete and the inherited hold is resolving.",
+          "subjectOccupancyIntent": "Preserve existing 1.93-world-unit mesh height, approximately 8 percent of reference image height; complete body plus 18px safe edges and 14px UI gap.",
+          "horizonIntent": "Retain current side-rig horizon and terrain slope; viewport principal-point fitting only when measured occupied rails require it.",
+          "negativeSpaceIntent": "Previously designated patch is quiet; the worker and unchanged strip have room to settle."
+        },
+        "cameraAuthority": "lens-rig",
+        "framing": {
+          "scale": "wide",
+          "blocking": "No new runtime beat or objective: existing raster completion hold, continuous original side camera, normal raster input permissions. Show actual final receipt900ms foreground then the one20px completed row DEBRIS 3/3 · FIBER 6/6 · STONE 4/4. No bracket,imperative,extra chirp or added duration. Preserve six-second beat minimum and2.5-second completion hold.",
+          "screenDirection": {
+            "axis": "existing SideLens.travelAxis is screen-right; up from current player/lens frame",
+            "movement": "both horizontal directions preserve legal row and last moved facing",
+            "continuityRule": "No axis reversal, pre-unbolt follow or new camera stack."
+          },
+          "desktopSafeArea": "Existing left56 work rail, body18px inside actual viewport/safe insets, measured text/target gap14px; compact bottom ledger clear of captions.",
+          "mobileSafeArea": "Reference portrait work area (18,124,354,40), ledger y632-652 above measured control top666; actual safe-area/obstacle solver owns values, 14px gaps.",
+          "exitComposition": "Existing depth handoff replaces completed ledger with real SUPPLY POD objective/marker and distance18 transition, without replaying quota completion."
+        },
+        "lens": {
+          "startFovDeg": 75,
+          "endFovDeg": 75,
+          "durationMs": 0,
+          "easing": "constant measured vertical perspective FOV",
+          "focusTarget": "Existing rig anchor plus focusLift1.4; fixed anchor comes from single coverage sample, continuous anchor follows current player.",
+          "physicalIntent": {
+            "mappingStatus": "not-applicable",
+            "character": "Executable perspective FOV; no physical filmback/focal-length equivalence claimed.",
+            "focalLengthMm": null,
+            "filmbackWidthMm": null,
+            "focusDistance": null,
+            "depthOfFieldIntent": "No depth-of-field pass or blur change.",
+            "shutterMotionIntent": "No motion-blur addition; hard coverage change or existing smoothstep rig motion."
+          },
+          "mobileCropRisk": "Body-safe projected intervals replace fixed24; short landscape may use minimal same-camera vertical view offset from measured reserved rails."
+        },
+        "motion": {
+          "mode": "track",
+          "durationMs": 0,
+          "easing": "existing locked or direct continuous follow; no added ease",
+          "target": "Original continuous-follow worker anchor; no new camera operation at quota completion.",
+          "rollPolicy": "No authored roll; preserve normalized rig/player up.",
+          "inputBlend": "Preserve existing side-look authority; no mouse rewrite; movement belongs to player except inherited descent/track holds.",
+          "collisionPlan": "Keep physical camera eye/rig and player capsule; view-offset fit cannot lower eye into terrain. Validate destination-frame occlusion.",
+          "occlusionPlan": "One target, real row, measured body/label/controls rectangles; no foreground cosmetic mask."
+        },
+        "transition": {
+          "type": "continuous",
+          "declaredCut": false,
+          "reason": "A real completed action becomes a quiet existing hold before the inherited depth handoff.",
+          "durationMs": 0,
+          "easing": "unchanged direct continuous follow"
+        },
+        "paletteRef": "palette.early.regulation-mono",
+        "effects": {
+          "realityStage": "bare",
+          "effectCeiling": [
+            "existing bare regulation feed treatment",
+            "existing natural descent impact",
+            "existing traversal static",
+            "existing track letterbox"
+          ],
+          "grade": {
+            "intent": "Unchanged regulation mono through original planet/reality authorities.",
+            "presetRef": null,
+            "exposureIntent": "No new exposure, contrast, saturation or clip mask.",
+            "resetRef": "reset.early.grade"
+          },
+          "lighting": {
+            "intent": "Existing noon/site world illumination; fixed light cardinality.",
+            "sourceRefs": [
+              "main/src/utils/planetArtDirection.ts",
+              "main/src/game/systems/realityRenderSystem.ts"
+            ],
+            "atmosphereIntent": "No fog/sky/atmosphere change.",
+            "resetRef": "reset.early.lighting"
+          },
+          "postEffects": []
+        },
+        "agency": {
+          "agencyWindowRefs": [
+            "agency.early.raster"
+          ],
+          "movement": "player",
+          "look": "director",
+          "interaction": "player",
+          "handBackAnchorRef": "early.depth.handoff",
+          "handBackBehavior": "Preserve current input policy and the actual existing raster release; no focus snap or new movement hold."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "resetRef": "reset.early.camera",
+        "evidenceRefs": [
+          "capture.early.quota-clear-hold",
+          "chapter-native-contract-contribution.json",
+          "base.desktop.raster",
+          "base.portrait.raster"
+        ]
+      }
+    },
+    {
+      "operation": "replace",
+      "path": "reset",
+      "value": {
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "states": [
+          {
+            "id": "reset.early.camera",
+            "domain": "camera",
+            "stateRef": "sideLens resetLensRig/clearSideLens; PerspectiveCamera viewOffset; shared coverage epoch",
+            "resetValue": "Existing SIDE_RIG defaults, clear side-only viewOffset and transfer history when leaving; pause freezes rather than changes beat rig.",
+            "triggers": [
+              "beat-exit",
+              "deep-link",
+              "replay",
+              "pause",
+              "quit",
+              "focus-loss",
+              "completion",
+              "sandbox"
+            ],
+            "acceptanceCriterion": "No stale offset, invalid progression event, FOV drift or camera authority in sandbox."
+          },
+          {
+            "id": "reset.early.grade",
+            "domain": "grade",
+            "stateRef": "existing feed/reality state",
+            "resetValue": "Current authoritative bare/next-beat/sandbox state; no new grade override.",
+            "triggers": [
+              "beat-exit",
+              "deep-link",
+              "replay",
+              "pause",
+              "quit",
+              "focus-loss",
+              "completion",
+              "sandbox"
+            ],
+            "acceptanceCriterion": "No unearned color, residual white overlay or disabled natural impact."
+          },
+          {
+            "id": "reset.early.lighting",
+            "domain": "lighting",
+            "stateRef": "existing planet/reality light authorities",
+            "resetValue": "No authored lighting override exists.",
+            "triggers": [
+              "beat-exit",
+              "deep-link",
+              "replay",
+              "pause",
+              "quit",
+              "focus-loss",
+              "completion",
+              "sandbox"
+            ],
+            "acceptanceCriterion": "Fixed light cardinality and same adjacent atmosphere."
+          },
+          {
+            "id": "reset.early.guidance",
+            "domain": "guidance",
+            "stateRef": "existing objective store/feed bracket slots/ledger receipt timers; storyText owned system/caption entries at track boundaries",
+            "resetValue": "Clear obsolete targets/labels/timers and derive next action from real state; freeze foreground duration on pause. Track entry removes outgoing predecessor caption/system, event-owned system clears2800ms, parenthetical clears6450ms; exit compare-and-clears only same owned entry identity. Never clear later-owner text or workorder via global reset.",
+            "triggers": [
+              "beat-exit",
+              "deep-link",
+              "replay",
+              "pause",
+              "quit",
+              "focus-loss",
+              "completion",
+              "sandbox"
+            ],
+            "acceptanceCriterion": "No phantom target, duplicate announcement/receipt or stale mandatory state. No expired text.caption masks system line; no hidden or repeated track voice; quota completed clear remains a same-receipt successor."
+          },
+          {
+            "id": "reset.early.avatar",
+            "domain": "camera",
+            "stateRef": "SideWorkerAvatar root/stance phase",
+            "resetValue": "Current physical-frame root and gravity basis; zero phase at idle/new run; freeze on pause.",
+            "triggers": [
+              "beat-exit",
+              "deep-link",
+              "replay",
+              "pause",
+              "quit",
+              "focus-loss",
+              "completion",
+              "sandbox"
+            ],
+            "acceptanceCriterion": "Planted contact preserved and actual airborne movement never snapped."
+          }
+        ],
+        "sandboxNoOp": {
+          "required": true,
+          "criterion": "No active side viewOffset, coverage/target/receipt state, avatar treatment or grade change in inactive sandbox."
+        },
+        "probeRefs": [
+          "capture.early.restore"
+        ]
+      }
+    },
+    {
+      "operation": "append",
+      "path": "evidence.captures",
+      "value": {
+        "id": "capture.early.track-text",
+        "kind": "dense-frame-strip",
+        "anchorRefs": [
+          "anc.track.unbolt",
+          "early.track.attention",
+          "early.raster.ready"
+        ],
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-potato"
+        ],
+        "pathOrPlanRef": "cinematography-stage3-native-delta.json#trackCaptionContract",
+        "status": "planned",
+        "acceptanceCriterion": "Actual-origin dense frames +/-2presentedframes at0,1768,2100,2800,3250,4474,5750,6450,7000ms. Full52-character system line revealed by1768ms with>=300ms fully opaque before fade;36-character parenthetical by4474ms; one lane and14px body/UI clearance. Own channel clears and visible-only voice sequence; no early journal, middle lines, HOLD utterance, hidden voice, stale previous-caption priority or replay on pause/restore."
+      }
+    },
+    {
+      "operation": "append",
+      "path": "evidence.captures",
+      "value": {
+        "id": "capture.early.quota-clear-hold",
+        "kind": "anchor-trace",
+        "anchorRefs": [
+          "early.raster.receipt",
+          "early.raster.salvage-complete",
+          "early.raster.quota-complete",
+          "early.depth.handoff"
+        ],
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-potato"
+        ],
+        "pathOrPlanRef": "cinematography-stage3-native-delta.json#quotaCompleteContract",
+        "status": "planned",
+        "acceptanceCriterion": "Each presented frame from final receipt-250ms through+500ms and900ms/hold-end, paired AV; old target/order absent<=2frames; same-receipt null successor preserves one120..240ms optional completion unless superseded/canceled; one completed row after900ms, no seventh objective or hold-expiry completion. Test final fiber, final salvage with preearned fiber, silent restored-complete branch and optional excess collection during hold."
+      }
+    }
+  ],
+  "nativeSyncAnchorContributions": [
+    {
+      "id": "anc.descent.impact",
+      "beat": "descent",
+      "order": 0,
+      "event": "Existing actual descent-impact bundle fires",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "event.early.descent-impact",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.descent-arrival",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "Preserve existing flash/impact and decay; no restored repeat."
+        }
+      ],
+      "acceptanceCriterion": "Preserve existing flash/impact and decay; no restored repeat."
+    },
+    {
+      "id": "early.fixed.ready",
+      "beat": "ch1-fixed",
+      "order": 1,
+      "event": "Settled supported worker and correct one-target first action",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "event.early.fixed-ready",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.fixed-pickup",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "Planted sole tolerance met, first debris visible and outside spawn pickup radius."
+        }
+      ],
+      "acceptanceCriterion": "Planted sole tolerance met, first debris visible and outside spawn pickup radius."
+    },
+    {
+      "id": "early.pickup.receipt",
+      "beat": "ch1-fixed",
+      "order": 2,
+      "event": "Actual collectDebris(0) idempotent receipt",
+      "source": "player-action",
+      "story": {
+        "eventRef": "event.early.pickup-receipt",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.fixed-harvest",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "Receipt clears old target within two frames; next action uses real inventory."
+        }
+      ],
+      "acceptanceCriterion": "Receipt clears old target within two frames; next action uses real inventory."
+    },
+    {
+      "id": "early.harvest.receipt",
+      "beat": "ch1-fixed",
+      "order": 3,
+      "event": "Real positive-yield extraction satisfies biofiber>=1",
+      "source": "player-action",
+      "story": {
+        "eventRef": "event.early.harvest-receipt",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.fixed-cross",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "Normal yield retained; fresh shared coverage frame/sequence armed."
+        }
+      ],
+      "acceptanceCriterion": "Normal yield retained; fresh shared coverage frame/sequence armed."
+    },
+    {
+      "id": "early.coverage.transfer",
+      "beat": "ch1-fixed",
+      "order": 4,
+      "event": "Actual player-traversal under unchanged valid geometry epoch crosses body-safe coverage",
+      "source": "camera-event",
+      "story": {
+        "eventRef": "event.early.coverage-transfer",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.track-unbolt",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "One camera ID/static event; complete worker visible pre/post; actual destination frame presented before rig release."
+        }
+      ],
+      "acceptanceCriterion": "One camera ID/static event; complete worker visible pre/post; actual destination frame presented before rig release."
+    },
+    {
+      "id": "anc.track.unbolt",
+      "beat": "ch1-track",
+      "order": 5,
+      "event": "Existing armed bundle fires at its current authoritative target",
+      "source": "score-event",
+      "story": {
+        "eventRef": "event.early.track-unbolt",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.track-unbolt",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "Existing rig/letterbox bundle begins; original first Regulation sentence appears once through existing system channel for2800ms; HOLD visible unvoiced; no competing caption/ledger."
+        }
+      ],
+      "acceptanceCriterion": "Original6500ms rig and7000ms envelope with450ms existing grid cap; source-bound channel ownership and one visible system/feed-voice sentence0..2800ms, no hidden voice or new journal."
+    },
+    {
+      "id": "early.track.attention",
+      "beat": "ch1-track",
+      "order": 6,
+      "event": "Existing silent parenthetical is actually shown at fired unbolt origin+3250ms for3200ms; newly declared presentation event, not a new revelation.",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "event.early.track-attention",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.track-unbolt",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "At actual fired unbolt+3250ms show unchanged silent parenthetical for3200ms through existing caption lane; clear6450ms."
+        }
+      ],
+      "acceptanceCriterion": "Actual runtime scheduled-story event at fired bundle origin+3250ms; 3200ms foreground TTL, all36characters visible, silent, safe-area clear, no entry/receipt or score stinger. Native anchor source uses runtime-event; timeline is not an allowed enum."
+    },
+    {
+      "id": "early.raster.ready",
+      "beat": "ch1-raster",
+      "order": 7,
+      "event": "Existing seven-second unbolt completes and releases raster input",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "event.early.raster-ready",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.raster-salvage",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "Continuous follow, actual input handback, one truthful required target if remaining."
+        }
+      ],
+      "acceptanceCriterion": "Continuous follow, actual input handback, one truthful required target if remaining."
+    },
+    {
+      "id": "early.raster.receipt",
+      "beat": "ch1-raster",
+      "order": 8,
+      "event": "Each actual required debris or yielding fiber transaction",
+      "source": "player-action",
+      "story": {
+        "eventRef": "event.early.raster-receipt",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.raster-salvage",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "Event carries receipt/target identity; one progress response; shot fiber binding applies when active phase is fiber."
+        }
+      ],
+      "acceptanceCriterion": "Event carries receipt/target identity; one progress response; shot fiber binding applies when active phase is fiber."
+    },
+    {
+      "id": "early.raster.salvage-complete",
+      "beat": "ch1-raster",
+      "order": 9,
+      "event": "Actual receipts for indices 0,1,2 are satisfied",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "event.early.raster-salvage-complete",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.raster-fiber",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "Optional indices 3-5 remain collectible; one fiber patch if total below six."
+        }
+      ],
+      "acceptanceCriterion": "Optional indices 3-5 remain collectible; one fiber patch if total below six."
+    },
+    {
+      "id": "early.raster.quota-complete",
+      "beat": "ch1-raster",
+      "order": 10,
+      "event": "Real required salvage/fiber/stone conjunction becomes satisfied; old action clears before inherited completion hold.",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "event.early.raster-quota-complete",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.raster-complete-hold",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "Real full conjunction clears obsolete imperative and designation within2presentedframes; same camera/worker continues through inherited hold, one900ms receipt then compact completed counts."
+        }
+      ],
+      "acceptanceCriterion": "Actual normal-route native receipt/predicate edge, not timer or feedback, completes quota. Same final receipt may also satisfy salvage. No seventh objective, no fiber entry when already satisfied, no repeat completion at depth; restore branch derives completed hold silently."
+    },
+    {
+      "id": "early.depth.handoff",
+      "beat": "ch1-depth",
+      "order": 11,
+      "event": "Required salvage, fiber6, stone4, six-second minimum and 2.5-second hold all met",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "event.early.depth-handoff",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.depth-handback",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "No reward or bypass; survey designation clears before existing SUPPLY POD marker."
+        }
+      ],
+      "acceptanceCriterion": "No reward or bypass; survey designation clears before existing SUPPLY POD marker."
+    },
+    {
+      "id": "early.depth.settled",
+      "beat": "ch1-depth",
+      "order": 12,
+      "event": "Existing distance-18 rig transition settles after 2.5 seconds",
+      "source": "camera-event",
+      "story": {
+        "eventRef": "event.early.depth-settled",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.depth-handback",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "All three supply receipts and legal row remain the current task."
+        }
+      ],
+      "acceptanceCriterion": "All three supply receipts and legal row remain the current task."
+    },
+    {
+      "id": "early.entry.restored",
+      "beat": "ch1-fixed",
+      "order": 13,
+      "event": "Actual cold-entry/earned Continue reconstruction completes",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "event.early.entry-restored",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "cinematography": [
+        {
+          "shotRef": "shot.early.fixed-pickup",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "Restore branches to earned current action; no impact/cut/receipt replay. This anchor is conditional, not ordered as a final story event."
+        }
+      ],
+      "acceptanceCriterion": "Restore branches to earned current action; no impact/cut/receipt replay. This anchor is conditional, not ordered as a final story event."
+    }
+  ],
+  "anchorRelationshipAdditions": [
+    {
+      "anchorId": "early.track.attention",
+      "relativeTo": "anc.track.unbolt",
+      "offsetMs": 3250,
+      "clock": "existing active story beat clock relative to actual fired bundle origin; not raw beat entry or wall time"
+    },
+    {
+      "anchorId": "early.raster.quota-complete",
+      "relativeTo": "early.raster.receipt",
+      "offsetMs": 0,
+      "clock": "actual after-commit full-predicate edge; may coincide with salvage-complete; restored state separately silent"
+    }
+  ],
+  "guidanceMerge": {
+    "owner": "chapter",
+    "useExactDocument": {
+      "path": "chapter-native-contract-contribution.json",
+      "sha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9"
+    },
+    "objectivesCount": 6,
+    "copyChanges": {
+      "ch1:fixed:recover-first-debris": [
+        "WALK OVER THE DEBRIS TO RECOVER IT."
+      ],
+      "ch1:raster:recover-quota": [
+        "WALK OVER THE DEBRIS TO RECOVER IT."
+      ]
+    },
+    "clearChanges": {
+      "ch1:raster:extract-fiber-quota": "early.raster.quota-complete"
+    },
+    "targetModes": "Chapter four survey-bracket interact rows and two none travel/wait rows; requiresMarkerfalse is never proof of target availability. Root extends schema/gate narrowly; old true-marker checks unchanged.",
+    "depth": "Canonical current objective.workOrder; preserve current exact SUPPLY POD true directional marker and objective text; test fixture RECOVER THE PROJECTED POD. remains a canonical-projection ownership test, not new runtime authored copy.",
+    "later": "No nav/iso/anomaly presentation changes."
+  },
+  "trackCaptionContract": {
+    "standingAction": "HOLD POSITION.",
+    "standingActionVoiced": false,
+    "publisher": "main/src/story/storyDirector.ts::tickTrackUnlock",
+    "origin": "actual fired anc.track.unbolt bundle target",
+    "cameraUnchanged": {
+      "rigBlendMs": 6500,
+      "letterboxMs": 7000,
+      "gridCapMs": 450,
+      "rigEasing": "smoothstep"
+    },
+    "events": [
+      {
+        "anchorRef": "anc.track.unbolt",
+        "channel": "system",
+        "text": "CAMERA HAND-OFF: SUSPENDED. ONE VIEW STAYS WITH YOU.",
+        "startOffsetMs": 0,
+        "ttlMs": 2800,
+        "clearOffsetMs": 2800,
+        "visibleVoiceOwner": "existing StoryCaptions voiceVisibleText system:<shownAt>,feed",
+        "typewriterMsPerCharacter": 34,
+        "characterCount": 52,
+        "fullyRevealedOffsetMs": 1768,
+        "fadeStartOffsetMs": 2100,
+        "minimumFullyRevealedOpaqueEvidenceMs": 300
+      },
+      {
+        "anchorRef": "early.track.attention",
+        "channel": "caption",
+        "text": "(simpler to keep watching this one.)",
+        "startOffsetMs": 3250,
+        "ttlMs": 3200,
+        "clearOffsetMs": 6450,
+        "visibleVoiceOwner": null,
+        "silent": true,
+        "typewriterMsPerCharacter": 34,
+        "characterCount": 36,
+        "fullyRevealedOffsetMs": 4474,
+        "fadeStartOffsetMs": 5750
+      }
+    ],
+    "captionFreeIntervalsMs": [
+      [
+        2800,
+        3250
+      ],
+      [
+        6450,
+        7000
+      ]
+    ],
+    "middleLinesAutomaticDispatch": "retired by Chapter authorized compact-copy amendment, original source/lineage preserved",
+    "journal": "none mounted/added; no archive claim",
+    "geometry": {
+      "existingSurfaceId": "story-caption",
+      "fontPx": 15,
+      "lineHeight": 1.55,
+      "referencePortraitWidthPx": 354,
+      "horizontalPaddingPx": 16,
+      "referencePortraitMaxLines": 2,
+      "referencePortraitHeightPx": 46.5,
+      "minimumBodyAndUiGapPx": 14,
+      "measuredBounds": "Reserve complete formatted text rectangle throughout reveal; measure actual desktop/portrait/landscape and safe insets. No transient width-induced target churn.",
+      "trackLedgerPresent": false
+    },
+    "lifecycle": [
+      "At track entry clear outgoing predecessor caption/system selectively so text.caption precedence cannot mask system.",
+      "At2800ms compare-and-clear own system entry; at3250ms emit silent caption once; at6450ms compare-and-clear own caption.",
+      "Capture current channel-entry identity when publishing; exit clear only if that exact owned entry still occupies the channel. Do not clear next owner text/workorder/audit/violation.",
+      "Once keys are run+beat-occurrence+fired-anchor scoped; pause/focus freezes story clock; restore derives actual saved beat without prior-line replay; cold diagnostic occurrence may run declared sequence once.",
+      "Quit/restart/beat exit invalidates pending story events. No delayed wall-clock timers, hidden work-order narration, HOLD utterance or audio backlog."
+    ]
+  },
+  "quotaCompleteContract": {
+    "anchorRef": "early.raster.quota-complete",
+    "predicate": "[0,1,2].every(isDebrisCollected) && biofiber>=6 && stone>=4",
+    "liveCause": "actual finalized native receipt/predicate edge; no feedback-controlled state",
+    "clearWithinPresentedFrames": 2,
+    "clear": [
+      "current resource survey target/label",
+      "current imperative",
+      "active raster objective when complete"
+    ],
+    "newObjective": false,
+    "existingTiming": {
+      "rasterMinimumSeconds": 6,
+      "completionHoldSeconds": 2.5,
+      "noAdditionalDelay": true
+    },
+    "visualHoldShotRef": "shot.early.raster-complete-hold",
+    "receiptForegroundMs": 900,
+    "completedLedgerText": "DEBRIS 3/3 · FIBER 6/6 · STONE 4/4",
+    "completedLedgerRole": "one20px existing ledger row of satisfied quota progress, not three outstanding orders or inventory totals",
+    "optionalExcess": "ordinary collectible/loot/native sound only; no mandatory progress or receipt-timer replacement",
+    "preearned": "Skip already met intermediate objective; enter completed visual state silently on restore, no fabricated live transaction."
+  },
+  "scoreRecipientAmendment": {
+    "rule": "Terminal satisfied clear is an expected same-receipt successor",
+    "matchingLineageFields": [
+      "runId",
+      "restoreEpoch",
+      "actualNativeReceiptId",
+      "outgoingObjectiveId",
+      "publicationLineage",
+      "nextObjectiveId:null",
+      "clearReason:quota-complete"
+    ],
+    "ackWindowMs": [
+      120,
+      240
+    ],
+    "maximumPendingUnscheduled": 1,
+    "retainOn": "same-receipt quota-complete clear into existing hold despite activeObjective=null",
+    "cancelOn": [
+      "unrelated replacement",
+      "later actual superseding action",
+      "beat exit",
+      "pause",
+      "focus/visibility loss",
+      "restore",
+      "new run",
+      "quit",
+      "sandbox"
+    ],
+    "visualAudioDifference": "Visual900ms receipt freezes on pause and may resume its remaining lifetime; canceled unstarted audio never re-arms.",
+    "noAudioGate": true,
+    "semanticTrace": "Completion-over-progress; one actual transaction one audible completion maximum; multiple satisfied predicates recorded; no repeats at hold expiry."
+  },
+  "sourceBindings": [
+    {
+      "path": "main/src/story/StoryCaptions.tsx",
+      "sha256": "2588e150ff5c29ab5fcde36f299ccfce1568c8aad5e276ab689574a2bdf40849",
+      "symbols": [
+        "StoryCaptions.active text.caption ?? text.system",
+        "34ms typewriter",
+        "700ms fade",
+        "visible system voiceVisibleText",
+        "existing story-caption geometry"
+      ]
+    },
+    {
+      "path": "main/src/story/StoryOverlays.tsx",
+      "sha256": "95ee8a6d965258b42763a4301502cbda4db11db86548e1d8d5994934ca4ef516",
+      "symbols": [
+        "guidance.embodiedObjectiveMounted journal gate",
+        "StoryCaptions mount"
+      ]
+    },
+    {
+      "path": "main/src/story/storyText.ts",
+      "sha256": "19f6aec5803be5c10e3770ead676b42fa4e3cf5812f5ff71cfbfbb1e4234e806",
+      "symbols": [
+        "showSystemLine",
+        "showCaption",
+        "proposed clearStoryTextChannel selective compare-and-clear"
+      ]
+    },
+    {
+      "path": "main/src/story/feed/regulationVoice.ts",
+      "sha256": "8306b3ddc0b1bac1dd321cb6830db1c9cdc28380fe720c0db9d0368ab9e12182",
+      "symbols": [
+        "REGULATION_VOICE.track",
+        "presentRegulationObjective"
+      ]
+    },
+    {
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "sha256": "80188c72ea6603bfd03758c577a886c6b54d0b00fece4f51a782f297a929bbb0",
+      "symbols": [
+        "workOrder",
+        "voicedOrder",
+        "voiceVisibleText dispatch"
+      ]
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "sha256": "4cfeace8d1a8e3fbf90cd48fef8fced3718dc89b4aa57ff5bf63e3f669749806",
+      "symbols": [
+        "tickTrackUnlock",
+        "fireCaptionOnce",
+        "onBeatEntered"
+      ]
+    },
+    {
+      "path": "main/src/audio/voice/voiceGrammar.ts",
+      "sha256": "f871a50466993e87a9b88c6b42cf8eeb9ac680f1fc7da887f16822b76081b37c",
+      "symbols": [
+        "parenthetical/lowercase refusal; read-only"
+      ]
+    }
+  ],
+  "boundaryAdditions": [
+    {
+      "path": "main/src/story/StoryCaptions.tsx",
+      "symbols": [
+        "StoryCaptions full-caption rectangle reservation; current typewriter/fade/visible-system voice path"
+      ],
+      "scope": "Only if current layout cannot reserve complete text and prove14px clearance; no changed timing,font,voice recipe or global caption redesign."
+    },
+    {
+      "path": "main/src/story/storyText.ts",
+      "symbols": [
+        "clearStoryTextChannel proposed selective helper with owned-entry identity"
+      ],
+      "scope": "Compare-and-clear only outgoing/own caption/system; no global state clearing."
+    }
+  ],
+  "pendingBeforeContractSignatures": [
+    "Score authentic response to new first/fifth visible-caption delivery and terminal-null-successor rule",
+    "Root actual candidate compilation with exact14anchors,Chapter events/six objectives and Cinema9shots",
+    "Native two grouped outgoing notes per director and recipient responses on actual candidate revision/hash",
+    "All implementation,actual hardware/manual/AV/UX evidence and fresh independent review remain open"
+  ],
+  "runtimeEdited": false,
+  "buildBrowserGpuOrAuditionPerformed": false,
+  "canonicalSignature": null,
+  "nativeFieldOperationTarget": "Apply to frozen Cinema nativeContractContribution before merging lanes into the actual scene candidate. Replace operations never remove Chapter/Score-owned fields from an already combined contract.",
+  "artifactValidation": {
+    "checkedAt": "2026-09-05T20:09:48.237Z",
+    "nativeRecordsChecked": 29,
+    "completeNativeRecordErrors": [],
+    "mergedCinemaShotCount": 9,
+    "mergedCinemaCaptureCount": 11,
+    "anchorContributions": 14,
+    "scoreRelationsIntentionallyNotAuthored": true,
+    "canonicalGuidanceRowsRemain6": true,
+    "firstBladesMatchExpectedHashes": true,
+    "recipientRows": 2,
+    "fullContractGateRun": false,
+    "validatorPath": "main/tools/creative-triad-gate.mjs",
+    "validatorSha256": "404431dd7092067db81d60196c56afffacd4c1b7ab831d56165509183c54ed2a",
+    "schemaSha256": "d80e8f3762c567c270d118f189d19fbbccb166f2fe93517e51971b4174689769"
+  }
+}

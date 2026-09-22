@@ -1,0 +1,43 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "failureSha256": "9c64ce97d0bac1ca699d72bba41249837b7b2342faf7c06560b50d76fdb9243a",
+  "amends": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/media-binding-repair-20260908/repair.json",
+    "sha256": "a4a60515134cf0076510377a08cc4abc2696da6f41645379029fbfe3997510ae"
+  },
+  "reconcileOnly": true,
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/evidence.mjs",
+      "before": "4683704c2f4debb3b75a43484bd4142bb4de26186048d6798c4448d6e542cf6b",
+      "after": "bd98540044711a608f893c387a931a155d127570e8a4a831dfe244a1fa3c5bc7"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "cb652778a97e74e777fcbe9a5514a2ec26c5e7cfed06c8c9f99c062bf48cae4a",
+      "after": "67060f72c27bf6745125d17fee6feb643bb2da0725914143d51c0f79901e7735"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "222709d26da6626f9c7e1ff792c669a35d57652fb82241ef9efaf3a9d7814182",
+      "after": "1de6efb6d70619f7fee46f0665a1f4ac3eb2344df01c709300375765f4327f93"
+    },
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.mjs",
+      "before": "abc3e04bb58d2aabf6022bedcc149c4a35f10cf96e496f1daa56e1e48f9cffe0",
+      "after": "1abcb189d1e79269a947f61419225260c8895989bcad45df650fb57c54e13964"
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "command": "npm run chapter:loop:test",
+    "tests": 125,
+    "log": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/preview-socket-repair-20260908/tests.log",
+      "sha256": "33b90f4735ba8e267c1a5145b61e435eaa29cb1bda210f3a19cc0f0ef3b2d3f4"
+    }
+  },
+  "diagnosis": "Reproduced UND_ERR_SOCKET after7.5s synchronous event-loop blocking between owned preview verifications. One idempotent GET retry passes the reproduction; every asset hash comparison remains enforced. Future AV captures retain8s after completed handback to cover the4s statement and2s release.",
+  "boundary": "Source maintenance only. Composer10 REVISE, actual evidence, all usage, original clock, cursor, refinement and retry counts remain unchanged. No new model/capture run and no acceptance or publishing."
+}

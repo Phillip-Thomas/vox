@@ -1,0 +1,163 @@
+{
+ "documentKind": "finale-authority-seam-runtime-report",
+ "schema": "paravoxia.verifier.finaleAuthoritySeamRuntime.v1",
+ "activeRole": "finale-authority-seam-runtime",
+ "action": "continue",
+ "invokedAtUTC": "2026-09-06T22:33:00Z",
+ "completedAtUTC": "2026-09-06T22:40:45Z",
+ "pins": {
+  "bundle": "main/dist/assets/index-C1X65dZp.js",
+  "bundleSha256": "68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "previewUrl": "http://127.0.0.1:37395/",
+  "indexSha256": "a9b880389deff7717b3d76b0f4a962beff1031a2ffa44fde427a5f0022353d8f"
+ },
+ "probeHashes": {
+  "seamLogpoints.mjs": "fae1524f4afe09c9d5483f58930d7000637ce931a9cf458eeee3c691077f73db",
+  "finale-window-probe.mjs": "8b1c6ec38a8e2bf0d84cbe08d90c8c85c3b0a3a0ad96b6c5bf1c42de07739e29",
+  "run-authority-seam.sh": "b78516643ed710b6cf85dcafbbb85ed542d3db17e27f7a46a5056803e1cd81a6"
+ },
+ "captureHashes": {
+  "normal/seam-events.json": "89c6c52ea6b538cc3c0943b76841268449801686a4a4666ccedf55e05a565998",
+  "pause/seam-events.json": "05d53e84265d71486323757a2f309dfaf722e4b71b6a457af14b06e255335d9d",
+  "normal/window.ndjson": "b7aea68bb9898ec753e7d8161359810089583127ae643e8dc92a0834d2f546c6"
+ },
+ "attachment": {
+  "method": "CDP Debugger.setBreakpointByUrl non-pausing conditional breakpoints on the owned page session; module locals read in valid lexical scope",
+  "pinsResolved": "10/10",
+  "evaluationErrors": 0,
+  "exactColumnMatches": [
+   "CANCEL_ngA_ENTRY",
+   "AUTHORITY_START_mMA_ENTRY"
+  ],
+  "columnSlideNote": "V8 slid the other 8 breakpoints a few columns to the nearest executable position within the SAME statement; all resolved on the pinned line and produced correctly-scoped reads (0 evaluation errors)."
+ },
+ "normalExpiry": {
+  "capture": "verifier/captures/manual-credit-finale/authority-seam-normal-20260906T223703Z",
+  "tokenBeat": "ch13-common",
+  "restoredCompletion": false,
+  "audioUnavailable": false,
+  "tokenStartedAtMs": 63968.5,
+  "deadlineAtMs": 68968.5,
+  "lastUnderCapDeadlineTick": {
+   "mono": 68961,
+   "ageS": 4.9925,
+   "willRelease": false
+  },
+  "firstOverCapDeadlineTick": {
+   "mono": 68977.8,
+   "ageS": 5.0093,
+   "willRelease": true
+  },
+  "releaseEntry": {
+   "mono": 69058,
+   "ageS": 5.0894,
+   "overshootMs": 89.5,
+   "beatBefore": null,
+   "moodBefore": null
+  },
+  "audioContextAtRelease": {
+   "built": false,
+   "ctxPresent": false,
+   "ctxState": null,
+   "note": "score graph never built in this session; no AudioContext currentTime pairing available"
+  },
+  "scheduleStoryAuthorityInvoked": false,
+  "moodCallsMmaHits": 0,
+  "authorityEntryHits": 0,
+  "authorityTailHits": 0,
+  "bedCallbackHits": 0
+ },
+ "pauseCancel": {
+  "capture": "verifier/captures/manual-credit-finale/authority-seam-pause-20260906T223906Z",
+  "realEscapePressed": true,
+  "pressedAtMono": 65082.2,
+  "tokenBeginRecordMono": 63984.2,
+  "ageAtPressMs": 1098,
+  "forcedPauseFlagUsed": false,
+  "accessorStubUsed": false,
+  "tokenCancelledByEscape": false,
+  "cancelPinHits": 2,
+  "cancelHitsWereLive": false,
+  "cancelHitMonos": [
+   5267.6,
+   5275.1
+  ],
+  "tokenStartedAtMs": 63993,
+  "deadlineAtMs": 68993,
+  "releaseEntry": {
+   "mono": 69085.8,
+   "ageS": 5.0927,
+   "overshootMs": 92.8,
+   "beatBefore": null,
+   "moodBefore": null
+  },
+  "audioContextAtRelease": {
+   "built": true,
+   "ctxPresent": true,
+   "ctxState": "running",
+   "ctxCurrentTime": 63.168
+  },
+  "moodCallsMma": {
+   "hits": 1,
+   "wasLeading": false,
+   "nowLeading": false,
+   "transition": false,
+   "noop": true,
+   "atTime": 63.168
+  },
+  "scheduleStoryAuthorityInvoked": false,
+  "authorityEntryHits": 0,
+  "authorityTailHits": 0,
+  "bedCallbackHits": 0
+ },
+ "findings": [
+  "Token creation, deadline ticks, and release are now measured directly at their own executable pins, not inferred from the diagnostic getter.",
+  "In BOTH sessions the score beat and mood were already null at release entry (beatBefore=null, moodBefore=null): the leadership drop happened at/near token creation, not at the deadline.",
+  "scheduleStoryAuthority (mMA) was NEVER invoked in either session. In the pause session the single MOOD_LY_CALLS_mMA hit shows transition=false / noop=true, so the guarded callsite did not fire. There is therefore NO measured 4.5s complementary authority/bed automation in these captures: no atTime, no endpoints, no bed callback invocation.",
+  "The observed token lifetime exceeds the exact 5s cap in both sessions (5.0894s / 5.0927s; overshoot 89.5ms / 92.8ms) measured at the RELEASE pin itself, not at a diagnostic read. The first over-cap deadline tick occurs at 5.0093s / 5.0012s and release entry follows ~80-92ms later.",
+  "A real Escape keypress at live token age ~1.1s did NOT cancel the token: no live cancel hit occurred and the token still ran to its full ~5.09s release. Both ngA cancel hits in each session are pre-token (mono ~5.2s, live=false, reasonArg=null).",
+  "cancel logpoint is NOT age-gated, so a ~1s cancellation could not have been filtered by the 4.8s sparse rule; the sparse rule applies only to the per-frame deadline pin."
+ ],
+ "limits": {
+  "audibleClaim": false,
+  "pcmAlignment": "not attempted; no listening performed",
+  "instrumentationBias": "Breakpoints force V8 deopt/reparse of hwe/LY/mMA; the 89-93ms release overshoot carries an unquantified positive bias and must not be reported as exact.",
+  "bufferTruncation": {
+   "cap": 4000,
+   "capDrop": {
+    "normal": 169,
+    "pause": 169
+   },
+   "droppedKeys": "deadline:drop only; all lifecycle events retained",
+   "silentTruncation": false,
+   "defect": "the drop RECORDS themselves consumed the buffer cap; drop counts are still explicit, no lifecycle event was lost"
+  },
+  "pauseUiState": "paused UI/state not independently read; only the token/authority chain was pinned.",
+  "notEstablished": [
+   "4.5s release timing (mMA never invoked)",
+   "audio authority cap violation",
+   "PCM/event alignment"
+  ]
+ },
+ "boundaries": {
+  "gameSourceChanged": false,
+  "audioEngineChanged": false,
+  "contractChanged": false,
+  "buildRun": false,
+  "fullSuiteRun": false,
+  "newPreviewStarted": false,
+  "headlessUsed": false,
+  "controlFilesEdited": false,
+  "foreignProcessKilled": false,
+  "rootPreviewStopped": false,
+  "monkeypatching": false,
+  "defectClosure": false,
+  "publication": false
+ },
+ "cleanup": {
+  "lockReleased": true,
+  "browsersExited": true,
+  "launcherLog": "logs/finale-authority-seam-runtime/launcher.log"
+ }
+}

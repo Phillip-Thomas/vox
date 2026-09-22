@@ -1,0 +1,330 @@
+{
+  "schema": "paravoxia.repairContractDisposition.v1",
+  "runId": "2026-09-04-audio-10x",
+  "stage": "audio-stage-1-bed-timbre-mastering",
+  "baseContractVersion": "draft-v3",
+  "activeContractVersion": "draft-v4",
+  "activeContractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+  "defectRegisterSha256": "d1aa714e3fb96b816bbe58438db2929e9172f62208fcdd683cb2ffee97d8d9d1",
+  "contractChangeRequired": true,
+  "route": "revised-and-resigned",
+  "routeNote": "Stage 1 record (defectDispositions below, D1-D15) closed as revised-and-resigned against draft-v3 sha256 776d676b90cc9c1007694b26f0000cfc61ecf85c256c81a72a0cdd324ea26ba1 and is unchanged in substance. The run-level route reopens because the Stage 2 cohesion judgement (cohesion-judge-stage-2.md, route-repair, weighted 4.58 against a 4.75 threshold with a 4.40 floor) routed a second contract amendment: draft-v4 now exists at sha256 672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d, snapshotted byte-identically at snapshots/scene-contract.draft-v4.json, carrying the judge's nine-path amendment list (evidence.acceptanceCriteria[5] and [6], score.mixIntent, score.cues[0..9].mixIntent, performance.measurementPlan, the Stage 3, Stage 4 and Stage 5 acceptance terms) together with the amended cinematography condition C6 from c6-amendment.md folded into the ten syncAnchors bundleAt derivations and the bundle-capture overlay term. The three director signatures are bound to the superseded draft-v3 bytes 776d676b, so the contract-phase gate fails only signoffs.* and triadResignComplete is false by fact. 'revised-pending-signature' is an in-flight marker only: the gate's governed route enum (repair.route, final phase) does not contain it, and this disposition must close as 'revised-and-resigned' when three fresh signatures bind 672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d.",
+  "directionRefs": [
+    "score-repair-direction.json"
+  ],
+  "defectDispositions": [
+    {
+      "id": "D1",
+      "owner": "human",
+      "severity": "high",
+      "contractChangeRequired": true,
+      "boundedAction": "draft-v3: BLOOM short-term -14 +/-1 LU moves from Stage 1 to Stage 2 acceptance; Stage 2 is authorised to retune the safety compressor in audioCore.ts to a true safety device (-6 dB, 20:1, knee 0-3 dB, attack <= 3 ms, release ~100 ms) behind the -1 dBTP true-peak limiter with a named, measured makeup cancel; bare/colour hashes re-baselined once at Stage 2 with before/after inaudibility evidence (pre-tail tap fingerprint identical and <= 2 LSB; through-tail loudness/envelope tolerances; audition). Exact text: score-repair-direction.json#contractAmendmentProposal. Not a Stage 1 patch; not a retarget.",
+      "directionRef": "score-repair-direction.json#contractAmendmentProposal",
+      "status": "open-pending-draft-v3-signature"
+    },
+    {
+      "id": "D2",
+      "owner": "human",
+      "severity": "low",
+      "contractChangeRequired": false,
+      "boundedAction": "None mechanical; owner auditions lean beside full. Lean night/day now rendered (-19.87 / -19.85 LUFS) for that audition.",
+      "status": "open-taste"
+    },
+    {
+      "id": "D3",
+      "owner": "integration",
+      "severity": "medium",
+      "contractChangeRequired": false,
+      "boundedAction": "Measured by tools/audio-thread-cost-probe.mjs: offline real-time factor before 0.067 / after full 0.118 (1.77x) / after lean 0.098 (1.47x); main-thread timer ms/frame under the score at full 1x, full 4x and lean 4x CPU throttle on the SwiftShader gate. Recorded in evidence/stage-1/perf.md.",
+      "status": "measured-awaiting-verifier"
+    },
+    {
+      "id": "D4",
+      "owner": "score",
+      "severity": "medium",
+      "contractChangeRequired": false,
+      "boundedAction": "Era-gated night trim BED_NIGHT_TRIM_DB -2.0 (onset 0.5) on the padChoir-gated bed-bus rail; night bed -18.99 -> -20.51 LUFS full, -19.87 lean; daylight renders unchanged.",
+      "directionRef": "score-repair-direction.json#SRD-D4",
+      "status": "repaired-awaiting-verifier"
+    },
+    {
+      "id": "D5",
+      "owner": "integration",
+      "severity": "medium",
+      "contractChangeRequired": false,
+      "boundedAction": "Render ch4-defy, refused and seam-ebb hand-back excerpts before/after within 0.25 LU (story-verifier). Not performed in this loop; proposed as an explicit Stage 2 term in the draft-v3 text.",
+      "status": "open"
+    },
+    {
+      "id": "D6",
+      "owner": "score",
+      "severity": "medium",
+      "contractChangeRequired": false,
+      "boundedAction": "resolveStage1Rails pure resolver + rail-law tests (exactly 0/1 at padChoir 0) + audioCore.topology.test.ts (glue placement, safety compressor -20/8 with attack/release/knee never written).",
+      "directionRef": "score-repair-direction.json#SRD-D6",
+      "status": "repaired-awaiting-verifier"
+    },
+    {
+      "id": "D7",
+      "owner": "integration",
+      "severity": "low",
+      "contractChangeRequired": false,
+      "boundedAction": "audio:check 'glue-gain' check: |measured glue static gain| <= 0.05 dB every run.",
+      "status": "repaired-awaiting-verifier"
+    },
+    {
+      "id": "D8",
+      "owner": "integration",
+      "severity": "low",
+      "contractChangeRequired": false,
+      "boundedAction": "README deviation 4 corrected to BED_ALIVE_LIFT 1.1.",
+      "status": "repaired"
+    },
+    {
+      "id": "D9",
+      "owner": "score",
+      "severity": "low",
+      "contractChangeRequired": true,
+      "boundedAction": "score-treatment.md section 13 reconciliation filed; draft-v3 wording (colour to 0.38; LSB ceiling) proposed.",
+      "directionRef": "score-repair-direction.json#SRD-D9",
+      "status": "reconciled-in-draft-v3-pending-signature"
+    },
+    {
+      "id": "D10",
+      "owner": "integration",
+      "severity": "low",
+      "contractChangeRequired": true,
+      "boundedAction": "draft-v3 measurementPlan sentence: LATENCY_COMP is the measured full music-path latency of the Stage 2 tail (LATENCY_COMP_MUSIC_PATH_S, about 12 ms today), not the glue's 6 ms alone.",
+      "status": "open-pending-draft-v3-signature"
+    },
+    {
+      "id": "D11",
+      "owner": "integration",
+      "severity": "low",
+      "contractChangeRequired": false,
+      "boundedAction": "One more story-mood A/B render (a ch4 or ch5 mood) by story-verifier. Not performed in this loop.",
+      "status": "open"
+    },
+    {
+      "id": "D12",
+      "owner": "integration",
+      "severity": "low",
+      "contractChangeRequired": true,
+      "boundedAction": "Wording corrected in README and treatment; comparer asserts fingerprint parity + 2 LSB ceiling; draft-v3 acceptanceCriteria[3] wording proposed. Replay-delta variance (8.91e-5 vs 1e-4 gate) recorded; gate not loosened.",
+      "status": "repaired-wording-in-draft-v3-pending-signature"
+    },
+    {
+      "id": "D13",
+      "owner": "human",
+      "severity": "low",
+      "contractChangeRequired": true,
+      "boundedAction": "Streamed loops / drone bank decision at the Stage 1 audition; draft-v3 term proposed to carry whichever decision is recorded.",
+      "status": "open-audition"
+    },
+    {
+      "id": "D14",
+      "owner": "integration",
+      "severity": "low",
+      "contractChangeRequired": false,
+      "boundedAction": "Record the story-audit skip in the ledger and mark the two unfilled templates as skipped by scope decision (story: Stage 3; cinematography: Stage 3; UX: Stage 4).",
+      "status": "open"
+    },
+    {
+      "id": "D15",
+      "owner": "integration",
+      "severity": "low",
+      "contractChangeRequired": false,
+      "boundedAction": "Run mining-metronome-probe.mjs once against the Stage 1 tree (story-verifier).",
+      "status": "open"
+    }
+  ],
+  "triadResignRequired": true,
+  "triadResignComplete": false,
+  "stage2GoCondition": "draft-v3 signed by all three directors AND D4 closed by the verifier's re-measurement of the refreshed after/ set; no Stage 2 edit to audioCore.ts before both hold.",
+  "decidedBy": "score-director (Claude Fable 5.1) run 2026-09-04-audio-10x, acting as integration engineer for the score lane in the Stage 1 repair loop; the producer/orchestrator compiles the final disposition once draft-v3 exists",
+  "decidedAt": "2026-09-05T06:15:00-04:00",
+  "stage2": {
+    "stage": "audio-stage-2-game-mix-buses",
+    "reviewRefs": [
+      "cohesion-judge-stage-2.md",
+      "score-audit-stage-2.md",
+      "c6-amendment.md",
+      "naive-audience-report-stage-2.md",
+      "final-scorecard-stage-2.json",
+      "dissent-register.md",
+      "human-decision.json"
+    ],
+    "baseContractVersion": "draft-v3",
+    "activeContractVersion": "draft-v4",
+    "activeContractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+    "contractChangeRequired": true,
+    "route": "revised-and-resigned",
+    "routeNote": "Every Stage 2 amendment is contract text, not a builder patch: the judge routed no repair into main/src for the amendment itself. Three signatures are required because the shared anchor timing semantics change (C6) and because the loudness architecture terms move between stages. Until they land, no bundleAt latency or SFX-forward code may be written, no edit may touch audioCore.ts or mix/**, and Stage 3's before/ stays pinned to Stage 2's after/.",
+    "triadResignRequired": true,
+    "triadResignComplete": false,
+    "stage3GoCondition": "draft-v4 tri-signed against sha256 672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d. Stage 3 build may continue meanwhile only under cohesion-judge-stage-2.md section 5: no bundleAt latency or SFX-forward scheduling code, no edit to main/src/audio/audioCore.ts or main/src/audio/mix/**, and Stage 3 before/ pinned to Stage 2 after/. The cinematography-continuity and player-experience audits are mandatory from Stage 3, and the player-experience audit must cover acknowledgement latency and the held-level law on mining and pickup.",
+    "defectDispositions": [
+      {
+        "id": "S2-D1",
+        "owner": "human",
+        "severity": "high",
+        "contractChangeRequired": true,
+        "boundedAction": "draft-v4 evidence.acceptanceCriteria[5] and [6], score.mixIntent and score.cues[0..9].mixIntent replace the absolute 'no makeup gain exists anywhere' rule with the HD-08(1) wording: no dynamic and no hidden gain, every DynamicsCompressor's baked makeup cancelled by a named measured trim, and exactly one static named tested reference gain TAIL_REFERENCE_GAIN_DB. Per the judge's D1 ruling the contract names it as +1.99 dB against a makeup-free chain and as level-preserving, NOT as 'unity-in-effect', which the judge called a fiction. Owner re-level decision is the only way to change it. Recorded as a taste exception under delegation.",
+        "directionRef": "human-decision.json#HD-08",
+        "status": "amended-in-draft-v4-pending-signature"
+      },
+      {
+        "id": "S2-D2",
+        "owner": "human",
+        "severity": "high",
+        "contractChangeRequired": true,
+        "boundedAction": "Deferred, not waived and not retargeted (HD-08(2)). draft-v4 records -17.90 LU as the measured Stage 2 value with the tail's whole available authority at 0.21 LU, publishes the named composedSpread field (2.5 LU measured against the 6.5 LU the window requires) at Stage 2, and re-asserts the -14 +/-1 LU window at Stage 5 (acceptanceCriteria[16]) as a BLOOM-only arrangement rail proved while bed-alone integrated stays -20.5 +/-1 and true peak stays at or below -1 dBTP on the same four beds, honouring the chapter's bloomBudget 0 after a refusal, and closed by owner A/B. BLOOM_ST_LUFS is not retargeted.",
+        "directionRef": "human-decision.json#HD-08",
+        "status": "deferred-to-stage-5-in-draft-v4-pending-signature"
+      },
+      {
+        "id": "S2-D3",
+        "owner": "cinematography",
+        "severity": "high",
+        "contractChangeRequired": true,
+        "boundedAction": "C6 amended by its owning director in c6-amendment.md and folded verbatim in substance into draft-v4: the compared quantity becomes LATENCY_COMP_MUSIC_VS_SFX_S (14.875 ms, 0.89 frame) rather than LATENCY_COMP_MUSIC_PATH_S; image members target device plus music-path latency; SFX forward-scheduling inside bundles becomes binding at all five SFX-bearing bundle members (the census correction from three to five) with no global SFX delay; the capture overlay carries both onset lines and the sample-rate key. Landed in syncAnchors[0..9].cinematography[0].visualIntent, evidence.captures[1].acceptanceCriterion and acceptanceCriteria[8]. The cinematography signoff file itself is untouched and must be re-signed.",
+        "directionRef": "c6-amendment.md",
+        "status": "amended-in-draft-v4-pending-signature"
+      },
+      {
+        "id": "S2-D4",
+        "owner": "integration",
+        "severity": "medium",
+        "contractChangeRequired": true,
+        "boundedAction": "Ruled for cinematography (dissent D-2, preserved verbatim in dissent-register.md and not edited): a sample-count derivation is not more correct, because the three DynamicsCompressor pre-delays are specified in seconds. Binding form in draft-v4 acceptanceCriteria[5]: three constants published per context sample rate, each entry measured at its own rate in an OfflineAudioContext of that rate, none derived from another rate by seconds or by samples, re-measured by audio:check within LATENCY_COMP_TOLERANCE_S 0.5 ms, selected at arming by ctx.sampleRate. Code follow-up: the per-rate table plus a 48 kHz audio:check render. D-2 stands until that render.",
+        "directionRef": "dissent-register.md#D-2",
+        "status": "amended-in-draft-v4-pending-signature-code-open"
+      },
+      {
+        "id": "S2-D5",
+        "owner": "human",
+        "severity": "medium",
+        "contractChangeRequired": true,
+        "boundedAction": "HD-08(3): the -18 +/-1.5 LU summed-bus integrated target is recorded at Stage 2 (measured -20.4 to -21.7) and re-asserted at Stage 4, where draft-v4 acceptanceCriteria[11] now requires each stress script to declare its SFX density - triggers per minute per recipe family and nominal linear amplitude - so the term cannot be met by making effects loud instead of by giving them their designed energy.",
+        "directionRef": "human-decision.json#HD-08",
+        "status": "deferred-to-stage-4-in-draft-v4-pending-signature"
+      },
+      {
+        "id": "S2-D6",
+        "owner": "score",
+        "severity": "medium",
+        "contractChangeRequired": true,
+        "boundedAction": "Routed to Stage 3 with an explicit acceptance term rather than a silent deferral: draft-v4 acceptanceCriteria[7] now requires scoreEngine.applyRails to be dirty-checked and steady-state AudioParam writes under 60 per second, proved by the param-write log split by method. Stage 2 records 2276 -> 590.4 per second. The README arithmetic is corrected separately (applyRails contributes about 468 of the 528 setTargetAtTime writes, not 528), and performance.measurementPlan drops the false 'roughly 1140'.",
+        "status": "routed-to-stage-3-in-draft-v4-pending-signature"
+      },
+      {
+        "id": "S2-D7",
+        "owner": "integration",
+        "severity": "low",
+        "contractChangeRequired": false,
+        "boundedAction": "No amendment. The judge confirmed the '(id, frame)' phrase lives in score-treatment.md section 2 and evidence/stage-2/README.md only, never in the contract, so this is a documentation repair: state 'deduped per flush within a frame, held-level across frames'. HD-09 defers keying queuedThisFrame to the frame clock, recording that it is a two-line change honouring the signed intent if Stage 3 or Stage 4 find a same-frame double.",
+        "directionRef": "human-decision.json#HD-09",
+        "status": "open-documentation"
+      },
+      {
+        "id": "S2-D8",
+        "owner": "score",
+        "severity": "low",
+        "contractChangeRequired": true,
+        "boundedAction": "draft-v4 score.mixIntent states the shipped tail order - glue, safety, SFX join, limiter, 4x ceiling, unity route - and deletes 'the BLOOM window is opened by that retune and by nothing upstream of it'. Per HD-09 the limiter is described as a bounded ceiling with measured margin at least 0.5 dB at +12 dBFS rather than as a true-peak guarantee, with the CEILING_DBTP -1.5 escape hatch kept documented and no AudioWorklet warranted.",
+        "directionRef": "human-decision.json#HD-09",
+        "status": "amended-in-draft-v4-pending-signature"
+      },
+      {
+        "id": "S2-D9",
+        "owner": "score",
+        "severity": "low",
+        "contractChangeRequired": true,
+        "boundedAction": "draft-v4 score.mixIntent labels the voice bus and its -9 dB duck row, the lifecycleCue category, the station snapshot state and roomPresetId as inert this run and not credited by any audition, so no untested depth is claimed at the Stage 2 audition.",
+        "status": "amended-in-draft-v4-pending-signature"
+      },
+      {
+        "id": "S2-D10",
+        "owner": "score",
+        "severity": "low",
+        "contractChangeRequired": false,
+        "boundedAction": "Accept-and-document or re-resolve the -3 dB story-lead cap on story-lead onset. Score director, Stage 3. No draft-v4 text.",
+        "status": "open"
+      },
+      {
+        "id": "S2-D11",
+        "owner": "integration",
+        "severity": "low",
+        "contractChangeRequired": false,
+        "boundedAction": "Single-authority comment on the two writers to the SFX submerge cutoff (setMixSnapshot and setSfxSubmerged). No live conflict today because only the offline rim uses the second. No draft-v4 text.",
+        "status": "open"
+      },
+      {
+        "id": "S2-J1",
+        "owner": "score",
+        "severity": "low",
+        "contractChangeRequired": false,
+        "boundedAction": "Judged a STAGE 0 TOOLING DEFECT, not a contract term and not a mix defect: forty same-seed chips at STRESS_MINING_BURST_AT_S 20 sum coherently in the offline rim while live play collapses them to one. The per-chip onset spread (about 0.013 s) is a Stage 4 recipe question for Score. No draft-v4 text.",
+        "status": "open-stage-0-tooling"
+      },
+      {
+        "id": "S2-J2",
+        "owner": "integration",
+        "severity": "low",
+        "contractChangeRequired": false,
+        "boundedAction": "Judged a STAGE 0 TOOLING DEFECT of the stress script, not a runtime defect and not a contract term: the music path is not edge-triggered (setMusicSubmerged slews 0.42 and 0.65 s) and the SFX muffle is edge-snapped by design (SFX_SUBMERGE_EDGE 0.5, 80 ms); the '6.3 kHz brick wall' is where the 12 dB/oct roll-off from about 930 Hz crosses the spectrogram floor. Repair is a ramped dive in the script (excerpts.ts:1515 steps submergence 0 to 0.85 at 8 s and back at 54 s where live play is continuous). Score confirms the dive gesture at audition. No draft-v4 text.",
+        "status": "open-stage-0-tooling"
+      },
+      {
+        "id": "S2-J3",
+        "owner": "integration",
+        "severity": "low",
+        "contractChangeRequired": true,
+        "boundedAction": "Judged a 5 ms-bin artefact: the raw full depth lies in (45, 50] ms, so the true margin is 0.3 to 5.3 ms, and the 40 ms term equals the row's own attack constant, so it is met and marginal by construction. Subtracting the shared 10.34 ms join latency is legitimate. draft-v4 acceptanceCriteria[5] restates the term as '-6 dB on music inside the row's attack time from the audible impact', measured onset-adjusted by subtracting LATENCY_COMP_SFX_PATH_S and with a bin tolerance of at least 10 ms. Code follow-up: 1 ms duck traces.",
+        "status": "amended-in-draft-v4-pending-signature-code-open"
+      },
+      {
+        "id": "S2-J4",
+        "owner": "integration",
+        "severity": "medium",
+        "contractChangeRequired": true,
+        "boundedAction": "draft-v4 acceptanceCriteria[5] replaces 'returns an unchanged result' with a field-by-field comparison of the probe's NAMED fields: suppressed-per-3s 5 to 0, the loop guard never engaging, and activeMineSeconds and cycles both 0 before and after. The probe's own PASS criterion is unmet on both sides because the sandbox-no-op instrument cannot engage mining - recorded in the contract as a pre-existing Stage 0 tooling defect owned by Integration and closed before Stage 4, not as a term of Stage 2.",
+        "status": "amended-in-draft-v4-pending-signature-probe-open"
+      },
+      {
+        "id": "S2-J5",
+        "owner": "integration",
+        "severity": "low",
+        "contractChangeRequired": false,
+        "boundedAction": "Add an oxygenCritical duck trace: the blind listener heard a -3.1 dB music dip over about 10 s in stress-oxygen-dive that no measurement covers. Code follow-up, no draft-v4 text.",
+        "status": "open"
+      },
+      {
+        "id": "S2-J6",
+        "owner": "integration",
+        "severity": "low",
+        "contractChangeRequired": false,
+        "boundedAction": "human-decision.json still binds contractVersion 'unfrozen' and contractSha256 null with acceptedExceptions empty although HD-08 and HD-09 are recorded. The judge's amendment item 9 asks for the sha bound, HD-08(1) placed in acceptedExceptions and HD-09 recorded. NOT PERFORMED IN THIS AMENDMENT: the orchestrator's instruction enumerated the files to change and human-decision.json was named only as a source of amendment text. It is carried as an open Integration item for the signature loop, where it must bind 672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d.",
+        "status": "open"
+      },
+      {
+        "id": "S2-J7",
+        "owner": "integration",
+        "severity": "medium",
+        "contractChangeRequired": false,
+        "boundedAction": "Lean-tier and cost probe through the new tail. Code follow-up on the judge's bounded code list, no draft-v4 text.",
+        "status": "open"
+      },
+      {
+        "id": "S2-J8",
+        "owner": "integration",
+        "severity": "low",
+        "contractChangeRequired": false,
+        "boundedAction": "Stage 3's parallel start is accepted in effect and not in principle: no file under main/src changed after 07:05, so nothing was contaminated. The conditions are carried in stage3GoCondition above and are binding until draft-v4 is tri-signed.",
+        "status": "accepted-with-conditions"
+      }
+    ],
+    "decidedBy": "integration-engineer, run 2026-09-04-audio-10x, compiling the Stage 2 cohesion judgement (cohesion-judge-stage-2.md section 7), the score auditor's Stage 2 requested contract text, the cinematography director's c6-amendment.md and human-decision.json HD-08/HD-09. No director approved their own implementation and no creative lane was authored here.",
+    "decidedAt": "2026-09-05T08:05:00-04:00"
+  }
+}

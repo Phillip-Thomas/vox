@@ -1,0 +1,558 @@
+{
+  "schema": "paravoxia.evidenceRegistry.bundle.v1",
+  "generatedAt": "2026-09-05T13:41:26.315Z",
+  "entries": [
+    {
+      "ref": "percept:bundle",
+      "path": "evidence/bundle/bundle.json",
+      "sha256": "9382eb8c9b3124e5d855b8647538e65c7b451a89d72444cf7b08438661f8da65",
+      "kind": "artifact",
+      "description": "percept capture-bundle-v1 manifest (hash-bound frames, bursts, sheet, digest)",
+      "bytes": 23809
+    },
+    {
+      "ref": "capture:contact-sheet",
+      "path": "evidence/bundle/sheet.png",
+      "sha256": "35e7319b6ce739301cd320ffeaf6b435c4684fca3d1e67643454898d3d58bd3f",
+      "kind": "frame",
+      "description": "chronological contact sheet; red numbers are frame indices",
+      "bytes": 1228593
+    },
+    {
+      "ref": "percept:digest",
+      "path": "evidence/bundle/digest.md",
+      "sha256": "efd1147c40dd4c672073e312cb8d90a47fc0eef4d4d88c71476d0892755a2071",
+      "kind": "document",
+      "description": "temporal digest: beat/objective/caption/anchor timeline and burst scalars",
+      "bytes": 3980
+    },
+    {
+      "ref": "capture:frames-f0000-t6-90s-opening-2-0s-png",
+      "path": "evidence/bundle/frames/f0000_t6.90s_opening-2.0s.png",
+      "sha256": "4c1e03703e03780a15749e26ec11e78e44165d0613cbdba30b07ec94db7a4c3f",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 0 (opening-2.0s, ch9-settle)",
+      "bytes": 1110358
+    },
+    {
+      "ref": "capture:frames-f0001-t7-40s-strip-png",
+      "path": "evidence/bundle/frames/f0001_t7.40s_strip.png",
+      "sha256": "5f8803066a2157962b582bd6fafb4fa6b3e1d69cfec90f80a4fe7f89e03fb025",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 1 (temporal, ch9-settle)",
+      "bytes": 1143927
+    },
+    {
+      "ref": "capture:frames-f0002-t8-60s-milestone-story-tidegarden-habitat-core-online-png",
+      "path": "evidence/bundle/frames/f0002_t8.60s_milestone:story:tidegarden:habitat-core-online.png",
+      "sha256": "7eefecbafd934977395fbd96d0f10cea27ddf28344f8d73971f4fc73535f53ff",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 2 (milestone:story:tidegarden:habitat-core-online, ch9-settle)",
+      "bytes": 278501
+    },
+    {
+      "ref": "capture:frames-f0003-t9-10s-milestone-story-tidegarden-shelter-certified-png",
+      "path": "evidence/bundle/frames/f0003_t9.10s_milestone:story:tidegarden:shelter-certified.png",
+      "sha256": "eb259dbfda785880be8ec4cd35506b5032339fbc36fcedb61dfcfa404a57d0af",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 3 (milestone:story:tidegarden:shelter-certified, ch9-settle)",
+      "bytes": 342833
+    },
+    {
+      "ref": "capture:frames-f0004-t9-50s-caption-first-png",
+      "path": "evidence/bundle/frames/f0004_t9.50s_caption-first.png",
+      "sha256": "62f52d403fb64b287735ec5e1d9573ebeea038d1a5924986f6f6182dda27e61e",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 4 (caption-first, ch9-settle)",
+      "bytes": 346882
+    },
+    {
+      "ref": "capture:frames-f0005-t9-90s-objective-change-png",
+      "path": "evidence/bundle/frames/f0005_t9.90s_objective-change.png",
+      "sha256": "72d56b8667f9aec219ad5d4e410c5769be13436e057d818cb3840326e1dfd84b",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 5 (objective-change, ch9-settle)",
+      "bytes": 348271
+    },
+    {
+      "ref": "capture:frames-f0006-t11-00s-milestone-story-ch9-settled-png",
+      "path": "evidence/bundle/frames/f0006_t11.00s_milestone:story:ch9:settled.png",
+      "sha256": "997a41fd3b15921449574465174943644d9cfb7ac2d8b483af4682f0a1fbebaf",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 6 (milestone:story:ch9:settled, ch9-hearth)",
+      "bytes": 350248
+    },
+    {
+      "ref": "capture:frames-f0007-t11-50s-strip-png",
+      "path": "evidence/bundle/frames/f0007_t11.50s_strip.png",
+      "sha256": "a87bac8c7cb7a4e4734f8752b0c67fa1064bdf34d893b0c00533f348d80fe16a",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 7 (temporal, ch9-hearth)",
+      "bytes": 349264
+    },
+    {
+      "ref": "capture:frames-f0008-t14-00s-burst-entry-png",
+      "path": "evidence/bundle/frames/f0008_t14.00s_burst-entry.png",
+      "sha256": "045607c1a6dc9db51afe1382cf350a0bd20e39f0dd5b2ae767e9fcbe975b6b8d",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 8 (burst-entry, ch9-hearth)",
+      "bytes": 348236
+    },
+    {
+      "ref": "capture:frames-f0009-t21-50s-opening-2-0s-png",
+      "path": "evidence/bundle/frames/f0009_t21.50s_opening-2.0s.png",
+      "sha256": "be4349cd38dd36ac4ea0565942b85c0e6aa881700f5e4dc2cd817290048f1299",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 9 (opening-2.0s, ch9-hearth)",
+      "bytes": 798560
+    },
+    {
+      "ref": "capture:frames-f0010-t22-00s-strip-png",
+      "path": "evidence/bundle/frames/f0010_t22.00s_strip.png",
+      "sha256": "a9577d0c68c0d20006e78f2c3c4fe6d8d1f23b1187e08d0e5d13cba93dfa5ebb",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 10 (temporal, ch9-hearth)",
+      "bytes": 793657
+    },
+    {
+      "ref": "capture:frames-f0011-t26-10s-strip-png",
+      "path": "evidence/bundle/frames/f0011_t26.10s_strip.png",
+      "sha256": "15bf6183bce5e6d369cd3a8a1ab680e46c724c1316dd5c1ce3fe10a58ab2a1c6",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 11 (temporal, ch9-hearth)",
+      "bytes": 819820
+    },
+    {
+      "ref": "capture:frames-f0012-t30-10s-strip-png",
+      "path": "evidence/bundle/frames/f0012_t30.10s_strip.png",
+      "sha256": "da6876671ed5f25485bed9f866889536c91e4b4d225dd61d957e001e1de772ff",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 12 (temporal, ch9-hearth)",
+      "bytes": 840835
+    },
+    {
+      "ref": "capture:frames-f0013-t34-20s-strip-png",
+      "path": "evidence/bundle/frames/f0013_t34.20s_strip.png",
+      "sha256": "8dbc03b84ea156a40485fff3eda37e6f3e39d39e169d76d7744ed222147becc2",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 13 (temporal, ch9-hearth)",
+      "bytes": 854919
+    },
+    {
+      "ref": "capture:frames-f0014-t38-30s-strip-png",
+      "path": "evidence/bundle/frames/f0014_t38.30s_strip.png",
+      "sha256": "7214638e4e0b1e5d816fcc326de610dfe829e37ff2d33176aabf0ecf5c7316bc",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 14 (temporal, ch9-hearth)",
+      "bytes": 823153
+    },
+    {
+      "ref": "capture:frames-f0015-t42-30s-strip-png",
+      "path": "evidence/bundle/frames/f0015_t42.30s_strip.png",
+      "sha256": "b045a87ce1be5ea1f615ca15f2748d666d9eb2b6e540ce23a9d3ff78bb130d36",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 15 (temporal, ch9-hearth)",
+      "bytes": 814464
+    },
+    {
+      "ref": "capture:frames-f0016-t46-30s-strip-png",
+      "path": "evidence/bundle/frames/f0016_t46.30s_strip.png",
+      "sha256": "8c5dcae35d8e95c5fbd08adaf58a0315e3bb52075b9174801d8c9a5113b591c3",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 16 (temporal, ch9-hearth)",
+      "bytes": 792011
+    },
+    {
+      "ref": "capture:frames-f0017-t50-30s-strip-png",
+      "path": "evidence/bundle/frames/f0017_t50.30s_strip.png",
+      "sha256": "dcfe74f0017eec5ddccabb52e4b91ebb3ae4891f59bd9aacf0abcd5e6f4a9e3f",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 17 (temporal, ch9-hearth)",
+      "bytes": 782102
+    },
+    {
+      "ref": "capture:frames-f0018-t54-30s-strip-png",
+      "path": "evidence/bundle/frames/f0018_t54.30s_strip.png",
+      "sha256": "7779d1ef7405873ca7c0f5fa808cc03c29a90f6a4424365bec23d73cc0eb7ce4",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 18 (temporal, ch9-hearth)",
+      "bytes": 842671
+    },
+    {
+      "ref": "capture:frames-f0019-t58-30s-strip-png",
+      "path": "evidence/bundle/frames/f0019_t58.30s_strip.png",
+      "sha256": "d829a887399ef3b4c36e5d73afa79a638191475c1c1b29922a87347b36b137f9",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 19 (temporal, ch9-hearth)",
+      "bytes": 814540
+    },
+    {
+      "ref": "capture:frames-f0020-t62-30s-strip-png",
+      "path": "evidence/bundle/frames/f0020_t62.30s_strip.png",
+      "sha256": "dab5b88952860fd9fb030250677667bbeff44dfa5d8794dacb79089c1ce8797d",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 20 (temporal, ch9-hearth)",
+      "bytes": 824612
+    },
+    {
+      "ref": "capture:frames-f0021-t66-30s-strip-png",
+      "path": "evidence/bundle/frames/f0021_t66.30s_strip.png",
+      "sha256": "a9cafe6d979c0986db8cd8f93b532eadb9e622f5fcfb5d3ac7b1d62563b08017",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 21 (temporal, ch9-hearth)",
+      "bytes": 807557
+    },
+    {
+      "ref": "capture:frames-f0022-t70-30s-strip-png",
+      "path": "evidence/bundle/frames/f0022_t70.30s_strip.png",
+      "sha256": "049627e02b8a087eb8c5dbce4b456369527dc344af9b77905cad13591e5bdbb0",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 22 (temporal, ch9-hearth)",
+      "bytes": 775656
+    },
+    {
+      "ref": "capture:frames-f0023-t74-30s-strip-png",
+      "path": "evidence/bundle/frames/f0023_t74.30s_strip.png",
+      "sha256": "b7258000a985817ce32cce22f1ef100ab4940bfe667796e948df66924a5bb18c",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 23 (temporal, ch9-hearth)",
+      "bytes": 782016
+    },
+    {
+      "ref": "capture:frames-f0024-t78-30s-strip-png",
+      "path": "evidence/bundle/frames/f0024_t78.30s_strip.png",
+      "sha256": "f2fdecc40e870686dd61c3c92de1b9ba082632be33f1e04e9beaed0f3b58d6c0",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 24 (temporal, ch9-hearth)",
+      "bytes": 772842
+    },
+    {
+      "ref": "capture:frames-f0025-t82-30s-strip-png",
+      "path": "evidence/bundle/frames/f0025_t82.30s_strip.png",
+      "sha256": "5ecd08afed188998fe956aa5017fda393ce5f3f6a7ab099635144fb63cb66503",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 25 (temporal, ch9-hearth)",
+      "bytes": 778336
+    },
+    {
+      "ref": "capture:frames-f0026-t86-30s-strip-png",
+      "path": "evidence/bundle/frames/f0026_t86.30s_strip.png",
+      "sha256": "bfe528e4f8719f7289be450d51f0e118398bac44ada695f510cf5a97791f00ef",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 26 (temporal, ch9-hearth)",
+      "bytes": 805265
+    },
+    {
+      "ref": "capture:frames-f0027-t90-40s-strip-png",
+      "path": "evidence/bundle/frames/f0027_t90.40s_strip.png",
+      "sha256": "146deb7e263fe8b9bdbb7a0c551b5bf9128e60761f06b1b92f72d2460e2c50bd",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 27 (temporal, ch9-hearth)",
+      "bytes": 787970
+    },
+    {
+      "ref": "capture:frames-f0028-t94-40s-strip-png",
+      "path": "evidence/bundle/frames/f0028_t94.40s_strip.png",
+      "sha256": "19ebd17c3376e4b3a3987e6fe8c7fa881cca73279f06b78cff135a96065da5c7",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 28 (temporal, ch9-hearth)",
+      "bytes": 788672
+    },
+    {
+      "ref": "capture:frames-f0029-t98-50s-strip-png",
+      "path": "evidence/bundle/frames/f0029_t98.50s_strip.png",
+      "sha256": "4cd49eaf7a50d90fbe363d6e65463aa17a3696899b5c9bcf8039e9f62d50291a",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 29 (temporal, ch9-hearth)",
+      "bytes": 791340
+    },
+    {
+      "ref": "capture:frames-f0030-t102-50s-strip-png",
+      "path": "evidence/bundle/frames/f0030_t102.50s_strip.png",
+      "sha256": "aab36d4030f974a5ae331afa495b2b2210bbf92ac75694489e9f0725ce8773cd",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 30 (temporal, ch9-hearth)",
+      "bytes": 817934
+    },
+    {
+      "ref": "capture:frames-f0031-t106-50s-strip-png",
+      "path": "evidence/bundle/frames/f0031_t106.50s_strip.png",
+      "sha256": "09cc70e72083741a046341c7ecde260990118ccc8a551fbd3a0ffaed574be4f7",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 31 (temporal, ch9-hearth)",
+      "bytes": 814305
+    },
+    {
+      "ref": "capture:frames-f0032-t110-50s-strip-png",
+      "path": "evidence/bundle/frames/f0032_t110.50s_strip.png",
+      "sha256": "d27e65fac22a75a1caa901dd0ffcf4473b4c34f5920d2c2b2a0ba6221f913b64",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 32 (temporal, ch9-hearth)",
+      "bytes": 780901
+    },
+    {
+      "ref": "capture:hud-f0000-t6-90s-opening-2-0s-png",
+      "path": "evidence/bundle/hud/f0000_t6.90s_opening-2.0s.png",
+      "sha256": "d9b9e6a978119d5115e372c4805a2ed27ca55006f4adf9c3a32e28dce29c54eb",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 0",
+      "bytes": 1173356
+    },
+    {
+      "ref": "capture:hud-f0001-t7-40s-strip-png",
+      "path": "evidence/bundle/hud/f0001_t7.40s_strip.png",
+      "sha256": "1513c1788d48d3c4ceb71779ea48148394bd839d328789ba4d155dfc278ced51",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 1",
+      "bytes": 1179902
+    },
+    {
+      "ref": "capture:hud-f0002-t8-60s-milestone-story-tidegarden-habitat-core-online-png",
+      "path": "evidence/bundle/hud/f0002_t8.60s_milestone:story:tidegarden:habitat-core-online.png",
+      "sha256": "50850e6a0a30319cb02d0e66a6dff0d8f8c1afbef2dfd0301240232b87d11ab5",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 2",
+      "bytes": 350324
+    },
+    {
+      "ref": "capture:hud-f0003-t9-10s-milestone-story-tidegarden-shelter-certified-png",
+      "path": "evidence/bundle/hud/f0003_t9.10s_milestone:story:tidegarden:shelter-certified.png",
+      "sha256": "6fabfd52c95e0a07cb3dfb1836dd34df3f3aeaaae81e33626d7b8cb7162391ae",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 3",
+      "bytes": 393322
+    },
+    {
+      "ref": "capture:hud-f0004-t9-50s-caption-first-png",
+      "path": "evidence/bundle/hud/f0004_t9.50s_caption-first.png",
+      "sha256": "5fd603922f45f9fda13d676b8ec0d58d854d7c6de2f722cdd94be6f842b6869d",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 4",
+      "bytes": 412978
+    },
+    {
+      "ref": "capture:hud-f0005-t9-90s-objective-change-png",
+      "path": "evidence/bundle/hud/f0005_t9.90s_objective-change.png",
+      "sha256": "44b5a44eef87e2a5cc0caa28f3bd46b2b8161b4a3686e3f86e5bc17d901abf9b",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 5",
+      "bytes": 414103
+    },
+    {
+      "ref": "capture:hud-f0006-t11-00s-milestone-story-ch9-settled-png",
+      "path": "evidence/bundle/hud/f0006_t11.00s_milestone:story:ch9:settled.png",
+      "sha256": "de2207420abdf51a9635649b78821bb7e7aedd3d7dd8a1113c2490e6e2fb9482",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 6",
+      "bytes": 417983
+    },
+    {
+      "ref": "capture:hud-f0007-t11-50s-strip-png",
+      "path": "evidence/bundle/hud/f0007_t11.50s_strip.png",
+      "sha256": "616af426b9e6dd0e7ae9a510fdc1fe68d382d5883b0c057d2f0d6ab546c27cef",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 7",
+      "bytes": 417820
+    },
+    {
+      "ref": "capture:hud-f0008-t14-00s-burst-entry-png",
+      "path": "evidence/bundle/hud/f0008_t14.00s_burst-entry.png",
+      "sha256": "b53c40b18226386ab9a8bfd2b0e980a80b5d59c0e84d020224b43755195672fe",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 8",
+      "bytes": 405094
+    },
+    {
+      "ref": "capture:hud-f0009-t21-50s-opening-2-0s-png",
+      "path": "evidence/bundle/hud/f0009_t21.50s_opening-2.0s.png",
+      "sha256": "94abe6874bca2d5b3452d3a4c7937bf10303bfbaba56d184b92634de427bd4db",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 9",
+      "bytes": 850523
+    },
+    {
+      "ref": "capture:hud-f0010-t22-00s-strip-png",
+      "path": "evidence/bundle/hud/f0010_t22.00s_strip.png",
+      "sha256": "06b55804bb8c41a34533843e7ae0c579d029999aa9309c9d8bfa8ef225c1afa6",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 10",
+      "bytes": 834887
+    },
+    {
+      "ref": "capture:hud-f0011-t26-10s-strip-png",
+      "path": "evidence/bundle/hud/f0011_t26.10s_strip.png",
+      "sha256": "6db9155471045260acbd075c82dc81ca928362c068d12ad1cf5fc3e4de3dd5dc",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 11",
+      "bytes": 856468
+    },
+    {
+      "ref": "capture:hud-f0012-t30-10s-strip-png",
+      "path": "evidence/bundle/hud/f0012_t30.10s_strip.png",
+      "sha256": "7c1096e69ac2339bf093d630f461fb2325033cee61139f924d3b6323f2e72cbf",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 12",
+      "bytes": 876293
+    },
+    {
+      "ref": "capture:hud-f0013-t34-20s-strip-png",
+      "path": "evidence/bundle/hud/f0013_t34.20s_strip.png",
+      "sha256": "d3e3319277dac22a0fcb578c184bcea20691e51bcb5f05861c839ef1da38f37a",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 13",
+      "bytes": 885769
+    },
+    {
+      "ref": "capture:hud-f0014-t38-30s-strip-png",
+      "path": "evidence/bundle/hud/f0014_t38.30s_strip.png",
+      "sha256": "f4d4237f71c402d9c2fb8692b68d40f479332ff0de6a842cea667125ca3b92af",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 14",
+      "bytes": 865542
+    },
+    {
+      "ref": "capture:hud-f0015-t42-30s-strip-png",
+      "path": "evidence/bundle/hud/f0015_t42.30s_strip.png",
+      "sha256": "1f3d22cdc396f48c37411a3d9b8db8066200624275e897d006e944d1554e1fe7",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 15",
+      "bytes": 856617
+    },
+    {
+      "ref": "capture:hud-f0016-t46-30s-strip-png",
+      "path": "evidence/bundle/hud/f0016_t46.30s_strip.png",
+      "sha256": "1dc8729df6bb2ec9a6c0de32fb3868068f864fccd91b2a140a2d565b692293b7",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 16",
+      "bytes": 833461
+    },
+    {
+      "ref": "capture:hud-f0017-t50-30s-strip-png",
+      "path": "evidence/bundle/hud/f0017_t50.30s_strip.png",
+      "sha256": "2ddd8efde2903d1c71d95b83fc661b51b08240ed542e5f10b00e8a976f448914",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 17",
+      "bytes": 833043
+    },
+    {
+      "ref": "capture:hud-f0018-t54-30s-strip-png",
+      "path": "evidence/bundle/hud/f0018_t54.30s_strip.png",
+      "sha256": "ca2496921221c03957d52c64129c7582c414988de2499e61ced88778b0ef71a8",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 18",
+      "bytes": 880470
+    },
+    {
+      "ref": "capture:hud-f0019-t58-30s-strip-png",
+      "path": "evidence/bundle/hud/f0019_t58.30s_strip.png",
+      "sha256": "905a6bee68c3988d4387f28672900792541f96a7c46e9ecee9f7850d99926974",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 19",
+      "bytes": 861893
+    },
+    {
+      "ref": "capture:hud-f0020-t62-30s-strip-png",
+      "path": "evidence/bundle/hud/f0020_t62.30s_strip.png",
+      "sha256": "ad32aeeaf627befdee4ba631b4254a45c853790f2c38f9a5de75a388901d6af1",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 20",
+      "bytes": 868107
+    },
+    {
+      "ref": "capture:hud-f0021-t66-30s-strip-png",
+      "path": "evidence/bundle/hud/f0021_t66.30s_strip.png",
+      "sha256": "7b8d76392a12f305d64b9dd2b6c1b2464219fbf72c172bbc0ae3600e34de4a11",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 21",
+      "bytes": 865803
+    },
+    {
+      "ref": "capture:hud-f0022-t70-30s-strip-png",
+      "path": "evidence/bundle/hud/f0022_t70.30s_strip.png",
+      "sha256": "08f996b02b19aec1c43e94ee9f7e13ad2769cb2c99089c4d9c6626f1b3accf6c",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 22",
+      "bytes": 822994
+    },
+    {
+      "ref": "capture:hud-f0023-t74-30s-strip-png",
+      "path": "evidence/bundle/hud/f0023_t74.30s_strip.png",
+      "sha256": "64b95fde43b0685d586a9d6d9f58395f520e5df7484891b7d9b50e21febf8ac4",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 23",
+      "bytes": 833861
+    },
+    {
+      "ref": "capture:hud-f0024-t78-30s-strip-png",
+      "path": "evidence/bundle/hud/f0024_t78.30s_strip.png",
+      "sha256": "530be92dd25b42c1680191e092427d2b95e65c37072944564c9dfd8fcb684209",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 24",
+      "bytes": 826579
+    },
+    {
+      "ref": "capture:hud-f0025-t82-30s-strip-png",
+      "path": "evidence/bundle/hud/f0025_t82.30s_strip.png",
+      "sha256": "8409efa39a6f775069ea0ea9c3fdf6adc1be3d2127d27e74a1c69deb7cc12ac7",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 25",
+      "bytes": 851946
+    },
+    {
+      "ref": "capture:hud-f0026-t86-30s-strip-png",
+      "path": "evidence/bundle/hud/f0026_t86.30s_strip.png",
+      "sha256": "d7e2de9f7e30e6cfc0b6c801c3b505309d58bf76aceaf219211ba2c371bb5a55",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 26",
+      "bytes": 851426
+    },
+    {
+      "ref": "capture:hud-f0027-t90-40s-strip-png",
+      "path": "evidence/bundle/hud/f0027_t90.40s_strip.png",
+      "sha256": "56a010e16010b016f5d708d80140e7759c947976d9bd4cf063e2346bbb9bef35",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 27",
+      "bytes": 834146
+    },
+    {
+      "ref": "capture:hud-f0028-t94-40s-strip-png",
+      "path": "evidence/bundle/hud/f0028_t94.40s_strip.png",
+      "sha256": "114df9825cd888cc754d62b1258d8f2e2dd13f1501bfd0d99468882b50e284e2",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 28",
+      "bytes": 830684
+    },
+    {
+      "ref": "capture:hud-f0029-t98-50s-strip-png",
+      "path": "evidence/bundle/hud/f0029_t98.50s_strip.png",
+      "sha256": "c2d04dc8ddcce464880f37d1fb0ec6df0f4c01e48e7e86cbf785fc25b132632f",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 29",
+      "bytes": 834112
+    },
+    {
+      "ref": "capture:hud-f0030-t102-50s-strip-png",
+      "path": "evidence/bundle/hud/f0030_t102.50s_strip.png",
+      "sha256": "232e4ec3978d605681bb8ef3685b43a4c4f42e547e2a7f713fa81e3b4f851596",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 30",
+      "bytes": 856984
+    },
+    {
+      "ref": "capture:hud-f0031-t106-50s-strip-png",
+      "path": "evidence/bundle/hud/f0031_t106.50s_strip.png",
+      "sha256": "50b221710a701c779a5f465be4c7b68c465ddd7bbc99aafd96c81f2a36ca16c4",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 31",
+      "bytes": 854993
+    },
+    {
+      "ref": "capture:hud-f0032-t110-50s-strip-png",
+      "path": "evidence/bundle/hud/f0032_t110.50s_strip.png",
+      "sha256": "daab66d3e0bc286175120ddd6ea383af87ce63a25f8db62e009975afc3690b59",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 32",
+      "bytes": 824459
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema": "paravoxia.producer.evidenceReview.v1",
+  "at": "2026-09-06T19:58:23.076851+00:00",
+  "reportRef": "common-exact-input-runtime-report.json",
+  "reportSha256": "d8f966e30456b822138651c73f14a785138419cc885d6239a3ad392a1c68eb32",
+  "isAcceptance": false,
+  "isMovementProof": false,
+  "observed": "Actual CDP resolved exact callee7839:193729 and caller7839:219885, both without relocation on exactbundle. No callee/caller records because COMMON was never entered.",
+  "qualifications": [
+    "No actual ordinary movement, E/H prerequisite, positive overshoot, guard/credit values or accounting verdict. Task remains incomplete.",
+    "Headless launch violated commissioned headed route and omitted explicit software-adapter pin/hardware assertion. Browser alreadyclosed19:55:14, no matching live node. Never reuse launch recipe; use shipped headed helper and currentmachine rule.",
+    "Malformed contention command is not lock evidence. ExclusiveFD9 acquisition itself succeeded; next run must use existing working verifyHeavyLock proof.",
+    "Agent guessed13of20minutes after about3actualminutes, then stopped at6m40s. Root actual deadline direction in verifier-control was not consumed. No elapsed-time or approval blocker.",
+    "Static caller bindings are known, live scope values remain unproved. No record cannot identify which physicalguard failed."
+  ],
+  "next": "Resume actual headed physical discriminator using retained CDPbinding and known working SHORTmanual prerequisite; no new source/budget loop."
+}

@@ -1,0 +1,622 @@
+{
+  "schema": "paravoxia.manualStartupRepairProof.v1",
+  "passed": true,
+  "diagnostic": true,
+  "earnedContinuity": false,
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "errors": [],
+  "trace": [
+    {
+      "at": 1788828587988,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828588279,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828588533,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828588785,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828589038,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828589296,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828589549,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828589802,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828590054,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828590309,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828590565,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828590817,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828591069,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828591326,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828591590,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828593753,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828594312,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828594565,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828594817,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828595069,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "pointerLocked": false,
+      "lockedConnected": false
+    },
+    {
+      "at": 1788828595358,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828595617,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828595870,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828596123,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828596375,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828596660,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828596911,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828597163,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828597418,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828597671,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828597923,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828598175,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828598428,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828598680,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828598934,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828599187,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828599439,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828599691,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828599944,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828600197,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828600449,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828600704,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828600956,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828601208,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828601461,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828601713,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828601966,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828602221,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828602473,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828602725,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828602977,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828603230,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    },
+    {
+      "at": 1788828603483,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "pointerLocked": true,
+      "lockedConnected": true
+    }
+  ],
+  "inputs": [
+    {
+      "key": "f",
+      "at": 1788828588017
+    },
+    {
+      "key": "f",
+      "at": 1788828589044
+    },
+    {
+      "key": "f",
+      "at": 1788828590057
+    },
+    {
+      "key": "f",
+      "at": 1788828591072
+    },
+    {
+      "key": "f",
+      "at": 1788828593937
+    },
+    {
+      "key": "f",
+      "at": 1788828595091
+    }
+  ],
+  "descentAt": 1788828595364,
+  "buildSha256": "36fca2998a58a45050752b7b64a969de9930712c01c220b9553b5ef3d042a7a6",
+  "cleanup": true
+}

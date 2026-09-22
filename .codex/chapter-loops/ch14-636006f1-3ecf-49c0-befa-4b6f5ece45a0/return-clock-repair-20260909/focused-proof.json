@@ -1,0 +1,22 @@
+{
+  "schema": "paravoxia.focusedRepairProof.v1",
+  "noncertifying": true,
+  "kind": "Actual saved return checkpoint101 through ordinary navigation and install to Chapter14 completion",
+  "complete": true,
+  "actualInstall": true,
+  "installElapsedMs": 24872,
+  "chapter14Complete": true,
+  "finalBeat": "done",
+  "elapsedMs": 185913,
+  "backstops": 0,
+  "teleportNudges": 0,
+  "errors": [],
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "enteredThrough": "ordinary Free Play control on completed-story checkpoint",
+  "raw": "complete-candidate/return-replay/result.json",
+  "source": "complete-candidate/source.json",
+  "preview": "complete-candidate/preview-owner.json",
+  "sourceCheckpoint": "../../evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/101.json",
+  "limits": "Noncertifying replay of earned saved state; ordinary Free Play enters the completed-story checkpoint. Not real Continue equality proof, fresh continuity or artistic acceptance.",
+  "at": "2026-09-09T17:34:01.047Z"
+}

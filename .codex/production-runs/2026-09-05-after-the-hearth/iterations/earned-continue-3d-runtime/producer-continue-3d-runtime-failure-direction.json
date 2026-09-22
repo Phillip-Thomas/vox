@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-06T20:28:02.080177+00:00",
+  "role": "earned-continue-3d-runtime",
+  "sourceMutationAuthorized": false,
+  "privateCorrectionsAuthorized": true,
+  "gpuTemporarilyTransferred": "common-entry-crossing",
+  "observed": [
+    "Actual attempt1 exited20:26:30 and postfinallyclosed.36directedbursts plus21recalibrations, footcrossed+Xto+Y but recalibrationcycled betweenupx~.18 and~.45; startingbasis is measured before four450mskeys which move thebody, so repeatedfullrecalibrationthrashesat12degreeboundary. This is a remaining private navigation flaw, not proof of inaccessiblegame.",
+    "Fourposebytes nowexist. BeforeContinue savedbasepose[-31.99068,52.78897,21.41554] remainedstableonmenu; afterContinue baseposebecame[53.75399,13.5,-14], oldsavedposecopiedto:p1.player. Actor-scopedrestore/load/fallback branch stillnotobserved; do notcall a menuoverwrite (menu byteswereunchanged).",
+    "promptOffersF returnsOBJECT {ok,matched,...}; probe passesittruthilyto bothboolgates. Observed F Drink wasacceptedbygenericcheck. Require .ok===true ANDactualsigned spanofferverb/prompt/currentobjective (reuse existing pinned verb table); retainmatchedprompt. Newacceptedactionmustspecificnewroute-offered/offerstate, notanyunrelatedanchor. No F waspressedonfailedarrival, so retainedrunnotinvalidatedbythislatentprivategate."
+  ],
+  "next": "Root grantsroutineCPU privatefixes now. Preserve attempt1; diagnosecalibrationthrashandactualposebranch fromretaineddata, stopguessingfromXZorwholeface. If correctingprivatebasis/revalidation, addsmallactualhelpercase wherecalibrationitselfmovesbasis, avoid repeatedallkeycycleswithouttargetmovement. Waitinlineuntilcontrolrole returns beforeONE freshneededlane, withinORIGINAL20:34:21deadline; no new20minbudget. If insufficienttime, retainprecisefacts/report, notfalsegamefailure. Read actualclock."
+}

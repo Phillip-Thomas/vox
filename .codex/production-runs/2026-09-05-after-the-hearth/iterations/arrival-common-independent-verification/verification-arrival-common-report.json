@@ -1,0 +1,405 @@
+{
+  "schema": "paravoxia.verifier.arrivalCommonReport.v1",
+  "role": "arrival-common-verifier",
+  "writtenAt": "2026-09-06T18:05:00+00:00",
+  "writtenAtNote": "Actual clock read 2026-09-06T18:04:09.500288536Z immediately before writing; no future or guessed timestamps used anywhere in this file.",
+  "isAcceptance": false,
+  "isChapterVerification": false,
+  "isDefectClosure": false,
+  "publicationAuthorized": false,
+  "scope": "Bounded physical verification of the SEVENTH material repair: (1) independent full verify on the frozen source, (2) one bounded actual return-flight capture, (3) movie survey/COMMON journey on the long route. Nothing else is claimed.",
+
+  "sourceIntegrity": {
+    "manifestRef": "implementation-source-manifest.json",
+    "manifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "manifestMatchesControl": true,
+    "manifestMatchesReadiness": true,
+    "contractVersion": "scene-v3",
+    "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+    "before": { "ref": "logs/arrival-common-verifier/rehash-before.json", "manifestFiles": "99/99 match", "auxiliary": "5/5 match", "external": "1/1 match", "mismatches": 0 },
+    "after": { "ref": "logs/arrival-common-verifier/rehash-after.json", "manifestFiles": "99/99 match", "mismatches": 1 },
+    "final": { "ref": "logs/arrival-common-verifier/rehash-final.json", "manifestFiles": "99/99 match", "mismatches": 1 },
+    "gameSourceWrittenByThisRole": false,
+    "auxiliaryDrift": [
+      {
+        "path": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-delta.run-profile.json",
+        "manifestHash": "a0b0ecdd0df08f1866af39fb74645bc8eea1c05b008cf1e8856de60edc1444c2",
+        "observedHash": "605fb2efc36901bc9c012bda0a0d6e7552003888dd5f959420d612f5e57ae828",
+        "firstObservedBy": "this role, in the post-verify rehash",
+        "action": "preserved; not fixed, not reverted, not attributed",
+        "producerDisposition": "producer-nonbinding-auxiliary-observation.json — observed-only, unused delta profile, capture may proceed",
+        "stillPresentAtFinalRehash": true
+      }
+    ],
+    "externalToolingPreserved": {
+      "main/tools/creative-triad-gate.mjs": "23b347b7d7f8ae67c87d3e0eff14baf80d6e9e80cb2255bff81bc91a555e66bf matched before, after and final"
+    }
+  },
+
+  "phase1_independentVerify": {
+    "command": "npm --prefix main run verify",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAtUtc": "2026-09-06T17:45:06.245184591Z",
+    "endedAtUtc": "2026-09-06T17:46:07.106885453Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-verifier/verify.log",
+    "logSha256": "e57a9dab67a87a31e54bfff8a3a3d6f334ca62b76098769acbddf4c15e68d6ba",
+    "testFiles": 351,
+    "tests": 3172,
+    "runsOnce": true,
+    "buildReadyAnnouncedIn": "verifier-arrival-common-progress.md",
+    "builtFileMap": "logs/arrival-common-verifier/dist-filemap.txt",
+    "builtFileCount": 11,
+    "shippedJsonFileMapBuildHash": "aa52b0341b78d0931a5c91d431d9ba0ce81b5edde12b9b5b54449a5ee1c20d74",
+    "shippedJsonFileMapAlgorithm": "main/tools/lib/previewSnapshot.mjs snapshotPreviewBuild -> sha256(JSON.stringify(files)); this is the value ownership records call buildHash",
+    "auxiliaryVerifierBuildHash": "318e2a54ea84286896d1afbeab2f0980f0074bb286170dee61a17a95abe40427",
+    "auxiliaryVerifierBuildHashAlgorithm": "sha256 over sorted path + NUL + filehash + newline records; the value ownership records call verifierBuildHash. DISTINCT from the shipped file-map buildHash.",
+    "indexSha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207",
+    "bundlePath": "/assets/index-BiDWGouH.js",
+    "bundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068"
+  },
+
+  "previewIdentityGate": {
+    "priorImmutableBuild": { "url": "http://127.0.0.1:38007/", "manifest": "dc63fbae...", "stateWhenRead": "stopped", "measuredByThisRole": false },
+    "currentPreview": {
+      "url": "http://127.0.0.1:34413/",
+      "ownershipRef": "verifier/artifacts/preview-ownership.json",
+      "daemonPid": 1802787,
+      "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+      "ownershipContractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+      "ownershipBuildHash": "aa52b0341b78d0931a5c91d431d9ba0ce81b5edde12b9b5b54449a5ee1c20d74",
+      "startedByThisRole": false,
+      "stoppedByThisRole": false
+    },
+    "independentHttpChecks": {
+      "GET /": { "status": 200, "sha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207", "matchesMyBuild": true, "title": "Paravoxia" },
+      "GET /assets/index-BiDWGouH.js": { "status": 200, "sha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068", "matchesMyBuild": true }
+    },
+    "ownershipFileMapEqualsMyDistFileMap": true,
+    "ownershipShippedBuildHashEqualsMyIndependentComputation": true,
+    "verdict": "MATCH — browser authorized"
+  },
+
+  "hardware": {
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "rendererClass": "hardware",
+    "headed": true,
+    "assertedBy": "main/tools/lib/previewServer.mjs assertHardwareGl, invoked inside openParavoxia",
+    "softwareRendererRefused": true,
+    "swiftshaderAllowed": false,
+    "lock": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+    "lockMode": "flock -n -x (EXCLUSIVE, non-blocking) on every browser job",
+    "concurrentBrowsers": 1,
+    "otherProcessesStopped": "none"
+  },
+
+  "phase2_returnFlight": {
+    "captureLabel": "flight-1",
+    "probe": "verifier/probes/arrival-common-verifier/arrival-flight-probe.mjs",
+    "probeSha256": "0960d6dab14889c97d2417d105ee54e34dc543b8a1c5e371c67e460c7604a6cb",
+    "copiedFrom": "verifier/probes/flight-discriminator/flight-discriminator-probe.mjs (15e65e89fd09e75c65e9ebce54e9a66b066cc0ea6f87d72d1a2097d51a8a4049) — shared probe not edited",
+    "ownedInstrumentationChanges": [
+      "URL/output taken from root preview-ownership + verifier-control with a manifest/state/URL gate (no browser on a mismatch)",
+      "refuses a nonempty capture directory",
+      "POSTCAPTURE LOGGER-ORDER ERROR FIXED: the original called say() AFTER lg.end(), so the cleanup receipt hit an already-ended stream and never reached probe.log. Cleanup receipt is now logged before the streams are ended, and the ends are awaited.",
+      "adds objective (id/markerLabel/workOrder/health/revision), signedSceneAv (anchorId/activationSequence/activationHistoryAnchorIds), shipRestoration and ch13 milestone sampling",
+      "stops at the SUBSEQUENT survey beat transition rather than at the origin-landed milestone, so landing and hand-off are in one capture"
+    ],
+    "entryUrl": "http://127.0.0.1:34413/?story=ch13-return&journeyprobe=1&debug=1&movie=1",
+    "lane": "movie (shipped ch13 rail drives the same virtual controls a player presses)",
+    "startedAtUtc": "2026-09-06T17:49:14.083704865Z",
+    "endedAtUtc": "2026-09-06T17:50:31.522277478Z",
+    "sampleIntervalMs": 250,
+    "samples": 272,
+    "captureMs": 74800,
+    "budgetMs": 120000,
+    "probeExitCode": 0,
+    "roleObservedRc": 0,
+    "stopReason": "survey-beat-transition",
+    "telemetry": "logs/arrival-common-verifier/flight-1/telemetry.jsonl (9d54ffbcb61e3134e6fd7c7983638250eed7e92f8602958ab94ebbd6c26eee41)",
+    "runJson": "verifier/captures/arrival-common/flight-1/run.json (33f336ccc4a64fe7d940bfa293a8d0b552282c2691952706576ac2459dc30450)",
+    "frames": 22,
+
+    "celestialTimeline": [
+      { "atMs": 104, "activePlanetId": "-1,-1:p1", "lastActivePlanetId": "-1,-1:p1", "activationEpoch": 2, "locationMode": "surface", "flightPhase": "surface", "controlMode": "fps", "note": "departure body (Tidegarden), boarded start" },
+      { "atMs": 1971, "controlMode": "flight", "objectiveId": "ch13:return:launch", "avAnchor": "anc.cg.hatch-boarded" },
+      { "atMs": 3614, "activationEpoch": 2, "locationMode": "atmosphere", "flightPhase": "descent", "objectiveId": "ch13:return:origin", "avAnchor": "anc.cg.lift-committed", "originCentreDistance": 2736.01 },
+      { "atMs": 7557, "locationMode": "local_space", "flightPhase": "deep_space", "originCentreDistance": 2502.47, "speed": 98.7 },
+      { "atMs": 8040, "activationEpoch": 3, "systemTarget": { "kind": "system_body", "address": { "system": { "x": -1, "y": -1 }, "slot": 0 }, "worldId": "-1,-1" }, "originCentreDistance": 2455.49 },
+      { "atMs": 40470, "activePlanetId": "-1,-1", "lastActivePlanetId": "-1,-1", "activationEpoch": 4, "locationMode": "atmosphere", "flightPhase": "descent", "originCentreDistance": 174.15, "note": "COMMITTED to Origin inside the 185-unit activation envelope; systemTarget released to null on the same step as the handoff" },
+      { "atMs": 44648, "locationMode": "surface", "flightPhase": "surface", "controlMode": "fps", "originCentreDistance": 58.09, "note": "grounded on Origin, control handed back" }
+    ],
+    "epochSequenceObserved": [2, 3, 4],
+    "departureReclaimObserved": false,
+    "priorFailureSignature": "epoch 3->5 and 6->8 with the departure pad reclaimed twice after reaching the 185-unit envelope",
+    "priorFailureReproduced": false,
+    "activePlanetAfterCommit": "-1,-1 (Origin) held from 40470 ms to end of capture, never reverted to -1,-1:p1",
+    "shipCelestialPoseAtLanding": [53.5, 16.0, -16.0],
+    "shipCelestialPoseNote": "systemFlight.pose.position — the ship's celestial pose. NOT the seated capsule readout, which is reported separately below.",
+    "seatedCapsuleReadoutSeparate": "__autopilot.pos, quoted only as the movie rail's body readout, never as celestial pose",
+
+    "objectiveLifecycle": {
+      "id": "ch13:return:origin",
+      "idConstantAcrossAllGroundedPhases": true,
+      "markerLabelObservedValues": ["Origin · audit site"],
+      "markerLabelConstant": true,
+      "healthObservedValues": ["ready"],
+      "mandatoryBoardRegressionObserved": false,
+      "phases": [
+        { "phase": "flight/descent, off-Origin preparation", "workOrder": ["Fly to Origin.", "Follow the audit-site approach and land."], "signedMatch": "EXACT (contract guidance.objectives[4].workOrder)", "firstAtMs": 3614, "lastAtMs": 44287, "samples": 154 },
+        { "phase": "grounded Origin, still boarded (flight controls owned)", "workOrder": ["Disembark.", "Follow the audit-site marker on foot."], "signedMatch": "EXACT (contract variantIntent literal)", "firstAtMs": 44648, "lastAtMs": 44648, "samples": 1, "durationBoundMs": "between 250 and 818 (one 250 ms sample; the window is shorter than 818 ms)" },
+        { "phase": "grounded Origin, embodied FPS before W-7744 reach", "workOrder": ["Follow the audit-site marker on foot."], "signedMatch": "EXACT (contract variantIntent literal)", "firstAtMs": 45466, "lastAtMs": 73220, "samples": 107 }
+      ],
+      "objectiveRevisionSteps": [ {"atMs": 4052, "from": 2, "to": 3}, {"atMs": 45213, "from": 3, "to": 5}, {"atMs": 45670, "from": 5, "to": 7}, {"atMs": 73873, "from": 7, "to": 9} ],
+      "sameIdAcknowledgementCount": "UNMEASURED by this probe — it samples objective state, not the feedback/cue emission stream. What IS measured: the objective ID and marker label never changed across the three phases, and no new objective was published between them.",
+      "clearedAtMs": 73473,
+      "clearedInto": "ch13:survey:start (markerLabel 'Survey start · begin a route')"
+    },
+
+    "actualWReach": {
+      "controlMode": "fps from 45020 ms",
+      "bodyReadoutStart": [52.79, 30.19, -13.99],
+      "bodyReadoutEnd": [-31.68, 52.79, 2.01],
+      "approxHorizontalTravelUnits": 86,
+      "shipStationaryDuringWalk": "systemFlight.pose.position held at [53.5, 16, -16] for the whole on-foot window",
+      "hudMarkerDistanceM": [214, 91, 89, 72, 55, 39, 22, 7],
+      "source": "__autopilot.pos, labelled as the movie rail body readout; it is NOT treated as canonical body proof. The independent physical proof of the on-foot approach is the ship's stationary celestial pose plus the fps control mode plus the monotone marker distance."
+    },
+
+    "namedAvAnchors": {
+      "activationHistoryAnchorIds": ["anc.cg.hatch-boarded", "anc.cg.lift-committed", "anc.cg.origin-landed", "anc.cg.repeated-measure"],
+      "anc.cg.origin-landed.present": true,
+      "note": "anc.cg.origin-landed is observed in the NAMED activationHistoryAnchorIds list. The current-anchorId field never displayed it: activationSequence stepped 2 -> 4 inside one 250 ms sample, so anc.cg.origin-landed and anc.cg.repeated-measure entered history in the same step. Named anchors, not generic AV key names."
+    },
+    "milestones": { "story:ch13-origin-landed": { "latchedAtMs": 74432, "beforeThis": ["story:ch13-fault-reviewed"] } },
+    "surveyTransition": { "beat": "ch13-return -> ch13-survey", "atMs": 74249 },
+
+    "rescues": { "autopilotNudges": 0, "teleportNudgesTotal": 0, "backstops": 0, "stuck": 0, "source": "__autopilot counters sampled every 250 ms across 267 samples" },
+    "unmeasured": [
+      "Screenshot coverage of the grounded-boarded ['Disembark.', ...] copy: the transition screenshot (0164-workOrder.png) was taken ~200 ms after the event and already shows the next phase. The boarded-surface phase is measured in TELEMETRY only. UNMEASURED in frames — not fabricated.",
+      "Same-ID objective-entry acknowledgement emission count.",
+      "FPS / frame budget: not measured in this lane."
+    ],
+    "verdict": "PASS — committed Origin stayed active with no departure reset, actual landing, anc.cg.origin-landed and story:ch13-origin-landed both committed, and the survey transition followed, inside the 120 s bound."
+  },
+
+  "phase3_movieSurveyCommon": {
+    "probe": "verifier/probes/arrival-common-verifier/journey-probe.mjs",
+    "probeSha256": "bab7c6339ed6c02fdfee2b5273fd64b684e6a3462d463a1bab33b8e09ef93a36",
+    "copiedFrom": "verifier/probes/handoff-standby-verifier/journey-probe.mjs (c3fbc90bf2a4722be54655705498d6ec82f9c7915017fa8a482e942c15511fba) — shared probe not edited",
+    "ownedInstrumentationChange": "one import repointed to a run-local contract reader",
+    "runLocalContractReader": {
+      "path": "verifier/probes/arrival-common-verifier/cgContract-v3.mjs",
+      "sha256": "2d698f7ed8cf6476cbd87aabde8c3dec6ed8889a67af575ce318962dbad250c4",
+      "copiedFrom": "verifier/probes/lib/cgContract.mjs (shared, untouched)",
+      "onlyChange": "SIGNED_CONTRACT_SHA256 pinned to the frozen scene-v3 5ef85a32… instead of the historical scene-v2 4dbf722b…"
+    },
+    "retainedPreflightFailure": {
+      "what": "The FIRST journey attempt aborted BEFORE any browser, on the shared library's scene-v2 contract pin.",
+      "exitCode": 1,
+      "error": "scene-contract.json is 5ef85a32…, not the signed scene-v2 4dbf722b…",
+      "consequence": "No gameplay was measured and no cold run was consumed by it.",
+      "retainedAt": ["logs/arrival-common-verifier/preflight-pin-failure-retained/failure.log", "logs/arrival-common-verifier/preflight-pin-failure-retained/transport-tool-result.json"],
+      "note": "Retained by root; preserved here and not overwritten."
+    },
+    "offlineSelfTestGate": { "command": "node journey-probe.mjs --self-test", "exitCode": 0, "suites": "cg-journey 1/1, cg-harness-selftest 25/25, cg-harness-prep-selftest 41/41" },
+    "route": "LONG. The shipped movie harness draws LONG. NO SHORT run is claimed from it; SHORT remains a dedicated ordinary-input lane and is UNMEASURED here.",
+
+    "runs": [
+      {
+        "label": "journey-common-1",
+        "command": "--beat ch13-survey --lane movie --seconds 330 --until-anchor anc.cg.handback --stall-fail-ms 20000 --strip-s 5 --percept",
+        "startedAtUtc": "2026-09-06T17:52:29.679083571Z",
+        "endedAtUtc": "2026-09-06T17:58:01.895414549Z",
+        "probeExitCode": 0,
+        "stopReason": "seconds-budget-exhausted",
+        "harnessOutcomeLabel": "BUDGET-EXHAUSTED-INCONCLUSIVE",
+        "harnessOutcomeLabelIsAboutTheSTOPPREDICATE": "The --until-anchor predicate compares only the CURRENTLY ACTIVE anchor. anc.cg.complete and anc.cg.handback committed inside one 100 ms sample and the active anchor was already null, so the predicate never matched. The PHYSICAL result in the same trace is a completed run: beat 'done' at 62.095 s. The inconclusive label describes the predicate, not the gameplay.",
+        "beatDoneAtMs": 62095,
+        "postCompletionObservationMs": 267935,
+        "frames": 184
+      },
+      {
+        "label": "journey-common-2",
+        "command": "--beat ch13-survey --lane movie --seconds 200 --until-beat done --stall-fail-ms 20000 --strip-s 5 --percept",
+        "startedAtUtc": "2026-09-06T17:59:58.051428622Z",
+        "endedAtUtc": "2026-09-06T18:01:04.054210987Z",
+        "probeExitCode": 0,
+        "stopReason": "reached-beat:done",
+        "harnessOutcomeLabel": "REACHED-STOP-PREDICATE",
+        "beatDoneAtMs": 62610,
+        "postCompletionObservationMs": 0,
+        "frames": 76
+      },
+      {
+        "label": "journey-common-3",
+        "command": "--beat ch13-survey --lane movie --seconds 200 --until-beat done --stall-fail-ms 20000 --strip-s 5 --percept",
+        "startedAtUtc": "2026-09-06T18:01:09.280446757Z",
+        "endedAtUtc": "2026-09-06T18:02:15.484843029Z",
+        "probeExitCode": 0,
+        "stopReason": "reached-beat:done",
+        "harnessOutcomeLabel": "REACHED-STOP-PREDICATE",
+        "beatDoneAtMs": 62506,
+        "postCompletionObservationMs": 0,
+        "frames": 79
+      }
+    ],
+    "coldRunCount": 3,
+    "coldRunsSameSource": true,
+    "coldRunsFixtureSeeded": false,
+    "coldRunEntry": "?story=ch13-survey deep link — a prerequisite fixture for the survey/common lanes, NOT continuous earned history. The earned return that precedes it was proved separately in phase 2 and is not stitched onto these runs.",
+
+    "physicalResultsPerRun": {
+      "journey-common-1": { "terraUnits": 18, "workerUnits": 18, "committed": true, "comparisonProved": true, "finalReferenceOffered": true, "commonStage": "arrived", "surveyPhase": "tested", "acceptedSamples": 38, "acceptedClass": "fixed-reference", "stallPredicateFired": null, "pageErrors": 0, "beatDoneAtS": 62.095 },
+      "journey-common-2": { "terraUnits": 18, "workerUnits": 18, "committed": true, "comparisonProved": true, "finalReferenceOffered": true, "commonStage": "arrived", "surveyPhase": "tested", "acceptedSamples": 40, "acceptedClass": "fixed-reference", "stallPredicateFired": null, "pageErrors": 0, "beatDoneAtS": 62.610 },
+      "journey-common-3": { "terraUnits": 18, "workerUnits": 18, "committed": true, "comparisonProved": true, "finalReferenceOffered": true, "commonStage": "arrived", "surveyPhase": "tested", "acceptedSamples": 38, "acceptedClass": "fixed-reference", "stallPredicateFired": null, "pageErrors": 0, "beatDoneAtS": 62.506 }
+    },
+
+    "namedAnchorsCommittedPerRun": {
+      "journey-common-1": ["anc.cg.repeated-measure", "anc.cg.demonstration-opened", "anc.cg.survey-started", "anc.cg.trace-drawn", "anc.cg.route-offered", "anc.cg.route-tested", "anc.cg.reciprocal-reference", "anc.cg.reciprocal-crossed", "anc.cg.final-reference-offered", "anc.cg.independent-test", "anc.cg.complete", "anc.cg.handback"],
+      "journey-common-2": ["anc.cg.repeated-measure", "anc.cg.demonstration-opened", "anc.cg.survey-started", "anc.cg.trace-drawn", "anc.cg.route-offered", "anc.cg.route-tested", "anc.cg.reciprocal-reference", "anc.cg.reciprocal-crossed", "anc.cg.final-reference-offered", "anc.cg.independent-test", "anc.cg.complete", "anc.cg.handback"],
+      "journey-common-3": ["anc.cg.repeated-measure", "anc.cg.demonstration-opened", "anc.cg.survey-started", "anc.cg.trace-drawn", "anc.cg.route-offered", "anc.cg.revision-ready", "anc.cg.route-tested", "anc.cg.reciprocal-reference", "anc.cg.reciprocal-crossed", "anc.cg.final-reference-offered", "anc.cg.independent-test", "anc.cg.complete", "anc.cg.handback"],
+      "note": "run 3 additionally committed the CONTINGENT anc.cg.revision-ready; the contract marks it contingent, so this is a legal variation, not a divergence."
+    },
+
+    "priorStallDisposition": {
+      "priorFinding": "movie stalled around 5.8/18 at COMMON corner 3, requested target [-44.6, 51.05, 16]; CPU predicted unsafe overshoot at corner 6 and terminal 9",
+      "observedNow": "the COMMON corner-3 target issued by the repaired steering is [-44.24, 51.05, 16], not [-44.6, 51.05, 16]",
+      "cornersPassed": "all, in all three runs",
+      "reproduced": false,
+      "cpuPredictedFailuresAt6And9Reproduced": false,
+      "caveat": "This is a live observation on the real world; exact world terrain edits may differ from the generated CPU fixtures the prediction was made on."
+    },
+
+    "commonOrderedProgress": {
+      "railCursorSequenceDuringCommon": {
+        "journey-common-1": [18, 0, 1, 2, 3, 4, 6, 7, 8, 9],
+        "journey-common-2": [18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+        "journey-common-3": [18, 0, 2, 4, 5, 6, 7, 8, 9]
+      },
+      "cursorSequenceStrictlyIncreasing": true,
+      "gapsInObservedCursorList": "run 1 did not sample cursor 5; run 3 did not sample cursors 1 and 3. These are 100 ms SAMPLING gaps in the observation, not skipped corners: the cursor never decreased and terraUnits advanced monotonically to exactly 18 in all three runs. The unsampled cursor indices are UNOBSERVED, not proven passed individually.",
+      "terraUnitsMonotone": true,
+      "terraUnitsFinal": 18,
+      "workerUnitsMonotone": true,
+      "workerUnitsFinal": 18,
+      "issuedCommonTargetsRun2": [[-40,51.05,8],[-42,51.05,12],[-42,51.05,14],[-42,51.05,16.24],[-44.24,51.05,16],[-44,51.05,18.24],[-46,51.05,18],[-48.24,51.05,18],[-48,51.05,16],[-48,51.05,14],[-48,51.05,11.76],[-44,51.05,12]]
+    },
+
+    "workerHold": {
+      "H": [-40, 51.05, 12],
+      "contractH": "anc.cg.reciprocal-reference declares H = (-40, 51.05, 12)",
+      "match": true,
+      "heldFromS": 43.19,
+      "heldThroughTerraPassageUntilS": 48.03,
+      "workerPosAtReciprocalCrossed": [-40, 51.05, 12]
+    },
+
+    "terraFAndOccupancy": {
+      "navigationActionBeforeF": "rail.action 'interact' at 52.72 s (run 1)",
+      "anchor": "anc.cg.final-reference-offered committed at 53.62 / 53.98 / 54.09 s",
+      "finalReferenceOffered": true,
+      "finalReferenceOccupiedSampleCounts": { "journey-common-1": 47, "journey-common-2": 50, "journey-common-3": 50 },
+      "occupancyHeldThroughWTest": true,
+      "note": "This is an authored F PLUS live occupancy, not waiting alone. Occupancy returns false only after W arrives and the handback fires."
+    },
+
+    "repairedStandbyMeasurement": {
+      "requestedGoalBeforeHold": [-44, 51.05, 12],
+      "railActionDuringWTest": "hold",
+      "railReason": "holding the far reference while he tests",
+      "railTargetDuringHold": null,
+      "actualOccupiedGroundedBodyPose": { "journey-common-1": [-44.089, 50.989, 12.013], "journey-common-2": [-44.083, 50.989, 12.014], "journey-common-3": [-44.092, 50.989, 12.014] },
+      "poseFrame": "bodyPose = capsule centre - up*(HALF_HEIGHT 1.3 + RADIUS 0.5); this IS the frame the routes/sockets are authored in",
+      "supported": true,
+      "up": [-0.0221, 0.9998, 0.0],
+      "groundOffsetUnits": 1.8,
+      "minimumClearanceFromEntireOfferedPolyline": { "journey-common-1": 2.089, "journey-common-2": 2.083, "journey-common-3": 2.092 },
+      "clearanceMethod": "minimum 2-D distance from the ACTUAL OCCUPIED grounded body pose to EVERY segment of the entire polyline of targets issued while the span was being drawn/offered (18-19 vertices per run), not to a chosen point and not to a desired target.",
+      "clearanceLimitation": "The ENGINE-ACCEPTED route is exposed only as acceptedSamples (38/40/38) and acceptedClass ('fixed-reference'); the accepted sample COORDINATES are not exposed on any published probe surface. The clearance above is therefore measured against the ISSUED/DRAWN target polyline, which the commission correctly distinguishes from the accepted route. Clearance against the accepted-sample coordinates is UNMEASURED.",
+      "run2PolylineNote": "the run-2 polyline list includes the pre-start approach vertex [-34, 51.05, 10]; it is an approach target, not part of the drawn span, and it is not the nearest segment."
+    },
+
+    "engineAcceptedRoute": { "exposed": "partially", "acceptedSamples": { "journey-common-1": 38, "journey-common-2": 40, "journey-common-3": 38 }, "acceptedClass": "fixed-reference", "acceptedCoordinates": "NOT exposed" },
+
+    "rescues": {
+      "stallPredicateFired": "never, in any of the three runs",
+      "largestSingleSampleJumpAfterBoot": { "units": 6.705, "atMs": 6502, "sampleGapMs": 1380, "impliedSpeed": "4.86 units/s — ordinary walking across a 1.38 s probe-side sampling gap (screenshot/percept capture), not a teleport" },
+      "reportedLargestJump54_771": "an artifact of the pose ledger's [0,0,0] placeholder first entry before the pose source resolved, not a runtime jump",
+      "autopilotRescueCounters": {
+        "correctionSource": "root verifier-inbox.jsonl 2026-09-06T18:08:12.507390+00:00 — an earlier draft of this report looked at hookProbe.autopilot and wrongly said the harness does not sample it. Corrected from the raw traces.",
+        "teleportNudgesTotal": { "journey-common-1": 0, "journey-common-2": 0, "journey-common-3": 0 },
+        "samplesWithAutopilot": { "journey-common-1": 2460, "journey-common-2": 356, "journey-common-3": 354 },
+        "fieldsActuallyExposedInSampleAutopilot": ["beat", "clock", "pos", "routeAction", "stillTime", "teleportNudgesTotal"],
+        "nudges": "FIELD NOT PRESENT in journey sample.autopilot — UNMEASURED, not zero",
+        "backstops": "FIELD NOT PRESENT in journey sample.autopilot — UNMEASURED, not zero",
+        "stuck": "FIELD NOT PRESENT in journey sample.autopilot — UNMEASURED, not zero",
+        "maxStillTimeSeconds": { "journey-common-1": 1.4, "journey-common-2": 1.3, "journey-common-3": 1.2 }
+      }
+    },
+
+    "objectiveClearAtCompletion": { "beat": "done", "objectiveId": null, "markerLabel": null, "workOrder": null, "staleGuidanceObserved": false, "frameEvidence": "verifier/captures/arrival-common/journey-common-2/0074-stop-reached-beat_done.png — objective card absent" },
+    "finalMessage": "UNMEASURED. No caption and no feed text distinct from the HUD objective was observed in the completion window in the sampled fields. Runtime score state showed finalTextureSeconds 0.0235 at 61.793 s then null at 62.095 s; NO audible-texture and NO visible final-message claim is made from that state.",
+
+    "verdict": "PASS on the LONG route: three cold movie runs on the same frozen source each reached beat 'done' with every original corner passed, Terra 18, W 18, committed, T's actual F plus held occupancy, all named terminal anchors and a cleared objective, with the stall predicate never firing."
+  },
+
+  "visualDefects": [],
+  "visualDefectNote": "Frames inspected: journey-common-2/0054-anchor-anc.cg.reciprocal-crossed.png, journey-common-2/0074-stop-reached-beat_done.png, flight-1/0164-workOrder.png. Rendered world, HUD present, objective copy matching the signed strings, marker labels present, no blank/black frame, no wrong-era glimpse. Debug overlays are present because debug=1 is a probe switch. This is a defect scan of a sample of frames, NOT a visual acceptance and NOT a full strip read.",
+
+  "cleanup": {
+    "browsersOwned": 4,
+    "browsersLeftRunning": 0,
+    "flightProbeCleanup": { "stopped": true, "invoked": true, "reason": "probe-end", "requests": 1, "error": null },
+    "journeyCleanupReceipts": [
+      { "run": "journey-common-1", "phase": "post-finally", "state": "stopped", "sessionStopInvocations": 1, "cleanupError": null, "writtenAt": "2026-09-06T17:58:01.863Z" },
+      { "run": "journey-common-2", "phase": "post-finally", "state": "stopped", "sessionStopInvocations": 1, "cleanupError": null, "writtenAt": "2026-09-06T18:01:03.982Z" },
+      { "run": "journey-common-3", "phase": "post-finally", "state": "stopped", "sessionStopInvocations": 1, "cleanupError": null, "writtenAt": "2026-09-06T18:02:15.452Z" }
+    ],
+    "summaryJsonCleanupCaveat": "summary.json .cleanup is captured PRE-finally and shows sessionStopped:false; the authoritative value is the post-finally cleanup-receipt in trace.ndjson / cleanup-receipt.json.",
+    "rootPreviewTouched": false,
+    "processesKilled": "none",
+    "probesStillRunning": "none",
+    "heavyLockHeldAtEnd": false
+  },
+
+  "notClaimedRemainingGates": [
+    "Manual COMMON corner recovery / signed 18-unit early-corner return-to-frontier (CG-IMPL-009) — UNMEASURED",
+    "SHORT survey ordinary-input lane — UNMEASURED (the movie harness draws LONG only; not impossible, just not exercised)",
+    "Primary earned Continue — UNMEASURED",
+    "Full-story and station continuity — UNMEASURED",
+    "Variant coverage (mobile, reduced motion, quality tiers) — UNMEASURED",
+    "FPS / performance budgets — UNMEASURED",
+    "Audio-visual acceptance, audibility, reset matrix — UNMEASURED",
+    "Independent creative reviews (chapter/score/cinematography, player-experience auditor) — not this role",
+    "Same-ID objective-entry acknowledgement emission count — UNMEASURED",
+    "Screenshot coverage of the grounded-boarded Disembark copy — UNMEASURED",
+    "Clearance against the engine-ACCEPTED survey sample coordinates — UNMEASURED (not exposed)"
+  ],
+
+  "artifacts": {
+    "progress": "verifier-arrival-common-progress.md",
+    "reportMd": "verification-arrival-common-report.md",
+    "probes": "verifier/probes/arrival-common-verifier/",
+    "captures": "verifier/captures/arrival-common/{flight-1,journey-common-1,journey-common-2,journey-common-3}",
+    "logs": "logs/arrival-common-verifier/",
+    "hashes": {
+      "logs/arrival-common-verifier/verify.log": "e57a9dab67a87a31e54bfff8a3a3d6f334ca62b76098769acbddf4c15e68d6ba",
+      "verifier/captures/arrival-common/flight-1/run.json": "33f336ccc4a64fe7d940bfa293a8d0b552282c2691952706576ac2459dc30450",
+      "logs/arrival-common-verifier/flight-1/telemetry.jsonl": "9d54ffbcb61e3134e6fd7c7983638250eed7e92f8602958ab94ebbd6c26eee41",
+      "verifier/captures/arrival-common/journey-common-1/summary.json": "8d9c3b85c797cf90c4f356be98c63e8b68b54002e433705a92c46b6072143134",
+      "verifier/captures/arrival-common/journey-common-1/trace.ndjson": "3ad4bda044795529b686110f8a50f3de13770c44fe39e3ef8fed5c6911bcc72b",
+      "verifier/captures/arrival-common/journey-common-2/summary.json": "f9bf64c8c79dddb3d5d191ae34207a3b3a4ccb9768c2c6cc47f39b76cd02479d",
+      "verifier/captures/arrival-common/journey-common-2/trace.ndjson": "5e9a7c77e4c8ad548664f31c0bf449fe14cbbd028b43e85dbcc2a73596cdc1db",
+      "verifier/captures/arrival-common/journey-common-3/summary.json": "daff62a6b5d8089b10f72c38e8523c72a3b1f0416045e77c78d78f7937058d20",
+      "verifier/captures/arrival-common/journey-common-3/trace.ndjson": "f5faafe63f05c5504778bd84f141e2e2219688ceb298531707dd1109702090ea",
+      "verifier/probes/arrival-common-verifier/arrival-flight-probe.mjs": "0960d6dab14889c97d2417d105ee54e34dc543b8a1c5e371c67e460c7604a6cb",
+      "verifier/probes/arrival-common-verifier/journey-probe.mjs": "bab7c6339ed6c02fdfee2b5273fd64b684e6a3462d463a1bab33b8e09ef93a36",
+      "verifier/probes/arrival-common-verifier/cgContract-v3.mjs": "2d698f7ed8cf6476cbd87aabde8c3dec6ed8889a67af575ce318962dbad250c4"
+    }
+  },
+
+  "priorEvidencePreserved": true,
+  "priorReportsOverwritten": false,
+  "otherRolesSignaturesClaimed": false
+}

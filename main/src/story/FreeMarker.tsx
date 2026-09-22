@@ -156,6 +156,8 @@ const FreeMarker: React.FC = () => {
       // them even when software WebGL is starving future animation frames.
       void root.offsetWidth;
       const overlayBounds = root.getBoundingClientRect();
+      const resourceToast = document.querySelector<HTMLElement>('[data-hud-surface="resource-gain-toast"]');
+      const toastRect = resourceToast?.getClientRects().length ? resourceToast.getBoundingClientRect() : null;
       const presentation = solveStoryMarkerPresentation({
         rawX: m.x,
         rawY: m.y,
@@ -163,7 +165,8 @@ const FreeMarker: React.FC = () => {
         overlayWidth: overlayBounds.width,
         overlayHeight: overlayBounds.height,
         layout,
-        stabilized: motion.stabilized
+        stabilized: motion.stabilized,
+        observedOverlays: toastRect ? [toastRect] : []
       });
       if (motion.stabilized) {
         // Stable reduced-motion placement uses real layout coordinates. This

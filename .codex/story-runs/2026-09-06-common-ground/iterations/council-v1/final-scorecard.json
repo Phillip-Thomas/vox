@@ -1,0 +1,97 @@
+{
+  "rubric": "paravoxia-story-cohesion v1",
+  "candidateSha256": "790b2894a48d6eb2a24816dede8ff8d911448e217e18f394d25be35444cd87ae",
+  "decisionsSha256": "017bafdae9b1e7148c5f037b3e79ac44fc850aaa2a26e4ca1f303bd6346690fd",
+  "categories": [
+    {
+      "slug": "shipped_truth_accuracy",
+      "score": 4.6,
+      "weight": 13,
+      "weighted": 59.8,
+      "evidence": "Present/proposed separation is disciplined throughout the candidate and the patch ('These are future authored lines, not a claim of player-visible runtime'). I independently verified storyState.ts:349-350 (ch10-transit before done), story-authority.json:7 ceilings, the removal of the false completeStory()/TEMPORARY arrival claim in STORY.md, and OI-4's silent install. Deduction: verified stale present-tense F01 row at Execution Plan:300 (CG-JUDGE-001) inside a document this very patch touched, plus refreshed snapshotDate over July production identity (CG-JUDGE-002)."
+    },
+    {
+      "slug": "causal_plot_coherence",
+      "score": 4.6,
+      "weight": 15,
+      "weighted": 69.0,
+      "evidence": "Full desire/opposition/tactic/action/consequence chain per movement (chapter-story-treatment.md 'Bridge and affected movements'); the A4 fault setup pays off as MODEL INCOMPLETE via a reversal of bodies; the future direction extends the shipped spine (hearth reliability enables voluntary departure) rather than replacing it. Deductions: Terra's opposition is the thinnest joint (CG-JUDGE-005), and the 'two complete solutions' proposition is explicitly unestablished by measurement (CG-JUDGE-003)."
+    },
+    {
+      "slug": "character_desire_opposition_and_change",
+      "score": 4.5,
+      "weight": 13,
+      "weighted": 58.5,
+      "evidence": "Three distinguishable dispositions with Worker 9 correctly withheld at this reveal level; W-7744's change is produced by his own authored action and physical arrival, not explained into existence, and is bounded to a LOCAL RECORD (CG-D04). Deduction: Terra's belief movement rests on a single brief dependency beat and is asserted at documentation level pending physical realisation."
+    },
+    {
+      "slug": "player_agency_and_authored_rites",
+      "score": 4.8,
+      "weight": 11,
+      "weighted": 52.8,
+      "evidence": "Choice, authored rite, fallback, hold, revision, reset and rescue are each named honestly; W-7744's final decision is declared authored rather than a branch; completion is granted only by physical arrival ('No timer, caption, sound, camera shot, gaze dwell, observation-ledger entry, timeout rescue or movie-only receipt grants it'); movie timeout reports stuck and three cold no-rescue journeys are required; the score allowance is explicitly never a progression predicate. Deduction: ch13's dense per-verb objective stack is an unmeasured recurrence risk against the blind reader's SEVERITY 1 finding (CG-JUDGE-004)."
+    },
+    {
+      "slug": "reveal_withhold_and_mystery",
+      "score": 4.8,
+      "weight": 11,
+      "weighted": 52.8,
+      "evidence": "w7744-return-cause verified retained at story-authority.json:303 with the scoped local answer held in the register rather than deleting the family; protectedUnresolved list intact (Makers, authorship, simulation, third consciousness, final frame); alignment \u00a73 intended-confusions ledger keeps the relay answerer, the bond mechanism and W-7744's interiority open; no A5/A6 spend; CG-D08 is a bounded new-chapter grammar rule, not a speaker reassignment. Deduction: none material; small margin held for the risk that a visible stored fault plus repeated inspection reads as more institutional causality than intended."
+    },
+    {
+      "slug": "audiovisual_story_arc",
+      "score": 4.6,
+      "weight": 12,
+      "weighted": 55.2,
+      "evidence": "Whole-arc progression is stated and non-inflationary (A5/A6/A7 reserved); the unresolved audit square has setup, restraint under temporary holds, and a spacing change gated on actually completed action with no victory cadence; silence is used as payoff; cinematography withdrew its own marker thesis so that feet, instrument direction, trace break and reciprocal positions carry the turn; witness validity is world-geometry based, never gaze; tier/mobile/reduced-motion equivalence preserved. Deductions: no heard or rendered current audio evidence (OI-5, OI-6); the \u22645 s allowance requires an integration that does not exist; ch13's own visual development is deliberately minimal."
+    },
+    {
+      "slug": "canon_and_authority_governance",
+      "score": 4.65,
+      "weight": 10,
+      "weighted": 46.5,
+      "evidence": "Precedence explicit and machine-checked (validate-candidate 77 pass, story:authority 1094 pass, smoke pass); identical candidate/register hashes across three signoffs and the owner decision; delegation recorded honestly with personallyReviewedByUser false and no fabricated viewing; owner-only ontology untouched; ceilings unchanged; legacy plans preserved as lineage without regaining authority; documentationAllowedPaths exactly equals the changed-path set. Deduction: CG-JUDGE-002 manifest identity retention; canon voice policy (CG-D08) amended under delegation without personal review, correctly scoped but worth naming."
+    },
+    {
+      "slug": "implementation_readiness",
+      "score": 4.5,
+      "weight": 8,
+      "weighted": 36.0,
+      "evidence": "Stable proposed beat IDs (ch13-home/-return/-survey/-common), implementation-acceptance.md, an explicitly typed external ch11/ch12 transition requirement, named pre-geometry preconditions (socket endpoints/heights, both route classes, day/night legibility), correct ordering that does not require the unbuilt mechanic to prove itself first, and a bounded, self-contained packet with no hidden chat context. Deduction: the core mechanic's feasibility premise is open (CG-JUDGE-003), and the score allowance's lifecycle is entirely unimplemented."
+    },
+    {
+      "slug": "independent_review_and_dissent",
+      "score": 4.8,
+      "weight": 4,
+      "weighted": 19.2,
+      "evidence": "Blind reader isolated by hash with canonExposure false and declared elisions; canon audit and contradiction triage separate; ten notes across all six directed routes in director-notes.json with every recipient accepting its incoming notes and no author closing its own; the material competing thesis was withdrawn by its own proposer (CG-CIN-CH-01); original treatments preserved unmodified as alternatives; dissent-register.md keeps unmeasured production obligations open rather than accepting them away. Deduction: only one bounded blind measurement exists for the whole corpus."
+    },
+    {
+      "slug": "documentation_precision_and_learning",
+      "score": 4.5,
+      "weight": 3,
+      "weighted": 13.5,
+      "evidence": "Two-pass documentation audit with iteration-1 lineage preserved under iterations/docs-v1; bounded five-path diff with 958 files compared and zero runtime drift; the pass-2 audit withdraws its predecessor's D4 inference on the record; status vocabulary (WORKTREE-IMPLEMENTED / APPROVED DIRECTION / gated) is consistent across the three prose documents. Deduction: R1 left unrepaired in-cycle (CG-JUDGE-001); R2 and the batch-plan ceiling assertion recorded but out of scope."
+    }
+  ],
+  "weightSum": 100,
+  "weightedTotal": 4.63,
+  "weightedTotalRaw": 463.3,
+  "passingThreshold": 4.7,
+  "categoryFloor": 4.25,
+  "categoryFloorMet": true,
+  "lowestCategoryScore": 4.5,
+  "openBlockingDefects": {
+    "critical": 0,
+    "high": 0,
+    "unacceptedBlockingMedium": 0,
+    "acceptedMedium": 1,
+    "low": 5
+  },
+  "requiredSignoffsPresent": true,
+  "lockViolation": false,
+  "runtimeMutationClaimed": false,
+  "publicationAuthorized": false,
+  "decision": "revise",
+  "decisionRationale": "Weighted 4.63 is below the 4.70 threshold; the score is not rounded up. Every category clears the 4.25 floor, all three director signatures and the delegated owner decision are present and honest, there is no lock violation, and no critical or high defect is open. This is therefore a quality-margin revise on a governance-sound packet, not a rejection. The gap is concentrated in three places: one verified stale present-tense claim inside a just-patched governing document (CG-JUDGE-001), the openly unestablished dual-route premise on which the chapter's agency proposition depends (CG-JUDGE-003), and the thinnest causal joint, Terra's in-chapter opposition (CG-JUDGE-005). I make no repair here and route all findings for independent re-review; the geometry pass-2 stream is credited with nothing (CG-JUDGE-006)."
+}

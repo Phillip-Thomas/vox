@@ -1,0 +1,60 @@
+# Creative-triad gate — contract phase, pre-signature
+# Recorded by: Integration Writer, 2026-09-04
+# Command: npm --prefix main run creative:gate -- --run .codex/production-runs/2026-09-04-station-interior-light --phase contract
+# Scene contract sha256: 291e75b0c19294f68d00add730b8fedf9ae232288b5ecb744ff2f39d6a969cc1
+
+
+> voxel-game@0.1.0 creative:gate
+> node tools/creative-triad-gate.mjs --run .codex/production-runs/2026-09-04-station-interior-light --phase contract
+
+Creative triad gate failed: 49 failure(s)
+run: /home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-04-station-interior-light
+- [artifact.placeholders] production-lock.md cannot contain template placeholders
+- [artifact.section] story-intent.md must contain its dramatic contract section
+- [artifact.placeholders] score-treatment.md cannot contain template placeholders
+- [artifact.section] score-treatment.md must contain its grounding section
+- [artifact.section] score-treatment.md must contain its cue ledger section
+- [artifact.placeholders] cinematography-treatment.md cannot contain template placeholders
+- [artifact.section] cinematography-treatment.md must contain its color script section
+- [artifact.section] cinematography-treatment.md must contain its agency section
+- [ux.contract-work-order] station-concourse-certified-source final work-order line must state an action appropriate to interact: ["FIND THE CERTIFIED COMPONENT TRADER.","PRESENT THE HABITAT FAULT RECORD."]
+- [lock.json-schema] Production lock must satisfy its checked-in JSON Schema: ["$.ownerInstruction: additional property is not allowed","$.lockRevisions: additional property is not allowed"]
+- [lock.authority-hash] Authority hash must match current file: CLAUDE.md: {"expected":"f2f3d6a0e72f831de22947b6c6c7be91b908112a1bb19bee290f3fe6f9dffcb4","actual":"d47d2f0b5670d801193c5f4c182b37af7da8313d5d8e4bbf55c4418eebc34d93"}
+- [lock.human-machine-mirror] production-lock.md must mirror every material machine-lock value: ["b631a52065a1a69fecac0331e69515c306408641+working-tree","paravoxia-creative-scene@v1","false","bounded-runtime","main/src/game/spaceStation/spaceStationShell.ts","main/src/game/spaceStation/spaceStationArchitecture.ts","main/src/game/spaceStation/spaceStationDressing.test.ts","main/src/game/spaceStation/spaceStationShell.test.ts","main/src/game/spaceStation/spaceStationArchitecture.test.ts","main/src/story/StoryDirectorDriver.tsx"]
+- [baseline.scene] Baseline scene ID must match the scene contract
+- [baseline.captures] At least one pre-change current-cut capture is required
+- [baseline.camera] Baseline must record resolvable camera authority and FOV state
+- [baseline.palette] Baseline must record semantic palette state and source references
+- [baseline.headed-status] Baseline must state whether headed capture is pending or captured
+- [baseline.placeholders] Shipped visual baseline cannot contain template placeholders
+- [ux.baseline-scene] Shipped UX baseline scene ID must match the scene contract
+- [ux.baseline-source-hash] Shipped UX baseline source hash must match: main/src/story/ux/README.md
+- [ux.baseline-source-hash-format] Shipped UX baseline source needs a SHA-256 hash: main/src/game/spaceStation/spaceStationTrade.ts
+- [ux.baseline-contract-source] Objective contract sourceRef must resolve to a hashed UX source file: "main/src/game/spaceStation/spaceStationStory.ts (LOCAL objective model)"
+- [ux.baseline-contract-semantics] Shipped UX baseline must preserve stable IDs, exact markers, actionable work orders, and one-shot presentation-only feedback
+- [ux.baseline-health] Shipped UX baseline must record idle, ready, and missing-marker health states
+- [ux.baseline-work-order] station:concourse:certified-source must capture an actionable work order
+- [ux.baseline-placeholders] Shipped UX baseline cannot contain template placeholders
+- [signoffs.contract-hash] Compiled signoffs must bind the exact scene-contract bytes
+- [signoffs.same-revision] All directors must sign the same revision
+- [signoffs.individual-revision] chapter individual signoff must target the frozen revision
+- [signoffs.individual-hash] chapter individual signoff must bind the exact frozen contract bytes
+- [signoffs.individual-disposition] chapter individual signoff must approve or approve with resolved notes
+- [signoffs.disposition] chapter must approve or approve with resolved notes
+- [signoffs.revision] chapter must sign the current revision
+- [signoffs.hash] chapter compiled signoff must bind the exact frozen contract bytes
+- [signoffs.lossless-assembly] chapter compiled signoff must reproduce the director-authored artifact exactly
+- [signoffs.individual-revision] score individual signoff must target the frozen revision
+- [signoffs.individual-hash] score individual signoff must bind the exact frozen contract bytes
+- [signoffs.individual-disposition] score individual signoff must approve or approve with resolved notes
+- [signoffs.disposition] score must approve or approve with resolved notes
+- [signoffs.revision] score must sign the current revision
+- [signoffs.hash] score compiled signoff must bind the exact frozen contract bytes
+- [signoffs.lossless-assembly] score compiled signoff must reproduce the director-authored artifact exactly
+- [signoffs.individual-revision] cinematography individual signoff must target the frozen revision
+- [signoffs.individual-hash] cinematography individual signoff must bind the exact frozen contract bytes
+- [signoffs.individual-disposition] cinematography individual signoff must approve or approve with resolved notes
+- [signoffs.disposition] cinematography must approve or approve with resolved notes
+- [signoffs.revision] cinematography must sign the current revision
+- [signoffs.hash] cinematography compiled signoff must bind the exact frozen contract bytes
+- [signoffs.lossless-assembly] cinematography compiled signoff must reproduce the director-authored artifact exactly

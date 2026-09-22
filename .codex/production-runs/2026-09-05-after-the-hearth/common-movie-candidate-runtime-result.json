@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 249531,
+  "stop_reason": "end_turn",
+  "session_id": "d3d2a8b4-95e7-411b-b013-b30c29c587a7",
+  "total_cost_usd": 1.5670465000000002,
+  "usage": {
+    "input_tokens": 44,
+    "cache_creation_input_tokens": 66160,
+    "cache_read_input_tokens": 836347,
+    "output_tokens": 19412,
+    "output_tokens_details": {
+      "thinking_tokens": 5142
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 66160,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2864,
+        "cache_read_input_tokens": 70295,
+        "cache_creation_input_tokens": 2171,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2171
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1678,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001753,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 44,
+      "outputTokens": 19412,
+      "cacheReadInputTokens": 836347,
+      "cacheCreationInputTokens": 66160,
+      "webSearchRequests": 0,
+      "costUSD": 1.5652935000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 5142,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 33,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: PARTIAL** \u2014 3 cold COMMON movie runs executed and green on the wrapper, but two required acceptance anchors (`anc.cg.complete`, `anc.cg.handback`) were never observed. Not a pass.\n\n**Time**: transport startedAt 22:14:19Z \u2192 report 22:19:51Z. 5.5 of 15 min used.\n\n## Gates (CPU-only, before launch)\n| Gate | Result |\n|---|---|\n| manifest sha256 | `8962a7b2\u202646962` \u2014 **exact match** |\n| `bash -n` launcher | OK |\n| `node --check` \u00d74 probe files | OK |\n| relative+dynamic-literal imports | 13 modules, 11 edges, **0 missing** |\n| bare specifiers | all `node:*` + `playwright-core` (installed). `\"x\"` = doc-comment false positive in `sourceSnapshot.mjs:132` |\n| `evidence.mjs` exported helpers | all 8 imported names real (`openParavoxia, waitReady, readState, frameStats, hideUi, showUi, SWIFTSHADER, CAPTURE_TIER`); used unchanged |\n| preview daemon pid 2144696 | alive, 53m |\n| HTTP pins | index + bundle sha **match** served bytes |\n| DISPLAY=:0, SWIFTSHADER unset | headed hardware path |\n\nTwo concrete launcher faults corrected (launcher only; no game source, no producer receipt):\n1. log dir was `logs/common-movie-candidate-prep` \u2192 `logs/common-movie-candidate-runtime` (my owned dir).\n2. the global `pgrep` mislabelled \"owned by this session\" \u2014 claim removed; ownership now asserted only from `cleanup-receipt.json`, census relabelled \"NOT an ownership claim\". No process killed; root preview untouched.\n\n## Measurements \u2014 3 cold runs, bound 100 s\n| Run | Elapsed | Bound | Exit | Stop | Beat | Rescues | pageErrors | Cleanup |\n|---|---|---|---|---|---|---|---|---|\n| 1 | 36 348 ms | 100 s | 0 | reached-beat:done | done | 0 | [] | stopped |\n| 2 | 36 425 ms | 100 s | 0 | reached-beat:done | done | 0 | [] | stopped |\n| 3 | 36 262 ms | 100 s | 0 | reached-beat:done | done | 0 | [] | stopped |\n\nVariance 163 ms across runs. 37 frames each. Renderer all 3: `ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)`, `headed=true`, `swiftshaderAllowed=false`, tier `hardware-high`. Cold browser identity distinct per run (run-1 pid 2246629 present in census, gone by run 2).\n\n## Movie-lane proof (not manual)\nURL all 3: `\u2026/?story=ch13-common&journeyprobe=1&debug=1&movie=1`. Autopilot **active in 202/203 trace samples**; `routeAction`, `clock` advance; `teleportNudgesTotal: 0`. No WASD substitution.\n\n## Acceptance data (shipped `__paravoxiaCommonGround` diagnostic) \u2014 identical all 3 runs\n`stage: arrived`, **`terraUnits: 18`** \u2713, **`workerUnits: 18`** \u2713, **`committed: true`** \u2713, `comparisonProved: true`, `finalReferenceOffered: true`, `finalReferenceOccupied: false`.\n\n## MISSING EVIDENCE (why this is not a pass)\n- **`anc.cg.complete` and `anc.cg.handback` never fired** in any observed ledger/event stream. They appear only in `beatAnchorsExpected` (contract) and in the game's own declared `diagnostic.anchors` array \u2014 declaration is not observation.\n- **Anchor sequence 5 is unaccounted in all 3 runs**: ledger goes seq 4 (`anc.cg.independent-test`) \u2192 seq 6 (`null`). A transition existed and was not captured at `--sample-ms 100`. This is exactly where `complete` would sit. I do not claim it fired.\n- Observed anchors (all 3, identical): 1 `reciprocal-reference` \u00b7 2 `reciprocal-crossed` \u00b7 3 `final-reference-offered` \u00b7 4 `independent-test` \u00b7 6 `null`.\n- **`readState.lane` is absent** from `finalState` (keys: anchor, auditWorker, autopilot, beat, health, markerLabel, milestones, objectiveId, prompts, workOrder). Lane is proven by request URL + autopilot, **not** by a shipped readState lane field as required.\n- **H\u2192E uncredited-2 transient not proven.** Only terminal 18/18 captured; `physicalDiagnostics` holds final state only. Per instruction I do not treat final 18 as dense transient proof.\n- The harness itself sets **`outcomeIsAcceptance: false`** on all 3.\n\n## Objective lifecycle (identical all 3 runs, 11 trace entries)\n`ch13:common:reciprocal` (\"Far reference \u00b7 check my route\") \u2192 text-change to actionable \"Walk the guide line\u2026\" \u2192 clear at `reciprocal-crossed` \u2192 `ch13:common:offer-final-reference` (\"[F] Offer this end\", health `ready`) \u2192 clear at `final-reference-offered` \u2192 `ch13:common:release` \u2192 clear at beat `done`, anchor null. Marker labels parity-exact; every standing work order retains a verb/input; **guidance cleared cleanly at `done`** (no stale objective, no `missing-marker`).\n\n## Objective visual defects\n- `attempt-\u2026-run1/0001-strip-ch13-common.png`, beat ch13-common, t\u22480 s: **3D viewport fully black**; only debug HUD panels and the objective card render. Boot frame. Corroborated by size (93 KB / percept 4.2 KB vs ~1.1 MB for all later frames). Same size signature in runs 2 and 3.\n- `0032-beat-done.png`: world renders fully, HUD and objective card present, no letterbox/scanline artifact, no wrong-era glimpse. No taste verdict offered.\n\n## FPS\n**Not measured** \u2014 the journey-probe lane emits no rAF/fps field. No fps claim is made.\n\n## Cleanup\nAll 3 `cleanup-receipt.json`: `state: stopped`, `cleanupCompleted: true`, `stopsOnlyProbeOwnedSession: true`. Root preview daemon 2144696 never touched, still serving. `flock` fd9 held exclusively for the whole sequence and released; no contender timeout. (Note: `summary.json .cleanup` shows `sessionStopped:false` \u2014 it is written pre-`finally` and is superseded by the receipt, per the receipt's own `supersedesForCleanupState`.)\n\n## Artifacts\n- Report: `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/common-movie-candidate-runtime-report.json`\n- Captures: `\u2026/verifier/captures/common-movie-candidate/attempt-20260906T221545Z-run{1,2,3}/` \u2014 37 PNGs each + `summary.json` + `trace.ndjson` (3.85 MB) + `source-snapshot/` + `cleanup-receipt.json`\n- Preflight receipts: `\u2026/verifier/captures/common-movie-candidate/preflight-ok-{1788732945917,1788732984909,1788733023979}.json`\n- Logs: `\u2026/logs/common-movie-candidate-runtime/launcher-20260906T221545Z.log` + `attempt-\u2026-run{1,2,3}.log`\n- `probeSha256`: `bab7c6339ed6c02fdfee2b5273fd64b684e6a3462d463a1bab33b8e09ef93a36` (reconstructable: true)\n\n**Caveats**: 3-run COMMON matrix only \u2014 no station-to-chapter or full-story claim. No variant matrix (mobile/reduced-motion/low-tier) run. Wrapper exit 0 is **not** used as an acceptance claim. Nothing deleted; all prior byte snapshots and capture attempts preserved. No game source, build, full suite, or producer/control file modified.",
+  "ttft_ms": 1410,
+  "type": "result",
+  "duration_ms": 369101,
+  "uuid": "5b5d2564-cb9f-4a3a-83a5-86b4ea7c9c16",
+  "ttft_stream_ms": 658,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 658,
+  "queued_turn_count": 0
+}

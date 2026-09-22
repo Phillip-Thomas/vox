@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 210102,
+  "stop_reason": "end_turn",
+  "session_id": "3d5fb399-9d1b-4f63-804e-7186e70abc6a",
+  "total_cost_usd": 0.8917615000000001,
+  "usage": {
+    "input_tokens": 22,
+    "cache_creation_input_tokens": 37098,
+    "cache_read_input_tokens": 279069,
+    "output_tokens": 15164,
+    "output_tokens_details": {
+      "thinking_tokens": 5878
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 37098,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1480,
+        "cache_read_input_tokens": 42983,
+        "cache_creation_input_tokens": 421,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 421
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1917,
+      "outputTokens": 24,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002037,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 22,
+      "outputTokens": 15164,
+      "cacheReadInputTokens": 279069,
+      "cacheCreationInputTokens": 37098,
+      "webSearchRequests": 0,
+      "costUSD": 0.8897245,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 5878,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 18,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: cause narrowed to one source path \u2014 **off-face parked-ship egress at Continue remount**; activation unproved. Ran 22:32:05Z \u2192 22:35:11Z (3m06s of 5m). CPU-only, no GPU/browser/build/test, no source edit.\n\n**Causal delta (new this pass)**\n\nThe numeric fingerprint the prior audits didn't extract: both post-jump positions have the form `[<surface-altitude magnitude>, 13.5, -16]`, where the **X slot carries a magnitude that on the top face is a Y magnitude**.\n- capsule `+711ms` = `[53.849998474121094, 13.5, -16]`; X slot = `arrivalPose.playerSurfacePosition.y` (voxelDebug `playerRequested [8,53.85,-6]` at `+426ms`).\n- base key after Continue = `[52.78897476196289, 13.5, -16]`; X slot is an **exact 16-digit match** to the saved exit pose's **Y** (`52.78897476196289`, playerpose-after-beforeunload).\n- Ties to ship `[54,16,-16]`: z identical, `16 \u2212 2.5 = 13.5` player egress clearance, x `54 \u2248 53.85`. Ship-adjacent along **+X**, not +Y.\n\n**Source fact**: `EfficientScene.tsx:515` calls `resolveShipPlayerEgressPosition(spawnTerrain, planetSize, landedShipPos)` with **three** args \u2014 the 4th `face` is omitted, unlike the arrival path at `:261` which passes `resolved.face`. `spawnValidation.ts:461-465` has `face?: CubeFace`; undefined falls back to `dominantFaceForPosition`, which for `[54,16,-16]` (|x|=54 dominant) yields **+X**, while `worldArrival.ts:80-84` documents the world as an explicit **top**-face (+Y) query. `:523-524` then makes `landedPlayerSpawn = landedPlayerEgress` whenever `landedShipPos` is non-null, feeding `:759/:760` and **bypassing** `initialPlayerPosition` \u2014 which had correctly loaded the saved pose.\n\n**Distinctions**\n- *Actual pose-validation reject*: **falsified** (prior replay: `isDryClearResumePosition` = SAFE at size 50; rescue never runs). The pose is bypassed, not rejected.\n- *Default spawn*: **excluded** \u2014 would give `[8,53.85,-6]`, not the observed value.\n- *Surface-flight restore*: **excluded as the transform** \u2014 `systemFlight.ts:345-354` is a pure `subtractVectors`, no axis remap, so it cannot put a Y magnitude in X.\n- *Collider remount*: right family, but displacement is in the egress **value**; `EfficientPlayer.tsx:1412/1424` only re-apply the target given.\n- Explains invariance of planetId/seed/beat across all **359** post-click frames: no world transition. The earlier Origin\u2192Tidegarden\u2192Origin excursion stays **unproved** and is not claimed. `:p1` = planet slot 1; it received the earned pose byte-identically (sha `4c011952\u2026`) before base was rewritten.\n\n**Unproved / remaining actual measurement**: that `validatedPersistedParked` was non-null at this boot (`:494`), that the derived face was `+X`, and that `landedPlayerEgress` was non-null (the data *requires* non-null, since the null fallback is `[8,53.85,-6]`).\n\n**Minimal passive pins on frozen `index-C1X65dZp.js`** (logpoints only; not executed by this role):\n- `aZ` = `resolveShipPlayerEgressPosition`, uniquely identified by its `.15` distance guard \u2014 capture args `t` (shipPosition) and `i` (face); `i===undefined` proves the omitted-face fact live.\n- `const g=i.face??Vt(t);` inside `Dn` \u2014 capture `g`; `g !== 'top'` confirms +X resolution.\n\n**Artifacts**: `continue-actual-handoff-audit.json` (JSON-validated), `logs/continue-actual-handoff-audit/run.log`. No other files touched; no repair proposed.",
+  "ttft_ms": 1475,
+  "type": "result",
+  "duration_ms": 209010,
+  "uuid": "feff78ab-d528-4990-a18b-76ac8a448bd0",
+  "ttft_stream_ms": 704,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 704,
+  "queued_turn_count": 0
+}

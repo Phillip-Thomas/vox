@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "phase": "implementation",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "checkedAt": "2026-09-06T15:58:03.908Z",
+  "checkCount": 1704,
+  "gateReportSha256": "a53d13f2e7e2f6ed5a9e243b247d0c2d0e0bf0c6206d90c2602dae4c58c6bedb",
+  "gateReportRef": "iterations/implemented-handoff-standby-repair/creative-run-quality-report.json",
+  "publicationAuthorized": false
+}

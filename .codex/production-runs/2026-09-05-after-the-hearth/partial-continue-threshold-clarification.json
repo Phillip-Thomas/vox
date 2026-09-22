@@ -1,0 +1,8 @@
+{
+  "author": "creative-producer",
+  "recordedAt": "2026-09-06T12:58:45.638416+00:00",
+  "originalCommissionRef": "partial-continue-commission.txt",
+  "instruction": "ROOT CORRECTION to my commissioning wording: the >=4-sample threshold was overly specific to an earlier reproducer, NOT a chapter or save-validity requirement. Your run-1 already earned a real partial drawing with3samples and2.089actualwalked units, before routeTested. That is precisely the partial state we need to save. Correct ONLY the probe precondition to accept a real valid drawing with at least2actualsamples andpositivewalkedUnits; do not change any game predicate. Use a bounded early stop as soon as this condition exists, not another120second wait at the known movie stall. Keep run-1 as a probe-threshold failure, not PC-EARN game failure or evidence Continue is blocked. Proceed with ACTUAL save/reload/new-act on those earned bytes. No permission question or source patch.",
+  "gameContractChanged": false,
+  "gameSourceChangeAuthorized": false
+}

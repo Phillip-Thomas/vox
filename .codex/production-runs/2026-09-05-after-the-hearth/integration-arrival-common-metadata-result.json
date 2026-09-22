@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 423981,
+  "stop_reason": "end_turn",
+  "session_id": "4cb3cb70-dc68-438d-bd97-758e7ca987e5",
+  "total_cost_usd": 2.4130535,
+  "usage": {
+    "input_tokens": 76,
+    "cache_creation_input_tokens": 77033,
+    "cache_read_input_tokens": 1648125,
+    "output_tokens": 32631,
+    "output_tokens_details": {
+      "thinking_tokens": 3460
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 77033,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1282,
+        "cache_read_input_tokens": 80247,
+        "cache_creation_input_tokens": 853,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 853
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2441,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002506,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 76,
+      "outputTokens": 32631,
+      "cacheReadInputTokens": 1648125,
+      "cacheCreationInputTokens": 77033,
+      "webSearchRequests": 0,
+      "costUSD": 2.4105475000000003,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 3460,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 47,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Metadata closure is complete. **Full `verify` passes \u2014 all 14 steps, one run, exit 0.**\n\n## What I did (continuation only)\n\nExact scene-v3 identity bindings, five files, nothing else:\n\n| path | before \u2192 after |\n|---|---|\n| `main/tools/generate-scene-av-runtime.mjs` | `a0681f65\u2026` \u2192 `d1cfbec1\u2026` (2 literals; no generator logic) |\n| `main/chapter-registry.json` | `6ae185a0\u2026` \u2192 `0e67cb8e\u2026` (catalog id/version/sha + 16 reference IDs; all 19 `scene-v2` tokens were common-ground) |\n| `docs/\u2026/paravoxia-story-authority.schema.json` | `100580db\u2026` \u2192 `eea51ae5\u2026` (one const token; strict exact equality preserved) |\n| `main/src/story/signedSceneAvRuntime.ts` | `681339e2\u2026` \u2192 `5ac8377f\u2026` (CH13 constants + doc comments) |\n| `main/src/story/generatedSceneAvRuntime.json` | `0433dc0a\u2026` \u2192 `4da94627\u2026` (regenerated; structural diff = exactly 2 leaves, all other scenes identical, equals the original invocation's v3 preview) |\n\n`story-authority.json` was already v3 \u2014 not re-edited. `signedSceneAvRuntime.test.ts` needed no edit (asserts via the constants; coverage unchanged). Zero gameplay/test writes in this continuation.\n\n## Evidence\n\n- The three previously failing gates now pass individually: `scene:av:check` (104 anchors, 3 contracts incl. `5ef85a324f57`), `chapter:registry:check` (4285 checks), `story:authority` (1039 checks).\n- **`npm --prefix main run verify` once on final source: exit 0**, all 14 steps executed \u2014 `test` = 351 files / 3172 tests. `story:ux:check` exit 0 (94 tests) beforehand.\n- Counterfactual re-run on the **repository-installed Vitest 3.2.4** (original used root `npx` \u2192 4.1.11): identical 10 failed / 149 passed; restore proof `3b2b95cc\u2026` / `c4c555d4\u2026`, restore finished 17:35:20Z before the 17:35:27Z verify.\n- Combined `changedPaths` vs the frozen 99-file baseline: **10 mine** (5 original, 5 closure), 89 unchanged. Tests: 3158 \u2192 3172, +14 (all original phase), removed **0**.\n\n## Two things needing your attention\n\n1. **New external drift.** `main/tools/creative-triad-gate.mjs` changed *again* at 17:36:27Z to `2ee54e48\u2026`, beyond root's reviewed `d26ce9af\u2026` (which was present through all my edits and gates). Reported, not adopted, not reverted, not in my changedPaths. No impact: that file is only used by `creative:gate`/`creative:smoke`, not the verify chain \u2014 I re-ran `creative:workflow:check` post-drift (185 checks, pass) for provenance.\n2. **Report corrections carried in.** The three metadata failures are recorded as unfinished v3 bindings of *this* task (post-16:50:03Z promotion), not unrelated pre-existing defects; and the modified controller assertion is documented as a tighter stop-radius ceiling with a *recalculated* (not stronger) `> 0.2` standoff threshold.\n\nArtifacts: combined `integration-arrival-common-report.json`/`.md`, `integration-arrival-common-metadata-progress.md`, `logs/arrival-common-metadata-closure/` (9 logs, hashed), `.private/arrival-common-metadata-closure/`. No source writes after the final verify or this report. Still not an acceptance, independent verification, or publication.",
+  "ttft_ms": 1721,
+  "type": "result",
+  "duration_ms": 497950,
+  "uuid": "452bd164-2960-4730-9634-299a482b423e",
+  "ttft_stream_ms": 995,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 1006,
+  "queued_turn_count": 0
+}

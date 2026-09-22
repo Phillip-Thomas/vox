@@ -1,0 +1,19 @@
+{
+  "noncertifying": true,
+  "reproducedSite": "-10,25,2",
+  "baseline": "foundation-repair-20260909/original-site-input-ready/result.json",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "errors": [],
+  "complete": true,
+  "elapsedMs": 24873,
+  "initialWood": 18,
+  "treePickerMatched": true,
+  "woodProgress": [
+    18,
+    25,
+    31
+  ],
+  "lastBeat": "ch9-hearth",
+  "backstops": 0,
+  "teleportNudges": 0
+}

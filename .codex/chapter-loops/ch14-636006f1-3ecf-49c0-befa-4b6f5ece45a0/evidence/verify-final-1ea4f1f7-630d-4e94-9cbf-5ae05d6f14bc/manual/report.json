@@ -1,0 +1,78 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "106dc4dff2c061e07c22305a50ff19ede8071943fc669ed03605b1f931b2d8ef",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": true,
+    "acceptedAction": 8,
+    "completePath": true,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-1ea4f1f7-630d-4e94-9cbf-5ae05d6f14bc/manual/raw/cleanup.json",
+      "sha256": "73f0c4f2177edd744ba46d1508bd0b0504452a0bcdcfa8a5ce2c847d95383e83"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-1ea4f1f7-630d-4e94-9cbf-5ae05d6f14bc/manual/raw/frame-4.png",
+      "sha256": "d18fc528ffeded38c7992a9c47b260ef8819308774622e6f2d6eaa9a8b5287ef"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-1ea4f1f7-630d-4e94-9cbf-5ae05d6f14bc/manual/raw/frame-5.png",
+      "sha256": "f5f6177d9d179a8fde49b4621741b05741222a1b681860b3e1f7b9acea3de584"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-1ea4f1f7-630d-4e94-9cbf-5ae05d6f14bc/manual/raw/frame-6.png",
+      "sha256": "f4359501ac5a3e0c67c906f7b9efc3ab28c518092c636fdc6c4eab2ab02eec91"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-1ea4f1f7-630d-4e94-9cbf-5ae05d6f14bc/manual/raw/frame-7.png",
+      "sha256": "9010660fd7e6540bf3e8e2a186d4e379b7f7209f2e732f2e0f82dd22d4541b1a"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-1ea4f1f7-630d-4e94-9cbf-5ae05d6f14bc/manual/raw/observations.json",
+      "sha256": "77e4fe57759cb045f023af595b75b0645d62a4f9233dc5218987263dcb333460"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-1ea4f1f7-630d-4e94-9cbf-5ae05d6f14bc/manual/raw/provenance.json",
+      "sha256": "e86f5f2a5eaf8598c07c982593cf566d83c28f5756c94fa5c1dc5e85e1c397fd"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-1ea4f1f7-630d-4e94-9cbf-5ae05d6f14bc/manual/raw/trace.ndjson",
+      "sha256": "453297755fdfc6f463b3b7137bf8f8622188b564e63c24a477739263d57ac467"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-1ea4f1f7-630d-4e94-9cbf-5ae05d6f14bc/manual/raw/walk-calibration.ndjson",
+      "sha256": "afd57613bd199d23e28083a44467a3acf4bdfd04c6e88f9ef4426810d5ace7f9"
+    }
+  ],
+  "reviewEntry": null,
+  "media": [
+    {
+      "kind": "frame",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-1ea4f1f7-630d-4e94-9cbf-5ae05d6f14bc/manual/frame.png",
+      "sha256": "7ac9186c53ac745ef843a36c3da31833061bc2eadd6af5c9972277b85ab3d7e9"
+    }
+  ],
+  "mediaTimeline": null,
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 0,
+  "reused": false,
+  "status": "passed",
+  "errors": [],
+  "provenance": {
+    "sourceManifestSha256": "bbb46273a51880e7615ac8d85376fd1993ed5a0113d8ca3cd293b3ca1f05fe4c",
+    "buildSha256": "fabdd0a0eb26fd9a49b8c4fcf3b8b309643d7ad6d77c5ddabd44168937d4c89a",
+    "transportSha256": "65fd4f66511ea94458f2f5d83421920d16af1802b693a16a1b810c40761a39d7"
+  }
+}

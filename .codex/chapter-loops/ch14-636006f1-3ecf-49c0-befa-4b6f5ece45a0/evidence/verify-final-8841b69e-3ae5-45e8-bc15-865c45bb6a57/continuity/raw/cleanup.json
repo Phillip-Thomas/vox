@@ -1,0 +1,12 @@
+{
+  "phase": "post-finally",
+  "errors": [
+    "Video: video.saveAs: Target page, context or browser has been closed"
+  ],
+  "recorderStopped": true,
+  "browserStopped": true,
+  "moduleRemoved": true,
+  "defaultSinkUnchanged": false,
+  "previewIntact": true,
+  "sourceIntact": true
+}

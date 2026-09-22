@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 507236,
+  "stop_reason": "end_turn",
+  "session_id": "6dd4282b-4465-4a1a-88ba-51c6f35a67eb",
+  "total_cost_usd": 3.8187945,
+  "usage": {
+    "input_tokens": 82,
+    "cache_creation_input_tokens": 111362,
+    "cache_read_input_tokens": 3160377,
+    "output_tokens": 44917,
+    "output_tokens_details": {
+      "thinking_tokens": 3069
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 111362,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2062,
+        "cache_read_input_tokens": 117191,
+        "cache_creation_input_tokens": 167,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 167
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1571,
+      "outputTokens": 16,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001651,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 82,
+      "outputTokens": 44917,
+      "cacheReadInputTokens": 3160377,
+      "cacheCreationInputTokens": 111362,
+      "webSearchRequests": 0,
+      "costUSD": 3.8171435000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 3069,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 50,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Both artifacts are written. Delivering the summary.\n\n---\n\n## Artifacts (story run only, no source touched)\n\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/implementation-interface-plan.md`\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/scene-contract-assembly-notes.md`\n\nNo runtime/main edit, no build, test, browser, GPU, server, patch or signature. Working tree otherwise untouched (`git status` shows only these two new untracked files in the run folder). Combined length 2,709 words \u2014 **over the 2,200 budget by ~500**; I traded budget for the pinned symbol/line references, which are the part that prevents a circuitous refactor.\n\n## Exact interface plan (condensed)\n\n**New namespaced modules:** `story/commonGround{State,Route,Director,Score,Actor}.ts`, `story/world/CommonGroundWorld.tsx`, `story/beats/ch13/{ch13-home,ch13-return,ch13-survey,ch13-common}.ts` + `index.ts`/`definitions.ts`, `story/autopilot/rail-ch13-*.ts`, colocated tests.\n\n**Shared files, one small call each (all pinned to live exports, not the old survey):**\n- `storyState.ts` \u2014 `storyEntryPoint :246` clauses *before* `ch10Complete`, explicit `alive`; `STORY_BEAT_ORDER :333`; `STORY_MILESTONES :120`; `reactivateStoryAtBeat :821` (never `advanceToBeat :808`); `restartStory :775` needs an explicit ch13 clear.\n- `StoryDirectorDriver.tsx :146/:181` dormant seam; `emergentStoryDirector.ts` `enterEmergentStoryBeat :645` / `emergentStoryDirectorTick :787`.\n- `beats/beatContract.ts::defineBeat :73` (`entry: 'reactivation-from-done'` for `ch13-home`); `beats/index.ts` import is hand-added; `beats/ch13/index.ts` must exist before the first generator run.\n- `objectivePrimitives.ts :84/:116`, `worldHandles.ts :9`, `markerTargets.ts :10/:20`, `interactionSystem.ts::InteractionId :9`, `storyInteractions.ts::registerStoryInteraction :287`.\n- `persistence.ts` \u2014 `WorldSave.commonGround?` following the `habitat` precedent (`:239/:253/:301`) plus `restore/clearCommonGroundForWorld`.\n- `storyScore.ts` facade only (`:965\u2013:1032`); \u22645 s live-only coda is the single required new score behavior; no engine graph, no new `STORY_HIT_ANCHORS`.\n- `signedSceneAvRuntime.ts :49` + `generate-scene-av-runtime.mjs::SIGNED_SOURCES` mirrors, `scene:av:check`.\n\n**Trace state:** versioned, actor/world-keyed snapshot with two slots, `testedPrefixCount` + `tailRevision`, one witness, hold reason, `safePose`; hydrate returns `null` on version/actor/world mismatch; `reviseTail` never lowers the tested prefix; `clearUncommitted` never touches `accepted`. All numeric caps/radii/range/sockets are declared exports with **no committed values** \u2014 deferred to the contract.\n\n**Actor/route:** `AuditWorker` stays the only body; `commonGroundActor.ts` is the sole ch13 pose writer (no `a4-exhale` overlap); `auditWorkerPresence.ts:11` gets one branch independent of the pack-drop latch; routing reuses `planAgentSurfaceRoute :305` / `createLiveAgentSurfaceTerrain :13` / `groundedSurfaceMotion` unmodified, with the pass-2 trunk-collider guard layered chapter-locally, three distinct refusal reasons, hold-at-last-safe.\n\n**Boundary:** `ch13` registry record at `order: 11`; ch11/ch12 receipts stay byte-identical and their transactions are not reimplemented; a named `externalTransitions` record (`ch10->ch13-via-station`) with independently checked both-side guarantees + evidence refs, added to registry, schema and gate \u2014 ordinary adjacency stays strict; new `state:` refs need a `storyBoundaryTelemetry.ts` producer *before* `SUPPORTED_STATE_REF_PATTERNS` (`chapter-registry-gate.mjs:27`).\n\n**Rail seam:** `stationmovie=1` \u2192 real airlock depart \u2192 intent carried without `story=` (`enterSpaceStation` strips it; reseeding erases the save) \u2192 `undock`/`fly` reconstruction \u2192 flight/land \u2192 real `installTidegardenBondedCell` \u2192 invitation \u2192 ch13 watch; `isMovieStationBridgeActive :1732` must yield; `railDiscipline.test.ts` 29-file census updated honestly.\n\n## Remaining dependencies (blocking an engineer)\n\n1. Selected instrument range (12 vs 24) + socket assignment \u2014 unsigned, three-lane.\n2. Arena coordinates and proof the two route classes clear the \u226512-unit / \u226525% / \u22656-unit-unsupported floor. Pass 2 says the current arena does not; it must not be frozen.\n3. Trace caps, spacing, corner threshold, witness radii/tolerances as contract constants.\n4. Exact objective ids, marker labels, work-order copy, feedback ids.\n5. The `externalTransitions` shape signed into registry schema + gate.\n6. Signed contract sha/revision for the AV inventories and `sceneContracts`.\n7. Owner-delegated decision after three signatures; production lock moved off `planning-only` (currently `planning-only`, `sourceRevision b631a52\u2026+working-tree`, allowedPaths = the run folder only).",
+  "ttft_ms": 1446,
+  "type": "result",
+  "duration_ms": 507052,
+  "uuid": "345b266c-2749-4f95-b022-8f3ddb8f221c",
+  "ttft_stream_ms": 695,
+  "time_to_request_ms": 22,
+  "first_content_frame_ms": 695,
+  "queued_turn_count": 0
+}

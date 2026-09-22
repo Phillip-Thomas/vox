@@ -1,0 +1,17 @@
+{
+  "recordedAt": "2026-09-06T11:08:01.909692+00:00",
+  "harnessPrepReportRef": "harness-prep-report.json",
+  "status": "source interface coordination; not runtime proof",
+  "actualNewInterface": "window.__paravoxiaCommonGround.snapshot() in active lifecycle source, query-gated StoryDirectorDriver",
+  "resolvesInPrinciple": [
+    "IR-1 CommonGround diagnostic via snapshot.diagnostic",
+    "IR-2 fullprecision physics via snapshot.bodyCentre/bodyPose/up"
+  ],
+  "caveats": [
+    "Old43617preview lacks this hook; only future clearedbuild can prove it.",
+    "Rootobserverconcern must be corrected so snapshot never executes movementplanner.",
+    "Harness report no-published-hook claim describes its earlier sourcegrep, now stale while engineer remainsactive.",
+    "Nextverifier must use --cg-diag-hook and adapt fullprecisionselector to bodyCentre/up ifneeded, with run-local selftests. No need to expand sourceboundary to JourneyRuntimeProbeBridge.",
+    "Score diagnostic still needs a field or equivalent purequery; askengineer within existing sourceowner ifabsent."
+  ]
+}

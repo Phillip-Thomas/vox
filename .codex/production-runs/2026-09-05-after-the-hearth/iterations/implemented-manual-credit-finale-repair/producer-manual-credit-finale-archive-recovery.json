@@ -1,0 +1,48 @@
+{
+  "createdAt": "2026-09-06T21:18:18.934273+00:00",
+  "disposition": "All eight pre-handoff draft files restored at original nested paths with exact recorded hashes. No candidate source modified.",
+  "cause": "Final engineer removed original source/main tree outside commission; report did not preserve all producer-owned evidence.",
+  "provenance": "integration-manual-credit-finale-frontier-stream.jsonl tools toolu_01Sruk1xC4KZTkT9yEhCHJXh and toolu_01BQFUg4jeM6UFEJzFw1tpBU; Driver test recovered from tool results toolu_015PvKnbPmZEkAEtfRotwiCC lines1-60 and toolu_01F1H7yRaDjDAvXUZPsPErPP lines60-137, overlap removed.",
+  "files": [
+    {
+      "path": "main/src/story/commonGroundRoute.ts",
+      "sha256": "13b3974e0dd2862bdb046a9439107fa22ba948a7ab9795341fdd6e311be34864",
+      "recoveredFrom": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/iterations/manual-credit-finale-rejected-projection-draft/source/commonGroundRoute.ts"
+    },
+    {
+      "path": "main/src/story/commonGroundRoute.test.ts",
+      "sha256": "e2bd0e8334f637d1cf8784cc298200829c43a470f24e41e6a7c7c3dcc25f9d81",
+      "recoveredFrom": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/iterations/manual-credit-finale-rejected-projection-draft/source/commonGroundRoute.test.ts"
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.ts",
+      "sha256": "73bceed58ff5f17df70d118d1c1091819e964e3ae5761af2b145956171cf0983",
+      "recoveredFrom": "/home/thomasphillip/Projects/vox/main/src/story/commonGroundDirector.ts"
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.test.ts",
+      "sha256": "54f9f76781e00325d63a3d187184827fcfaf9d444e4d98a8ec9a98356bd30023",
+      "recoveredFrom": "/home/thomasphillip/Projects/vox/main/src/story/commonGroundDirector.test.ts"
+    },
+    {
+      "path": "main/src/story/StoryDirectorDriver.tsx",
+      "sha256": "85327128819f44f745f58f72300da1595a5a2e0283bcdf8777f9495e608f493c",
+      "recoveredFrom": "/home/thomasphillip/Projects/vox/main/src/story/StoryDirectorDriver.tsx"
+    },
+    {
+      "path": "main/src/story/StoryDirectorDriver.test.tsx",
+      "sha256": "0f10a92bf7da3b7b23977053e55b5732f68c4965b33a316fc701473b2d54584d",
+      "recoveredFrom": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/iterations/manual-credit-finale-rejected-projection-draft/driver-test-stream-recovery.txt"
+    },
+    {
+      "path": "main/src/story/commonGroundScore.ts",
+      "sha256": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+      "recoveredFrom": "/home/thomasphillip/Projects/vox/main/src/story/commonGroundScore.ts"
+    },
+    {
+      "path": "main/src/story/commonGroundScore.test.ts",
+      "sha256": "70630be669128d832814a82491d23c61f56927668f085f564920f4063fa3d535",
+      "recoveredFrom": "/home/thomasphillip/Projects/vox/main/src/story/commonGroundScore.test.ts"
+    }
+  ]
+}

@@ -142,13 +142,18 @@ const EmergentAuditSites: React.FC<EmergentAuditSitesProps> = ({
   }, [commandContext, pond, relay.position, revision, story.active, story.beat, tree.position]);
 
   const target = currentTarget(story.beat, pond?.shore ?? null, tree.position, relay.position, commandContext.actorId);
-  if (!target) return null;
   const protectedTrace = story.beat === 'ch4-defy'
     && hasMilestone(EMERGENT_AUDIT_MILESTONES.protectedToolRefused, commandContext.actorId)
     && !hasMilestone(EMERGENT_AUDIT_MILESTONES.refusalCommitted, commandContext.actorId);
   return (
     <>
-      <AuditAttentionRing position={target.position} color={target.color} />
+      {/* Keep the light slot present across the arrival-to-audit cut. Adding a
+          point light there recompiles every lit world material on that frame. */}
+      <AuditAttentionRing
+        position={target?.position ?? tree.position}
+        color={target?.color ?? '#ffffff'}
+        active={target !== null}
+      />
       {protectedTrace && <ProtectedTreeToolTrace position={tree.position} up={tree.up} />}
     </>
   );
@@ -194,15 +199,17 @@ function currentTarget(
   return null;
 }
 
-const AuditAttentionRing: React.FC<{ position: THREE.Vector3; color: string }> = ({ position, color }) => (
-  <group position={position}>
-    <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0.08, 0]}>
-      <torusGeometry args={[0.65, 0.035, 8, 36]} />
-      <meshBasicMaterial color={color} transparent opacity={0.62} depthWrite={false} />
-    </mesh>
-    <pointLight color={color} intensity={0.32} distance={3.5} decay={2} position={[0, 0.5, 0]} />
-  </group>
-);
+export function AuditAttentionRing({ position, color, active }: { position: THREE.Vector3; color: string; active: boolean }) {
+  return (
+    <group position={position}>
+      <mesh visible={active} rotation={[Math.PI / 2, 0, 0]} position={[0, 0.08, 0]}>
+        <torusGeometry args={[0.65, 0.035, 8, 36]} />
+        <meshBasicMaterial color={color} transparent opacity={0.62} depthWrite={false} />
+      </mesh>
+      <pointLight color={color} intensity={active ? 0.32 : 0} distance={3.5} decay={2} position={[0, 0.5, 0]} />
+    </group>
+  );
+}
 
 /** The Maw field visibly collapses against an intact trunk: refusal, not damage. */
 const ProtectedTreeToolTrace: React.FC<{

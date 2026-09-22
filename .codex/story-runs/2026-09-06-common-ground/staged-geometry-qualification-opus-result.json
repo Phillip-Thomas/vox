@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 279034,
+  "stop_reason": "end_turn",
+  "session_id": "8f3dd9b7-7bcb-4eb8-9bf8-6fb7003e0de2",
+  "total_cost_usd": 3.1183975,
+  "usage": {
+    "input_tokens": 74,
+    "cache_creation_input_tokens": 102339,
+    "cache_read_input_tokens": 3010127,
+    "output_tokens": 23520,
+    "output_tokens_details": {
+      "thinking_tokens": 4523
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 102339,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1241,
+        "cache_read_input_tokens": 107774,
+        "cache_creation_input_tokens": 561,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 561
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1499,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0015739999999999999,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 74,
+      "outputTokens": 23520,
+      "cacheReadInputTokens": 3010127,
+      "cacheCreationInputTokens": 102339,
+      "webSearchRequests": 0,
+      "costUSD": 3.1168235,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 4523,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 40,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: pass \u2014 staged-pose qualification PASS, 0 failures, CPU 0.79 s (budget 60), exactly one candidate, no search/fallback.\n\n**Measurements (CPU geometry probe; no beats/fps/browser in scope)**\n\n| Property | Required | Measured |\n|---|---|---|\n| H grounds (-40,51.05,12), voxel (-20,25,6) | supported, no solid intersect | disc supported, min planar gap 8.75, `anyIntersection:false` |\n| H distinct from E (-42,51.05,12) | distinct | separation 2.00, `distinctFromComparisonStart:true` |\n| E\u2192C samples from H+1.85 (52.90) | all 31 in range 12 + clear | 31/31, max 10.01, margin 1.99, 0 failures |\n| E\u2192C dense points from H+1.85 | all 73 in range 12 + clear | 73/73, 0 solid crossings |\n| Units outside fixed reference | real nonzero, unchanged | 8.25; reciprocal necessity 8.00 (44.4 %), nonzero |\n| Player whole path vs worker at H | \u22651 body-body | **2.00** |\n| Leg E\u2192H (live planner/solid guard) | dry, no solid/trunk hit | 2.00 walked, 3 samples/9 dense, all dry, gap 8.75, no hit |\n| Leg H\u2192E | dry, no solid/trunk hit | 2.00 walked, 3/9, all dry, no hit |\n| H\u2192E moving worker from far Terra T+1.35 | in range + clear, clearance \u22651 | 3/3 samples, 9/9 dense, max 4.03, margin 7.97, clearance 2.00 |\n| Final full E\u2192C from separate far Terra | independent, no leg credit | 73/73 dense clear, max 7.23, clearance 2.00, `finalTestUsesPositioningLegs:false` |\n| Preserved | unchanged | short 16.00 / span 14.00 backing-only, long 36.00 all-supported, W-shift valid, 6 contact tests pass, cap/socket connection, footprint uniform |\n\n**Objective defects**: none.\n\n**Text honesty**: no false \"held at E\" \u2014 `workerReferenceHeldAtH` states the socket is H+1.85; the only \"held at E\" strings are the explicit provenance line (`previousStudyProved`) and its negation. Near-body clearance is flagged as new; reference-socket-dependent metrics are listed in `stagedPoseChange.metricsChangedByH` and are **not** claimed byte-identical.\n\n**Source-13 hashes**: identical before/after (7 live modules + selected-/head-geometry-qualification .mts/.json/.md). Prior reports untouched.\n\n**Artifacts**\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/staged-geometry-qualification.mts`\n- `\u2026/staged-geometry-qualification.json`\n- `\u2026/staged-geometry-qualification.md` (342 words)\n- Repro: `cd main && ./node_modules/.bin/esbuild ../.codex/story-runs/2026-09-06-common-ground/staged-geometry-qualification.mts --bundle --platform=node --format=esm --outfile=/tmp/cg-staged.mjs \"--alias:three=$PWD/node_modules/three/build/three.module.js\" \"--alias:three/examples/jsm/utils/BufferGeometryUtils.js=$PWD/node_modules/three/examples/jsm/utils/BufferGeometryUtils.js\" && node /tmp/cg-staged.mjs`",
+  "ttft_ms": 1588,
+  "type": "result",
+  "duration_ms": 279555,
+  "uuid": "0271751b-9c27-4cde-bd8a-78f05c7a92af",
+  "ttft_stream_ms": 831,
+  "time_to_request_ms": 38,
+  "first_content_frame_ms": 832,
+  "queued_turn_count": 0
+}

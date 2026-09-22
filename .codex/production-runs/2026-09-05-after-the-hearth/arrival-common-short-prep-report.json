@@ -1,0 +1,165 @@
+{
+  "schema": "paravoxia.run.arrivalCommonShortPrep.v1",
+  "role": "mechanical probe preparer (opus, CPU-only)",
+  "run": ".codex/production-runs/2026-09-05-after-the-hearth",
+  "status": "prepared-not-run",
+  "producedAt": "2026-09-06T17:55:00Z",
+  "isAcceptance": false,
+  "closesDefect": false,
+  "publishes": false,
+  "scope": {
+    "owned": [
+      "verifier/probes/arrival-common-short/",
+      "logs/arrival-common-short-prep/",
+      "arrival-common-short-prep-report.json",
+      "arrival-common-short-prep-report.md"
+    ],
+    "notTouched": [
+      "game/runtime source (main/**) — read-only",
+      "scene-contract.json, all gates and manifests — read-only",
+      "every existing probe, including verifier/probes/arrival-common-manual/, manual-focused/, cg-journey-probe.mjs and verifier/probes/lib/* — read-only, byte-verified before and after",
+      "verifier-control.json — read-only"
+    ],
+    "gpuBrowserBuildUsed": false
+  },
+  "problemStatement": "The movie rail and every existing manual witness capture deliberately draw the LONG span (manual-witness-hold-probe.mjs hardcodes the 18-waypoint z=14..22 detour, which is CG_ROUTE_LONG minus its first vertex). LONG is supported end to end by the fixed reference and therefore completes as routeClass 'fixed-reference'. No existing artefact can be re-read as a SHORT proof, so a SHORT lane must draw the short span itself and earn the held-reference class.",
+  "contractAndSourceRead": {
+    "sceneContract": {
+      "path": "scene-contract.json",
+      "sha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+      "contractVersion": "scene-v3",
+      "status": "frozen",
+      "surveyObjectivesRead": [
+        "ch13:survey:offer", "ch13:survey:start", "ch13:survey:draw", "ch13:survey:offer-span",
+        "ch13:survey:test", "ch13:survey:revise", "ch13:survey:witness", "ch13:survey:witness-return"
+      ],
+      "note": "The pinned cgContract helper carries the scene-v2 signature (4dbf722b…). It is NOT used to load the contract here; this lane reads the CURRENT bytes and refuses if they are not the scene-v3 sha above."
+    },
+    "runtimePredicatesReadReadOnly": {
+      "main/src/story/commonGroundState.ts": "7a3c03fb73cb715116ddbf1952fc2c312f52d1dac68b765b8097f4becdb0452e",
+      "main/src/story/commonGroundRoute.ts": "6025bc4c55098bb3bffc54dd04134fa3b666ef71361e22bba1a9b3fad7a1f1ff",
+      "main/src/story/commonGroundDirector.ts": "3b2b95ccd1701b863348e147a8181a704c2ed73258467ea98617e06f0f25aba3",
+      "main/src/story/commonGroundRoute.test.ts": "69e1760a1e2296b363af1dea7a7efe7bdde72044e0cf4449cee0bbee28e29f88"
+    },
+    "actualGeometry": {
+      "CG_ROUTE_SHORT": "9 samples, straight along z=12 from S(-26,51.05,12) to E(-42,51.05,12), 16 walked units",
+      "CG_ROUTE_LONG": "19 samples, z=14..22 detour, 36 walked units",
+      "CG_POSES.W": "(-34, 51.05, 10) — the authored witness pose, OFF the short span",
+      "classDecision": "commonGroundDirector.tickWorkerTest: routeClass = held ? 'held-reference' : 'fixed-reference', where `held` requires witness.offered AND witness.occupied at the completing tick",
+      "filenamesWereNotTrusted": "Geometry was taken from the frozen source literals and re-extracted mechanically by selftest.mjs, not inferred from any probe filename. The old manual-survey/manual-survey-probe.mjs was NOT used as a survey reference."
+    },
+    "shippedPredicateSnapshotDeferredTo": {
+      "source": "main/src/story/commonGroundRoute.test.ts",
+      "assertions": [
+        "short + fixed reference only -> reason != null and supportedPrefix < 9",
+        "the named cause is 'reference-occluded-survey-housing' or 'reference-out-of-range'",
+        "short + held reference at playerSocket(CG_POSES.W) -> reason null, supportedPrefix == 9",
+        "long + fixed reference only -> reason null, supportedPrefix == 19",
+        "walked lengths are 16 and 36"
+      ],
+      "why": "The lane defers to the already-shipped expectations instead of writing its own looser geometric proof."
+    }
+  },
+  "preparedArtifact": {
+    "entrypoint": "verifier/probes/arrival-common-short/short-survey-probe.mjs",
+    "sha256": "03931214d21fe84219c0cd1b8fef9bbf3a7e4c54293787ca96fc831c9a9ffc4a",
+    "newFiles": {
+      "verifier/probes/arrival-common-short/short-survey-probe.mjs": "03931214d21fe84219c0cd1b8fef9bbf3a7e4c54293787ca96fc831c9a9ffc4a",
+      "verifier/probes/arrival-common-short/shortSurveyLogic.mjs": "83981677b9ccf69629e90aaa1e03ce56c1d3a105385a15aa18c248790a4a99fb",
+      "verifier/probes/arrival-common-short/selftest.mjs": "226ef9380fee642dbe37cd0c6baa9009031320599acf38481f62a671ece0c250",
+      "verifier/probes/arrival-common-short/pin.json": "7a3e4c8c927500f1ee86e42496f310ed39be9b9c9cc5564612f772f3f351fa10"
+    },
+    "pinnedCopies": {
+      "verifier/probes/arrival-common-short/cgContract.pinned.mjs": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+      "verifier/probes/arrival-common-short/ownedSession.pinned.mjs": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "verifier/probes/arrival-common-short/sourceSnapshot.pinned.mjs": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "verifier/probes/arrival-common-short/commonPassageLogic.mjs": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+      "verifier/probes/arrival-common-short/entryObservation.mjs": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4"
+    },
+    "unpinnedDependency": {
+      "path": "main/tools/lib/evidence.mjs",
+      "sha256": "1997cf2a3e9db88ae6e1e474b76232a2589c78a58fe69a579b493b44e5aa5328",
+      "why": "transitively imports sibling main tooling (previewServer.mjs / assertHardwareGl, pixel-laws.mjs) whose relative paths a copy would break; hash recorded so drift is detectable"
+    }
+  },
+  "plannedRuntimeBehaviour": {
+    "inputsUsed": "shipped ordinary keyboard (held WASD, [F]) and a real canvas click for pointer lock; [F] only where the shipped prompt offers the AUTHORED verb under the AUTHORED objective id (mayPressF)",
+    "forbiddenAndAbsent": [
+      "no pose write", "no control-state write", "no progress/milestone/route write", "no forged save",
+      "no direct game predicate call", "no teleport", "no forced pointer lock", "no forced/synthetic click",
+      "no movie=1", "no autopilot"
+    ],
+    "fixture": "?story=ch13-survey&journeyprobe=1&debug=1 — a LABELLED ch13-survey fixture for an ISOLATED survey proof. entryLabel() computes the label from the actual entry URL and hardcodes mayClaimEarnedArrival=false. It is never called an earned continuous arrival.",
+    "fixtureBootCheck": "fixtureBootIsClean() refuses on the first read if the boot already carries a SHORT completion, an accepted class, a held/occupied reference, working samples, a tested prefix, a tail revision, the worker approach, or any of anc.cg.route-offered/route-tested/witness-held/tail-reopened/route-revised.",
+    "sequence": [
+      "preflight (pure, no browser): verification-ready, activeRole arrival-common-short-runtime, inherited EXCLUSIVE flock on fd 9 of the shared heavy lock, root-published URL from verifier/artifacts/preview-ownership.json, frozen implementation-source-manifest sha, scene-v3 contract sha, ACTUAL served index+bundle byte hashes, absolute and EMPTY --out",
+      "one owned browser; identity gate (document.title Paravoxia, hardware ANGLE via the shipped assertHardwareGl path in openParavoxia, headed, served index sha == root-owned index sha)",
+      "world-bound + usable body, settled + grounded, movement policy, pointer lock through a REAL canvas click, four-key directional calibration measured from actual displacement",
+      "walk to W using the LIVE shipped marker target (falls back to the quoted CG_POSES.W only if no live target is published) -> authored [F] 'Offer to demonstrate a route' -> anc.cg.demonstration-opened",
+      "walk to S -> authored [F] 'Begin recording your route' -> anc.cg.survey-started",
+      "DRAW THE SHORT SPAN: walk the 8 remaining z=12 waypoints with ordinary keys; classifyDrawnRoute compares the ACTUAL walked positions against both signed spans and refuses to report SHORT unless the body really walked it",
+      "at E: authored [F] 'Offer the walked span' -> anc.cg.route-offered",
+      "watch W-7744's REAL test until anc.cg.route-tested or a published hold; the branch is chosen from the ACTUAL hold reason",
+      "occlusion/range hold -> walk INSIDE the 1.25u occupancy cylinder at the live witness marker, authored [F] 'Offer this end', verify it is a NEW offer (offered false->true plus a first anc.cg.witness-held), then REMAIN while sampling witnessOccupied every 1.5s until anc.cg.route-tested",
+      "footing-invalid hold -> occupancy may never launder it: walk to the last tested point, authored [F] 'Reopen the untested span', verify the revision actually changed samples (tailRevision bump agreeing with anc.cg.route-revised, tested prefix never lowered), redraw along the signed LONG geometry and reoffer",
+      "verdict from shortCompletionVerdict: SHORT + acceptedClass 'held-reference' + anc.cg.route-tested + phase 'tested'; a held class on a LONG drawing is reported as MISLABELLED-NOT-SHORT"
+    ],
+    "evidenceRetained": "trace.ndjson (every gate, key pulse, leg, watch sample, F press/refusal, stall diagnosis, observer record), per-step PNG frames with their sha256, preflight.json, the probe+library source snapshot, summary.json and summary.sha256",
+    "boundedWaitsAndStalls": "every wait is budgeted (ready 120s, leg 90s, test 300s, hold 180s) and a ~20s no-progress window triggers a stall diagnosis recording body/support/hold/pointer-lock/focus/policy/objective before the lane continues or stops",
+    "failureStopsDependents": "downstreamPermitted() refuses every dependent act (key, F, click) while any required gate is failed and names the FIRST failure; a physical stop writes a stop frame and an INCONCLUSIVE failure record and never becomes a pass",
+    "lifetimeAndCleanup": "exactly one probe-owned session, adopted by the owned-session guard, stopped in a finally, with a POST-FINALLY cleanupReceipt recorded; the root-owned preview is never stopped and no process is killed",
+    "observer": "the safe passive Window/Document input observer is reused verbatim; observerFailureIsNotGameplay() records that its failure degrades observation only and is never read as a gameplay failure or used to pass one"
+  },
+  "cpuTestsRun": [
+    {
+      "command": "node verifier/probes/arrival-common-short/shortSurveyLogic.mjs --self-test",
+      "exit": 0,
+      "covers": [
+        "actual SHORT vs issued target/route classification, including UNCLASSIFIED never defaulting to SHORT",
+        "held-reference on a LONG drawing reported as a mislabel; fixed-reference never proves SHORT; no anchor means no completion",
+        "new witness F vs a pre-existing hold (offer flag and once-anchor both required)",
+        "required occupancy: vacancy at the completing sample fails; a 2u stand-off is outside the 1.25u cylinder",
+        "a failed physical gate refuses the dependent action and names the first failure",
+        "revision: a real tail edit bumps tailRevision with its anchor; a lowered tested prefix fails",
+        "fixture-vs-earned labels; fixture boot that already carries the completion is refused",
+        "cleanup/identity/active-role closing receipt, including an honestly reported failed stop and a foreign activeRole"
+      ]
+    },
+    {
+      "command": "node verifier/probes/arrival-common-short/selftest.mjs",
+      "exit": 0,
+      "covers": [
+        "all five pinned copies byte-identical to their originals, and the originals themselves unchanged",
+        "quoted CG_ROUTE_SHORT/CG_ROUTE_LONG/CG_POSES mechanically re-extracted from the frozen commonGroundState.ts and matched",
+        "the short span is the straight z=12 S->E line and the witness pose W is OFF it",
+        "the shipped predicate suite is still the sha deferred to, and still names each expectation",
+        "the director still earns held-reference only from an offered AND occupied witness, and still refuses to launder footing-invalid"
+      ]
+    },
+    {
+      "command": "node verifier/probes/arrival-common-short/short-survey-probe.mjs --out /tmp/nonexistent-short-check",
+      "exit": 3,
+      "result": "REFUSED-PREREQUISITE with NO browser launched; refusal JSON retained at logs/arrival-common-short-prep/refusal-dryrun.json. Refusals: foreign activeRole (arrival-common-verifier), missing --url, no inherited exclusive flock fd, missing --expect-source-manifest, unbound served build.",
+      "note": "This is the only execution of the entrypoint. It is a pure file-driven refusal path; it opened no browser, no preview and no lock."
+    }
+  ],
+  "sourceIntegrity": {
+    "implementationSourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "matchesVerifierControl": true,
+    "hashesBefore": "logs/arrival-common-short-prep/hashes-before.txt",
+    "hashesAfter": "logs/arrival-common-short-prep/hashes-after.txt",
+    "drift": "NONE — every pre-existing file hashed before this preparation is byte-identical after it, including all game source, the contract, verifier-control.json, verifier/probes/lib/*, arrival-common-manual/*, manual-focused/* and cg-journey-probe.mjs.",
+    "externalToolingDrift": "none observed during this preparation"
+  },
+  "limitations": [
+    "PREPARED, NOT RUN. Nothing here is evidence about the chapter. No browser, GPU, preview, dev server or build was used.",
+    "The SHORT completion is UNPROVEN until this lane is released and run on hardware; the hold reason and therefore the witness-vs-revision branch are predictions taken from the shipped unit suite, not measurements.",
+    "Running it requires root to publish: activeRole arrival-common-short-runtime in verifier-control.json, a current preview-ownership.json (url + indexSha256 + bundleSha256 + bundlePath + sourceManifestSha256), and an inherited EXCLUSIVE flock on fd 9 of the shared heavy lock. It refuses otherwise, before any browser.",
+    "The ch13-survey deep link is a labelled fixture. This lane can never support an earned-continuous-arrival, first-time-usability or naive-UX claim.",
+    "Route waypoints were read from frozen source, which is private knowledge a player does not have; this is an instrumentation lane, not a discoverability measurement.",
+    "The pinned cgContract copy still carries the scene-v2 SIGNED_CONTRACT_SHA256; its loadContract() is unused here and the lane binds to the scene-v3 bytes directly. That stale constant in the SHARED helper is reported, not fixed by this role.",
+    "The witness-return (vacate/re-enter) contingency and the ch13-common beat are out of this lane's scope."
+  ],
+  "instrumentationBlockers": [],
+  "nextStepForRoot": "Release activeRole arrival-common-short-runtime with the current URL/index/bundle/source-manifest facts and an inherited fd-9 exclusive flock, then run the unexecuted command in the probe header with an ABSOLUTE, EMPTY --out."
+}

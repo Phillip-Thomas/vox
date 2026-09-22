@@ -1,0 +1,10 @@
+{
+  "observedAt": "2026-09-06T05:10:20.544888+00:00",
+  "originalSessionId": "c6e470c6-98e4-43c4-868b-fa554da20a5a",
+  "originalTransportPid": 3939029,
+  "transportAlive": false,
+  "finalModelResultPresent": false,
+  "completedCaptureArtifact": "evidence/software-baseline/baseline-report.json",
+  "captureFinishedAt": "2026-09-06T04:58:51.428Z",
+  "disposition": "Capture subprocess finished both source-pinned software bundles; originating agent transport ended before final role report. Preserve all evidence and invoke fresh mechanical harvest only; do not rerender or claim original model completion."
+}

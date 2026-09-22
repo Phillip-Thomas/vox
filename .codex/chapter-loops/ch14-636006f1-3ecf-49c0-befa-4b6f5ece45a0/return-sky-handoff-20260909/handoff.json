@@ -1,0 +1,130 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "continue; fix blockers; missing constellations during Vigil",
+  "standingAuthorization": "Fix blockers and finish the existing chapter autonomously, preserving quality checks and avoiding repeated full movies.",
+  "contributor": "root mechanical repair",
+  "scope": "Advance clocks for playing post-terminal bridges and publish their existing passive diagnostics. Probe the capsule lower sphere for shallow dry steps using the existing one-voxel/headroom/support checks; remove the duplicated fluid probe selector. Let the shared interaction own cooldown, so the return install does not block itself before attempting. Replace probabilistic constellation hosting with eleven sparse authored host cells covering all six sky faces, preserving shape, colour, brightness and reveal timing. No grants, teleports, altered acceptance predicates, extra creative pass, publishing or budget reset.",
+  "status": "focused-hardware-pass-resume-existing-final-verification",
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-sky-handoff-20260909/previous-state.json",
+    "sha256": "63544188021e0b041aac94fbf77f99940d72a57659ec98b49c6420c13c7561c4"
+  },
+  "priorFailure": {
+    "stage": "verify-final",
+    "message": "Probe continuity failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T17:08:45.855Z"
+  },
+  "files": [
+    {
+      "path": "main/src/components/EfficientPlayer.tsx",
+      "before": "c46bfd6771dd4dd29d779210183ba64a4e78cb1b60769f3a513e5c30294f0660",
+      "after": "691e4d8d1cc4e2cb333c72a6a9925077c2d99ad117765ca4e7ac1aade3b31925"
+    },
+    {
+      "path": "main/src/story/autopilot/primitives.test.ts",
+      "before": "835048b86aaa7a8d1ec2de4e8681b36ee4f43d1a68828ab7e446963303381ba0",
+      "after": "9fe5457b1b66bb32ec0fa5d9a6fc9c06af5b71c6d363f8a59b7ff677458e12df"
+    },
+    {
+      "path": "main/src/story/autopilot/primitives.ts",
+      "before": "f3a8787699bbec8c82a9b470734cc4f130b800172a5ddc9fd81a86ddd3a28b0a",
+      "after": "98d5484efc41f37a91ab5a18079d08a4ce2ccbc381625aec0862f81ce2e784a5"
+    },
+    {
+      "path": "main/src/utils/spaceSky.test.ts",
+      "before": "57bb13605855edbc915dcaaf1e0bd371c3dd347af45b706e15266fc4fa15dc09",
+      "after": "cea0b19316bb3d5f4876246600775e0213c827ec3a5031f49dcb3f9a8f436dda"
+    },
+    {
+      "path": "main/src/utils/spaceSky.ts",
+      "before": "c631eda8e778a9211f8f30c87de276d9bf61f2f4cb4693ae064f5daeac1ec965",
+      "after": "e72d409778a8c786f8505a2f789b416801073a3de01ea97712d72dcf3bb7aa15"
+    },
+    {
+      "path": "main/src/utils/playerStepProbe.test.ts",
+      "before": null,
+      "after": "81cc893cf53e9cde8f9995eae4f78a6439bbf3b4799dce064041ae59a3769d38"
+    },
+    {
+      "path": "main/src/utils/playerStepProbe.ts",
+      "before": null,
+      "after": "bf7dba0f4e8e7ce158e0ce6f5a3d424bdcc53a76013a35dd1ad49837ff2ebf38"
+    }
+  ],
+  "evidence": {
+    "clockRegression": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-clock-repair-20260909/tests-before.log",
+      "sha256": "7d5dc48b526de5d9dea45e109c13d5fe2482438f343ba879f3574a6c04d17e3b"
+    },
+    "collisionObservation": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-clock-repair-20260909/diagnostic/collision-inspection/result.json",
+      "sha256": "e2f91fa4a039213b83677089f98939967da47bb25e3608535860b85d505d590a"
+    },
+    "stepRegression": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-clock-repair-20260909/step-tests-before.log",
+      "sha256": "824fc0ef34eec1aa60bfdb07502f14b2b1cf8fce68fadad0b1e1573e76997c5a"
+    },
+    "actionRegression": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-clock-repair-20260909/action-tests-before.log",
+      "sha256": "38a82f7f0605b36701dc725d2f214f41c360aae346a33f190bb5883c7aa68153"
+    },
+    "checks": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-clock-repair-20260909/final-tests.log",
+      "sha256": "172be500da1c8bd15ee5015e73f254942cefe01a8c36dd55e6ee7671d2f2d956"
+    },
+    "typescript": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-clock-repair-20260909/complete-typescript.log",
+      "sha256": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af"
+    },
+    "build": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-clock-repair-20260909/complete-build.log",
+      "sha256": "c63e857418037e61d91a6543cbe9429260b7edb6b32e43e52d9250654c3da579"
+    },
+    "source": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-clock-repair-20260909/complete-candidate/source.json",
+      "sha256": "71ebb2c071adfd884794d7867b18356308a6c4bde47e092c7b523319f0960075"
+    },
+    "returnRuntime": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-clock-repair-20260909/focused-proof.json",
+      "sha256": "62ec765b2aa5c74df94f9c649fcd0441767063c609335bdb5a50c4574f642b92"
+    },
+    "returnRaw": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/return-clock-repair-20260909/complete-candidate/return-replay/result.json",
+      "sha256": "e584ff7c20cc2428db063b14c2f593605a2ec53db454ad2c3a0344ba571fdb4c"
+    },
+    "skyRuntime": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/focused-proof.json",
+      "sha256": "2428a8404cb31b4b15b1fdb5697a7b732e61ffd7aaa312d0826dab4db45fdb06"
+    },
+    "skyRaw": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/production/result.json",
+      "sha256": "dd6d419b283785ab3d79ba5d98fa6548ec425601422ed56371fd7a36737ebb70"
+    },
+    "skyBaseline": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/isolated/result.json",
+      "sha256": "0886fe8a6cb7b4ba534577ff2f74b2ec686681e93cc9825e10c98e0266a124ed"
+    },
+    "skyCoverage": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/coverage/result.json",
+      "sha256": "1855e0e74a2621a1c9f999b7f4bc6f1be13b1f7a893c6ef5fb692264b5b56185"
+    }
+  },
+  "retainedUsage": {
+    "roleLaunches": 16,
+    "modelTurns": 423,
+    "inputTokens": 846529,
+    "cacheReadTokens": 23679131,
+    "outputTokens": 174567
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "remaining": "Existing fresh continuity, recovery/manual/Continue/AV checks, independent final reviews and release certification. Focused diagnostic replays do not certify those gates.",
+  "at": "2026-09-09T17:34:01.506Z"
+}

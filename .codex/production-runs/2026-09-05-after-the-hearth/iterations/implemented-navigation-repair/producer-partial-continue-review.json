@@ -1,0 +1,171 @@
+{
+  "schema": "paravoxia.producerPartialContinueReview.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "recordedAt": "2026-09-06T13:10:09.741206+00:00",
+  "author": "root producer harvesting existing probe artifacts; not a substitute signed verifier report",
+  "sourceManifestSha256": "d9e36ae314ba547a292e55376d54eecbf0ff47dc3d6710c4f9b5ae3fee96caf2",
+  "allSourceFilesUnchanged": 97,
+  "captureChecks": [
+    {
+      "capture": "run-1",
+      "probeFilesVerified": 8,
+      "cleanup": "stopped"
+    },
+    {
+      "capture": "run-2",
+      "probeFilesVerified": 8,
+      "cleanup": "stopped"
+    },
+    {
+      "capture": "run-3",
+      "probeFilesVerified": 8,
+      "cleanup": "stopped"
+    },
+    {
+      "capture": "run-4",
+      "probeFilesVerified": 8,
+      "cleanup": "stopped"
+    }
+  ],
+  "invocationRef": "partial-continue-verifier-invocation.json",
+  "transportOutcome": "CLI timed out at13:06:37UTC (exit124), before final role report. Already-launched run4 browser subprocess continued to13:07:49UTC and independently completed cleanup. No final role report exists and no role success is claimed. Root observed exact probe/browser PIDs gone before release.",
+  "completedCaptureRef": "verifier/captures/partial-continue/run-4/summary.json",
+  "completedCaptureSha256": "10b05864fb58d5bbaa5ec4cdf6680c60a6a10616e66fd907f0f0cb497f76fbba",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "headed": true,
+  "findings": [
+    {
+      "id": "PC-SAVE-OVERWRITTEN",
+      "detail": "after Continue the persisted WorldSave no longer carries the earned samples; the empty live chapter state was written over the earned bytes"
+    },
+    {
+      "id": "PC-CONTINUE-RESUME-POINT",
+      "detail": "the survey verbs are not live: beat=ch13-return survey={\"phase\":\"idle\",\"approached\":false,\"samples\":0,\"lengthUnits\":0,\"walkedUnits\":0,\"testedPrefix\":0,\"tailRevision\":0,\"witnessOffered\":false,\"witnessOccupied\":false,\"acceptedSamples\":0,\"acceptedClass\":null}"
+    }
+  ],
+  "save": [
+    {
+      "key": "pvx.v1.world.-1,-1",
+      "bytes": 1186,
+      "sha256": "5953723ed162c04fbde71f8c9e679f9a1c8e6a000e9b1ca6121c1768d52b0204",
+      "file": "worldsave-pvx.v1.world.-1_-1.json",
+      "worldId": "-1,-1",
+      "seed": 3215739679,
+      "hasCommonGround": true,
+      "commonGroundSha256": "b8b0a48ad825f3bc369cac13414007f0d987f6335ef5595de0f6838ddbfec657"
+    }
+  ],
+  "afterContinue": [
+    {
+      "key": "pvx.v1.world.-1,-1:p1",
+      "bytes": 622,
+      "sha256": "525d051bc7463c95db7bf4c26d8d21e3d13ff07618e4447a3bbcf13a0531147f",
+      "file": "worldsave-after-continue-pvx.v1.world.-1_-1_p1.json",
+      "hasCommonGround": true,
+      "commonGroundSha256": "7aa9e4b253b593d5ed1df872de8ca9ef06aaec7f691422ab14c42ab7c7795eb7",
+      "surveyPhase": "idle",
+      "savedSamples": 0
+    },
+    {
+      "key": "pvx.v1.world.-1,-1",
+      "bytes": 606,
+      "sha256": "078cb101184e43ed68ae74a913bd226fb21aff5025eafa4912471cf39c3189e3",
+      "file": "worldsave-after-continue-pvx.v1.world.-1_-1.json",
+      "hasCommonGround": true,
+      "commonGroundSha256": "5891a718c21fe71c2dc0f43a8607dee60db4b116e9b8f47448770d846b0f9a5d",
+      "surveyPhase": "idle",
+      "savedSamples": 0
+    }
+  ],
+  "worldBefore": {
+    "activePlanetId": "-1,-1",
+    "locationMode": "surface",
+    "pos": [
+      0,
+      89,
+      0
+    ],
+    "speed": 0
+  },
+  "worldAfter": {
+    "activePlanetId": "-1,-1:p1",
+    "locationMode": "surface",
+    "pos": [
+      0,
+      89,
+      0
+    ],
+    "speed": 0
+  },
+  "beatAfter": "ch13-return",
+  "objectiveAfter": "ch13:return:board",
+  "survival": {
+    "beforeSave": {
+      "phase": "drawing",
+      "approached": false,
+      "samples": 4,
+      "lengthUnits": 1.7936539696452547,
+      "walkedUnits": 2.090399978331871,
+      "testedPrefix": 0,
+      "tailRevision": 0,
+      "witnessOffered": false,
+      "witnessOccupied": false,
+      "acceptedSamples": 0,
+      "acceptedClass": null
+    },
+    "afterContinue": {
+      "phase": "idle",
+      "approached": false,
+      "samples": 0,
+      "lengthUnits": 0,
+      "walkedUnits": 0,
+      "testedPrefix": 0,
+      "tailRevision": 0,
+      "witnessOffered": false,
+      "witnessOccupied": false,
+      "acceptedSamples": 0,
+      "acceptedClass": null
+    },
+    "samplesSurvived": false,
+    "walkedUnitsSurvived": false,
+    "phaseAfterContinue": "idle",
+    "identity": {
+      "savedWorldIds": [
+        "-1,-1"
+      ],
+      "liveBeat": "ch13-return"
+    },
+    "avReplayCheck": {
+      "earnedHistory": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started"
+      ],
+      "restoredHistory": [],
+      "pendingAnchorsAfterContinue": [],
+      "note": "A restored survey must not replay already-earned activations into fresh AV history nor play a deferred acknowledgement."
+    },
+    "afterEarnedReentry": {
+      "phase": "idle",
+      "approached": false,
+      "samples": 0,
+      "lengthUnits": 0,
+      "walkedUnits": 0,
+      "testedPrefix": 0,
+      "tailRevision": 0,
+      "witnessOffered": false,
+      "witnessOccupied": false,
+      "acceptedSamples": 0,
+      "acceptedClass": null
+    }
+  },
+  "limitations": [
+    "Entry is the explicitly labeled ch13-survey deep-link fixture; drawing is actual physical progress. This does not prove the same failure after a continuous station/home journey.",
+    "The fixture currently lacks ch13OriginLanded; determine fixture incompleteness versus genuine Continue/save authority ordering with exact source reproduction. Do not fix only fixture and claim general restoration.",
+    "Actual span offer was unavailable after wrong-world resume; later new-action/AV acceptance remains unproved. Empty AV history shows no replay in this failed restore, not successful continuation.",
+    "Run1 failed an unnecessary >=4-sample probe threshold; run2 waited for a3D-ready world while on menu. These are probe-side errors, not game save failures. Root correction preserved separately.",
+    "Run3 reached actual Continue before a secondary Pause-click timeout. Run4 secondary Pause was intercepted; forced click did not show Quit menu. Quit-to-Menu was not exercised.",
+    "Run4 report overwrites its pauseClick field and reports only last W leg duration636ms, despite33 total bursts; root uses raw probe-log and does not claim all walking took636ms."
+  ],
+  "chapterAccepted": false
+}

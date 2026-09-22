@@ -1,0 +1,95 @@
+```json
+{
+  "verdict": "PASS",
+  "scope": "Bounded engineering review of staged startup repair + explicit verification renewal. Read only: main/src/state/appState.ts (getGameCanvas/requestGamePointerLock), main/src/story/prologue/TerminalPrologue.tsx (handoff), main/tools/chapter-loop/renewal.mjs, main/tools/chapter-loop/providers.mjs:1-35, /tmp/paravoxia-all-20260908/startup-proof/result.json. No tests, no GPU, no writes, no repo scans.",
+  "correct": [
+    {
+      "ref": "main/src/state/appState.ts:173-197",
+      "finding": "Pointer-lock crash surface is genuinely closed. getGameCanvas rejects a stale canvas via isConnected + ownerDocument===document and re-resolves a live one; requestGamePointerLock re-checks isConnected before requesting and wraps the call in try/catch, covering both legacy synchronous throws and modern promise rejection. The baseline error 'The root document of this element is not valid for pointer lock.' cannot become an unhandled page error on this path."
+    },
+    {
+      "ref": "main/src/story/prologue/TerminalPrologue.tsx:80-92",
+      "finding": "handoff ordering is sound: milestone/stage/beat/enterPlaying are committed before capture is attempted, capture is deferred to rAF so the prologue/canvas swap can settle, the result is explicitly voided, and touch plus movie drivers are excluded. No state transition depends on lock success, so a denied permission cannot block the descent."
+    },
+    {
+      "ref": "main/tools/chapter-loop/renewal.mjs:12-35",
+      "finding": "Renewal preconditions match the claim exactly: schema/runId/chapter/'do it all'/explicitNewCommission/resumeVerification, plus !active, cursor===0, queue[0]==='verify', receipts limited to 'recipe' (no completed model role), !renewals?.length, and byte-exact binding to the retained checkpoint (policySeal(state)===state.policySha256, previousStateSha256===sha(state), recipeSha256 unchanged). A replayed or already-advanced checkpoint is rejected."
+    },
+    {
+      "ref": "main/tools/chapter-loop/renewal.mjs:22-26",
+      "finding": "Clock renewal is correct and non-extending: deadline must equal requestedAt+MAX_CHAPTER_MS, requestedAt <= now and > createdAt, and the prior window must already be fully elapsed (clock.startedAt+MAX_CHAPTER_MS <= started). This yields exactly one fresh 8h window (00:06:46Z -> 08:06:46Z, consistent with result.json deadline 2026-09-08T08:06:46.000Z); no timeout was extended."
+    },
+    {
+      "ref": "main/tools/chapter-loop/renewal.mjs:51-53,57-61,73-83",
+      "finding": "Counters are retained, not replenished: limits are min'd against prior limits, activeMs/usage/retries survive the shallow spread and are also recorded in retainedSpend; previous state is persisted as the original raw bytes with flag 'wx' and mode 0o400 (immutable, replay-proof); queue becomes ['preflight','verify',...] with cursor 0, so no downstream role index shifts; policySha256 is resealed after all mutations (line 81), and no returned object aliases a mutated field of the previous state."
+    },
+    {
+      "ref": "main/tools/chapter-loop/renewal.mjs:30-32,36-47",
+      "finding": "Creative direction is locked (continuation/canon/references/allowedPaths hashes must match) and '.claude/' rewrites are refused, so the renewal cannot alter story or commissions. Every drifted file must appear in the owner authority with exact before/after hashes, so the staged repair diff is explicitly owner-listed."
+    },
+    {
+      "ref": "/tmp/paravoxia-all-20260908/startup-proof/result.json",
+      "finding": "Proof self-labels correctly: kind 'diagnostic-transition-only', earnedContinuity false, contextClosed true, cleanup true. It asserts no creative or runtime acceptance, matching the renewal's role (verification is re-queued, not marked complete)."
+    }
+  ],
+  "risks": [
+    {
+      "severity": "medium",
+      "ref": "/tmp/paravoxia-all-20260908/startup-proof/result.json (both reports use movie=1); main/src/story/prologue/TerminalPrologue.tsx:89",
+      "finding": "Evidence coverage gap. Both A/B runs use ?movie=1, but the candidate's handoff skips capture entirely when isMovieMode() is true. The candidate's zero-error result is therefore fully explained by not calling requestGamePointerLock at all; the appState.ts detached-canvas guard (lines 173-197) is not exercised at runtime by this proof. The real-player path (non-movie, non-touch) remains untested. Also note samples differ (31 baseline vs 63 candidate), so the two runs are not equal-length. Treat the proof as 'crash path no longer reachable in movie mode', not as validation of the guard."
+    },
+    {
+      "severity": "low",
+      "ref": "main/src/state/appState.ts:179-181",
+      "finding": "Fallback uses document.querySelector('canvas'), the first canvas in the document. During the prologue/canvas swap the PrologueVector canvas may still be mounted, so a single-rAF race can cache the wrong canvas as gameCanvas. Consequence is a silently failed lock (recoverable on the next user gesture), not a crash, but any other consumer of getGameCanvas would read the prologue canvas until setGameCanvas overwrites it."
+    },
+    {
+      "severity": "low",
+      "ref": "main/src/state/appState.ts:191-192",
+      "finding": "On engines where requestPointerLock() returns undefined (legacy, non-promise), `await` resolves before the lock is granted and failure arrives as a pointerlockerror event, so the boolean return is unreliable (false negative). Harmless today because the only caller voids the result, but the documented contract is stronger than the implementation."
+    },
+    {
+      "severity": "medium",
+      "ref": "main/tools/chapter-loop/renewal.mjs:15 vs 51-53",
+      "finding": "authorization.extraInfrastructureRetries === 1 is validated but never applied in this file: limits are only ever narrowed (Math.min) and retries carries over unchanged. Either the runner grants the extra retry from state.renewals (not read, per scope) or the declared allowance is inert. Confirm outside this file; if inert, the renewal will re-block on the first infrastructure failure."
+    },
+    {
+      "severity": "medium",
+      "ref": "main/tools/chapter-loop/renewal.mjs:48-50",
+      "finding": "The validation receipt is only checked for passed===true and a non-empty checks array. Nothing binds it to a.files, to the renewed acceptedSource snapshot, or to result.json's build sha256 (36fca299...). A stale-but-passing validation receipt would satisfy the gate. Recommend binding validation to the handoff hashes or build sha."
+    },
+    {
+      "severity": "low",
+      "ref": "main/tools/chapter-loop/providers.mjs:9-15 and renewal.mjs:29",
+      "finding": "Renewal requires brief.provider.permissionMode==='full', which maps to '--permission-mode bypassPermissions' while '--safe-mode' is still passed unconditionally on the claude branch. The two flags are semantically opposed; if safe-mode wins, the full-permission binding the renewal insists on is not actually granted at runtime. Per the brief, permission2 tests pass, so residual risk is low, but the flag pair is worth an explicit assertion."
+    },
+    {
+      "severity": "low",
+      "ref": "main/tools/chapter-loop/renewal.mjs:44-45",
+      "finding": "Handoff verification calls fs.readFileSync unconditionally on every listed path, so a deletion in the staged repair would throw ENOENT rather than be validated as a removal. No deletions are in the current diff; edge-case robustness only."
+    },
+    {
+      "severity": "low",
+      "ref": "main/tools/chapter-loop/renewal.mjs:57",
+      "finding": "workload is overwritten to 'throughput-v2' unconditionally without comparing state.workload; a checkpoint on a different workload would be silently migrated."
+    }
+  ],
+  "mustFix": [],
+  "claimsAssessed": {
+    "renewalScopeLimitedToExpiredImportedVerificationCheckpoint": "confirmed (renewal.mjs:16-19,25-26)",
+    "noCompletedModelRoleReplayed": "confirmed (receipts limited to 'recipe', renewal.mjs:18)",
+    "countersRetainedImmutableOldState": "confirmed (renewal.mjs:52-53,72-77)",
+    "queueIndexUnchanged": "confirmed (preflight prepended, remaining order preserved, renewal.mjs:60)",
+    "invalidAuthorityDeadlineSourceRecipeRejected": "confirmed by code paths (renewal.mjs:12-15,22-26,39-47,35); tests not re-run per scope",
+    "noCreativeOrRuntimeAcceptanceClaimed": "confirmed (result.json earnedContinuity=false, kind=diagnostic-transition-only; renewal re-queues verify rather than accepting it)",
+    "noTimeoutExtendedOrCheckpointReset": "confirmed; prior state preserved read-only at renewals/<authoritySha>/previous-state.json"
+  },
+  "recommendations": [
+    "Before relying on the repair for real players, capture one non-movie, non-touch runtime sample so the appState.ts:173-197 guard is actually exercised.",
+    "Bind the validation receipt to the handoff file hashes or the proof build sha256 (renewal.mjs:48-50).",
+    "Confirm where extraInfrastructureRetries is consumed, or apply it explicitly in prepareRenewal.",
+    "Assert mutually exclusive permission flags in providerCommand (providers.mjs:9-15)."
+  ],
+  "actionsTaken": "read-only review; no tests, no GPU, no file modifications, no agents dispatched, no checkpoint touched"
+}
+```

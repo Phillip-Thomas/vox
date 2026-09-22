@@ -29,6 +29,12 @@ import { isFloraHarvested, markFloraHarvested, resetFloraHarvest } from './flora
 import { getWaterskinFill, fillWaterskin, resetWaterskin } from './consumeSystem.ts';
 import { restoreForageForWorld } from './persistence.ts';
 import { createWorldIdentity } from '../worldIdentity.ts';
+import {
+  clearCommonGroundWorld,
+  createCommonGroundSnapshot,
+  putCommonGroundLive,
+  serializeCommonGroundForWorld
+} from '../../story/commonGroundState.ts';
 import { GENERATION_SCHEMA_VERSION } from '../schema.ts';
 import { createPlanetIdentity } from '../starSystem.ts';
 import {
@@ -514,5 +520,125 @@ describe('multiplayer local persistence guard', () => {
     expect(isTreeHarvested(4, 5, 6)).toBe(true);
     expect(isTreeHarvested(10, 11, 12)).toBe(true);
     expect(globalThis.localStorage.length).toBe(0);
+  });
+});
+
+// --- An autosave must not delete chapter state it cannot speak for -------------------
+describe('world save carries chapter state it does not own', () => {
+  const world = { worldId: 'cg-carry-1,-1', seed: 4242 };
+  const key = `pvx.v1.world.${world.worldId}`;
+  const earned = () => ({
+    version: 1,
+    actorId: 'local',
+    worldId: world.worldId,
+    home: { faultReviewed: false, returnChosen: false },
+    survey: {
+      phase: 'drawing',
+      accepted: null,
+      working: {
+        samples: [
+          { x: -26.67, y: 50.99, z: 11.99, corner: true, walkedAt: 0 },
+          { x: -26.04, y: 50.99, z: 13.66, corner: true, walkedAt: 1.9 }
+        ],
+        walkedUnits: 2.0905907131951453,
+        routeClass: null,
+        testedPrefixCount: 0,
+        tailRevision: 0,
+        offeredEndIndex: null,
+        atCapacity: false
+      },
+      witness: null,
+      hold: { reason: null, atIndex: -1 },
+      approached: false,
+      testedIndex: -1,
+      workerPose: null,
+      revisionReady: false
+    },
+    common: {
+      stage: 'none', terraUnits: 0, comparisonProved: false,
+      finalReferenceOffered: false, workerUnits: 0, workerPose: null, committed: false
+    }
+  });
+
+  const readSave = () => JSON.parse(localStorage.getItem(key)!) as {
+    commonGround?: { survey?: { phase?: string; working?: unknown } };
+    structures?: unknown[];
+  };
+
+  beforeEach(() => {
+    clearCommonGroundWorld(world.worldId);
+    localStorage.removeItem(key);
+  });
+
+  it('keeps an earned blob when no live chapter state exists for the world', () => {
+    // The captured loss: 1186 bytes of real drawing replaced by 606 bytes of
+    // `phase: "idle"` while the runtime had moved to another world entirely.
+    localStorage.setItem(key, JSON.stringify({
+      worldId: world.worldId, seed: world.seed,
+      structures: [], campfires: [], trees: [], stones: [], forage: [], flora: [],
+      commonGround: earned()
+    }));
+    saveWorld(world);
+    expect(readSave().commonGround?.survey?.phase).toBe('drawing');
+    expect(readSave().commonGround?.survey?.working).not.toBeNull();
+  });
+
+  it('keeps it when the only live snapshot is an unentered initial snapshot', () => {
+    localStorage.setItem(key, JSON.stringify({
+      worldId: world.worldId, seed: world.seed,
+      structures: [], campfires: [], trees: [], stones: [], forage: [], flora: [],
+      commonGround: earned()
+    }));
+    // Exactly what a pre-hydration read leaves behind.
+    putCommonGroundLive(createCommonGroundSnapshot('local', world.worldId));
+    expect(serializeCommonGroundForWorld(world.worldId)).toBeNull();
+    saveWorld(world);
+    expect(readSave().commonGround?.survey?.phase).toBe('drawing');
+  });
+
+  it('a live snapshot with real progress still writes itself', () => {
+    localStorage.setItem(key, JSON.stringify({
+      worldId: world.worldId, seed: world.seed,
+      structures: [], campfires: [], trees: [], stones: [], forage: [], flora: [],
+      commonGround: earned()
+    }));
+    const live = createCommonGroundSnapshot('local', world.worldId);
+    live.home.faultReviewed = true;
+    putCommonGroundLive(live);
+    saveWorld(world);
+    expect(readSave().commonGround?.survey?.phase).toBe('idle');
+  });
+
+  it('writes nothing at all for a world that never had chapter state', () => {
+    saveWorld(world);
+    expect(readSave().commonGround).toBeUndefined();
+  });
+
+  it('carrying the blob does not freeze the rest of the record', () => {
+    localStorage.setItem(key, JSON.stringify({
+      worldId: world.worldId, seed: world.seed,
+      structures: [], campfires: [], trees: [], stones: [], forage: [], flora: [],
+      commonGround: earned()
+    }));
+    resetStructures();
+    setFreeBuild(true);
+    placePiece([1, 2, 3], 3, 'foundation', 'wood');
+    saveWorld(world);
+    // Chapter state retained AND the live structures were written normally: the
+    // carry-forward is scoped to one field and drops no construction.
+    expect(readSave().commonGround?.survey?.phase).toBe('drawing');
+    expect(readSave().structures?.length).toBeGreaterThan(0);
+  });
+
+  it('an explicit world clear still removes everything', () => {
+    localStorage.setItem(key, JSON.stringify({
+      worldId: world.worldId, seed: world.seed,
+      structures: [], campfires: [], trees: [], stones: [], forage: [], flora: [],
+      commonGround: earned()
+    }));
+    clearWorldStateForWorld(world);
+    expect(localStorage.getItem(key)).toBeNull();
+    saveWorld(world);
+    expect(readSave().commonGround).toBeUndefined();
   });
 });

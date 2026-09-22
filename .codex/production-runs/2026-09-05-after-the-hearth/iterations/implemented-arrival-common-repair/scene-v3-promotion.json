@@ -1,0 +1,15 @@
+{
+  "schema": "paravoxia.producerContractPromotion.v1",
+  "promotedAt": "2026-09-06T16:50:03.409989+00:00",
+  "priorContractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "candidateCopiedByteExactly": true,
+  "archiveRef": "iterations/pre-v3-arrival-promotion",
+  "signatureMapping": "contractVersion to revision only; exact director disposition/name/time/hash preserved",
+  "gatePending": false,
+  "sourceMutationAuthorized": true,
+  "gatePassedAt": "2026-09-06T16:52:49.819Z",
+  "contractGateRef": "contract-gate-pass.json",
+  "sourceMutationDirectionRef": "arrival-common-repair-direction.json"
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "paravoxia.producerEarnedContinuePreparationReview.v1",
+  "at": "2026-09-06T16:40:24.966233+00:00",
+  "reportRef": "earned-continue-probe-prep-report.json",
+  "reportSha256": "718af0ddae8d7f58b02d56695011761e54564fa00dbe134a3c88c3fb39fde0f8",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "preparedFileHashesVerified": 5,
+  "logHashesVerified": 6,
+  "preparedForDedicatedRuntime": true,
+  "captureAuthorizedNow": false,
+  "accepted": [
+    "69 CPU helper checks, probe selftest and real localHTTP index+bundle binding/refusal.",
+    "Pinned builtin-only lock/identity module separates concurrent manual edits.",
+    "Actual beforeunload WorldSave capture and realContinue without deep reseeding, later newF/AV eligibility encoded, forcedQuit fallbackremoved.",
+    "Actual JourneyRuntimeProbeBridge DOES publish named activationHistoryAnchorIds; nested reader matches source.",
+    "Inherited E(-42,51.05,12) directly matches currentCG_POSES.E; root resolves preparation uncertainty."
+  ],
+  "requiredBeforeRuntime": [
+    "Explicitly require landedActivePlanetId == signed Origin -1,-1, not merely different fromdeparture; currenthelper onlyproveschangedbody.",
+    "Require anc.cg.origin-landed in real AVactivationhistory and actualCGanchorhistory, not merely a nonemptyhistory that couldcontainonlylift. Retain rawsequence/time observations.",
+    "Use actual current root URL/source/role atrelease. Existing command containsoldmanifestdc63 solelyaspreparedexample, source willchangebeforelivevalidation."
+  ],
+  "qualifications": [
+    "Report confuses old run4 overwrite with run5. Run5 retained1305bytes andlawfullyresumeddeparturebecausefixturemissingorigin-landed; fifthrepairfixedbootstrapoverwrite. Preparednewlaneassertionsremainusefulbuthistoricalfailureattributionisnotaccepted.",
+    "Report currentactiveRole common-manual-focused reflectsitsrecordedrefusalcheck; rootnowownsentry-discriminator. It isnotpresentcontrolstate.",
+    "15FPSminimumisprobeoperationalthreshold, notaproofofno-renderbelow15 orfinalperformanceacceptance.",
+    "No runtime/Continue/AV/listening/chapteracceptance implied."
+  ],
+  "sourceRefs": [
+    {
+      "path": "main/src/story/commonGroundState.ts",
+      "sha256": "7a3c03fb73cb715116ddbf1952fc2c312f52d1dac68b765b8097f4becdb0452e"
+    },
+    {
+      "path": "main/src/story/JourneyRuntimeProbeBridge.tsx",
+      "sha256": "f718b09ab02cf13514d0f78f3539d0753d7ff50a0b56ff3a6ac0f5e9c842441d"
+    }
+  ],
+  "gameMutation": false
+}

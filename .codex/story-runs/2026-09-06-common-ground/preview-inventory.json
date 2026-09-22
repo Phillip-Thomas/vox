@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-09-06T04:21:25.029548+00:00",
+  "canonicalPreviewUrl": null,
+  "checkedEndpoints": [
+    {
+      "url": "http://127.0.0.1:5174/",
+      "httpStatus": 200,
+      "title": "Novel Synthesis",
+      "cwd": "/home/thomasphillip/Projects/Paraform",
+      "ownership": "unrelated Paraform Vite process; not a Paravoxia preview"
+    }
+  ],
+  "baselinePolicy": "No new preview or rendering begun during documentation council. Production stage must establish a Paravoxia-owned preview and current hardware evidence. Historical visual evidence may be used only with its source limitations."
+}

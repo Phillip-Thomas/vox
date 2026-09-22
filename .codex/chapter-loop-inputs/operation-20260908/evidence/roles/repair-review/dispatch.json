@@ -1,0 +1,12 @@
+{
+  "ticket": "6d402707-4426-4a68-bd5b-86ccc5e2df66",
+  "at": "2026-09-08T00:42:34.247Z",
+  "task": {
+    "id": "repair-review",
+    "seconds": 600,
+    "writes": false,
+    "task": "Independent bounded engineering review of the staged startup repair and explicit verification renewal. Read ONLY main/src/state/appState.ts (requestGamePointerLock), main/src/story/prologue/TerminalPrologue.tsx (handoff), main/tools/chapter-loop/renewal.mjs, main/tools/chapter-loop/providers.mjs first 35 lines, and /tmp/paravoxia-all-20260908/startup-proof/result.json. Runtime A/B reproduced old pointer-lock crash, candidate descent no errors on NVIDIA GB10, diagnostic only. appState4 tests pass; renewal3 tests pass (source immutable history and counters, index unchanged, invalid authority/deadline/source/recipe rejected); permission2 tests pass. No broad repo scans, no whole runner or manifests, total reads <=16KB. Assess actual correctness, risks, any must-fix bugs. Renewal only expired imported verification checkpoint before any completed model role; explicit owner current request do it all renews clock from original00:06:46UTC to08:06:46UTC retaining counters and immutable old state. It may not claim creative/runtime acceptance. Scope authorizes allroutinefixes, fullpermissionsonnewbindings. Do not run tests or GPU or modify files. Return JSON verdict PASS|REVISE with exact findings and file references. This is an engineering specialist review, not chapter artistic acceptance. Finish within compact context."
+  },
+  "permissionMode": "full",
+  "model": "opus"
+}

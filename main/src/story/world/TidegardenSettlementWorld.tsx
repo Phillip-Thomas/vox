@@ -1,3 +1,4 @@
+import { habitatCoreGroundPosition } from '../movieShelterLayout.ts';
 import React, { useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -191,13 +192,6 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
     () => state ? new THREE.Vector3(...state.core.up) : new THREE.Vector3(0, 1, 0),
     [state]
   );
-  const coreApproachPosition = useMemo(() => {
-    if (!corePosition) return null;
-    return findValidSpawnSite(liveTerrain, planetSize, corePosition, {
-      kind: 'player',
-      maxSearchRadius: 0
-    })?.position ?? corePosition.clone();
-  }, [corePosition, liveTerrain, planetSize]);
   const chosenApproachPosition = useMemo(() => {
     if (!chosenSite) return null;
     return findValidSpawnSite(liveTerrain, planetSize, chosenSite.position, {
@@ -246,8 +240,8 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
       : recommendedSite && relationshipAttended
         ? 'recommended'
         : 'hidden';
-  const coreVisualPosition = corePosition
-    ?? chosenSite?.position
+  const coreVisualPosition = state ? habitatCoreGroundPosition(state.core.cell, state.core.up)
+    : chosenSite?.position
     ?? recommendedSite?.proof.position
     ?? relationship?.position
     ?? null;
@@ -264,10 +258,10 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
     relationshipPosition: relationship?.position ?? null,
     recommendedSitePosition: recommendedSite?.approachPosition ?? null,
     chosenSitePosition: chosenApproachPosition,
-    corePosition: coreApproachPosition
+    corePosition: coreVisualPosition
   }), [
     chosenApproachPosition,
-    coreApproachPosition,
+    coreVisualPosition,
     recommendedSite,
     relationship,
     shipPosition

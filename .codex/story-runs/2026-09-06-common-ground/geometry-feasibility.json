@@ -1,0 +1,365 @@
+{
+  "probe": "common-ground geometry feasibility",
+  "generatedAt": "2026-09-06T05:02:00.263Z",
+  "derivation": "source-derived (pristine procedural terrain; no live voxel edits, no render, no GPU)",
+  "world": {
+    "planetSize": 50,
+    "storyCoordinate": {
+      "x": -1,
+      "y": -1
+    },
+    "storySeed": 3215739679,
+    "worldId": "-1,-1",
+    "voxelScale": 2,
+    "voxelCount": 115629
+  },
+  "workerRouteOptions": {
+    "face": "top",
+    "differentFaceFallback": "unreachable",
+    "clearanceCells": 2,
+    "maxSlopeCells": 1,
+    "edgeMarginCells": 1,
+    "maxVisitedCells": 8192,
+    "waypointClearanceWorld": 1.05,
+    "allowJetpackCrossing": false
+  },
+  "traceContract": {
+    "maxPoints": 128,
+    "maxLengthUnits": 120,
+    "sampleSpacing": 1,
+    "minSeparation": 0.25
+  },
+  "anchors": {
+    "heroTree": {
+      "position": {
+        "x": -24,
+        "y": 50.95,
+        "z": 22
+      },
+      "up": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "trunkHeight": 8.17,
+      "trunkColliderHalfExtentXZ": 0.55
+    },
+    "pond": {
+      "surface": {
+        "x": 6,
+        "y": 50.5,
+        "z": -12
+      },
+      "shore": {
+        "x": 4,
+        "y": 51.05,
+        "z": -10
+      },
+      "floor": {
+        "x": 6,
+        "y": 44.6,
+        "z": -12
+      },
+      "depthVoxels": 3
+    },
+    "wreckRelay": {
+      "position": {
+        "x": -2,
+        "y": 51,
+        "z": -2
+      }
+    },
+    "signalMesa": {
+      "position": {
+        "x": 36,
+        "y": 50.5,
+        "z": -22
+      }
+    },
+    "podImpact": {
+      "position": {
+        "x": 3,
+        "y": 51,
+        "z": -6
+      }
+    },
+    "fieldPack": {
+      "position": {
+        "x": -16,
+        "y": 51.18,
+        "z": 18
+      },
+      "supportVoxel": {
+        "x": -8,
+        "y": 25,
+        "z": 9
+      },
+      "relocated": true
+    },
+    "auditWorkerPathPoints": 24
+  },
+  "derivedEndpoints": {
+    "arenaStartReferenceAtTree": {
+      "x": -26,
+      "y": 53.05,
+      "z": 20
+    },
+    "approachReferenceNearRelay": {
+      "x": -2,
+      "y": 51.05,
+      "z": -2
+    },
+    "relayToTreeDistance": 32.62,
+    "endReferenceOnPondShore": {
+      "x": 4,
+      "y": 51.05,
+      "z": -10
+    },
+    "dryStandNearTree": {
+      "x": -26,
+      "y": 53.05,
+      "z": 20
+    },
+    "straightStartToEndDistance": 42.47,
+    "treeToStartDistance": 3.52,
+    "treeToEndDistance": 42.52,
+    "directStartEndWitnessLine": {
+      "clear": true,
+      "nearField": false,
+      "byTerrain": false,
+      "byTrunk": false,
+      "distance": 42.47
+    }
+  },
+  "routeA": {
+    "name": "A-direct-shorter",
+    "legs": [
+      {
+        "mode": "walk",
+        "reason": "dry-surface-path",
+        "waypoints": 31,
+        "visitedCells": 37
+      }
+    ],
+    "walkable": true,
+    "waypointCount": 31,
+    "walkedLength": 60,
+    "lengthWithinBudget": true,
+    "traceSampleCount": 76,
+    "pointsWithinBudget": true,
+    "witnessReference": {
+      "x": -26,
+      "y": 53.05,
+      "z": 20
+    },
+    "witnessNearFieldExemptSamples": 3,
+    "witnessClearSamples": 58,
+    "witnessBlockedSamples": 18,
+    "witnessBlockedByTerrain": 18,
+    "witnessBlockedByTrunk": 0,
+    "firstBlockedSampleIndex": 3,
+    "firstBlockedSamplePosition": {
+      "x": -26,
+      "y": 51.05,
+      "z": 17
+    },
+    "maxWitnessDistance": 42.47,
+    "endpoints": {
+      "start": {
+        "x": -26,
+        "y": 51.05,
+        "z": 20
+      },
+      "end": {
+        "x": 4,
+        "y": 51.05,
+        "z": -10
+      }
+    }
+  },
+  "routeB": {
+    "name": "B-outer-detour",
+    "legs": [
+      {
+        "mode": "walk",
+        "reason": "dry-surface-path",
+        "waypoints": 27,
+        "visitedCells": 27
+      },
+      {
+        "mode": "walk",
+        "reason": "dry-surface-path",
+        "waypoints": 29,
+        "visitedCells": 30
+      }
+    ],
+    "walkable": true,
+    "waypointCount": 55,
+    "walkedLength": 108,
+    "lengthWithinBudget": true,
+    "traceSampleCount": 127,
+    "pointsWithinBudget": true,
+    "witnessReference": {
+      "x": -26,
+      "y": 53.05,
+      "z": 20
+    },
+    "witnessNearFieldExemptSamples": 3,
+    "witnessClearSamples": 44,
+    "witnessBlockedSamples": 83,
+    "witnessBlockedByTerrain": 83,
+    "witnessBlockedByTrunk": 23,
+    "firstBlockedSampleIndex": 3,
+    "firstBlockedSamplePosition": {
+      "x": -26,
+      "y": 51.05,
+      "z": 23
+    },
+    "maxWitnessDistance": 42.47,
+    "endpoints": {
+      "start": {
+        "x": -26,
+        "y": 51.05,
+        "z": 20
+      },
+      "end": {
+        "x": 4,
+        "y": 51.05,
+        "z": -10
+      }
+    }
+  },
+  "routeBDetour": {
+    "x": 4,
+    "y": 53.05,
+    "z": 42
+  },
+  "routeBDetourCandidatesTried": 60,
+  "routeBDetourCandidatePool": 582,
+  "routeBRejections": {
+    "notWalkable": 18,
+    "overLengthBudget": 0,
+    "overPointBudget": 31,
+    "notLonger": 0,
+    "witnessBroken": 11
+  },
+  "routeBFirstRejectedExample": {
+    "name": "B-outer-detour",
+    "legs": [
+      {
+        "mode": "walk",
+        "reason": "dry-surface-path",
+        "waypoints": 30,
+        "visitedCells": 30
+      },
+      {
+        "mode": "walk",
+        "reason": "dry-surface-path",
+        "waypoints": 32,
+        "visitedCells": 33
+      }
+    ],
+    "walkable": true,
+    "waypointCount": 61,
+    "walkedLength": 120,
+    "lengthWithinBudget": true,
+    "traceSampleCount": 139,
+    "pointsWithinBudget": false,
+    "witnessReference": {
+      "x": -26,
+      "y": 53.05,
+      "z": 20
+    },
+    "witnessNearFieldExemptSamples": 3,
+    "witnessClearSamples": 44,
+    "witnessBlockedSamples": 95,
+    "witnessBlockedByTerrain": 95,
+    "witnessBlockedByTrunk": 26,
+    "firstBlockedSampleIndex": 3,
+    "firstBlockedSamplePosition": {
+      "x": -26,
+      "y": 51.05,
+      "z": 23
+    },
+    "maxWitnessDistance": 42.47,
+    "endpoints": {
+      "start": {
+        "x": -26,
+        "y": 51.05,
+        "z": 20
+      },
+      "end": {
+        "x": 4,
+        "y": 51.05,
+        "z": -10
+      }
+    }
+  },
+  "intermediateWitnessForRouteA": {
+    "exists": true,
+    "position": {
+      "x": -26,
+      "y": 53.05,
+      "z": 18
+    },
+    "distanceToStartReference": 2,
+    "distanceToBlockedSpan": 2.24
+  },
+  "corridorOcclusionCensus": {
+    "boundsWorld": {
+      "min": {
+        "x": -46,
+        "z": -30
+      },
+      "max": {
+        "x": 24,
+        "z": 40
+      }
+    },
+    "dryStandableColumns": 846,
+    "columnsWithTerrainBlockedWitnessToStart": 248,
+    "columnsWithTrunkBlockedWitnessToStart": 56,
+    "examples": [
+      {
+        "from": {
+          "x": -46,
+          "y": 53.05,
+          "z": 18
+        },
+        "distance": 20.1
+      },
+      {
+        "from": {
+          "x": -46,
+          "y": 53.05,
+          "z": 20
+        },
+        "distance": 20
+      },
+      {
+        "from": {
+          "x": -46,
+          "y": 53.05,
+          "z": 22
+        },
+        "distance": 20.1
+      },
+      {
+        "from": {
+          "x": -46,
+          "y": 55.05,
+          "z": 24
+        },
+        "distance": 20.49
+      },
+      {
+        "from": {
+          "x": -46,
+          "y": 53.05,
+          "z": 26
+        },
+        "distance": 20.88
+      }
+    ]
+  }
+}

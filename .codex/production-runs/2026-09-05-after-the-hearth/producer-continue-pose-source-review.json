@@ -1,0 +1,31 @@
+{
+  "schema": "paravoxia.producerEvidenceReview.v1",
+  "at": "2026-09-06T20:36:40.521710+00:00",
+  "acceptedCause": false,
+  "sourceRepairInferred": false,
+  "reportRef": "continue-pose-source-audit.json",
+  "reportSha256": "9084ec59e868aaadaca9adcf2e2536e9a6ec56f7f30a3d14150a7cba32ecfef1",
+  "invocation": {
+    "role": "continue-pose-source-audit",
+    "requestedModel": "opus",
+    "startedAt": "2026-09-06T20:31:04.901597+00:00",
+    "commissionSha256": "c51c97b1afbd8df3bd70ffcb3cb21351c1b6e2b34fc0b258be4cf3f76536558d",
+    "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sourceFilesRehashedBefore": 99,
+    "scope": "Read-only actual Continue pose load/validation/scoping causal audit, bounded CPUreplay, no GPU/game changes",
+    "exitCode": 0,
+    "finishedAt": "2026-09-06T20:33:19.183720+00:00",
+    "model": "claude-opus-5",
+    "sessionId": "a2454b90-77bc-4cac-8adc-6c6b9bfab824",
+    "isError": false,
+    "sourceDrift": [],
+    "sourceFilesRehashedAfter": 99
+  },
+  "qualifications": [
+    "Report invented20:42:40 end; transport finished20:33:19.183720. Actual2m14 elapsed, not11m32.",
+    "CPU real functions ran at canonical seed/world, but actual Continue spawnTerrain/seed not established. Only tested hypothesis is rejected, not every live safety fallback.",
+    "storyAnchoredSpawn source excludes actual ch13, but boot story value not sampled.",
+    "Scratch test was created/deleted in main/src; original source and actual output retained in stream, no game source drift. No markdown report created."
+  ],
+  "continuation": "continue-pose-scope-audit invocation51753 traces exact promotion writer/order and actual world/seed; no game patch or GPU."
+}

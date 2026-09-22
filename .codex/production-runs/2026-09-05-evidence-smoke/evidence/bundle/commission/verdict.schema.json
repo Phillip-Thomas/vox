@@ -1,0 +1,486 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "judge-verdict-absolute-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "judge-verdict-absolute-v1"
+    },
+    "bundleSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "rubricId": {
+      "const": "paravoxia-chapter-v1"
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "audiovisual_emotional_alignment": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "probs": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 5,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "description": "probability of grade 0..4; must sum to 1"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "frames": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "observation": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "frames",
+                  "observation"
+                ]
+              }
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "required": [
+            "probs",
+            "evidence",
+            "confidence"
+          ]
+        },
+        "narrative_and_player_causality": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "probs": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 5,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "description": "probability of grade 0..4; must sum to 1"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "frames": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "observation": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "frames",
+                  "observation"
+                ]
+              }
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "required": [
+            "probs",
+            "evidence",
+            "confidence"
+          ]
+        },
+        "cinematic_composition_and_lens": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "probs": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 5,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "description": "probability of grade 0..4; must sum to 1"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "frames": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "observation": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "frames",
+                  "observation"
+                ]
+              }
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "required": [
+            "probs",
+            "evidence",
+            "confidence"
+          ]
+        },
+        "score_coherence_and_sync": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "probs": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 5,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "description": "probability of grade 0..4; must sum to 1"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "frames": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "observation": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "frames",
+                  "observation"
+                ]
+              }
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "required": [
+            "probs",
+            "evidence",
+            "confidence"
+          ]
+        },
+        "palette_light_and_render_cohesion": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "probs": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 5,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "description": "probability of grade 0..4; must sum to 1"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "frames": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "observation": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "frames",
+                  "observation"
+                ]
+              }
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "required": [
+            "probs",
+            "evidence",
+            "confidence"
+          ]
+        },
+        "transition_and_state_integrity": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "probs": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 5,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "description": "probability of grade 0..4; must sum to 1"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "frames": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "observation": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "frames",
+                  "observation"
+                ]
+              }
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "required": [
+            "probs",
+            "evidence",
+            "confidence"
+          ]
+        },
+        "creative_ambition_and_specificity": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "probs": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 5,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "description": "probability of grade 0..4; must sum to 1"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "frames": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "observation": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "frames",
+                  "observation"
+                ]
+              }
+            },
+            "confidence": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "required": [
+            "probs",
+            "evidence",
+            "confidence"
+          ]
+        }
+      },
+      "required": [
+        "audiovisual_emotional_alignment",
+        "narrative_and_player_causality",
+        "cinematic_composition_and_lens",
+        "score_coherence_and_sync",
+        "palette_light_and_render_cohesion",
+        "transition_and_state_integrity",
+        "creative_ambition_and_specificity"
+      ]
+    },
+    "severeIssues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "frames": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "enum": [
+              "minor",
+              "major"
+            ]
+          }
+        },
+        "required": [
+          "description",
+          "severity"
+        ]
+      }
+    },
+    "namedStrongest": {
+      "type": "string"
+    },
+    "namedWeakest": {
+      "type": "string"
+    },
+    "injectionFlag": {
+      "type": "boolean"
+    },
+    "requests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "denser-window",
+              "crop",
+              "seam",
+              "hardware-capture",
+              "other"
+            ]
+          },
+          "t0": {
+            "type": "number"
+          },
+          "t1": {
+            "type": "number"
+          },
+          "frame": {
+            "type": "integer"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "kind",
+          "reason"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema",
+    "bundleSha256",
+    "rubricId",
+    "dimensions",
+    "severeIssues",
+    "injectionFlag"
+  ]
+}

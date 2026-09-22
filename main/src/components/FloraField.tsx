@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
@@ -37,6 +37,7 @@ interface FloraFieldProps {
   persistenceWorld?: WorldIdentity;
   playerPosition?: THREE.Vector3;
   progressiveMount?: boolean;
+  onInitialMountComplete?: () => void;
 }
 
 const HEADROOM = 24;
@@ -76,7 +77,8 @@ export default function FloraField({
   planetProfile,
   persistenceWorld,
   playerPosition,
-  progressiveMount = false
+  progressiveMount = false,
+  onInitialMountComplete
 }: FloraFieldProps) {
   const density = getGraphicsQuality().floraDensity;
   const profile = useMemo(
@@ -86,6 +88,12 @@ export default function FloraField({
   const [visibleKindCount, setVisibleKindCount] = useState(
     progressiveMount ? 1 : FLORA_KINDS.length
   );
+  const mountedKinds = useMemo(() => new Set<FloraKind>(), [profile, density]);
+  const kindMounted = useCallback((kind: FloraKind) => {
+    if (mountedKinds.has(kind)) return;
+    mountedKinds.add(kind);
+    if (mountedKinds.size === FLORA_KINDS.length) onInitialMountComplete?.();
+  }, [mountedKinds, onInitialMountComplete]);
   useEffect(() => {
     if (!progressiveMount || visibleKindCount >= FLORA_KINDS.length) return undefined;
     const frame = window.requestAnimationFrame(() => {
@@ -111,6 +119,7 @@ export default function FloraField({
           terrainSeed={terrainSeed}
           playerPosition={playerPosition}
           profile={profile}
+          onInitialMountComplete={kindMounted}
         />
       ))}
     </>
@@ -122,13 +131,15 @@ function FloraLayer({
   density,
   terrainSeed,
   playerPosition,
-  profile
+  profile,
+  onInitialMountComplete
 }: {
   kind: FloraKind;
   density: number;
   terrainSeed: number;
   playerPosition?: THREE.Vector3;
   profile: FloraProfile;
+  onInitialMountComplete: (kind: FloraKind) => void;
 }) {
   const geometry = useMemo(() => createFloraGeometry(kind, profile), [kind, profile]);
   const material = useMemo(() => createFloraMaterial(kind, profile), [kind, profile]);
@@ -181,17 +192,22 @@ function FloraLayer({
   };
 
   useEffect(() => {
-    growCapacity(neededCapacity());
+    const needed = neededCapacity();
+    growCapacity(needed);
+    if (needed === 0) onInitialMountComplete(kind);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [density, terrainSeed, profile]);
+  }, [density, terrainSeed, profile, onInitialMountComplete]);
 
   useEffect(() => {
     if (capacity <= 0) return;
     rebuild();
     signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getFloraHarvestVersion()}`;
     if (playerPosition) lastBucketPos.current.copy(playerPosition);
+    // Capacity alone only schedules a mesh. Report after its actual instance
+    // matrices/colors and picking attributes have been populated by rebuild.
+    if (meshRef.current) onInitialMountComplete(kind);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [capacity, profile]);
+  }, [capacity, profile, onInitialMountComplete]);
 
   useEffect(() => {
     windAppliedRef.current = false;

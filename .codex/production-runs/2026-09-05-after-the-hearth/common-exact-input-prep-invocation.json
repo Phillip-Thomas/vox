@@ -1,0 +1,16 @@
+{
+  "role": "common-exact-input-prepor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T19:43:57.433096+00:00",
+  "commissionSha256": "2a42c66f92aa92515d7a8233fe3a757e124ce61853c920d4eae385ea8b52a18a",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFrozen": true,
+  "sourceReference": "iterations/implemented-arrival-common-repair/source",
+  "scope": "CPU-only exact live credit-call diagnostic preparation; no GPU/game changes",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T19:50:20.078334+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "5ed7b961-b123-4a25-b55f-59e69b888c59",
+  "isError": false,
+  "gameSourceMutationAuthorized": false
+}

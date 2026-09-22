@@ -1,0 +1,115 @@
+{
+  "schema": "paravoxia.verifier.diagnosis.v1",
+  "task": "ch14 ordinary-control manual walk freeze at steps[38]",
+  "producedAtWallMs": 1788924035375,
+  "verdict": "ROOT CAUSE IDENTIFIED: terrain/collision. The body left the supported walk surface at a measured support gap (submerged shoreline ledge) on the ch14-scar approach, fell 0.326u below the floor plane, and became geometrically wedged: horizontal resolution returned a bit-identical position and gravity was already floor-clamped. Not survival/downed, not input/focus, not a render/physics stall, not a controller error.",
+  "candidate": {
+    "previewUrl": "http://127.0.0.1:35673/",
+    "buildSha256": "fabdd0a0eb26fd9a49b8c4fcf3b8b309643d7ad6d77c5ddabd44168937d4c89a",
+    "buildMatchesFailingRun": true,
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "headed": true,
+    "tier": "hardware-high",
+    "software": false,
+    "sourceParity": {
+      "gameSourceFilesCandidatePinned": 721,
+      "drifted": [
+        "main/package.json",
+        "main/package-lock.json"
+      ],
+      "driftNature": "npm script definitions only; no game source, no bundled asset. Served bundle hash-verified identical to the failing run.",
+      "affectsRuntime": false
+    }
+  },
+  "reproduction": {
+    "replays": 1,
+    "reproduced": false,
+    "status": "passed",
+    "proof": {
+      "ordinaryControls": true,
+      "acceptedAction": 8,
+      "completePath": true,
+      "hardware": true,
+      "cleanup": true
+    },
+    "steps38Gesture": {
+      "arrived": true,
+      "distance": 1.9924897813316778,
+      "pulses": 54,
+      "calibrations": 1,
+      "settled": true
+    },
+    "inference": "The defect is intermittent and timing-dependent, not deterministic. A single passing replay cannot certify the fix and does not clear the blocker."
+  },
+  "causalChain": [
+    "1. A real support gap exists on the ch14-scar walk route. In the passing replay, /commonGround/supported reads FALSE at bodyPose [-41.876,50.977,10.824] and [-41.233,50.896,10.471]; the same band was hit earlier at bootstrap[36] ([-41.637,50.990,11.413], [-42.449,50.990,11.413]). Band approx x in [-42.45,-41.23], z in [10.47,11.41], floor plane y ~= 50.99.",
+    "2. Crossing the gap, support is lost and the body falls. In the passing run the fall was shallow (y 50.989 -> 50.896, -0.093) and forward momentum carried the body across within 2 samples; y then recovered to 51.223 and the walk continued.",
+    "3. In the failing run the body entered the same band and fell deeper: y 50.989 -> 50.723 -> 50.663 (-0.326) at [-41.446,50.663,10.521], which lies inside the measured unsupported band.",
+    "4. At that depth the body is below the surrounding floor lip and is pinned. Vertical motion is floor-clamped (y stops exactly and never decays further, so it is resting on collision, not free-falling). Horizontal motion resolves to the identical clamped value every tick, so bodyPose is BIT-IDENTICAL for 7.48s across 37 consecutive samples.",
+    "5. The walk driver cannot recover from a total wedge. In walkByInputs (main/tools/chapter-loop/control-capture.mjs), disagreements only increments when moved > 0.02; a full wedge has moved ~= 0, which RESETS disagreements to 0. Recalibration and direction change therefore never fire. The driver holds the same W+D chord for the full noProgressMs (8000ms) and throws \"Walk stopped making progress toward its target\"."
+  ],
+  "hypothesesExcluded": {
+    "survivalOrDowned": {
+      "excluded": true,
+      "evidence": "Failure frame raw/frame-5.png shows SUIT HUD HEALTH 100%, FOOD 89%, WATER 84%, TEMP 100%, STAM 100%, OXY 100%. isDowned() is health<=0 (main/src/game/systems/survivalVitals.ts:111) and no downed gate exists in commonGroundDirector or the surface-motion path. Story remained active and unpaused with unchanged objective feedback."
+    },
+    "inputOrFocus": {
+      "excluded": true,
+      "evidence": "The same held W+D chord drove the body ~2.9u at ~4.7u/s in the 1.2s immediately before the freeze. input.hotkeyActivations reached 212 with revision 212 and targetEditable false on every event. Absence of new input events during the freeze is expected: heldWalkInput keeps keys down and emits no repeat up/down."
+    },
+    "renderOrPhysicsStall": {
+      "excluded": true,
+      "evidence": "The probe bridge executed page.evaluate on the page main thread every ~200ms for the full 8s with runtimeReady true, so the JS main thread was never blocked. The body also came to rest at a floor-clamped value rather than freezing mid-descent, which requires the physics step to have run and clamped it."
+    },
+    "controllerError": {
+      "excluded": true,
+      "evidence": "No pageerrors in the failing run and none in this replay (observations.json pageErrors empty). /commonGround/diagnostic/holdReason was null throughout the freeze and /commonGround/worldBound stayed true."
+    }
+  },
+  "frozenSignature": {
+    "bodyPose": [
+      -41.446343921827015,
+      50.66322523557324,
+      10.521458608390002
+    ],
+    "frozenForSeconds": 7.48,
+    "identicalSamples": 37,
+    "onlyFieldAdvancing": "t (runner wall clock)",
+    "walkTarget": [
+      -2,
+      51,
+      -4
+    ],
+    "floorPlaneNearby": 50.989,
+    "dropBelowFloor": 0.326
+  },
+  "diagnosticMethod": {
+    "replayTool": "main/tools/chapter-loop/control-capture.mjs (production tool, unmodified)",
+    "scratchConfig": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/scratch/manual-diagnostic.config.json",
+    "passiveDeltaPointersAdded": 25,
+    "decisivePointer": "/commonGround/supported",
+    "injections": "none: no state injection, teleport, progress setter or debug script",
+    "gpuSerialized": "flock -E75 -w30 /home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+    "browserCleanup": "tool-owned; cleanup proof true"
+  },
+  "evidence": {
+    "failingRunTrace": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-72d6ce01-8114-48ed-bd71-af62ed471b2a/manual/raw/trace.ndjson",
+    "failingRunFrame": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-72d6ce01-8114-48ed-bd71-af62ed471b2a/manual/raw/frame-5.png",
+    "replayTrace": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/run/raw/trace.ndjson",
+    "replayProvenance": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/run/raw/provenance.json",
+    "replayReport": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/run/report.json",
+    "replayFrames": [
+      ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/run/raw/frame-4.png",
+      ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/run/raw/frame-5.png",
+      ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/run/raw/frame-6.png",
+      ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/run/raw/frame-7.png"
+    ],
+    "replayLog": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/run.log"
+  },
+  "objectiveVisualDefects": [],
+  "notes": [
+    "The failing run and this replay are the same immutable build; the failure is not a stale-candidate artifact.",
+    "This diagnostic duplicate is noncertifying: it passed, so it proves the path CAN complete, not that the defect is gone.",
+    "Two independent contributors are in evidence: a world-geometry support gap (game source) and a walk-driver wedge-recovery blind spot (harness tool). Fixing only the harness would hide the gap; fixing only the gap leaves the driver unable to report future wedges."
+  ]
+}

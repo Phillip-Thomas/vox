@@ -1,0 +1,46 @@
+{
+  "schema": "paravoxia.chapterLoopRole.v1",
+  "summary": "Added chapter-local musical subtraction and protected the return cue across handback. TypeScript and 48 score tests pass. Inspected native audio/video across two listen cycles; staging holds, but complete musical acceptance remains open. Gateway fetch failures persisted despite passing internal reports.",
+  "verdict": "REVISE",
+  "evidence": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/changes.json",
+      "sha256": "0d83a8a7898caef1449aff959564cdb0e5ea30b7e01c994197fb1aefca30659b"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/composition.json",
+      "sha256": "3445d32a12dc14c6f0ee8d431c38df9e99efd48c7b4147b7c6ff827a6e6c759d"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/video.webm",
+      "sha256": "2412e48721055ee3be261cf9655cb9901f880ee3955f6ec33717ab9924f3913e"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "description": "Listening establishes reduced instrumentation and separated pitches, but not their precise alignment with the earned return. The captured tail cannot prove the complete four-second statement and two-second release.",
+      "evidence": [
+        {
+          "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/audio.wav",
+          "sha256": "13496f96f86a70da1525f076babb785ab0d837e957f45a309b2ff8b9296047ae"
+        }
+      ]
+    },
+    {
+      "severity": "major",
+      "description": "Pause, Resume and Continue audio behavior remains unobserved; source cancellation does not establish runtime acceptance.",
+      "evidence": [
+        {
+          "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/composition.json",
+          "sha256": "3445d32a12dc14c6f0ee8d431c38df9e99efd48c7b4147b7c6ff827a6e6c759d"
+        }
+      ]
+    }
+  ],
+  "keep": [
+    "The compact record preserves the visible hull and unanswered question.",
+    "The actual return retires guidance immediately without forced framing.",
+    "Gameplay predicates, attribution and W-7744’s bounded role remain intact."
+  ]
+}

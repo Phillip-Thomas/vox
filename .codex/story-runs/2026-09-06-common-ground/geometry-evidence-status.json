@@ -1,0 +1,19 @@
+{
+  "updatedAt": "2026-09-06T05:23:31.643087+00:00",
+  "currentAuthority": "geometry-pass2.md and geometry-pass2.json, CPU pristine-world diagnostic only",
+  "pass1Disposition": "Superseded where line-of-sight and standing-height queries counted logical voxels outside the rendered cube; preserve original artifacts as failure evidence. Do not claim terrain-based witness occlusion from pass1.",
+  "pass2Findings": [
+    "Rendered corridor dry nodes are flat atsupportheight25.",
+    "Original navigation ignores hero trunk collision; chapter-local route must reject actualprop intersections.",
+    "Two same-endpoint routes within caps exist but differ only4units and2trunk-occluded samples.",
+    "Intermediate witness can be satisfied at startingposition; this is insufficiently substantial for promised play."
+  ],
+  "arenaDisposition": "Reopened bounded scene arena/reference design under exact candidate preflight condition; no signed geometry, runtime edit or physical acceptance.",
+  "activeRefinement": "Cinema independent bounded proposal, Chapter draft remains geometry-dependent. Keep reversible walked trace, reciprocal usefulness and true differing repeatability; no invented rendered terrain, optionalfoliage predicate or unapprovedphysics assertion.",
+  "limitsUnchanged": {
+    "routeSlots": 2,
+    "samples": 128,
+    "lengthWorldUnits": 120
+  },
+  "originalSourceUnmodified": true
+}

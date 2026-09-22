@@ -1,0 +1,12 @@
+{
+  "at": "2026-09-06T21:02:54.293982+00:00",
+  "standingAuthorization": "Owner explicitly authorized routine reversible checks and fixes; no permission needed.",
+  "role": "continue-controller-preflight",
+  "invocationRef": "continue-controller-preflight-invocation.json",
+  "scope": "Four identified private executable faults; exact rootreview, no generic redesign.",
+  "additionalCpuWallMinutesMaximum": 10,
+  "materialRepairBudgetChanged": false,
+  "gameSourceMutationAllowed": false,
+  "gpuAuthorized": false,
+  "acceptanceOrPublicationAuthorized": false
+}

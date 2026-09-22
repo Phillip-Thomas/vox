@@ -282,7 +282,7 @@ export function countGrassInstancesForWindow(
   let voxelCount = 0;
   let visibleVoxelCount = 0;
 
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (!isDecoratableGrassVoxel(voxel)) continue;
     voxelCount++;
     const [x, y, z] = voxel.position;
@@ -487,8 +487,7 @@ export function buildGrassInstances(
     densityMul,
     coverage
   };
-  const voxels = voxelSystem.getAllVoxels();
-  for (const voxel of voxels.values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (!isDecoratableGrassVoxel(voxel)) continue;
     voxelCount++;
 
@@ -512,8 +511,7 @@ export function buildGrassInstances(
 /** Count exposed grass voxels (cheap signature for change detection). */
 export function countGrassVoxels(): number {
   let n = 0;
-  const voxels = voxelSystem.getAllVoxels();
-  for (const voxel of voxels.values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (isDecoratableGrassVoxel(voxel)) n++;
   }
   return n;

@@ -1,0 +1,65 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "fix them",
+  "ownerAuthority": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-defect-repair-20260909/authority.json",
+    "sha256": "b1e7d5b75f779b04224bdf77dab6ce71ae42d22ad1fea8d75c7f883e0e76fa78"
+  },
+  "contributor": "root orchestrator, mechanical correctness correction",
+  "scope": "Finish the already-authorized Continue defect: activate the shell for a resumed non-prologue chapter, including a click before scene readiness. No new creative role, planning, polish or changed arrival/route predicate.",
+  "status": "implementation-complete-runtime-pending",
+  "priorRole": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/12-refine/result.json",
+    "sha256": "917f7526db5cb1938671379e5e375269fa8f954e699dd8d7f7f90919d9fa6fbc"
+  },
+  "priorFailure": {
+    "stage": "verify-final",
+    "message": "Probe continue failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T02:04:58.784Z"
+  },
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continue-shell-repair-20260909/previous-state.json",
+    "sha256": "1d247fc6218b5b4441b060e8300cb3a7c3777f68b6e985dc24006e67aff4ecc9"
+  },
+  "files": [
+    {
+      "path": "main/src/components/ui/LandingMenu.test.tsx",
+      "before": "a65ff4dae9762454850f2acf9cfb77e23508fc692f7d72398e47fcc04082459c",
+      "after": "49602b061ce54eaeb6701fe5a2c710cbb1bff8cc55c44e98924208de1937960d"
+    },
+    {
+      "path": "main/src/components/ui/LandingMenu.tsx",
+      "before": "74e9f3c4b819fe46b2ef251af4d63c2f33719b0f1e5ffc83f9bdf6d9048cc06b",
+      "after": "acfbbe03011be5e842e4ad98a3959b50744571e60dcc1fe854b1028c8f1d12d6"
+    }
+  ],
+  "tests": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continue-shell-repair-20260909/tests-focused.log",
+    "sha256": "8d299c56b7275f7c5e0b152b74e2c950d047abf946e002bf2458b01667699ada"
+  },
+  "typescript": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continue-shell-repair-20260909/typescript.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "diagnosis": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/focus-diagnosis-20260909/trace.ndjson",
+    "sha256": "59d1eda7d35b0b1d6a7d275d8caefbcf81b3c0d5338133b754d763ef1918cdb4"
+  },
+  "retainedUsage": {
+    "roleLaunches": 12,
+    "modelTurns": 323,
+    "inputTokens": 646604,
+    "cacheReadTokens": 20528640,
+    "outputTokens": 100201
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "at": "2026-09-09T02:08:13.837Z"
+}

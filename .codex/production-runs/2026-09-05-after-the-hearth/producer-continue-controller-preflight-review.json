@@ -1,0 +1,22 @@
+{
+  "at": "2026-09-06T21:20:42.974916+00:00",
+  "readiness": "PRIVATE FIX REQUIRED; no runtime failure conclusion",
+  "priorRole": "68184 report written21:11:32 but transport timeout124 at21:12:24; reported bytes hash-match.",
+  "acceptedCorrections": [
+    "New signed route-offered anchor relative to all actual pre-F anchors; no hard19 anchor count.",
+    "Real systemFlight journey hook; renderOrigin array separate from worldBound boolean.",
+    "Sampler now remains through first valid foot+HUD plus5seconds under30second capture bound; no harvest frame filter.",
+    "Calibration per-key live-up stamps and complete census wired."
+  ],
+  "remainingFaults": [
+    "harvestContinueSampler assignment occurs AFTER the click and wait loop; throw inside that region leaves hoisted var undefined, so finally skips capture harvest.",
+    "Directed-burst path still substitutes cur.up ?? [0,1,0] for actual missing up and only updates usable restamps, preserving stale key on bad restamp.",
+    "Telemetry completeness is computed from wall poll duration, not actual last retained frame, capHit/harvest errors; an empty or capped sampler can look complete."
+  ],
+  "reportCorrection": "commandsRun and log include25check ground-frame suite; notRun statement claiming it was not repeated is false.",
+  "sourceMutationAuthorized": false,
+  "probeCorrectionAuthorized": true,
+  "cpuBudgetSeconds": 480,
+  "publicationAuthorized": false,
+  "archiveRef": "iterations/continue-controller-preflight-review"
+}

@@ -1,0 +1,391 @@
+{
+  "schema": "paravoxia.canonDecisionRegister.v1",
+  "runId": "2026-09-06-common-ground",
+  "revision": "council-v2-draft",
+  "ownerOnlyChoicesInferred": 0,
+  "authorityKind": "explicit-standing-user-delegation",
+  "decisions": [
+    {
+      "id": "CG-D01",
+      "currentState": "The real ch12 install consumes a cell and marks restoration without authored payoff.",
+      "proposedState": "A bounded local persistent visual acknowledgement and warm quotation at live commit; restored saves have steady state and no repeated transaction/transient.",
+      "evidenceRefs": [
+        "CG-C01",
+        "score-to-chapter-02"
+      ],
+      "affectedBeatsOrChapters": "ch12 install / ch13-home",
+      "revealLevel": "player-visible fact",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [
+        {
+          "noteId": "score-to-chapter-02",
+          "recipient": "chapter",
+          "status": "accepted"
+        }
+      ],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D02",
+      "currentState": "No post-restoration formal chapter or authored return invitation exists.",
+      "proposedState": "Voluntary review of the visibly stored audit fault and explicit choice to return from a reliable home; no summons, emergency or knowledge of current worker location.",
+      "evidenceRefs": [
+        "score-to-chapter-02"
+      ],
+      "affectedBeatsOrChapters": "ch13-home / ch13-return",
+      "revealLevel": "player-visible intent",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [
+        {
+          "noteId": "score-to-chapter-02",
+          "recipient": "chapter",
+          "status": "accepted"
+        }
+      ],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D03",
+      "currentState": "W-7744 recurrence is confirmed long-arc direction; precise return cause remains protected.",
+      "proposedState": "Approve only ch13 local recurrence after his local retreat to repeat unresolved field measurement; keep protected question family for later offworld/A5 timing/cause and eventual turn.",
+      "evidenceRefs": [
+        "CG-C03",
+        "chapter-story-treatment.md#bounded-canon-decisions-proposed-for-the-delegated-decision-register"
+      ],
+      "affectedBeatsOrChapters": "ch13-survey",
+      "revealLevel": "bounded authored cause expressed through visible repetition",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D04",
+      "currentState": "W-7744 remains opposed and independently faulted; no local cooperation yet.",
+      "proposedState": "One grounded reciprocal comparison and independently completed test, retained as LOCAL RECORD: PASSAGE OBSERVED. MODEL INCOMPLETE.; no network clearance, alliance, friendship or awakening. Terra initially mistakes passage for completed proof. Her wanted final comparison needs W-7744's maintained reference, outside the fixed plate range. After her crossing she explicitly offers/occupies the safe far reference; his final independently initiated traversal obeys the same live range/visibility/grounding relation. Real arrival plus reciprocal proof alone commits.",
+      "evidenceRefs": [
+        "score-to-chapter-01",
+        "CG-CIN-CH-01",
+        "arena-chapter-reconciliation.md",
+        "arena-cinema-reconciliation.md",
+        "arena-score-reconciliation.md",
+        "arena-instrument-repair-chapter.md",
+        "arena-instrument-repair-cinema.md",
+        "arena-instrument-repair-score.md"
+      ],
+      "affectedBeatsOrChapters": "ch13-survey / ch13-common",
+      "revealLevel": "player-visible action and local record; interiority remains inferred",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [
+        {
+          "noteId": "score-to-chapter-01",
+          "recipient": "chapter",
+          "status": "accepted"
+        },
+        {
+          "noteId": "CG-CIN-CH-01",
+          "recipient": "chapter",
+          "status": "accepted"
+        }
+      ],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D05",
+      "currentState": "Prior audit/route play does not record a player-authored traversed argument.",
+      "proposedState": "Continuous grounded walked trace, reversible unverified-tail editing, two complete route classes and required reciprocal usefulness. No placeable-stake puzzle. Bounded two-slot/128-sample/120-unit snapshot and one intermediate witness. Move to real dry survey routes around the backed instrument. Save independently repeatable longer survey route and intermediate-witness shorter survey route separately from common reciprocal comparison. Preserve all caps. Meaningful route difference and witness relocation require measurement, not arbitrary exclusions.",
+      "evidenceRefs": [
+        "chapter-to-cinematography-01",
+        "score-to-cinematography-01",
+        "CG-CIN-CH-01",
+        "arena-chapter-reconciliation.md",
+        "arena-cinema-reconciliation.md",
+        "arena-score-reconciliation.md",
+        "arena-instrument-repair-chapter.md",
+        "arena-instrument-repair-cinema.md",
+        "arena-instrument-repair-score.md"
+      ],
+      "affectedBeatsOrChapters": "ch13-survey / ch13-common / optional repeat",
+      "revealLevel": "new player capability at alive",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [
+        {
+          "noteId": "chapter-to-cinematography-01",
+          "recipient": "cinematography",
+          "status": "accepted"
+        },
+        {
+          "noteId": "score-to-cinematography-01",
+          "recipient": "cinematography",
+          "status": "accepted"
+        },
+        {
+          "noteId": "CG-CIN-CH-01",
+          "recipient": "chapter",
+          "status": "accepted"
+        }
+      ],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D06",
+      "currentState": "New witness predicate is unauthored.",
+      "proposedState": "World-position/grounding/solid-geometry relation with explicitly offered reference and occupancy hysteresis; no camera/gaze/time/optional-foliage input. Distinct footing, occluded and vacated-reference reasons; two actual geometry routes required before exact scene layout. Add explicitly NEW constant finite socket-to-socket instrument range applying to all references, visibly declared before a hold. Nominated12/24 values await geometry; no selected value in draft. Distinguish out-of-range/solid-occlusion/unsafe-ground/temporarily-vacated reasons; no invisiblewalkingbarrier or adaptive tuning.",
+      "evidenceRefs": [
+        "CG-CIN-CH-02",
+        "arena-chapter-reconciliation.md",
+        "arena-cinema-reconciliation.md",
+        "arena-score-reconciliation.md",
+        "arena-instrument-repair-chapter.md",
+        "arena-instrument-repair-cinema.md",
+        "arena-instrument-repair-score.md"
+      ],
+      "affectedBeatsOrChapters": "ch13-survey / ch13-common",
+      "revealLevel": "literal physical capability, no final privileged renderer",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [
+        {
+          "noteId": "CG-CIN-CH-02",
+          "recipient": "chapter",
+          "status": "accepted"
+        }
+      ],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D07",
+      "currentState": "Old A4 departure latch hides the worker; no later local test presence exists.",
+      "proposedState": "One chapter-local Origin tester persists with accepted route and optional repeat; restore validated safe pose, no A4 pack/flight replay, no offworld companion or permanent farewell.",
+      "evidenceRefs": [
+        "chapter-to-cinematography-02",
+        "score-to-cinematography-02"
+      ],
+      "affectedBeatsOrChapters": "ch13-common / completed Origin visits",
+      "revealLevel": "persistent local consequence",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [
+        {
+          "noteId": "chapter-to-cinematography-02",
+          "recipient": "cinematography",
+          "status": "accepted"
+        },
+        {
+          "noteId": "score-to-cinematography-02",
+          "recipient": "cinematography",
+          "status": "accepted"
+        }
+      ],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D08",
+      "currentState": "Old Bible blanket bans post-embodiment parentheses; current source uses sensory parentheses and bare agency.",
+      "proposedState": "Explicit bounded rule for new ch13: sensory/involuntary lowercase parentheses, deliberate owned intent bare lowercase, worker procedural caps. Preserve older copy and dated blanket-rule lineage; no identity reassignment.",
+      "evidenceRefs": [
+        "CG-C02",
+        "chapter-story-treatment.md#candidate-copy-and-reveal-discipline"
+      ],
+      "affectedBeatsOrChapters": "new ch13 copy and affected Bible policy",
+      "revealLevel": "presentation grammar; no new hidden-pillar reveal",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D09",
+      "currentState": "Existing hearth and audit motifs exist; there is no Common Ground cue.",
+      "proposedState": "The Unrepeated Order retains audit square/tension; temporary witness hold has no mood restart; actual refused span holds quietly; reciprocal action stays restrained; actual final completion alone permits changed spacing. Immediate free-play handback plus live-only maximum5s final texture then existing4.5s release, cancelled on listed transitions. No engine rewrite, hits, coda, hierarchy of routes or alliance theme. New unsupported offered out-of-range span uses existing quiet refused-hold once; temporary occupied-reference loss/resume never restarts. Terra's sparse realization lines and quiet tracing receive no separate cue. Final arrival alone changes spacing.",
+      "evidenceRefs": [
+        "chapter-to-score-01",
+        "CG-CIN-SC-01",
+        "arena-chapter-reconciliation.md",
+        "arena-cinema-reconciliation.md",
+        "arena-score-reconciliation.md",
+        "arena-instrument-repair-chapter.md",
+        "arena-instrument-repair-cinema.md",
+        "arena-instrument-repair-score.md"
+      ],
+      "affectedBeatsOrChapters": "ch12 live install / ch13 / audio handback",
+      "revealLevel": "audible causality after real facts",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [
+        {
+          "noteId": "chapter-to-score-01",
+          "recipient": "score",
+          "status": "accepted"
+        },
+        {
+          "noteId": "CG-CIN-SC-01",
+          "recipient": "score",
+          "status": "accepted"
+        }
+      ],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D10",
+      "currentState": "Current player camera/world palettes/actor remain canonical; new staging unmeasured.",
+      "proposedState": "Player-owned75degree embodied camera, existing vehicle rig, alive world, stable shape/value walked/tested trace and visible grounded reciprocal bodies. All-day nominated; physical route/reference and day/night geometry proof before exact layout, final hardware/tier/motion required. No new light/worldgen/renderer/forced look. One fixed passive nonluminous plate and stable readable instrument scale; new apparatus, not existing-source claim. A literal small opaque backing, bracket and supported reference replace the unproven water/range layout. Render, collision and reference rays use the same housing geometry, never an invisible sector or inflated wall. The held reference visibly lacks that backing; all references share the same finite range and solid-visibility rule. Terra's necessary comparison and far-reference offer remain fully player-owned75FOV and ordinaryworldlighting.",
+      "evidenceRefs": [
+        "CG-CIN-CH-02",
+        "chapter-to-cinematography-02",
+        "arena-chapter-reconciliation.md",
+        "arena-cinema-reconciliation.md",
+        "arena-score-reconciliation.md",
+        "arena-instrument-repair-chapter.md",
+        "arena-instrument-repair-cinema.md",
+        "arena-instrument-repair-score.md"
+      ],
+      "affectedBeatsOrChapters": "ch13 and local aftermath",
+      "revealLevel": "relational reading in one existing view",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [
+        {
+          "noteId": "chapter-to-cinematography-02",
+          "recipient": "cinematography",
+          "status": "accepted"
+        },
+        {
+          "noteId": "CG-CIN-CH-02",
+          "recipient": "chapter",
+          "status": "accepted"
+        }
+      ],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D11",
+      "currentState": "Formal registry ends ch10; separate station/return uses ch11/ch12; current movie ends inside station.",
+      "proposedState": "Preserve receipts and formalize ch13 through a strictly typed/evidenced external station-return transition. Movie must depart, return, land, install and enter through real actions with no story reseed or timeout success. Normal adjacency checks remain strict.",
+      "evidenceRefs": [
+        "CG-C04",
+        "CG-C05",
+        "integration-survey.md"
+      ],
+      "affectedBeatsOrChapters": "ch10 boundary / external ch11-ch12 / ch13",
+      "revealLevel": "truthful production sequencing",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    },
+    {
+      "id": "CG-D12",
+      "currentState": "Bible/Execution Plan status and source pointers retain July15 status despite later worktree continuation.",
+      "proposedState": "Bounded source-grounded current-truth addenda and approved-future direction with preserved lineage; synchronize manifest/schema snapshot/source refs only, retain runtime/release ceilings and protected families until implementation.",
+      "evidenceRefs": [
+        "CG-C03",
+        "CG-C06",
+        "CG-C07",
+        "CG-C08"
+      ],
+      "affectedBeatsOrChapters": "affected documentation only",
+      "revealLevel": "source authority; no runtime claim",
+      "authority": {
+        "kind": "standing-user-delegation",
+        "sourceRef": "owner-standing-authority.json",
+        "requiresExactThreeSignatures": true,
+        "decisionArtifact": "owner-story-decision.json",
+        "personallyReviewedByUser": false
+      },
+      "peerDisposition": [],
+      "unresolvedDissent": [],
+      "status": "candidate-pending-exact-signatures-and-delegated-decision"
+    }
+  ],
+  "protectedUnresolved": [
+    "later W-7744 offworld/A5 recurrence and ultimate awakening/turn",
+    "greater-threat ontology",
+    "Worker9 reveal timing",
+    "third-consciousness form, mapping, persistence, separability and evidence grammar",
+    "Makers identity, number, motive",
+    "literal Terra authorship",
+    "simulation status",
+    "final-frame ontology"
+  ],
+  "documentationAllowedPaths": [
+    "main/PARAVOXIA_STORY_BIBLE.md",
+    "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+    "main/STORY.md",
+    "main/story-authority.json",
+    "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json"
+  ],
+  "runtimeMutationAuthorizedByThisCandidate": false,
+  "publicationAuthorized": false,
+  "supersedes": "iterations/council-v1/canon-decision-register.json"
+}

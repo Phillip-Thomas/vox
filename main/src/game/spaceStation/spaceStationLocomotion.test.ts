@@ -6,9 +6,12 @@ import {
   PLAYER_EYE_HEIGHT,
   PLAYER_RADIUS,
   stepWalk,
+  stepWalkFrame,
   type WalkState
 } from './spaceStationLocomotion.ts';
 import type { SpaceStationGraph } from './spaceStationTypes.ts';
+import { buildBlockerIndex } from './spaceStationCollision.ts';
+import { buildSpaceStationDressing } from './spaceStationDressing.ts';
 
 const descriptor = buildSpaceStationDescriptor({ system: { x: -19, y: -17 }, index: 0 });
 const graph = descriptor.graph;
@@ -122,5 +125,56 @@ describe('step determinism', () => {
     const snapshot = JSON.parse(JSON.stringify(state));
     stepWalk(graph, state, { dx: 5, dz: 5 }, 1 / 60);
     expect(state).toEqual(snapshot);
+  });
+});
+
+describe('foreground frame time at ordinary walking speed', () => {
+  it('covers the same6.16metres in1.4seconds at60FPS and the captured software cadence', () => {
+    const counter = graph.cells.find(cell => cell.id === 'counter')!;
+    const props = buildBlockerIndex(buildSpaceStationDressing(graph, descriptor.seed));
+    const start = createWalkState(graph, [counter.max[0] - 0.5, 0, 0]);
+    let hardware = start, software = start;
+    for (let i = 0; i < 84; i++) hardware = stepWalkFrame(graph, hardware, { x: 4.4, z: 0 }, 1 / 60, props);
+    // Actual C4 consecutive intervals after its first concourse frame.
+    for (const delta of [0.3333, 0.0334, 0.0333, 1]) {
+      software = stepWalkFrame(graph, software, { x: 4.4, z: 0 }, delta, props);
+    }
+    expect(software.position[0] - start.position[0]).toBeCloseTo(6.16, 6);
+    expect(software.position[0]).toBeCloseTo(hardware.position[0], 6);
+    expect(software.cellId).toBe('concourse');
+    expect(software.grounded).toBe(true);
+  });
+
+  it('resolves a thin solid obstacle on every substep instead of skipping it', () => {
+    const counter = graph.cells.find(cell => cell.id === 'counter')!;
+    const x = counter.min[0] + 10;
+    const props = buildBlockerIndex([{ kind: 'prop', tone: 5,
+      center: [x + 2, 1.5, 0], size: [0.2, 3, 3] }]);
+    const state = stepWalkFrame(graph, createWalkState(graph, [x, 0, 0]), { x: 4.4, z: 0 }, 1.4, props);
+    expect(state.position[0]).toBeGreaterThan(x + 1);
+    expect(state.position[0]).toBeLessThanOrEqual(x + 1.9 - PLAYER_RADIUS);
+    expect(state.cellId).toBe('counter');
+  });
+
+  it('retains sealed-portal and off-axis wall collisions under slow frames', () => {
+    const shelves = graph.cells.find(cell => cell.id === 'shelves')!;
+    const sealed = stepWalkFrame(graph, createWalkState(graph, [shelves.max[0] - 1, 0, 0]), { x: 4.4, z: 0 }, 2);
+    expect(sealed.cellId).toBe('shelves');
+    expect(sealed.position[0]).toBeLessThanOrEqual(shelves.max[0] - PLAYER_RADIUS);
+    const apron = graph.cells.find(cell => cell.id === 'apron')!;
+    const wall = stepWalkFrame(graph, createWalkState(graph, [apron.max[0] - 1, 0, apron.max[2] - 2]), { x: 4.4, z: 0 }, 2);
+    expect(wall.cellId).toBe('apron');
+    expect(wall.position[0]).toBeLessThanOrEqual(apron.max[0] - PLAYER_RADIUS);
+  });
+
+  it('discards paused/resumed zero-time frames and bounds an unreported long suspension', () => {
+    const start = createWalkState(graph, spaceStationSpawnPoint(descriptor));
+    // The controller supplies zero for a resumed frame and clears held/scripted
+    // input on visibility changes. A missed event still cannot charge30seconds.
+    expect(stepWalkFrame(graph, start, { x: 4.4, z: 0 }, 0)).toBe(start);
+    expect(stepWalkFrame(graph, start, { x: 4.4, z: 0 }, NaN)).toBe(start);
+    expect(stepWalkFrame(graph, start, { x: 4.4, z: 0 }, 30).position[0] - start.position[0]).toBeCloseTo(0.22, 6);
+    const resumed = stepWalkFrame(graph, start, { x: 4.4, z: 0 }, 1 / 60);
+    expect(resumed.position[0] - start.position[0]).toBeCloseTo(4.4 / 60, 6);
   });
 });

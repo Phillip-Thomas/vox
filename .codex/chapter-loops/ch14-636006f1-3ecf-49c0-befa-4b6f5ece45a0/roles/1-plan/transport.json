@@ -1,0 +1,22 @@
+{
+  "exitCode": 1,
+  "signal": null,
+  "reason": null,
+  "bytes": 4699,
+  "pid": 3214882,
+  "usage": {
+    "roleLaunches": 0,
+    "modelTurns": 1,
+    "inputTokens": 0,
+    "cacheReadTokens": 0,
+    "outputTokens": 0
+  },
+  "session": "054d4acb-fe9c-4260-921a-cee98bc32f34",
+  "resolved": "claude-fable-5-1",
+  "completed": false,
+  "failed": true,
+  "contextTokens": 0,
+  "reported": true,
+  "accounting": "Live per-message usage, reconciled to cumulative terminal usage.",
+  "requestedModel": "fable"
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "compiledAt": "2026-09-06T15:57:51.499020+00:00",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "productionScope": {
+    "status": "passed",
+    "evidenceRefs": [
+      "implementation.diff",
+      "implementation-source-manifest.json",
+      "production-lock.json",
+      "producer-boundary-completion.json"
+    ]
+  },
+  "creativeContract": {
+    "status": "passed",
+    "evidenceRefs": [
+      "contract-gate-pass.json",
+      "scene-v2-contract-gate.log",
+      "director-signoffs.json"
+    ]
+  },
+  "typecheck": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/handoff-standby-repair/verify.log"
+    ]
+  },
+  "tests": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/handoff-standby-repair/verify.log"
+    ]
+  },
+  "build": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/handoff-standby-repair/verify.log"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npm --prefix main run verify",
+      "commandAsReported": "npm --prefix main run verify",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/handoff-standby-repair/verify.log",
+      "evidenceSha256": "54a473d489deff9e73bc8c1379955e31684907f1fb773eb3de0e6ecd765d7fa0",
+      "componentScriptSource": "main/package.json#scripts.verify",
+      "componentScript": "npm run catalog:check && npm run scene:av:check && npm run creative:workflow:check && npm run chapter:registry:check && npm run chapter:journey:check && npm run typecheck && npm run preview:check && npm run audio:diagnostic-check && npm run story:ladder:check && npm run guidance:target-check && npm run story:authority && npm run test && npm run audio:check && npm run build",
+      "componentScriptSourceSha256": "2972e52e1c61e8c61034dfc1161f071ae04f27787b80fc5c3e83200523069a68"
+    },
+    {
+      "command": "python3 verifier/probes/flight-discriminator/rehash.py integration-handoff-standby-after",
+      "commandAsReported": "python3 verifier/probes/flight-discriminator/rehash.py integration-handoff-standby-after",
+      "cwd": ".codex/production-runs/2026-09-05-after-the-hearth",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/handoff-standby-repair/source-rehash-after.json",
+      "evidenceSha256": "31b017153f91b1af7c719a2f07cf2c7c180664357df37fe73248cde1c92b91c2"
+    }
+  ],
+  "scope": "Final handoff/standby implementation checks. Independent full verify, actual manual/movie/AV/hardware evidence and creative acceptance remain pending."
+}

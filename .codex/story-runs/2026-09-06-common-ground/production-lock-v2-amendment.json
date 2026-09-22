@@ -1,0 +1,21 @@
+{
+  "kind": "producer-lock-amendment",
+  "createdAt": "2026-09-06T06:48:04.140223+00:00",
+  "supersededFrozenLock": {
+    "path": "production-lock.json",
+    "sha256": "262a663b87aa38c04797b3fdd21abc3b35cb5915d231648f2b694f01e8673714"
+  },
+  "documentationCandidate": {
+    "path": "story-authority-candidate.md",
+    "sha256": "133d1dbe54a9f51e68d9fd67997042d1494059e30707a5da6c308d403cebc2fb"
+  },
+  "judgment": {
+    "path": "final-scorecard-v2.json",
+    "sha256": "76428cca21ae65cae5e07bb684e2480a24b1c87164d6e5f9e70e48f4b14baddd",
+    "decision": "approved",
+    "scope": "Bounded story-council direction and documentation candidate only. Not a scene approval, not runtime acceptance, not a final-game approval, not publication."
+  },
+  "mutationBoundary": "documentation-only",
+  "publicationAuthorized": false,
+  "reason": "CG-JUDGE-007: successor binding preserves frozen v1 lock bytes and records the exactly signed and independently approved v2 documentation candidate."
+}

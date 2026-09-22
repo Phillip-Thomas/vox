@@ -1,0 +1,63 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "a1a20583be2637f0e349f9655885c3d0c97b52606a9f76fb899e810e89039de3",
+  "kind": "continuity",
+  "chapter": "ch14",
+  "proof": {
+    "earnedEntry": false,
+    "earnedExit": false,
+    "chapterWindowComplete": false,
+    "noFixtures": true,
+    "priorIndex": -1,
+    "entryIndex": -1,
+    "beatIndices": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "exitIndex": -1,
+    "sampleCount": 6764,
+    "hardware": true,
+    "cleanup": false,
+    "videoDecodes": false,
+    "audioDecodes": false,
+    "framesNonblank": false
+  },
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b5728597-2553-4df4-9e2d-856f1d6c86f3/continuity/raw/cleanup.json",
+      "sha256": "549c2ed6a756ece117b243e87139be3c827217e617d15fb2ded2dd3bae90c9ef"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b5728597-2553-4df4-9e2d-856f1d6c86f3/continuity/raw/diagnostic-checkpoints.json",
+      "sha256": "5f9dc1b5d45c15b71664f51b89ae72cbeadbeebedf1dcb996010a16b3620651b"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b5728597-2553-4df4-9e2d-856f1d6c86f3/continuity/raw/media-proof.json",
+      "sha256": "60768decde3e4679be63c65e734c097ab39ec2a14df36ae39c4afd364c139fd0"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b5728597-2553-4df4-9e2d-856f1d6c86f3/continuity/raw/provenance.json",
+      "sha256": "d3bb2531324d68f1fe16b94fcf98a87583db293acdff0600eef94b9934a8da49"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b5728597-2553-4df4-9e2d-856f1d6c86f3/continuity/raw/trace.ndjson",
+      "sha256": "c6d309b7a9dbc51c260b9cc5ca63e9fb0da7c5f702676741ad6c7f96d857b893"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "Capture interrupted by session deadline",
+    "Chapter video: Chapter-ready video window was not observed"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "36b2f76606f86e97d2d9ab3b23bc960f7fe6c2c324be92743f8022add684b3ae",
+    "buildSha256": "e8972a7149659c9eb45ad3ec8c43451ae8e5b42adff7cd166b9354b08ec2743d",
+    "transportSha256": "d94b5b79f607a2416e0d197889bbcb7376674882b68085296b0e3d38339e1eb8"
+  }
+}

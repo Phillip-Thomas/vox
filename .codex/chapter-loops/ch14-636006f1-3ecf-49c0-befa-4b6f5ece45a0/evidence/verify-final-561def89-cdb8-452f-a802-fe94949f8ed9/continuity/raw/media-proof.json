@@ -1,0 +1,18 @@
+{
+  "video": {
+    "decoded": false,
+    "error": "Command failed: ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=codec_name,nb_read_frames:format=duration -of json /home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/video.webm\n/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/video.webm: No such file or directory\n"
+  },
+  "audio": {
+    "decoded": false,
+    "error": "Command failed: ffprobe -v error -show_entries stream=codec_name,sample_rate,channels:format=duration -of json /home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/audio.wav\n/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/audio.wav: No such file or directory\n"
+  },
+  "decodedFrames": [],
+  "frames": [],
+  "isolation": [],
+  "pageErrors": [],
+  "errors": [
+    "Capture interrupted by SIGTERM",
+    "Chapter video: Chapter-ready video window was not observed"
+  ]
+}

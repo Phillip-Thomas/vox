@@ -7,6 +7,7 @@ import {
 } from './cubeGravityConstants';
 import { FACE_NORMALS } from './surfaceControls';
 import { findValidSpawnSite } from './spawnValidation.ts';
+import { DEFAULT_ARRIVAL_SITE } from './worldPrepProtocol.ts';
 
 export type ArrivalMode = 'surface' | 'approach';
 
@@ -23,7 +24,10 @@ export interface WorldArrivalPose {
   shipPosition: THREE.Vector3;
 }
 
-const DEFAULT_SITE = { x: 4, z: -4 };
+// Shared with the world-prep worker, which runs the same validated search off
+// the main thread; the two MUST agree or a worker boot and a sync boot would
+// spawn the ship on different pads.
+const DEFAULT_SITE = DEFAULT_ARRIVAL_SITE;
 const APPROACH_ALTITUDE = 30;
 const EXTRA_PLAYER_CLEARANCE = 1;
 // This pose is measured from the voxel centre, not its exposed contact plane.

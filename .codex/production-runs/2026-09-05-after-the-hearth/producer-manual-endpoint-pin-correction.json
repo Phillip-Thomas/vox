@@ -1,0 +1,31 @@
+{
+  "at": "2026-09-06T23:59:17.785478+00:00",
+  "reason": "Actual first endpoint probe armed old bundle URL and stopped before shortcut; original verifier then claimed deadline despite actual remaining time.",
+  "originalStartedAt": "2026-09-06T23:51:40.412276Z",
+  "absoluteDeadline": "2026-09-07T00:03:40.412276Z",
+  "extraBudgetMinutes": 0,
+  "privateOnly": true,
+  "sourceMutation": false,
+  "currentBundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9",
+  "verifiedUniqueSignature": "function Rwe(e,A,t,i,g=2.5,I=ywe){",
+  "verifiedSites": {
+    "creditDecl": {
+      "lineNumber": 7839,
+      "columnNumber": 194688,
+      "actualContext": "y:I.y+r*c,z:I.z+s*c};return Ti(t,l)>i?null:b6(e,A)+n*c}function Rwe(e,A,t,i,g=2.5,I=ywe){const o={x:A.x,y:A.y,z:A.z},n=i.foot;if(!n||!(t>0))return{units:i.units,reachedVertex:i.reachedV"
+    },
+    "creditEntry": {
+      "lineNumber": 7839,
+      "columnNumber": 194730,
+      "actualContext": ":b6(e,A)+n*c}function Rwe(e,A,t,i,g=2.5,I=ywe){const o={x:A.x,y:A.y,z:A.z},n=i.foot;if(!n||!(t>0))return{units:i.units,reachedVertex:i.reachedVertex,foot:o};let a=i.reachedVertex,r=i.un"
+    },
+    "caller": {
+      "lineNumber": 7839,
+      "columnNumber": 220603,
+      "actualContext": "I=AvA(i),o=O0(),n=(RI==null?void 0:RI.extraSolids)??[];if(!o)return;if(t.stage===\"none\"&&(t.stage=\"positioning-to-h\"),t.stage===\"positioning-to-h\"){if(bh({leg:\"position-to-h\",points:_6,"
+    }
+  },
+  "coordinateQualification": "CDP zero-based UTF16 line/column positions remain exact. Whole-file Python codepoint offset differs from UTF16 offset; do not relabel these as byte offsets.",
+  "next": "Existing prepared actualCnegative/recovery recipe rerun with fresh capture. Actual CDP resolvedlocations and callhits still required.",
+  "allPredicatesAndLogpointConditionsUnchanged": true
+}

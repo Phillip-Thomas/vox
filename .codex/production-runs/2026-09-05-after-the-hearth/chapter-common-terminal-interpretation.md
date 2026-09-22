@@ -1,0 +1,13 @@
+# Common terminal interpretation — Chapter
+
+**The 0.6-unit movie overshoot is an implementation device. A bounded steering correction preserving the signed route requires no contract amendment.** This does not authorize moving C or any route vertex.
+
+The signed v3 candidate is `5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54`; live v2 remains `4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e`. Their common passage requirements are unchanged. Exact geometry is `scene-cinema-lane.json#/qualifiedGeometry/common/vertices` and `#/commonGuide/geometrySource`, including C=(-48,51.05,12). The contract requires actual full ordered eighteen-unit traversal, maintained reference, support, solid sight, body clearance and real final arrival (`scene-contract.json#/story/events/21/acceptanceCriterion`, events 25/26, `#/story/agencyWindows/3` and `#/guidance/objectives/13/acceptanceCriterion`).
+
+In inspected `commonGroundDirector.ts` SHA256 `acc0d9cf6331f13f77bd95d29b3bd311033a382fcdc3bff3d9ab977297166c46`, `railGoal:2251–2267` derives a steering goal by adding an offset to an unchanged route point; the 0.6 constant and terminal option are at 2130/2147/2533. The audit's description of that offset as “signed” and its claim that every terminal-device change requires creative geometry approval overstate its authority. A source snapshot does not make each controller constant an authored coordinate.
+
+Root may route an engineer's change to overshoot amount, direction or steering under the existing implementation boundary. It must still physically traverse the unchanged route in order, cross the incoming corners honestly and arrive at unchanged C. No arrival widening, corner skipping, endpoint-distance debt, safety bypass, altered reference, rescue or extra player action is permitted. Adjusting the device is distinct from moving the route; the audit's offset-goal failure does not establish that C must move.
+
+An outgoing-leg aim is **unproved**: an ideal target on the incoming plane does not ensure the actual body reaches that plane before stopping or turning. Require actual control-driven path/footprint and strict-credit evidence at all affected corners and C. Preserve unsafe refusals and the audit's generated-terrain/transcribed-function/live-branch limitations. Independent manual testing of the original vertices remains pending.
+
+This is an authority interpretation, not a selected algorithm, source-mutation grant, candidate edit, GPU test or runtime acceptance. `common-terminal-source-audit.json` SHA256 `6bc39c2015c524eb096bbf3152eaef79e98313ced1aef8b2e9ad0c1771d26ed7` and exact clause/source references are recorded in the JSON companion.

@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 470734,
+  "stop_reason": "end_turn",
+  "session_id": "9a8e1966-8e84-44bb-9200-9a54863520b5",
+  "total_cost_usd": 2.8571015000000006,
+  "usage": {
+    "input_tokens": 94,
+    "cache_creation_input_tokens": 82321,
+    "cache_read_input_tokens": 2087433,
+    "output_tokens": 39518,
+    "output_tokens_details": {
+      "thinking_tokens": 2520
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 82321,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1316,
+        "cache_read_input_tokens": 84349,
+        "cache_creation_input_tokens": 2098,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2098
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1680,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001755,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 94,
+      "outputTokens": 39518,
+      "cacheReadInputTokens": 2087433,
+      "cacheCreationInputTokens": 82321,
+      "webSearchRequests": 0,
+      "costUSD": 2.8553465000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2520,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 55,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Closure complete, CPU-only, within the owned lane.\n\n## Six blockers closed \u2014 all verified by running the actual artefacts\n\n| # | Blocker | Fix | Proof |\n|---|---|---|---|\n| 1 | 5 `../` to main | now **6** (`probes/verifier/run/production-runs/.codex/vox`) | C1 imports resolve; C2 shows 5-parent path doesn't exist |\n| 1b | **new, found by running it** | `import('playwright')` was unresolvable *and* the wrong package \u2014 run folder is outside `main/`, and the installed package is `playwright-core` (as `evidence.mjs` uses). Resolved by path. **No install needed** | C1 |\n| 2 | `state.avFull` presumed | actual provider `buildSnapshot` exposes `state.signedSceneAv`; reads `activationHistoryAnchorIds` with **exact** `indexOf` membership; regexes deleted; absent \u21d2 `null` + `*Present:false`, never `false` | C3\u2013C6 run the actual sampler in `node:vm` on an exact bridge-shaped snapshot |\n| 3 | weak edge | requires in ONE sample: done/inactive **+** both `anc.cg.complete`/`anc.cg.handback` **+** live `common.committed===true && workerUnits>=18`. In-page predicate is the *same function object*, injected verbatim | C7\u2013C9 |\n| 4 | browser leak | adopted by the guard **immediately** at launch; `newContext`/`newPage`/`goto`/`assertHardwareGl` failures close it + write failure/cleanup records | C11\u2013C13 (goto & assert stubs) |\n| 5 | bogus lock | `bash -c 'exec 9>LOCK; flock -w 60 -x 9 \\|\\| exit 75; node \u2026 --heavy-lock-fd 9'` \u2014 node inherits the locked description | documented, not run |\n| 6 | 60 s recording | `finale-window-runtime.mjs`: own sink by exact module id, `PULSE_SINK` on its own child only, ownership gate against the **real** browser pid tree (`browser-pid.json`, unmocked), records only `<sink>.monitor`, recorder \u2265 **73.5 s** (~62 s + 11.5 s hold), session cap **360 s**, recorder stopped in `finally`, **failure audio preserved**, exact-id unload verified gone, default sink re-read unchanged | C14\u2013C18 (pactl/spawn stubs) |\n\n**Commands/exits:** `node --check` \u00d74 \u2192 OK; `node closure-checks.mjs` \u2192 **exit 0, 19/19**.\n**Runtime command / control role:** `finale-window-runtime.mjs --out <dir>` = role `finale-window-runtime`; it spawns the probe with `--pulse-sink`, probe uses inherited **fd 9**; one unmuted session yields **both** the atomic state window and the actual output \u2014 no duplicate state-only capture.\n\n**Provenance:** 99/99 manifest game files rehashed, 0 mismatches. No sink, browser, recorder, build, verify, source or package change during preparation. Originals intact in `iterations/finale-window-initial-preparation/` (prep report still `50204d49\u2026`, matching the review).\n\n**Owned hashes:** windowSampler `9f82db53\u2026`, probe `91d802b6\u2026`, runtime `f844bb43\u2026`, checks `8bc1bb8a\u2026`, checks-log `a699e1f0\u2026`, report.json `b89348d5\u2026`, report.md `39f6c8ca\u2026`.\n\nStill MISSING and left honest: cancellation reason/caller, `AudioContext.state`/mute, and the App.tsx pause conjuncts. **No audible or causal verdict** \u2014 nothing was heard or recorded.",
+  "ttft_ms": 1313,
+  "type": "result",
+  "duration_ms": 471726,
+  "uuid": "3360eeb5-eb04-439b-87ab-c031872dcded",
+  "ttft_stream_ms": 691,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 691,
+  "queued_turn_count": 0
+}

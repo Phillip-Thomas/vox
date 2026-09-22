@@ -1,0 +1,16 @@
+{
+  "schema": "paravoxia.chapterLoopOwnerRepair.v1",
+  "at": "2026-09-07T13:18:58.247253+00:00",
+  "runId": "ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b",
+  "request": "fix the blocker.",
+  "scope": "Fix manual cleanup normalization and held Continue input; validate affected evidence. Keep prior spend and all chapter acceptance requirements. No publication.",
+  "before": {
+    "main/tools/chapter-loop/legacy-capture.mjs": "901d9b39969e00733d55ed32c65889df9930d6cb15692312854de55324e3e772",
+    "main/tools/chapter-loop/loop.test.mjs": "f107927f9e6903247d895b5cb97eb29848ef2ee3fb304aa1eb73dc5f464c2f86",
+    ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs": "46496492de0645c43e1a01537cb5cf3453c33f324c2607754da01d9b086bff22",
+    "main/tools/chapter-loop/runner.mjs": "51f4d493dd35aaee95c5f95ff54e04c45b012373111c46c9f638b690be59a9a1",
+    "docs/chapter-loop.md": "7a5d203517b80151be1f2724ad2f82e884ae4b73d19dd042d379f4fdfcbc84b6"
+  },
+  "failureSha256": "d71c0ebf44fcb65176372eddf44724393ed4221ebbe984c913a584d9c57b9c01",
+  "extraInfrastructureRetries": 1
+}

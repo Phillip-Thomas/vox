@@ -1,0 +1,29 @@
+{
+  "createdAt": "2026-09-06T07:45:20.279349+00:00",
+  "author": "creative-producer",
+  "authority": "User standing delegation to continue and auto approve all necessary in-scope work",
+  "briefItemRef": "CG-S1-boundary-registry",
+  "addedPaths": [
+    {
+      "path": "main/src/story/StoryDebugPanel.tsx",
+      "symbol": "BEAT_LABELS",
+      "why": "Complete the exhaustive StoryBeat label map with the four already signed ch13 beats.",
+      "preimplementationSha256": "9d41894069ed5d89a857e336c38831ba10377e820161ce79c326fd129ca21b96",
+      "baselineRecovery": "HEAD bytes verified equal to the original initial-source-hashes.json",
+      "currentSha256": "875443375da39429f91cb3ddf100a7fbae34400397ee4fb0d57f9cc9cdc9d8d1"
+    },
+    {
+      "path": "main/src/story/tidegardenRoute.ts",
+      "symbol": "resolveStoryBootWorldId",
+      "why": "Keep ch13-survey and ch13-common physically owned by Origin, while home and return start on Tidegarden.",
+      "preimplementationSha256": "16904583da2e22bd393feafd59f0d84c4b42cfea35e11fe2e483f0c972b00875",
+      "baselineRecovery": "HEAD bytes verified equal to the original initial-source-hashes.json",
+      "currentSha256": "e7237efcf339efb599222a171a22b0c4b118712025f3f777030c08482b7e103e"
+    }
+  ],
+  "processDeviation": "Integrator edited these necessary exhaustive/physical-world registration surfaces before reporting the missing path boundary. Root records the late report explicitly; earlier gate evidence does not cover the added boundary. Recheck the implementation gate against this current lock before capture.",
+  "personallyReviewedByUser": false,
+  "contractSha256": "ecce3e98270a9041b071e3c627090b228cfaab8a34e6c847296bd775baac3a74",
+  "contractChanged": false,
+  "publicationAuthorized": false
+}

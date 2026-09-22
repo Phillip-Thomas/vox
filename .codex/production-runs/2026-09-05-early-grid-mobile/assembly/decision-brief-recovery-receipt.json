@@ -1,0 +1,34 @@
+{
+  "method": "Reverse exact target-only append literals in genuine Chapter stage3 command; Python AST literal_eval only; no historical shell executed. SHA must equal two independent original director input bindings.",
+  "sourceLog": "/home/thomasphillip/.codex/sessions/2026/09/05/rollout-2026-09-05T14-39-10-01a072de-0e74-72a3-8754-9c24e902bf36.jsonl",
+  "line": 385,
+  "eventId": "exec-eb750b42-8283-4e79-9aa4-57abecc4ae67",
+  "historicalCommandSha256": "930495ce3aad8cd55f445ae91638bb232a9d7da9d20de4d99fe4e735122194d9",
+  "inputPath": "assembly/originals/decision-brief.json",
+  "inputSha256": "ee362e3a10d5ebc15e667bd1cf28c20cabceff59d5cb367d911a2f1829653114",
+  "recoveredPath": "assembly/originals/decision-brief.pre-stage3.json",
+  "recoveredSha256": "310d50f9dd3e29c3e9e06c42c60c3a81567596a09acae6def8e0d1134c5c8189",
+  "removedExactAppendedPathRecords": [
+    [
+      "main/src/story/storyDirector.ts",
+      "tickTrackUnlock",
+      "Sole publisher for explicitly timed original track text and actual quota-complete clear."
+    ],
+    [
+      "main/src/story/storyText.ts",
+      "clearStoryTextChannel (proposed), showSystemLine, showCaption",
+      "Selective channel lifecycle for the authorized compact track presentation."
+    ],
+    [
+      "docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json",
+      "$defs.guidanceObjective, $defs.guidanceTargetContract (proposed)",
+      "Truthfully represent existing survey/no-target objectives; preserve true directional enforcement."
+    ],
+    [
+      "main/tools/creative-triad-gate.mjs",
+      "validateGuidanceContract, validateObjectiveLifecycleEvidence, corresponding selftests",
+      "Root-owned strict per-mode validation and negative evidence tests; no waiver or omission of guidance."
+    ]
+  ],
+  "removedExactContextSuffix": " Stage3 concrete refinements are recorded in chapter-stage3-proposal; they remain within already authorized UX/engineering scope and require peer reconciliation, not an invented owner approval."
+}

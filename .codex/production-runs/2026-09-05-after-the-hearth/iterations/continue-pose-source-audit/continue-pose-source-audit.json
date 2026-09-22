@@ -1,0 +1,53 @@
+{
+  "schema": "paravoxia.audit.continuePoseSource.v1",
+  "role": "continue-pose-source-audit",
+  "startedAtUtc": "2026-09-06T20:31:08Z",
+  "budgetMinutes": 12,
+  "endedAtUtc": "2026-09-06T20:42:40Z",
+  "scope": "read-only source diagnosis + bounded CPU replay; no browser, no build, no source edit",
+  "verdict": "PARTIAL - one candidate cause FALSIFIED by causal replay, one FALSIFIED by source read; exact branch NOT yet proven",
+  "doNotAccept": "Verifier label 'POSE FINDING - THE ROUTE-BLOCKING CAUSE' remains an observation; no cause is established by this audit.",
+  "falsified": [
+    {
+      "hypothesis": "isDryClearResumePosition rejected the earned +Y exit pose, findValidSpawnSite(r=12) failed, fallback to arrivalPose.playerSurfacePosition",
+      "method": "bool causal CPU replay of the REAL shipped functions (src/utils/spawnValidation.ts) against the REAL worldgen (getWorldGen, seed 3215739679, worldId '-1,-1')",
+      "result": "dry=true for the exit pose [-31.990680694580078,52.78897476196289,21.41554069519043] at planetSize 50, 48 and 32; validator returns SAFE, so the rescue path is never entered and the pose would be used verbatim",
+      "note": "Only an out-of-scope planetSize 64 makes it false. Origin/story planet size in-tree is 50."
+    },
+    {
+      "hypothesis": "storyAnchoredSpawn(storyAtMount) returned true and nulled the saved pose",
+      "method": "source read src/story/storyState.ts:1132-1137 and default snapshot :218",
+      "result": "returns true only for chapter 'prologue' or ch1 up to 'ch1-lift'; default snapshot is {active:false, chapter:'none'} which also returns false. ch13 cannot take this branch unless story state is mis-restored to prologue/ch1 at mount."
+    }
+  ],
+  "replay": {
+    "planetSize50": {"exit": {"radius": 65.34, "dry": true}, "earlierAutosave": {"radius": 60.41, "dry": true}, "afterContinue": {"radius": 57.16, "dry": true}},
+    "planetSize64_outOfScope": {"exit": {"dry": false, "findValidSpawnSite": [-32.0, 67.85, 22.0]}}
+  },
+  "capturedBytes": {
+    "baseKey": "pvx.v1.world.-1,-1.player",
+    "actorKey": "pvx.v1.world.-1,-1:p1.player",
+    "beforeNavigation": [-26.54019546508789, 52.78955841064453, 12.59562873840332],
+    "afterBeforeunloadAndMenuBoot": [-31.990680694580078, 52.78897476196289, 21.41554069519043],
+    "menuBeforeContinue": "UNCHANGED, sha256 fec3227fce4b24173c6bd8fb92c83c0212a53ac65ca9ed67b5cae75d585524de",
+    "afterContinueBase": [53.753990173339844, 13.5, -14],
+    "afterContinueActor": "exit pose, sha256 fec3227f... (copied intact)",
+    "conclusion": "No pre-Continue menu overwrite. The base key is rewritten AFTER Continue with a +X arrival-shell pose."
+  },
+  "remainingCandidates": [
+    "loadPlayerPose scope mismatch at Continue boot: savePlayerPose writes ONLY scopedWorldKey(...).primary (src/game/systems/persistence.ts:451). If commandContext.world.worldId at Continue boot is not the same string that produced 'pvx.v1.world.-1,-1.player', readScoped falls through to a legacy seed key and returns null -> arrivalPose.playerSurfacePosition.",
+    "Ordering: whether the actor/world snapshot promotion that copies base -> ':p1' runs BEFORE EfficientScene's useState initializer reads the base key, and whether it clears or re-seeds base in between.",
+    "arrivalMode/controlMode: 'approach' and the flight-restore branch both return before the saved-pose branch (EfficientScene.tsx:323-329)."
+  ],
+  "noFidelityDefectConfirmed": true,
+  "correctionCandidate": "NONE PROPOSED - a minimal correction cannot be justified until the actual taken branch is proven. Proposing one now would risk removing legitimate unsafe-spawn recovery, which the replay shows is NOT firing here.",
+  "requiredNext": [
+    "Instrumented CPU/runtime trace of the exact worldId string in commandContext.world at Continue boot vs at autosave time",
+    "Trace of promotion order around pvx.v1.world.-1,-1.player during the Continue click"
+  ],
+  "sourceIntegrity": {
+    "manifestSha256Expected": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "gameSourceEdited": false,
+    "scratchTestCreatedAndRemoved": "main/src/__continue_pose_audit.replay.test.ts"
+  }
+}

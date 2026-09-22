@@ -1,0 +1,6 @@
+{
+  "at": "2026-09-06T18:28:26.587122+00:00",
+  "to": "arrival-common-earned",
+  "from": "creative-producer",
+  "instruction": "Root inspected primaryearned1: stored19samples surviveContinue, but afterContinue cg.bodyCentre [52.7889748,17.5,-20], projectedbodyPose [50.9889748,17.5,-20], up~[1,0,0], instead of prere-loadauditplane pose[-33.34,51.03,22.47]. MovementcalibrationA/D appearzero inXZ becausebodyup+X. walkTowards usesrawbodyCentreXZ againstfixedE[-42,51.05,12]; evenprojectedfootremains+Xface, so do NOT assume replacingcentrewithfootalone fixesactualrestoredlocation. This is likely a real spawn/placement or coordinate-binding boundary, not preservedroutebytes proof of usableContinue. Retain exact savedactorposition/world/activebody identity versus restoredchosenSpawn/materialization, actualinstallWatchunknown and approachedfalse. Stop at genuinefailure; no90sec repeatingstallneeded. Bounded read-only source diagnosis of spawnedpose is authorized; no gamepatch or forcedrestore. Need no permission. Keep actualcalibration/readout trace and cleanup; finalnewF must remain notearned if failing. Existing role instruction to read targetedinbox atphaseboundaries remains important."
+}

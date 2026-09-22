@@ -1,0 +1,6135 @@
+{
+  "schema": "paravoxia.sceneAvRuntime.v1",
+  "source": {
+    "sceneId": "distance-between-fires",
+    "contractVersion": "intent-v1",
+    "sha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+    "status": "frozen"
+  },
+  "sources": [
+    {
+      "sceneId": "distance-between-fires",
+      "contractVersion": "intent-v1",
+      "sha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+      "status": "frozen"
+    },
+    {
+      "sceneId": "ch10-station-introduction",
+      "contractVersion": "draft-v9",
+      "sha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+      "status": "frozen"
+    },
+    {
+      "sceneId": "common-ground",
+      "contractVersion": "scene-v1",
+      "sha256": "ecce3e98270a9041b071e3c627090b228cfaab8a34e6c847296bd775baac3a74",
+      "status": "frozen"
+    }
+  ],
+  "beats": [
+    "ch4-audit",
+    "ch4-comply",
+    "ch4-defy",
+    "a4-exhale",
+    "ch5-maw",
+    "ch6-dive",
+    "ch7-reconstruct",
+    "ch7-board",
+    "ch8-launch",
+    "ch8-crossing",
+    "ch8-landfall",
+    "ch9-settle",
+    "ch9-hearth",
+    "ch10-cold",
+    "ch10-ask",
+    "ch10-transit",
+    "ch13-home",
+    "ch13-return",
+    "ch13-survey",
+    "ch13-common"
+  ],
+  "anchors": [
+    {
+      "id": "anc.audit.arrival-handback",
+      "beat": "ch4-audit",
+      "order": 0,
+      "event": "arrival_handback_authenticated",
+      "source": "runtime-event",
+      "storyEventRef": "evt.audit.arrival-handback",
+      "scoreCueRefs": [
+        "sc.audit.incomplete-model"
+      ],
+      "shotRefs": [
+        "cin.audit.01-inherited-world"
+      ]
+    },
+    {
+      "id": "anc.audit.fire-check",
+      "beat": "ch4-audit",
+      "order": 1,
+      "event": "ev.audit.fire-mismatch",
+      "source": "runtime-event",
+      "storyEventRef": "evt.audit.fire-check",
+      "scoreCueRefs": [
+        "sc.audit.incomplete-model"
+      ],
+      "shotRefs": [
+        "cin.audit.02-warmth-without-fire"
+      ]
+    },
+    {
+      "id": "anc.audit.life-as-noise",
+      "beat": "ch4-audit",
+      "order": 2,
+      "event": "ev.audit.life-mismatch",
+      "source": "runtime-event",
+      "storyEventRef": "evt.audit.life-as-noise",
+      "scoreCueRefs": [
+        "sc.audit.incomplete-model"
+      ],
+      "shotRefs": [
+        "cin.audit.03-noise-field"
+      ]
+    },
+    {
+      "id": "anc.audit.tree-distance",
+      "beat": "ch4-audit",
+      "order": 3,
+      "event": "ev.audit.tree-mismatch",
+      "source": "runtime-event",
+      "storyEventRef": "evt.audit.tree-distance",
+      "scoreCueRefs": [
+        "sc.audit.incomplete-model"
+      ],
+      "shotRefs": [
+        "cin.audit.04-object-not-there"
+      ]
+    },
+    {
+      "id": "anc.audit.directive",
+      "beat": "ch4-audit",
+      "order": 4,
+      "event": "ev.audit.sterilization-authorized",
+      "source": "runtime-event",
+      "storyEventRef": "evt.audit.directive",
+      "scoreCueRefs": [
+        "sc.audit.incomplete-model"
+      ],
+      "shotRefs": [
+        "cin.audit.04-object-not-there"
+      ]
+    },
+    {
+      "id": "anc.comply.fire-order",
+      "beat": "ch4-comply",
+      "order": 5,
+      "event": "ev.comply.fire-order-issued",
+      "source": "runtime-event",
+      "storyEventRef": "evt.comply.fire-order",
+      "scoreCueRefs": [
+        "sc.comply.self-diminish"
+      ],
+      "shotRefs": [
+        "cin.comply.01-fire-in-hand"
+      ]
+    },
+    {
+      "id": "anc.comply.fire-commit",
+      "beat": "ch4-comply",
+      "order": 6,
+      "event": "ev.comply.fire-doused",
+      "source": "runtime-event",
+      "storyEventRef": "evt.comply.fire-commit",
+      "scoreCueRefs": [
+        "sc.comply.self-diminish"
+      ],
+      "shotRefs": [
+        "cin.comply.02-first-diminishment"
+      ]
+    },
+    {
+      "id": "anc.comply.organics-order",
+      "beat": "ch4-comply",
+      "order": 7,
+      "event": "ev.comply.organics-order-issued",
+      "source": "runtime-event",
+      "storyEventRef": "evt.comply.organics-order",
+      "scoreCueRefs": [
+        "sc.comply.self-diminish"
+      ],
+      "shotRefs": [
+        "cin.comply.03-given-away"
+      ]
+    },
+    {
+      "id": "anc.comply.organics-commit",
+      "beat": "ch4-comply",
+      "order": 8,
+      "event": "ev.comply.organics-resolved",
+      "source": "runtime-event",
+      "storyEventRef": "evt.comply.organics-commit",
+      "scoreCueRefs": [
+        "sc.comply.self-diminish"
+      ],
+      "shotRefs": [
+        "cin.comply.04-nothing-looks-better"
+      ]
+    },
+    {
+      "id": "anc.comply.regression-floor",
+      "beat": "ch4-comply",
+      "order": 9,
+      "event": "ev.comply.regression-settled",
+      "source": "runtime-event",
+      "storyEventRef": "evt.comply.regression-floor",
+      "scoreCueRefs": [
+        "sc.comply.self-diminish"
+      ],
+      "shotRefs": [
+        "cin.comply.04-nothing-looks-better"
+      ]
+    },
+    {
+      "id": "anc.defy.tree-order",
+      "beat": "ch4-defy",
+      "order": 10,
+      "event": "ev.defy.tree-order-issued",
+      "source": "runtime-event",
+      "storyEventRef": "evt.defy.tree-order",
+      "scoreCueRefs": [
+        "sc.defy.lowercase"
+      ],
+      "shotRefs": [
+        "cin.defy.01-impossible-order"
+      ]
+    },
+    {
+      "id": "anc.defy.tool-refusal",
+      "beat": "ch4-defy",
+      "order": 11,
+      "event": "ev.defy.tree-target-protected",
+      "source": "runtime-event",
+      "storyEventRef": "evt.defy.tool-refusal",
+      "scoreCueRefs": [
+        "sc.defy.lowercase"
+      ],
+      "shotRefs": [
+        "cin.defy.02-verb-arrives"
+      ]
+    },
+    {
+      "id": "anc.defy.refuse-available",
+      "beat": "ch4-defy",
+      "order": 12,
+      "event": "ev.defy.refuse-command-available",
+      "source": "runtime-event",
+      "storyEventRef": "evt.defy.refuse-available",
+      "scoreCueRefs": [
+        "sc.defy.lowercase"
+      ],
+      "shotRefs": [
+        "cin.defy.03-no"
+      ]
+    },
+    {
+      "id": "anc.defy.no-committed",
+      "beat": "ch4-defy",
+      "order": 13,
+      "event": "ev.defy.refusal-committed",
+      "source": "runtime-event",
+      "storyEventRef": "evt.defy.no-committed",
+      "scoreCueRefs": [
+        "sc.defy.lowercase"
+      ],
+      "shotRefs": [
+        "cin.defy.04-the-quiet"
+      ]
+    },
+    {
+      "id": "anc.a4.held-stillness",
+      "beat": "a4-exhale",
+      "order": 14,
+      "event": "ev.a4.refusal-hush-held",
+      "source": "runtime-event",
+      "storyEventRef": "evt.a4.held-stillness",
+      "scoreCueRefs": [
+        "sc.a4.breath-front"
+      ],
+      "shotRefs": [
+        "cin.a4.01-held-field"
+      ]
+    },
+    {
+      "id": "anc.a4.life-front",
+      "beat": "a4-exhale",
+      "order": 15,
+      "event": "ev.a4.alive-authority-committed",
+      "source": "runtime-event",
+      "storyEventRef": "evt.a4.life-front",
+      "scoreCueRefs": [
+        "sc.a4.breath-front"
+      ],
+      "shotRefs": [
+        "cin.a4.02-first-breath"
+      ]
+    },
+    {
+      "id": "anc.a4.pond-wakes",
+      "beat": "a4-exhale",
+      "order": 16,
+      "event": "ev.a4.pond-response-visible",
+      "source": "runtime-event",
+      "storyEventRef": "evt.a4.pond-wakes",
+      "scoreCueRefs": [
+        "sc.a4.breath-front"
+      ],
+      "shotRefs": [
+        "cin.a4.03-water-learns-light"
+      ]
+    },
+    {
+      "id": "anc.a4.herd-crest",
+      "beat": "a4-exhale",
+      "order": 17,
+      "event": "ev.a4.herd-route-visible",
+      "source": "runtime-event",
+      "storyEventRef": "evt.a4.herd-crest",
+      "scoreCueRefs": [
+        "sc.a4.breath-front"
+      ],
+      "shotRefs": [
+        "cin.a4.04-the-ridge-arrives"
+      ]
+    },
+    {
+      "id": "anc.a4.w7744-flight",
+      "beat": "a4-exhale",
+      "order": 18,
+      "event": "ev.a4.w7744-fault-recorded",
+      "source": "runtime-event",
+      "storyEventRef": "evt.a4.w7744-flight",
+      "scoreCueRefs": [
+        "sc.a4.breath-front"
+      ],
+      "shotRefs": [
+        "cin.a4.05-empty-field-flight"
+      ]
+    },
+    {
+      "id": "anc.a4.pack-torn",
+      "beat": "a4-exhale",
+      "order": 19,
+      "event": "ev.a4.field-pack-dropped",
+      "source": "runtime-event",
+      "storyEventRef": "evt.a4.pack-torn",
+      "scoreCueRefs": [
+        "sc.a4.breath-front"
+      ],
+      "shotRefs": [
+        "cin.a4.06-cause-left-behind"
+      ]
+    },
+    {
+      "id": "anc.a4.handback",
+      "beat": "a4-exhale",
+      "order": 20,
+      "event": "ev.a4.on-foot-authority-restored",
+      "source": "runtime-event",
+      "storyEventRef": "evt.a4.handback",
+      "scoreCueRefs": [
+        "sc.a4.breath-front"
+      ],
+      "shotRefs": [
+        "cin.maw.01-follow-the-tear"
+      ]
+    },
+    {
+      "id": "anc.maw.pack-attended",
+      "beat": "ch5-maw",
+      "order": 21,
+      "event": "ev.maw.pack-attended",
+      "source": "runtime-event",
+      "storyEventRef": "evt.maw.pack-attended",
+      "scoreCueRefs": [
+        "sc.maw.direction"
+      ],
+      "shotRefs": [
+        "cin.maw.02-open-the-pack"
+      ]
+    },
+    {
+      "id": "anc.maw.kit-acquired",
+      "beat": "ch5-maw",
+      "order": 22,
+      "event": "ev.maw.kit-acquired",
+      "source": "runtime-event",
+      "storyEventRef": "evt.maw.kit-acquired",
+      "scoreCueRefs": [
+        "sc.maw.direction"
+      ],
+      "shotRefs": [
+        "cin.maw.03-find-the-catch"
+      ]
+    },
+    {
+      "id": "anc.maw.repair-begun",
+      "beat": "ch5-maw",
+      "order": 23,
+      "event": "ev.maw.repair-begun",
+      "source": "runtime-event",
+      "storyEventRef": "evt.maw.repair-begun",
+      "scoreCueRefs": [
+        "sc.maw.direction"
+      ],
+      "shotRefs": [
+        "cin.maw.04-segments-remember"
+      ]
+    },
+    {
+      "id": "anc.maw.repair-committed",
+      "beat": "ch5-maw",
+      "order": 24,
+      "event": "maw_repaired",
+      "source": "runtime-event",
+      "storyEventRef": "evt.maw.repair-committed",
+      "scoreCueRefs": [
+        "sc.maw.direction"
+      ],
+      "shotRefs": [
+        "cin.maw.05-tool-without-order"
+      ]
+    },
+    {
+      "id": "anc.maw.direction-handback",
+      "beat": "ch5-maw",
+      "order": 25,
+      "event": "ev.maw.first-direction-resolved",
+      "source": "runtime-event",
+      "storyEventRef": "evt.maw.direction-handback",
+      "scoreCueRefs": [
+        "sc.maw.direction"
+      ],
+      "shotRefs": [
+        "cin.maw.06-an-answer-under-water"
+      ]
+    },
+    {
+      "id": "anc.maw.pond-resonance",
+      "beat": "ch5-maw",
+      "order": 26,
+      "event": "ev.maw.keel-resonance-detected",
+      "source": "runtime-event",
+      "storyEventRef": "evt.maw.pond-resonance",
+      "scoreCueRefs": [
+        "sc.maw.direction"
+      ],
+      "shotRefs": [
+        "cin.dive.01-cross-the-line"
+      ]
+    },
+    {
+      "id": "anc.dive.waterline",
+      "beat": "ch6-dive",
+      "order": 27,
+      "event": "submersion_changed",
+      "source": "runtime-event",
+      "storyEventRef": "evt.dive.waterline",
+      "scoreCueRefs": [
+        "sc.dive.two-clocks"
+      ],
+      "shotRefs": [
+        "cin.dive.02-air-stays-above"
+      ]
+    },
+    {
+      "id": "anc.dive.oxygen-authored",
+      "beat": "ch6-dive",
+      "order": 28,
+      "event": "oxygen_threshold",
+      "source": "runtime-event",
+      "storyEventRef": "evt.dive.oxygen-authored",
+      "scoreCueRefs": [
+        "sc.dive.two-clocks"
+      ],
+      "shotRefs": [
+        "cin.dive.03-counting-body"
+      ]
+    },
+    {
+      "id": "anc.dive.keel-revealed",
+      "beat": "ch6-dive",
+      "order": 29,
+      "event": "ev.dive.keel-revealed",
+      "source": "runtime-event",
+      "storyEventRef": "evt.dive.keel-revealed",
+      "scoreCueRefs": [
+        "sc.dive.two-clocks"
+      ],
+      "shotRefs": [
+        "cin.dive.04-free-the-memory"
+      ]
+    },
+    {
+      "id": "anc.dive.keel-freed",
+      "beat": "ch6-dive",
+      "order": 30,
+      "event": "keel_memory_acquired",
+      "source": "runtime-event",
+      "storyEventRef": "evt.dive.keel-freed",
+      "scoreCueRefs": [
+        "sc.dive.two-clocks"
+      ],
+      "shotRefs": [
+        "cin.dive.05-look-back-if-chosen"
+      ]
+    },
+    {
+      "id": "anc.dive.surface",
+      "beat": "ch6-dive",
+      "order": 31,
+      "event": "dive_surfaced",
+      "source": "runtime-event",
+      "storyEventRef": "evt.dive.surface",
+      "scoreCueRefs": [
+        "sc.dive.two-clocks"
+      ],
+      "shotRefs": [
+        "cin.dive.06-open-air-release"
+      ]
+    },
+    {
+      "id": "anc.dive.shore-bank",
+      "beat": "ch6-dive",
+      "order": 32,
+      "event": "ev.dive.keel-banked",
+      "source": "runtime-event",
+      "storyEventRef": "evt.dive.shore-bank",
+      "scoreCueRefs": [
+        "sc.dive.two-clocks"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.01-wreck-remembers"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.diagnosis",
+      "beat": "ch7-reconstruct",
+      "order": 33,
+      "event": "ev.reconstruct.relationships-diagnosed",
+      "source": "runtime-event",
+      "storyEventRef": "evt.reconstruct.diagnosis",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.02-bench-wakes"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.bench-online",
+      "beat": "ch7-reconstruct",
+      "order": 34,
+      "event": "ship_repair_stage:bench_online",
+      "source": "runtime-event",
+      "storyEventRef": "evt.reconstruct.bench-online",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.03-bearing-weight"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.frame-restored",
+      "beat": "ch7-reconstruct",
+      "order": 35,
+      "event": "ship_repair_stage:frame_restored",
+      "source": "runtime-event",
+      "storyEventRef": "evt.reconstruct.frame-restored",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.04-boundary-seals"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.hull-sealed",
+      "beat": "ch7-reconstruct",
+      "order": 36,
+      "event": "ship_repair_stage:hull_sealed",
+      "source": "runtime-event",
+      "storyEventRef": "evt.reconstruct.hull-sealed",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.05-pulse-enters"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.lift-online",
+      "beat": "ch7-reconstruct",
+      "order": 37,
+      "event": "ship_repair_stage:lift_online",
+      "source": "runtime-event",
+      "storyEventRef": "evt.reconstruct.lift-online",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.06-ground-relents"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.first-hover",
+      "beat": "ch7-reconstruct",
+      "order": 38,
+      "event": "ev.reconstruct.first-legal-hover",
+      "source": "runtime-event",
+      "storyEventRef": "evt.reconstruct.first-hover",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.07-route-becomes-intention"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.route-online",
+      "beat": "ch7-reconstruct",
+      "order": 39,
+      "event": "ev.reconstruct.flight-ready",
+      "source": "runtime-event",
+      "storyEventRef": "evt.reconstruct.route-online",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.08-ready-is-not-departed"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.calibration",
+      "beat": "ch7-reconstruct",
+      "order": 40,
+      "event": "ev.reconstruct.calibration-completed",
+      "source": "runtime-event",
+      "storyEventRef": "evt.reconstruct.calibration",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.09-one-exterior-reveal"
+      ]
+    },
+    {
+      "id": "anc.board.hatch-enter",
+      "beat": "ch7-board",
+      "order": 41,
+      "event": "ev.board.hatch-entered",
+      "source": "runtime-event",
+      "storyEventRef": "evt.board.hatch-enter",
+      "scoreCueRefs": [
+        "sc.board.one-owner"
+      ],
+      "shotRefs": [
+        "cin.board.01-enter-the-scar"
+      ]
+    },
+    {
+      "id": "anc.board.camera-transfer",
+      "beat": "ch7-board",
+      "order": 42,
+      "event": "ev.board.camera-owner-vehicle",
+      "source": "runtime-event",
+      "storyEventRef": "evt.board.camera-transfer",
+      "scoreCueRefs": [
+        "sc.board.one-owner"
+      ],
+      "shotRefs": [
+        "cin.board.02-one-owner"
+      ]
+    },
+    {
+      "id": "anc.board.pressure-seal",
+      "beat": "ch7-board",
+      "order": 43,
+      "event": "ev.board.cockpit-sealed",
+      "source": "runtime-event",
+      "storyEventRef": "evt.board.pressure-seal",
+      "scoreCueRefs": [
+        "sc.board.one-owner"
+      ],
+      "shotRefs": [
+        "cin.board.03-pressure-boundary"
+      ]
+    },
+    {
+      "id": "anc.board.cockpit-handback",
+      "beat": "ch7-board",
+      "order": 44,
+      "event": "ship_boarded",
+      "source": "runtime-event",
+      "storyEventRef": "evt.board.cockpit-handback",
+      "scoreCueRefs": [
+        "sc.board.one-owner"
+      ],
+      "shotRefs": [
+        "cin.board.03-pressure-boundary"
+      ]
+    },
+    {
+      "id": "anc.launch.ignition",
+      "beat": "ch8-launch",
+      "order": 45,
+      "event": "ship_launched",
+      "source": "runtime-event",
+      "storyEventRef": "evt.launch.ignition",
+      "scoreCueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "shotRefs": [
+        "cin.launch.01-engine-finds-weight"
+      ]
+    },
+    {
+      "id": "anc.launch.liftoff",
+      "beat": "ch8-launch",
+      "order": 46,
+      "event": "ev.launch.legal-liftoff",
+      "source": "runtime-event",
+      "storyEventRef": "evt.launch.liftoff",
+      "scoreCueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "shotRefs": [
+        "cin.launch.02-world-below"
+      ]
+    },
+    {
+      "id": "anc.launch.atmosphere-exit",
+      "beat": "ch8-launch",
+      "order": 47,
+      "event": "ev.launch.origin-atmosphere-exited",
+      "source": "runtime-event",
+      "storyEventRef": "evt.launch.atmosphere-exit",
+      "scoreCueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "shotRefs": [
+        "cin.launch.03-boundary-without-warp"
+      ]
+    },
+    {
+      "id": "anc.crossing.origin-lookback",
+      "beat": "ch8-crossing",
+      "order": 48,
+      "event": "ev.crossing.origin-attended:optional",
+      "source": "player-action",
+      "storyEventRef": "evt.crossing.origin-lookback",
+      "scoreCueRefs": [
+        "sc.crossing.distance"
+      ],
+      "shotRefs": [
+        "cin.crossing.02-one-world-behind"
+      ]
+    },
+    {
+      "id": "anc.crossing.sibling-targeted",
+      "beat": "ch8-crossing",
+      "order": 49,
+      "event": "system_body_targeted:{worldId -1,-1:p1, seed 1600321158, profileId story:tidegarden, profileVersion 1 (story:tidegarden@1), profileHash pf1-eeef3b78, archetype verdant}",
+      "source": "runtime-event",
+      "storyEventRef": "evt.crossing.sibling-targeted",
+      "scoreCueRefs": [
+        "sc.crossing.distance"
+      ],
+      "shotRefs": [
+        "cin.crossing.03-another-world-ahead"
+      ]
+    },
+    {
+      "id": "anc.crossing.local-handoff",
+      "beat": "ch8-crossing",
+      "order": 50,
+      "event": "ev.crossing.world-owner-transferred",
+      "source": "runtime-event",
+      "storyEventRef": "evt.crossing.local-handoff",
+      "scoreCueRefs": [
+        "sc.crossing.distance"
+      ],
+      "shotRefs": [
+        "cin.crossing.04-limb-handoff"
+      ]
+    },
+    {
+      "id": "anc.crossing.approach",
+      "beat": "ch8-crossing",
+      "order": 51,
+      "event": "ev.crossing.approach-established",
+      "source": "runtime-event",
+      "storyEventRef": "evt.crossing.approach",
+      "scoreCueRefs": [
+        "sc.crossing.distance"
+      ],
+      "shotRefs": [
+        "cin.landfall.01-read-the-ground"
+      ]
+    },
+    {
+      "id": "anc.landfall.touchdown",
+      "beat": "ch8-landfall",
+      "order": 52,
+      "event": "planet_arrived",
+      "source": "runtime-event",
+      "storyEventRef": "evt.landfall.touchdown",
+      "scoreCueRefs": [
+        "sc.landfall.world-first"
+      ],
+      "shotRefs": [
+        "cin.landfall.02-weight-on-another-world"
+      ]
+    },
+    {
+      "id": "anc.landfall.egress",
+      "beat": "ch8-landfall",
+      "order": 53,
+      "event": "ev.landfall.egress-cleared",
+      "source": "runtime-event",
+      "storyEventRef": "evt.landfall.egress",
+      "scoreCueRefs": [
+        "sc.landfall.world-first"
+      ],
+      "shotRefs": [
+        "cin.landfall.03-hatch-to-air"
+      ]
+    },
+    {
+      "id": "anc.landfall.first-footfall",
+      "beat": "ch8-landfall",
+      "order": 54,
+      "event": "ev.landfall.first-footfall",
+      "source": "runtime-event",
+      "storyEventRef": "evt.landfall.first-footfall",
+      "scoreCueRefs": [
+        "sc.landfall.world-first"
+      ],
+      "shotRefs": [
+        "cin.landfall.04-world-before-thought"
+      ]
+    },
+    {
+      "id": "anc.landfall.handback",
+      "beat": "ch8-landfall",
+      "order": 55,
+      "event": "ev.landfall.on-foot-authority-restored",
+      "source": "runtime-event",
+      "storyEventRef": "evt.landfall.handback",
+      "scoreCueRefs": [
+        "sc.landfall.world-first"
+      ],
+      "shotRefs": [
+        "cin.settle.01-too-much-signal"
+      ]
+    },
+    {
+      "id": "anc.settle.scanner-overload",
+      "beat": "ch9-settle",
+      "order": 56,
+      "event": "ev.settle.scanner-overload",
+      "source": "runtime-event",
+      "storyEventRef": "evt.settle.scanner-overload",
+      "scoreCueRefs": [
+        "sc.settle.abundance-choice"
+      ],
+      "shotRefs": [
+        "cin.settle.02-see-one-relation"
+      ]
+    },
+    {
+      "id": "anc.settle.relationship-attended",
+      "beat": "ch9-settle",
+      "order": 57,
+      "event": "ecology_relationship_attended",
+      "source": "runtime-event",
+      "storyEventRef": "evt.settle.relationship-attended",
+      "scoreCueRefs": [
+        "sc.settle.abundance-choice"
+      ],
+      "shotRefs": [
+        "cin.settle.03-three-kinds-of-neighbor"
+      ]
+    },
+    {
+      "id": "anc.settle.site-chosen",
+      "beat": "ch9-settle",
+      "order": 58,
+      "event": "ev.settle.site-validated",
+      "source": "runtime-event",
+      "storyEventRef": "evt.settle.site-chosen",
+      "scoreCueRefs": [
+        "sc.settle.abundance-choice"
+      ],
+      "shotRefs": [
+        "cin.settle.04-question-on-the-ground"
+      ]
+    },
+    {
+      "id": "anc.settle.first-foundation",
+      "beat": "ch9-settle",
+      "order": 59,
+      "event": "ev.settle.foundation-placed",
+      "source": "runtime-event",
+      "storyEventRef": "evt.settle.first-foundation",
+      "scoreCueRefs": [
+        "sc.settle.abundance-choice"
+      ],
+      "shotRefs": [
+        "cin.settle.05-built-of-here"
+      ]
+    },
+    {
+      "id": "anc.settle.core-online",
+      "beat": "ch9-settle",
+      "order": 60,
+      "event": "station_activated",
+      "source": "runtime-event",
+      "storyEventRef": "evt.settle.core-online",
+      "scoreCueRefs": [
+        "sc.settle.abundance-choice"
+      ],
+      "shotRefs": [
+        "cin.settle.06-wind-finds-another-path"
+      ]
+    },
+    {
+      "id": "anc.settle.shelter-certified",
+      "beat": "ch9-settle",
+      "order": 61,
+      "event": "shelter_certified",
+      "source": "runtime-event",
+      "storyEventRef": "evt.settle.shelter-certified",
+      "scoreCueRefs": [
+        "sc.settle.abundance-choice"
+      ],
+      "shotRefs": [
+        "cin.hearth.01-living-night"
+      ]
+    },
+    {
+      "id": "anc.hearth.ecology-night",
+      "beat": "ch9-hearth",
+      "order": 62,
+      "event": "ev.hearth.night-lived",
+      "source": "runtime-event",
+      "storyEventRef": "evt.hearth.ecology-night",
+      "scoreCueRefs": [
+        "sc.hearth.between-fires"
+      ],
+      "shotRefs": [
+        "cin.hearth.02-safe-because-built"
+      ]
+    },
+    {
+      "id": "anc.hearth.safe-rest",
+      "beat": "ch9-hearth",
+      "order": 63,
+      "event": "ev.hearth.safe-rest-completed",
+      "source": "runtime-event",
+      "storyEventRef": "evt.hearth.safe-rest",
+      "scoreCueRefs": [
+        "sc.hearth.between-fires"
+      ],
+      "shotRefs": [
+        "cin.hearth.04-the-line-remains-open"
+      ]
+    },
+    {
+      "id": "anc.hearth.window",
+      "beat": "ch9-hearth",
+      "order": 64,
+      "event": "ev.hearth.origin-framed:optional",
+      "source": "player-action",
+      "storyEventRef": "evt.hearth.window",
+      "scoreCueRefs": [
+        "sc.hearth.between-fires"
+      ],
+      "shotRefs": [
+        "cin.hearth.03-opening-between-worlds"
+      ]
+    },
+    {
+      "id": "anc.hearth.freeplay-handback",
+      "beat": "ch9-hearth",
+      "order": 65,
+      "event": "ev.hearth.two-world-story-handoff",
+      "source": "runtime-event",
+      "storyEventRef": "evt.hearth.freeplay-handback",
+      "scoreCueRefs": [
+        "sc.hearth.between-fires"
+      ],
+      "shotRefs": [
+        "cin.hearth.04-the-line-remains-open"
+      ]
+    },
+    {
+      "id": "anc.ch10.cold-noticed",
+      "beat": "ch10-cold",
+      "order": 0,
+      "event": "Story re-activates at the second hearth at night; the fault is noticed, not announced.",
+      "source": "story-event",
+      "storyEventRef": "ev.ch10.cold-noticed",
+      "scoreCueRefs": [
+        "sc.ch10.cold-step"
+      ],
+      "shotRefs": [
+        "cin.cold.01-hum-drop"
+      ]
+    },
+    {
+      "id": "anc.ch10.fault-read",
+      "beat": "ch10-cold",
+      "order": 1,
+      "event": "The core's fault record is shown: one bonded cell, degrading, an issued component whose fabrication is not authorized.",
+      "source": "player-action",
+      "storyEventRef": "ev.ch10.fault-read",
+      "scoreCueRefs": [
+        "sc.ch10.fault-ledger"
+      ],
+      "shotRefs": [
+        "cin.cold.02-fault-read"
+      ]
+    },
+    {
+      "id": "anc.ch10.fabrication-refused",
+      "beat": "ch10-cold",
+      "order": 2,
+      "event": "The Kestrel Fabricator refuses: pattern not held, source not held locally. The beat advances into ch10-ask.",
+      "source": "player-action",
+      "storyEventRef": "ev.ch10.fabrication-refused",
+      "scoreCueRefs": [
+        "sc.ch10.refusal-subtraction"
+      ],
+      "shotRefs": [
+        "cin.cold.03-refusal",
+        "cin.ask.01-reboard"
+      ]
+    },
+    {
+      "id": "anc.ch10.relay-ask",
+      "beat": "ch10-ask",
+      "order": 3,
+      "event": "The source request is committed at the wreck relay after the return crossing and landfall.",
+      "source": "player-action",
+      "storyEventRef": "ev.ch10.relay-ask",
+      "scoreCueRefs": [
+        "sc.ch10.crossing-back"
+      ],
+      "shotRefs": [
+        "cin.ask.04-request"
+      ]
+    },
+    {
+      "id": "anc.ch10.relay-answer",
+      "beat": "ch10-ask",
+      "order": 4,
+      "event": "The instant reply. Nested inside the ask's own phrase — the relationship IS the meaning.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.ch10.relay-answer",
+      "scoreCueRefs": [
+        "sc.ch10.relay-answer"
+      ],
+      "shotRefs": [
+        "cin.ask.05-claim"
+      ]
+    },
+    {
+      "id": "anc.ch10.bearing-claimed",
+      "beat": "ch10-ask",
+      "order": 5,
+      "event": "The player claims the bearing. The rite: the story waits indefinitely and claiming is the commitment.",
+      "source": "player-action",
+      "storyEventRef": "ev.ch10.bearing-claimed",
+      "scoreCueRefs": [
+        "sc.ch10.bearing-claimed"
+      ],
+      "shotRefs": [
+        "cin.ask.05-claim"
+      ]
+    },
+    {
+      "id": "anc.ch10.transit-ignite",
+      "beat": "ch10-transit",
+      "order": 6,
+      "event": "Launch on the claimed bearing in ch8 grammar; the flight phase leaves the surface.",
+      "source": "player-action",
+      "storyEventRef": "ev.ch10.transit-ignite",
+      "scoreCueRefs": [
+        "sc.ch10.transit-hold"
+      ],
+      "shotRefs": [
+        "cin.transit.01-ignite"
+      ]
+    },
+    {
+      "id": "anc.ch10.seam-of-light",
+      "beat": "ch10-transit",
+      "order": 7,
+      "event": "The edge-on reveal: a line with no body. A veil-clearing, not a crescendo.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.ch10.seam-of-light",
+      "scoreCueRefs": [
+        "sc.ch10.seam-ebb"
+      ],
+      "shotRefs": [
+        "cin.transit.03-seam"
+      ]
+    },
+    {
+      "id": "anc.ch10.station-resolved",
+      "beat": "ch10-transit",
+      "order": 8,
+      "event": "The yaw: the line becomes a place; standoff reached. The run's cut line is this frame.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.ch10.station-resolved",
+      "scoreCueRefs": [
+        "sc.ch10.station-resolved"
+      ],
+      "shotRefs": [
+        "cin.transit.04-resolve"
+      ]
+    },
+    {
+      "id": "anc.ch10.threshold-handback",
+      "beat": "ch10-transit",
+      "order": 9,
+      "event": "Free play resumes in space, station visible, bearing held; the ch9 close is preserved with a third light added to its geometry.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.ch10.threshold-handback",
+      "scoreCueRefs": [
+        "sc.ch10.threshold-release"
+      ],
+      "shotRefs": [
+        "cin.transit.05-threshold-handback"
+      ]
+    },
+    {
+      "id": "anc.cg.cell-installed",
+      "beat": "ch13-home",
+      "order": 0,
+      "event": "CG-B0 boundary: the actual live install receipt from the prior station-continuation contract consumes one sealed cell, reactivates ch13-home at the real core, and may fire the one authored live hearth acknowledgement there.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.cell-installed",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.home"
+      ]
+    },
+    {
+      "id": "anc.cg.home-steady",
+      "beat": "ch13-home",
+      "order": 1,
+      "event": "Entry to ch13-home at the real restored Tidegarden core: the home keeps working and the stored audit fault is visibly archived.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.home-steady",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.home"
+      ]
+    },
+    {
+      "id": "anc.cg.fault-reviewed",
+      "beat": "ch13-home",
+      "order": 2,
+      "event": "Terra reviews the stored audit fault at the core; no new fault, summons or transmission cue is introduced.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.fault-reviewed",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.home",
+        "shot.cg.choose"
+      ]
+    },
+    {
+      "id": "anc.cg.return-chosen",
+      "beat": "ch13-home",
+      "order": 3,
+      "event": "Explicit F accepts the invitation to revisit the Origin audit site; the invitation could have stayed pending.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.return-chosen",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.choose",
+        "shot.cg.return"
+      ]
+    },
+    {
+      "id": "anc.cg.hatch-boarded",
+      "beat": "ch13-return",
+      "order": 4,
+      "event": "The player boards the Kestrel through the shipped boarding interaction.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.hatch-boarded",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.return"
+      ]
+    },
+    {
+      "id": "anc.cg.lift-committed",
+      "beat": "ch13-return",
+      "order": 5,
+      "event": "Ignition and lift commit through the existing held-input flight control.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.lift-committed",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.return"
+      ]
+    },
+    {
+      "id": "anc.cg.origin-landed",
+      "beat": "ch13-return",
+      "order": 6,
+      "event": "The Kestrel lands at the Origin audit site and the player disembarks and approaches on foot.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.origin-landed",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.return"
+      ]
+    },
+    {
+      "id": "anc.cg.repeated-measure",
+      "beat": "ch13-survey",
+      "order": 7,
+      "event": "W-7744 is physically mounted at W and performs the repeated unresolved local measurement: UNRESOLVED FAULT. REPEATING LOCAL MEASUREMENT.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.repeated-measure",
+      "scoreCueRefs": [
+        "sc.cg.unreconciled"
+      ],
+      "shotRefs": [
+        "shot.cg.return"
+      ]
+    },
+    {
+      "id": "anc.cg.demonstration-opened",
+      "beat": "ch13-survey",
+      "order": 8,
+      "event": "Terra offers to demonstrate a route; the survey opens actor-scoped and world-scoped.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.demonstration-opened",
+      "scoreCueRefs": [
+        "sc.cg.unreconciled"
+      ],
+      "shotRefs": [
+        "shot.cg.return",
+        "shot.cg.draw"
+      ]
+    },
+    {
+      "id": "anc.cg.survey-started",
+      "beat": "ch13-survey",
+      "order": 9,
+      "event": "Actual grounded F at the survey start S begins the quiet trace and records the first sample; nothing was recorded beside the inspecting actor.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.survey-started",
+      "scoreCueRefs": [
+        "sc.cg.unreconciled"
+      ],
+      "shotRefs": [
+        "shot.cg.draw"
+      ]
+    },
+    {
+      "id": "anc.cg.trace-drawn",
+      "beat": "ch13-survey",
+      "order": 10,
+      "event": "Continuous grounded walking forms a finite valid trace to the survey end; growth is quiet.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.trace-drawn",
+      "scoreCueRefs": [
+        "sc.cg.unreconciled"
+      ],
+      "shotRefs": [
+        "shot.cg.draw"
+      ]
+    },
+    {
+      "id": "anc.cg.route-offered",
+      "beat": "ch13-survey",
+      "order": 11,
+      "event": "Terra offers the walked span for W-7744 to test; the proposal becomes physical, not proof.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.route-offered",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.draw"
+      ]
+    },
+    {
+      "id": "anc.cg.revision-ready",
+      "beat": "ch13-survey",
+      "order": 12,
+      "event": "The player selects the available unverified-tail revision at its actual last tested point; the unchanged return/F work order is presented before any edit.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.revision-ready",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.hold"
+      ]
+    },
+    {
+      "id": "anc.cg.specific-hold",
+      "beat": "ch13-survey",
+      "order": 13,
+      "event": "Contingent: an actually offered span reaches its first unsupported reference or footing relation, so W-7744 holds at the last safe sample and reports the literal cause.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.specific-hold",
+      "scoreCueRefs": [
+        "sc.cg.refused"
+      ],
+      "shotRefs": [
+        "shot.cg.hold"
+      ]
+    },
+    {
+      "id": "anc.cg.witness-held",
+      "beat": "ch13-survey",
+      "order": 14,
+      "event": "Contingent: the player stands at the intermediate reference, explicitly offers that end, and the test proceeds.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.witness-held",
+      "scoreCueRefs": [
+        "sc.cg.refused"
+      ],
+      "shotRefs": [
+        "shot.cg.witness"
+      ]
+    },
+    {
+      "id": "anc.cg.witness-vacated",
+      "beat": "ch13-survey",
+      "order": 15,
+      "event": "Contingent: the holder leaves the release cylinder, so the test holds at the last safe sample and keeps the proof.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.witness-vacated",
+      "scoreCueRefs": [
+        "sc.cg.refused"
+      ],
+      "shotRefs": [
+        "shot.cg.witness"
+      ]
+    },
+    {
+      "id": "anc.cg.test-resumed",
+      "beat": "ch13-survey",
+      "order": 16,
+      "event": "Contingent: reentry to the inner cylinder revalidates geometry and resumes the test without a second F.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.test-resumed",
+      "scoreCueRefs": [
+        "sc.cg.refused"
+      ],
+      "shotRefs": [
+        "shot.cg.witness"
+      ]
+    },
+    {
+      "id": "anc.cg.tail-reopened",
+      "beat": "ch13-survey",
+      "order": 17,
+      "event": "Contingent: the player explicitly presses F at the actual last tested point to reopen only the unverified tail; a refusal alone never edits the proposal.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.tail-reopened",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.hold"
+      ]
+    },
+    {
+      "id": "anc.cg.route-revised",
+      "beat": "ch13-survey",
+      "order": 18,
+      "event": "Contingent: the unverified suffix is replaced at no cost; the tested prefix survives.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.route-revised",
+      "scoreCueRefs": [
+        "sc.cg.revised"
+      ],
+      "shotRefs": [
+        "shot.cg.hold"
+      ]
+    },
+    {
+      "id": "anc.cg.route-tested",
+      "beat": "ch13-survey",
+      "order": 19,
+      "event": "W-7744 completes his grounded test of the offered span; the chosen survey class is saved.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.route-tested",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating",
+        "sc.cg.revised"
+      ],
+      "shotRefs": [
+        "shot.cg.witness"
+      ]
+    },
+    {
+      "id": "anc.cg.reciprocal-reference",
+      "beat": "ch13-common",
+      "order": 20,
+      "event": "W-7744 physically walks the uncredited two-unit E to H leg and actually reaches and maintains the held reference at H (-40, 51.05, 12) before Terra starts her comparison.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.reciprocal-reference",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.other-end"
+      ]
+    },
+    {
+      "id": "anc.cg.reciprocal-crossed",
+      "beat": "ch13-common",
+      "order": 21,
+      "event": "W-7744 actually maintains the reference at distinct H=(-40,51.05,12) while Terra completes the full 18-unit E-to-C common passage for her own comparison.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.reciprocal-crossed",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.other-end"
+      ]
+    },
+    {
+      "id": "anc.cg.final-reference-offered",
+      "beat": "ch13-common",
+      "order": 22,
+      "event": "Terra explicitly offers the separate far reference, clear of the tested span; conditions for his choice, not a command.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.final-reference-offered",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.his-test"
+      ]
+    },
+    {
+      "id": "anc.cg.reference-vacated",
+      "beat": "ch13-common",
+      "order": 23,
+      "event": "Contingent: Terra leaves the release cylinder during his test, so it holds at the last safe sample.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.reference-vacated",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.his-test"
+      ]
+    },
+    {
+      "id": "anc.cg.reference-resumed",
+      "beat": "ch13-common",
+      "order": 24,
+      "event": "Contingent: reentry and live revalidation resume his test without another F.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.reference-resumed",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.his-test"
+      ]
+    },
+    {
+      "id": "anc.cg.independent-test",
+      "beat": "ch13-common",
+      "order": 25,
+      "event": "CG-06: after the actual uncredited two-unit H to E return and a valid far Terra reference at T (-44, 51.05, 12), W-7744 begins his independent full 18-unit E to C test.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.independent-test",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.his-test"
+      ]
+    },
+    {
+      "id": "anc.cg.complete",
+      "beat": "ch13-common",
+      "order": 26,
+      "event": "CG-07: W-7744 actually arrives at the far end of his independent full E to C test and the reciprocal proof commits exactly once.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.complete",
+      "scoreCueRefs": [
+        "sc.cg.independent-settled"
+      ],
+      "shotRefs": [
+        "shot.cg.complete"
+      ]
+    },
+    {
+      "id": "anc.cg.handback",
+      "beat": "ch13-common",
+      "order": 27,
+      "event": "CG-08: mandatory guidance retires and full controls and progression are immediately free; his record stays incomplete.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.handback",
+      "scoreCueRefs": [
+        "sc.cg.independent-settled"
+      ],
+      "shotRefs": [
+        "shot.cg.complete"
+      ]
+    }
+  ],
+  "shots": [
+    {
+      "id": "cin.audit.01-inherited-world",
+      "beat": "ch4-audit",
+      "startAnchorRef": "anc.audit.arrival-handback",
+      "endAnchorRef": "anc.audit.fire-check",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 50,
+        "endFovDeg": 50,
+        "durationMs": 0,
+        "easing": "No interpolation is authorized: preserve auth.arrival.handback.camera exactly until headed telemetry authenticates its numeric state.",
+        "focusTarget": "auth.arrival.handback.pose, then the player-selected grounded W-7744 route"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.audit.fire-check"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.audit.02-warmth-without-fire",
+      "beat": "ch4-audit",
+      "startAnchorRef": "anc.audit.fire-check",
+      "endAnchorRef": "anc.audit.life-as-noise",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "persisted fire source/absence and W-7744's reaction"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.audit.life-as-noise"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.audit.03-noise-field",
+      "beat": "ch4-audit",
+      "startAnchorRef": "anc.audit.life-as-noise",
+      "endAnchorRef": "anc.audit.tree-distance",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "W-7744 visually separated by ember against life"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.audit.tree-distance"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.audit.04-object-not-there",
+      "beat": "ch4-audit",
+      "startAnchorRef": "anc.audit.tree-distance",
+      "endAnchorRef": "anc.audit.directive",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 350,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "physical gap W-7744 refuses to close"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 500
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.audit.directive"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.comply.01-fire-in-hand",
+      "beat": "ch4-comply",
+      "startAnchorRef": "anc.comply.fire-order",
+      "endAnchorRef": "anc.comply.fire-commit",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "persisted fire interaction in reachable lower-middle"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.comply.01-fire-in-hand",
+            "verb": "parameterize the existing grade after each committed material transaction",
+            "entryAnchorRef": "anc.comply.fire-order",
+            "exitAnchorRef": "anc.comply.fire-commit",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.comply.fire-commit"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.comply.02-first-diminishment",
+      "beat": "ch4-comply",
+      "startAnchorRef": "anc.comply.fire-commit",
+      "endAnchorRef": "anc.comply.organics-order",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 6000,
+        "easing": "symmetric smoothstep from the treatment rail",
+        "focusTarget": "dark wet fire remains"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.comply.02-first-diminishment",
+            "verb": "parameterize the existing grade after each committed material transaction",
+            "entryAnchorRef": "anc.comply.fire-commit",
+            "exitAnchorRef": "anc.comply.organics-order",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.comply.organics-order"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.comply.03-given-away",
+      "beat": "ch4-comply",
+      "startAnchorRef": "anc.comply.organics-order",
+      "endAnchorRef": "anc.comply.organics-commit",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "Terra/W-7744 transaction distance"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.comply.03-given-away",
+            "verb": "parameterize the existing grade after each committed material transaction",
+            "entryAnchorRef": "anc.comply.organics-order",
+            "exitAnchorRef": "anc.comply.organics-commit",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.comply.organics-commit"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.comply.04-nothing-looks-better",
+      "beat": "ch4-comply",
+      "startAnchorRef": "anc.comply.organics-commit",
+      "endAnchorRef": "anc.comply.regression-floor",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 6000,
+        "easing": "symmetric smoothstep from the treatment rail",
+        "focusTarget": "the diminished landscape itself"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.comply.04-nothing-looks-better",
+            "verb": "parameterize the existing grade after each committed material transaction",
+            "entryAnchorRef": "anc.comply.organics-commit",
+            "exitAnchorRef": "anc.comply.regression-floor",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.comply.regression-floor"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.defy.01-impossible-order",
+      "beat": "ch4-defy",
+      "startAnchorRef": "anc.defy.tree-order",
+      "endAnchorRef": "anc.defy.tool-refusal",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "hero tree as ordinary persistent geometry"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.defy.tool-refusal"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.defy.02-verb-arrives",
+      "beat": "ch4-defy",
+      "startAnchorRef": "anc.defy.tool-refusal",
+      "endAnchorRef": "anc.defy.refuse-available",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "contradiction between intact tree and issued target"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.defy.refuse-available"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.defy.03-no",
+      "beat": "ch4-defy",
+      "startAnchorRef": "anc.defy.refuse-available",
+      "endAnchorRef": "anc.defy.no-committed",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "the player's actual interaction"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.defy.no-committed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.defy.04-the-quiet",
+      "beat": "ch4-defy",
+      "startAnchorRef": "anc.defy.no-committed",
+      "endAnchorRef": "anc.a4.held-stillness",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 1500,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "the player's current frame becomes the composition; nothing new competes"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.a4.held-stillness"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.a4.01-held-field",
+      "beat": "a4-exhale",
+      "startAnchorRef": "anc.a4.held-stillness",
+      "endAnchorRef": "anc.a4.life-front",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "drained world in the player's retained frame"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "material",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "disabled",
+        "handBackAnchorRef": "anc.a4.life-front"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.a4.02-first-breath",
+      "beat": "a4-exhale",
+      "startAnchorRef": "anc.a4.life-front",
+      "endAnchorRef": "anc.a4.pond-wakes",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 4000,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "first bowing/growing life at the front"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.a4.02-first-breath",
+            "verb": "support the prewarmed physical life front without creating its story truth",
+            "entryAnchorRef": "anc.a4.life-front",
+            "exitAnchorRef": "anc.a4.pond-wakes",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "disabled",
+        "handBackAnchorRef": "anc.a4.pond-wakes"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.a4.03-water-learns-light",
+      "beat": "a4-exhale",
+      "startAnchorRef": "anc.a4.pond-wakes",
+      "endAnchorRef": "anc.a4.herd-crest",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "physical pond amplitude/reflection response"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.a4.03-water-learns-light",
+            "verb": "support the prewarmed physical life front without creating its story truth",
+            "entryAnchorRef": "anc.a4.pond-wakes",
+            "exitAnchorRef": "anc.a4.herd-crest",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "disabled",
+        "handBackAnchorRef": "anc.a4.herd-crest"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.a4.04-the-ridge-arrives",
+      "beat": "a4-exhale",
+      "startAnchorRef": "anc.a4.herd-crest",
+      "endAnchorRef": "anc.a4.w7744-flight",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "herd silhouettes locomoting over the ridge"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.a4.04-the-ridge-arrives",
+            "verb": "support the prewarmed physical life front without creating its story truth",
+            "entryAnchorRef": "anc.a4.herd-crest",
+            "exitAnchorRef": "anc.a4.w7744-flight",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "disabled",
+        "handBackAnchorRef": "anc.a4.w7744-flight"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.a4.05-empty-field-flight",
+      "beat": "a4-exhale",
+      "startAnchorRef": "anc.a4.w7744-flight",
+      "endAnchorRef": "anc.a4.pack-torn",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "W-7744 crossing living ground"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.a4.05-empty-field-flight",
+            "verb": "support the prewarmed physical life front without creating its story truth",
+            "entryAnchorRef": "anc.a4.w7744-flight",
+            "exitAnchorRef": "anc.a4.pack-torn",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "disabled",
+        "handBackAnchorRef": "anc.a4.pack-torn"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.a4.06-cause-left-behind",
+      "beat": "a4-exhale",
+      "startAnchorRef": "anc.a4.pack-torn",
+      "endAnchorRef": "anc.a4.handback",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 1200,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "torn strap, branch and pack in one causal depth stack"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.a4.06-cause-left-behind",
+            "verb": "support the prewarmed physical life front without creating its story truth",
+            "entryAnchorRef": "anc.a4.pack-torn",
+            "exitAnchorRef": "anc.a4.handback",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "disabled",
+        "handBackAnchorRef": "anc.a4.handback"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.maw.01-follow-the-tear",
+      "beat": "ch5-maw",
+      "startAnchorRef": "anc.a4.handback",
+      "endAnchorRef": "anc.maw.pack-attended",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "displaced grass/torn branch/pack relationship"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.maw.01-follow-the-tear",
+            "verb": "punctuate the visible cyan fracture seam with a bounded existing-stack response",
+            "entryAnchorRef": "anc.a4.handback",
+            "exitAnchorRef": "anc.maw.pack-attended",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.maw.pack-attended"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.maw.02-open-the-pack",
+      "beat": "ch5-maw",
+      "startAnchorRef": "anc.maw.pack-attended",
+      "endAnchorRef": "anc.maw.kit-acquired",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "unique kit and chromatic fault record"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.maw.02-open-the-pack",
+            "verb": "punctuate the visible cyan fracture seam with a bounded existing-stack response",
+            "entryAnchorRef": "anc.maw.pack-attended",
+            "exitAnchorRef": "anc.maw.kit-acquired",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.maw.kit-acquired"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.maw.03-find-the-catch",
+      "beat": "ch5-maw",
+      "startAnchorRef": "anc.maw.kit-acquired",
+      "endAnchorRef": "anc.maw.repair-begun",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 58,
+        "durationMs": 800,
+        "easing": "symmetric smoothstep from the treatment rail",
+        "focusTarget": "same wreck cradle and Faulty Maw"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.maw.03-find-the-catch",
+            "verb": "punctuate the visible cyan fracture seam with a bounded existing-stack response",
+            "entryAnchorRef": "anc.maw.kit-acquired",
+            "exitAnchorRef": "anc.maw.repair-begun",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.maw.repair-begun"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.maw.04-segments-remember",
+      "beat": "ch5-maw",
+      "startAnchorRef": "anc.maw.repair-begun",
+      "endAnchorRef": "anc.maw.repair-committed",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 58,
+        "endFovDeg": 52,
+        "durationMs": 1200,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "stable Maw center"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.maw.04-segments-remember",
+            "verb": "punctuate the visible cyan fracture seam with a bounded existing-stack response",
+            "entryAnchorRef": "anc.maw.repair-begun",
+            "exitAnchorRef": "anc.maw.repair-committed",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.maw.repair-committed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.maw.05-tool-without-order",
+      "beat": "ch5-maw",
+      "startAnchorRef": "anc.maw.repair-committed",
+      "endAnchorRef": "anc.maw.direction-handback",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 52,
+        "endFovDeg": 75,
+        "durationMs": 1400,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "brief formed beam not striking a target"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.maw.05-tool-without-order",
+            "verb": "punctuate the visible cyan fracture seam with a bounded existing-stack response",
+            "entryAnchorRef": "anc.maw.repair-committed",
+            "exitAnchorRef": "anc.maw.direction-handback",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.maw.direction-handback"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.maw.06-an-answer-under-water",
+      "beat": "ch5-maw",
+      "startAnchorRef": "anc.maw.direction-handback",
+      "endAnchorRef": "anc.maw.pond-resonance",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "whatever the player chooses to test or withhold"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.maw.06-an-answer-under-water",
+            "verb": "punctuate the visible cyan fracture seam with a bounded existing-stack response",
+            "entryAnchorRef": "anc.maw.direction-handback",
+            "exitAnchorRef": "anc.maw.pond-resonance",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.maw.pond-resonance"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.dive.01-cross-the-line",
+      "beat": "ch6-dive",
+      "startAnchorRef": "anc.maw.pond-resonance",
+      "endAnchorRef": "anc.dive.waterline",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "actual water boundary"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.dive.01-cross-the-line",
+            "verb": "derive the underwater medium and oxygen edge language from eye submersion and authoritative oxygen",
+            "entryAnchorRef": "anc.maw.pond-resonance",
+            "exitAnchorRef": "anc.dive.waterline",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.dive.waterline"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.dive.02-air-stays-above",
+      "beat": "ch6-dive",
+      "startAnchorRef": "anc.dive.waterline",
+      "endAnchorRef": "anc.dive.oxygen-authored",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 82,
+        "durationMs": 1200,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "refracting surface/Snell aperture"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.dive.02-air-stays-above",
+            "verb": "derive the underwater medium and oxygen edge language from eye submersion and authoritative oxygen",
+            "entryAnchorRef": "anc.dive.waterline",
+            "exitAnchorRef": "anc.dive.oxygen-authored",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.dive.oxygen-authored"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.dive.03-counting-body",
+      "beat": "ch6-dive",
+      "startAnchorRef": "anc.dive.oxygen-authored",
+      "endAnchorRef": "anc.dive.keel-revealed",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 82,
+        "endFovDeg": 82,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "amber Keel trace inside drowned hull"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.dive.03-counting-body",
+            "verb": "derive the underwater medium and oxygen edge language from eye submersion and authoritative oxygen",
+            "entryAnchorRef": "anc.dive.oxygen-authored",
+            "exitAnchorRef": "anc.dive.keel-revealed",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.dive.keel-revealed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.dive.04-free-the-memory",
+      "beat": "ch6-dive",
+      "startAnchorRef": "anc.dive.keel-revealed",
+      "endAnchorRef": "anc.dive.keel-freed",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 82,
+        "endFovDeg": 82,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "Maw contact on structural pin"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.dive.04-free-the-memory",
+            "verb": "derive the underwater medium and oxygen edge language from eye submersion and authoritative oxygen",
+            "entryAnchorRef": "anc.dive.keel-revealed",
+            "exitAnchorRef": "anc.dive.keel-freed",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.dive.keel-freed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.dive.05-look-back-if-chosen",
+      "beat": "ch6-dive",
+      "startAnchorRef": "anc.dive.keel-freed",
+      "endAnchorRef": "anc.dive.surface",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 82,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "open-air aperture/route home"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.dive.05-look-back-if-chosen",
+            "verb": "derive the underwater medium and oxygen edge language from eye submersion and authoritative oxygen",
+            "entryAnchorRef": "anc.dive.keel-freed",
+            "exitAnchorRef": "anc.dive.surface",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.dive.surface"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.dive.06-open-air-release",
+      "beat": "ch6-dive",
+      "startAnchorRef": "anc.dive.surface",
+      "endAnchorRef": "anc.dive.shore-bank",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 1000,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "horizon/shore and recovering breath"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.dive.06-open-air-release",
+            "verb": "derive the underwater medium and oxygen edge language from eye submersion and authoritative oxygen",
+            "entryAnchorRef": "anc.dive.surface",
+            "exitAnchorRef": "anc.dive.shore-bank",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.dive.shore-bank"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.reconstruct.01-wreck-remembers",
+      "beat": "ch7-reconstruct",
+      "startAnchorRef": "anc.dive.shore-bank",
+      "endAnchorRef": "anc.reconstruct.diagnosis",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "persistent wreck silhouette and chosen scar"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.reconstruct.01-wreck-remembers",
+            "verb": "support monotonic topology and contact without hiding duplicate hulls",
+            "entryAnchorRef": "anc.dive.shore-bank",
+            "exitAnchorRef": "anc.reconstruct.diagnosis",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.diagnosis"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.reconstruct.02-bench-wakes",
+      "beat": "ch7-reconstruct",
+      "startAnchorRef": "anc.reconstruct.diagnosis",
+      "endAnchorRef": "anc.reconstruct.bench-online",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "physical Keel socket/bench"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.reconstruct.02-bench-wakes",
+            "verb": "support monotonic topology and contact without hiding duplicate hulls",
+            "entryAnchorRef": "anc.reconstruct.diagnosis",
+            "exitAnchorRef": "anc.reconstruct.bench-online",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.bench-online"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.reconstruct.03-bearing-weight",
+      "beat": "ch7-reconstruct",
+      "startAnchorRef": "anc.reconstruct.bench-online",
+      "endAnchorRef": "anc.reconstruct.frame-restored",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "landing gear taking weight and straightening spine"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.reconstruct.03-bearing-weight",
+            "verb": "support monotonic topology and contact without hiding duplicate hulls",
+            "entryAnchorRef": "anc.reconstruct.bench-online",
+            "exitAnchorRef": "anc.reconstruct.frame-restored",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.frame-restored"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.reconstruct.04-boundary-seals",
+      "beat": "ch7-reconstruct",
+      "startAnchorRef": "anc.reconstruct.frame-restored",
+      "endAnchorRef": "anc.reconstruct.hull-sealed",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "panes/biocomposite enclosing pressure volume"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.reconstruct.04-boundary-seals",
+            "verb": "support monotonic topology and contact without hiding duplicate hulls",
+            "entryAnchorRef": "anc.reconstruct.frame-restored",
+            "exitAnchorRef": "anc.reconstruct.hull-sealed",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.hull-sealed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.reconstruct.05-pulse-enters",
+      "beat": "ch7-reconstruct",
+      "startAnchorRef": "anc.reconstruct.hull-sealed",
+      "endAnchorRef": "anc.reconstruct.lift-online",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "lift-cell seat and low engine pulse"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.reconstruct.05-pulse-enters",
+            "verb": "support monotonic topology and contact without hiding duplicate hulls",
+            "entryAnchorRef": "anc.reconstruct.hull-sealed",
+            "exitAnchorRef": "anc.reconstruct.lift-online",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.lift-online"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.reconstruct.06-ground-relents",
+      "beat": "ch7-reconstruct",
+      "startAnchorRef": "anc.reconstruct.lift-online",
+      "endAnchorRef": "anc.reconstruct.first-hover",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "real first-person rise toward upper socket"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.reconstruct.06-ground-relents",
+            "verb": "support monotonic topology and contact without hiding duplicate hulls",
+            "entryAnchorRef": "anc.reconstruct.lift-online",
+            "exitAnchorRef": "anc.reconstruct.first-hover",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.first-hover"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.reconstruct.07-route-becomes-intention",
+      "beat": "ch7-reconstruct",
+      "startAnchorRef": "anc.reconstruct.first-hover",
+      "endAnchorRef": "anc.reconstruct.route-online",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "upper route/logic socket reached by the earned hover"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.reconstruct.07-route-becomes-intention",
+            "verb": "support monotonic topology and contact without hiding duplicate hulls",
+            "entryAnchorRef": "anc.reconstruct.first-hover",
+            "exitAnchorRef": "anc.reconstruct.route-online",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.route-online"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.reconstruct.08-ready-is-not-departed",
+      "beat": "ch7-reconstruct",
+      "startAnchorRef": "anc.reconstruct.route-online",
+      "endAnchorRef": "anc.reconstruct.calibration",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "complete scarred ship under ordinary world light"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.reconstruct.08-ready-is-not-departed",
+            "verb": "support monotonic topology and contact without hiding duplicate hulls",
+            "entryAnchorRef": "anc.reconstruct.route-online",
+            "exitAnchorRef": "anc.reconstruct.calibration",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.calibration"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "beat": "ch7-reconstruct",
+      "startAnchorRef": "anc.reconstruct.calibration",
+      "endAnchorRef": "anc.reconstruct.calibration",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 52,
+        "endFovDeg": 52,
+        "durationMs": 350,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "restored spine and surviving scar"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 350
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.reconstruct.09-one-exterior-reveal",
+            "verb": "support monotonic topology and contact without hiding duplicate hulls",
+            "entryAnchorRef": "anc.reconstruct.calibration",
+            "exitAnchorRef": "anc.reconstruct.calibration",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.calibration"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.board.01-enter-the-scar",
+      "beat": "ch7-board",
+      "startAnchorRef": "anc.board.hatch-enter",
+      "endAnchorRef": "anc.board.camera-transfer",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "physical hatch and threshold"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.board.01-enter-the-scar",
+            "verb": "follow physical hatch occlusion and exposure ownership transfer",
+            "entryAnchorRef": "anc.board.hatch-enter",
+            "exitAnchorRef": "anc.board.camera-transfer",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.board.camera-transfer"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.board.02-one-owner",
+      "beat": "ch7-board",
+      "startAnchorRef": "anc.board.camera-transfer",
+      "endAnchorRef": "anc.board.pressure-seal",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "hatch interior fills frame; no competing world subject"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.board.02-one-owner",
+            "verb": "follow physical hatch occlusion and exposure ownership transfer",
+            "entryAnchorRef": "anc.board.camera-transfer",
+            "exitAnchorRef": "anc.board.pressure-seal",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.board.pressure-seal"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.board.03-pressure-boundary",
+      "beat": "ch7-board",
+      "startAnchorRef": "anc.board.pressure-seal",
+      "endAnchorRef": "anc.board.cockpit-handback",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "canopy opening onto the actual parked world"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.board.03-pressure-boundary",
+            "verb": "follow physical hatch occlusion and exposure ownership transfer",
+            "entryAnchorRef": "anc.board.pressure-seal",
+            "exitAnchorRef": "anc.board.cockpit-handback",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.board.cockpit-handback"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.launch.01-engine-finds-weight",
+      "beat": "ch8-launch",
+      "startAnchorRef": "anc.launch.ignition",
+      "endAnchorRef": "anc.launch.liftoff",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 72,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "horizon/landing reference through canopy"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.launch.01-engine-finds-weight",
+            "verb": "follow physical altitude, atmosphere, and thrust without warp grammar",
+            "entryAnchorRef": "anc.launch.ignition",
+            "exitAnchorRef": "anc.launch.liftoff",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.launch.liftoff"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.launch.02-world-below",
+      "beat": "ch8-launch",
+      "startAnchorRef": "anc.launch.liftoff",
+      "endAnchorRef": "anc.launch.atmosphere-exit",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 74,
+        "endFovDeg": 74,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "ground physically receding"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.launch.02-world-below",
+            "verb": "follow physical altitude, atmosphere, and thrust without warp grammar",
+            "entryAnchorRef": "anc.launch.liftoff",
+            "exitAnchorRef": "anc.launch.atmosphere-exit",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.launch.atmosphere-exit"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.launch.03-boundary-without-warp",
+      "beat": "ch8-launch",
+      "startAnchorRef": "anc.launch.atmosphere-exit",
+      "endAnchorRef": "anc.launch.atmosphere-exit",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "origin limb and black interval in one frame when player permits"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.launch.03-boundary-without-warp",
+            "verb": "follow physical altitude, atmosphere, and thrust without warp grammar",
+            "entryAnchorRef": "anc.launch.atmosphere-exit",
+            "exitAnchorRef": "anc.launch.atmosphere-exit",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.launch.atmosphere-exit"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.crossing.01-room-to-look-back",
+      "beat": "ch8-crossing",
+      "startAnchorRef": "anc.launch.atmosphere-exit",
+      "endAnchorRef": "anc.crossing.sibling-targeted",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "chosen flight direction; origin remains coherent behind; no forced souvenir frame"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.crossing.01-room-to-look-back",
+            "verb": "soften only the limb-covered local renderer handoff",
+            "entryAnchorRef": "anc.launch.atmosphere-exit",
+            "exitAnchorRef": "anc.crossing.sibling-targeted",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.crossing.sibling-targeted"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.crossing.02-one-world-behind",
+      "beat": "ch8-crossing",
+      "startAnchorRef": "anc.crossing.origin-lookback",
+      "endAnchorRef": "anc.crossing.origin-lookback",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "whole origin cube at 10–24% frame height"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.crossing.02-one-world-behind",
+            "verb": "soften only the limb-covered local renderer handoff",
+            "entryAnchorRef": "anc.crossing.origin-lookback",
+            "exitAnchorRef": "anc.crossing.origin-lookback",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.crossing.origin-lookback"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.crossing.03-another-world-ahead",
+      "beat": "ch8-crossing",
+      "startAnchorRef": "anc.crossing.sibling-targeted",
+      "endAnchorRef": "anc.crossing.local-handoff",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 79,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "physical sibling body growing in S-cockpit"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.crossing.03-another-world-ahead",
+            "verb": "soften only the limb-covered local renderer handoff",
+            "entryAnchorRef": "anc.crossing.sibling-targeted",
+            "exitAnchorRef": "anc.crossing.local-handoff",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.crossing.local-handoff"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.crossing.04-limb-handoff",
+      "beat": "ch8-crossing",
+      "startAnchorRef": "anc.crossing.local-handoff",
+      "endAnchorRef": "anc.crossing.local-handoff",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "destination limb/atmospheric shell occupying enough forward frame to hide only the renderer ownership transfer"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.crossing.04-limb-handoff",
+            "verb": "soften only the limb-covered local renderer handoff",
+            "entryAnchorRef": "anc.crossing.local-handoff",
+            "exitAnchorRef": "anc.crossing.local-handoff",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.crossing.local-handoff"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.crossing.05-another-key",
+      "beat": "ch8-crossing",
+      "startAnchorRef": "anc.crossing.local-handoff",
+      "endAnchorRef": "anc.crossing.approach",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 72,
+        "endFovDeg": 72,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "Tidegarden water/terrace/canopy hierarchy resolving from body to place"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.crossing.05-another-key",
+            "verb": "soften only the limb-covered local renderer handoff",
+            "entryAnchorRef": "anc.crossing.local-handoff",
+            "exitAnchorRef": "anc.crossing.approach",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.crossing.approach"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.landfall.01-read-the-ground",
+      "beat": "ch8-landfall",
+      "startAnchorRef": "anc.crossing.approach",
+      "endAnchorRef": "anc.landfall.touchdown",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 72,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "selected dry pad and clear egress"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.landfall.01-read-the-ground",
+            "verb": "enrich already-present wet depth and ecology without a landing reward bloom",
+            "entryAnchorRef": "anc.crossing.approach",
+            "exitAnchorRef": "anc.landfall.touchdown",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.landfall.touchdown"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.landfall.02-weight-on-another-world",
+      "beat": "ch8-landfall",
+      "startAnchorRef": "anc.landfall.touchdown",
+      "endAnchorRef": "anc.landfall.egress",
+      "cameraAuthority": "lens-rig",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "gear contact and settled horizon"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.landfall.02-weight-on-another-world",
+            "verb": "enrich already-present wet depth and ecology without a landing reward bloom",
+            "entryAnchorRef": "anc.landfall.touchdown",
+            "exitAnchorRef": "anc.landfall.egress",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.landfall.egress"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.landfall.03-hatch-to-air",
+      "beat": "ch8-landfall",
+      "startAnchorRef": "anc.landfall.egress",
+      "endAnchorRef": "anc.landfall.first-footfall",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "physical hatch threshold"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.landfall.03-hatch-to-air",
+            "verb": "enrich already-present wet depth and ecology without a landing reward bloom",
+            "entryAnchorRef": "anc.landfall.egress",
+            "exitAnchorRef": "anc.landfall.first-footfall",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.landfall.first-footfall"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.landfall.04-world-before-thought",
+      "beat": "ch8-landfall",
+      "startAnchorRef": "anc.landfall.first-footfall",
+      "endAnchorRef": "anc.landfall.handback",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "actual local ground/near water or shelf"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.landfall.04-world-before-thought",
+            "verb": "enrich already-present wet depth and ecology without a landing reward bloom",
+            "entryAnchorRef": "anc.landfall.first-footfall",
+            "exitAnchorRef": "anc.landfall.handback",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.landfall.handback"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.settle.01-too-much-signal",
+      "beat": "ch9-settle",
+      "startAnchorRef": "anc.landfall.handback",
+      "endAnchorRef": "anc.settle.scanner-overload",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "selected relationship/deposit under aim"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.settle.01-too-much-signal",
+            "verb": "keep scanner relationships and bounded habitat light subordinate to physical placement",
+            "entryAnchorRef": "anc.landfall.handback",
+            "exitAnchorRef": "anc.settle.scanner-overload",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.settle.scanner-overload"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.settle.02-see-one-relation",
+      "beat": "ch9-settle",
+      "startAnchorRef": "anc.settle.scanner-overload",
+      "endAnchorRef": "anc.settle.relationship-attended",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "one deposit plus what uses/shelters it"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.settle.02-see-one-relation",
+            "verb": "keep scanner relationships and bounded habitat light subordinate to physical placement",
+            "entryAnchorRef": "anc.settle.scanner-overload",
+            "exitAnchorRef": "anc.settle.relationship-attended",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.settle.relationship-attended"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.settle.03-three-kinds-of-neighbor",
+      "beat": "ch9-settle",
+      "startAnchorRef": "anc.settle.relationship-attended",
+      "endAnchorRef": "anc.settle.site-chosen",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "canopy shelf, limestone ridge and lagoon terrace each disclose a different foreground/midground relationship without a “correct” beauty shot"
+      },
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.settle.03-three-kinds-of-neighbor",
+            "verb": "keep scanner relationships and bounded habitat light subordinate to physical placement",
+            "entryAnchorRef": "anc.settle.relationship-attended",
+            "exitAnchorRef": "anc.settle.site-chosen",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.settle.site-chosen"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.settle.04-question-on-the-ground",
+      "beat": "ch9-settle",
+      "startAnchorRef": "anc.settle.site-chosen",
+      "endAnchorRef": "anc.settle.first-foundation",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "legal placement footprint and preserved nearby relationship"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.settle.04-question-on-the-ground",
+            "verb": "keep scanner relationships and bounded habitat light subordinate to physical placement",
+            "entryAnchorRef": "anc.settle.site-chosen",
+            "exitAnchorRef": "anc.settle.first-foundation",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.settle.first-foundation"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.settle.05-built-of-here",
+      "beat": "ch9-settle",
+      "startAnchorRef": "anc.settle.first-foundation",
+      "endAnchorRef": "anc.settle.core-online",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "chosen mixed local material and actual emerging layout"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.settle.05-built-of-here",
+            "verb": "keep scanner relationships and bounded habitat light subordinate to physical placement",
+            "entryAnchorRef": "anc.settle.first-foundation",
+            "exitAnchorRef": "anc.settle.core-online",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.settle.core-online"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.settle.06-wind-finds-another-path",
+      "beat": "ch9-settle",
+      "startAnchorRef": "anc.settle.core-online",
+      "endAnchorRef": "anc.settle.shelter-certified",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "actual roof/eave/opening response"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.settle.06-wind-finds-another-path",
+            "verb": "keep scanner relationships and bounded habitat light subordinate to physical placement",
+            "entryAnchorRef": "anc.settle.core-online",
+            "exitAnchorRef": "anc.settle.shelter-certified",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.settle.shelter-certified"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.hearth.01-living-night",
+      "beat": "ch9-hearth",
+      "startAnchorRef": "anc.settle.shelter-certified",
+      "endAnchorRef": "anc.hearth.ecology-night",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "threshold between warm work volume and moving exterior"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.hearth.01-living-night",
+            "verb": "separate cool living exterior from bounded warm shelter without a completion glow",
+            "entryAnchorRef": "anc.settle.shelter-certified",
+            "exitAnchorRef": "anc.hearth.ecology-night",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.hearth.ecology-night"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.hearth.02-safe-because-built",
+      "beat": "ch9-hearth",
+      "startAnchorRef": "anc.hearth.ecology-night",
+      "endAnchorRef": "anc.hearth.safe-rest",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "actual rest point inside certified volume"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.hearth.02-safe-because-built",
+            "verb": "separate cool living exterior from bounded warm shelter without a completion glow",
+            "entryAnchorRef": "anc.hearth.ecology-night",
+            "exitAnchorRef": "anc.hearth.safe-rest",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.hearth.safe-rest"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.hearth.03-opening-between-worlds",
+      "beat": "ch9-hearth",
+      "startAnchorRef": "anc.hearth.window",
+      "endAnchorRef": "anc.hearth.window",
+      "cameraAuthority": "cinematic-look",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 52,
+        "durationMs": 1200,
+        "easing": "Only after player invocation: compress 75 to 52 degrees over 1200 ms, hold no more than 6000 ms, then return 52 to 75 degrees over 1200 ms; player look input begins the return immediately.",
+        "focusTarget": "preferred: real opening with warm habitat foreground, origin world small beyond, and Tidegarden life in middle distance; alternate: real doorway/eave with ship/route and the two-world material relation"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.hearth.03-opening-between-worlds",
+            "verb": "separate cool living exterior from bounded warm shelter without a completion glow",
+            "entryAnchorRef": "anc.hearth.window",
+            "exitAnchorRef": "anc.hearth.window",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "blended",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.hearth.window"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.hearth.04-the-line-remains-open",
+      "beat": "ch9-hearth",
+      "startAnchorRef": "anc.hearth.safe-rest",
+      "endAnchorRef": "anc.hearth.freeplay-handback",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "continuous pause-aware treatment easing with no overshoot",
+        "focusTarget": "the player's current valid frame, not a director-selected postcard"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "existing-post-stack-only",
+          "physical-truth-first",
+          "prewarmed-no-allocation-anchor-window"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": [
+          {
+            "id": "fx.hearth.04-the-line-remains-open",
+            "verb": "separate cool living exterior from bounded warm shelter without a completion glow",
+            "entryAnchorRef": "anc.hearth.safe-rest",
+            "exitAnchorRef": "anc.hearth.freeplay-handback",
+            "reducedMotion": true,
+            "lowTierFallback": "physical-state",
+            "resetRef": "reset-effects"
+          }
+        ]
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.hearth.freeplay-handback"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.cold.01-hum-drop",
+      "beat": "ch10-cold",
+      "startAnchorRef": "anc.ch10.cold-noticed",
+      "endAnchorRef": "anc.ch10.fault-read",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: no authored lens motion exists anywhere in this run",
+        "focusTarget": "player-chosen; the core when the player chooses it"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no new post effect may be introduced anywhere in ch10",
+          "no frost and no cold blue-shift: the copy's cold is a fact in a record, not a weather effect"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.fault-read"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.cold.02-fault-read",
+      "beat": "ch10-cold",
+      "startAnchorRef": "anc.ch10.fault-read",
+      "endAnchorRef": "anc.ch10.fabrication-refused",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: no authored lens motion",
+        "focusTarget": "the core readout, at the player's own distance"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no effect may mark the readout; the institution is audible, not visible"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.fabrication-refused"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.cold.03-refusal",
+      "beat": "ch10-cold",
+      "startAnchorRef": "anc.ch10.fabrication-refused",
+      "endAnchorRef": "anc.ch10.fabrication-refused",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none",
+        "focusTarget": "the fabricator craft surface"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no effect may distinguish the refusal from a success"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.fabrication-refused"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.ask.01-reboard",
+      "beat": "ch10-ask",
+      "startAnchorRef": "anc.ch10.fabrication-refused",
+      "endAnchorRef": "anc.ch10.relay-ask",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "state-derived: the shipped vehicle grammar changes the FOV; no authored move exists",
+        "focusTarget": "the hatch, then the controls"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped ch8 stack only; nothing is added"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.relay-ask"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.ask.02-crossing-back",
+      "beat": "ch10-ask",
+      "startAnchorRef": "anc.ch10.fabrication-refused",
+      "endAnchorRef": "anc.ch10.relay-ask",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none: vehicle-state FOV 70 throughout, no authored lens motion",
+        "focusTarget": "the first world"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped ch8 stack only",
+          "no galaxy composition in any transit or crossing frame — that image belongs to A5"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.relay-ask"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.ask.03-landfall",
+      "beat": "ch10-ask",
+      "startAnchorRef": "anc.ch10.fabrication-refused",
+      "endAnchorRef": "anc.ch10.relay-ask",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "state-derived by the shipped vehicle-to-on-foot transition; no authored move",
+        "focusTarget": "the wreck site, then the relay"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped ch8 stack only",
+          "no W-7744 pursuit imagery and nothing that follows"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.relay-ask"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.ask.04-request",
+      "beat": "ch10-ask",
+      "startAnchorRef": "anc.ch10.relay-ask",
+      "endAnchorRef": "anc.ch10.relay-answer",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: refusing a lens move here is the point",
+        "focusTarget": "the relay ember"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no letterbox anywhere in ch10",
+          "no effect, flash, or chrome change may acknowledge the answer"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.relay-answer"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.ask.05-claim",
+      "beat": "ch10-ask",
+      "startAnchorRef": "anc.ch10.relay-answer",
+      "endAnchorRef": "anc.ch10.bearing-claimed",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none",
+        "focusTarget": "the claim prompt, at the player's own distance"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no effect may mark the claim; commitment sounds as room being made, and looks like nothing at all"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.bearing-claimed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.transit.01-ignite",
+      "beat": "ch10-transit",
+      "startAnchorRef": "anc.ch10.transit-ignite",
+      "endAnchorRef": "anc.ch10.transit-ignite",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none: vehicle-state FOV 70, no authored lens motion anywhere in the run",
+        "focusTarget": "the flight controls, then the bearing"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped ch8 stack only; no riser, no warp grammar, no BUILD"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.transit-ignite"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.transit.02-hold",
+      "beat": "ch10-transit",
+      "startAnchorRef": "anc.ch10.transit-ignite",
+      "endAnchorRef": "anc.ch10.seam-of-light",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none",
+        "focusTarget": "the committed station target"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped ch8 stack only",
+          "no galaxy composition; GalaxyImpostors must not sit in the canopy aperture in composed evidence frames"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.seam-of-light"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.transit.03-seam",
+      "beat": "ch10-transit",
+      "startAnchorRef": "anc.ch10.seam-of-light",
+      "endAnchorRef": "anc.ch10.station-resolved",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none: the reveal is a veil-clearing, not a lens event",
+        "focusTarget": "the amber line"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped bloom at HIGH pushes far emissives past white; acceptable and used only in the hero still",
+          "no galaxy in the aperture in the two transit HIGH stills; if the sky layout puts it there, the still is taken at a probe-selected yaw within the player's free-look envelope, never via an authored camera move"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.station-resolved"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.transit.04-resolve",
+      "beat": "ch10-transit",
+      "startAnchorRef": "anc.ch10.station-resolved",
+      "endAnchorRef": "anc.ch10.station-resolved",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none: no lens move. The widening-lens idea from the July appendix is withdrawn because it belonged to docking, which is not this run.",
+        "focusTarget": "the station spine"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no new effect at the resolve; no dock flood heroics",
+          "no letterbox; letterbox is declined for the whole run"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.threshold-handback"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.transit.05-threshold-handback",
+      "beat": "ch10-transit",
+      "startAnchorRef": "anc.ch10.threshold-handback",
+      "endAnchorRef": "anc.ch10.threshold-handback",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none; on-foot return resolves to 75 by shipped state",
+        "focusTarget": "player-chosen"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "nothing is added after the cut line; the station is never re-dressed"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.threshold-handback"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.home",
+      "beat": "ch13-home",
+      "startAnchorRef": "anc.cg.cell-installed",
+      "endAnchorRef": "anc.cg.fault-reviewed",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The core and the stored fault."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.fault-reviewed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.choose",
+      "beat": "ch13-home",
+      "startAnchorRef": "anc.cg.fault-reviewed",
+      "endAnchorRef": "anc.cg.return-chosen",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The stored fault and, after the choice, the hatch."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.return-chosen"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.return",
+      "beat": "ch13-return",
+      "startAnchorRef": "anc.cg.return-chosen",
+      "endAnchorRef": "anc.cg.demonstration-opened",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The hatch, then the controls, then the audit site and W-7744."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.demonstration-opened"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.draw",
+      "beat": "ch13-survey",
+      "startAnchorRef": "anc.cg.demonstration-opened",
+      "endAnchorRef": "anc.cg.route-offered",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The trace end and the reference socket."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.route-offered"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.hold",
+      "beat": "ch13-survey",
+      "startAnchorRef": "anc.cg.specific-hold",
+      "endAnchorRef": "anc.cg.route-revised",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The last safe sample and the literal cause of the refusal."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.route-revised"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.witness",
+      "beat": "ch13-survey",
+      "startAnchorRef": "anc.cg.witness-held",
+      "endAnchorRef": "anc.cg.route-tested",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The occupied reference socket and the sampled span."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.route-tested"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.other-end",
+      "beat": "ch13-common",
+      "startAnchorRef": "anc.cg.reciprocal-reference",
+      "endAnchorRef": "anc.cg.reciprocal-crossed",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "His maintained reference and her walked common span."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.reciprocal-crossed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.his-test",
+      "beat": "ch13-common",
+      "startAnchorRef": "anc.cg.final-reference-offered",
+      "endAnchorRef": "anc.cg.independent-test",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "His traversal and her separate held reference."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.independent-test"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.complete",
+      "beat": "ch13-common",
+      "startAnchorRef": "anc.cg.complete",
+      "endAnchorRef": "anc.cg.handback",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The arrival point and the retained route."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.handback"
+      },
+      "resetRef": "reset-camera"
+    }
+  ],
+  "scoreCues": [
+    {
+      "id": "sc.audit.incomplete-model",
+      "type": "music",
+      "anchorRef": "anc.audit.arrival-handback",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Dialogue and physical world lead; square fifth and pad remain beneath evidence.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.comply.self-diminish",
+      "type": "music",
+      "anchorRef": "anc.comply.fire-order",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Interaction and physical loss lead; the score makes diminishment audible without masking the command.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.defy.lowercase",
+      "type": "silence",
+      "anchorRef": "anc.defy.tree-order",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "The exact line and world remain above a low score floor.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.a4.breath-front",
+      "type": "music",
+      "anchorRef": "anc.a4.held-stillness",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "World life, movement, and W-7744 physical evidence remain above the bounded Dorian and quartal bloom.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.maw.direction",
+      "type": "music",
+      "anchorRef": "anc.maw.pack-attended",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Repair SFX and hand trace lead; revoice and bed remain subordinate.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.dive.two-clocks",
+      "type": "music",
+      "anchorRef": "anc.dive.waterline",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Breath, oxygen, water, and interaction remain above low-passed score.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.reconstruct.one-instrument",
+      "type": "music",
+      "anchorRef": "anc.reconstruct.diagnosis",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Construction impacts and engine evidence lead; retained score layers never mask prompts.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.board.one-owner",
+      "type": "music",
+      "anchorRef": "anc.board.hatch-enter",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Hatch and pressure SFX lead; cockpit hum then finds the current root.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.launch.ground-relents",
+      "type": "music",
+      "anchorRef": "anc.launch.ignition",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Warnings and engine lead, score follows, surface world recedes naturally.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.crossing.distance",
+      "type": "music",
+      "anchorRef": "anc.crossing.sibling-targeted",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Cockpit and engine lead over a quiet bed and a destination fragment below warnings.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.landfall.world-first",
+      "type": "music",
+      "anchorRef": "anc.landfall.touchdown",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Landing, egress, and ecology remain above the destination bed.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.settle.abundance-choice",
+      "type": "music",
+      "anchorRef": "anc.settle.scanner-overload",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Scanner, relationship, world, and placement SFX lead over bounded notes.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.hearth.between-fires",
+      "type": "music",
+      "anchorRef": "anc.hearth.ecology-night",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Interior, rest, and living-world sound lead over low counterpoint.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.cold-step",
+      "type": "music",
+      "anchorRef": "anc.ch10.cold-noticed",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Interior and ecology SFX lead; score under. Entry sits at or below the parked 0.28 so the bed-to-mood handover moves only through the shipped mood-boundary slews. Intensity 0.24.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.fault-ledger",
+      "type": "music",
+      "anchorRef": "anc.ch10.fault-read",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Caption and SFX lead; the square fifth sits under the triangle rather than over it. Intensity 0.30.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.refusal-subtraction",
+      "type": "silence",
+      "anchorRef": "anc.ch10.fabrication-refused",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Silence is the content. The beat exits quiet. Intensity 0.22.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.crossing-back",
+      "type": "music",
+      "anchorRef": "anc.ch10.relay-ask",
+      "relation": "until",
+      "offsetMs": 0,
+      "mixIntent": "Flight SFX lead as shipped ch8. Intensity 0.34 at relay-ask.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.relay-answer",
+      "type": "music",
+      "anchorRef": "anc.ch10.relay-answer",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "No sting, no hit; placement only. Intensity 0.36.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.bearing-claimed",
+      "type": "music",
+      "anchorRef": "anc.ch10.bearing-claimed",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Caption and work-order clear lead. Intensity 0.38.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.transit-hold",
+      "type": "music",
+      "anchorRef": "anc.ch10.transit-ignite",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Engine SFX lead as ch8. Intensity 0.42.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.seam-ebb",
+      "type": "music",
+      "anchorRef": "anc.ch10.seam-of-light",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Image leads; score is floor. Intensity 0.36.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.station-resolved",
+      "type": "music",
+      "anchorRef": "anc.ch10.station-resolved",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Closing caption leads. Intensity 0.44, the run maximum, smaller than A4 by construction and verified against an a4-exhale reference render.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.threshold-release",
+      "type": "transition",
+      "anchorRef": "anc.ch10.threshold-handback",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "The bed resumes with no click; intensity parks at a named constant. Maximum inter-sample step stays under the click threshold.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.hearth-held",
+      "type": "music",
+      "anchorRef": "anc.cg.cell-installed",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "Below the world bed; nothing in the home is required to understand the invitation.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.unreconciled",
+      "type": "music",
+      "anchorRef": "anc.cg.repeated-measure",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "Below the world bed and below the player’s own feet.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.demonstrating",
+      "type": "music",
+      "anchorRef": "anc.cg.route-offered",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "Below the world bed; the physical cause is always legible muted.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.refused",
+      "type": "music",
+      "anchorRef": "anc.cg.specific-hold",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "Below the world bed; the refusal is never a sting.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.revised",
+      "type": "music",
+      "anchorRef": "anc.cg.route-revised",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "Below the world bed.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.independent-settled",
+      "type": "music",
+      "anchorRef": "anc.cg.complete",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "The release tail never owns camera, controls or progression; handback at anc.cg.handback is immediate and independent of it.",
+      "resetRef": "reset-score"
+    }
+  ],
+  "reset": {
+    "triggers": [
+      "beat-exit",
+      "deep-link",
+      "replay",
+      "pause",
+      "quit",
+      "focus-loss",
+      "completion",
+      "sandbox"
+    ],
+    "states": [
+      {
+        "id": "reset-camera",
+        "domain": "camera",
+        "resetValue": "On foot: player owner, FOV 75, pose and gaze weights zero. In vehicle: sole vehicle owner, state-derived FOV 70, feedback zero at zero thrust.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-grade",
+        "domain": "grade",
+        "resetValue": "Clear Story grade owner and restore the current state-derived world profile.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "quit",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-lighting",
+        "domain": "lighting",
+        "resetValue": "Clear temporary local-light and exposure owners; retain only committed world, ship, station, and time-of-day sources.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "quit",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-effects",
+        "domain": "effect",
+        "resetValue": "Clear temporary bloom, outline, underwater medium, flight feedback, density ramp, bars, and punctuation owners.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-score",
+        "domain": "score",
+        "resetValue": "Clear authored overlay and envelope owner; derive steady cue or bed state from committed beat, repair, vehicle, and world identity.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-story",
+        "domain": "story",
+        "resetValue": "Reconstruct the latest monotonic event, unique-item receipt, vehicle owner, world owner, and safe boundary without manufacturing acceptance.",
+        "triggers": [
+          "deep-link",
+          "replay",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-guidance",
+        "domain": "guidance",
+        "resetValue": "idle: no active objective, no marker, no work order, marker health idle",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-st0",
+        "domain": "effect",
+        "resetValue": "no reset: ST-0 is world state, not cutscene state, and never clears",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-seam-latch",
+        "domain": "story",
+        "resetValue": "unset outside ch10-transit; latched once within a transit activation and never un-fired inside the beat",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-docking-gate",
+        "domain": "agency",
+        "resetValue": "story:station-docking-authorized is defined this run and set nowhere; story:ch10-bearing-claimed is unset until the rite is performed and durable thereafter",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-agency",
+        "domain": "agency",
+        "resetValue": "Full player authority with mandatory guidance retired.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-effect",
+        "domain": "effect",
+        "resetValue": "Transient beat presentation ownership released; saved accepted trace and persistent local tester remain under their world-scoped ownership on completion and later Origin visits.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-quality",
+        "domain": "quality",
+        "resetValue": "The player's shipped tier selection, unmodified.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      }
+    ],
+    "sandboxNoOpRequired": true
+  }
+}

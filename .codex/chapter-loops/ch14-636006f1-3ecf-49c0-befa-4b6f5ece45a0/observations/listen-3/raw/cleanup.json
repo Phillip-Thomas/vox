@@ -1,0 +1,10 @@
+{
+  "phase": "post-finally",
+  "errors": [],
+  "recorderStopped": true,
+  "browserStopped": true,
+  "moduleRemoved": true,
+  "defaultSinkUnchanged": true,
+  "previewIntact": true,
+  "sourceIntact": true
+}

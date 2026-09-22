@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://paravoxia.local/schemas/paravoxia-chapter-registry.schema.json",
   "title": "Paravoxia Chapter Registry v1",
-  "description": "A thin ordered chapter interface over runtime progression, player guidance, reveals, signed audiovisual contracts, and acceptance evidence. Rich scene content remains in its source contracts.",
+  "description": "A thin ordered chapter interface over runtime progression, player guidance, reveals, signed audiovisual contracts, and acceptance evidence. Rich scene content remains in its source contracts. Ordered adjacency stays exact; a NAMED external transition is the only way to declare a boundary that unregistered host segments run between, and it must prove both sides independently rather than weakening either.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -34,6 +34,102 @@
       "items": {
         "$ref": "#/$defs/chapter"
       }
+    },
+    "externalTransitions": {
+      "type": "array",
+      "description": "Declared boundaries between two registered chapters that are separated by host segments which are NOT chapters of their own. The ch10 -> ch13 case is the shape: chapter 10 ends in flight at a station standoff and chapter 13 opens on foot at a restored hearth, and between them the station visit issues a sealed cell and the return installs it. Neither side may be edited to make ordinary adjacency pass: the exit keeps exactly the guarantees it earns, the entry keeps exactly the requirements it needs, and this record carries the host segments and the receipts they actually produce.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "from",
+          "to",
+          "hostSegments",
+          "producedReceipts",
+          "entryGuarantees",
+          "evidenceRefs",
+          "rationale"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "from": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "chapter",
+              "exitBeat"
+            ],
+            "properties": {
+              "chapter": {
+                "type": "string",
+                "minLength": 1
+              },
+              "exitBeat": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "to": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "chapter",
+              "entryBeat"
+            ],
+            "properties": {
+              "chapter": {
+                "type": "string",
+                "minLength": 1
+              },
+              "entryBeat": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "hostSegments": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "producedReceipts": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "entryGuarantees": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
     }
   },
   "$defs": {
@@ -52,27 +148,62 @@
     },
     "qualityProfile": {
       "type": "string",
-      "enum": ["ULTRA", "HIGH", "MEDIUM", "LOW", "POTATO"]
+      "enum": [
+        "ULTRA",
+        "HIGH",
+        "MEDIUM",
+        "LOW",
+        "POTATO"
+      ]
     },
     "variantViewport": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["width", "height"],
+      "required": [
+        "width",
+        "height"
+      ],
       "properties": {
-        "width": { "type": "integer", "minimum": 320 },
-        "height": { "type": "integer", "minimum": 480 }
+        "width": {
+          "type": "integer",
+          "minimum": 320
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 480
+        }
       }
     },
     "acceptanceVariant": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "qualityProfile", "deviceClass", "viewport", "reducedMotion"],
+      "required": [
+        "id",
+        "qualityProfile",
+        "deviceClass",
+        "viewport",
+        "reducedMotion"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/stableId" },
-        "qualityProfile": { "$ref": "#/$defs/qualityProfile" },
-        "deviceClass": { "type": "string", "enum": ["desktop", "mobile"] },
-        "viewport": { "$ref": "#/$defs/variantViewport" },
-        "reducedMotion": { "type": "boolean" }
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "qualityProfile": {
+          "$ref": "#/$defs/qualityProfile"
+        },
+        "deviceClass": {
+          "type": "string",
+          "enum": [
+            "desktop",
+            "mobile"
+          ]
+        },
+        "viewport": {
+          "$ref": "#/$defs/variantViewport"
+        },
+        "reducedMotion": {
+          "type": "boolean"
+        }
       }
     },
     "beatId": {
@@ -346,14 +477,38 @@
         "maxHeapBytes"
       ],
       "properties": {
-        "maxEntryLoadMs": { "type": "number", "exclusiveMinimum": 0 },
-        "maxSceneReadyMs": { "type": "number", "exclusiveMinimum": 0 },
-        "maxBoundaryMs": { "type": "number", "exclusiveMinimum": 0 },
-        "minFps": { "type": "number", "exclusiveMinimum": 0 },
-        "maxP95FrameTimeMs": { "type": "number", "exclusiveMinimum": 0 },
-        "maxFrameGapMs": { "type": "number", "exclusiveMinimum": 0 },
-        "maxLongTasks": { "type": "integer", "minimum": 0 },
-        "maxHeapBytes": { "type": "integer", "exclusiveMinimum": 0 }
+        "maxEntryLoadMs": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maxSceneReadyMs": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maxBoundaryMs": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "minFps": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maxP95FrameTimeMs": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maxFrameGapMs": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maxLongTasks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxHeapBytes": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        }
       }
     },
     "acceptance": {
@@ -373,12 +528,16 @@
         "requiredObjectiveBeats": {
           "type": "array",
           "uniqueItems": true,
-          "items": { "$ref": "#/$defs/beatId" }
+          "items": {
+            "$ref": "#/$defs/beatId"
+          }
         },
         "requiredVariantProfiles": {
           "type": "array",
           "minItems": 4,
-          "items": { "$ref": "#/$defs/acceptanceVariant" }
+          "items": {
+            "$ref": "#/$defs/acceptanceVariant"
+          }
         },
         "performanceBudgets": {
           "$ref": "#/$defs/performanceBudgets"

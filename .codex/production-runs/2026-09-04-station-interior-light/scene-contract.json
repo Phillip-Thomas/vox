@@ -1,0 +1,2995 @@
+{
+  "schema": "paravoxia.sceneContract.v1",
+  "sceneId": "station-interior-light",
+  "contractVersion": "draft-v1",
+  "status": "frozen",
+  "supersedesVersion": null,
+  "production": {
+    "mode": "scene",
+    "authorityRefs": [
+      "production-lock.json#sha256-bound lock, frozen 2026-09-04T21:50:39-04:00, sourceRevision b631a52065a1a69fecac0331e69515c306408641 plus working tree, lock revision R1 adds main/src/ui/hudSurfaces.ts",
+      "production-lock.md#Authority, Locked scope, Protected paths and strengths, Execution and evidence budget, Stop conditions, Lock revision R1",
+      "PARAVOXIA_DEMO_FOUNDATION_PLAN.md#OWNER GATE LIFT 2026-07-28 — post-arrival station work authorized through the Creative Triad; demo release surface unchanged at ch4-arrival",
+      "CLAUDE.md#Story scope — station work authorized, sequencing owner-directed, publishing a separate decision",
+      "PARAVOXIA_CREATIVE_COUNCIL.md#Creative Triad authority, peer note passing, and cohesion review",
+      "Owner instruction 2026-09-04: improve the space station graphics, lighting, and the full user experience; it is currently too dark everywhere but the main area"
+    ],
+    "productionLockRef": "production-lock.json",
+    "mutationBoundary": "bounded-runtime",
+    "allowedPaths": [
+      ".codex/production-runs/2026-09-04-station-interior-light/",
+      "main/src/components/spaceStation/",
+      "main/src/game/spaceStation/spaceStationDressing.ts",
+      "main/src/game/spaceStation/spaceStationShell.ts",
+      "main/src/game/spaceStation/spaceStationArchitecture.ts",
+      "main/src/game/spaceStation/spaceStationDressing.test.ts",
+      "main/src/game/spaceStation/spaceStationShell.test.ts",
+      "main/src/game/spaceStation/spaceStationArchitecture.test.ts",
+      "main/src/game/spaceStation/spaceStationDevFlag.ts",
+      "main/tools/spaceStation-shots.mjs",
+      "main/src/ui/hudSurfaces.ts"
+    ],
+    "protectedPaths": [
+      "main/src/audio/",
+      "main/src/components/audio/",
+      "main/public/audio/",
+      "main/src/components/PostFX.tsx",
+      "main/src/story/storyDirector.ts",
+      "main/src/story/StoryDirectorDriver.tsx",
+      "main/src/story/storyText.ts",
+      "main/src/game/spaceStation/spaceStationStory.ts",
+      "firebase.json",
+      ".firebaserc"
+    ],
+    "ownerDecisionRefs": [
+      "owner instruction 2026-09-04 (station too dark everywhere but the main area) — the run premise",
+      "headed real-GPU exposure and colour taste remains an open owner gate (production-lock.json currentRestrictions.openGateRefs)"
+    ],
+    "canonicalPreviewUrl": "http://127.0.0.1:4321",
+    "frozenAt": "2026-09-04T22:45:00-04:00"
+  },
+  "scope": {
+    "title": "Station interior light: the station stops hiding rooms and starts showing their size",
+    "beats": [
+      "station-interior-sandbox",
+      "ch11-station-story-interior"
+    ],
+    "shippedReferenceRefs": [
+      "shipped-reference-map.md#ref-01 district colour script (SpaceStationLighting DISTRICT_FILL)",
+      "shipped-reference-map.md#ref-02 one-program instanced interior surface, programs 13, meshes 3, POOL_SIZE 7",
+      "shipped-reference-map.md#ref-03 station story objective chrome, marker labels and work orders",
+      "shipped-reference-map.md#district-light-dressing-geometry-map",
+      "shipped-reference-map.md#adjacent-scene-continuity"
+    ],
+    "priorEvidenceRefs": [
+      "shipped-visual-baseline.json",
+      "shipped-ux-baseline.json",
+      "shipped-reference-map.md",
+      "evidence/baseline-sheet.png",
+      "evidence/baseline-perf.json",
+      "evidence/baseline-perf.run1.json"
+    ],
+    "targetDevices": [
+      "desktop",
+      "mobile"
+    ],
+    "targetQualityTiers": [
+      "high",
+      "medium",
+      "low",
+      "potato"
+    ],
+    "nonGoals": [
+      "Audio of any kind at the station: none exists, none is added, main/src/audio/ stays protected.",
+      "PostFX.tsx, the shared post chain, and the ACES exposure of 0.94: untouched.",
+      "New story beats, objective ids, milestones, reaches, gates, or any copy change in spaceStationStory.ts or storyText.ts.",
+      "The approach, docking, undocking and screening-driver sequences: byte-identical.",
+      "The economy, the market, and the crowd behaviour model (only the visual legibility of figures under new light is in scope).",
+      "The station exterior.",
+      "Any proper name for the station, and any name for the hall or the warehouse.",
+      "Text signage: no text material is added in this revision; the reserved lexicon stays unspent.",
+      "Publishing: the demo release surface stays at ch4-arrival."
+    ]
+  },
+  "story": {
+    "intentRef": "story-intent.md",
+    "purpose": "Re-express the station colour script so every district withholds by showing rather than by hiding. The visit means exactly what it meant before; what changes is that a player can read the room it happens in. A room you can read is still allowed to be cold; a room you cannot read is a bug.",
+    "emotionalBefore": "A visitor in a place that will not show itself: the hall is a black void, the far portals are indistinguishable from wall, and the only room with light is the only room that seems to exist.",
+    "emotionalAfter": "A visitor in a place that shows exactly how much of it there is and how little of it is for him: extent as coldness, flatness as unkindness, and one room, the concourse, that still comes down to his height.",
+    "intendedAmbiguity": "Whether the station is indifferent or merely built for someone else stays open. The station is never the actor: nothing here explains the sealed volume, names the place, or has a fitting notice the player.",
+    "nonNegotiableCanon": [
+      "The district colour script stays a sequence: cold, clinical, warm, coldest-hue, sodium. It may be re-exposed; it may not be flattened into one uniform brightness.",
+      "The concourse is the only room that likes you and stays the fill peak; its DISTRICT_FILL entry is unchanged.",
+      "The station is never the actor. No light notices the player; light cardinality never changes around a player verb.",
+      "The three station objective ids, marker labels, reaches, gates and work-order lines are shipped protected copy and change by not one word.",
+      "The hall and the warehouse stay unnamed; no station proper name is coined; ISSUING STATION stays where it already lives.",
+      "The standalone sandbox stays ephemeral and non-canon.",
+      "The interior stays two instanced draws on one material and one program."
+    ],
+    "realityStageCeiling": "alive",
+    "characterDynamics": [
+      {
+        "id": "dyn-pilot",
+        "characterRef": "the pilot (the player), arrived from the planet with a habitat fault and no certified part",
+        "desire": "to get one bonded cell and get out, without being detained by a place that does not want him",
+        "opposition": "a station built at a scale and a light level that give him nothing to steer by; procedure that must be satisfied in a fixed order",
+        "tactic": "read the room: follow the brightest thing on the wall, cross the lit deck, present what is asked for, take the cell and go",
+        "beliefBefore": "the dark is hiding something from me",
+        "beliefAfter": "the dark was the size of the place; nothing was hidden, and nothing was offered either",
+        "playerVisibleEvidenceRefs": [
+          "the apron floor grid resolving to the far wall at 01-dock",
+          "the counter portal jamb strips as the brightest object on the apron wall",
+          "the hall at 07-bureau showing desk islands on a visible plain instead of black",
+          "the shipped low lines, unchanged in word: your body takes its place before the marker does; warmth you did not make; one fire waiting"
+        ],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ]
+      },
+      {
+        "id": "dyn-issuer",
+        "characterRef": "the certified-components trader B-7073 (Bell), the only figure in the station who trades with the pilot",
+        "desire": "to close a compliant transaction against a recorded fault",
+        "opposition": "nothing in this revision; the trader is procedure with a face and does not recognise Terra",
+        "tactic": "issue the bonded cell against the habitat fault record and the registry receipt",
+        "beliefBefore": "an unrecorded visitor is not yet a customer",
+        "beliefAfter": "a recorded visitor is a closed line item",
+        "playerVisibleEvidenceRefs": [
+          "the certified-components stall front and sign board, legible at the concourse median-luma target at 06-concourse-look",
+          "the shipped marker label CERTIFIED COMPONENTS and the shipped prompt line, unchanged"
+        ],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ]
+      }
+    ],
+    "revealLedger": [
+      {
+        "id": "reveal-no-new-station-information",
+        "subject": "What the station is, who it is for, and why one volume is sealed — the standing open question of the station visit",
+        "levelBefore": "player-inference",
+        "levelAfter": "player-inference",
+        "setupRefs": [
+          "ch10 station introduction run; station-continuation-contract.md protected unknowns"
+        ],
+        "payoffRefs": [],
+        "playerEvidence": "This revision adds no story information and spends no hidden-pillar budget. Every new visible element is light: fill, albedo, fog, emissive trim, and HUD chrome. No sign names the hall or the warehouse, no station proper name is coined, and the sealed volume is never entered or explained. The one thing a player can now read that he could not before is scale, which is architecture, not information.",
+        "protectedQuestion": true
+      }
+    ],
+    "events": [
+      {
+        "id": "ev-arrive-apron",
+        "beat": "ch11-station-story-interior",
+        "anchorRef": "airlock-threshold",
+        "event": "The interior mounts on the apron with the player inside the Kestrel lock; the apron is a working bay at shift change, cool and hard and long.",
+        "playerAction": "stand, look, turn",
+        "stateBeforeRefs": [
+          "docking complete or dock=0 deep link"
+        ],
+        "stateAfterRefs": [
+          "occupiedCellId apron",
+          "G1 active"
+        ],
+        "causeRefs": [],
+        "payoffRefs": [
+          "ev-cross-apron"
+        ],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ],
+        "informationRevealed": "No new information. The apron shows its own length and its two exits: the counter portal ahead, the ship lock behind.",
+        "acceptanceCriterion": "On the first interior frame the apron fill is at target with no ramp, and both the counter portal and the lock frame are identifiable from the mount position."
+      },
+      {
+        "id": "ev-cross-apron",
+        "beat": "ch11-station-story-interior",
+        "anchorRef": "apron-cross",
+        "event": "The player crosses 99 m of apron toward the brightest thing on the far wall.",
+        "playerAction": "walk or sprint forward",
+        "stateBeforeRefs": [
+          "occupiedCellId apron"
+        ],
+        "stateAfterRefs": [
+          "approaching counter portal"
+        ],
+        "causeRefs": [
+          "ev-arrive-apron"
+        ],
+        "payoffRefs": [
+          "ev-present-designation"
+        ],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ],
+        "informationRevealed": "No new information. Wayfinding only: the exit is the brightest object on its wall.",
+        "acceptanceCriterion": "The G1 marker and the counter portal resolve to the same bearing across the whole crossing, with the live distance readout falling monotonically."
+      },
+      {
+        "id": "ev-present-designation",
+        "beat": "ch11-station-story-interior",
+        "anchorRef": "registry-desk",
+        "event": "The player presents the suit record at the queue side of the middle registry desk; the registry records him.",
+        "playerAction": "approach inside reach 4.2 m and press the shipped use input",
+        "stateBeforeRefs": [
+          "G1 active"
+        ],
+        "stateAfterRefs": [
+          "story:ch11-registry-recorded",
+          "G2 active"
+        ],
+        "causeRefs": [
+          "ev-cross-apron"
+        ],
+        "payoffRefs": [
+          "ev-present-fault"
+        ],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ],
+        "informationRevealed": "No new information; the shipped registry transcript is unchanged. The counter now reads as over-lit and shadowless rather than dark: unkindness as flatness.",
+        "acceptanceCriterion": "The registry panel opens on the shipped prompt, commits the shipped milestone, and the counter vantage holds the lowest standard deviation of any district."
+      },
+      {
+        "id": "ev-enter-concourse",
+        "beat": "ch11-station-story-interior",
+        "anchorRef": "concourse-open",
+        "event": "The player crosses the concourse threshold and the warmth arrives over 1.4 s while the shipped low line rises under it.",
+        "playerAction": "walk through the concourse portal",
+        "stateBeforeRefs": [
+          "G2 active",
+          "occupiedCellId counter"
+        ],
+        "stateAfterRefs": [
+          "occupiedCellId concourse",
+          "story:ch11-concourse-entered"
+        ],
+        "causeRefs": [
+          "ev-present-designation"
+        ],
+        "payoffRefs": [
+          "ev-present-fault"
+        ],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ],
+        "informationRevealed": "No new information. The shipped line (warmth you did not make.) is unchanged in word, id and gate; only its presentation timing is named, so it lands on warmth already present instead of promising warmth.",
+        "acceptanceCriterion": "In the T-concourse-open strip the caption is at opacity 0 while ramp progress is under 0.6 and reaches opacity 1 only at or after ramp progress 0.9."
+      },
+      {
+        "id": "ev-present-fault",
+        "beat": "ch11-station-story-interior",
+        "anchorRef": "issuer-stall",
+        "event": "The player finds the certified-components trader and presents the habitat fault record; one bonded cell is issued and trade unlocks.",
+        "playerAction": "face the trader inside reach 3.4 m and press the shipped use input",
+        "stateBeforeRefs": [
+          "G2 active"
+        ],
+        "stateAfterRefs": [
+          "bonded_cell x1",
+          "story:ch11-bonded-cell-acquired",
+          "G3 active"
+        ],
+        "causeRefs": [
+          "ev-enter-concourse"
+        ],
+        "payoffRefs": [
+          "ev-return-lock"
+        ],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ],
+        "informationRevealed": "No new information; the shipped cargo receipt is unchanged.",
+        "acceptanceCriterion": "The stall front, canopy and sign board are legible at the concourse median-luma target and the shipped marker label is rendered exactly."
+      },
+      {
+        "id": "ev-leave-concourse",
+        "beat": "ch11-station-story-interior",
+        "anchorRef": "concourse-leave",
+        "event": "The player steps out of the concourse through either portal and the warmth withdraws faster than it arrived.",
+        "playerAction": "walk through a concourse portal",
+        "stateBeforeRefs": [
+          "occupiedCellId concourse"
+        ],
+        "stateAfterRefs": [
+          "occupiedCellId floor or counter"
+        ],
+        "causeRefs": [
+          "ev-present-fault"
+        ],
+        "payoffRefs": [
+          "ev-see-hall",
+          "ev-return-lock"
+        ],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ],
+        "informationRevealed": "No new information. Recorded so the withdrawal of warmth is an anchor a future station-audio packet can bind, exactly as the arrival is.",
+        "acceptanceCriterion": "Leaving the concourse starts a monotone ramp of the destination district duration from a snapshot of the live fill, with no overshoot and no re-run of the low line."
+      },
+      {
+        "id": "ev-see-hall",
+        "beat": "station-interior-sandbox",
+        "anchorRef": "hall-plain",
+        "event": "Optional. The player enters the floor district and the plain is shown: blue-grey deck, columns as lit objects, desk lamps as islands, far wall in haze.",
+        "playerAction": "walk into the hall",
+        "stateBeforeRefs": [
+          "occupiedCellId concourse"
+        ],
+        "stateAfterRefs": [
+          "occupiedCellId floor"
+        ],
+        "causeRefs": [
+          "ev-leave-concourse"
+        ],
+        "payoffRefs": [],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ],
+        "informationRevealed": "No new information and no name. Coldness becomes extent: the player can see exactly how much empty room there is, and that nothing in it is for him.",
+        "acceptanceCriterion": "The 07-bureau vantage reports median luma 22 to 34 with at most 35 percent of pixels under 16, the lowest median of any entered district, and no floor strip points into the hall."
+      },
+      {
+        "id": "ev-see-racking",
+        "beat": "station-interior-sandbox",
+        "anchorRef": "racking-aisle",
+        "event": "Optional. The player enters the shelves district: amber, close, cluttered, dim against the concourse but readable.",
+        "playerAction": "walk into the shelves",
+        "stateBeforeRefs": [
+          "occupiedCellId floor"
+        ],
+        "stateAfterRefs": [
+          "occupiedCellId shelves"
+        ],
+        "causeRefs": [
+          "ev-see-hall"
+        ],
+        "payoffRefs": [],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ],
+        "informationRevealed": "No new information and no name.",
+        "acceptanceCriterion": "The 09-warehouse vantage reports median luma 34 to 46 with at most 25 percent under 16, and the aisle direction and rack faces are legible from the doorway."
+      },
+      {
+        "id": "ev-return-lock",
+        "beat": "ch11-station-story-interior",
+        "anchorRef": "airlock-return",
+        "event": "The player returns to the Kestrel lock and stows the bonded cell; the departure route runs.",
+        "playerAction": "walk back to the apron and press the shipped use input inside AIRLOCK_REACH 9",
+        "stateBeforeRefs": [
+          "G3 active",
+          "bonded_cell x1"
+        ],
+        "stateAfterRefs": [
+          "bonded-cell-stowed",
+          "stationDeparted"
+        ],
+        "causeRefs": [
+          "ev-present-fault"
+        ],
+        "payoffRefs": [],
+        "revealRefs": [
+          "reveal-no-new-station-information"
+        ],
+        "informationRevealed": "No new information. Before G3 the lock refuses in silence: it is not an interactable, raises no prompt, and carries no jamb strip. That silence is canonical, not deferred — a refusal line would make the ship or the station speak.",
+        "acceptanceCriterion": "Before G3 no prompt appears at the lock at any distance and the lock frame carries no emissive jamb; at G3 the marker resolves on the lock and the shipped departure prompt appears inside reach 9."
+      }
+    ],
+    "agencyWindows": [
+      {
+        "id": "agency-registry-approach",
+        "startAnchorRef": "airlock-threshold",
+        "endAnchorRef": "registry-desk",
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "agencyType": "mandatory-action",
+        "mandatoryPath": "The player must walk the apron and present the suit record at the middle registry desk himself; no camera is taken and no route is driven.",
+        "fallbackAllowed": false,
+        "fallbackSemantics": "No automated fallback exists: the registry cannot be satisfied by waiting or by autopilot. If the player never approaches, the objective simply stands.",
+        "fallbackCountsAsNarrativeAcceptance": false,
+        "rescueAllowed": false,
+        "rescueSemantics": "No rescue teleport or auto-complete is authorized. The marker and the lit portal are the only assistance.",
+        "rescueCountsAsNarrativeAcceptance": false,
+        "motivation": "The visit is procedure the player performs, not a scene played at him; taking the camera here would make the station the actor.",
+        "handBack": "Nothing is taken, so nothing is handed back. The registry panel is closable at any time with no progression loss.",
+        "pauseBehavior": "Opening the registry or vendor panel suspends look and movement input only while the panel is open; the objective, marker and fill ramp are unaffected.",
+        "focusLossBehavior": "Pointer-lock loss releases look input and restores the desktop controls hint slot; the objective and marker persist unchanged.",
+        "replayBehavior": "Re-entering the interior reconstructs the objective from milestones; the marker and work order are rebuilt, never restored from a snapshot.",
+        "mobileBehavior": "D-pad and touch look with the same reach and facing rules; the prompt renders under the aim point with the touch glyph through inputGlyphs.ts.",
+        "reducedMotionBehavior": "No camera motion is added by this run, so reduced motion changes nothing about movement; the objective-entry border acknowledgement is static."
+      },
+      {
+        "id": "agency-concourse-trade",
+        "startAnchorRef": "registry-desk",
+        "endAnchorRef": "issuer-stall",
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "agencyType": "mandatory-action",
+        "mandatoryPath": "The player must cross into the concourse and present the habitat fault record to the certified-components trader in person, facing him inside reach 3.4 m.",
+        "fallbackAllowed": false,
+        "fallbackSemantics": "Other vendors open a bounded topic panel and cannot advance the objective; there is no automated purchase path.",
+        "fallbackCountsAsNarrativeAcceptance": false,
+        "rescueAllowed": false,
+        "rescueSemantics": "No rescue path issues the bonded cell. The stall must be found.",
+        "rescueCountsAsNarrativeAcceptance": false,
+        "motivation": "The concourse is the one room that likes you; it has to be walked into to be felt, and the low line is only true if the warmth arrived while the player was moving.",
+        "handBack": "Nothing is taken. The trade panel is closable with no loss; the bonded cell is granted only on the shipped commit.",
+        "pauseBehavior": "The vendor panel suspends movement and look input while open; the fill ramp continues on wall-clock time and the low line is never re-animated.",
+        "focusLossBehavior": "Pointer-lock loss releases look; the concourse ramp and the mounted low line are unaffected because both key off the cell-change timestamp.",
+        "replayBehavior": "Re-entry rebuilds G2 from story:ch11-registry-recorded; the low line does not replay because its milestone persists.",
+        "mobileBehavior": "Same reach and facing rules; the marker ring clamps to the viewport edge inside the safe area when the stall is off-screen.",
+        "reducedMotionBehavior": "The low line keeps its named presentation delay and steps opacity instead of fading; no camera motion is added."
+      },
+      {
+        "id": "agency-departure",
+        "startAnchorRef": "issuer-stall",
+        "endAnchorRef": "airlock-return",
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "agencyType": "mandatory-action",
+        "mandatoryPath": "The player must walk back to the Kestrel lock and stow the bonded cell himself.",
+        "fallbackAllowed": false,
+        "fallbackSemantics": "There is no auto-return. Before G3 the lock is not an interactable at all and refuses in silence.",
+        "fallbackCountsAsNarrativeAcceptance": false,
+        "rescueAllowed": false,
+        "rescueSemantics": "No rescue teleport to the lock is authorized; the marker plus the edge-clamped ring is the whole affordance.",
+        "rescueCountsAsNarrativeAcceptance": false,
+        "motivation": "Carrying the cell back across every district the player has now been shown is the payoff of the light pass: the walk out is the walk in, read.",
+        "handBack": "Nothing is taken until the shipped departure route begins, which is outside this lock and byte-identical.",
+        "pauseBehavior": "Panels suspend input only; the objective persists.",
+        "focusLossBehavior": "Pointer-lock loss releases look; the marker and the work order persist.",
+        "replayBehavior": "Re-entry rebuilds G3 from story:ch11-bonded-cell-acquired and the bonded_cell item count.",
+        "mobileBehavior": "Same reach; the edge-clamped ring is inset by the safe area so it is never under the action cluster.",
+        "reducedMotionBehavior": "Edge ring static; no camera motion added."
+      },
+      {
+        "id": "agency-free-interior",
+        "startAnchorRef": "concourse-leave",
+        "endAnchorRef": "racking-aisle",
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "agencyType": "observation",
+        "mandatoryPath": "None. The hall and the shelves are optional; the player may look at the extent of the station or ignore it entirely, and the standing objective never points into them.",
+        "fallbackAllowed": false,
+        "fallbackSemantics": "There is nothing to fall back from: skipping the hall and the shelves is a complete play of the scene.",
+        "fallbackCountsAsNarrativeAcceptance": false,
+        "rescueAllowed": false,
+        "rescueSemantics": "No rescue exists or is needed; the jamb strips on both faces of every portal are the only guarantee that the player can get back.",
+        "rescueCountsAsNarrativeAcceptance": false,
+        "motivation": "The hall must be findable but never recommended: it is coldness as extent, and a floor strip pointing into it would read as an invitation.",
+        "handBack": "Nothing is taken at any point.",
+        "pauseBehavior": "Panels suspend input only.",
+        "focusLossBehavior": "Pointer-lock loss releases look; district fill and fog hold their current ramp state.",
+        "replayBehavior": "Districts are re-entered freely; each entry starts a fresh threshold ramp from the live fill snapshot.",
+        "mobileBehavior": "Identical; one quality tier and one lighting model on every device.",
+        "reducedMotionBehavior": "Identical; no camera motion is added anywhere in this run."
+      }
+    ]
+  },
+  "guidance": {
+    "baselineArtifact": "shipped-ux-baseline.json",
+    "lifecycleEvidenceArtifact": "objective-lifecycle-evidence.json",
+    "auditArtifact": "ux-audit.md",
+    "objectives": [
+      {
+        "id": "station-counter-registry-entry",
+        "agencyWindowRef": "agency-registry-approach",
+        "kind": "interact",
+        "enterAnchorRef": "airlock-threshold",
+        "clearAnchorRef": "registry-desk",
+        "markerLabel": "COUNTER · PRESENT DESIGNATION",
+        "requiresMarker": true,
+        "workOrder": [
+          "FOLLOW THE REGISTRY CORRIDOR.",
+          "[F] PRESENT THE SUIT RECORD."
+        ],
+        "feedback": {
+          "eventType": "objective-enter",
+          "presentationOnly": true,
+          "advancesProgression": false,
+          "emissionsPerEntry": 1,
+          "intent": "One-shot presentation acknowledgement on objective id change: the story HUD warm left border widens from 2 px to 4 px and back over 600 ms, once per id, static under reduced motion. No sound (there is no audio at the station), no milestone, no progression effect."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "variantIntent": "The exact marker label, the two work-order lines and the one-shot entry acknowledgement are identical on desktop, mobile, reduced motion and all four nominal quality tiers. Only presentation adapts: the HUD width clamps to min(420px, viewport minus 32px) on touch, the prompt hangs under the aim point on both, the touch player sees the USE glyph rendered through main/src/story/ux/inputGlyphs.ts while the work-order line keeps its shipped [F] token verbatim, and the reduced-motion border acknowledgement is static.",
+        "resetRef": "reset-guidance",
+        "resetTriggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "resetIntent": "The objective is derived from milestones on every mount, never restored from a snapshot, so a sandbox reload, a dock=0 deep link, a story-mode continuation, a panel open and close, or a pointer-lock loss all reconstruct exactly one active objective with its marker, or none. No stale marker, work order or distance readout survives a district change or a completion.",
+        "acceptanceCriterion": "Runtime objective id station:counter:registry-entry. On every entry the HUD shows the exact label COUNTER · PRESENT DESIGNATION with zero missing-marker frames, the work order ends in an action line naming the shipped use glyph, the entry acknowledgement is emitted exactly once, and on receipt the objective is replaced by station:concourse:certified-source with no residue of the first."
+      },
+      {
+        "id": "station-concourse-certified-source",
+        "agencyWindowRef": "agency-concourse-trade",
+        "kind": "interact",
+        "enterAnchorRef": "registry-desk",
+        "clearAnchorRef": "issuer-stall",
+        "markerLabel": "CERTIFIED COMPONENTS · B-7073 “BELL”",
+        "requiresMarker": true,
+        "workOrder": [
+          "FIND THE CERTIFIED COMPONENT TRADER.",
+          "PRESENT THE HABITAT FAULT RECORD."
+        ],
+        "feedback": {
+          "eventType": "objective-enter",
+          "presentationOnly": true,
+          "advancesProgression": false,
+          "emissionsPerEntry": 1,
+          "intent": "One-shot presentation acknowledgement on objective id change, identical to G1. The concourse low line is a separate shipped milestone line and is not this feedback; it mounts once and is never re-animated."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "variantIntent": "Same exact marker label and work order on every device, motion preference and quality tier. On mobile the marker ring clamps to the viewport edge inside the safe area along the bearing when the stall is off-screen; the ring is the same warm ring, never a second marker language.",
+        "resetRef": "reset-guidance",
+        "resetTriggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "resetIntent": "Rebuilt from story:ch11-registry-recorded on every mount. A vendor panel open and close, a pointer-lock loss, or a district change never clears or duplicates it; completion replaces it with station:departure:stow-cell.",
+        "acceptanceCriterion": "Runtime objective id station:concourse:certified-source. On every entry the HUD shows the exact shipped certified-components label with zero missing-marker frames and the ring resolves to the trader bearing at any distance; the entry acknowledgement fires exactly once; on the cargo receipt the objective is replaced with no residue."
+      },
+      {
+        "id": "station-departure-stow-cell",
+        "agencyWindowRef": "agency-departure",
+        "kind": "interact",
+        "enterAnchorRef": "issuer-stall",
+        "clearAnchorRef": "airlock-return",
+        "markerLabel": "KESTREL AIRLOCK · STOW THE CELL",
+        "requiresMarker": true,
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "[F] STOW THE BONDED CELL AND DEPART."
+        ],
+        "feedback": {
+          "eventType": "objective-enter",
+          "presentationOnly": true,
+          "advancesProgression": false,
+          "emissionsPerEntry": 1,
+          "intent": "One-shot presentation acknowledgement on objective id change, identical to G1 and G2."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "variantIntent": "Same exact marker label and work order everywhere. This is the objective most often off-screen, so the edge-clamped ring carries it on both desktop and touch; on touch the ring is inset by the safe area so it can never sit under the action cluster.",
+        "resetRef": "reset-guidance",
+        "resetTriggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "resetIntent": "Rebuilt from story:ch11-bonded-cell-acquired plus a bonded_cell count above zero. Before this objective exists the Kestrel lock is not an interactable and shows no prompt and no jamb strip; on departure the objective clears to nothing and the HUD, marker and prompt unmount together.",
+        "acceptanceCriterion": "Runtime objective id station:departure:stow-cell. On entry the HUD shows the exact label KESTREL AIRLOCK · STOW THE CELL with zero missing-marker frames; from the hall the edge ring resolves the bearing back to the apron; the acknowledgement fires once; on stow the objective clears with activeAfterClear false."
+      }
+    ]
+  },
+  "syncAnchors": [
+    {
+      "id": "airlock-threshold",
+      "beat": "ch11-station-story-interior",
+      "order": 0,
+      "event": "The interior branch mounts with the player standing inside the Kestrel lock on the apron, back to the ship; the apron fill entry is the mount value, not a fade.",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "ev-arrive-apron",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "cue-station-silence",
+          "relation": "through",
+          "offsetMs": 0,
+          "musicalIntent": "Silence, by contract. No cue, no stinger, no acknowledgement tone; no AudioContext is constructed anywhere on the station page."
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "sil-01",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "01-dock: the counter portal jamb strips at the far end of the apron."
+        },
+        {
+          "shotRef": "sil-01b",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "01b-apron-back: the unlit Kestrel lock frame."
+        }
+      ],
+      "acceptanceCriterion": "The first interior frame reports occupiedCellId apron, camera FOV 75, and apron fill already at target with no ramp in progress."
+    },
+    {
+      "id": "apron-cross",
+      "beat": "ch11-station-story-interior",
+      "order": 1,
+      "event": "The player walks the 99 m apron toward the counter portal; the portal jamb strips are the brightest object on the far wall for the whole crossing.",
+      "source": "player-action",
+      "story": {
+        "eventRef": "ev-cross-apron",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "cue-station-silence",
+          "relation": "through",
+          "offsetMs": 0,
+          "musicalIntent": "Silence, by contract. No cue, no stinger, no acknowledgement tone; no AudioContext is constructed anywhere on the station page."
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "sil-01",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "01-dock: the counter portal jamb strips at the far end of the apron."
+        },
+        {
+          "shotRef": "sil-01b",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "01b-apron-back: the unlit Kestrel lock frame."
+        },
+        {
+          "shotRef": "sil-02",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "02-dock-mid: the counter portal."
+        }
+      ],
+      "acceptanceCriterion": "At apron u 0.5 the counter portal jamb strip is the highest-luma object in frame and the floor grid resolves to the far wall."
+    },
+    {
+      "id": "registry-desk",
+      "beat": "ch11-station-story-interior",
+      "order": 2,
+      "event": "The player reaches the queue side of the middle registry desk inside reach 4.2 m and presents the suit record.",
+      "source": "player-action",
+      "story": {
+        "eventRef": "ev-present-designation",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "cue-station-silence",
+          "relation": "through",
+          "offsetMs": 0,
+          "musicalIntent": "Silence, by contract. No cue, no stinger, no acknowledgement tone; no AudioContext is constructed anywhere on the station page."
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "sil-02",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "02-dock-mid: the counter portal."
+        },
+        {
+          "shotRef": "sil-03",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "03-registry: the ceiling strips reading as a runway over the desks."
+        },
+        {
+          "shotRef": "sil-03b",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "03b-counter-exit: the concourse portal, warm, the brightest object on the counter wall."
+        }
+      ],
+      "acceptanceCriterion": "The unified prompt reads the shipped desktop line at reach 4.2 m, the counter vantage median luma sits in 48 to 62, and the counter has the lowest standard deviation and lowest percentage under 16 of any district."
+    },
+    {
+      "id": "concourse-open",
+      "beat": "ch11-station-story-interior",
+      "order": 3,
+      "event": "THE anchor of this run: t equals zero at the first occupiedCellId change into the concourse cell, identically in story mode (where story:ch11-concourse-entered commits inside the same effect) and in the standalone sandbox (cell change only). The 1.4 s fill ramp and the low line are consequences of that instant, never second triggers.",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "ev-enter-concourse",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "cue-station-silence",
+          "relation": "through",
+          "offsetMs": 0,
+          "musicalIntent": "Silence, by contract. This is the one anchor a future station-audio packet would score: warmth you did not make would be the first pitched material since the dock, arriving inside the named 1.4 s ramp. It is declined in this revision so the light is the only sense being measured."
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "sil-03b",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "03b-counter-exit: the concourse portal, warm, the brightest object on the counter wall."
+        },
+        {
+          "shotRef": "sil-04",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "04-concourse-entry: the fill cross-fade itself arriving over 1.4 s."
+        },
+        {
+          "shotRef": "sil-05",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "05-concourse-mid: the concourse aisle."
+        }
+      ],
+      "acceptanceCriterion": "The T-concourse-open strip shows ramp progress 0 at t equals 0, at least 0.95 by t plus 1.2 s and exactly 1.0 at t plus 1.4 s; caption opacity is 0 through t plus 0.8 s and 1 at t plus 1.2 s."
+    },
+    {
+      "id": "issuer-stall",
+      "beat": "ch11-station-story-interior",
+      "order": 4,
+      "event": "The player finds the certified-components trader in the concourse and presents the habitat fault record; the bonded cell is issued.",
+      "source": "player-action",
+      "story": {
+        "eventRef": "ev-present-fault",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "cue-station-silence",
+          "relation": "through",
+          "offsetMs": 0,
+          "musicalIntent": "Silence, by contract. No cue, no stinger, no acknowledgement tone; no AudioContext is constructed anywhere on the station page."
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "sil-04",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "04-concourse-entry: the fill cross-fade itself arriving over 1.4 s."
+        },
+        {
+          "shotRef": "sil-05",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "05-concourse-mid: the concourse aisle."
+        },
+        {
+          "shotRef": "sil-06",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "06-concourse-look: the certified-components stall front."
+        },
+        {
+          "shotRef": "sil-06b",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "06b-concourse-up: the concourse lid: the lightened ceiling tone under the banner uplights."
+        }
+      ],
+      "acceptanceCriterion": "The trader stall front, canopy and sign board are legible at the concourse median-luma target and the marker label matches the shipped label exactly."
+    },
+    {
+      "id": "concourse-leave",
+      "beat": "ch11-station-story-interior",
+      "order": 5,
+      "event": "The first occupiedCellId change out of the concourse through either portal, in both modes. The withdrawal of warmth, recorded so a future station-audio packet inherits the exit as well as the arrival.",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "ev-leave-concourse",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "cue-station-silence",
+          "relation": "through",
+          "offsetMs": 0,
+          "musicalIntent": "Silence, by contract. Recorded as the withdrawal anchor so a future packet inherits an exit as well as an arrival."
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "sil-06",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "06-concourse-look: the certified-components stall front."
+        },
+        {
+          "shotRef": "sil-06b",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "06b-concourse-up: the concourse lid: the lightened ceiling tone under the banner uplights."
+        },
+        {
+          "shotRef": "sil-07",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "07-bureau: lit deck running to the next column."
+        }
+      ],
+      "acceptanceCriterion": "Leaving the concourse starts a ramp of THRESHOLD_FADE_SECONDS for the destination district (1.0 s to the hall, 0.8 s to the counter) from a snapshot of the live concourse fill, monotone and with no overshoot."
+    },
+    {
+      "id": "hall-plain",
+      "beat": "station-interior-sandbox",
+      "order": 6,
+      "event": "Optional. The player steps onto the floor district and the plain is shown rather than hidden: lit blue-grey deck to the next column, desk lamps as islands, the far wall in blue-grey haze.",
+      "source": "player-action",
+      "story": {
+        "eventRef": "ev-see-hall",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "cue-station-silence",
+          "relation": "through",
+          "offsetMs": 0,
+          "musicalIntent": "Silence, by contract. No cue, no stinger, no acknowledgement tone; no AudioContext is constructed anywhere on the station page."
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "sil-07",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "07-bureau: lit deck running to the next column."
+        },
+        {
+          "shotRef": "sil-07b",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "07b-hall-back: the concourse portal seen from the hall, warm, the way back."
+        },
+        {
+          "shotRef": "sil-08",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "08-bureau-deep: one true desk pool at the player position."
+        }
+      ],
+      "acceptanceCriterion": "The 07-bureau vantage reports median luma 22 to 34 and at most 35 percent of pixels under 16, and the column edge strips resolve as a grid to the far wall."
+    },
+    {
+      "id": "racking-aisle",
+      "beat": "station-interior-sandbox",
+      "order": 7,
+      "event": "Optional. The player enters the shelves district; amber, close and cluttered, dim relative to the concourse but above the legibility floor.",
+      "source": "player-action",
+      "story": {
+        "eventRef": "ev-see-racking",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "cue-station-silence",
+          "relation": "through",
+          "offsetMs": 0,
+          "musicalIntent": "Silence, by contract. No cue, no stinger, no acknowledgement tone; no AudioContext is constructed anywhere on the station page."
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "sil-08",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "08-bureau-deep: one true desk pool at the player position."
+        },
+        {
+          "shotRef": "sil-09",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "09-warehouse: the racking aisle direction."
+        }
+      ],
+      "acceptanceCriterion": "The 09-warehouse vantage reports median luma 34 to 46, at most 25 percent under 16, and the doorway jamb strip is visible from the aisle."
+    },
+    {
+      "id": "airlock-return",
+      "beat": "ch11-station-story-interior",
+      "order": 8,
+      "event": "The player returns to the Kestrel lock from inside the apron and stows the bonded cell; before G3 the lock is not an interactable and carries no jamb strip.",
+      "source": "player-action",
+      "story": {
+        "eventRef": "ev-return-lock",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "cue-station-silence",
+          "relation": "through",
+          "offsetMs": 0,
+          "musicalIntent": "Silence, by contract. No cue, no stinger, no acknowledgement tone; no AudioContext is constructed anywhere on the station page."
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "sil-07b",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "07b-hall-back: the concourse portal seen from the hall, warm, the way back."
+        },
+        {
+          "shotRef": "sil-09",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "09-warehouse: the racking aisle direction."
+        }
+      ],
+      "acceptanceCriterion": "Before G3 the lock frame shows no jamb strip and raises no prompt at any distance; at G3 the marker resolves on the lock and the shipped departure prompt appears inside AIRLOCK_REACH 9."
+    }
+  ],
+  "cinematography": {
+    "treatmentRef": "cinematography-treatment.md",
+    "thesis": "Light as extent, not pools. The station stops hiding rooms and starts showing their size: fill and albedo carry every room, point lights are reserved for the few pools that belong to someone, and coldness becomes how much lit floor there is between the player and anything. The concourse stays the only room whose light comes down to head height.",
+    "currentCutRefs": [
+      "shipped-visual-baseline.json frames 01-dock through 09-warehouse at source revision b631a52 plus working tree",
+      "evidence/baseline-sheet.png",
+      "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL, POOL_SIZE 7, WARM_SLOTS 3, ILLUMINANCE_AT_REACH 0.6, FILL_FADE_SECONDS 0.8",
+      "main/src/components/spaceStation/SpaceStationInterior.tsx SURFACE_TONES"
+    ],
+    "adjacentSceneRefs": [
+      "approach and docking sequence (DockOverlay) — byte-identical, hands the camera back at phase complete and is suppressed entirely by dock=0",
+      "departure route — reuses the same three DockOverlay gauges with inverted end-state words; unchanged",
+      "planet-side grade lineage — PostFX with ACES exposure 0.94 is shared and untouched, so the station cannot diverge from the shipped grade"
+    ],
+    "cameraLineage": [
+      "player-camera"
+    ],
+    "paletteRef": "palette-station-interior",
+    "shotOrder": [
+      "sil-01",
+      "sil-01b",
+      "sil-02",
+      "sil-03",
+      "sil-03b",
+      "sil-04",
+      "sil-05",
+      "sil-06",
+      "sil-06b",
+      "sil-07",
+      "sil-07b",
+      "sil-08",
+      "sil-09"
+    ]
+  },
+  "palette": {
+    "id": "palette-station-interior",
+    "family": "regulation-mono",
+    "sourceRefs": [
+      "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL (retuned per district; concourse entry unchanged)",
+      "main/src/components/spaceStation/SpaceStationInterior.tsx SURFACE_TONES (albedo retune)",
+      "main/src/game/spaceStation/spaceStationDressing.ts lamp tones 0 warm 0xffa447 and 1 cool 0xbfe4ff",
+      "shipped-reference-map.md#district-light-dressing-geometry-map"
+    ],
+    "semanticRoles": [
+      {
+        "id": "role-deck",
+        "role": "deck and floor: the surface that proves a room has extent",
+        "valueRef": "SURFACE_TONES floor, retuned to 0x7d848c with seam strength 0.55 lowered to 0.45",
+        "hex": "#7d848c",
+        "usage": "Every district floor. It is the single largest change in the pass and the reason the hall stops being black; it may never be lifted far enough to flatten the district ordering."
+      },
+      {
+        "id": "role-wall",
+        "role": "walls, columns and partitions: the backdrop that puts the crowd into silhouette",
+        "valueRef": "SURFACE_TONES walls and columns 0x8a9199, partitions 0x878e97",
+        "hex": "#8a9199",
+        "usage": "All vertical shell surfaces. Bright enough that the 0.18 suits read as a species against them; the gate is figure-versus-backdrop delta of at least 0.08 linear at 06-concourse-look."
+      },
+      {
+        "id": "role-lid",
+        "role": "ceiling: a lid that recedes instead of vanishing",
+        "valueRef": "SURFACE_TONES ceiling 0x3a4048, still the darkest tone in the table",
+        "hex": "#3a4048",
+        "usage": "Counter, concourse and shelves ceilings. It stays the darkest surface so the eye is never pulled up, but 06b-concourse-up must clear median 30: the warm room may not have a black lid."
+      },
+      {
+        "id": "role-cool-fill",
+        "role": "the cold end of the script: apron and hall ambient plus hemisphere",
+        "valueRef": "DISTRICT_FILL apron 0x5c7088 at 1.15 and floor 0x4c5d78 at 0.95, with hemisphere sky 0x7a91a6 and 0x6f86a8",
+        "hex": "#4c5d78",
+        "usage": "Apron and hall only. The hall keeps the lowest median of any entered district and the hemisphere, not point lights, carries its plain."
+      },
+      {
+        "id": "role-clinical-fill",
+        "role": "the clinical middle: the counter, over-lit and shadowless",
+        "valueRef": "DISTRICT_FILL counter 0x91a8bd at 1.55 with hemisphere ground 0x303438 at 0.50",
+        "hex": "#91a8bd",
+        "usage": "Counter only. It must hold the lowest standard deviation and the lowest percentage under 16 of any district: unkindness expressed as flatness, not as level."
+      },
+      {
+        "id": "role-warm-pool",
+        "role": "the scarce focal accent: a pool of light that belongs to a person",
+        "valueRef": "lamp tone 0 LAMP_WARM 0xffa447 at ILLUMINANCE_AT_REACH 0.6, three warm pool slots",
+        "hex": "#ffa447",
+        "usage": "The clerk lamp at the registry, the stall lamps in the concourse, and the nearest three desk lamps in the hall. Never more than three warm pools are live at once and none of them is ever the player: a pool is proof the light is someone else’s."
+      },
+      {
+        "id": "role-sodium",
+        "role": "the amber close of the script: the shelves",
+        "valueRef": "DISTRICT_FILL shelves 0x8a7650 at 1.10 with fog 0x1c1710",
+        "hex": "#8a7650",
+        "usage": "Shelves only. Dim relative to the concourse, never below the legibility floor, and the last hue in the protected sequence."
+      },
+      {
+        "id": "role-emissive-trim",
+        "role": "unlit emissive trim: the wayfinding language",
+        "valueRef": "lamp boxes with radius 0, tone 1, filtered out of the point-light pool by SpaceStationLighting",
+        "hex": "#bfe4ff",
+        "usage": "Threshold jamb strips on both faces of every portal, hall column edge strips, and the single counter-to-concourse deck strip. Radius 0 means these never enter the seven-light pool, so light cardinality is untouched. The Kestrel lock frame is the one deliberate exception and gets no jamb strip."
+      }
+    ],
+    "continuityRefs": [
+      "the approach and docking sequence renders under the same PostFX chain at exposure 0.94 and is byte-identical, so the interior cannot drift from the shipped grade",
+      "shipped-visual-baseline.json paletteState: FogExp2 0x0a0f16 at density 0.0016 and background 0x05070a are the pre-change values this contract replaces per district"
+    ],
+    "focalAccent": {
+      "roleRef": "role-warm-pool",
+      "scarcityIntent": "Warm pools are scarce by construction: three warm slots out of a seven-light pool, and every one of them belongs to a clerk, a trader or an occupied desk. The player never carries light and no fitting ever tracks, breathes or brightens toward him. Scarcity is what keeps the concourse the only room that likes you once every other room is legible."
+    },
+    "anomaly": null
+  },
+  "shots": [
+    {
+      "id": "sil-01",
+      "beat": "ch11-station-story-interior",
+      "startAnchorRef": "airlock-threshold",
+      "endAnchorRef": "apron-cross",
+      "focalHierarchy": {
+        "primary": "the counter portal jamb strips at the far end of the apron",
+        "secondary": "the floor grid running to the far wall",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "screen right reads as deeper into the station",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "screen right reads as deeper into the station",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the counter portal jamb strips at the far end of the apron",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-registry-approach"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-01",
+        "evidence/baseline/01-dock.png"
+      ]
+    },
+    {
+      "id": "sil-01b",
+      "beat": "ch11-station-story-interior",
+      "startAnchorRef": "airlock-threshold",
+      "endAnchorRef": "apron-cross",
+      "focalHierarchy": {
+        "primary": "the unlit Kestrel lock frame",
+        "secondary": "the cargo stacks flanking it",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "a 180 degree turn at the lock; screen left now reads as deeper",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "a 180 degree turn at the lock; screen left now reads as deeper",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the unlit Kestrel lock frame",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-registry-approach"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-01b",
+        "evidence/baseline-sheet.png"
+      ]
+    },
+    {
+      "id": "sil-02",
+      "beat": "ch11-station-story-interior",
+      "startAnchorRef": "apron-cross",
+      "endAnchorRef": "registry-desk",
+      "focalHierarchy": {
+        "primary": "the counter portal",
+        "secondary": "the column edge strips flanking the aisle",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "forward along the apron axis",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "forward along the apron axis",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the counter portal",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-registry-approach"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-02",
+        "evidence/baseline/02-dock-mid.png"
+      ]
+    },
+    {
+      "id": "sil-03",
+      "beat": "ch11-station-story-interior",
+      "startAnchorRef": "registry-desk",
+      "endAnchorRef": "registry-desk",
+      "focalHierarchy": {
+        "primary": "the ceiling strips reading as a runway over the desks",
+        "secondary": "the clerk lamp and the queue figure",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "forward with the desk on screen right",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "forward with the desk on screen right",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the ceiling strips reading as a runway over the desks",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-registry-approach"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-03",
+        "evidence/baseline/03-registry.png"
+      ]
+    },
+    {
+      "id": "sil-03b",
+      "beat": "ch11-station-story-interior",
+      "startAnchorRef": "registry-desk",
+      "endAnchorRef": "concourse-open",
+      "focalHierarchy": {
+        "primary": "the concourse portal, warm, the brightest object on the counter wall",
+        "secondary": "the deck guidance strip running to it",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "forward along the counter spine",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "forward along the counter spine",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the concourse portal, warm, the brightest object on the counter wall",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-concourse-trade"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-03b",
+        "evidence/baseline-sheet.png"
+      ]
+    },
+    {
+      "id": "sil-04",
+      "beat": "ch11-station-story-interior",
+      "startAnchorRef": "concourse-open",
+      "endAnchorRef": "issuer-stall",
+      "focalHierarchy": {
+        "primary": "the fill cross-fade itself arriving over 1.4 s",
+        "secondary": "the canopies and the people under them",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "forward through the portal",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "forward through the portal",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the fill cross-fade itself arriving over 1.4 s",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-concourse-trade"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-04",
+        "evidence/baseline/04-concourse-entry.png"
+      ]
+    },
+    {
+      "id": "sil-05",
+      "beat": "ch11-station-story-interior",
+      "startAnchorRef": "concourse-open",
+      "endAnchorRef": "issuer-stall",
+      "focalHierarchy": {
+        "primary": "the concourse aisle",
+        "secondary": "stall fronts and sign boards",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "forward down the aisle",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "forward down the aisle",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the concourse aisle",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-concourse-trade"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-05",
+        "evidence/baseline/05-concourse-mid.png"
+      ]
+    },
+    {
+      "id": "sil-06",
+      "beat": "ch11-station-story-interior",
+      "startAnchorRef": "issuer-stall",
+      "endAnchorRef": "concourse-leave",
+      "focalHierarchy": {
+        "primary": "the certified-components stall front",
+        "secondary": "the crowd figures as a species, not portraits",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "a look to screen left across the aisle",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "a look to screen left across the aisle",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the certified-components stall front",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-concourse-trade"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-06",
+        "evidence/baseline/06-concourse-look.png"
+      ]
+    },
+    {
+      "id": "sil-06b",
+      "beat": "ch11-station-story-interior",
+      "startAnchorRef": "issuer-stall",
+      "endAnchorRef": "concourse-leave",
+      "focalHierarchy": {
+        "primary": "the concourse lid: the lightened ceiling tone under the banner uplights",
+        "secondary": "the canopy tops",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "a look up; no horizontal direction",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "a look up; no horizontal direction",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the concourse lid: the lightened ceiling tone under the banner uplights",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-concourse-trade"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-06b",
+        "evidence/baseline/06b-concourse-up.png"
+      ]
+    },
+    {
+      "id": "sil-07",
+      "beat": "station-interior-sandbox",
+      "startAnchorRef": "concourse-leave",
+      "endAnchorRef": "hall-plain",
+      "focalHierarchy": {
+        "primary": "lit deck running to the next column",
+        "secondary": "the desk islands as a grid and the far wall in haze",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "forward into the hall",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "forward into the hall",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "lit deck running to the next column",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-free-interior",
+          "agency-departure"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-07",
+        "evidence/baseline/07-bureau.png"
+      ]
+    },
+    {
+      "id": "sil-07b",
+      "beat": "station-interior-sandbox",
+      "startAnchorRef": "hall-plain",
+      "endAnchorRef": "airlock-return",
+      "focalHierarchy": {
+        "primary": "the concourse portal seen from the hall, warm, the way back",
+        "secondary": "the nearest desk island",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "a 180 degree turn in the hall",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "a 180 degree turn in the hall",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the concourse portal seen from the hall, warm, the way back",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-free-interior",
+          "agency-departure"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-07b",
+        "evidence/baseline-sheet.png"
+      ]
+    },
+    {
+      "id": "sil-08",
+      "beat": "station-interior-sandbox",
+      "startAnchorRef": "hall-plain",
+      "endAnchorRef": "racking-aisle",
+      "focalHierarchy": {
+        "primary": "one true desk pool at the player position",
+        "secondary": "the grid of emissive desk islands and the columns",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "forward deeper into the hall",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "forward deeper into the hall",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "one true desk pool at the player position",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-free-interior"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-08",
+        "evidence/baseline/08-bureau-deep.png"
+      ]
+    },
+    {
+      "id": "sil-09",
+      "beat": "station-interior-sandbox",
+      "startAnchorRef": "racking-aisle",
+      "endAnchorRef": "airlock-return",
+      "focalHierarchy": {
+        "primary": "the racking aisle direction",
+        "secondary": "the rack faces and the doorway jamb strip",
+        "allowedAmbiguity": "Distance is allowed to be ambiguous where fog carries the district hue; identity is not. A far wall may fade into blue-grey haze, but a portal, a rack face, a desk island or a figure must always be identifiable as what it is.",
+        "subjectOccupancyIntent": "Free first-person at FOV 75: the primary subject is placed by the player, not by the frame. The contract is that from the vantage the primary subject is the highest-luma identifiable object in the half of the frame the player is walking toward.",
+        "horizonIntent": "No sky and no true horizon exists indoors; the far wall or the next column line does the horizon’s work, and it must be visible in every entered district.",
+        "negativeSpaceIntent": "Negative space is the subject in the hall and the apron: lit empty deck is the whole point. Elsewhere it is bounded so the room does not read as unfinished."
+      },
+      "cameraAuthority": "player-camera",
+      "framing": {
+        "scale": "first-person",
+        "blocking": "forward down the aisle",
+        "screenDirection": {
+          "axis": "the station spine, apron to counter to concourse to hall to shelves",
+          "movement": "forward down the aisle",
+          "continuityRule": "Deeper into the station is one consistent direction along the spine for the whole visit; the two turn-around vantages are declared 180 degree reversals so the way back is a deliberate reverse, never an axis break."
+        },
+        "desktopSafeArea": "Story HUD top left, unified prompt under the aim point at 50 percent plus 40 px, crosshair centred, controls hint line in its own bottom slot until first pointer lock.",
+        "mobileSafeArea": "HUD width min(420px, viewport minus 32px); prompt max-width viewport minus 2 times 150 px so it clears the D-pad and action cluster; edge-clamped marker ring inset by the safe area.",
+        "exitComposition": "The player leaves the vantage under his own control; there is no authored exit frame anywhere in this scene."
+      },
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none — FOV is constant and player owned",
+        "focusTarget": "the racking aisle direction",
+        "physicalIntent": {
+          "mappingStatus": "not-applicable",
+          "character": "The shipped station FOV 75 with near 0.08 and far 4000 is the whole lens contract; no physical lens model is claimed and none is introduced.",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "None. There is no depth of field anywhere in the station; separation is carried by luma and by fog hue.",
+          "shutterMotionIntent": "None. No motion blur, no shutter simulation; the only motion in frame is the player’s own."
+        },
+        "mobileCropRisk": "At 390 by 844 portrait the vertical crop can lose the deck strip and the lower jamb of a far portal. Mitigation: jambs run the full height of every portal frame on both faces, so the wayfinding read survives any crop."
+      },
+      "motion": {
+        "mode": "player-owned",
+        "durationMs": 0,
+        "easing": "none — the camera is never driven",
+        "target": "whatever the player is looking at",
+        "rollPolicy": "Roll is zero at all times; no camera roll is introduced.",
+        "inputBlend": "Full player input at all times. No blend, no partial authority, no assist.",
+        "collisionPlan": "Shipped first-person collision is unchanged by this run.",
+        "occlusionPlan": "Unchanged. Nothing new occludes: every added element is either an emissive box on an existing instanced draw or DOM chrome."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "The station visit is one unbroken first-person walk. There is not one cut in the scene; the only authored change between vantages is the threshold fill ramp, which is a lighting event, not a transition.",
+        "durationMs": 0,
+        "easing": "none"
+      },
+      "paletteRef": "palette-station-interior",
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped grade",
+          "Sobel outline",
+          "N8AO",
+          "ACES filmic tone mapping at exposure 0.94",
+          "bloom"
+        ],
+        "grade": {
+          "intent": "The shipped grade is the grade. This run changes what enters the tone curve, never the curve.",
+          "presetRef": "main/src/components/PostFX.tsx (protected; unchanged)",
+          "exposureIntent": "ACES exposure stays 0.94, matching App.tsx. Lifting exposure was considered and rejected: it lifts the trough by clipping the peak, blows the strips and emissives, whitens the counter and flattens the protected sequence.",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "District fill plus hemisphere carry the room; a seven-light pool with three warm slots carries the few pools that belong to someone; radius-0 emissive trim carries wayfinding and never enters the pool. POOL_SIZE stays 7 and light cardinality never changes around a player verb.",
+          "sourceRefs": [
+            "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL and the point-light pool",
+            "main/src/game/spaceStation/spaceStationDressing.ts lamp placement and reach",
+            "main/src/game/spaceStation/spaceStationShell.ts buildFrame (portal jamb strips)"
+          ],
+          "atmosphereIntent": "Fog carries the colour script: scene.fog colour and density lerp with the fill on the same ramp, so a long sightline fades to the district hue instead of to black. Concourse fog is warm and thin so the market stays crisp; hall fog is blue-grey at 0.0040 and is where most of the hall’s percentage under 16 goes.",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "agency-free-interior",
+          "agency-departure"
+        ],
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "airlock-return",
+        "handBackBehavior": "There is nothing to hand back: the camera is never taken at any point in the station interior. The only authority the runtime holds is the district fill ramp, which is visible, monotone, finite and complete within 1.4 s of any threshold."
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#sil-09",
+        "evidence/baseline/09-warehouse.png"
+      ]
+    }
+  ],
+  "score": {
+    "treatmentRef": "score-treatment.md",
+    "mood": "silence — no cue by contract",
+    "eraFidelity": "Not exercised. The station renders at the shipped full stage and no ladder rung is sounded; there is no instrument, no bed and no room tone in this revision.",
+    "cues": [
+      {
+        "id": "cue-station-silence",
+        "cueRef": null,
+        "type": "silence",
+        "anchorRef": "airlock-threshold",
+        "relation": "through",
+        "offsetMs": 0,
+        "phraseIntent": "One unbroken silence from the first interior frame to departure. No cue, no stinger, no objective-entry tone, no acknowledgement of any player verb.",
+        "barIntent": null,
+        "mixIntent": "There is no bus. Nothing is ducked, nothing is prioritised, because nothing sounds.",
+        "silenceIntent": "The Score Director declines every cue for this revision and signs it as no-cue-by-contract. The classification, recorded here so a future run inherits a decision rather than an accident: the station’s silence is UNSPENT INVENTORY, not a protected baseline. Nobody composed it; audio dies at the page swap. A future run may score the station without a broken-silence objection, provided it goes through the deferred station-audio packet rather than a polish lock. Two anchors are pre-identified for that packet: concourse-open, where warmth you did not make would be the first pitched material since the dock, and concourse-leave, its withdrawal. Score under this pass would blur which sense is doing the work while Cinematography is being measured on luminance.",
+        "resetRef": "reset-score",
+        "evidenceRefs": [
+          "audio-report.md",
+          "score-treatment.md"
+        ]
+      }
+    ],
+    "mixIntent": "No mix exists. The only audio requirement of this run is proof that none is created: zero AudioContext, webkitAudioContext and OfflineAudioContext constructions and zero HTMLMediaElement play calls on the station page.",
+    "performancePlan": "No nodes, no voices, no per-frame audio work, no soak. The verifier check runs in the baseline-probe.mjs idiom against http://127.0.0.1:4321 with the Paravoxia title identity check: instrument the three context constructors and media play, teleport apron to counter to concourse to floor to shelves, click for pointer lock, open and close a vendor panel, and step each story objective id change, expecting a count of zero at every sample and window.__voxSfxDiag undefined at every sample. A console error naming AudioContext is a failure. Run before and after implementation; both must be zero. No combined-bus render, because there is no bus.",
+    "evidenceRefs": [
+      "audio-report.md",
+      "score-treatment.md",
+      "score-peer-notes.jsonl",
+      "score-reconciliation.jsonl"
+    ]
+  },
+  "variants": {
+    "desktop": {
+      "id": "variant-desktop",
+      "preservedFocalSubject": "The lit exit on every wall and the objective marker on its bearing.",
+      "preservedMeaning": "Every district is readable and the ordering hall, apron, shelves, counter, concourse holds.",
+      "cameraChanges": "None. FOV 75, free first person, no added motion.",
+      "effectChanges": "None beyond the district fill, albedo, fog and emissive trim that are the run itself. Crosshair becomes 5 by 5 px at INK 0.85 with a 1 px dark outline so it survives a lit registry wall.",
+      "agencyChanges": "None. The shipped controls hint line, click to capture mouse and the walk, run and jump keys, is surfaced verbatim in story mode on interior entry and is dismissed on the first pointer lock; it is desktop only and is suppressed when the hud=1 diagnostic panel already shows it.",
+      "evidenceRefs": [
+        "screenshot-report.md#desktop",
+        "evidence/baseline-hud"
+      ]
+    },
+    "mobile": {
+      "id": "variant-mobile",
+      "preservedFocalSubject": "Identical: the lit exit and the marker bearing.",
+      "preservedMeaning": "Identical. One lighting model on every device; nothing about the colour script is device conditional.",
+      "cameraChanges": "None. Same FOV; portrait 390 by 844 and landscape 844 by 390 both crop the same frame.",
+      "effectChanges": "None to the scene. Chrome only: HUD width min(420px, viewport minus 32px), prompt max-width viewport minus 2 times 150 px, marker edge ring inset by the safe area.",
+      "agencyChanges": "D-pad and touch look replace keyboard and pointer lock; the controls hint is hidden because the D-pad is its own hint. The use glyph renders as USE through main/src/story/ux/inputGlyphs.ts while the shipped work-order line keeps its [F] token verbatim.",
+      "evidenceRefs": [
+        "screenshot-report.md#mobile",
+        "evidence/baseline-hud"
+      ]
+    },
+    "reducedMotion": {
+      "id": "variant-reduced-motion",
+      "preservedFocalSubject": "Identical.",
+      "preservedMeaning": "Identical. This run adds no camera motion at all, so reduced motion is a state-only check.",
+      "cameraChanges": "None to change: no camera motion is added anywhere in this run.",
+      "effectChanges": "The one-shot objective-entry border acknowledgement is static instead of animated; the marker edge ring is static; the concourse low line keeps its named presentation delay and steps opacity instead of fading. The district fill ramp itself is retained because it is the scene event, not a decoration, and it is monotone, finite and non-periodic.",
+      "agencyChanges": "None.",
+      "evidenceRefs": [
+        "screenshot-report.md#reduced-motion"
+      ]
+    },
+    "qualityTiers": [
+      {
+        "id": "quality-high",
+        "tier": "high",
+        "preservedFocalSubject": "The lit exit on every wall and the objective marker on its bearing.",
+        "preservedMeaning": "The full colour script, the legibility floor and the district ordering.",
+        "simplifications": [],
+        "paletteFallback": "None. The station Canvas has exactly one quality tier: the same DISTRICT_FILL, SURFACE_TONES, fog table and seven-light pool render at every nominal tier. This tier entry exists so the contract is complete, not because the runtime branches on it.",
+        "effectFallback": "None. Nothing in this run is tier gated; there is no lower-cost path and no degraded path, and the legibility floor therefore holds identically at every tier.",
+        "evidenceRefs": [
+          "screenshot-report.md#quality-high"
+        ]
+      },
+      {
+        "id": "quality-medium",
+        "tier": "medium",
+        "preservedFocalSubject": "The lit exit on every wall and the objective marker on its bearing.",
+        "preservedMeaning": "The full colour script, the legibility floor and the district ordering.",
+        "simplifications": [],
+        "paletteFallback": "None. The station Canvas has exactly one quality tier: the same DISTRICT_FILL, SURFACE_TONES, fog table and seven-light pool render at every nominal tier. This tier entry exists so the contract is complete, not because the runtime branches on it.",
+        "effectFallback": "None. Nothing in this run is tier gated; there is no lower-cost path and no degraded path, and the legibility floor therefore holds identically at every tier.",
+        "evidenceRefs": [
+          "screenshot-report.md#quality-medium"
+        ]
+      },
+      {
+        "id": "quality-low",
+        "tier": "low",
+        "preservedFocalSubject": "The lit exit on every wall and the objective marker on its bearing.",
+        "preservedMeaning": "The full colour script, the legibility floor and the district ordering.",
+        "simplifications": [],
+        "paletteFallback": "None. The station Canvas has exactly one quality tier: the same DISTRICT_FILL, SURFACE_TONES, fog table and seven-light pool render at every nominal tier. This tier entry exists so the contract is complete, not because the runtime branches on it.",
+        "effectFallback": "None. Nothing in this run is tier gated; there is no lower-cost path and no degraded path, and the legibility floor therefore holds identically at every tier.",
+        "evidenceRefs": [
+          "screenshot-report.md#quality-low"
+        ]
+      },
+      {
+        "id": "quality-potato",
+        "tier": "potato",
+        "preservedFocalSubject": "The lit exit on every wall and the objective marker on its bearing.",
+        "preservedMeaning": "The full colour script, the legibility floor and the district ordering.",
+        "simplifications": [],
+        "paletteFallback": "None. The station Canvas has exactly one quality tier: the same DISTRICT_FILL, SURFACE_TONES, fog table and seven-light pool render at every nominal tier. This tier entry exists so the contract is complete, not because the runtime branches on it.",
+        "effectFallback": "None. Nothing in this run is tier gated; there is no lower-cost path and no degraded path, and the legibility floor therefore holds identically at every tier.",
+        "evidenceRefs": [
+          "screenshot-report.md#quality-potato"
+        ]
+      }
+    ]
+  },
+  "performance": {
+    "targetFps": 60,
+    "minimumFps": 30,
+    "maximumFrameTimeMs": 33.4,
+    "maximumDrawCalls": 5,
+    "maximumShaderPrograms": 13,
+    "maximumGpuMemoryMb": 4,
+    "deviceProfiles": [
+      "desktop 1600 by 900, dpr 1, headless chromium ANGLE SwiftShader (the capture profile)",
+      "desktop real GPU, headed (the owner taste profile; the only place frame time is meaningful)",
+      "mobile 390 by 844 portrait and 844 by 390 landscape, viewport emulation"
+    ],
+    "criticalAnchors": [
+      "airlock-threshold",
+      "registry-desk",
+      "concourse-open",
+      "concourse-leave",
+      "hall-plain",
+      "airlock-return"
+    ],
+    "measurementPlan": "The stable, comparable numbers on this renderer are programs, meshes, instances and visibleCellCount, read from the shipped SandboxHud diagnostics in the hud=1 pass. Shader programs is an ABSOLUTE budget: 13, the measured baseline, unchanged, because the interior surface stays one material and one program and the new fittings are instances of the two existing draws. Draw calls is a baseline-plus-two ceiling: the measured baseline is 3 meshes (interior surface, interior lamps, crowd) and the plan is plus zero, with two of headroom granted by the lock. GPU memory is a delta ceiling of 4 MB: no texture exists or is added, and the change is roughly 60 additional instanced boxes per district plus two scalars. Instance parity is asserted per district against evidence/baseline-perf.json, with the added-instance count declared and bounded at plus 80 per district. FPS and frame time are ADVISORY ONLY: SwiftShader measured 0.6 to 3.3 fps across two baseline runs with no stable ordering between districts, so it is not a usable regression signal at this resolution on this renderer; the 60 and 30 figures are the shipped targets carried forward for triage. A real frame-time judgement requires the headed real-GPU session that is already an open owner gate."
+  },
+  "reset": {
+    "triggers": [
+      "beat-exit",
+      "deep-link",
+      "replay",
+      "pause",
+      "quit",
+      "focus-loss",
+      "completion",
+      "sandbox"
+    ],
+    "states": [
+      {
+        "id": "reset-camera",
+        "domain": "camera",
+        "stateRef": "first-person camera in SpaceStationSandbox interior branch: FOV 75, near 0.08, far 4000, roll 0, full player authority",
+        "resetValue": "Shipped interior mount state on the apron, camera never held by any director",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "After a sandbox reload, a dock=0 deep link, a story-mode continuation, a panel open and close, or a pointer-lock loss, the camera is at FOV 75 with roll 0 and full player authority, and no rig, blend or partial authority is ever observed."
+      },
+      {
+        "id": "reset-grade",
+        "domain": "grade",
+        "stateRef": "shared PostFX chain and ACES tone mapping exposure",
+        "resetValue": "ACES filmic at exposure 0.94, identical to App.tsx; PostFX.tsx untouched by this run",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "Exposure reads 0.94 on entry, on exit, and after every reset trigger; no station code path writes exposure or mounts a second post chain, so leaving the station cannot leak a grade into the planet."
+      },
+      {
+        "id": "reset-lighting",
+        "domain": "lighting",
+        "stateRef": "SpaceStationLighting district fill, hemisphere, fog colour and density, the threshold ramp progress, and the seven-light pool assignment",
+        "resetValue": "Apron DISTRICT_FILL entry at full value with no ramp in progress, apron fog, and a freshly assigned pool",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "Fill and fog live inside the interior branch and unmount with it: a reload or a deep link starts at the apron entry with ramp progress 1 and no carried value, a mid-ramp retarget restarts from the live snapshot without overshoot, and no fill or fog value survives leaving the station. Pool size stays 7 across every trigger."
+      },
+      {
+        "id": "reset-score",
+        "domain": "score",
+        "stateRef": "audio state on the station page",
+        "resetValue": "No AudioContext, no SfxEngine, window.__voxSfxDiag undefined",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "At every sample across every reset trigger the three context constructors and HTMLMediaElement play have been called zero times and window.__voxSfxDiag is undefined; no console error names AudioContext."
+      },
+      {
+        "id": "reset-guidance",
+        "domain": "guidance",
+        "stateRef": "active station story objective, its marker, its work order, its distance readout, and the one-shot entry acknowledgement",
+        "resetValue": "Exactly one objective derived from milestones, or none; no marker, work order or readout without an owning objective",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "A sandbox reload, a dock=0 deep link, a story-mode continuation, a vendor or story panel open and close, and a pointer-lock loss each reconstruct the objective from milestones with zero missing-marker frames, zero duplicate entry acknowledgements, and no stale marker or work order; on completion the objective clears with activeAfterClear false and the HUD, marker and prompt unmount together."
+      }
+    ],
+    "sandboxNoOp": {
+      "required": true,
+      "criterion": "The standalone sandbox stays ephemeral and non-canon: a bare ?spacestation= deep link shows no story HUD, no marker and no prompt, writes no milestone and no save, and grants no item. Every file this run touches is inside main/src/components/spaceStation/, main/src/game/spaceStation/, main/tools/spaceStation-shots.mjs and the appended station ids in main/src/ui/hudSurfaces.ts, so no shared runtime path changes: planet-side rendering, the story director and the audio graph are provably unaffected by a station-only diff."
+    },
+    "probeRefs": [
+      "baseline-probe.mjs",
+      "main/tools/spaceStation-shots.mjs",
+      "main/tools/hud-overlap-sweep.mjs"
+    ]
+  },
+  "evidence": {
+    "acceptanceCriteria": [
+      "Per-vantage luma targets hold at 1600 by 900, dpr 1, SwiftShader: hall (07, 08) median 22 to 34 with at most 35 percent under 16; apron (01, 02) median 30 to 42 with at most 25 percent under 16; shelves (09) median 34 to 46 with at most 25 percent under 16; counter (03) median 48 to 62 with at most 10 percent under 16; concourse (04, 05, 06) median 56 to 72 with at most 12 percent under 16; concourse up (06b) median at least 30. No entered-district vantage falls below median 22 or above 35 percent under 16 (the legibility floor), and no vantage exceeds its stated percentage above 235.",
+      "The monotonic ordering assertion is printed as pass or fail by the capture harness on every run: median(hall) plus 6 at most median(apron), median(apron) at most median(shelves), median(shelves) at most median(counter), median(counter) at most median(concourse) minus 6; the concourse is the maximum and the hall the minimum; the counter holds the lowest standard deviation and the lowest percentage under 16 of any district.",
+      "The hudSurfaces sweep passes: station-story-hud, station-prompt, station-crosshair and the station marker are registered in main/src/ui/hudSurfaces.ts with layer assignments and are swept by main/tools/hud-overlap-sweep.mjs with zero overlaps on desktop 1600 by 900 and on mobile 390 by 844 and 844 by 390. No existing surface id, layer or exemption is changed by lock revision R1.",
+      "The T-concourse-open strip asserts, at frames minus 0.5, 0, plus 0.4, plus 0.8, plus 1.2, plus 1.4 and plus 2.0 s from the occupiedCellId change: ramp progress 0 at t equals 0, at least 0.95 at plus 1.2 s and exactly 1.0 at plus 1.4 s; caption computed opacity 0 through plus 0.8 s and 1 at plus 1.2 s with progress at least 0.9; concourse median luma inside its target band at plus 1.4 s; the ramp is monotone with no overshoot at any sample.",
+      "Zero console errors across the whole capture sweep, in both the sandbox and the story-mode routes, on desktop and mobile. A console error naming AudioContext is a hard failure of the silence proof.",
+      "Instance and program parity: programs is 13 and meshes is 3 at all five districts, point lights are 7, added instances are at most plus 80 per district against evidence/baseline-perf.json, and draw calls are at most baseline plus 2.",
+      "Audio silence proof: zero AudioContext, webkitAudioContext and OfflineAudioContext constructions and zero HTMLMediaElement play calls, with window.__voxSfxDiag undefined at every sample, across district teleports, pointer lock, a vendor panel cycle and all three story objective id changes, before and after implementation.",
+      "Contrast proof on the mobile still: DIM_INK at 0.68 reaches at least 4.5 to 1 against its own box backdrop over a 70-luma frame, with INK and WARM_INK above it; the 5 by 5 px outlined crosshair remains visible on both the darkest floor and the brightest registry wall.",
+      "Crowd legibility: figure versus backdrop delta of at least 0.08 linear at 06-concourse-look. If it fails, SUIT_DARK is darkened; suits are never brightened.",
+      "Shipped copy parity: the three objective ids, the three marker labels, the six work-order lines, the three low lines, all reaches and all gates are byte-identical to shipped, proven by diffing spaceStationStory.ts and storyText.ts as unchanged."
+    ],
+    "captures": [
+      {
+        "id": "capture-ten-vantages",
+        "kind": "dense-frame-strip",
+        "anchorRefs": [
+          "airlock-threshold",
+          "apron-cross",
+          "registry-desk",
+          "concourse-open",
+          "issuer-stall",
+          "concourse-leave",
+          "hall-plain",
+          "racking-aisle",
+          "airlock-return"
+        ],
+        "variantRefs": [
+          "variant-desktop"
+        ],
+        "pathOrPlanRef": "main/tools/spaceStation-shots.mjs — the ten shipped vantages 01-dock through 09-warehouse, before and after, with mean, median, percentage under 16, percentage over 235, standard deviation and a lower-third floor-band median per frame",
+        "status": "planned",
+        "acceptanceCriterion": "Every vantage is captured before and after at identical camera state, and the per-district targets plus the ordering assertion are printed as pass or fail."
+      },
+      {
+        "id": "capture-new-vantages",
+        "kind": "exact-frame",
+        "anchorRefs": [
+          "airlock-threshold",
+          "registry-desk",
+          "concourse-open",
+          "hall-plain",
+          "airlock-return"
+        ],
+        "variantRefs": [
+          "variant-desktop"
+        ],
+        "pathOrPlanRef": "main/tools/spaceStation-shots.mjs — three added stops: 01b-apron-back (apron u 0.12, turn plus pi over 2), 03b-counter-exit (counter u 0.92), 07b-hall-back (floor u 0.18, turn plus pi over 2)",
+        "status": "planned",
+        "acceptanceCriterion": "01b shows the lock frame unlit and identifiable; 03b shows the concourse portal as the brightest object on the counter wall; 07b shows the concourse portal as the way back from inside the hall."
+      },
+      {
+        "id": "capture-t-concourse-open",
+        "kind": "dense-frame-strip",
+        "anchorRefs": [
+          "concourse-open"
+        ],
+        "variantRefs": [
+          "variant-desktop",
+          "variant-reduced-motion"
+        ],
+        "pathOrPlanRef": "main/tools/spaceStation-shots.mjs — walked strip from counter u 0.96 holding forward, frames at minus 0.5, 0, plus 0.4, plus 0.8, plus 1.2, plus 1.4 and plus 2.0 s from the cell change, printing the SpaceStationLighting window diagnostic (district kind and ramp progress), concourse median luma and the caption computed opacity per frame",
+        "status": "planned",
+        "acceptanceCriterion": "The strip proves the finite eased ramp and the named low-line delay exactly as asserted in the acceptance criteria."
+      },
+      {
+        "id": "capture-hud-stills",
+        "kind": "exact-frame",
+        "anchorRefs": [
+          "registry-desk",
+          "concourse-open",
+          "hall-plain"
+        ],
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile"
+        ],
+        "pathOrPlanRef": "main/tools/spaceStation-shots.mjs — the six existing hud=1 stills plus story-mode stills at the registry desk, the concourse entry and the hall (G3 off-screen edge ring) on desktop 1600 by 900 and mobile 390 by 844; requires the seeded story save, supplied by Integration",
+        "status": "planned",
+        "acceptanceCriterion": "Every still shows the exact contracted marker label, the unified prompt under the aim point, the outlined crosshair, and no overlap between any two registered HUD surfaces."
+      },
+      {
+        "id": "capture-audio-silence",
+        "kind": "anchor-trace",
+        "anchorRefs": [
+          "airlock-threshold",
+          "apron-cross",
+          "registry-desk",
+          "concourse-open",
+          "issuer-stall",
+          "concourse-leave",
+          "hall-plain",
+          "racking-aisle",
+          "airlock-return"
+        ],
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile"
+        ],
+        "pathOrPlanRef": "baseline-probe.mjs idiom — instrumented AudioContext, webkitAudioContext, OfflineAudioContext and HTMLMediaElement play counters across district teleports, pointer lock, a vendor panel cycle and all three objective id changes",
+        "status": "planned",
+        "acceptanceCriterion": "All counters read zero and window.__voxSfxDiag is undefined at every sample, before and after implementation."
+      },
+      {
+        "id": "capture-performance-parity",
+        "kind": "performance-trace",
+        "anchorRefs": [
+          "airlock-threshold",
+          "registry-desk",
+          "concourse-open",
+          "hall-plain",
+          "racking-aisle"
+        ],
+        "variantRefs": [
+          "variant-desktop"
+        ],
+        "pathOrPlanRef": "evidence/baseline-perf.json comparison at all five districts: programs, meshes, instances, visibleCellCount and point-light count",
+        "status": "planned",
+        "acceptanceCriterion": "Programs 13, meshes 3, point lights 7, added instances at most plus 80 per district, draw calls at most baseline plus 2."
+      },
+      {
+        "id": "capture-reset-matrix",
+        "kind": "reset-probe",
+        "anchorRefs": [
+          "airlock-threshold",
+          "concourse-open",
+          "airlock-return"
+        ],
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile"
+        ],
+        "pathOrPlanRef": "reset probe covering sandbox reload, dock=0 deep link, story-mode continuation, vendor and story panel open and close, pointer-lock loss, and completion",
+        "status": "planned",
+        "acceptanceCriterion": "Every case reconstructs exactly one objective or none with no stale marker, no duplicate acknowledgement, no carried fill or fog value, and no leaked grade."
+      }
+    ],
+    "mechanicalChecks": [
+      {
+        "id": "check-creative-gate-contract",
+        "commandOrProbeRef": "npm --prefix main run creative:gate -- --run .codex/production-runs/2026-09-04-station-interior-light --phase contract",
+        "status": "planned",
+        "resultRef": "evidence/gate-contract-presign.txt",
+        "acceptanceCriterion": "The contract-phase gate passes every structural, schema, lock, authorship and guidance check; only director signature checks may remain open before the three directors sign."
+      },
+      {
+        "id": "check-verify",
+        "commandOrProbeRef": "npm --prefix main run verify",
+        "status": "planned",
+        "resultRef": null,
+        "acceptanceCriterion": "Typecheck, tests and build pass. A failure on files this run never touched is checked against ls -l timestamps for the concurrent sessions before being treated as this run’s."
+      },
+      {
+        "id": "check-hud-overlap-sweep",
+        "commandOrProbeRef": "node main/tools/hud-overlap-sweep.mjs",
+        "status": "planned",
+        "resultRef": null,
+        "acceptanceCriterion": "The station surfaces registered under lock revision R1 are swept and report zero overlaps on desktop and both mobile orientations."
+      },
+      {
+        "id": "check-station-shots",
+        "commandOrProbeRef": "node main/tools/spaceStation-shots.mjs against http://127.0.0.1:4321 with the Paravoxia title identity check",
+        "status": "planned",
+        "resultRef": null,
+        "acceptanceCriterion": "All thirteen vantages and the T-concourse-open strip capture with the ordering assertion printed as pass, on a preview server proven to be Paravoxia and not another project on a reused port."
+      }
+    ],
+    "continuity": {
+      "previousBeatRefs": [
+        "ch10 station introduction: approach, docking, and the DockOverlay hand-back at phase complete"
+      ],
+      "nextBeatRefs": [
+        "station departure route: the same three DockOverlay gauges with inverted end-state words"
+      ],
+      "paletteRefs": [
+        "shipped-visual-baseline.json paletteState (pre-change fog, background, DISTRICT_FILL, pool size and illuminance at reach)",
+        "shipped-reference-map.md#district-light-dressing-geometry-map (the measured per-district fill entries, cell dimensions and lamp histograms this contract retunes)"
+      ],
+      "lensRefs": [
+        "shipped-reference-map.md#adjacent-scene-continuity (incoming FOV 75, near 0.08, far 4000, free first-person walk)",
+        "evidence/baseline-sheet.png (the ten shipped vantages at that lens)"
+      ]
+    },
+    "headedTaste": {
+      "required": true,
+      "realGpuRequired": true,
+      "status": "pending",
+      "decisionRef": null
+    },
+    "directorSignoffsRef": "director-signoffs.json"
+  }
+}

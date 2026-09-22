@@ -1,0 +1,6 @@
+{
+  "at": "2026-09-09T04:01:00.578407+00:00",
+  "flockPid": 207621,
+  "capturePid": 207623,
+  "reason": "Ready story-rest interaction, same pose and idle controls for over150s in ch4-vigil; diagnosed Euclidean rail threshold vs tangent gait-distance arrival. Stop this failed case instead of burning remaining30min capture budget. Existing failed trace and owned cleanup retained."
+}

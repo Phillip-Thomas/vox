@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 690341,
+  "stop_reason": "end_turn",
+  "session_id": "098300bc-af23-4b93-9c6d-1c1e0d67192f",
+  "total_cost_usd": 4.524569499999999,
+  "usage": {
+    "input_tokens": 94,
+    "cache_creation_input_tokens": 116234,
+    "cache_read_input_tokens": 3760259,
+    "output_tokens": 59169,
+    "output_tokens_details": {
+      "thinking_tokens": 14001
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 116234,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1235,
+        "cache_read_input_tokens": 119094,
+        "cache_creation_input_tokens": 3136,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3136
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2340,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002405,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 94,
+      "outputTokens": 59169,
+      "cacheReadInputTokens": 3760259,
+      "cacheCreationInputTokens": 116234,
+      "webSearchRequests": 0,
+      "costUSD": 4.5221645,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 14001,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 57,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Report is 704 words (a hard-cap trim; content unchanged), all 13 source hashes re-verified OK.\n\n**VERDICT: pass \u2014 qualifying layouts found for BOTH exact creative-nominated geometries.** 570/1200 at range 12, 58/1200 at range 24. CPU 1.84 s, deterministic, no threshold relaxed.\n\n**Measurements (top-1 per range; full top-3 in the JSON/report)**\n\n| Range | R ground / yaw | Short S\u2192E | Blind span (backing-only) | Long route | \u0394 / ratio | Long range margin | W margin / body clear | E\u2192C | outside R | common span | Terra lat / clear |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| 12 | (\u221234, 51.05, 20) 90\u00b0 | 16.0 (17 s) | **14.0** \u22656 \u2713 | 32.0 (57 s) | +16.0 / \u00d72.00 \u2713 | 0.67 | 4.91 / **1.00** | 18.0 | 8.25 | 8.00 | 4.00 / 2.00 |\n| 24 | (\u221212, 51.05, 24) 90\u00b0 | 32.0 (33 s) | **30.0** \u22656 \u2713 | 92.0 (123 s) | +60.0 / \u00d72.875 \u2713 | 1.19 | 8.86 / 2.00 | 12.0 | 11.00 | 10.00 | 2.00 / 2.00 |\n\nCaps hold everywhere (\u2264128 samples / \u2264120 units, 1.0/0.25 sampling, undecimated). S and E are fixed-valid (11.33 margin 0.67 / 22.63 margin 1.37); neither witnesses the whole span; W covers it and is reachable.\n\n**Objective defects / honest worst cases**\n- Range-12 W is exactly at the body-body limit (1.00 = 2\u00d70.5, margin **0.00**) and its 1.75 release cylinder overlaps the survey corridor. Not a rejection per the standing contract; the hold condition is stated. Range-24 W is 2.00 clear.\n- One rule was *added*, not relaxed: the blind span must be caused by the backing alone, so `REFERENCE OCCLUDED \u00b7 SURVEY HOUSING` stays distinct. It removed 55 (r12) / 77 (r24) layouts whose span was partly the hero trunk \u2014 those would have mislabelled the cause.\n- Shipped planner is prop-blind: it walks into the backing's centre column (terrain-walkable) knowing neither the backing nor the trunk collider. Probe supplements both on the node mask and the walked segments.\n- Range-12 layout #1 walks 18.0 for a 6.0 straight E\u2192C offset (terrain detour); #2/#3 walk 10.0.\n\n**Artifacts**\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/geometry-instrument.md`\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/geometry-instrument.json`\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/geometry-instrument-probe.mts`\n- `/tmp/cg-instr.mjs`, `/tmp/cg-instr-b.json` (determinism replica), `/tmp/cg-instr-hashes-before.txt`\n\nSource unchanged: 13/13 input hashes match before and after; `find main/src -newermt` empty. No main edits, no GPU/browser/worldgen/validator touched.",
+  "ttft_ms": 1324,
+  "type": "result",
+  "duration_ms": 699035,
+  "uuid": "72151809-48df-4f87-bebb-e7c90b9f9b27",
+  "ttft_stream_ms": 933,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 933,
+  "queued_turn_count": 0
+}

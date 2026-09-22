@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import {
   spaceStationDockRoute,
@@ -32,7 +32,7 @@ import {
   eyePosition,
   PLAYER_BODY,
   PLAYER_EYE_HEIGHT,
-  stepWalk,
+  stepWalkFrame,
   type WalkState
 } from '../../game/spaceStation/spaceStationLocomotion.ts';
 import { validateSpaceStationShell } from '../../game/spaceStation/spaceStationShell.ts';
@@ -46,6 +46,9 @@ import { SpaceStationInterior, spaceStationInteriorDiagnostics } from './SpaceSt
 import { SpaceStationCrowd, crowdSize } from './SpaceStationCrowd.tsx';
 import { VendorPanel } from './VendorPanel.tsx';
 import { StationStoryPanel } from './StationStoryPanel.tsx';
+import { planStationWalk } from '../../game/spaceStation/spaceStationNavigation.ts';
+import { StationScreeningDriver } from './StationScreeningDriver.tsx';
+import { STATION_SCREENING_PARAM, isStationScreening } from '../../game/spaceStation/stationScreening.ts';
 import {
   spaceStationVendorSites,
   buildSpaceStationVendors,
@@ -72,7 +75,16 @@ import {
   type StationStoryObjective
 } from '../../game/spaceStation/spaceStationStory.ts';
 import { hasMilestone } from '../../game/systems/progressionSystem.ts';
-import { SpaceStationLighting } from './SpaceStationLighting.tsx';
+import {
+  LOW_LINE_FADE_SECONDS,
+  LOW_LINE_PRESENTATION_DELAY_SECONDS,
+  SpaceStationLighting
+} from './SpaceStationLighting.tsx';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
+import { presentStoryGuidanceLine } from '../../story/ux/inputGlyphs.ts';
+import { stationMarkerPosition, stationMarkerSurfaceReserved } from './stationMarkerLayout.ts';
+import { STATION_FRAME_PRIORITY, stationFrameTime } from './stationFrameOrder.ts';
+import { createStationPresentation, presentationOpacity, startPresentationOnce, updateStationLowLine, type StationPresentation } from './stationPresentation.ts';
 import { ApproachScene } from './SpaceStationApproach.tsx';
 import { spaceStationBody } from '../../game/spaceStation/spaceStationBody.ts';
 import {
@@ -108,8 +120,19 @@ type SandboxScene = 'approach' | 'interior';
  *  style objects that read it — a module-level const in the temporal dead zone
  *  is a runtime crash, not a lint warning. */
 const INK = 'rgba(228,236,231,0.92)';
-const DIM_INK = 'rgba(228,236,231,0.5)';
+/** 0.68: at least 4.5:1 against the HUD backdrop over a 70-luma frame. */
+const DIM_INK = 'rgba(228,236,231,0.68)';
 const WARM_INK = '#ffb45a';
+const MONO = '12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace';
+
+/** The controls line, verbatim from the diagnostic panel. No other wording is authorized. */
+const CONTROLS_HINT = 'click to capture mouse · WASD walk · shift run · space jump';
+
+function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined'
+    && typeof window.matchMedia === 'function'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
 
 const WALK_SPEED = 4.4;
 const SPRINT_SPEED = 11;
@@ -122,6 +145,10 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
   // station URL, so this is the sole restore point across the hard page seam.
   const [storySession] = useState(() => bootstrapStationStorySession(address));
   const storyMode = storySession !== null;
+  const presentation = useMemo(
+    () => createStationPresentation(hasMilestone(STATION_STORY_MILESTONES.concourseEntered)),
+    [storySession]
+  );
   const problems = useMemo(
     () => [...validateSpaceStationGraph(descriptor.graph), ...validateSpaceStationShell(descriptor.graph)],
     [descriptor]
@@ -136,10 +163,27 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
     [descriptor]
   );
   const [occupiedCellId, setOccupiedCellId] = useState<CellId | null>(null);
+  // Physical state is published before this frame renders; React drives only DOM receipts.
+  const occupiedCell = useRef<CellId | null>(null);
+  const publishOccupiedCell = useCallback((cellId: CellId | null) => {
+    occupiedCell.current = cellId;
+    if (cellId === 'concourse' && (!storySession || hasMilestone(STATION_STORY_MILESTONES.registryRecorded))) {
+      startPresentationOnce(presentation.lowLines, 'concourse-warmth', stationFrameTime());
+    }
+    setOccupiedCellId(cellId);
+  }, [presentation, storySession]);
+  // The marker's off-screen affordance lives in the DOM; the in-canvas marker
+  // writes its bearing into this element every frame without touching React state.
+  const edgeRingRef = useRef<HTMLDivElement>(null);
+  const screeningWalkIntent = useRef(false);
   const [vendors, setVendors] = useState<Vendor[]>(() => buildSpaceStationVendors(descriptor));
   const [trader, setTrader] = useState<TraderState>(() => createTrader());
   const [nearVendorId, setNearVendorId] = useState<string | null>(null);
   const [openVendorId, setOpenVendorId] = useState<string | null>(null);
+  const openVendorPanel = useCallback((id: string | null) => {
+    if (id !== null && document.pointerLockElement) document.exitPointerLock();
+    setOpenVendorId(id);
+  }, []);
   const [storyRevision, setStoryRevision] = useState(0);
   const [nearStoryTargetId, setNearStoryTargetId] = useState<string | null>(null);
   const [openStoryKind, setOpenStoryKind] = useState<'registry' | 'issuer' | null>(null);
@@ -234,6 +278,19 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
       next.delete('dock');
       next.set('undock', `${system.x},${system.y},${index}`);
       next.set('fly', '1');
+      // A SCREENING CONTINUES OUT. `movie` was stripped on the way in and has to
+      // be put back on the way out, or the run returns to the game with nobody
+      // driving and the whole point of the trip sitting in the pack.
+      //
+      // `story` is NOT restored, and must never be: `initStoryFromSave` reads
+      // `?story=<beat>` as a fresh rehearsal and would erase the completion and
+      // docking receipts this seam exists to carry. The screening flag itself is
+      // dropped here — the station page is behind us.
+      if (isStationScreening()) {
+        next.set('movie', '1');
+        next.delete(STATION_SCREENING_PARAM);
+      }
+      next.delete('story');
       window.location.assign(`${window.location.pathname}?${next.toString()}`);
       return;
     }
@@ -272,6 +329,7 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
       leaveStation(position);
       return;
     }
+    if (document.pointerLockElement) document.exitPointerLock();
     setOpenVendorId(null);
     setOpenStoryKind(objective.targetKind);
   }, [leaveStation, recordStoryReceipt]);
@@ -341,27 +399,25 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
         ) : (
           <>
             {/*
-              FogExp2 to match the shipped atmosphere model. The bible requires that
-              light, fog and grade describe one atmosphere; linear fog with a hand-picked
-              near plane described a different one. Density is well below the surface
-              value (0.005) because an interior's longest sightline is ~250m, not a
-              horizon. Vacuum gets none of it, which is why this lives inside the
-              interior branch rather than on the canvas.
+              Fog is owned by SpaceStationLighting: it rides the district ramp so a
+              long sightline fades to the room's hue, and it unmounts with the
+              interior branch. Vacuum gets none of it.
             */}
-            <fogExp2 attach="fog" args={['#0a0f16', 0.0016]} />
-            <SpaceStationLighting descriptor={descriptor} occupiedCellId={occupiedCellId} />
-            <SpaceStationInterior descriptor={descriptor} occupiedCellId={occupiedCellId} />
+            <SpaceStationLighting descriptor={descriptor} occupiedCell={occupiedCell} />
+            <StationPresentationFrame presentation={presentation} />
+            <SpaceStationInterior descriptor={descriptor} occupiedCell={occupiedCell} />
             <SpaceStationCrowd descriptor={descriptor} />
-            {storyObjective && <StationStoryMarker objective={storyObjective} />}
+            {storyObjective && <StationStoryMarker objective={storyObjective} edgeRing={edgeRingRef} />}
             <WalkController
               descriptor={descriptor}
               spawn={spawn}
               props={props}
-              onCellChange={setOccupiedCellId}
+              onCellChange={publishOccupiedCell}
               vendors={vendors}
               onNearVendor={setNearVendorId}
-              onOpenVendor={setOpenVendorId}
+              onOpenVendor={openVendorPanel}
               storyObjective={storyObjective}
+              screeningWalkIntent={screeningWalkIntent}
               onNearStoryTarget={setNearStoryTargetId}
               onStoryDistance={setStoryDistance}
               onActivateStoryTarget={activateStoryTarget}
@@ -388,7 +444,13 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
         <SandboxHud descriptor={descriptor} problems={problems} population={population} />
       )}
       {storyMode && storyObjective && !openVendor && !openStoryKind && !docking && scene === 'interior' && (
-        <StationStoryHud objective={storyObjective} distance={storyDistance} />
+        <>
+          <StationStoryHud objective={storyObjective} distance={storyDistance} touch={isTouch} presentation={presentation} />
+          <StationMarkerEdgeRing ref={edgeRingRef} />
+        </>
+      )}
+      {storyMode && !isTouch && !spaceStationHudVisible() && !openVendor && !openStoryKind && !docking && scene === 'interior' && (
+        <StationControlsHint />
       )}
       {(spaceStationHudVisible() || storyMode) && !openVendor && !openStoryKind && !docking && scene === 'interior' && (
         <Crosshair />
@@ -420,6 +482,19 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
           onClose={() => setOpenVendorId(null)}
         />
       )}
+      {/* The screening's driver: present only when this page load is the
+          continuation of a movie run (see stationScreening.ts). It reads the
+          same prompts and presses the same buttons a player would. */}
+      {isStationScreening() && storyMode && (
+        <StationScreeningDriver
+          objective={storyObjective}
+          nearTarget={nearStoryTargetId !== null}
+          panelOpen={openStoryKind !== null || openVendorId !== null}
+          scene={scene}
+          docking={docking}
+          walkIntent={screeningWalkIntent}
+        />
+      )}
       {openStoryKind && (
         <StationStoryPanel
           kind={openStoryKind}
@@ -441,6 +516,7 @@ function WalkController({
   onNearVendor,
   onOpenVendor,
   storyObjective,
+  screeningWalkIntent,
   onNearStoryTarget,
   onStoryDistance,
   onActivateStoryTarget,
@@ -460,6 +536,7 @@ function WalkController({
   onNearVendor: (vendorId: string | null) => void;
   onOpenVendor: (vendorId: string | null) => void;
   storyObjective: StationStoryObjective | null;
+  screeningWalkIntent: React.MutableRefObject<boolean>;
   onNearStoryTarget: (targetId: string | null) => void;
   onStoryDistance: (distance: number | null) => void;
   onActivateStoryTarget: (
@@ -483,6 +560,7 @@ function WalkController({
   const euler = useRef(new THREE.Euler(0, -Math.PI / 2, 0, 'YXZ'));
   const walk = useRef<WalkState>(createWalkState(graph, spawn));
   const reportedCell = useRef<CellId | null>(null);
+  const screeningRoute = useRef<{ objective: string; points: [number, number, number][]; index: number } | null>(null);
 
   const forward = useMemo(() => new THREE.Vector3(), []);
   const right = useMemo(() => new THREE.Vector3(), []);
@@ -492,6 +570,7 @@ function WalkController({
   const storyDistanceRef = useRef<number | null>(null);
   /** Probe-driven movement intent, in m/s. Null while the keyboard is in charge. */
   const scripted = useRef<{ forward: number; strafe: number } | null>(null);
+  const discardResumedWalkFrame = useRef(false);
   const vendorsRef = useRef<Vendor[]>(vendors);
   vendorsRef.current = vendors;
   const storyObjectiveRef = useRef(storyObjective);
@@ -509,6 +588,7 @@ function WalkController({
   const applyEye = useCallback(() => {
     const eye = eyePosition(walk.current);
     camera.position.set(eye[0], eye[1], eye[2]);
+    camera.updateMatrixWorld();
   }, [camera]);
 
   useEffect(() => {
@@ -516,6 +596,28 @@ function WalkController({
     camera.quaternion.setFromEuler(euler.current);
     applyEye();
   }, [applyEye, camera, graph, spawn]);
+
+  // A modal owns a free pointer before its first paint. Also catch an outstanding
+  // lock request that resolves after the panel opened. Closing leaves the next
+  // ordinary canvas click to reacquire, in that trusted user gesture.
+  useLayoutEffect(() => {
+    const releaseForPanel = () => {
+      if (!capturedRef.current) return;
+      keys.current.clear();
+      if (document.pointerLockElement === gl.domElement) document.exitPointerLock();
+    };
+    releaseForPanel();
+    document.addEventListener('pointerlockchange', releaseForPanel);
+    return () => document.removeEventListener('pointerlockchange', releaseForPanel);
+  }, [gl, inputCaptured]);
+
+  // Mouse, touch and the movie's steering share the same angular input path.
+  const applyLook = useCallback((movementX: number, movementY: number) => {
+    euler.current.y -= movementX * LOOK_SENSITIVITY;
+    euler.current.x -= movementY * LOOK_SENSITIVITY;
+    euler.current.x = Math.max(-Math.PI / 2 + 0.02, Math.min(Math.PI / 2 - 0.02, euler.current.x));
+    camera.quaternion.setFromEuler(euler.current);
+  }, [camera]);
 
   useEffect(() => {
     const canvas = gl.domElement;
@@ -559,15 +661,22 @@ function WalkController({
       }
     };
     const onKeyUp = (event: KeyboardEvent) => keys.current.delete(event.code);
-    const onClick = () => void canvas.requestPointerLock?.();
-    const onMouseMove = (event: MouseEvent) => {
-      if (document.pointerLockElement !== canvas && !isTouchActive()) return;
-      euler.current.y -= event.movementX * LOOK_SENSITIVITY;
-      euler.current.x -= event.movementY * LOOK_SENSITIVITY;
-      euler.current.x = Math.max(-Math.PI / 2 + 0.02, Math.min(Math.PI / 2 - 0.02, euler.current.x));
-      camera.quaternion.setFromEuler(euler.current);
+    const onClick = () => {
+      if (capturedRef.current || document.pointerLockElement === canvas) return;
+      // A browser may decline a request immediately after releasing the lock.
+      // A subsequent real canvas click retries; no unhandled rejection escapes.
+      void canvas.requestPointerLock?.()?.catch(() => {});
     };
-    const onBlur = () => keys.current.clear();
+    const onMouseMove = (event: MouseEvent) => {
+      if (capturedRef.current || (document.pointerLockElement !== canvas && !isTouchActive())) return;
+      applyLook(event.movementX, event.movementY);
+    };
+    const onBlur = () => {
+      keys.current.clear();
+      scripted.current = null;
+      discardResumedWalkFrame.current = true;
+    };
+    const onVisibilityChange = () => onBlur();
 
     // Capture harnesses cannot acquire pointer lock headless, so expose the look
     // direction directly. Same shape as the existing `window.__auditWorker` hook.
@@ -600,11 +709,8 @@ function WalkController({
     /**
      * Drive movement directly, in metres per second.
      *
-     * Held keys are the honest input path but a useless probe instrument: the walk
-     * is time-stepped and software rendering runs at a few frames a second, so
-     * "hold forward for three seconds" covers a wildly different distance headless
-     * than it does on a GPU. An explicit intent makes a collision assertion mean
-     * something. Pass (0, 0) to stop.
+     * Both this intent and held keys use the same collision substeps and real
+     * foreground frame duration. Pass (0, 0) to stop.
      */
     devWindow.__spaceStationWalk = (forward: number, strafe: number) => {
       scripted.current = forward === 0 && strafe === 0 ? null : { forward, strafe };
@@ -703,12 +809,14 @@ function WalkController({
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
     window.addEventListener('blur', onBlur);
+    document.addEventListener('visibilitychange', onVisibilityChange);
     canvas.addEventListener('click', onClick);
     document.addEventListener('mousemove', onMouseMove);
     return () => {
       window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('keyup', onKeyUp);
       window.removeEventListener('blur', onBlur);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       canvas.removeEventListener('click', onClick);
       document.removeEventListener('mousemove', onMouseMove);
       delete devWindow.__spaceStationLook;
@@ -724,6 +832,14 @@ function WalkController({
 
   useFrame((_, delta) => {
     const held = keys.current;
+    if (document.hidden) {
+      held.clear();
+      scripted.current = null;
+      discardResumedWalkFrame.current = true;
+      return;
+    }
+    const walkDelta = discardResumedWalkFrame.current ? 0 : delta;
+    discardResumedWalkFrame.current = false;
 
     // The arrival owns the camera until it hands back. The dolly ends exactly at
     // the walk state's spawn, so handback is a matter of stopping the override
@@ -733,12 +849,37 @@ function WalkController({
       dock.current = advanceDock(dock.current, delta).state;
       const eye = dockEyeAt(dockRoute, dockReadout(dock.current).travel, PLAYER_EYE_HEIGHT);
       camera.position.set(eye[0], eye[1], eye[2]);
+      camera.updateMatrixWorld();
       return;
     }
 
     if (inputCaptured) {
       held.clear();
       return;
+    }
+
+    // This supplies ordinary look/forward intent. Position changes happen only
+    // below through the same speed limits, walls, portals and solid furniture.
+    let screeningForward = true;
+    if (screeningWalkIntent.current && storyObjective) {
+      if (screeningRoute.current?.objective !== storyObjective.id) {
+        const points = planStationWalk(graph, props, walk.current, storyObjective.target, storyObjective.reach);
+        screeningRoute.current = { objective: storyObjective.id, points: points ?? [], index: 0 };
+      }
+      const route = screeningRoute.current;
+      let point = route.points[route.index];
+      while (point && Math.hypot(point[0] - walk.current.position[0], point[2] - walk.current.position[2]) < 0.18) {
+        point = route.points[++route.index];
+      }
+      screeningForward = false;
+      if (point) {
+        const dx = point[0] - walk.current.position[0], dz = point[2] - walk.current.position[2];
+        const yaw = Math.atan2(-dx, -dz);
+        const error = Math.atan2(Math.sin(yaw - euler.current.y), Math.cos(yaw - euler.current.y));
+        const turn = Math.max(-1.6 * delta, Math.min(1.6 * delta, error));
+        applyLook(-turn / LOOK_SENSITIVITY, euler.current.x * Math.min(1, delta * 3) / LOOK_SENSITIVITY);
+        screeningForward = Math.abs(error - turn) < 0.08;
+      }
     }
 
     // Horizontal basis from the look direction, flattened so looking up does not
@@ -758,20 +899,18 @@ function WalkController({
       speed = move.length();
       if (speed > 0) move.normalize();
     } else {
-      if (held.has('KeyW')) move.add(forward);
+      if (held.has('KeyW') && screeningForward) move.add(forward);
       if (held.has('KeyS')) move.sub(forward);
       if (held.has('KeyD')) move.add(right);
       if (held.has('KeyA')) move.sub(right);
       if (move.lengthSq() > 0) move.normalize();
     }
 
-    const step = Math.min(delta, 0.05);
-
-    walk.current = stepWalk(
+    walk.current = stepWalkFrame(
       graph,
       walk.current,
-      { dx: move.x * speed * step, dz: move.z * speed * step, jump: held.has('Space') },
-      step,
+      { x: move.x * speed, z: move.z * speed, jump: held.has('Space') },
+      walkDelta,
       props
     );
 
@@ -829,7 +968,7 @@ function WalkController({
       nearAirlockRef.current = nextAirlock;
       onNearAirlock(nextAirlock);
     }
-  });
+  }, STATION_FRAME_PRIORITY.walk);
 
   return null;
 }
@@ -1164,18 +1303,80 @@ const dockPanel: React.CSSProperties = {
 /** How near the lock you must stand before the way out is offered. */
 const AIRLOCK_REACH = 9;
 
-/** A single shared visual language for counter, issuer, and return-airlock goals. */
-function StationStoryMarker({ objective }: { objective: StationStoryObjective }) {
+/**
+ * How the marker grows with distance: `clamp(d / 18, 1, 12)` keeps the ring at or
+ * above ~14 px on desktop from anywhere in the station, so a target two rooms away
+ * is still a ring and not a warm pixel.
+ */
+function markerScaleForDistance(distance: number): number {
+  return Math.min(12, Math.max(1, distance / 18));
+}
+
+/**
+ * A single shared visual language for counter, issuer, and return-airlock goals.
+ *
+ * When the target leaves the frustum, the same warm ring clamps to the viewport
+ * edge along its bearing (see StationMarkerEdgeRing) — no arrows, no second
+ * language. The DOM element is written directly from the frame loop: a bearing
+ * that changes every frame has no business in React state.
+ */
+function StationStoryMarker({
+  objective,
+  edgeRing
+}: {
+  objective: StationStoryObjective;
+  edgeRing: React.RefObject<HTMLDivElement | null>;
+}) {
   const ring = useRef<THREE.Mesh>(null);
-  useFrame(({ clock }) => {
-    if (!ring.current) return;
-    ring.current.rotation.z = clock.elapsedTime * 0.55;
-    const pulse = 1 + Math.sin(clock.elapsedTime * 2.4) * 0.08;
+  const group = useRef<THREE.Group>(null);
+  const projected = useMemo(() => new THREE.Vector3(), []);
+  const anchor = useMemo(() => new THREE.Vector3(), []);
+  const reducedMotion = prefersReducedMotion();
+  useFrame(({ clock, camera }) => {
+    if (!ring.current || !group.current) return;
+    ring.current.rotation.z = reducedMotion ? 0 : clock.elapsedTime * 0.55;
+    const pulse = reducedMotion ? 1 : 1 + Math.sin(clock.elapsedTime * 2.4) * 0.08;
     ring.current.scale.setScalar(pulse);
+
+    group.current.getWorldPosition(anchor);
+    group.current.scale.setScalar(markerScaleForDistance(camera.position.distanceTo(anchor)));
+
+    const element = edgeRing.current;
+    if (!element) return;
+    projected.copy(anchor).project(camera);
+    let x = projected.x;
+    let y = projected.y;
+    const behind = projected.z > 1;
+    if (behind) {
+      x = -x;
+      y = -y;
+    }
+    const onScreen = !behind && Math.abs(x) <= 1 && Math.abs(y) <= 1;
+    if (onScreen) {
+      if (!element.hidden) element.hidden = true;
+      return;
+    }
+    // Push the bearing out to the edge of the inset field.
+    // A target directly behind has no horizontal projection; choose a stable
+    // edge instead of displaying an off-screen bearing over the crosshair.
+    if (Math.max(Math.abs(x), Math.abs(y)) < 1e-4) x = 1;
+    const reach = Math.max(Math.abs(x), Math.abs(y));
+    x /= reach;
+    y /= reach;
+    const field = element.parentElement?.getBoundingClientRect();
+    if (!field) return;
+    const reserved = Array.from(document.querySelectorAll<HTMLElement>('[data-hud-surface]'))
+      .filter(surface => surface !== element && stationMarkerSurfaceReserved(surface))
+      .map(surface => surface.getBoundingClientRect())
+      .filter(rect => rect.width > 0 && rect.height > 0);
+    const point = stationMarkerPosition(x, y, field, reserved);
+    element.style.left = `${point.x - field.left}px`;
+    element.style.top = `${point.y - field.top}px`;
+    if (element.hidden) element.hidden = false;
   });
 
   return (
-    <group position={[objective.target[0], objective.target[1] + 2.2, objective.target[2]]}>
+    <group ref={group} position={[objective.target[0], objective.target[1] + 2.2, objective.target[2]]}>
       <mesh ref={ring} renderOrder={1000}>
         <torusGeometry args={[0.62, 0.045, 8, 32]} />
         <meshBasicMaterial color="#ffb45a" transparent opacity={0.92} depthTest={false} />
@@ -1192,16 +1393,47 @@ function StationStoryMarker({ objective }: { objective: StationStoryObjective })
   );
 }
 
+const ENTRY_ACKNOWLEDGEMENT_MS = 600;
+
+const STATION_HUD_KEYFRAMES = `
+@keyframes stationObjectiveEnter { 0% { border-left-width: 2px; } 50% { border-left-width: 4px; } 100% { border-left-width: 2px; } }
+`;
+
 function StationStoryHud({
   objective,
-  distance
+  distance,
+  touch,
+  presentation
 }: {
   objective: StationStoryObjective;
   distance: number | null;
+  touch: boolean;
+  presentation: StationPresentation;
 }) {
   const step = deriveStationStoryStep();
+  const reduced = prefersReducedMotion();
+  // The entry acknowledgement: presentation only, once per objective id, static
+  // under reduced motion. Nothing here advances progression.
+  const startedAt = startPresentationOnce(presentation.objectives, objective.id, performance.now());
+  // Keep one CSS delay for this objective's mount; distance updates must not
+  // add elapsed visit time to an animation that is already advancing.
+  const acknowledgement = useMemo(() => {
+    const elapsed = Math.max(0, performance.now() - startedAt);
+    return elapsed >= ENTRY_ACKNOWLEDGEMENT_MS || reduced ? undefined
+      : `stationObjectiveEnter ${ENTRY_ACKNOWLEDGEMENT_MS}ms ease-out -${elapsed}ms`;
+  }, [startedAt, reduced]);
+
   return (
-    <aside style={stationStoryHud} data-testid="spaceStation-story-objective">
+    <aside
+      style={{
+        ...stationStoryHud,
+        animation: acknowledgement
+      }}
+      data-testid="spaceStation-story-objective"
+      data-objective-id={objective.id}
+      {...hudSurface('station-story-hud', 'informational')}
+    >
+      <style>{STATION_HUD_KEYFRAMES}</style>
       <div style={{ color: DIM_INK, fontSize: 10, letterSpacing: '0.16em' }}>
         STATION VISIT · ISSUED COMPONENT
       </div>
@@ -1210,13 +1442,13 @@ function StationStoryHud({
         {distance !== null ? ` · ${Math.max(0, Math.round(distance))}m` : ''}
       </div>
       <div style={{ marginTop: 8 }}>
-        {objective.workOrder.map(line => <div key={line}>{line}</div>)}
+        {objective.workOrder.map(line => <div key={line}>{presentStoryGuidanceLine(line, touch)}</div>)}
       </div>
       {step === 'registry' && !hasMilestone(STATION_STORY_MILESTONES.designationPresented) && (
         <div style={{ color: DIM_INK, marginTop: 9 }}>(your body takes its place before the marker does.)</div>
       )}
       {step === 'issuer' && hasMilestone(STATION_STORY_MILESTONES.concourseEntered) && (
-        <div style={{ color: DIM_INK, marginTop: 9 }}>(warmth you did not make.)</div>
+        <DelayedLowLine id="concourse-warmth" presentation={presentation}>(warmth you did not make.)</DelayedLowLine>
       )}
       {step === 'depart' && (
         <div style={{ color: DIM_INK, marginTop: 9 }}>(one fire waiting. carry back what the world could not give.)</div>
@@ -1224,6 +1456,125 @@ function StationStoryHud({
     </aside>
   );
 }
+
+/** Publish DOM presentation before PostFX/render, not in a competing rAF callback. */
+function StationPresentationFrame({ presentation }: { presentation: StationPresentation }) {
+  useFrame(() => updateStationLowLine(presentation, stationFrameTime()), STATION_FRAME_PRIORITY.presentation);
+  return null;
+}
+
+/** One visit clock, independent of HUD rerenders and vendor-panel remounts. */
+function DelayedLowLine({ id, children, presentation }: { id: string; children: string; presentation: StationPresentation }) {
+  const element = useRef<HTMLDivElement>(null);
+  const reduced = prefersReducedMotion();
+  const startedAt = startPresentationOnce(presentation.lowLines, id, stationFrameTime());
+  const opacityAt = (now: number) => presentationOpacity(startedAt, now,
+    LOW_LINE_PRESENTATION_DELAY_SECONDS * 1000, LOW_LINE_FADE_SECONDS * 1000, reduced);
+  useLayoutEffect(() => {
+    if (!element.current) return;
+    const line = { element: element.current, startedAt,
+      delayMs: LOW_LINE_PRESENTATION_DELAY_SECONDS * 1000,
+      durationMs: LOW_LINE_FADE_SECONDS * 1000, reduced };
+    presentation.lowLine = line;
+    updateStationLowLine(presentation, stationFrameTime());
+    return () => { if (presentation.lowLine === line) presentation.lowLine = null; };
+  }, [startedAt, reduced, presentation]);
+  return (
+    <div ref={element}
+      style={{ color: DIM_INK, marginTop: 9, opacity: opacityAt(stationFrameTime()) }}
+      data-testid="spaceStation-low-line" data-low-line={id}
+    >{children}</div>
+  );
+}
+
+/**
+ * The marker's off-screen affordance: the same warm ring, 18 px, clamped to the
+ * edge of a field inset by the safe area along the target's bearing. Hidden while
+ * the target is on screen. Written from the marker's frame loop; static (no pulse)
+ * so it needs no reduced-motion branch.
+ */
+const StationMarkerEdgeRing = forwardRef<HTMLDivElement>(function StationMarkerEdgeRing(_, ref) {
+  return (
+    <div style={edgeRingField} aria-hidden="true">
+      <div
+        ref={ref}
+        hidden
+        style={edgeRing}
+        data-testid="spaceStation-marker-edge-ring"
+        {...hudSurface('station-marker', 'marker')}
+      />
+    </div>
+  );
+});
+
+const edgeRingField: React.CSSProperties = {
+  position: 'absolute',
+  top: 'calc(24px + env(safe-area-inset-top, 0px))',
+  right: 'calc(24px + env(safe-area-inset-right, 0px))',
+  bottom: 'calc(24px + env(safe-area-inset-bottom, 0px))',
+  left: 'calc(24px + env(safe-area-inset-left, 0px))',
+  pointerEvents: 'none',
+  zIndex: 33
+};
+
+const edgeRing: React.CSSProperties = {
+  position: 'absolute',
+  width: 18,
+  height: 18,
+  transform: 'translate(-50%, -50%)',
+  borderRadius: '50%',
+  border: `2px solid ${WARM_INK}`,
+  boxShadow: '0 0 0 1px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(0,0,0,0.55)',
+  pointerEvents: 'none'
+};
+
+/** Dismissed for the life of the page once the pointer has been captured. */
+let controlsHintDismissed = false;
+
+/**
+ * The controls line, surfaced in story mode on the desktop until the first pointer
+ * lock. The touch player has the D-pad as its own hint; hud=1 already shows this
+ * line in the diagnostic panel.
+ */
+function StationControlsHint() {
+  const [dismissed, setDismissed] = useState(
+    () => controlsHintDismissed || document.pointerLockElement !== null
+  );
+  useEffect(() => {
+    const onChange = () => {
+      if (!document.pointerLockElement) return;
+      controlsHintDismissed = true;
+      setDismissed(true);
+    };
+    document.addEventListener('pointerlockchange', onChange);
+    return () => document.removeEventListener('pointerlockchange', onChange);
+  }, []);
+  if (dismissed) return null;
+  return (
+    <div
+      style={controlsHint}
+      data-testid="spaceStation-controls-hint"
+      {...hudSurface('station-controls-hint', 'informational')}
+    >
+      {CONTROLS_HINT}
+    </div>
+  );
+}
+
+const controlsHint: React.CSSProperties = {
+  position: 'absolute',
+  left: '50%',
+  bottom: 'calc(18px + env(safe-area-inset-bottom, 0px))',
+  transform: 'translateX(-50%)',
+  padding: '5px 11px',
+  font: MONO,
+  color: DIM_INK,
+  background: 'rgba(6,8,10,0.86)',
+  border: '1px solid rgba(228,236,231,0.16)',
+  pointerEvents: 'none',
+  whiteSpace: 'nowrap',
+  zIndex: 34
+};
 
 function StoryInteractionPrompt({
   objective,
@@ -1234,7 +1585,8 @@ function StoryInteractionPrompt({
 }) {
   return (
     <div
-      style={storyInteractionPrompt}
+      style={{ ...stationPrompt(touch), color: '#77f0a1', border: '1px solid rgba(119,240,161,0.34)' }}
+      {...hudSurface('station-prompt', 'informational')}
       data-testid={objective.targetKind === 'registry'
         ? 'spaceStation-registry-prompt'
         : objective.targetKind === 'issuer'
@@ -1243,7 +1595,7 @@ function StoryInteractionPrompt({
       role="status"
       aria-live="polite"
     >
-      {touch ? 'USE' : '[F]'} {objective.verb}
+      {presentStoryGuidanceLine(`[F] ${objective.verb}`, touch)}
     </div>
   );
 }
@@ -1255,7 +1607,7 @@ const stationStoryHud: React.CSSProperties = {
   width: 'min(420px, calc(100vw - 32px))',
   padding: '12px 14px',
   color: INK,
-  background: 'rgba(5,8,10,0.82)',
+  background: 'rgba(5,8,10,0.88)',
   borderLeft: '2px solid rgba(255,180,90,0.86)',
   borderTop: '1px solid rgba(228,236,231,0.13)',
   font: '12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace',
@@ -1263,45 +1615,41 @@ const stationStoryHud: React.CSSProperties = {
   zIndex: 34
 };
 
-const storyInteractionPrompt: React.CSSProperties = {
-  position: 'absolute',
-  left: '50%',
-  top: '58%',
-  transform: 'translateX(-50%)',
-  maxWidth: 'calc(100vw - 24px)',
-  padding: '6px 12px',
-  font: '12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace',
-  color: '#77f0a1',
-  background: 'rgba(6,8,10,0.82)',
-  border: '1px solid rgba(119,240,161,0.34)',
-  pointerEvents: 'none',
-  whiteSpace: 'normal',
-  textAlign: 'center',
-  zIndex: 35
-};
+/**
+ * One prompt rule for story, vendor and airlock: same box, same type, same place.
+ * It hangs under the aim point because every one of these resolves to what you
+ * are near and facing. On touch it clears the D-pad and the action cluster.
+ */
+function stationPrompt(touch: boolean): React.CSSProperties {
+  return {
+    position: 'absolute',
+    left: '50%',
+    top: 'calc(50% + 40px)',
+    transform: 'translateX(-50%)',
+    maxWidth: touch ? 'min(300px, calc(100vw - 32px))' : 'calc(100vw - 24px)',
+    padding: '6px 12px',
+    font: '12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace',
+    color: INK,
+    background: 'rgba(6,8,10,0.86)',
+    border: '1px solid rgba(228,236,231,0.16)',
+    pointerEvents: 'none',
+    whiteSpace: 'normal',
+    textAlign: 'center',
+    zIndex: 35
+  };
+}
 
 /** The way out. Same idiom as the counter prompt, because it is the same verb. */
 function AirlockPrompt({ touch }: { touch: boolean }) {
   return (
     <div
-      style={{
-        position: 'absolute',
-        left: '50%',
-        top: '58%',
-        transform: 'translateX(-50%)',
-        padding: '5px 11px',
-        font: '12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace',
-        color: 'rgba(228,236,231,0.92)',
-        background: 'rgba(6,8,10,0.72)',
-        border: '1px solid rgba(228,236,231,0.16)',
-        pointerEvents: 'none',
-        whiteSpace: 'nowrap'
-      }}
+      style={stationPrompt(touch)}
+      {...hudSurface('station-prompt', 'informational')}
       data-testid="spaceStation-airlock-prompt"
       role="status"
       aria-live="polite"
     >
-      {touch ? 'USE · return to ship' : '[F] return to ship'}
+      {presentStoryGuidanceLine('[F] return to ship', touch)}
     </div>
   );
 }
@@ -1310,28 +1658,18 @@ function AirlockPrompt({ touch }: { touch: boolean }) {
 function InteractionPrompt({ vendor, touch = isTouchDevice() }: { vendor: Vendor; touch?: boolean }) {
   return (
     <div
-      style={{
-        position: 'absolute',
-        left: '50%',
-        top: '58%',
-        transform: 'translateX(-50%)',
-        padding: '5px 11px',
-        font: '12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace',
-        color: 'rgba(228,236,231,0.92)',
-        background: 'rgba(6,8,10,0.72)',
-        border: '1px solid rgba(228,236,231,0.16)',
-        pointerEvents: 'none',
-        whiteSpace: 'nowrap'
-      }}
+      style={stationPrompt(touch)}
+      {...hudSurface('station-prompt', 'informational')}
       data-testid="spaceStation-interaction-prompt"
       role="status"
       aria-live="polite"
     >
-      {touch ? 'USE' : '[F]'} talk to {vendor.name}
+      {presentStoryGuidanceLine(`[F] talk to ${vendor.name}`, touch)}
     </div>
   );
 }
 
+/** 5 × 5 px with a 1 px dark outline: holds on a black floor and on a white strip. */
 function Crosshair() {
   return (
     <div
@@ -1339,13 +1677,15 @@ function Crosshair() {
         position: 'absolute',
         left: '50%',
         top: '50%',
-        width: 3,
-        height: 3,
-        marginLeft: -1.5,
-        marginTop: -1.5,
-        background: 'rgba(228,236,231,0.55)',
+        width: 5,
+        height: 5,
+        marginLeft: -2.5,
+        marginTop: -2.5,
+        background: 'rgba(228,236,231,0.85)',
+        boxShadow: '0 0 0 1px rgba(0,0,0,0.55)',
         pointerEvents: 'none'
       }}
+      {...hudSurface('station-crosshair', 'marker')}
     />
   );
 }
@@ -1400,6 +1740,7 @@ function SandboxHud({
         whiteSpace: 'pre-wrap'
       }}
       data-testid="spaceStation-sandbox-hud"
+      {...hudSurface('station-sandbox-hud', 'informational')}
     >
       {`SPACE_STATION SANDBOX — ${descriptor.worldId}
 seed ${descriptor.seed} · bound ${descriptor.boundRadius}m · ${fps} fps

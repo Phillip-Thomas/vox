@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 543371,
+  "stop_reason": "end_turn",
+  "session_id": "15681bf7-da0d-496c-8121-785e6f5243f8",
+  "total_cost_usd": 3.7017230000000003,
+  "usage": {
+    "input_tokens": 98,
+    "cache_creation_input_tokens": 108316,
+    "cache_read_input_tokens": 2892320,
+    "output_tokens": 46801,
+    "output_tokens_details": {
+      "thinking_tokens": 6729
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 108316,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2775,
+        "cache_read_input_tokens": 113669,
+        "cache_creation_input_tokens": 838,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 838
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1808,
+      "outputTokens": 16,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001888,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 98,
+      "outputTokens": 46801,
+      "cacheReadInputTokens": 2892320,
+      "cacheCreationInputTokens": 108316,
+      "webSearchRequests": 0,
+      "costUSD": 3.699835,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 6729,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 57,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: PASS \u2014 corrected SHORT probe checks pass on 3 of 3 fresh cold headed hardware trials (node exit 0 each); both root-authorized measurement corrections applied and independently confirmed against actual game observations.**\n\n## Measurements table\n\n| trial | node exit | verdict | elapsed | gates | failed | stalls | rescues |\n|---|---|---|---|---|---|---|---|\n| trial-1 | 0 | SHORT-HELD-REFERENCE-PROVEN | 52926 ms | 20/20 | none | 0 | 0 |\n| trial-2 | 0 | SHORT-HELD-REFERENCE-PROVEN | 51303 ms | 20/20 | none | 0 | 0 |\n| trial-3 | 0 | SHORT-HELD-REFERENCE-PROVEN | 52961 ms | 20/20 | none | 0 | 0 |\n\nVariance 1658 ms. Renderer `ANGLE (NVIDIA GB10/PCIe, OpenGL 4.5.0)`, headed, swiftshader false, 1 browser at a time, serial, timeout/GPU/source rescues **0**.\n\n## Correction (1) \u2014 foot frame, measured not inferred\nSource read (only as needed): `commonGroundDirector.ts` \u2014 `body = player() = commonGroundPlayerPose()`, occupancy is `nextOccupancy(body, pose)`; `getCommonGroundProbeSnapshot` publishes that same pose as `bodyPose`. So the diagnostic foot pose is the correct comparand, not a constant subtraction.\n\n| trial | foot radial (\u22641.25) | foot vertical (\u22640.6) | inside | bodyCentre vertical (old frame) |\n|---|---|---|---|---|\n| 1 | 0.53654 | 0.06008 | **true** | 1.73992 (outside) |\n| 2 | 0.46623 | 0.06054 | **true** | 1.73946 (outside) |\n| 3 | 0.53944 | 0.06191 | **true** | 1.73809 (outside) |\n\nRuntime published `groundOffsetUnits = 1.8` and `bodyCentre`/`up` retained separately; probe derived nothing. Unavailable foot \u21d2 frame `\"unavailable\"` \u21d2 gate FAILS as UNMEASURED. 1.25/0.6 unchanged. `occupiedThroughout` true, `anyVacant` false in all three \u2014 runtime judgement and probe geometry now agree in one frame.\n\n## Correction (2) \u2014 accepted vs actual recorder count\nSource read: diagnostic `samples = survey.working.samples.length`, `acceptedSamples = survey.accepted.samples.length`.\n\n| trial | recorded @ offer/freeze | accepted | equal | recorded @ completion | waypoint legs (reported only) |\n|---|---|---|---|---|---|\n| 1 | 16 | 16 | **true** | 0 | 8 |\n| 2 | 15 | 15 | **true** | 0 | 8 |\n| 3 | 16 | 16 | **true** | 0 | 8 |\n\nRecorder count **varies run to run (16/15/16)** while commanded legs are fixed at 8 \u2014 the old comparison could never have held. `recordedAtCompletion = 0`: the working slot is cleared on acceptance, so offer/freeze is the only valid comparison point (observed behaviour, not a defect). Missing/zero count still fails as UNMEASURED.\n\n## Route geometry \u2014 nominal reported with actual measured length\nSigned geometry: 16 **nominal** units, z=12 constant, x \u221226 \u2192 \u221242, 9 vertices / 8 legs. **Actual runtime length at offer/freeze: 15.2790 / 14.2981 / 15.3672 units.** Walked units 15.6512 / 15.6486 / 15.7320. Path class SHORT, agrees, shortDev 0.52\u20130.55, longDev 6.39\u20136.40. No tolerance relaxed to reconcile nominal vs measured.\n\n## Actual game observations, separate from probe checks\n- Hold at first test `reference-occluded-survey-housing` (all 3), accepted class `held-reference`, phase `tested`.\n- `anc.cg.reciprocal-reference` fired in trials 1 and 3 but **not** trial 2 \u2014 anchor set is not constant across cold runs.\n- `anc.cg.revision-ready` fired in all 3; it did **not** appear in retained short-2.\n- `testedPrefix` stayed **0** at completion in all 3 while the whole span was accepted at once \u2014 same as short-2; the supported prefix never advanced during the hold.\n- Witness pose came from `CG_POSES.W` frozen source in all 3 (live rail target not an array at the read instant) \u2014 instrumentation limitation, same as short-2, not a gameplay failure.\n- 4 ordinary [F] presses per trial on shipped prompts, all pressed, identical objective sequence; no movie rail, autopilot, forced click, state write, or source hook call.\n\n## Owned changes / tests\n| file | before | bytes | after | bytes |\n|---|---|---|---|---|\n| `short-survey-probe.mjs` | `82a49ba5787bcc11\u2026` | 39351 | `5fb64456e5208417\u2026` | 43237 |\n| `shortSurveyLogic.mjs` | `83981677b9ccf696\u2026` | 27249 | `7e6fb3626d3b3dca\u2026` | 33363 |\n\nGame source / contract / build / full suite / shared lib / pinned copies: **untouched**. Targeted tests exit 0: `shortSurveyLogic --self-test`, `selftest.mjs`, `node --check` \u2014 including 9 new old-mismatch/new-equivalent cases (centre frame refused; retained-instant foot pose inside; 0.6 and 1.25 boundaries still fail; unavailable frame fails; 16-vs-16 passes with 8 legs; 16-vs-15 fails; null/zero recorder fails).\n\n## Prior lane status retained\nshort-1 STOPPED-PREREQUISITE (exit 2, published-diagnostic wait fix) retained. **short-2 retained as recorded** \u2014 measured game acceptance with an incomplete independent occupancy measurement and a SHORT-NOT-PROVEN probe verdict; not rewritten as PASS.\n\n## Integrity & receipts\n99 source files rehashed before **and** after, drift **none**. Index/bundle/manifest/contract re-verified before **each** capture. Heavy lock `/home/.../.heavy.lock` fd 9 EXCLUSIVE, inherited, contention probed (no holder), held across all three, released. All three post-`finally` receipts `stopped` / `cleanupCompleted: true` / `cleanupError: null` / closing `ok`. Root preview PID 1802787 still HTTP 200; no browser from this lane survives (surviving chromium PIDs all pre-date this role). Log sha256: `027a0123ee7b31ae\u2026`, `aae6b283405745c5\u2026`, `d74035082004e195\u2026`.\n\n**Blockade:** none. **Not claimed:** earned arrival, first-time usability/UX, COMMON, chapter, LONG, score/audibility, taste, continuity/variant/reset, FPS, defect closure, publication.\n\n**Artifacts:** `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/` \u2192 `verifier/captures/arrival-common-short-corrected/trial-{1,2,3}/`, `verifier/logs/arrival-common-short-corrected/trial-{1,2,3}.log`, `arrival-common-short-corrected-report.json` (`c49f2024e7fcb289\u2026`), `arrival-common-short-corrected-report.md` (`d6e44ce0f588ea38\u2026`).",
+  "ttft_ms": 1278,
+  "type": "result",
+  "duration_ms": 701997,
+  "uuid": "46c8533e-d8d5-49ce-8279-40d1fc319154",
+  "ttft_stream_ms": 866,
+  "time_to_request_ms": 32,
+  "first_content_frame_ms": 866,
+  "queued_turn_count": 0
+}

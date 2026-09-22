@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "phase": "implementation",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "checkedAt": "2026-09-06T23:32:11.876496+00:00",
+  "checkCount": 1764,
+  "gateReportSha256": "3b09f11f181889ac02e8805454bd1e93ff4d8d4653c6a0ea364afe69e3caa7ce",
+  "gateReportRef": "iterations/implemented-continue-spawn-repair/creative-run-quality-report.json",
+  "publicationAuthorized": false
+}

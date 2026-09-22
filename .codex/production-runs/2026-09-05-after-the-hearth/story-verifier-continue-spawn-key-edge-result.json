@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 155848,
+  "stop_reason": "end_turn",
+  "session_id": "48abeda6-1eb1-4d85-9773-d9dfc100e519",
+  "total_cost_usd": 0.8669435000000001,
+  "usage": {
+    "input_tokens": 44,
+    "cache_creation_input_tokens": 31704,
+    "cache_read_input_tokens": 470321,
+    "output_tokens": 12496,
+    "output_tokens_details": {
+      "thinking_tokens": 1900
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 31704,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1884,
+        "cache_read_input_tokens": 35915,
+        "cache_creation_input_tokens": 2142,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2142
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2053,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0021230000000000003,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 44,
+      "outputTokens": 12496,
+      "cacheReadInputTokens": 470321,
+      "cacheCreationInputTokens": 31704,
+      "webSearchRequests": 0,
+      "costUSD": 0.8648205,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 1900,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 29,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: PASS** \u2014 the prior \"no route-offered\" was a probe-side missed input edge, not a game-callback failure. A real held [F] was accepted.\n\n## Private correction (as instructed, then executed)\nSource read confirms the hypothesis. In `main/src/components/EfficientPlayer.tsx`:\n- `:1967` `const interactHeld = deleteActive && controls.interact === true;` `:1968` rising-edge latch vs `prevInteractKey` \u2014 sampled **once per RAF frame**. A zero-duration `keyboard.press` can be fully erased between frames.\n- `:2035` publishes `__voxelDebug.player.grounded` (every 10th frame). The earlier helper claim that no grounded flag is published was wrong; I did not repeat it.\n\nPath correction: the file is `main/src/components/EfficientPlayer.tsx`, not `EffPlayer.tsx`; cited line numbers map correctly.\n\n## New lane\n`verifier/probes/continue-spawn-key-edge/` \u2014 same-depth sibling copied `-a` from `continue-spawn-candidate`. Originals untouched. Only behavioral change at `earned-continue-3d-probe.mjs:1474`: `press('KeyF')` \u2192 `down / sleep(80) / up` in try/finally. Added passive-only receipt (capture+passive DOM keydown/keyup with `timeStamp/code/isTrusted`, pointerlock/focus/`__voxelDebug.player.grounded` before+during+after, rAF ticks spanning the hold). No direct game call, setter, forced click, CDP pin, or broad observer. Launcher `run-continue-spawn-key-edge.sh` (`$D` auto-derived), role `continue-spawn-key-edge`, `checks: []`. Strict gate byte-identical: `4cdf744e17b3\u202679c0`.\n\nProbe bytes at run: probe `eb87f54f\u2026a9b4`, launcher `7734c2ec\u20264d9e`, plan `997eb560\u20268513`.\n\n## Measurements \u2014 one attempt, real headed run\n| Item | Result |\n|---|---|\n| runtime-0 (real browser) | exit 0, 107,016 ms |\n| DOM keydown / keyup | both `isTrusted: true`, code `KeyF`, 83.6 ms apart |\n| **rAF ticks during hold** | **5** (zero-duration press could span 0) |\n| Grounded before/during/after | `true / true / true`, face `top` |\n| Pointerlock / focus | `CANVAS` / `hasFocus true` / visible \u2014 unchanged across hold |\n| Acceptance | `accepted: true` |\n| New anchor | `anc.cg.route-offered` (before `['anc.cg.trace-drawn']` \u2192 after `[trace-drawn, route-offered]`) |\n| AV activation history | seq 1\u21922, `history: [trace-drawn, route-offered]`, no replay |\n| requiredGates | worldSaveEquality, worldActorIdentity, milestonesPreserved, noAnchorReplay, actualAcceptedNewAction, continueTelemetryComplete, **allHeld: true** |\n| Prefix / pose | full point-object prefix equality + scoped centre-to-centre retention held; settling max 0.00194u, valid tail 6,288 ms, `identityMismatches: []` |\n| findings | `[]` |\n| Strict gate | `GATE-PASS`, `gate-exit=0` |\n| Source binding | manifest `2de3fa2a\u2026bb9f63`, 103 files, 0 mismatches, before **and** after \u2014 `stableAcrossCapture: true` |\n| Cleanup | post-finally `stopped`, own session only, `rootPreviewUntouched: true`, `killsProcesses: false`, FD9 inherited (not opened by probe) |\n| Full suite (`--final`) | exit 0, 61,577 ms \u2014 **353/353 files, 3207/3207 tests**, build ok |\n\nCausal boundary is now closed on the input side: the edge was delivered, observed across 5 frames, and the shipped callback fired.\n\n## Objective defects\nNone. No blank frames, stalls, timeouts, or rescues.\n\n## Note on the CLI field\n`{\"passed\":true,...,\"accepted\":false}` \u2014 `accepted` is repair-check's own human-signoff field in `repairCheckReport.v1`, unrelated to the probe's `actualAcceptedNewAction: true`. Neither CLI success nor helper success was treated as acceptance; acceptance rests on the new `anc.cg.route-offered` anchor plus AV history, prefix, and pose preservation.\n\n## Artifacts\n- Capture: `.../verifier/captures/continue-spawn-key-edge/20260906T234656Z/` (7 PNGs, `summary.json`, `trace.ndjson`, `continue-raf-telemetry.json`, `source-rehash.json`, `cleanup-receipt.json`)\n- Logs: `.../verifier/logs/continue-spawn-key-edge-verifier/20260906T234656Z/` (`runtime-0.log`, `final-0.log`, `checks.json`)\n- Probes: `.../verifier/probes/continue-spawn-key-edge/`\n\nNo chapter or defect closure asserted.",
+  "ttft_ms": 1472,
+  "type": "result",
+  "duration_ms": 323988,
+  "uuid": "9e940b5f-3f57-42de-9f52-01d49cc5058a",
+  "ttft_stream_ms": 722,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 722,
+  "queued_turn_count": 0
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "paravoxia.storyAlignmentDelta.v1",
+  "runId": "2026-09-06-common-ground",
+  "revision": "council-v2",
+  "documentationIteration": 3,
+  "verdict": "approve",
+  "scope": "bounded-documentation-intent-alignment",
+  "blockingDocumentationDefects": [],
+  "numericScoreAssigned": false,
+  "hashes": {
+    "story-authority-candidate.md": "133d1dbe54a9f51e68d9fd67997042d1494059e30707a5da6c308d403cebc2fb",
+    "canon-decision-register.json": "267ec0e8ecc8986c71b41a725e15467979704e8a6b4881bf3ab513730f391a4b",
+    "arena-director-notes.json": "4659a4369e2d13a656f8d4278f45da2fd8be33d04fb07cc9d574501f7f45eee1",
+    "council-geometry-basis.json": "b7999bb589cfcf2d420af1f25f59780026c0ea7909a65b52d1f26fb2088ee55a",
+    "director-signoffs.json": "8bffb4bebe40376427344d1f4fe5b07de7d041f4ea40216d177dcb3d9fb32edb",
+    "owner-story-decision.json": "4407d346ff7046085d7763e1f65d2d73d86ff54bc69aa7c407f267ba54f68577",
+    "implementation-diff.patch": "4c661abb2a9b2414e7e310035fe9f626970c845092ada1cae12af2dee896821c",
+    "authority-patch-receipt.json": "24ac02bade73b8ceacabb68eb4cf4e4a346762d64d5b6eb713c59c63c7dd8125",
+    "shipped-copy-corpus.md": "d0fe844959ccdbbcd07b8df568f659633c760dede3515d1ddcf565b94e35e53e"
+  },
+  "appliedDocumentationHashMatches": 5,
+  "allThreeExactV2SignaturesRead": true,
+  "allSixArenaNotesAndResponsesRead": true,
+  "newBlindExposure": false,
+  "newIndependentPeerReviewRead": false,
+  "runtimeMutated": false,
+  "runtimeOrProbeExecuted": false,
+  "existingOutOfScopeDebt": ["A1", "A2", "A4"],
+  "sceneHolds": [
+    "connected-head-and-general-endpoint-contact-qualification",
+    "nonoverlapping-near-end-bodies-and-actual-repositioning",
+    "exact-scene-hash-and-three-scene-signatures"
+  ],
+  "protectedOntologyUnchanged": true,
+  "sceneApproved": false,
+  "runtimeApproved": false,
+  "perceivedImprovementVerified": false,
+  "audiovisualAcceptance": false,
+  "publicationApproved": false,
+  "priorReportPreservedAt": "alignment-report.md",
+  "requestedPriorArchivePresentAtReview": false,
+  "producerNotifiedOfArchiveAbsence": true
+}

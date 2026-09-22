@@ -1,0 +1,39 @@
+{
+ "schema": "paravoxia.verifier.arrivalCommonShort.refusal.v1",
+ "probe": "common-entry-crossing-probe.mjs",
+ "role": "manual-endpoint-negative-runtime",
+ "at": "2026-09-07T00:07:05.620Z",
+ "launched": false,
+ "browserLaunched": false,
+ "verdict": "REFUSED-PREREQUISITE",
+ "refusals": [
+  "verifier control activeRole=manual-grounded-recovery-runtime, not manual-endpoint-negative-runtime"
+ ],
+ "heavyLock": {
+  "lockPath": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "fd": 9,
+  "owned": true,
+  "problems": [],
+  "procLock": {
+   "kind": "FLOCK",
+   "scope": "ADVISORY",
+   "mode": "WRITE",
+   "pid": 2440538,
+   "major": 259,
+   "minor": 2,
+   "inode": 8397196
+  }
+ },
+ "previewBinding": {
+  "ok": true,
+  "problems": [],
+  "expectedIndexSha256": "74025800f5312519a92b480a15b493c3b27f971f0cbcbe1ec2b571342d4f4c82",
+  "expectedBundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9",
+  "servedIndexSha256": "74025800f5312519a92b480a15b493c3b27f971f0cbcbe1ec2b571342d4f4c82",
+  "servedBundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9",
+  "ownedFileMapCount": 11,
+  "note": "preview-ownership.json publishes index+bundle byte hashes and a matched-file COUNT; the remaining build files are unmeasured here."
+ },
+ "liveManifestSha": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+ "liveContractSha": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54"
+}

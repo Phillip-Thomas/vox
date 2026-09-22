@@ -1,0 +1,16 @@
+{
+  "role": "common-exact-input-runtime",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T19:51:04.147503+00:00",
+  "commissionSha256": "5ce6aa695d2988a93e370e5cef697af36540814b2f74bd5b239ce9eb91362f80",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "Actual bounded manual COMMON credit-call discriminator; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T19:57:44.580481+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "2e090b09-c91a-42e0-b98c-27563a6252ae",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

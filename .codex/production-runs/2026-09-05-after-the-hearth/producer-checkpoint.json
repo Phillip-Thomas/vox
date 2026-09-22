@@ -1,0 +1,74 @@
+{
+  "updatedAt": "2026-09-06T10:06:16.782543+00:00",
+  "stage": "Home hardware playback passed. Survey deep-link remained in flight mode; clean probe checkpoint captured. Same verifier continues independent diagnostics before a bounded repair.",
+  "userAuthority": "continue story creatively; auto approve all in-scope decisions",
+  "councilV2": "approved 4.7485; final-scorecard-v2.json",
+  "sceneNotes": "six losslessly compiled, all recipient-resolved/accepted",
+  "directors": "All three exact scene-v2 signatures complete",
+  "lock": "bounded-runtime; exact signatures and contract gate passed before first runtime edit",
+  "toolingChange": "DELIVER/FLY/Space plus explicit no-target control-input evidence in gate, guidanceTargets helper, scene schema. Selftest passed1727 including positive/negative control evidence.",
+  "activeCliSession": null,
+  "activeCliScript": "run-integration-movie-repair.py",
+  "activeOutput": "integration-movie-repair-progress.md; integration-movie-repair-stream.jsonl",
+  "next": [
+    "Finish CG-IMPL-004/005 controller repair, compile exact source/check evidence, refresh implementation gate",
+    "independent full verify and real owned preview/browser evidence",
+    "fresh independent review network and bounded repairs",
+    "actual chapter delivery with honest evidence boundaries"
+  ],
+  "preparedIntegrationTransport": "run-integration-engineer.py",
+  "runtimeSourcesEdited": true,
+  "publicationAuthorized": false,
+  "sceneContractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "allNonSignatureContractChecksPass": true,
+  "pendingCorrections": [
+    "CG-IMPL-004 shared interaction cadence double-consumption",
+    "CG-IMPL-005 ordered waypoint progression and actual endpoint precision",
+    "independent verification continuation and required evidence/reviews"
+  ],
+  "contractCounts": {
+    "anchors": 28,
+    "shots": 9,
+    "scoreCues": 6,
+    "objectives": 17
+  },
+  "contractGateChecks": 1668,
+  "allThreeExactSignatures": true,
+  "initialFocusedTests": {
+    "files": 2,
+    "passed": 37,
+    "acceptance": "initial tests only; producer findings remain open"
+  },
+  "producerFindingsRef": "integration-inbox.md (17 implementation findings; actual fixes pending verification)",
+  "integratorHasReadLatestInbox": true,
+  "preparedVerifierTransport": "run-story-verifier-continuation.py",
+  "boundaryCompletionRef": "producer-boundary-completion.json (3 necessary generated/registration surfaces; original hashes verified; late-reporting deviations recorded)",
+  "gpuLockLastObservation": {
+    "at": "2026-09-06T09:35:26.630276+00:00",
+    "unowned": true,
+    "acquired": false,
+    "evidence": "fuser returned1 with no owner PIDs"
+  },
+  "activeVerifierSession": 81525,
+  "verifierStage": "Fresh opus verifier continuation; CPU verification and graceful checkpoint harness update first.",
+  "preparedImplementationSnapshotCompiler": "compile-implementation-snapshot.py",
+  "implementationGateChecks": 1708,
+  "canonicalPreviewUrl": "http://127.0.0.1:43617/",
+  "previewState": "running; root-owned immutable build",
+  "preparedReviewTransport": "run-independent-review.py (not launched; gated on review-ready/source/evidence identity)",
+  "preparedReviewCommissions": [
+    "review-story-canon-auditor-commission.txt",
+    "review-player-experience-auditor-commission.txt",
+    "review-cinematography-continuity-auditor-commission.txt",
+    "review-score-continuity-auditor-commission.txt"
+  ],
+  "activeRepairProgress": "Finished successfully;3026tests and1708implementation checks. No rendered acceptance yet.",
+  "rootPreparedPreview": "verifier/probes/cg-preview-daemon.mjs updated to root ownership/source manifest identity; not started",
+  "producerReviewNotes": "integration-inbox includes original-vertex early-turn finding and premature F during movement; verifier-inbox requests honest manual early-turn recovery check.",
+  "sourceManifestSha256": "58f275f6130914f878942774fd4b4c6ce74327755c33ae257965a9dbeed40e70",
+  "activeVerifierScript": "run-story-verifier-continuation.py",
+  "previewExecSessionId": 9968,
+  "previewBuildHash": "1dbce6a7d39aba30cb26f27d94891f50190782a6fc61736d966b21a9957c63f3",
+  "latestRawFinding": "verifier/captures/post/survey-movie-1/summary.json",
+  "sourceStillFrozen": true
+}

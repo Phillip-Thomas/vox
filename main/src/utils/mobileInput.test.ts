@@ -1,10 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   applyJoystickToKeys,
+  allowsMousePointerLock,
   KEY_CODES,
   pressKey,
   releaseAllKeys,
-  releaseKey
+  releaseKey,
+  setTouchActive
 } from './mobileInput.ts';
 
 // mobileInput synthesizes DOM KeyboardEvents on `document` so the (unchanged)
@@ -18,6 +20,7 @@ type Dispatched = { type: string; code: string };
 let dispatched: Dispatched[];
 
 beforeEach(() => {
+  setTouchActive(false);
   dispatched = [];
   vi.stubGlobal(
     'KeyboardEvent',
@@ -43,12 +46,41 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  setTouchActive(false);
   releaseAllKeys();
   vi.unstubAllGlobals();
 });
 
 const keydowns = () => dispatched.filter(e => e.type === 'keydown').map(e => e.code);
 const keyups = () => dispatched.filter(e => e.type === 'keyup').map(e => e.code);
+
+describe('pointer lock after a touch control changes scene', () => {
+  it('rejects a touch compatibility click after the held control unmounts', () => {
+    setTouchActive(true);
+    pressKey('KeyD');
+    releaseAllKeys();
+    setTouchActive(false);
+    expect(allowsMousePointerLock({ pointerType: 'touch' } as unknown as MouseEvent)).toBe(false);
+    // The next scene can take a fresh ordinary hold without retaining old keys.
+    pressKey('KeyE');
+    expect(keyups()).toEqual(['KeyD']);
+    expect(keydowns()).toEqual(['KeyD', 'KeyE']);
+  });
+
+  it('recognizes touch-generated MouseEvents without pointerType', () => {
+    const click = { sourceCapabilities: { firesTouchEvents: true } } as unknown as MouseEvent;
+    expect(allowsMousePointerLock(click)).toBe(false);
+  });
+
+  it('keeps real desktop mouse clicks eligible after touch controls retire', () => {
+    const click = { pointerType: 'mouse' } as unknown as MouseEvent;
+    setTouchActive(true);
+    expect(allowsMousePointerLock(click)).toBe(false);
+    setTouchActive(false);
+    expect(allowsMousePointerLock(click)).toBe(true);
+    expect(allowsMousePointerLock({} as MouseEvent)).toBe(true);
+  });
+});
 
 describe('mobileInput synthetic-key registry', () => {
   it('presses a code exactly once until it is released (no auto-repeat storm)', () => {

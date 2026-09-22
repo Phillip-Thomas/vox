@@ -1,0 +1,63 @@
+{
+  "schema": "paravoxia.decisionBrief.v1",
+  "runId": "2026-09-04-station-interior-light",
+  "authoredBy": "Codex recovery integrator documenting existing owner instructions, not a new director signature",
+  "authoredAt": "2026-09-05T15:49:38.675388+00:00",
+  "sourceIntentRef": "story-intent.md",
+  "items": [
+    {
+      "id": "recover-original-creative-intent",
+      "kind": "creative",
+      "question": "Does recovery require a new story or aesthetic direction beyond the signed station polish?",
+      "context": "Retrospective record introduced because the shared decision-brief gate postdates this run. The owner commissioned station graphics, lighting and UX improvement on 2026-09-05T01:46:49.895Z and explicitly instructed recovery to stick to original plans on 2026-09-05. The three original director signatures remain authoritative; headed owner taste is still pending.",
+      "options": [
+        "Complete the original signed lighting and UX contract"
+      ],
+      "recommended": "Complete the original signed lighting and UX contract",
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "Continue the original signed draft-v1. No new canon, copy, audio or aesthetic thesis is introduced by recovery. This records prior scope authorization, not a new taste approval.",
+      "decidedAt": "2026-09-05"
+    },
+    {
+      "id": "recover-original-boundaries",
+      "kind": "boundary",
+      "question": "Which integration paths beyond the initial station-only list are already covered by the original plan?",
+      "context": "Original production-lock revisions R1 and R2 explicitly covered station HUD registration and the present-verb gate repair. Current owner recovery request authorizes completing and repairing the original plan.",
+      "options": [
+        "Preserve production-lock R1/R2 and route any additional boundary separately"
+      ],
+      "recommended": "Preserve production-lock R1/R2 and route any additional boundary separately",
+      "paths": [
+        {
+          "path": "main/src/ui/hudSurfaces.ts",
+          "symbol": "HUD_SURFACE_IDS station-* entries",
+          "why": "Original R1 station surface registration"
+        },
+        {
+          "path": "main/tools/creative-triad-gate.mjs",
+          "symbol": "interact work-order present verb",
+          "why": "Original R2 vocabulary parity"
+        }
+      ],
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "Retain the documented R1/R2 scope and all protected paths. No station audio, approach/dock changes or publishing. Further gate evidence repair is owned and documented separately by the recovery orchestrator.",
+      "decidedAt": "2026-09-05"
+    },
+    {
+      "id": "recover-release-surface",
+      "kind": "release",
+      "question": "Does this recovery promote or publish the station chapter?",
+      "context": "Original production-lock publishAllowed is false and releaseCandidate is false; current request concerns completing code and repository health.",
+      "options": [
+        "Keep current demo ceiling and prepare local review evidence"
+      ],
+      "recommended": "Keep current demo ceiling and prepare local review evidence",
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "No release promotion or deployment is authorized. Keep demo ceiling ch4-arrival and preserve the owner-only headed taste gate for final station disposition.",
+      "decidedAt": "2026-09-05"
+    }
+  ]
+}

@@ -180,3 +180,18 @@ export function getGameCanvas(): HTMLCanvasElement | null {
   gameCanvas = liveCanvas instanceof HTMLCanvasElement ? liveCanvas : null;
   return gameCanvas;
 }
+
+/** Pointer capture is optional browser permission, not a gameplay transition.
+ * Catch both legacy synchronous failures and modern rejected requests so a
+ * canvas remount or denied gesture cannot become an unhandled page error. */
+export async function requestGamePointerLock(): Promise<boolean> {
+  const canvas = getGameCanvas();
+  if (!canvas?.isConnected) return false;
+  try {
+    await canvas.requestPointerLock();
+    return canvas.isConnected && canvas.ownerDocument.pointerLockElement === canvas;
+  } catch {
+    // Normal canvas input remains available for another trusted user gesture.
+    return false;
+  }
+}

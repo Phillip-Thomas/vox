@@ -1,0 +1,63 @@
+{
+  "schema": "paravoxia.producerBoundedRepairDirection.v1",
+  "author": "creative-producer",
+  "decidedAt": "2026-09-06T16:49:54.646379+00:00",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceMutationAuthorized": true,
+  "sourceMutationPending": null,
+  "defectIds": [
+    "CG-IMPL-010",
+    "CG-IMPL-014"
+  ],
+  "materialRepairIteration": 7,
+  "baseline": {
+    "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "sourceFileCount": 99,
+    "testFiles": 351,
+    "tests": 3158,
+    "immutableSourceRef": "iterations/arrival-common-findings/source"
+  },
+  "allowedSourcePaths": [
+    "main/src/story/commonGroundDirector.ts",
+    "main/src/story/commonGroundDirector.test.ts",
+    "main/src/story/beats/objectivePrimitives.ts",
+    "main/src/story/beats/objectivePrimitives.test.ts",
+    "main/src/story/autopilot/primitives.ts",
+    "main/src/story/autopilot/primitives.test.ts",
+    "main/src/story/signedSceneAvRuntime.ts",
+    "main/src/story/signedSceneAvRuntime.test.ts",
+    "main/src/story/generatedSceneAvRuntime.json",
+    "main/story-authority.json"
+  ],
+  "directionRefs": [
+    "chapter-arrival-guidance-interpretation.json",
+    "chapter-common-terminal-interpretation.json",
+    "producer-common-terminal-audit-review.json",
+    "producer-arrival-common-findings-review.json"
+  ],
+  "budgetDecisionRef": "producer-arrival-common-budget-decision.json",
+  "sourceDirections": [
+    "Repair private COMMON steering amount/direction/precision over unchanged original route, all corners and terminal; actual physical original incoming-plane crossing and full18 required.",
+    "Exact signed v3 arrival guidance: retain flight/descent origin copy; actual Origin grounded boarded Disembark then follow marker; grounded embodied follow marker; same objective ID/label and silent updates, actual on-foot W completion.",
+    "Update only exact signed runtime revision/hash metadata and existing generated output via repository generator."
+  ],
+  "requiredValidation": [
+    "Actual imported source and terrain/controller counterfactuals at all COMMON corners and terminal, representative survey controls and measured tilted body/ground convention.",
+    "Retain unsafe target refusals, original early15.82 unfinished proof and omitted-ground recovery.",
+    "Focused tests, exact old-source counterfactual with complete restore proof, separate story:ux:check and full verify."
+  ],
+  "prohibited": [
+    "Route/C/geometry changes",
+    "Larger arrival radii or relaxed progress predicates",
+    "Nudges, teleports, grants, endpoint pumping or timeout rescue",
+    "Input source changes based on unreproduced diagnostic",
+    "Score/camera/other-scene changes",
+    "GPU, browser, preview replacement or publication during integration"
+  ],
+  "independentVerificationRequired": true,
+  "acceptanceWaived": false,
+  "sourceHandoffAt": "2026-09-06T16:52:49.839010+00:00",
+  "contractGateRef": "contract-gate-pass.json",
+  "contractGateSha256": "fa788ed5e528005a8b52f9ac1b2927c2836c271291350ac8df597d7cc7e545e4"
+}

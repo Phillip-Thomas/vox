@@ -1,0 +1,93 @@
+{
+ "schema": "paravoxia.verifier.finaleWindowClosure.v1",
+ "closedAt": "2026-09-06T18:40:00Z",
+ "lane": "finale-window",
+ "runId": "2026-09-05-after-the-hearth",
+ "authorship": "Claude Opus 5 (claude-opus-5) invocation; the owner email identifies the operator, not an author or reviewer of this preparation.",
+ "state": "PREPARED-NOT-EXECUTED (CPU-only closure)",
+ "isAcceptance": false,
+ "audibleOrCausalVerdict": "none \u2014 nothing here was heard, rendered or recorded",
+ "scope": "Closure of the six runtime blockers in producer-finale-window-prep-review.json inside the owned probe folder. Not a game repair and not a new production run.",
+ "notDoneHere": [
+  "no browser or GPU launch",
+  "no null sink created",
+  "no audio recorder started",
+  "no build/full verify",
+  "no game source or contract change",
+  "no new capture directory"
+ ],
+ "blockersClosed": [
+  {
+   "id": "B1 import depth",
+   "fix": "main/tools/lib imports now use SIX parents (probes/verifier/run/production-runs/.codex/vox).",
+   "proof": "C1 imported evidence.mjs, previewServer.mjs, ownedSession.mjs and the browser driver with no browser launch; C2 shows the five-parent path does not exist."
+  },
+  {
+   "id": "B1b dependency (NEW, found by running it)",
+   "fix": "await import('playwright') was doubly wrong: the run folder is outside main/, so no node_modules lookup reaches main/node_modules, and the installed package is playwright-core (as evidence.mjs uses). Now resolved by path via PLAYWRIGHT_CORE_URL.",
+   "proof": "C1; the bare specifier throws ERR_MODULE_NOT_FOUND from this folder.",
+   "installationNeeded": false
+  },
+  {
+   "id": "B2 snapshot shape",
+   "fix": "Sampler now reads the ACTUAL state.signedSceneAv (active/suspended/beat/anchorId/anchorEvent/activationSequence/activationHistoryAnchorIds) from JourneyRuntimeProbeBridge.buildSnapshot. state.avFull does not exist and the JSON regexes are gone; membership is exact indexOf on 'anc.cg.complete' and 'anc.cg.handback'.",
+   "proof": "C3, C4, C5 run the ACTUAL in-page sampler in node:vm on an exact bridge-shaped snapshot."
+  },
+  {
+   "id": "B3 completion edge",
+   "fix": "edgeReason() requires, in ONE atomic sample: story done/inactive, BOTH exact anchor ids in activationHistoryAnchorIds, and live diagnostic.common.committed===true with workerUnits>=18 (CG_COMMON_ROUTE_UNITS). The in-page decision is the same function object, injected verbatim.",
+   "proof": "C7, C8, C9."
+  },
+  {
+   "id": "B4 custom unmuted browser leak",
+   "fix": "The browser is adopted by the owned-session guard IMMEDIATELY after launch; newContext/newPage/goto/assertHardwareGl now run inside try/catch that calls guard.stopOnce and writes failure.json + cleanup-receipt.json.",
+   "proof": "C11, C12 (goto and assertHardwareGl stubs), C13 idempotence."
+  },
+  {
+   "id": "B5 lock command",
+   "fix": "Documented command is now: bash -c 'exec 9>LOCK; flock -w 60 -x 9 || exit 75; node ... --heavy-lock-fd 9'. Node inherits the locked open file description; the old flock -c + reopened fd 9 made --probe-lock-contention meaningless.",
+   "proof": "documented in-file; not executed here."
+  },
+  {
+   "id": "B6 audio wrapper",
+   "fix": "finale-window-runtime.mjs: owns the null sink by exact module id, points ONLY its own Chromium child at it via PULSE_SINK, verifies every sink-input on that sink belongs to the real browser pid's process tree (pid published by the probe as browser-pid.json, never mocked), records only <sink>.monitor, bounds the session at 360s, stops the recorder in a finally on every path, preserves failure audio, unloads the exact module and verifies it is gone, and re-reads the default sink to prove it is unchanged.",
+   "proof": "C14\u2013C18 exercise those branches with pactl/spawn stubs; MIN_RECORDER_S=73.5s rejects the old 60s whole-run recording."
+  }
+ ],
+ "focusedChecks": {
+  "file": "logs/finale-window-closure/closure-checks.json",
+  "total": 19,
+  "passed": 19,
+  "difference": "These execute the actual sampler/guard/wrapper functions. The prior 33 checks were structural source searches and could not have caught any of these blockers."
+ },
+ "combinedRuntimeWrapper": {
+  "file": "verifier/probes/finale-window/finale-window-runtime.mjs",
+  "callable": true,
+  "onePassCaptures": [
+   "atomic state window (window.ndjson)",
+   "actual unmuted output of the owned sink (owned-sink.wav)"
+  ],
+  "controlRole": "finale-window-runtime",
+  "recorderCoversSeconds": 73.5,
+  "sessionCapSeconds": 360
+ },
+ "stillMissingAndHonest": [
+  "final-texture cancellation reason/caller (discarded at commonGroundScore.ts:259)",
+  "AudioContext.state / mute / musicVolume at the clearing frame",
+  "App.tsx paused / hudBlockingOverlayOpen / downed conjuncts"
+ ],
+ "gameSourceUnchanged": {
+  "manifest": "implementation-source-manifest.json",
+  "gameFilesRehashed": 99,
+  "mismatches": 0
+ },
+ "ownedArtifactHashes": {
+  "verifier/probes/finale-window/windowSampler.mjs": "9f82db5336e145be84c5f2a6f5bf175c7da987e36df7cac51e5cad6f9911ba40",
+  "verifier/probes/finale-window/finale-window-probe.mjs": "91d802b6ee6c6cc65330a5a0eb73d939859c265e81ef5c395309ba8617dde4d1",
+  "verifier/probes/finale-window/finale-window-runtime.mjs": "f844bb43be1ee3922d6e07ab01ebc9defc0ab0d2c721f531732560bc63c368e7",
+  "verifier/probes/finale-window/closure-checks.mjs": "8bc1bb8afb1f4fd7eba089abc574e6fe7240eded8ccef3433a1912d15177b73d",
+  "verifier/probes/finale-window/audio-isolation-plan.json": "80598be940380c4c9f7c2530602597215ea110931ad0843ada2cc803d21424ba",
+  "logs/finale-window-closure/closure-checks.json": "a699e1f0b4092b9897cacad9055d7bad466ad70d962d4203ca116985e8201fb0"
+ },
+ "archivedOriginalsPreserved": "iterations/finale-window-initial-preparation (invocation, prep report json/md, review, logs, verifier tree) \u2014 untouched"
+}

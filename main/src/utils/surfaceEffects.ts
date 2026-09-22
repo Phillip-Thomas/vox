@@ -246,7 +246,7 @@ export function countSurfaceSheetVoxels(
 ): number {
   if (density <= 0) return 0;
   let n = 0;
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (!isSurfaceEffectVoxel(voxel, config)) continue;
     const [x, y, z] = voxel.position;
     if (!isVoxelFaceOpen(x, y, z)) continue;
@@ -264,7 +264,7 @@ export function countSurfaceMoteVoxels(
   const coverage = surfaceMoteCoverage(density, config);
   const perVoxel = surfaceMotesPerVoxel(density, config);
   let n = 0;
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (!isSurfaceEffectVoxel(voxel, config)) continue;
     const [x, y, z] = voxel.position;
     if (!isVoxelFaceOpen(x, y, z)) continue;
@@ -765,7 +765,7 @@ export function buildSurfaceSheetInstances(
     return { count: 0, voxelCount: 0 };
   }
 
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (slot >= capacity) break;
     if (!isSurfaceEffectVoxel(voxel, config)) continue;
     const [x, y, z] = voxel.position;
@@ -807,7 +807,7 @@ export function buildSurfaceMoteInstances(
     return { count: 0, voxelCount: 0 };
   }
 
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (slot >= capacity) break;
     if (!isSurfaceEffectVoxel(voxel, config)) continue;
     const [x, y, z] = voxel.position;

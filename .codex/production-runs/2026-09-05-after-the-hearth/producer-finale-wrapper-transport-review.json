@@ -1,0 +1,25 @@
+{
+  "schema": "paravoxia.producer.evidenceReview.v1",
+  "at": "2026-09-06T19:58:23.076851+00:00",
+  "reportRef": "finale-wrapper-transport-report.json",
+  "reportSha256": "a332d9529cac3e08c24aa975cd202c455c13c7e46c2ac0eafe737d3d925eb71b",
+  "acceptedForBoundedRuntime": true,
+  "isAcceptance": false,
+  "verifiedArtifactHashes": [
+    "verifier/probes/finale-window/finale-window-runtime.mjs",
+    "verifier/probes/finale-window/finale-window-probe.mjs",
+    "verifier/probes/finale-window/closure-checks.mjs",
+    "verifier/probes/finale-window/windowSampler.mjs"
+  ],
+  "requiredPrivateCorrectionsBeforeGpu": [
+    "Validate actual cleanup receipt state/cleanupCompleted/sessionStopped/cleanupError, not missing stopped as success.",
+    "Correct3stale self-test aliases/story-only fixtures to actual signedSceneAv+dual18 schema, preserve negatives."
+  ],
+  "qualifications": [
+    "Old self-test block is byte-identical to iterations/finale-window-pid-closure/probe baseline; the earlier claim no pre-change baseline exists is false. The3failures are stale tests, not a new gameplay regression.",
+    "Session360s excludes bounded teardown grace25+8s; report whole walltime including teardown accurately.",
+    "31focusedCPUchecks use realistic fixtures/realFDchild, still no actual browser/audio yet. Output interval is recorder-process walltime until actual decoded WAV coverage verifies sample duration.",
+    "Engineer temporarily overwrote/deleted producer invocation; wrapper has now restored its authentic cached start/finish/session. Retained report discloses incident. Do not repeat."
+  ],
+  "next": "One combined unmuted actual output+atomic-state capture; private fixes authorized in concrete runtime commission."
+}

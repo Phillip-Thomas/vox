@@ -1,0 +1,17 @@
+{
+  "at": "2026-09-06T20:05:34.586484+00:00",
+  "from": "root producer",
+  "sourceMutationAuthorized": false,
+  "privateFixesAuthorized": true,
+  "status": "CPU correction required before GPU. Your own waiting launcher is stopped by root so it cannot launch incomplete instrumentation; restart it after these fixes. No owner permission needed.",
+  "fixes": [
+    "urlRegex currently has FOUR source backslashes before .js; it evaluates to a regex expecting a literal backslash and will not match the bundle URL. Use the exact URL or correctly escaped regex; a CPU regex test must actually match http://127.0.0.1:34413/assets/index-BiDWGouH.js and reject a wrongbundle.",
+    "rawCommon reads snapshot.common/passage, but the provider publishes snapshot.diagnostic.common and snapshot.diagnostic.worker. Use actual provider shape. Require actual beat ch13-common, common.stage holding-h, reciprocal-reference anchor and actual worker atH before arming; previousholding mayfinishduringapproach but must be checked.",
+    "Armed-without-relocation currently onlychecks nonempty locations; require both exact scriptId/line/column for allresolvedsites and actualcallee/caller records. Debugger paused count must be observed, not assumedfalse.",
+    "Vertex loop aims at vertex when s>0 but below0.05, so it can steerbackwards while needingpositiveovershoot. Aim at vertex+incoming*.15; preserve actual positive<=.35 and >=30msordinarypulses. No before-plane substitution.",
+    "A failed bounded vertex/support gate is currently optional and laterdependentverticescontinue. Stop dependentwalk and drain/retain rawrecords onfailure. Alwaysdrain finally afterarmedstage; no missingevidence fromthrow.",
+    "chainReturns gain0 is not ceilingcausality. Keeplabelqualified and only useactual function replay onactualcapturedargs forcausalclaim. End-to-end movingdriver is thetask; no extra standalonebindingbrowser."
+  ],
+  "timing": "Actual start19:59:37, deadline20:19:37UTC. Current clock2026-09-06T20:05:34.586484+00:00. Ampleactualtime remains. Do not inferminutesfromtokens.",
+  "readyWhenDone": "Update ownready artifact with fixes and wait for root GPUhandoff. Root will release promptly after concrete correction; no game/material repaircount consumed."
+}

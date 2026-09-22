@@ -1,0 +1,846 @@
+{
+  "a_w7744_arrival_inspection_compliance_refusal_flight": {
+    "A1_pre-arrival_system_orders_ch4-vigil": [
+      {
+        "seq": 1,
+        "channel": "system",
+        "text": "AN AUDITOR HAS BEEN DISPATCHED TO ASSESS SITE LOSS."
+      },
+      {
+        "seq": 2,
+        "channel": "system",
+        "text": "REMAIN AT THE WRECK. DO NOT PRODUCE. DO NOT CONSUME. DO NOT OBSERVE."
+      },
+      {
+        "seq": 3,
+        "channel": "system",
+        "text": "SLEEP IS SCHEDULED AT DARK. COMPLIANCE WILL BE VERIFIED."
+      },
+      {
+        "seq": 4,
+        "channel": "caption",
+        "text": "they schedule the dark now. last night the dark was mine."
+      },
+      {
+        "seq": 5,
+        "channel": "caption",
+        "text": "rest. it is ordered. i would have anyway."
+      }
+    ],
+    "A2_arrival_ch4-arrival_timeline_ordered": [
+      {
+        "seq": 1,
+        "atSeconds": 7,
+        "channel": "caption",
+        "text": "someone is coming out of the sunrise. someone else exists."
+      },
+      {
+        "seq": 2,
+        "atSeconds": 20,
+        "channel": "caption",
+        "text": "he walks like the feed looks. straight lines."
+      },
+      {
+        "seq": 3,
+        "atSeconds": 31,
+        "channel": "auditBand",
+        "header": "W-7744 · FIELD AUDIT",
+        "speaker": "W-7744",
+        "text": "WORKER W-7743. YOU ARE FOUND."
+      },
+      {
+        "seq": 4,
+        "atSeconds": 34.5,
+        "channel": "auditBand",
+        "header": "W-7744 · FIELD AUDIT",
+        "speaker": "W-7744",
+        "text": "THIS SITE REPORTS ZERO PRODUCTIVITY FOR TWO CYCLES. EXPLAIN NOTHING. I WILL SEE FOR MYSELF."
+      },
+      {
+        "seq": 5,
+        "atSeconds": 39.2,
+        "channel": "caption",
+        "text": "for a blink i borrowed his seeing. slabs. flat light. i lived there."
+      },
+      {
+        "seq": 6,
+        "atSeconds": 41.5,
+        "channel": "auditBand",
+        "header": "W-7744 · FIELD AUDIT",
+        "speaker": "W-7744",
+        "text": "AUDIT IN PROGRESS. RESUME NOTHING."
+      }
+    ],
+    "A3_inspection_ch4-audit": [
+      {
+        "seq": 1,
+        "trigger": "beat entry",
+        "channel": "auditBand",
+        "header": "W-7744",
+        "text": "AUDIT IN PROGRESS. THREE DEVIATIONS REQUIRE WITNESS."
+      },
+      {
+        "seq": 2,
+        "trigger": "interaction prompt",
+        "channel": "interactPrompt",
+        "text": "Attend Fire Mismatch"
+      },
+      {
+        "seq": 3,
+        "trigger": "fire mismatch attended",
+        "channel": "auditBand",
+        "header": "W-7744",
+        "text": "HEAT SOURCE: PERSISTENT WITHOUT AUTHORIZATION."
+      },
+      {
+        "seq": 4,
+        "trigger": "interaction prompt",
+        "channel": "interactPrompt",
+        "text": "Attend Living Noise"
+      },
+      {
+        "seq": 5,
+        "trigger": "life mismatch attended",
+        "channel": "auditBand",
+        "header": "W-7744",
+        "text": "BIOLOGICAL NOISE HAS BEEN MISCLASSIFIED AS SCENERY."
+      },
+      {
+        "seq": 6,
+        "trigger": "interaction prompt",
+        "channel": "interactPrompt",
+        "text": "Attend Tree Mismatch"
+      },
+      {
+        "seq": 7,
+        "trigger": "tree mismatch attended",
+        "channel": "auditBand",
+        "header": "W-7744",
+        "text": "PRIMARY ORGANIC ANOMALY CONFIRMED. STERILIZATION AUTHORIZED."
+      }
+    ],
+    "A4_compliance_ch4-comply": [
+      {
+        "seq": 1,
+        "trigger": "beat entry",
+        "channel": "auditBand",
+        "header": "W-7744",
+        "text": "RESTORE THE SITE TO ITS VERIFIED FLOOR."
+      },
+      {
+        "seq": 2,
+        "trigger": "interaction prompt",
+        "channel": "interactPrompt",
+        "text": "Douse the Fire"
+      },
+      {
+        "seq": 3,
+        "trigger": "fire doused",
+        "channel": "caption",
+        "text": "(the warmth goes out because a voice named it wrong.)"
+      },
+      {
+        "seq": 4,
+        "trigger": "interaction prompt",
+        "channel": "interactPrompt",
+        "text": "Resolve Organic Samples"
+      },
+      {
+        "seq": 5,
+        "trigger": "regression settled",
+        "channel": "system",
+        "text": "VERIFIED REALITY FLOOR RESTORED."
+      }
+    ],
+    "A5_refusal_ch4-defy": [
+      {
+        "seq": 1,
+        "trigger": "beat entry",
+        "channel": "auditBand",
+        "header": "W-7744",
+        "text": "THE TREE IS THE REMAINING ERROR."
+      },
+      {
+        "seq": 2,
+        "trigger": "interaction prompt, before the tool refuses",
+        "channel": "interactPrompt",
+        "text": "Test Maw on Protected Tree"
+      },
+      {
+        "seq": 3,
+        "trigger": "interaction prompt, after the tool refuses",
+        "channel": "interactPrompt",
+        "text": "refuse."
+      },
+      {
+        "seq": 4,
+        "trigger": "refusal committed",
+        "channel": "caption",
+        "text": "no."
+      }
+    ],
+    "A6_flight_a4-exhale": [
+      {
+        "seq": 1,
+        "trigger": "world exhale",
+        "channel": "caption",
+        "text": "(the world exhales where it had been holding still.)"
+      },
+      {
+        "seq": 2,
+        "trigger": "pond response visible",
+        "channel": "caption",
+        "text": "(water answers first. then wings. then everything at once.)"
+      },
+      {
+        "seq": 3,
+        "trigger": "W-7744 flight recorded",
+        "channel": "auditBand",
+        "header": "AUDIT NETWORK",
+        "text": "FAULT: W-7744 / MODEL REFUSED BY OBSERVATION"
+      }
+    ]
+  },
+  "b_maw_dive_kestrel_tidegarden_secondhearth": {
+    "B1_ch5-maw": {
+      "entryCaption": "(something tore free when he ran.)",
+      "workOrdersInObservableOrder": [
+        {
+          "markerLabel": "W-7744 FIELD PACK · RECOVER KIT",
+          "workOrder": [
+            "FOLLOW THE FIELD PACK MARKER.",
+            "[F] RECOVER THE FIELD KIT."
+          ]
+        },
+        {
+          "markerLabel": "W-7744 FIELD PACK · REPAIR MAW",
+          "workOrder": [
+            "RETURN TO THE OPEN FIELD PACK.",
+            "[F] BEGIN MAW REPAIR."
+          ]
+        },
+        {
+          "markerLabel": "W-7744 FIELD PACK · REPAIR MAW",
+          "workOrder": [
+            "REMAIN AT THE OPEN FIELD PACK.",
+            "HOLD POSITION UNTIL THE MAW REPAIR COMPLETES."
+          ]
+        },
+        {
+          "markerLabel": "REPAIRED MAW · LISTEN",
+          "workOrder": [
+            "REMAIN WITH THE REPAIRED MAW.",
+            "WAIT. LISTEN BEFORE ASSIGNING IT A PURPOSE."
+          ]
+        },
+        {
+          "markerLabel": "REPAIRED MAW · CHOOSE DIRECTION",
+          "workOrder": [
+            "TEST THE MAW ON STONE OR BASE METAL.",
+            "OR REMAIN WITH IT AND [F] LOWER IT TO LISTEN."
+          ]
+        },
+        {
+          "markerLabel": "POND RESPONSE · ATTEND",
+          "workOrder": [
+            "FOLLOW THE RESPONSE TO THE DRY SHORE.",
+            "WATCH IT, OR [F] ATTEND THE POND RESPONSE."
+          ]
+        },
+        {
+          "markerLabel": "POND RESPONSE · RESOLVED",
+          "workOrder": [
+            "REMAIN WITH THE RESONANCE.",
+            "LET THE STRUCTURE SETTLE."
+          ]
+        }
+      ],
+      "captions": [
+        "(it does not wake hungry. it wakes listening.)",
+        "(you lower it. the world supplies no order.)",
+        "(it cuts. the world supplies no order.)",
+        "(the world supplies no order. direction was yours.)",
+        "(the pond answers in structure, not instruction.)"
+      ],
+      "captionSelectionNote": "The three middle captions are exclusive branches on the recorded first-direction choice."
+    },
+    "B2_ch6-dive": {
+      "entryCaption": "(the repaired tool has marked something beneath the water.)",
+      "completionCaption": "(returned with breath. returned with a way to leave.)"
+    },
+    "B3_ch7-reconstruct_and_board": {
+      "entryCaptionReconstruct": "(repair is not return.)",
+      "wreckRelayLine": {
+        "channel": "auditBand",
+        "header": "WRECK RELAY",
+        "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+      },
+      "M1Caption": "the wreck that brought me here will leave here. i will build the leaving.",
+      "auditNetworkAtCalibration": {
+        "channel": "auditBand",
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "postCalibrationCaptions": [
+        "nothing has asked yet. something has started paying attention.",
+        "the scar remains. now it can carry me."
+      ],
+      "entryCaptionBoard": "(the wreck is waiting for an owner.)"
+    },
+    "B4_ch8-launch_crossing_landfall": {
+      "launchCaptionsInSlotOrder": [
+        "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+        "hold it. this is the only order left, and i am the one giving it.",
+        "the site gets small. the tree does not. i keep finding it.",
+        "i came down this line without being asked. i am going back up it on purpose."
+      ],
+      "auditNetworkStack": [
+        "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+        "REGISTRY QUERY · STATE DESIGNATION.",
+        "NO DESIGNATION RETURNED.",
+        "CONTACT LOGGED."
+      ],
+      "postStackCaptions": [
+        "they asked for a designation. what i have is not one.",
+        "nothing answers. the query does not close."
+      ],
+      "crossingEntryCaption": "(there is another world here. it was always here.)",
+      "landfallCaption": "(a world does not begin when you see it. it begins when it holds your weight.)"
+    },
+    "B5_ch9-settle_kestrel_tidegarden": {
+      "entryCaption": "(abundance is not permission. it is a question with many answers.)",
+      "workOrdersInObservableOrder": [
+        {
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "workOrder": [
+            "FOLLOW THE LIVING WATERLINE MARKER.",
+            "READ THE SIGNAL FIELD."
+          ]
+        },
+        {
+          "markerLabel": "LIVING WATERLINE · ATTEND",
+          "workOrder": [
+            "FOLLOW THE LIVING WATERLINE MARKER.",
+            "[F] ATTEND THE RELATIONSHIP."
+          ]
+        },
+        {
+          "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+          "workOrder": [
+            "FOLLOW THE HABITAT SITE MARKER.",
+            "[F] CHOOSE THIS DRY, LEVEL SITE."
+          ]
+        },
+        {
+          "markerLabel": "KESTREL FABRICATOR · CRAFT HABITAT CORE",
+          "workOrder": [
+            "RETURN TO THE FLIGHT-READY KESTREL FABRICATOR.",
+            "[C] CRAFT HABITAT CORE."
+          ]
+        },
+        {
+          "markerLabel": "CHOSEN SITE · PLACE FOUNDATION",
+          "workOrder": [
+            "[B] PLACE A FOUNDATION AT THE CHOSEN SITE."
+          ]
+        },
+        {
+          "markerLabel": "CHOSEN SITE · INSTALL HABITAT CORE",
+          "workOrder": [
+            "RETURN TO THE CHOSEN FOUNDATION.",
+            "[F] INSTALL HABITAT CORE."
+          ]
+        },
+        {
+          "markerLabel": "HABITAT CORE · ENCLOSE AND CERTIFY",
+          "workOrder": [
+            "BUILD A CLOSED SHELTER AROUND THE CORE.",
+            "[F] CERTIFY THE WORKING SHELTER."
+          ]
+        },
+        {
+          "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+          "workOrder": [
+            "RETURN TO THE SECOND HEARTH.",
+            "REST BECOMES AVAILABLE AT NIGHT."
+          ]
+        },
+        {
+          "markerLabel": "SECOND HEARTH · REST INSIDE",
+          "workOrder": [
+            "RETURN INSIDE THE CERTIFIED SHELTER.",
+            "[F] REST AT THE SECOND HEARTH."
+          ]
+        }
+      ],
+      "interactPrompts": [
+        "Install Habitat Core"
+      ],
+      "captions": [
+        "(roots hold the bank. the bank slows the water. neither stands alone.)",
+        "(not a claim on the world. an address inside a relationship.)"
+      ],
+      "systemLine": "HABITAT CORE ONLINE · ADDRESS NOT YET PROVEN"
+    },
+    "B6_ch9-hearth_second_hearth_close": {
+      "closingCaption": "(one fire behind you. one fire here. home is the distance you can keep alive.)"
+    }
+  },
+  "c_chapter10_fault_ask_station_reveal": {
+    "C1_ch10-cold": [
+      {
+        "seq": 1,
+        "trigger": "beat entry (reactivation from free play)",
+        "channel": "caption",
+        "id": "K1",
+        "text": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)"
+      },
+      {
+        "seq": 2,
+        "channel": "workOrder",
+        "markerLabel": "HABITAT CORE · READ THE FAULT",
+        "workOrder": [
+          "STAND AT THE SECOND HEARTH CORE.",
+          "[F] READ THE HEARTH FAULT."
+        ]
+      },
+      {
+        "seq": 3,
+        "channel": "interactPrompt",
+        "text": "Read the hearth fault"
+      },
+      {
+        "seq": 4,
+        "trigger": "fault read",
+        "channel": "auditBand",
+        "id": "K2",
+        "text": "HAB CORE · POWER: ONE BONDED CELL · CONDITION: DEGRADING"
+      },
+      {
+        "seq": 5,
+        "channel": "auditBand",
+        "id": "K3",
+        "text": "BONDED CELL IS AN ISSUED COMPONENT. FABRICATION IS NOT AUTHORIZED."
+      },
+      {
+        "seq": 6,
+        "channel": "caption",
+        "id": "K4",
+        "text": "(a world gives stone, water, wood. it does not give this. this was issued.)"
+      },
+      {
+        "seq": 7,
+        "channel": "workOrder",
+        "markerLabel": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+        "workOrder": [
+          "TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR.",
+          "[F] ATTEMPT TO FABRICATE A REPLACEMENT CELL."
+        ]
+      },
+      {
+        "seq": 8,
+        "trigger": "fabrication refused",
+        "channel": "auditBand",
+        "header": "KESTREL FABRICATOR",
+        "id": "K5",
+        "text": "PATTERN NOT HELD · CLASS: ISSUED COMPONENT · SOURCE NOT HELD LOCALLY"
+      }
+    ],
+    "C2_ch10-ask": [
+      {
+        "seq": 1,
+        "trigger": "beat entry",
+        "channel": "caption",
+        "id": "K6",
+        "text": "(the channel at the wreck never closed. asking is still a thing that can be done.)"
+      },
+      {
+        "seq": 2,
+        "channel": "workOrder",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ]
+      },
+      {
+        "seq": 3,
+        "channel": "workOrder",
+        "markerLabel": "ORIGIN WORLD · COURSE",
+        "workOrder": [
+          "FIND THE ORIGIN WORLD.",
+          "CENTER IT AND CROSS."
+        ]
+      },
+      {
+        "seq": 4,
+        "channel": "workOrder",
+        "markerLabel": "WRECK SITE · LAND",
+        "workOrder": [
+          "FOLLOW THE WRECK SITE MARKER DOWN.",
+          "LAND NEAR THE RELAY."
+        ]
+      },
+      {
+        "seq": 5,
+        "channel": "workOrder",
+        "markerLabel": "WRECK RELAY · REQUEST A SOURCE",
+        "workOrder": [
+          "FOLLOW THE WRECK RELAY MARKER.",
+          "[F] REQUEST A SOURCE FOR A BONDED CELL."
+        ]
+      },
+      {
+        "seq": 6,
+        "channel": "interactPrompt",
+        "text": "Request a source for a bonded cell"
+      },
+      {
+        "seq": 7,
+        "trigger": "relay asked",
+        "channel": "auditBand",
+        "header": "WRECK RELAY",
+        "surface": "ch10-relay slot 0",
+        "id": "K7",
+        "text": "SOURCE REQUEST LOGGED · COMPONENT: BONDED CELL (ISSUED)"
+      },
+      {
+        "seq": 8,
+        "trigger": "relay answered",
+        "channel": "auditBand",
+        "header": "WRECK RELAY",
+        "surface": "ch10-relay slot 1",
+        "id": "K8",
+        "text": "SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)"
+      },
+      {
+        "seq": 9,
+        "channel": "caption",
+        "id": "K9",
+        "text": "(the answer came back before the asking finished.)"
+      },
+      {
+        "seq": 10,
+        "channel": "workOrder",
+        "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+        "workOrder": [
+          "A BEARING IS ATTACHED (ADVISORY).",
+          "[F] CLAIM THE BEARING."
+        ]
+      },
+      {
+        "seq": 11,
+        "channel": "interactPrompt",
+        "text": "Claim the bearing"
+      },
+      {
+        "seq": 12,
+        "trigger": "bearing claimed",
+        "channel": "caption",
+        "id": "K10",
+        "text": "(issued, not offered. the going is still yours.)"
+      }
+    ],
+    "C3_ch10-transit_station_reveal": [
+      {
+        "seq": 1,
+        "channel": "workOrder",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ]
+      },
+      {
+        "seq": 2,
+        "channel": "workOrder",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "workOrder": [
+          "BRING THE KESTREL ONLINE.",
+          "HOLD [SPACE] TO IGNITE AND LIFT."
+        ],
+        "requiresMarker": false
+      },
+      {
+        "seq": 3,
+        "channel": "workOrder",
+        "markerLabel": "ISSUED BEARING · HOLD",
+        "workOrder": [
+          "FLY THE CLAIMED BEARING.",
+          "FOLLOW IT UNTIL THE SOURCE RESOLVES."
+        ]
+      },
+      {
+        "seq": 4,
+        "channel": "railWaitReason",
+        "text": "HOLDING THE BEARING"
+      },
+      {
+        "seq": 5,
+        "channel": "workOrder",
+        "markerLabel": "ISSUING STATION · RESOLVING",
+        "workOrder": [
+          "THE SOURCE IS RESOLVING.",
+          "HOLD."
+        ],
+        "requiresMarker": false
+      },
+      {
+        "seq": 6,
+        "trigger": "station resolved",
+        "channel": "caption",
+        "id": "K11",
+        "text": "(both fires behind you now. ahead, a light someone else keeps alive.)"
+      },
+      {
+        "seq": 7,
+        "trigger": "threshold hand-back after hold",
+        "channel": "workOrder",
+        "text": "(cleared — work order emptied, guided objective cleared 'satisfied', chapter 10 completed; no copy is painted)"
+      }
+    ]
+  },
+  "d_station_registry_bell_return_install": {
+    "D1_station_hud_persistent": [
+      {
+        "channel": "hudEyebrow",
+        "text": "STATION VISIT · ISSUED COMPONENT"
+      },
+      {
+        "channel": "hudMarkerLabel",
+        "text": "<active objective markerLabel> · <distance>m"
+      }
+    ],
+    "D2_registry_step": [
+      {
+        "seq": 1,
+        "channel": "workOrder",
+        "markerLabel": "COUNTER · PRESENT DESIGNATION",
+        "workOrder": [
+          "FOLLOW THE REGISTRY CORRIDOR.",
+          "[F] PRESENT THE SUIT RECORD."
+        ]
+      },
+      {
+        "seq": 2,
+        "channel": "hudLowLine",
+        "condition": "before designation presented",
+        "text": "(your body takes its place before the marker does.)"
+      },
+      {
+        "seq": 3,
+        "channel": "interactVerb",
+        "text": "Present the suit record"
+      },
+      {
+        "seq": 4,
+        "channel": "panelEyebrow",
+        "text": "ISSUING STATION · COUNTER"
+      },
+      {
+        "seq": 5,
+        "channel": "panelTitle",
+        "text": "DESIGNATION RECORD"
+      },
+      {
+        "seq": 6,
+        "channel": "panelLine",
+        "register": "REGULATION",
+        "text": "PRESENT DESIGNATION."
+      },
+      {
+        "seq": 7,
+        "channel": "panelAction",
+        "text": "PRESENT SUIT RECORD"
+      },
+      {
+        "seq": 8,
+        "channel": "panelLine",
+        "register": "REGULATION",
+        "text": "DESIGNATION: W-7743 · RECORD ACCEPTED."
+      },
+      {
+        "seq": 9,
+        "channel": "panelLine",
+        "register": "REGULATION",
+        "text": "DECLARE PURPOSE OF ENTRY."
+      },
+      {
+        "seq": 10,
+        "channel": "panelAction",
+        "text": "DECLARE: ISSUED COMPONENT"
+      },
+      {
+        "seq": 11,
+        "channel": "panelLine",
+        "register": "REGULATION",
+        "text": "NEED RECORDED · BONDED CELL / HABITAT GRADE."
+      },
+      {
+        "seq": 12,
+        "channel": "panelLine",
+        "register": "REGULATION",
+        "text": "CONCOURSE ACCESS ISSUED."
+      },
+      {
+        "seq": 13,
+        "channel": "panelLowLine",
+        "text": "(the suit is accepted before you are.)"
+      },
+      {
+        "seq": 14,
+        "channel": "panelAction",
+        "text": "CONTINUE TO CONCOURSE"
+      },
+      {
+        "seq": 15,
+        "channel": "panelButton",
+        "text": "CLOSE"
+      }
+    ],
+    "D3_issuer_step_Bell": [
+      {
+        "seq": 1,
+        "channel": "hudLowLine",
+        "condition": "concourse entered; fades in after 0.8s over 0.4s",
+        "text": "(warmth you did not make.)"
+      },
+      {
+        "seq": 2,
+        "channel": "workOrder",
+        "markerLabel": "CERTIFIED COMPONENTS · <DESIGNATION> “<NAME UPPERCASE>”",
+        "resolvedFrozenValue": "CERTIFIED COMPONENTS · B-7073 “BELL”",
+        "workOrder": [
+          "FIND THE CERTIFIED COMPONENT TRADER.",
+          "PRESENT THE HABITAT FAULT RECORD."
+        ]
+      },
+      {
+        "seq": 3,
+        "channel": "interactVerb",
+        "text": "Present the habitat fault"
+      },
+      {
+        "seq": 4,
+        "channel": "panelEyebrow",
+        "text": "CERTIFIED COMPONENTS"
+      },
+      {
+        "seq": 5,
+        "channel": "panelTitle",
+        "text": "B-7073 · Bell"
+      },
+      {
+        "seq": 6,
+        "channel": "panelLine",
+        "speaker": "Bell",
+        "text": "<vendor persona greeting; procedural>",
+        "shippedFallbackLiteral": "i can attest to all of it. i can attest to the attestation, if you like."
+      },
+      {
+        "seq": 7,
+        "channel": "panelAction",
+        "text": "PRESENT HABITAT FAULT"
+      },
+      {
+        "seq": 8,
+        "channel": "panelLine",
+        "speaker": "Bell",
+        "text": "bonded cell. habitat grade. one left with a clean seal."
+      },
+      {
+        "seq": 9,
+        "channel": "panelAction",
+        "text": "ASK WHAT THE BOND IS"
+      },
+      {
+        "seq": 10,
+        "channel": "panelLine",
+        "speaker": "Bell",
+        "text": "the cell carries an issuance record. break the record and the core will not take it."
+      },
+      {
+        "seq": 11,
+        "channel": "panelAction",
+        "text": "ACCEPT ISSUED BONDED CELL"
+      },
+      {
+        "seq": 12,
+        "channel": "panelLine",
+        "speaker": "Bell",
+        "text": "the seal follows the designation the counter recorded. keep it intact until the core takes it."
+      },
+      {
+        "seq": 13,
+        "channel": "panelReceipt",
+        "text": "CARGO RECEIPT"
+      },
+      {
+        "seq": 14,
+        "channel": "panelReceipt",
+        "text": "BONDED CELL (HABITAT) · SEAL INTACT"
+      },
+      {
+        "seq": 15,
+        "channel": "panelLowLine",
+        "text": "(the first thing a world could not give fits beneath one arm.)"
+      },
+      {
+        "seq": 16,
+        "channel": "panelAction",
+        "text": "STOW RECEIPT · RETURN TO SHIP"
+      }
+    ],
+    "D4_depart_step": [
+      {
+        "seq": 1,
+        "channel": "workOrder",
+        "markerLabel": "KESTREL AIRLOCK · STOW THE CELL",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "[F] STOW THE BONDED CELL AND DEPART."
+        ]
+      },
+      {
+        "seq": 2,
+        "channel": "hudLowLine",
+        "text": "(one fire waiting. carry back what the world could not give.)"
+      },
+      {
+        "seq": 3,
+        "channel": "interactVerb",
+        "text": "Stow the bonded cell and depart"
+      }
+    ],
+    "D5_return_and_install": [
+      {
+        "seq": 1,
+        "channel": "workOrder",
+        "markerLabel": "TIDEGARDEN · SECOND HEARTH",
+        "workOrder": [
+          "RETURN TO TIDEGARDEN.",
+          "DELIVER THE BONDED CELL TO THE SECOND HEARTH."
+        ]
+      },
+      {
+        "seq": 2,
+        "channel": "workOrder",
+        "markerLabel": "SECOND HEARTH · INSTALL BONDED CELL",
+        "workOrder": [
+          "DELIVER THE BONDED CELL TO THE SECOND HEARTH.",
+          "[F] INSTALL THE SEALED CELL."
+        ]
+      },
+      {
+        "seq": 3,
+        "channel": "interactPrompt",
+        "text": "Install the Sealed Bonded Cell"
+      },
+      {
+        "seq": 4,
+        "channel": "none",
+        "text": "(no authored caption, system line, or audit line is emitted on install; the objective simply clears)"
+      }
+    ]
+  }
+}

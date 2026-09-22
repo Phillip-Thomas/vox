@@ -1,3 +1,7 @@
+import { resolveMarkerTarget } from './beats/markerTargets.ts';
+import { BEAT_METADATA } from './beats/metadata.generated.ts';
+import { pulseAuditEmber } from './AuditBand.tsx';
+import type { GuidedStoryObjective } from './ux/objectiveDirector.ts';
 import * as THREE from 'three';
 import {
   clearVoxelRealityOverrides,
@@ -38,7 +42,8 @@ import {
   SANDBOX_FOV
 } from './storyInputPolicy.ts';
 import {
-  fixedScreenCellIndex,
+  getFixedScreenCoverage,
+  resetFixedScreenCoverage,
   getSideFacing,
   getSideLens,
   setLensRig,
@@ -46,13 +51,13 @@ import {
   type LensRig
 } from './sideLens.ts';
 import { getPlayerLook, getPlayerUp, getPlayerWorldPosition } from '../state/playerFrame.ts';
-import { readSystemCompanionBodyTarget } from '../state/systemCompanionBodyTargets.ts';
+
 import { getLocalActorId } from '../game/playerActors.ts';
 import { getSunDirection } from '../components/SkyController.tsx';
 import { treeFieldHandle } from '../components/TreeField.tsx';
 import { floraFieldHandle } from '../components/FloraField.tsx';
 import { looseStoneHandle } from '../components/LooseStoneField.tsx';
-import { nearestForageNodeWorld } from '../components/ForageField.tsx';
+
 import { dominantFaceForPosition } from '../utils/surfaceControls.ts';
 import { isNightPhase, NIGHT_START_PHASE } from '../utils/nightState.ts';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
@@ -60,7 +65,7 @@ import { setConstellationReveal } from './skyMeaning.ts';
 import { hifiWreckHandle } from './world/hifiWreck.ts';
 import { isSpawnSettled } from '../game/spawnSettle.ts';
 import { clearLifeReveal, setLifeReveal } from '../game/lifeReveal.ts';
-import { backfillLegacyDebrisStone, debrisSalvageComplete } from './debrisSalvage.ts';
+import { backfillLegacyDebrisStone, isDebrisCollected, requiredDebrisSalvageComplete, subscribeDebrisCollectionReceipt } from './debrisSalvage.ts';
 import { supplyPodsComplete } from './supplyPods.ts';
 import {
   currentNavWaypointIndex,
@@ -71,22 +76,14 @@ import {
 import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
-import {
-  getAuditWorkerPath,
-  getKeelMemoryPose,
-  storyAnchors
-} from './world/storyWorld.ts';
+import { getAuditWorkerPath, storyAnchors } from './world/storyWorld.ts';
 import { createLiveAgentSurfaceTerrain } from '../utils/agentSurfaceNavigationRuntime.ts';
-import { STORY_PRIMARY_WORLD_ID, TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
-import { getAuthoredDiveGuidance } from './emergentDive.ts';
-import { getAuthoredMawGuidance } from './emergentMawRepair.ts';
-import { getWreckReconstructionGuidance } from './wreckReconstruction.ts';
-import {
-  getPhysicalBoardingGuidance,
-  getPhysicalBoardingSnapshot,
-  hasSealedPhysicalBoarding
-} from './physicalBoarding.ts';
-import { resolveTidegardenSettlementTarget } from './tidegardenSettlementTargets.ts';
+import { STORY_PRIMARY_WORLD_ID } from './tidegardenRoute.ts';
+
+
+
+import { getPhysicalBoardingSnapshot, hasSealedPhysicalBoarding } from './physicalBoarding.ts';
+
 import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
 import {
   hasFirstHoverGroundedReturn,
@@ -110,7 +107,7 @@ import {
 } from '../utils/groundedSurfaceMotion.ts';
 import { STORY_TASK_ROW_DEPTH_BAND } from './taskRowNavigation.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
-import { isStoryPaused } from './storyClock.ts';
+import { isStoryPaused, storyNow } from './storyClock.ts';
 import {
   clearCinematicCameraPose,
   setCinematicCameraPose,
@@ -131,8 +128,9 @@ import {
 } from './duskCinematography.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
 import {
-  clearViolations,
+  clearStoryTextChannel,
   getStoryText,
+  clearViolations,
   pushViolation,
   setWorkOrder,
   showAuditLine,
@@ -150,16 +148,12 @@ import {
   ARRIVAL,
   ARRIVAL_CAPTIONS,
   ARRIVAL_LINES,
-  CH1_ANOMALY_MASS_ORDER,
   CH1_ECHO_LINES,
   CH1_FIXED_CAPTIONS,
   CH1_FIXED_CUT_CAPTION,
-  CH1_FIXED_TRAVERSE_ORDER,
-  CH1_RASTER_QUOTA_ORDER,
   CH1_FLASH_SCHEDULE,
   CH1_FIXED_TUTORIAL,
   CH1_QUOTA,
-  CH1_WORK_ORDERS,
   CH3_CAPTIONS,
   DUSK,
   FIRST_DAY,
@@ -176,15 +170,31 @@ import {
   VOYAGE_DECK
 } from './storyScript.ts';
 import { complianceToneLine, getArrivalCellCharge } from './voyageOutcome.ts';
-import { scoreHit, setScoreBeat, setScoreIntensity } from './storyScore.ts';
+import { SFX_BUNDLE_ARM_LEAD_S } from '../audio/generative/tuning.ts';
 import {
-  emergentStoryDirectorTick,
-  enterEmergentStoryBeat,
-  getEmergentStoryMarkerTarget
-} from './emergentStoryDirector.ts';
+  armStoryHit,
+  bundlePresentationDue,
+  bundleAudioClockDue,
+  fireStoryHitFallback,
+  noteStoryBundleFired,
+  noteStoryBundleSfxPosted,
+  noteStoryBundleState,
+  setScoreBeat,
+  setScoreIntensity,
+  storyHitAnchorTempo,
+  type StoryHitAnchorId
+} from './storyScore.ts';
+import { cancelPendingStoryUxFeedback } from './ux/feedbackCues.ts';
+import { TRACK_SYSTEM_LINE, TRACK_WATCHER_LINE } from './feed/regulationVoice.ts';
+import { emergentStoryDirectorTick, enterEmergentStoryBeat } from './emergentStoryDirector.ts';
+import { commonGroundFinalTextureHolds } from './commonGroundScore.ts';
+import { mapScoreFinalTextureHolds } from './unfinishedMapScore.ts';
 import {
   activateGuidedStoryObjective,
-  getActiveGuidedStoryObjective
+  acknowledgeGuidedStoryCompletion,
+  getActiveGuidedStoryObjective,
+  clearGuidedStoryObjective,
+  publishEarlyObjectiveReceipt
 } from './ux/objectiveDirector.ts';
 import {
   resolveStoryObjectiveGuidance,
@@ -214,9 +224,29 @@ function mulberry32(seed: number): () => number {
   };
 }
 
+/**
+ * Composed sync (audio-10x Stage 3): one contracted bundle's beat-clock timing,
+ * armed ONCE per beat. `at` is the tick the presentation members fire (every
+ * guard is `>=`: a dropped frame makes the image late, never early); `sfxAt`
+ * is the tick the SFX member is POSTED, scheduled to `sfxAudioTime` (C6 forward
+ * scheduling). With no transport (`fallback`) the site keeps its shipped timing
+ * and the reflex hit plays at `at`.
+ */
+interface StoryBundleTiming {
+  at: number;
+  sfxAt: number;
+  sfxAudioTime: number | null;
+  audibleAudioTime: number | null;
+  fallback: boolean;
+  fired: boolean;
+  sfxPosted: boolean;
+}
+
 interface DirectorRuntime {
   beat: StoryBeat | null;
   beatClock: number;
+  /** Beat-scoped bundle targets (never survive a beat change). */
+  bundles: Partial<Record<StoryHitAnchorId, StoryBundleTiming>>;
   /** Seconds of ch1 gameplay (drives the flash schedule). */
   ch1Clock: number;
   flashesFired: boolean[];
@@ -308,6 +338,7 @@ function createDirectorRuntime(): DirectorRuntime {
   return {
     beat: null,
     beatClock: 0,
+    bundles: {},
     descentSettleWait: 0,
     ch1Clock: 0,
     flashesFired: CH1_FLASH_SCHEDULE.map(() => false),
@@ -384,7 +415,31 @@ function tickStoryChill(dt: number, drainPerSecond: number): void {
   }
 }
 
-const _fixedRel = new THREE.Vector3();
+let fixedArm: { epoch: number; sequence: number } | null = null;
+let fixedTransferAwaitingPaint = 0;
+let trackLiveEntry = false;
+let ownedTrackSystem: ReturnType<typeof getStoryText>['system'] = null;
+let ownedTrackCaption: ReturnType<typeof getStoryText>['caption'] = null;
+let fixedOwnedCaption: ReturnType<typeof getStoryText>['caption'] = null;
+
+subscribeDebrisCollectionReceipt(receipt => {
+  const beat = getStoryStateSnapshot().beat;
+  if (beat !== 'ch1-fixed' && beat !== 'ch1-raster') return;
+  cancelPendingStoryUxFeedback('later-action');
+  const objective = getActiveGuidedStoryObjective();
+  const first = objective?.id === 'ch1:fixed:recover-first-debris' && receipt.index === 0;
+  const final = objective?.id === 'ch1:raster:recover-quota' && receipt.index < 3 && requiredDebrisSalvageComplete();
+  if (objective && (first || final)) {
+    const successor = first
+      ? (getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber ? 'ch1:fixed:cross-camera-cell' : 'ch1:fixed:calibrate-extractor')
+      : (quotaCollected().met ? null : 'ch1:raster:extract-fiber-quota');
+    acknowledgeGuidedStoryCompletion(objective.id, true, { receiptId: receipt.receiptId, expectedSuccessor: successor });
+  }
+  if ((beat === 'ch1-fixed' && receipt.index === 0) || (beat === 'ch1-raster' && receipt.index < 3)) {
+    publishEarlyObjectiveReceipt(receipt.receiptId, 'DEBRIS RECOVERED.', storyNow());
+  }
+  syncFoundationalStoryObjective(beat);
+});
 
 /** ch1-fixed tutorial progress (HUD ledger line). */
 export function fixedTutorialProgress(): { fiber: number; screens: number } {
@@ -402,12 +457,12 @@ function quotaCollected(): { fiber: number; stone: number; total: number; met: b
     stone,
     total: fiber + stone,
     // The raster act completes on quota AND the descent's debris recovered.
-    met: fiber >= CH1_QUOTA.biofiber && stone >= CH1_QUOTA.stone && debrisSalvageComplete()
+    met: fiber >= CH1_QUOTA.biofiber && stone >= CH1_QUOTA.stone && requiredDebrisSalvageComplete()
   };
 }
 
 /** Prologue-choice echo lines the work order appends (the system remembers). */
-function echoLines(): string[] {
+export function getRegulationEchoLines(): string[] {
   const chosen = getMilestones().filter(m => m.startsWith('story:choice:'));
   const lines: string[] = [];
   for (const milestone of chosen) {
@@ -431,7 +486,8 @@ function echoLines(): string[] {
 // --- beat entry ----------------------------------------------------------------
 
 /** Width (world units) of one fixed-screen cell — the era where the frame is bolted. */
-const FIXED_SCREEN_CELL = 24;
+// Positive followQuant selects shared viewport coverage; it is no longer an independent world width.
+const FIXED_SCREEN_COVERAGE = 1;
 
 /**
  * Collection acts remain on screen long enough to read as authored phases,
@@ -494,7 +550,7 @@ export const CH1_2D_TRAVEL_BAND = {
  */
 const ERA_RIGS: Partial<Record<StoryBeat, { rig: LensRig; seconds: number }>> = {
   'descent': { rig: { ...SIDE_RIG }, seconds: 0 },
-  'ch1-fixed': { rig: { ...SIDE_RIG, followQuant: FIXED_SCREEN_CELL, travelBand: CH1_2D_TRAVEL_BAND.gather }, seconds: 0 },
+  'ch1-fixed': { rig: { ...SIDE_RIG, followQuant: FIXED_SCREEN_COVERAGE, travelBand: CH1_2D_TRAVEL_BAND.gather }, seconds: 0 },
   'ch1-track': { rig: { ...SIDE_RIG }, seconds: 6.5 }, // the unbolt IS the cutscene
   'ch1-raster': { rig: { ...SIDE_RIG, travelBand: CH1_2D_TRAVEL_BAND.gather }, seconds: 0 },
   // The profile view has one real traversable task row. The camera can breathe
@@ -510,17 +566,9 @@ const ERA_RIGS: Partial<Record<StoryBeat, { rig: LensRig; seconds: number }>> = 
 };
 
 /** Beats whose picture is literally owned by a site/external camera. */
-const EXTERNAL_CAMERA_BEATS = new Set<StoryBeat>([
-  'descent',
-  'ch1-fixed',
-  'ch1-track',
-  'ch1-raster',
-  'ch1-depth',
-  'ch1-nav',
-  'ch1-iso',
-  // The lift begins outside the body and continuously releases this mix.
-  'ch1-lift'
-]);
+export const EXTERNAL_CAMERA_BEATS: ReadonlySet<StoryBeat> = new Set(
+  Object.entries(BEAT_METADATA).filter(([, beat]) => beat.hud.externalCamera).map(([id]) => id as StoryBeat)
+);
 
 function chapter7ReconstructionScoreFacts(): Chapter7ReconstructionScoreFacts {
   const actorId = getLocalActorId();
@@ -559,7 +607,7 @@ function firstMissingGatherInput(
  * not folded into a vague "campfire" instruction and the pickaxe/flint detour
  * disappears only when the inventory genuinely makes it unnecessary.
  */
-function currentGatherObjectiveStage(): GatherObjectiveStage {
+export function currentGatherObjectiveStage(): GatherObjectiveStage {
   const hatchet = getRecipe('stone_hatchet');
   if (getItemCount('stone_hatchet') <= 0) {
     return hasItems(hatchet.inputs) ? 'hatchet' : 'materials';
@@ -583,7 +631,7 @@ function currentGatherObjectiveStage(): GatherObjectiveStage {
   return hasItems(campfire.inputs) ? 'campfire' : 'materials';
 }
 
-function currentGatherMarkerResource(): GatherMarkerResource {
+export function currentGatherMarkerResource(): GatherMarkerResource {
   const hatchet = getRecipe('stone_hatchet');
   if (getItemCount('stone_hatchet') <= 0) {
     return firstMissingGatherInput(hatchet.inputs) ?? 'wood';
@@ -611,6 +659,7 @@ function currentGatherMarkerResource(): GatherMarkerResource {
  * deep link or reload reconstructs the same rung (ux README guardrail 5).
  */
 function currentCh1FixedObjectiveState(): Ch1FixedObjectiveState {
+  if (!isDebrisCollected(0)) return 'salvage';
   return getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber ? 'traverse' : 'harvest';
 }
 
@@ -621,7 +670,7 @@ function currentCh1FixedObjectiveState(): Ch1FixedObjectiveState {
  * case, and it needs its own rung and its own instruction.
  */
 function currentCh1RasterObjectiveState(): Ch1RasterObjectiveState {
-  return debrisSalvageComplete() ? 'quota' : 'salvage';
+  return requiredDebrisSalvageComplete() ? 'quota' : 'salvage';
 }
 
 function currentRestObjectivePhase(): RestObjectivePhase {
@@ -643,7 +692,12 @@ function currentVigilObjectivePhase(): VigilObjectivePhase {
  */
 function syncFoundationalStoryObjective(beat: StoryBeat | null): void {
   if (!beat) return;
-  const legacyFeedCopy = getStoryText().workorder;
+  if (beat === 'ch1-raster' && quotaCollected().met) {
+    clearGuidedStoryObjective('satisfied');
+    if (getStoryText().workorder.length) setWorkOrder([]);
+    for (const bracket of getFeedRuntime().brackets) bracket.visible = false;
+    return;
+  }
   const guidance = (() => {
     switch (beat) {
       case 'ch1-fixed':
@@ -694,57 +748,108 @@ function syncFoundationalStoryObjective(beat: StoryBeat | null): void {
     }
   })();
   if (!guidance) return;
-  const activated = activateGuidedStoryObjective(guidance);
-  // Before embodiment, the Regulation Feed's bureaucratic voice is part of the
-  // scene (including voyage echoes). Keep that authored copy while the shared
-  // store supplies its semantic id, action, marker label, and health.
-  // ch1-fixed owns two feed orders, one per rung, so it derives its directive
-  // block from progression rather than replaying whatever the beat entered
-  // with. The voyage echoes trailing the directive are prologue-owned and must
-  // survive the swap — they are the record answering back, not work-order copy.
-  if (activated && beat === 'ch1-fixed') {
-    const directive = currentCh1FixedObjectiveState() === 'traverse'
-      ? CH1_FIXED_TRAVERSE_ORDER
-      : CH1_WORK_ORDERS.fixed;
-    const echoes = legacyFeedCopy.filter(
-      line => !CH1_WORK_ORDERS.fixed.includes(line) && !CH1_FIXED_TRAVERSE_ORDER.includes(line)
-    );
-    setWorkOrder([...directive, ...echoes]);
-    return;
-  }
-  // ch1-raster stages the same way, and for the same reason: its rung changes
-  // while the beat does not. Its repaired copy previously went to the objective
-  // store, which the FEED does not render — so the fix reached nobody.
-  if (activated && beat === 'ch1-raster') {
-    const directive = currentCh1RasterObjectiveState() === 'quota'
-      ? CH1_RASTER_QUOTA_ORDER
-      : CH1_WORK_ORDERS.raster;
-    const echoes = legacyFeedCopy.filter(
-      line => !CH1_WORK_ORDERS.raster.includes(line) && !CH1_RASTER_QUOTA_ORDER.includes(line)
-    );
-    setWorkOrder([...directive, ...echoes]);
-    return;
-  }
-  if (
-    activated
-    && legacyFeedCopy.length > 0
-    && (
-      beat === 'ch1-track'
-      || beat === 'ch1-raster'
-      || beat === 'ch1-depth'
-      || beat === 'ch1-nav'
-      || beat === 'ch1-iso'
-      || beat === 'ch1-lift'
-    )
-  ) setWorkOrder(legacyFeedCopy);
+  const marker = resolveMarkerTarget(beat, guidance);
+  if (guidance.requiresMarker !== false && !marker) return;
+  activateGuidedStoryObjective(guidance, marker?.label);
 }
 
+function completeFoundationalObjective(prefix: string, confirmedAction = false): void {
+  const objective = getActiveGuidedStoryObjective();
+  if (objective?.id.startsWith(prefix)) acknowledgeGuidedStoryCompletion(objective.id, confirmedAction);
+}
+
+// --- Composed sync helpers (audio-10x Stage 3) -------------------------------------------------
+//
+// A site arms its bundle once (at beat entry for authored timelines, at the
+// event for player-caused moments); the returned beat-clock target is what the
+// site's `>=` guards read. State never waits here — these helpers move only
+// presentation: the hit is already on the grid, the SFX member is scheduled to
+// the exact music onset, and the image members fire at `at`.
+
+function armBundle(id: StoryHitAnchorId, desiredDelayS = 0, notBeforeDelayS?: number): StoryBundleTiming {
+  const arm = armStoryHit(id, { beatClock: d.beatClock, desiredDelayS, notBeforeDelayS });
+  const timing: StoryBundleTiming = {
+    at: d.beatClock + arm.bundleDelayS,
+    sfxAt: d.beatClock + arm.sfxArmDelayS,
+    sfxAudioTime: arm.sfxAudioTime,
+    audibleAudioTime: arm.audibleAudioTime,
+    fallback: arm.fallback,
+    fired: false,
+    sfxPosted: false
+  };
+  d.bundles[id] = timing;
+  return timing;
+}
+
+/**
+ * True exactly once, on the tick the beat clock reaches the bundle target. An
+ * unarmed id (defensive; every site arms at entry) fires at `fallbackAt` with
+ * the shipped reflex hit.
+ */
+function bundleFires(id: StoryHitAnchorId, fallbackAt = 0): boolean {
+  let bundle = d.bundles[id];
+  if (!bundle) {
+    if (d.beatClock < fallbackAt) return false;
+    bundle = { at: fallbackAt, sfxAt: fallbackAt, sfxAudioTime: null, audibleAudioTime: null, fallback: true, fired: false, sfxPosted: false };
+    d.bundles[id] = bundle;
+  }
+  if (bundle.fired) return false;
+  // Neither clock may release the other early. A foreground hitch can make
+  // this callback late, but cannot skip the authored ramp or move its target.
+  if (!bundlePresentationDue(d.beatClock, bundle.at, bundle.audibleAudioTime)) return false;
+  bundle.fired = true;
+  // Keep the stored target fixed; delayed frames remain measurably late.
+  if (bundle.fallback) fireStoryHitFallback(id);
+  noteStoryBundleFired(id, d.beatClock);
+  return true;
+}
+
+/**
+ * The immutable beat-clock target a timeline reads for its phases and landing.
+ * A stalled render may be late; it cannot move an authored target backward.
+ */
+function bundleTargetAt(id: StoryHitAnchorId, fallbackAt: number): number {
+  return d.bundles[id]?.at ?? fallbackAt;
+}
+
+function bundleReady(id: StoryHitAnchorId, fallbackAt: number): boolean {
+  const bundle = d.bundles[id];
+  return bundlePresentationDue(d.beatClock, bundle?.at ?? fallbackAt, bundle?.audibleAudioTime ?? null);
+}
+
+/** The bundle's SFX member: posted once at `sfxAt`, scheduled to the forward audio time (C6). */
+function bundleSfx(id: StoryHitAnchorId, sfx: 'storyAwaken' | 'shipCrash' | 'storyGlitch'): void {
+  const bundle = d.bundles[id];
+  if (!bundle || bundle.sfxPosted) return;
+  if (d.beatClock < bundle.sfxAt && !bundleAudioClockDue(bundle.sfxAudioTime, SFX_BUNDLE_ARM_LEAD_S)) return;
+  bundle.sfxPosted = true;
+  playSfx(sfx, bundle.sfxAudioTime != null ? { atAudioTime: bundle.sfxAudioTime } : undefined);
+  noteStoryBundleSfxPosted(id, d.beatClock, bundle.sfxAudioTime);
+}
+
+/** The a2 HUD death lands at this fraction of hudDeathSeconds (the braam's notBefore floor). */
+const A2_HUD_DEATH_K = 0.55;
+/** The mid-lift DPR snap: halfway through the 4.5 s traverse that starts at 1.2 s. */
+const LIFT_SNAP_AT = 1.2 + 4.5 * 0.5;
+
 function onBeatEntered(beat: StoryBeat | null): void {
+  const previousBeat = d.beat;
+  trackLiveEntry = beat === 'ch1-track' && previousBeat === 'ch1-fixed' && fixedTransferAwaitingPaint > 0;
+  if (beat !== 'ch1-fixed') clearStoryTextChannel('caption', fixedOwnedCaption);
+  if (beat !== 'ch1-track') {
+    clearStoryTextChannel('system', ownedTrackSystem);
+    clearStoryTextChannel('caption', ownedTrackCaption);
+    ownedTrackSystem = null; ownedTrackCaption = null;
+  }
+  if (previousBeat && previousBeat !== beat && beat !== 'ch1-fixed' && beat !== 'ch1-raster') cancelPendingStoryUxFeedback('beat-exit');
   d.beat = beat;
   d.beatClock = 0;
+  d.bundles = {};
   d.descentSettleWait = 0;
   const era = beat ? ERA_RIGS[beat] : null;
-  if (era) setLensRig(era.rig, era.seconds);
+  // anc.track.unbolt: the ch1-track rig transfer is a bundle member and starts
+  // at the bundle target inside tickTrackUnlock, not at entry.
+  if (era && beat !== 'ch1-track') setLensRig(era.rig, era.seconds);
   // Cutscene-scoped world state never survives a beat change.
   if (beat !== 'a3-dawn') {
     clearLifeReveal();
@@ -756,9 +861,14 @@ function onBeatEntered(beat: StoryBeat | null): void {
   clearCinematicCameraPose();
   const feed = getFeedRuntime();
   feed.cinematic = 0;
+  // The hard white hold/impact belongs to descent, never to a restored or
+  // directly entered playable beat. Other feed treatment has separate owners.
+  feed.flash = 0;
   // Beat entry is the replay/deep-link authority for camera-feed ownership.
   // First-person beats never inherit CCTV treatment from an earlier rung.
-  feed.externalCameraMix = beat && EXTERNAL_CAMERA_BEATS.has(beat) ? 1 : 0;
+  feed.externalCameraMix = beat
+    ? EXTERNAL_CAMERA_BEATS.has(beat) ? 1 : 0
+    : 0;
   // Chapter 7 derives its cumulative orchestration from the same durable
   // repair/boarding facts that gate progression. Install that override before
   // setScoreBeat asks the instrument for the beat mood, including deep links.
@@ -775,7 +885,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
     });
   }
   // The score retunes to the beat's resolved mood (null returns to sandbox).
-  setScoreBeat(beat);
+  if (beat !== null || !mapScoreFinalTextureHolds()) setScoreBeat(beat);
   enterEmergentStoryBeat(beat);
   // Constellation reveal persistence: the resolved sky belongs to a STORY save
   // that has earned it (milestone) and never to the sandbox — a sandbox session
@@ -803,15 +913,21 @@ function onBeatEntered(beat: StoryBeat | null): void {
       // minus recalibrations/forgettings; commendations topped it up). It
       // degrades to the broken/refuel loop when the survival act begins (ch3).
       setMawCharge(getArrivalCellCharge());
+      resetFixedScreenCoverage();
+      fixedArm = null; fixedTransferAwaitingPaint = 0; fixedOwnedCaption = null;
       d.fixedCells.clear();
       d.fixedCamCell = null; // first tick assigns the opening camera, cut-free
-      setWorkOrder([...CH1_WORK_ORDERS.fixed, ...echoLines()]);
+
       break;
     case 'ch1-track':
+      d.captionsFired.delete('early-track-watcher');
       // The mini-awakening: the frame unbolts and learns to follow the worker.
-      playSfx('storyAwaken');
-      scoreHit('bloom');
-      setWorkOrder([...CH1_WORK_ORDERS.track]);
+      // anc.track.unbolt: the bloom is armed on the grid here; the unbolt (rig
+      // transfer, letterbox origin) and storyAwaken chase it as one bundle in
+      // tickTrackUnlock. The work order is state and stays immediate.
+      armBundle('anc.track.unbolt');
+      noteStoryBundleState('anc.track.unbolt', d.beatClock);
+
       break;
     case 'ch1-raster':
       // Direct jumps land here too — re-run the arrival init (idempotent).
@@ -823,28 +939,28 @@ function onBeatEntered(beat: StoryBeat | null): void {
       setStoryForcedDayPhase(0.25);
       setMawCharge(getArrivalCellCharge());
       d.rasterCompleteAt = -1;
-      setWorkOrder([...CH1_WORK_ORDERS.raster, ...echoLines()]);
+
       break;
     case 'ch1-depth':
       getFeedRuntime().descent = 1.1; // direct-jump safe
       setStoryForcedDayPhase(0.25);
       d.glitchDecay = 0.55; // each era hand-off announces itself
       d.depthCompleteAt = -1;
-      setWorkOrder([...CH1_WORK_ORDERS.depth]);
+
       break;
     case 'ch1-nav':
       getFeedRuntime().descent = 1.1;
       setStoryForcedDayPhase(0.25);
       d.glitchDecay = 0.55;
       resetNavWaypoints();
-      setWorkOrder([...CH1_WORK_ORDERS.nav]);
+
       break;
     case 'ch1-iso':
       getFeedRuntime().descent = 1.1;
       setStoryForcedDayPhase(0.25);
       d.glitchDecay = 0.7; // dpr ratchets 0.4→0.55 under this pulse (policy snap)
       playSfx('storyGlitch');
-      setWorkOrder([...CH1_WORK_ORDERS.iso]);
+
       break;
     case 'ch1-anomaly':
       // The external lens is gone: this is an embodied, constrained pan-tilt
@@ -856,12 +972,14 @@ function onBeatEntered(beat: StoryBeat | null): void {
       d.anomalyMassStage = false;
       d.anomalyDesignatedAt = -1;
       d.gravityEdgeAt = -1;
-      setWorkOrder([...CH1_WORK_ORDERS.anomaly]);
+
       break;
     case 'ch1-lift':
       d.liftSnapped = false;
       playSfx('storyAwaken');
-      setWorkOrder(['PAN-TILT SURVEY: CALIBRATING…', 'HOLD POSITION. PERSPECTIVE IS BEING ISSUED.']);
+      // anc.lift.perspective-issued: the masked snap lands on the 84 BPM beat,
+      // ±cap of its authored time (lead permitted).
+      armBundle('anc.lift.perspective-issued', LIFT_SNAP_AT);
       break;
     case 'a1-ramp':
       // Movement freezes via the beat policy; the timeline below owns the
@@ -869,6 +987,9 @@ function onBeatEntered(beat: StoryBeat | null): void {
       // frame for the awakening; ch2's ticket re-fills it after).
       setWorkOrder([]);
       playSfx('storyAwaken');
+      // anc.a1.color-stabilizes: pre-scheduled here so A1_RAMP_SECONDS stretches
+      // to the 96 BPM grid; the landing fires at max(ramp end, bundleAt).
+      armBundle('anc.a1.color-stabilizes', A1_RAMP_SECONDS);
       break;
     case 'ch2-color':
       // Post-A1 (also the deep-link/resume entry): color is through. The
@@ -878,28 +999,29 @@ function onBeatEntered(beat: StoryBeat | null): void {
       getFeedRuntime().treatment = 1;
       getFeedRuntime().descent = 1.1; // wreck present on direct jumps too
       setStoryForcedDayPhase(0.25);
-      setWorkOrder([
-        'SENSOR FAULT: CHROMATIC CHANNEL UNSUPPRESSED',
-        'SENSOR FAULT: PAN-TILT INTERLOCK RELEASED. FULL ROTATION AVAILABLE.',
-        'A REPAIR TICKET HAS BEEN FILED (Q: 44,207)',
-        'RESUME QUOTA. DO NOT LOOK AT THE COLORS. DO NOT LOOK FREELY.'
-      ]);
       break;
     case 'ch2-approach':
       getFeedRuntime().desat = 0; // post-A1 (direct debug jumps skip ch2-color)
-      setWorkOrder([
-        'RETURN TO THE SURVEY AREA',
-        'THE OBJECT AHEAD IS NOT AN OBJECT',
-        'THERE IS NO OBJECT'
-      ]);
       break;
-    case 'a2-awakening':
+    case 'a2-awakening': {
       getFeedRuntime().desat = 0; // post-A1 (direct debug jumps land here too)
       d.a2NextViolationAt = 0;
       d.a2ViolationIndex = 0;
       d.a2HudDead = false;
       clearViolations();
+      // anc.a2.feed-wall-falls / anc.a2.hand-back: both armed at entry so the
+      // liberation origin and the hand-back land on the 132 BPM beat; the
+      // braam can never precede the HUD death (notBefore = the k > 0.55 tick).
+      const T = A2_TIMELINE;
+      const floodEnd = T.violationFloodSeconds;
+      const liberation = armBundle(
+        'anc.a2.feed-wall-falls',
+        floodEnd + T.hudDeathSeconds,
+        floodEnd + T.hudDeathSeconds * A2_HUD_DEATH_K
+      );
+      armBundle('anc.a2.hand-back', liberation.at + T.liberationSeconds);
       break;
+    }
     case 'ch3-gather':
       // Post-A2 (also the deep-link/resume entry): the feed is gone entirely.
       getFeedRuntime().treatment = 0;
@@ -929,13 +1051,31 @@ function onBeatEntered(beat: StoryBeat | null): void {
       d.dayPhase = Math.max(d.dayPhase, DUSK.targetPhase);
       ensureRestInteraction();
       break;
-    case 'a3-dawn':
+    case 'a3-dawn': {
       d.a3Woke = false;
       if (d.restUnregister) {
         d.restUnregister();
         d.restUnregister = null;
       }
+      // anc.a3.first-blade / anc.a3.material-lands: the wave origin holds to the
+      // 88 BPM bar (never shrinks) and may not precede any grain caption authored
+      // before it (plus one 8th step); the landing follows the stretched wave.
+      const T = A3_TIMELINE;
+      const wakeAt = T.sleepFadeSeconds + T.holdBlackSeconds;
+      const rampStart = wakeAt + T.fadeUpSeconds;
+      const rampEnd = rampStart + T.materialRampSeconds;
+      const waveStart = rampStart + T.bloomWaveDelaySeconds;
+      const stepS = 60 / storyHitAnchorTempo('anc.a3.first-blade') / 2;
+      const precedingCaptions = A3_CAPTIONS.filter((caption) => wakeAt + caption.atSeconds < waveStart);
+      const lastPreceding = precedingCaptions[precedingCaptions.length - 1];
+      const blade = armBundle(
+        'anc.a3.first-blade',
+        waveStart,
+        lastPreceding ? wakeAt + lastPreceding.atSeconds + stepS : undefined
+      );
+      armBundle('anc.a3.material-lands', Math.max(rampEnd + 4, blade.at + T.bloomWaveSeconds + 1.5));
       break;
+    }
     case 'ch3-thirst':
     case 'ch3-forage':
     case 'ch3-signal':
@@ -1039,6 +1179,7 @@ function ensureRestInteraction(): void {
 export function beginA3(): void {
   const s = getStoryStateSnapshot();
   if (!s.active || s.beat !== 'ch3-await-rest') return;
+  completeFoundationalObjective('ch3:rest:rest-at-fire', true);
   playSfx('storySleep');
   advanceToBeat('a3-dawn');
 }
@@ -1047,6 +1188,7 @@ export function beginA3(): void {
 export function beginVigilSleep(): void {
   const s = getStoryStateSnapshot();
   if (!s.active || s.beat !== 'ch4-vigil') return;
+  completeFoundationalObjective('ch4:vigil:rest-at-fire', true);
   playSfx('storySleep');
   // Rest refills what a night can refill: stamina + warmth only (hunger/thirst
   // stay down — day-2 pressure is chapter 4's fuel, per the plan §2 S4).
@@ -1078,8 +1220,20 @@ function syncBeat(): void {
   // Deactivation (quit to menu / completion) drops the live rest resolver and
   // fades the score out (the sandbox owns its own music).
   if (!s.active) {
-    enterEmergentScoreBeat(null);
-    setScoreBeat(null);
+    // THE ONE BOUNDED EXCEPTION at this cleanup, and it is signed.
+    //
+    // Deactivation clears the score immediately, which is right for every
+    // handback the game has had until now. Chapter 13's completion hands back
+    // in the SAME FRAME it commits — controls and progression are free at once,
+    // and nothing waits on presentation — so the live-only final texture has to
+    // survive this line or it would be cut off by the very handback it is
+    // acknowledging. It is bounded at five seconds, releases through the
+    // existing fade, and is cancelled by pause, focus loss and every other
+    // signed trigger; it never defers, hydrates or replays.
+    if (!commonGroundFinalTextureHolds() && !mapScoreFinalTextureHolds()) {
+      enterEmergentScoreBeat(null);
+      setScoreBeat(null);
+    }
     if (s.chapter !== 'complete') clearLifeReveal(); // quit mid-cutscene: no stuck wave
     if (d.restUnregister) {
       d.restUnregister();
@@ -1098,7 +1252,7 @@ subscribeCampfires(() => {
   if (!s.active || s.chapter !== 'ch3') return;
   if (getCampfires().length === 0) return;
   fireCaptionOnce('fire-built', CH3_CAPTIONS.fireBuilt);
-  if (s.beat === 'ch3-gather') advanceToBeat('ch3-dusk');
+  if (s.beat === 'ch3-gather') { completeFoundationalObjective('ch3:gather:craft-campfire', true); advanceToBeat('ch3-dusk'); }
 });
 
 // --- external triggers (story world props call these) ----------------------------
@@ -1121,6 +1275,7 @@ export function beginA1(): void {
   const s = getStoryStateSnapshot();
   if (!s.active || s.beat !== 'ch1-anomaly') return;
   if (!anomalyTouchArmed()) return; // sweep → designation → THEN the answer
+  completeFoundationalObjective('ch1:anomaly:classify-mass', true);
   advanceToBeat('a1-ramp');
 }
 
@@ -1128,6 +1283,7 @@ export function beginA1(): void {
 export function beginA2(): void {
   const s = getStoryStateSnapshot();
   if (!s.active || s.beat !== 'ch2-approach') return;
+  completeFoundationalObjective('ch2:approach:eat-fruit', true);
   advanceToBeat('a2-awakening');
 }
 
@@ -1183,21 +1339,22 @@ function tickAnomalySurvey(camera: THREE.PerspectiveCamera | null): void {
     d.anomalyDesignatedAt = d.beatClock;
     d.glitchDecay = 0.55;
     playSfx('storyGlitch');
-    setWorkOrder([...CH1_ANOMALY_MASS_ORDER]);
   }
 }
 
 function tickA1Ramp(): void {
   const t = d.beatClock / A1_RAMP_SECONDS;
-  if (t >= 1) {
+  // anc.a1.color-stabilizes: the landing fires at max(A1_RAMP_SECONDS, bundleAt)
+  // — the ramp end bends to the grid and nothing inside the block is split.
+  if (bundleFires('anc.a1.color-stabilizes', A1_RAMP_SECONDS)) {
     // Land EXACTLY on the color preset (chroma 1) — the stage cut is seamless.
+    noteStoryBundleState('anc.a1.color-stabilizes', d.beatClock);
     setVoxelRealityStage('color');
     clearVoxelRealityOverrides();
     const r = getFeedRuntime();
     r.desat = 0;
     r.glitch = 0;
-    markMilestone(STORY_MILESTONES.a1);
-    scoreHit('bloom'); // color arrives as a chord opening
+    markMilestone(STORY_MILESTONES.a1); // color arrives as a chord opening
     advanceToBeat('ch2-color');
     return;
   }
@@ -1222,8 +1379,11 @@ function tickA2(): void {
   const T = A2_TIMELINE;
   const r = getFeedRuntime();
   const floodEnd = T.violationFloodSeconds;
-  const deathEnd = floodEnd + T.hudDeathSeconds;
-  const libEnd = deathEnd + T.liberationSeconds;
+  // anc.a2.feed-wall-falls / anc.a2.hand-back: the liberation origin and the
+  // hand-back are the bundle targets (composed to the 132 BPM beat).
+  const deathEnd = bundleTargetAt('anc.a2.feed-wall-falls', floodEnd + T.hudDeathSeconds);
+  const libEnd = bundleTargetAt('anc.a2.hand-back', deathEnd + T.liberationSeconds);
+  bundleSfx('anc.a2.feed-wall-falls', 'storyAwaken');
 
   if (t < floodEnd) {
     if (t >= d.a2NextViolationAt && d.a2ViolationIndex < A2_VIOLATION_LINES.length) {
@@ -1236,14 +1396,15 @@ function tickA2(): void {
     r.redaction.visible = false;
     return;
   }
-  if (t < deathEnd) {
-    const k = (t - floodEnd) / T.hudDeathSeconds;
+  if (t < deathEnd || !bundleReady('anc.a2.feed-wall-falls', deathEnd)) {
+    const k = Math.min(1, (t - floodEnd) / T.hudDeathSeconds);
     r.garble = 1;
     r.glitch = 0.8 * (1 - k);
     r.scanRoll = 0.9 * (1 - k);
     r.redaction.visible = false;
-    if (!d.a2HudDead && k > 0.55) {
+    if (!d.a2HudDead && k > A2_HUD_DEATH_K) {
       d.a2HudDead = true;
+      noteStoryBundleState('anc.a2.feed-wall-falls', t, 'timeline');
       setWorkOrder([]);
       clearViolations();
       // Replay/deep-link safety: embodied chapters already use device DPR, but
@@ -1252,12 +1413,8 @@ function tickA2(): void {
     }
     return;
   }
-  if (t < libEnd) {
-    if (!d.captionsFired.has('a2-awaken-sfx')) {
-      d.captionsFired.add('a2-awaken-sfx');
-      playSfx('storyAwaken');
-      scoreHit('braam'); // the wall of the feed gives way
-    }
+  if (t < libEnd || !bundleReady('anc.a2.hand-back', libEnd)) {
+    bundleFires('anc.a2.feed-wall-falls', deathEnd); // the wall of the feed gives way
     const k = smoothstep((t - deathEnd) / T.liberationSeconds);
     // (The look is already free — ch2 runs unlocked since the A1 interlock
     // fault — so the liberation is carried by the widening embodied FOV, the
@@ -1274,11 +1431,12 @@ function tickA2(): void {
     return;
   }
   // Handoff (one shot): feed gone, device resolution, chapter 3 begins.
+  bundleFires('anc.a2.hand-back', libEnd); // depth resolves into the warm chapter-3 key
+  noteStoryBundleState('anc.a2.hand-back', t);
   setStoryLookMode('free');
   setStoryTargetDpr(null);
   r.treatment = 0;
   markMilestone(STORY_MILESTONES.a2);
-  scoreHit('bloom'); // depth resolves into the warm chapter-3 key
   advanceToBeat('ch3-gather');
 }
 
@@ -1316,18 +1474,22 @@ function tickDescent(dt: number): void {
   }
   const t = d.beatClock;
   const r = getFeedRuntime();
+  // anc.descent.impact: armed on the first live tick (the world has settled).
+  // DESCENT_IMPACT_AT may move later by the cap, never earlier — the fall reads
+  // for its whole length and the pod lands ON the boom + braam (one onset).
+  if (!d.bundles['anc.descent.impact']) armBundle('anc.descent.impact', DESCENT_IMPACT_AT - t);
+  const impactAt = bundleTargetAt('anc.descent.impact', DESCENT_IMPACT_AT);
   r.cinematic = envelope(t, 0, 0.8, DESCENT_SECONDS - 1.5, DESCENT_SECONDS);
-  r.descent = Math.min(1.1, t / DESCENT_IMPACT_AT);
+  r.descent = Math.min(1.1, t / impactAt);
   // Tension climbs with the fall; the impact is the score's first boom.
-  setScoreIntensity(Math.min(1, 0.4 + (t / DESCENT_IMPACT_AT) * 0.6));
-  if (!d.descentImpacted && t >= DESCENT_IMPACT_AT) {
+  setScoreIntensity(Math.min(1, 0.4 + (t / impactAt) * 0.6));
+  bundleSfx('anc.descent.impact', 'shipCrash');
+  if (!d.descentImpacted && bundleFires('anc.descent.impact', impactAt)) {
     d.descentImpacted = true;
+    noteStoryBundleState('anc.descent.impact', t);
     r.flash = 1;
     r.glitch = 1;
     r.scanRoll = 0.8;
-    playSfx('shipCrash');
-    scoreHit('boom');
-    scoreHit('braam');
   }
   r.flash = Math.max(0, r.flash - dt * 1.4);
   r.glitch = Math.max(0, r.glitch - dt * 0.9);
@@ -1343,10 +1505,30 @@ function tickDescent(dt: number): void {
 const TRACK_SECONDS = 7;
 
 function tickTrackUnlock(): void {
-  const t = d.beatClock;
+  // anc.track.unbolt: the timeline's origin is the bundle target — the lens
+  // rig transfer, the letterbox and storyAwaken start together when the bloom
+  // is audible; a hitch makes them late, never early.
+  bundleSfx('anc.track.unbolt', 'storyAwaken');
+  if (bundleFires('anc.track.unbolt')) {
+    const rig = ERA_RIGS['ch1-track'];
+    if (rig) setLensRig(rig.rig, rig.seconds);
+    if (trackLiveEntry) {
+      showSystemLine(TRACK_SYSTEM_LINE, 2800);
+      ownedTrackSystem = getStoryText().system;
+    }
+  }
+  const t = d.beatClock - bundleTargetAt('anc.track.unbolt', 0);
+  if (t < 0 || !bundleReady('anc.track.unbolt', 0)) return;
   const r = getFeedRuntime();
   r.cinematic = envelope(t, 0, 0.8, TRACK_SECONDS - 1.4, TRACK_SECONDS);
+  if (trackLiveEntry && t >= 3.25 && !d.captionsFired.has('early-track-watcher')) {
+    d.captionsFired.add('early-track-watcher');
+    clearStoryTextChannel('system', ownedTrackSystem);
+    showCaption(TRACK_WATCHER_LINE, 3200);
+    ownedTrackCaption = getStoryText().caption;
+  }
   if (t >= TRACK_SECONDS) {
+    noteStoryBundleState('anc.track.unbolt', d.beatClock, 'timeline');
     markMilestone(STORY_MILESTONES.ch1Track);
     advanceToBeat('ch1-raster');
   }
@@ -1392,13 +1574,13 @@ function tickCh1Lift(): void {
 
   // Mid-lift, one glitch pulse masks the single resolution snap back to the
   // device DPR (never lerp framebuffers through the move).
-  if (!d.liftSnapped && t >= 1.2 + 4.5 * 0.5) {
-    d.liftSnapped = true;
+  bundleSfx('anc.lift.perspective-issued', 'storyGlitch');
+  if (!d.liftSnapped && bundleFires('anc.lift.perspective-issued', LIFT_SNAP_AT)) {
+    d.liftSnapped = true; // perspective is being issued
+    noteStoryBundleState('anc.lift.perspective-issued', t);
     setStoryTargetDpr(null);
     r.glitch = 0.8;
     r.scanRoll = 0.5;
-    playSfx('storyGlitch');
-    scoreHit('braam'); // perspective is being issued
   }
   r.glitch = Math.max(0, r.glitch - 0.02);
   r.scanRoll = Math.max(0, r.scanRoll - 0.015);
@@ -1693,20 +1875,20 @@ function tickA3(dt: number): void {
   // fields un-cull into invisibility — never a pop), holds while the grain
   // captions land, then the front races outward: blades rise around the feet
   // first, slow enough to watch, then the wave accelerates to the horizon.
-  const waveStart = rampStart + T.bloomWaveDelaySeconds;
+  // anc.a3.first-blade / anc.a3.material-lands: the wave origin and the landing
+  // are the bundle targets (a hold to the 88 BPM bar, never a shrink).
+  const waveStart = bundleTargetAt('anc.a3.first-blade', rampStart + T.bloomWaveDelaySeconds);
   const waveEnd = waveStart + T.bloomWaveSeconds;
+  const landingAt = bundleTargetAt('anc.a3.material-lands', Math.max(rampEnd + 4, waveEnd + 1.5));
   if (d.bloomCenter.lengthSq() < 1e-6) {
     const fire = getCampfires()[0];
     if (fire) d.bloomCenter.set(fire.pos[0], fire.pos[1], fire.pos[2]);
     else d.bloomCenter.copy(getPlayerWorldPosition());
   }
-  if (t < waveStart) {
+  if (t < waveStart || !bundleReady('anc.a3.first-blade', waveStart)) {
     setLifeReveal(d.bloomCenter, 0, 1);
   } else {
-    if (!d.captionsFired.has('a3-bloom-hit')) {
-      d.captionsFired.add('a3-bloom-hit');
-      scoreHit('bloom'); // the first blade rises on a bloom
-    }
+    bundleFires('anc.a3.first-blade', waveStart); // the first blade rises on a bloom
     const wk = smoothstep(Math.min(1, (t - waveStart) / T.bloomWaveSeconds));
     const radius = T.bloomWaveRadius * Math.pow(wk, 1.6); // linger near, race far
     setLifeReveal(d.bloomCenter, radius, 5 + radius * 0.18);
@@ -1715,16 +1897,17 @@ function tickA3(dt: number): void {
   A3_CAPTIONS.forEach((caption, i) => {
     if (t >= wakeAt + caption.atSeconds) fireCaptionOnce(`a3-${i}`, caption.text);
   });
-  if (t >= Math.max(rampEnd + 4, waveEnd + 1.5) && d.captionsFired.has(`a3-${A3_CAPTIONS.length - 1}`)) {
+  if (t >= landingAt && bundleReady('anc.a3.material-lands', landingAt) && d.captionsFired.has(`a3-${A3_CAPTIONS.length - 1}`)) {
     // Land EXACTLY on the material preset. The story no longer ends here: the
     // first day alive begins with NO CUT AT ALL — the score resolves and thins,
     // and only the world remains. (The sun stays the director's through the
     // tail; the live clock takes over at the arrival's end.)
+    bundleFires('anc.a3.material-lands', landingAt); // texture arrives; the score resolves major and recedes
+    noteStoryBundleState('anc.a3.material-lands', t);
     setVoxelRealityStage('material');
     clearVoxelRealityOverrides();
     clearLifeReveal();
     markMilestone(STORY_MILESTONES.a3);
-    scoreHit('bloom'); // texture arrives; the score resolves major and recedes
     advanceToBeat('ch3-thirst');
   }
 }
@@ -1783,6 +1966,7 @@ function tickThirst(dt: number): void {
   if (t > 1 && d.prevThirst >= 0 && v.thirst - d.prevThirst >= FIRST_DAY.drinkJump) {
     markMilestone(STORY_MILESTONES.senseWater); // even a drink ahead of the cue names it
     markMilestone(STORY_MILESTONES.ch3Drank);
+    completeFoundationalObjective('ch3:thirst:drink-water', true);
     fireCaptionOnce('day-drank', FIRST_DAY_CAPTIONS.drank);
     advanceToBeat('ch3-forage');
   }
@@ -1815,6 +1999,7 @@ function tickForage(dt: number): void {
     d.forageAteAt = t;
     markMilestone(STORY_MILESTONES.senseFood);
     markMilestone(STORY_MILESTONES.ch3Ate);
+    completeFoundationalObjective('ch3:forage:eat-held-food', true);
     fireCaptionOnce('day-ate', FIRST_DAY_CAPTIONS.ate);
   }
   d.prevHunger = v.hunger;
@@ -1845,6 +2030,7 @@ function tickSignal(dt: number): void {
   // Three klaxon tones from the wreck.
   if (d.signalKlaxons < SIGNAL.klaxonRepeats && t >= d.signalKlaxons * SIGNAL.klaxonGapSeconds) {
     d.signalKlaxons++;
+    pulseAuditEmber();
     playSfx('terminalAlarm');
   }
   if (t >= SIGNAL.carrierAt) fireAuditOnce('sig-carrier', SIGNAL_LINES.carrier);
@@ -2142,7 +2328,11 @@ export function storyDirectorTick(
   worldElapsedSeconds = d.worldElapsedSeconds + dt
 ): void {
   const s = getStoryStateSnapshot();
-  if (!s.active || isStoryPaused()) return;
+  // Also enforce ownership at the frame boundary, including a stale value left
+  // after an entry subscriber ran. No non-descent tick can renew or retain that
+  // ephemeral hold. Natural impact and decay stay in tickDescent.
+  if (!s.active || s.beat !== 'descent') getFeedRuntime().flash = 0;
+  if (!s.active || isStoryPaused()) { cancelPendingStoryUxFeedback('inactive'); return; }
   d.beatClock += dt;
   d.elapsedSeconds += dt;
   d.worldElapsedSeconds = worldElapsedSeconds;
@@ -2175,26 +2365,24 @@ export function storyDirectorTick(
       break;
     case 'ch1-fixed': {
       tickCh1Flashes(dt);
-      // The first tutorial: extract fiber (hold-to-mine) and cross a screen
-      // edge — feeling the coverage hand off between fixed site cameras is the
-      // whole point. Every cell flip is a camera CUT: the HUD's SITE CAM tag
-      // changes and a small static blip marks the switch.
-      const lens = getSideLens();
-      if (lens) {
-        const along = _fixedRel.copy(getPlayerWorldPosition()).sub(lens.origin).dot(lens.travelAxis);
-        const cell = fixedScreenCellIndex(along, FIXED_SCREEN_CELL);
-        r.camCell = cell;
-        if (d.fixedCamCell === null) {
-          d.fixedCamCell = cell; // the opening camera — no cut on entry
-        } else if (cell !== d.fixedCamCell) {
-          d.fixedCamCell = cell;
-          d.glitchDecay = Math.max(d.glitchDecay, 0.4); // brief static, decays fast
-          playSfx('storyGlitch');
-        }
-        if (!d.fixedCells.has(cell)) {
-          d.fixedCells.add(cell);
-          if (d.fixedCells.size === CH1_FIXED_TUTORIAL.screens) {
+      const coverage = getFixedScreenCoverage();
+      if (coverage?.valid) {
+        r.camCell = coverage.cellId;
+        d.fixedCamCell = coverage.cellId;
+        if (currentCh1FixedObjectiveState() === 'traverse') {
+          if (!fixedArm || fixedArm.epoch !== coverage.geometryEpoch) {
+            fixedArm = { epoch: coverage.geometryEpoch, sequence: coverage.transferSequence };
+            fixedTransferAwaitingPaint = 0;
+            d.fixedCells.clear(); d.fixedCells.add(coverage.cellId);
+          } else if (coverage.transfer?.reason === 'player-traversal' && coverage.transferSequence > fixedArm.sequence) {
+            fixedArm.sequence = coverage.transferSequence;
+            d.fixedCells.add(coverage.cellId);
+            fixedTransferAwaitingPaint = coverage.transferSequence;
+            d.glitchDecay = Math.max(d.glitchDecay, 0.4);
+            playSfx('storyGlitch');
             fireCaptionOnce('fixed-cut', CH1_FIXED_CUT_CAPTION);
+            fixedOwnedCaption = getStoryText().caption;
+            completeFoundationalObjective('ch1:fixed:cross-camera-cell', true);
           }
         }
       }
@@ -2203,11 +2391,14 @@ export function storyDirectorTick(
       CH1_FIXED_CAPTIONS.forEach((caption, i) => {
         if (d.beatClock >= caption.atSeconds && d.elapsedSeconds - d.lastCaptionAt >= 6) {
           fireCaptionOnce(`fixed-obs-${i}`, caption.text);
+          fixedOwnedCaption = getStoryText().caption;
         }
       });
       if (
-        getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber
+        isDebrisCollected(0) && getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber
         && d.fixedCells.size >= CH1_FIXED_TUTORIAL.screens
+        && coverage?.presentedTransferSequence === fixedTransferAwaitingPaint
+        && fixedTransferAwaitingPaint > 0
       ) {
         advanceToBeat('ch1-track');
       }
@@ -2245,6 +2436,7 @@ export function storyDirectorTick(
           && d.beatClock >= d.depthCompleteAt + CH1_COLLECTION_TIMING.completionHoldSeconds
         ) {
           markMilestone(STORY_MILESTONES.ch1Depth);
+          completeFoundationalObjective('ch1:depth:');
           advanceToBeat('ch1-nav');
         }
       }
@@ -2254,6 +2446,7 @@ export function storyDirectorTick(
       // The ordered route complete (beacons mark fixes on proximity).
       if (d.beatClock >= 1 && navWaypointsComplete()) {
         markMilestone(STORY_MILESTONES.ch1Nav);
+        completeFoundationalObjective('ch1:nav:');
         advanceToBeat('ch1-iso');
       }
       break;
@@ -2267,6 +2460,7 @@ export function storyDirectorTick(
       if (d.beatClock >= 9 && signalMesaHandle.summit
         && getPlayerWorldPosition().distanceTo(signalMesaHandle.summit) <= 2.6) {
         markMilestone(STORY_MILESTONES.ch1Iso);
+        completeFoundationalObjective('ch1:iso:');
         advanceToBeat('ch1-lift');
       }
       break;
@@ -2408,7 +2602,7 @@ const _markerFire = new THREE.Vector3();
 const _markerResource = new THREE.Vector3();
 const _markerCandidate = new THREE.Vector3();
 
-function nearestCampfireMarkerTarget(): THREE.Vector3 | null {
+export function nearestCampfireMarkerTarget(): THREE.Vector3 | null {
   const player = getPlayerWorldPosition();
   let nearest: ReturnType<typeof getCampfires>[number] | null = null;
   let nearestDistance = Infinity;
@@ -2434,7 +2628,7 @@ function keepNearestMarkerCandidate(
   return Math.min(nearestDistance, distance);
 }
 
-function nearestGatherResourceTarget(resource: GatherMarkerResource): THREE.Vector3 | null {
+export function nearestGatherResourceTarget(resource: GatherMarkerResource): THREE.Vector3 | null {
   if (resource === 'flint') return signalMesaHandle.summit;
   const player = getPlayerWorldPosition();
   let nearestDistance = Infinity;
@@ -2483,118 +2677,20 @@ export interface StoryMarkerTarget {
 export function storyFreeMarkerTarget(): StoryMarkerTarget | null {
   const s = getStoryStateSnapshot();
   if (!s.active) return null;
-  const objective = getActiveGuidedStoryObjective();
-  switch (s.beat) {
-    case 'ch3-gather': {
-      if (!objective || objective.requiresMarker === false) return null;
-      const resource = objective.id === 'ch3:gather:recover-flint'
-        ? 'flint'
-        : currentGatherMarkerResource();
-      const target = nearestGatherResourceTarget(resource);
-      return target ? { position: target, label: objective.markerLabel } : null;
-    }
-    case 'ch3-await-rest': {
-      if (!objective || objective.requiresMarker === false) return null;
-      const fire = nearestCampfireMarkerTarget();
-      return fire ? { position: fire, label: objective.markerLabel } : null;
-    }
-    case 'ch3-thirst':
-      return objective?.requiresMarker !== false && storyAnchors.pond
-        ? { position: storyAnchors.pond.surface, label: objective?.markerLabel ?? 'WATER · DRINK' }
-        : null;
-    case 'ch3-forage': {
-      const seed = storyAnchors.terrainSeed;
-      if (!objective || objective.requiresMarker === false || seed == null) return null;
-      const target = nearestForageNodeWorld(getPlayerWorldPosition(), seed, 60);
-      return target ? { position: target, label: objective.markerLabel } : null;
-    }
-    case 'ch3-signal':
-      return objective?.requiresMarker !== false && wreckRelayHandle.position
-        ? { position: wreckRelayHandle.position, label: objective?.markerLabel ?? 'WRECK RELAY · REPORT' }
-        : null;
-    case 'ch4-vigil': {
-      if (!objective || objective.requiresMarker === false) return null;
-      const target = objective.id.includes('rest')
-        ? nearestCampfireMarkerTarget()
-        : wreckRelayHandle.position;
-      return target ? { position: target, label: objective.markerLabel } : null;
-    }
-    case 'ch4-audit':
-    case 'ch4-comply':
-    case 'ch4-defy': {
-      if (!objective || objective.requiresMarker === false) return null;
-      const target = getEmergentStoryMarkerTarget(s.beat);
-      return target ? { position: target, label: objective.markerLabel } : null;
-    }
-    case 'ch5-maw': {
-      const size = storyAnchors.planetSize;
-      const seed = storyAnchors.terrainSeed;
-      if (size == null || seed == null) return null;
-      const guidance = getAuthoredMawGuidance(getLocalActorId());
-      if (guidance.id === 'maw:observe-pond-response'
-        || guidance.id === 'maw:resonance-settling') {
-        return storyAnchors.pond
-          ? { position: storyAnchors.pond.shore, label: guidance.markerLabel }
-          : null;
-      }
-      const pack = storyAnchors.fieldPack;
-      return pack ? { position: pack.position, label: guidance.markerLabel } : null;
-    }
-    case 'ch6-dive': {
-      const size = storyAnchors.planetSize;
-      const seed = storyAnchors.terrainSeed;
-      if (size == null || seed == null) return null;
-      const guidance = getAuthoredDiveGuidance();
-      if (guidance.requiresMarker === false) return null;
-      if (guidance.id === 'dive:surface-with-keel') {
-        return storyAnchors.pond
-          ? { position: storyAnchors.pond.surface, label: guidance.markerLabel }
-          : null;
-      }
-      if (guidance.id === 'dive:return-to-shore') {
-        return storyAnchors.pond
-          ? { position: storyAnchors.pond.shore, label: guidance.markerLabel }
-          : null;
-      }
-      const keel = getKeelMemoryPose(size, seed);
-      return keel ? { position: keel.position, label: guidance.markerLabel } : null;
-    }
-    case 'ch7-reconstruct': {
-      const wreck = hifiWreckHandle.position;
-      if (!wreck) return null;
-      const guidance = getWreckReconstructionGuidance();
-      if (guidance.requiresMarker === false) return null;
-      const target = guidance.id === 'diagnose'
-        ? hifiWreckHandle.diagnosisTarget ?? wreck
-        : hifiWreckHandle.workstationPosition ?? wreck;
-      return { position: target, label: guidance.markerLabel };
-    }
-    case 'ch7-board': {
-      const guidance = getPhysicalBoardingGuidance();
-      if (guidance.requiresMarker === false || !hifiWreckHandle.hatchTarget) return null;
-      return { position: hifiWreckHandle.hatchTarget, label: guidance.markerLabel };
-    }
-    case 'ch8-launch': {
-      if (!objective || objective.requiresMarker === false || !hifiWreckHandle.hatchTarget) return null;
-      return { position: hifiWreckHandle.hatchTarget, label: objective.markerLabel };
-    }
-    case 'ch8-crossing': {
-      if (!objective || objective.requiresMarker === false) return null;
-      const target = readSystemCompanionBodyTarget(TIDEGARDEN_WORLD_ID);
-      return target
-        ? { position: target, label: objective.markerLabel, projectionSpace: 'spatial' }
-        : null;
-    }
-    case 'ch9-settle':
-    case 'ch9-hearth': {
-      if (!objective || objective.requiresMarker === false) return null;
-      const guidanceId = objective.id.startsWith('settle:')
-        ? objective.id.slice('settle:'.length)
-        : objective.id;
-      const target = resolveTidegardenSettlementTarget(guidanceId);
-      return target ? { position: target, label: objective.markerLabel } : null;
-    }
-    default:
-      return null;
-  }
+  return storyFreeMarkerTargetFor(s.beat, getActiveGuidedStoryObjective());
+}
+
+/**
+ * The post-feed marker resolver, parameterised on the objective it resolves
+ * FOR. `storyFreeMarkerTarget()` above passes the published one; the
+ * publication gate passes the CANDIDATE. That parameter is what removes the
+ * circularity that limited the deadlock guard to four ch1 beats: a resolver
+ * that reads the published objective can never answer "does this rung have a
+ * target?" before the rung is published.
+ */
+export function storyFreeMarkerTargetFor(
+  beat: StoryBeat | null,
+  objective: Readonly<GuidedStoryObjective> | null
+): StoryMarkerTarget | null {
+  return resolveMarkerTarget(beat, objective);
 }

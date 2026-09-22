@@ -1,0 +1,32 @@
+{
+  "role": "story-verifier",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T12:46:37.061982+00:00",
+  "safeMode": true,
+  "permissionMode": "default",
+  "tools": [
+    "Bash",
+    "Read",
+    "Grep",
+    "Glob",
+    "Write",
+    "Edit"
+  ],
+  "systemPromptSource": ".claude/agents/story-verifier.md",
+  "systemPromptSha256": "06216d09794dac2b5875897d6774a6b2aa11e851cb8a07d280123e5f0a96389f",
+  "commissionSha256": "1076838a15009cab8bac4042214977b9eb2b4003a9f63f917410d30b64bc42b3",
+  "scope": "Bounded actual partial WorldSave and Continue follow-through on frozen source; same run, no game edit/build or chapter acceptance",
+  "exitCode": 124,
+  "transportTimeout": true,
+  "finishedAt": "2026-09-06T13:06:37.091355+00:00",
+  "sessionId": "cfb0a387-6e2f-4abf-8adf-ca70e5332e52",
+  "model": "claude-opus-5",
+  "actualTools": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+  ]
+}

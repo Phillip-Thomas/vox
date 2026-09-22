@@ -1,0 +1,276 @@
+{
+  "schema": "paravoxia.verifier.runtimeReport.v1",
+  "role": "earned-continue-3d-runtime",
+  "status": "RAN \u2014 BOUNDED RESTORE PROVED; NEW ACCEPTED ACTION NOT PROVED",
+  "isAcceptance": false,
+  "isChapterVerification": false,
+  "acceptedActionClaim": false,
+  "chapterClaim": null,
+  "actualStartedAt": "2026-09-06T20:14:21Z",
+  "reportAt": "2026-09-06T20:28:18Z",
+  "gpuGrantedAt": "2026-09-06T20:22:35Z",
+  "probeStart": "2026-09-06T20:23:18Z",
+  "probeExit": {
+    "at": "2026-09-06T20:26:30Z",
+    "code": 1
+  },
+  "cpuWaitBeforeGpu": "20:14:21Z -> 20:22:41Z (8m20s) spent on the mandated pre-GPU corrections and <=30s control polls; no browser, lock or audio was touched in that window",
+  "attempts": 1,
+  "identicalRetryPerformed": false,
+  "environment": {
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "headed": true,
+    "headless": false,
+    "previewUrl": "http://127.0.0.1:34413/",
+    "previewLaunchedByThisRole": false,
+    "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "heavyLock": {
+      "path": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+      "form": "exec 9<>LOCK; flock -w 60 -x 9; node probe --heavy-lock LOCK --heavy-lock-fd 9",
+      "acquiredAt": "2026-09-06T20:23:18Z",
+      "openedByThisProbe": false,
+      "inheritedFd": 9
+    }
+  },
+  "preGpuCorrectionOutcome": {
+    "EC3D-FIX-GROUND-FRAME": {
+      "result": "EFFECTIVE",
+      "proof": "foot and centre are now separately reported at every burst; at the walk end footDistToE=90.053 vs centreDistToE=90.825. The prepared probe would have gated on the centre number.",
+      "radiusUnchanged": 1.2,
+      "yDropped": false
+    },
+    "EC3D-LATERAL-KEYS": {
+      "result": "DEFECT FIXED AND CONFIRMED IN RUNTIME",
+      "prepared": "earned-1 recorded KeyA=null, KeyD=null on the +X face (XZ-only calibration)",
+      "measured": "every calibration round recorded KeyA and KeyD usable=true with non-zero 3D tangent magnitude, e.g. KeyA 3d=1.725 tangent=1.724, KeyD 3d=0.899 tangent=0.406",
+      "findingEC3D_LATERAL_KEYS_DEAD_fired": false
+    },
+    "EC3D-FIX-GROUNDED-F-GATE": {
+      "result": "EFFECTIVE \u2014 it correctly REFUSED",
+      "detail": "groundedActionGate refused [F] because the foot was 90.069u from E and audit support was false. No [F] was pressed. No forced interaction, no rail grant, no milestone write, no endpoint-near success."
+    }
+  },
+  "requiredGates": {
+    "worldSaveEquality": true,
+    "worldActorIdentity": true,
+    "milestonesPreserved": true,
+    "noAnchorReplay": true,
+    "actualAcceptedNewAction": false,
+    "allHeld": false,
+    "note": "A restore alone is NOT a pass. The new accepted action was not achieved and is NOT claimed."
+  },
+  "boundedRestoreEvidence": {
+    "worldSaveOverwriteOk": true,
+    "problems": [],
+    "savedSamplesAtSave": 19,
+    "samplesOnDiskAfterContinue": 20,
+    "sampleCountGrowthIsNotDataLoss": true,
+    "prefixEquality": "the saved prefix survived into the later blob; growth is OBSERVED continuation, not loss, and count alone is never read as equality",
+    "worldIdentityOk": true,
+    "lostMilestones": [],
+    "noAnchorReplay": true,
+    "replayedAnchorIds": [],
+    "continueWasRealUi": {
+      "menuTitle": "Paravoxia",
+      "cta": "\u25b6 Continue",
+      "subtitle": "STORY COMPLETE \u00b7 RETURN TO YOUR WORLD",
+      "waitedForCtaBeforeStoryRuntime": true,
+      "deepLinkUsed": false
+    },
+    "restoredBeat": "ch13-survey",
+    "restoredSurveyPhase": "drawing",
+    "restoredSamples": 20
+  },
+  "POSE FINDING \u2014 THE ROUTE-BLOCKING CAUSE": {
+    "id": "EC3D-POSE-OVERWRITTEN-BEFORE-CONTINUE",
+    "severity": "data",
+    "claim": "The separate pvx.v1.world.-1,-1.player pose did NOT survive the save->menu->Continue lifecycle. It was overwritten twice. The WorldSave survey data DID survive.",
+    "poseBytesRetained": {
+      "before-navigation": {
+        "bytes": 168,
+        "sha256": "3751ca5b54996651a757fb161ebfeea178adcb39a7a6b1083e6d150341ead8d1",
+        "pos": [
+          -26.54019546508789,
+          52.78955841064453,
+          12.59562873840332
+        ],
+        "at": "2026-09-06T20:24:44.338Z"
+      },
+      "after-beforeunload-and-menu-boot": {
+        "bytes": 171,
+        "sha256": "fec3227fce4b24173c6bd8fb92c83c0212a53ac65ca9ed67b5cae75d585524de",
+        "pos": [
+          -31.990680694580078,
+          52.78897476196289,
+          21.41554069519043
+        ],
+        "at": "2026-09-06T20:24:44.640Z"
+      },
+      "menu-immediately-before-continue": {
+        "bytes": 171,
+        "sha256": "fec3227fce4b24173c6bd8fb92c83c0212a53ac65ca9ed67b5cae75d585524de",
+        "pos": [
+          -31.990680694580078,
+          52.78897476196289,
+          21.41554069519043
+        ],
+        "at": "2026-09-06T20:24:51.228Z"
+      },
+      "after-real-continue": {
+        "bytes": 122,
+        "sha256": "e11def664905d3e620ce1c5814548b9656d16a075dfb9517c52267e62ffeced6",
+        "pos": [
+          53.753990173339844,
+          13.5,
+          -14
+        ],
+        "at": "2026-09-06T20:24:53.632Z"
+      }
+    },
+    "domStorageEvidence": [
+      {
+        "atWall": "2026-09-06T20:24:44.338Z",
+        "what": "probe read the earned pose",
+        "pos": [
+          -26.54019546508789,
+          52.78955841064453,
+          12.59562873840332
+        ],
+        "bytes": 168
+      },
+      {
+        "atWall": "2026-09-06T20:24:44.353Z",
+        "what": "DOMStorage 'updated' on pvx.v1.world.-1,-1.player, 15 ms later, oldValue pos [-26.540...]",
+        "becomes": [
+          -31.990680694580078,
+          52.78897476196289,
+          21.41554069519043
+        ],
+        "bytes": 171,
+        "reading": "an autosave landed DURING the navigation/menu-boot window and replaced the earned pose"
+      },
+      {
+        "atWall": "2026-09-06T20:24:52.264Z",
+        "what": "DOMStorage 'updated' after the Continue click, oldValue pos [-31.990...]",
+        "becomes": [
+          53.753990173339844,
+          13.5,
+          -14
+        ],
+        "bytes": 122,
+        "reading": "the resumed session wrote a pose ~90u away from both the earned position and the menu-time saved value"
+      }
+    ],
+    "displacement": {
+      "earnedPose": [
+        -26.54,
+        52.79,
+        12.6
+      ],
+      "posePresentAtContinueClick": [
+        -31.99,
+        52.79,
+        21.42
+      ],
+      "poseAfterContinue": [
+        53.75,
+        13.5,
+        -14
+      ],
+      "distanceFromMenuTimeSavedPose": "~93 units; far outside the findValidSpawnSite radius of 12"
+    },
+    "sourceCallsiteHypothesis": {
+      "notAPatch": true,
+      "noGameSourceEdited": true,
+      "overwriteWindow": "main/src/App.tsx:1419-1462 doSave(withVoxels) -> savePlayerPose is fired by beforeunload, by visibilitychange hidden, by a 20 s interval, and by the autosave effect cleanup as doSave(false). One of these landed 15 ms after the earned pose was read, which is consistent with the effect-cleanup/beforeunload pair both writing during the same navigation.",
+      "spawnFallback": "main/src/components/EfficientScene.tsx:336-380 loads the saved pose, then computes resumeIsSafe = isDryClearResumePosition(...). On false it uses findValidSpawnSite(radius 12) and OTHERWISE arrivalPose.playerSurfacePosition. The observed ~93-unit displacement is far outside radius 12, so the reading consistent with the data is that the saved pose was rejected and the arrivalPose branch was taken.",
+      "confidence": "HYPOTHESIS from observed storage events and shipped code paths. The branch actually taken was NOT instrumented in this lane and is NOT asserted."
+    },
+    "consequence": "The body resumed on the +X face ~90 u from the ground target E [-42,51.05,12]. The walk therefore began 90 u away, which is why the ordinary route could not close within its 90 s budget. This is a POSE-RESTORE observation, not a steering defect: the corrected steering demonstrably worked (all four ordinary keys usable, full 3D, live-up tangents)."
+  },
+  "walkTelemetry": {
+    "target": "E [-42, 51.05, 12] (a GROUND target; arrival decided on the published FOOT)",
+    "arriveUnits": 1.2,
+    "radiusWidened": false,
+    "bursts": 36,
+    "walkMs": 90778,
+    "stopReason": "budget-exhausted",
+    "arrived": false,
+    "finalFoot": [
+      47.760593332076425,
+      48.53764895928807,
+      5.194135661742545
+    ],
+    "finalDist3dFootToE": 90.05329428993107,
+    "finalBodyCentre": [
+      48.56480026245117,
+      50.148006439208984,
+      5.194135665893555
+    ],
+    "finalDist3dCentreToE_diagnosticOnly": 90.82464659053537,
+    "lastFace": "+Y",
+    "recalibrations": 21,
+    "lateralKeysUsableAtLastCalibration": 2,
+    "recalibrationCost": "7 calibration rounds x 4 keys x ~800 ms consumed ~22 s of the 90 s budget; the body's live up changed face repeatedly during the descent",
+    "noPoseSetter": true,
+    "noRailGrant": true,
+    "noMilestoneWrite": true,
+    "noForcedInteraction": true,
+    "noFakePhysics": true
+  },
+  "privateProbeFaultObserved": {
+    "id": "EC3D-PROBE-OFFERSF-OBJECT",
+    "severity": "logging/binding, private probe only",
+    "detail": "promptOffersF(...) returns an OBJECT, not a boolean; the pre-[F] log rendered it as '[object Object]' and groundedActionGate received a truthy object where a boolean was intended.",
+    "impactOnThisResult": "NONE for the verdict: the gate refused on the foot-distance and audit-support conditions, which are independent. But an object would have been read as 'offering [F]' had the other conditions held, so this MUST be corrected before any lane that can actually reach E.",
+    "correctedInThisTask": false,
+    "reason": "discovered after the single bounded attempt; the remaining actual clock did not permit a corrected rerun. Recorded rather than silently patched."
+  },
+  "whatIsNotClaimed": [
+    "no full chapter verification",
+    "no full UX or taste judgement",
+    "no accepted new action",
+    "no claim the game restores the player pose correctly beyond the storage events shown",
+    "no claim about the branch EfficientScene actually took",
+    "no movie zero-rescue claim"
+  ],
+  "artifacts": {
+    "captureDir": "verifier/captures/earned-continue-3d/attempt-1/",
+    "summary": "verifier/captures/earned-continue-3d/attempt-1/summary.json",
+    "trace": "verifier/captures/earned-continue-3d/attempt-1/trace.ndjson",
+    "failure": "verifier/captures/earned-continue-3d/attempt-1/failure.json",
+    "poseFiles": [
+      "verifier/captures/earned-continue-3d/attempt-1/playerpose-before-navigation.json",
+      "verifier/captures/earned-continue-3d/attempt-1/playerpose-after-beforeunload-menu-boot.json",
+      "verifier/captures/earned-continue-3d/attempt-1/playerpose-menu-before-continue.json",
+      "verifier/captures/earned-continue-3d/attempt-1/playerpose-after-continue.json"
+    ],
+    "domStorage": "verifier/captures/earned-continue-3d/attempt-1/domstorage-events.json",
+    "cleanupReceipt": "verifier/captures/earned-continue-3d/attempt-1/cleanup-receipt.json",
+    "sourceRehash": "verifier/captures/earned-continue-3d/attempt-1/source-rehash.json",
+    "frames": [
+      "verifier/captures/earned-continue-3d/attempt-1/0000-movie-rail-state.png",
+      "verifier/captures/earned-continue-3d/attempt-1/0000a-origin-landed.png",
+      "verifier/captures/earned-continue-3d/attempt-1/0001-earned-partial-drawing.png",
+      "verifier/captures/earned-continue-3d/attempt-1/0002-landing-menu-continue.png",
+      "verifier/captures/earned-continue-3d/attempt-1/0003-after-continue.png",
+      "verifier/captures/earned-continue-3d/attempt-1/0004-at-survey-end.png"
+    ],
+    "logs": "logs/earned-continue-3d-runtime/"
+  },
+  "cleanup": {
+    "browserClosed": true,
+    "ownedSessionOnly": true,
+    "rootPreviewUntouched": true,
+    "sourceIntactAfterCapture": true,
+    "rawFailureRetained": true
+  },
+  "notModified": {
+    "gameSource": true,
+    "contract": true,
+    "build": true,
+    "producerControl": true,
+    "producerInvocationOrReceipts": true,
+    "otherRolesArtifacts": true
+  }
+}

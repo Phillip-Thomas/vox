@@ -9,6 +9,7 @@ import {
   enterSignedSceneAvBeat,
   getSignedSceneAvContract,
   getSignedSceneAvDebugSnapshot,
+  isConditionalSignedAnchor,
   resetSignedSceneAvRuntime,
   setSignedSceneAvDocumentVisible,
   setSignedSceneAvFocused,
@@ -17,6 +18,7 @@ import {
   tickSignedSceneAvRuntime
 } from './signedSceneAvRuntime.ts';
 import { getStoryMusicEnvelopeSnapshot } from './storyMusicEnvelope.ts';
+import { getStoryBundleTrace } from './storyScore.ts';
 
 afterEach(() => {
   resetEmergentStoryEvents();
@@ -25,13 +27,17 @@ afterEach(() => {
 });
 
 describe('signed scene AV runtime', () => {
-  it('loads both frozen council contracts and every reference resolves', () => {
+  it('loads all three frozen council contracts and every reference resolves', () => {
     const contract = getSignedSceneAvContract();
     expect(contract.source.contractVersion).toBe(SIGNED_SCENE_AV_REVISION);
     expect(contract.source.sha256).toBe(SIGNED_SCENE_AV_SHA256);
-    // 66 anchors from the A4-through-ch9 contract, plus chapter 10's ten.
-    expect(contract.anchors).toHaveLength(76);
-    expect(contract.beats).toHaveLength(16);
+    // 66 anchors from the A4-through-ch9 contract, chapter 10's ten, and
+    // chapter 13's twenty-eight. 13 beats, then 3, then 4.
+    expect(contract.anchors).toHaveLength(104);
+    expect(contract.beats).toHaveLength(20);
+    expect(contract.sources.map(source => source.sceneId)).toEqual([
+      'distance-between-fires', 'ch10-station-introduction', 'common-ground'
+    ]);
 
     const anchors = new Set(contract.anchors.map(anchor => anchor.id));
     const shots = new Set(contract.shots.map(shot => shot.id));
@@ -649,6 +655,18 @@ describe('signed scene AV runtime', () => {
       type: 'maw_repaired',
       payload: { toolId: 'iron_maw' }
     });
+    // anc.maw.repair-answer (audio-10x Stage 3): the receipt and commit are
+    // immediate — the anchor is active on this tick — but the Maw's answer (the
+    // bloom) chases the grid and lands on a later runtime tick.
+    const answer = [...getStoryBundleTrace()].reverse().find(row => row.anchorId === 'anc.maw.repair-answer')!;
+    expect(answer.authoredCommitAt?.beatClock).toBe(answer.schedulingArmAt.beatClock);
+    expect(answer.authoredCommits[0].cause).toBe('immediate');
+    expect(answer.fired).toBeNull();
+    expect(getSignedSceneAvDebugSnapshot()).toMatchObject({
+      anchorId: 'anc.maw.repair-committed',
+      score: { hit: null }
+    });
+    tickSignedSceneAvRuntime(0.016);
     expect(getSignedSceneAvDebugSnapshot()).toMatchObject({
       anchorId: 'anc.maw.repair-committed',
       score: { hit: 'bloom' }
@@ -945,5 +963,86 @@ describe('chapter 10 lens parity across quality and motion profiles', () => {
     if (snapshot.shot?.lens.appliedFovDeg != null) {
       expect(snapshot.shot.lens.appliedFovDeg).toBe(75);
     }
+  });
+});
+
+describe('conditional signed anchors are not prerequisites for the ones after them', () => {
+  it('covers every anchor the contract itself declares Contingent, and only ch13', () => {
+    // Drift guard. The set inside the runtime is written out by id so each entry
+    // can carry its contract citation; this asserts it against the compiled
+    // contract so a new contingent anchor cannot quietly become a gate.
+    const contract = getSignedSceneAvContract();
+    const contingent = contract.anchors
+      .filter(anchor => /^contingent\b/i.test(anchor.event))
+      .map(anchor => anchor.id);
+    expect(contingent.length).toBeGreaterThan(0);
+    for (const id of contingent) {
+      expect(isConditionalSignedAnchor(id), id).toBe(true);
+    }
+    // The two the contract declares conditional in prose rather than by prefix.
+    expect(isConditionalSignedAnchor('anc.cg.cell-installed')).toBe(true);
+    expect(isConditionalSignedAnchor('anc.cg.revision-ready')).toBe(true);
+    // Nothing else in any contract is exempted.
+    const conditional = contract.anchors.filter(anchor => isConditionalSignedAnchor(anchor.id));
+    expect(conditional).toHaveLength(contingent.length + 2);
+    for (const anchor of conditional) {
+      expect(anchor.beat.startsWith('ch13'), anchor.id).toBe(true);
+    }
+  });
+
+  it('still refuses a REQUIRED anchor whose ordered predecessor has not happened', () => {
+    // The order guard is not removed. ch13-common's own required chain must
+    // still be walked in order.
+    resetSignedSceneAvRuntime('sandbox');
+    enterSignedSceneAvBeat('ch13-common');
+    // reciprocal-crossed (21) before reciprocal-reference (20): refused.
+    expect(activateSignedSceneAnchorById('anc.cg.reciprocal-crossed')).toBe(false);
+    expect(activateSignedSceneAnchorById('anc.cg.reciprocal-reference')).toBe(true);
+    expect(activateSignedSceneAnchorById('anc.cg.reciprocal-crossed')).toBe(true);
+    // ...and a conditional one that never happened does not block the next
+    // required anchor after it.
+    expect(activateSignedSceneAnchorById('anc.cg.final-reference-offered')).toBe(true);
+    expect(activateSignedSceneAnchorById('anc.cg.independent-test')).toBe(true);
+    expect(activateSignedSceneAnchorById('anc.cg.complete')).toBe(true);
+    expect(getSignedSceneAvDebugSnapshot().activationHistoryAnchorIds)
+      .not.toContain('anc.cg.reference-vacated');
+  });
+
+  it('does not let an unearned receipt excuse an ordered predecessor', () => {
+    // The receipt map answers "has this already happened?", never "may this be
+    // skipped?". With no receipts at all the required chain is unchanged.
+    resetProgression();
+    resetSignedSceneAvRuntime('sandbox');
+    enterSignedSceneAvBeat('ch13-common');
+    expect(activateSignedSceneAnchorById('anc.cg.final-reference-offered')).toBe(false);
+    expect(activateSignedSceneAnchorById('anc.cg.complete')).toBe(false);
+    expect(getSignedSceneAvDebugSnapshot().activationHistoryAnchorIds).toEqual([]);
+  });
+
+  it('treats an ALREADY EARNED predecessor as done, without replaying it', () => {
+    // A mid-beat Continue: the crossing really happened in an earlier session
+    // and its receipt is durable. It must not be replayed into this ledger, and
+    // it must not block the offer the player makes now.
+    resetProgression();
+    markMilestone('story:ch13-reciprocal-crossed');
+    resetSignedSceneAvRuntime('sandbox');
+    enterSignedSceneAvBeat('ch13-common');
+    expect(activateSignedSceneAnchorById('anc.cg.final-reference-offered')).toBe(true);
+    const history = getSignedSceneAvDebugSnapshot().activationHistoryAnchorIds;
+    expect(history).toEqual(['anc.cg.final-reference-offered']);
+    expect(history).not.toContain('anc.cg.reciprocal-reference');
+    expect(history).not.toContain('anc.cg.reciprocal-crossed');
+  });
+
+  it('lets a hydrated ch13-home reach its later anchors without the live install receipt', () => {
+    resetSignedSceneAvRuntime('sandbox');
+    enterSignedSceneAvBeat('ch13-home');
+    // The live install receipt cannot exist on a restored entry, and the signed
+    // acceptance says it must stay silent there.
+    expect(activateSignedSceneAnchorById('anc.cg.home-steady')).toBe(true);
+    expect(activateSignedSceneAnchorById('anc.cg.fault-reviewed')).toBe(true);
+    expect(activateSignedSceneAnchorById('anc.cg.return-chosen')).toBe(true);
+    expect(getSignedSceneAvDebugSnapshot().activationHistoryAnchorIds)
+      .not.toContain('anc.cg.cell-installed');
   });
 });

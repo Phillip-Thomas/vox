@@ -1,0 +1,139 @@
+{
+  "documentKind": "score-final-completion-interpretation",
+  "director": "score",
+  "runId": "2026-09-05-after-the-hearth",
+  "interpretedAt": "2026-09-06T17:57:35.214432Z",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "providedSourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "providedImmutablePreview": "http://127.0.0.1:34413/",
+  "traceRef": "verifier/captures/arrival-common/journey-common-1/trace.ndjson",
+  "traceSha256": "c7473a705f516f2f1c381534bf8b7fb55fd8249635469a2f8d6b9ca1c67356d1",
+  "disposition": "mechanical-state-observed-audible-result-and-release-cause-unresolved",
+  "contractInterpretation": {
+    "audibleMinimumSpecified": false,
+    "fixedFiveSecondPerformanceRequired": false,
+    "guaranteedFinalAttackRequired": false,
+    "maximumLiveTextureSeconds": 5,
+    "existingReleaseSeconds": 4.5,
+    "meaning": "An eligible actual first completion selects the retained final-spacing texture under a bounded live token. The contract sets a maximum, not a guaranteed audible duration. Normal immediate handback/transition to done is explicitly allowed to retain that token; it must not be treated as an ordinary cancelling beat exit. Declared cancellations end it early and it never replays, hydrates or waits for unlock. The lack of an audible minimum does not excuse an unexplained generic handback cancellation.",
+    "clauses": [
+      "scene-contract.json#/score/cues/5",
+      "scene-contract.json#/syncAnchors/26",
+      "scene-contract.json#/syncAnchors/27",
+      "scene-contract.json#/reset/states/3"
+    ],
+    "controlAndProgressionWaitForMusic": false
+  },
+  "capturedSamples": [
+    {
+      "elapsedMs": 61793,
+      "storyBeat": "ch13-common",
+      "objectiveId": "ch13:common:release",
+      "common": {
+        "terraUnits": 18,
+        "workerUnits": 18,
+        "comparisonProved": true,
+        "committed": true
+      },
+      "score": {
+        "beat": null,
+        "mood": null,
+        "finalTextureSeconds": 0.0235
+      },
+      "completeAndHandbackInAvFullHistory": false
+    },
+    {
+      "elapsedMs": 62095,
+      "storyBeat": "done",
+      "objectiveId": null,
+      "common": {
+        "terraUnits": 18,
+        "workerUnits": 18,
+        "comparisonProved": true,
+        "committed": true
+      },
+      "score": {
+        "beat": null,
+        "mood": null,
+        "finalTextureSeconds": null
+      },
+      "completeAndHandbackInAvFullHistory": true
+    },
+    {
+      "elapsedMs": 65063,
+      "storyBeat": "done",
+      "objectiveId": null,
+      "common": {
+        "terraUnits": 18,
+        "workerUnits": 18,
+        "comparisonProved": true,
+        "committed": true
+      },
+      "score": {
+        "beat": null,
+        "mood": null,
+        "finalTextureSeconds": null
+      },
+      "completeAndHandbackInAvFullHistory": true
+    }
+  ],
+  "provenByTheseSamples": [
+    "The Common Ground diagnostic reports Terra 18, worker 18, reciprocal comparison proved and committed true at sample 61793 ms.",
+    "A live token diagnostic exists at that sample with elapsed age 0.0235 seconds, even though its separate beat/mood fields are null.",
+    "By sample 62095 ms both completion and handback appear in avFull activation history, story is done and required objective is null; the score token diagnostic is null, and remains null in later inspected samples."
+  ],
+  "notProven": [
+    "No audible onset, attack, duration, loudness, mix, final phrase or successful completed 4.5-second release is established.",
+    "Null finalTextureSeconds reports no current token; it is not a waveform-silence or engine-tail diagnostic. Beat/mood can clear independently of the token on normal beat departure.",
+    "The roughly 302 ms spacing of two sampled records does not establish exact token lifetime or the reason for clearing. The broad snapshots are not shown to be atomic across every queried subsystem.",
+    "The samples contain no authoritative cancellation/release-cause ledger or contemporaneous complete output/mute/focus/visibility eligibility state. They do not establish an allowed cancellation, an illegal cleanup, or a runtime repair requirement.",
+    "This local seeded survey entry is not proof of the continuous station-to-home-to-common journey or a Score acceptance review."
+  ],
+  "relevantSourceMeaning": {
+    "module": "main/src/story/commonGroundScore.ts",
+    "diagnostic": "getCommonGroundScoreDiagnostic returns elapsedSeconds(startedAtMs) while a token exists, else null; it does not report audible energy.",
+    "normalPath": "beginCommonGroundFinalTexture checks eligibility and creates a monotonic start; the current deadline path releases when elapsed reaches five seconds. releaseCommonGroundFinalTexture clears the token before setScoreBeat(null) and the existing override/fade release.",
+    "otherPaths": "Explicit cancellation also clears through release; resetCommonGroundScoreRuntime can clear local state. enterCommonGroundScoreBeat(null) clears beat/mood without itself clearing the token.",
+    "limitation": "These are meanings of the inspected source, not a measured attribution of the captured early clear. Supplied preview/manifest identity is kept separate from the current local source-read hashes.",
+    "sourceReadSha256": {
+      "main/src/story/commonGroundScore.ts": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+      "main/src/story/commonGroundDirector.ts": "3b2b95ccd1701b863348e147a8181a704c2ed73258467ea98617e06f0f25aba3",
+      "main/src/story/storyDirector.ts": "82fe1ca596ab6322aeb61c2f33ebed018b1ac1fc22a8fd10d3b2377aa2bf385b"
+    }
+  },
+  "boundedMeasurementNeeded": {
+    "window": "One synchronized 12-second completion window: approximately one second before an actually earned eligible completion through eleven seconds afterwards. Use existing aligned evidence where available; this interpretation launches no run or GPU work.",
+    "identity": [
+      "Exact scene-v3 hash and immutable preview/source identity",
+      "Actor/world/run identity throughout"
+    ],
+    "eventLedger": [
+      "Actual arrival/proof commit and completion/handback times",
+      "Token-begin request, accepted/declined result and eligibility inputs",
+      "Every token-clear time, caller/owner and precise reason: deadline versus a specific cancellation/reset",
+      "Normal story transition to done and objective/control handback"
+    ],
+    "lifecycleState": [
+      "Monotonic performance timestamp and aligned AudioContext.currentTime",
+      "Audio context/output state, mute and music-volume state",
+      "Pause, focus and document visibility transitions",
+      "World/actor/new story/optional action/reset/quit transitions"
+    ],
+    "audioEvidence": [
+      "Existing score/bed ownership and release-envelope target/effective gain across the handback",
+      "Synchronized captured output covering the final selection and completed existing release, with explicit decoded/output checks",
+      "Actual audition of that bounded excerpt for any audible or musical judgment; telemetry/metrics cannot substitute"
+    ],
+    "decisionRule": "A measured declared cancellation explains an early clear without imposing a five-second audible minimum. A clear attributed solely to ordinary handback/done with no declared cancellation conflicts with the explicit retention exception. A null field without that attribution decides neither. In an uninterrupted eligible case, establish the bounded monotonic deadline and actual existing release, without delaying controls or forcing an attack.",
+    "noScopeExpansion": "No invented receipt, forced onset, intensity boost, repeated finale, new composition, full-suite run or contract change is requested."
+  },
+  "limits": {
+    "runtimeRepairInferred": false,
+    "creativeAcceptance": false,
+    "scoreReview": false,
+    "newRuntimeOrGpuProbe": false,
+    "audioHeard": false,
+    "contractOrSourceEdited": false
+  }
+}

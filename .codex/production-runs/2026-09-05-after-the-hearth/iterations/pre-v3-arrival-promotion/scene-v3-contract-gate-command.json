@@ -1,0 +1,9 @@
+{
+  "command": "npm --prefix main run creative:gate -- --run .codex/production-runs/2026-09-05-after-the-hearth --phase contract",
+  "cwd": "/home/thomasphillip/Projects/vox",
+  "startedAt": "2026-09-06T16:50:03.516972+00:00",
+  "finishedAt": "2026-09-06T16:50:03.765659+00:00",
+  "exitCode": 1,
+  "log": "scene-v3-contract-gate.log",
+  "logSha256": "02e3e038371502da281e4e920f03f9f401a7f436dc399620fac0bd53e4cde819"
+}

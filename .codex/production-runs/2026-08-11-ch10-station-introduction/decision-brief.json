@@ -1,0 +1,120 @@
+{
+  "schema": "paravoxia.decisionBrief.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "authoredBy": "chapter-director (retrofitted 2026-09-05 from human-decision.json#ownerDecisions)",
+  "authoredAt": "2026-09-05T13:40:58.302132Z",
+  "sourceIntentRef": "story-intent.md#routed-decisions",
+  "items": [
+    {
+      "id": "owner-decision-cut-line-reach",
+      "kind": "creative",
+      "question": "The station now reads smaller in the final frame than authored (19.65% of frame width vs a contracted 22.0-28.7%). Restore the ship's reach so it coasts into the authored range, or accept the smaller station and re-derive the window?",
+      "context": "The judge's sharpest finding: the 'reveal is too small' complaint that three reviewers raised as a MUSICAL problem is partly a measurable IMAGE regression, and this run caused it. Suppressing the autopilot's held boost \u2014 an unambiguously correct fix, it closed both a receding cockpit and an undeclared lens \u2014 cut terminal speed from 320 to 117.5 u/s, which shortened the coast from ~533 units to ~196. The ship now asymptotes at 1,377-1,399 and never enters the window the shot was specified against. So the score lane has been defending a musical position against a perception that is half image.",
+      "options": [
+        "restore reach (change the coast so the ship arrives in 1,000-1,300) \u2014 keeps the authored composition, but touches ship feel at the chapter's last moment",
+        "accept the smaller station and re-derive the window from the real coast endpoint \u2014 cheap and honest, but concedes the regression the judge named",
+        "split: restore reach for the movie lane's capture only, leave manual feel untouched \u2014 likely rejected as a two-truths staging, but worth ruling on explicitly"
+      ],
+      "recommended": "restore reach. The judge's note is that fixing this closes a failing criterion, a measured regression, and half the run's loudest complaint at once \u2014 and the 'too small' perception is the one thing three independent reviewers agreed on.",
+      "decidedBy": "owner",
+      "status": "pending"
+    },
+    {
+      "id": "owner-decision-docking-architecture",
+      "kind": "boundary",
+      "question": "Docking: page reload (as the sandbox does today) or an in-place scene swap?",
+      "context": "Gates the entire second run. The interior wants an 8cm near plane and system space a 100km far plane, which is why the shipped path navigates rather than swaps. A reload kills StoryDirectorDriver, the signed AV rail and score continuity across the seam, forcing resume-through-milestones; an in-place swap preserves them but is a large renderer change.",
+      "options": [
+        "as recommended"
+      ],
+      "recommended": "in-place scene swap, and budget it as its own run \u2014 the reload forecloses both the score's continuous-pedal thesis and an unbroken arrival grammar, which are the two things that would make docking feel authored rather than loaded",
+      "decidedBy": "owner",
+      "status": "decided",
+      "paths": [
+        {
+          "path": "main/src/story/storyDirector.ts",
+          "symbol": "ch10 docking beat",
+          "why": "page reload vs in-place scene swap decides which files the docking beat may touch"
+        }
+      ],
+      "decision": "The owner directed Chapter 10 to expose the already-working sandbox docking path on 2026-08-13. Use the proven page-transition handoff now; an in-place renderer swap remains optional later polish.",
+      "decidedAt": "2026-08-12T00:00:00Z"
+    },
+    {
+      "id": "owner-decision-corridor-silence-legibility",
+      "kind": "creative",
+      "question": "Flying to the station and receiving complete silence inside the corridor is contract-correct. You read it as unfinished rather than as a closed door. Authorize one beat that makes the withholding legible as a choice?",
+      "context": "The chapter intends 'an address without an invitation', but intent only lands if the closed door reads as deliberate. This is the only owner-reported experience defect still open, and the build is live.",
+      "options": [
+        "as recommended"
+      ],
+      "recommended": "yes \u2014 cheap, inside this run's lane, in the chapter's own voice rather than a fourth advisory line",
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "The owner explicitly requested the same working [F] landing affordance in story mode on 2026-08-13. The threshold hand-back now opens the normal procedural approach, clearance prompt, and docking path; R12 continues through the station transaction. No extra Chapter 10 voice line was added. Desktop and touch round trips are browser-proven.",
+      "decidedAt": "2026-08-12T00:00:00Z"
+    },
+    {
+      "id": "owner-taste-voice-lane",
+      "kind": "creative",
+      "question": "Chapter 10's low lines are parenthetical second person ('a wall you sealed yourself', 'the going is still yours'). The ch7/ch8 repair you approved moved the movement voice to bare first person ('the scar remains. now it can carry me.'). Which lane does ch10 belong to?",
+      "context": "At the chapter's stated agency peak, K10's 'yours' places the voice outside the doer. Consistent with ch9; inconsistent with the lane you just moved.",
+      "options": [
+        "keep second person (ch9 continuity)",
+        "re-voice to first person (ch7/ch8 continuity)",
+        "an authored split at the threshold"
+      ],
+      "recommended": "the Chapter Director recommends the authored split; it is a taste call and yours",
+      "decidedBy": "owner",
+      "status": "pending"
+    },
+    {
+      "id": "owner-taste-reveal-scale",
+      "kind": "creative",
+      "question": "The station reveal's musical restraint: authored discipline, or too small?",
+      "context": "Three independent reviewers flagged the same perception from different directions \u2014 the blind viewer ('too small for the biggest image; nothing you'd remember'), the canon auditor (the answer's continuation reads as thinning), and the score auditor (the answer enters ~6dB under the ask's own mean). The score lane's position is that withholding the station's key, theme, mediant and lead is the point. R12 implements the station transaction without spending the still-deferred station-audio continuation.",
+      "options": [
+        "as recommended"
+      ],
+      "recommended": "listen to evidence/score/station-resolved_combined.wav against evidence/score/relay_ask-through-answer_combined.wav before deciding; the restraint is defensible but it is now three-for-three against it",
+      "decidedBy": "owner",
+      "status": "pending"
+    },
+    {
+      "id": "owner-decision-firebase-predeploy-gate",
+      "kind": "release",
+      "question": "Should firebase.json's predeploy hook run verify, not just build?",
+      "context": "The 2026-08-12 deploy went out green-looking while scene:av:check and chapter:registry:check were red, because predeploy runs npm run build only. Nothing in the repo's governance chain can currently block a deploy. firebase.json is a protected path, so this needs your authorization.",
+      "options": [
+        "as recommended"
+      ],
+      "recommended": "yes \u2014 the deploy that prompted this was harmless (the red checks were version pins, not correctness), but the gap is structural",
+      "decidedBy": "owner",
+      "status": "pending"
+    },
+    {
+      "id": "owner-decision-release-surface",
+      "kind": "release",
+      "question": "The build is live at https://paravox-game.web.app with ch10 behind ?story= dev entry. Confirm the player-facing ceiling stays at ch4-arrival, or promote?",
+      "context": "The deploy spent the publish gate the lock reserved; the surface question was never separately decided.",
+      "options": [
+        "as recommended"
+      ],
+      "recommended": "keep the ceiling at ch4-arrival while the judge's repair disposition and the missing systematic headed screening remain open \u2014 ch10's shot ladder has never been commissioned on a real GPU, beyond the owner's informal play",
+      "decidedBy": "owner",
+      "status": "pending"
+    },
+    {
+      "id": "owner-decision-redeploy",
+      "kind": "release",
+      "question": "The live site serves 9a20dde, which predates every review-wave repair. Redeploy, or leave production on the shipped-chapter build until the run is judged?",
+      "context": "Two commits of fixes have landed since the deploy: the reboard rung the manual player needs, the gaze solver, ST-0 occlusion, berth-ring suppression, and the boost suppression that keeps transit at its authored FOV. None are live.",
+      "options": [
+        "as recommended"
+      ],
+      "recommended": "redeploy only after the judge's repair items and remaining owner gates close, so release corresponds to an accepted state rather than an arbitrary checkpoint; add verify to the predeploy hook first",
+      "decidedBy": "owner",
+      "status": "pending"
+    }
+  ]
+}

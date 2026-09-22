@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 378500,
+  "stop_reason": "end_turn",
+  "session_id": "769a8dd3-b012-4622-9353-9416a40ff306",
+  "total_cost_usd": 2.8478105000000014,
+  "usage": {
+    "input_tokens": 96,
+    "cache_creation_input_tokens": 93344,
+    "cache_read_input_tokens": 2522695,
+    "output_tokens": 26038,
+    "output_tokens_details": {
+      "thinking_tokens": 9068
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 93344,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1070,
+        "cache_read_input_tokens": 96619,
+        "cache_creation_input_tokens": 537,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 537
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1518,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001593,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 96,
+      "outputTokens": 26038,
+      "cacheReadInputTokens": 2522695,
+      "cacheCreationInputTokens": 93344,
+      "webSearchRequests": 0,
+      "costUSD": 2.8462175000000007,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 9068,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 56,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Dirty source preserved (pre-existing modifications untouched; 98/98 manifest hashes identical before and after).\n\n## Result\n\n**Files owned/written:** `return-flight-source-audit.json`, `return-flight-source-audit.md`, `return-flight-source-audit/scratch/rehash-{before,after}.json`. Clock: start 10:47:58, before-rehash 10:48:14, after-rehash 10:53:55 (\u221204:00) \u2014 well inside 20 min. Manifest: 98/98 match manifest, before == after, zero drift.\n\n**Causal chain (one choke point):**\n1. `commonGroundDirector.ts:2270` \u2014 in flight with `!onOrigin()` the rail can *only* publish `fly`; `land`/`exit-ship` (`:2262-2265`) are unreachable.\n2. `:804-806` \u2014 `onOrigin()` is a pure store read: `systemFlight.activePlanetId === '-1,-1'`.\n3. `:862-869` \u2014 `tickReturn` returns early on `!onOrigin()`, gating the milestone, `anc.cg.origin-landed` and the beat advance.\n4. `activePlanetId` moves only through `SystemTravelDriver.tsx:108-260` (deep_space + flight + 6\u00b0 aim cone + `targetReady` + envelope).\n5. Activation needs centre distance \u2264 50 (`starSystem.ts:74`) + 135 (`systemTravelDriverModel.ts:1`) = **185**.\n6. `systemTravelAssist.ts:47-50` \u2014 while `ready === false`, inward speed is clamped to `(d\u2212300)\u00b70.65`, i.e. **held at 300 units**, applied at `ShipController.tsx:899-925`.\n\n**Candidates:** (A) ship parks on the unready 300-unit shell; (B) cone loss cancels lock *and* world prep (`SystemTravelDriver.tsx:238-240` \u2192 `App.tsx:1238-1241`, cancelled prep resolves false at `:1215-1222`), so `targetReady` never latches. Same observable. Both **[U]** until live fields exist.\n\n**Ruled out:** speed/distance budget (~7\u201311 s crossing); the real `sprint:false` divergence at `:2520` vs `rail-ch10-ask.ts:66-67` (boost scales acceleration only, \u22484 s); route-offline/single-body manifest (seeded via `storyState.ts:568-571` \u2192 `shipRestoration.ts:97`); world-id lookup miss; controls unwired (lift anchor proves `jump` landed); seated stillness; 435 m marker as celestial distance.\n\n**Smallest discriminator (no build/GPU/source change):** add to earned-2's per-second sample only `systemFlight.pose.position/.velocity`, `systemFlight.target`/`locationMode`, and `getSystemTravelAssistTarget().ready`. Plateau \u2248300 with `ready:false` \u21d2 A/B; constant 2200\u20133300 with |v|\u22480 \u21d2 neither; `d<185` with `ready:true` \u21d2 handoff commit, outside this audit.\n\nNo defect asserted, no repair authorized.",
+  "ttft_ms": 1830,
+  "type": "result",
+  "duration_ms": 378177,
+  "uuid": "e28db572-386e-472d-a1fd-6e18246dc6f7",
+  "ttft_stream_ms": 1308,
+  "time_to_request_ms": 44,
+  "first_content_frame_ms": 1309,
+  "queued_turn_count": 0
+}

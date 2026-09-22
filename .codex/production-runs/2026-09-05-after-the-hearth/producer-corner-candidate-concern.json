@@ -1,0 +1,13 @@
+{
+  "schema": "paravoxia.producerImplementationConcern.v1",
+  "recordedAt": "2026-09-06T10:54:56.437021+00:00",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourcePath": "main/src/story/commonGroundRoute.ts",
+  "sourceSha256": "d7e5bbc38e2ea321c18db1366cc6a8dbcd2806029fc670b1a82bd825ac8d813a",
+  "sourceStage": "candidate under active lifecycle integration, not accepted",
+  "riskRef": "producer-manual-corner-risk.json",
+  "statement": "Candidate permits outstanding rounded-corner lag to be credited by lateral endpoint motion, potentially conflicting with signed missing-ground/endpoint-loop exclusion.",
+  "counterexample": "At C(-48,51.05,12), previousUnits17.6915 (engineer corrected simulation), move x to-48.075 and back in0.075 steps with z12 fixed. The nearest route arc stays18; lag<0.6 and displacement>0, so each step credits0.075 until18 without revisiting omitted corner. This follows the candidate formula; not a browser measurement.",
+  "requestedDisposition": "Chapter Director is interpreting whether this satisfies existing contract. Do not treat3059passingtests as resolving this concern. Root will route exact disposition before capture readiness.",
+  "status": "awaiting Chapter interpretation"
+}

@@ -1,0 +1,18 @@
+{
+  "role": "continue-controller-wireor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T20:48:07.485702+00:00",
+  "commissionSha256": "e023fa6d221b13911f587332dba50f37f7ea20890426d17086f5720367526360",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFrozen": false,
+  "originalDeadline": "2026-09-06T20:59:21.964214+00:00",
+  "originalInvocationRef": "continue-controller-closure-invocation.json",
+  "sourceReference": "iterations/implemented-arrival-common-repair/source",
+  "scope": "Private probe-only correction of curved-face calibration thrash and signed-action gating; CPU only while independent source integration may proceed",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T20:54:19.325204+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "cf4b8de6-1ef8-4f60-a20b-b32997434291",
+  "isError": false,
+  "gameSourceMutationAuthorized": false
+}

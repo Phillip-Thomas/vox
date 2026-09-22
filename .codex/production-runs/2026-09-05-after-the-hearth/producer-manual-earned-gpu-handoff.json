@@ -1,0 +1,35 @@
+{
+  "at": "2026-09-06T18:21:15.896988+00:00",
+  "from": "arrival-common-manual",
+  "to": "arrival-common-earned",
+  "capturesComplete": true,
+  "captureAuthorityReleased": true,
+  "priorRoleReportMayContinue": true,
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashed": 99,
+  "cleanupReceipts": [
+    {
+      "path": "verifier/captures/arrival-common-manual/reference-1/summary.json",
+      "sha256": "58124d01618c4cf52d02e7f50521bd5fc9daed6480f3b7c3223ad3d67523f003",
+      "cleanupState": "stopped"
+    },
+    {
+      "path": "verifier/captures/arrival-common-manual/reference-2/summary.json",
+      "sha256": "06768cdb89c1f8c6d0c8ee7975530563ea09fb16ed3d1a6cdf11802b84e2d5e3",
+      "cleanupState": "stopped"
+    },
+    {
+      "path": "verifier/captures/arrival-common-manual/reference-3/summary.json",
+      "sha256": "c3e6dead27fa431c6b9592fd11fb2537534118ef4ecd0ee05c46b009a7786664",
+      "cleanupState": "stopped"
+    },
+    {
+      "path": "verifier/captures/arrival-common-manual/deviation-1/summary.json",
+      "sha256": "d2e82f007cae943efbbf1c543bb33ed99dccd49c900207ede33efa5bdd706f54",
+      "cleanupState": "stopped"
+    }
+  ],
+  "sharedExclusiveLockObservedFree": true,
+  "isAcceptance": false,
+  "findings": "Manual reference not complete; deviation physically traversed original planes but live credit stalled6units. Preserve all four attempts; no game patch inferred. Prior role may finish read-only report, not launch another browser."
+}

@@ -1,0 +1,12 @@
+{
+  "at": "2026-09-06T21:28:22.029426+00:00",
+  "captureRef": "verifier/captures/manual-credit-finale/entry-crossing-run2/summary.json",
+  "captureSha256": "2ff9476d1e40651824d72f1d7c8be8eadcb86e9b6e30c00d91df5acebdc6d21c",
+  "classification": "PROBE-ARMING-ERROR-INCONCLUSIVE for candidate manual passage",
+  "failedGates": [
+    "LP-A-and-LP-B-armed-without-relocation"
+  ],
+  "reason": "LP-A requested194722 resolved194730; LP-B219885 resolved219894 at line7839. Zero pauses but exact-location requirement failed before route walking. Legacy setup verdict/exit0 not passage.",
+  "newSourceRepairRequired": false,
+  "next": "Inspect actual executable statement sites and lexical variables, then pin legal exact locations before next actual crossing; preserve failedrun2. Verify captured function identity as well as argument scope."
+}

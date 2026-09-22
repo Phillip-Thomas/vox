@@ -62,6 +62,126 @@ export function fixedScreenCellIndex(along: number, cellWidth: number): number {
   return Math.floor((along + cellWidth / 2) / cellWidth);
 }
 
+export interface SideCoverageViewport {
+  width: number; height: number; fov: number; aspect: number; touch: boolean;
+  safe: { left: number; right: number; top: number; bottom: number };
+  restoreIdentity?: string;
+  targetVertical?: { top: number; bottom: number };
+  reservations: readonly { id?: string; left: number; right: number; top: number; bottom: number }[];
+}
+export interface FixedScreenCoverageGeometry {
+  projectionSignature: string; cellWidth: number; offsetY: number; valid: boolean;
+}
+export interface FixedScreenTransfer {
+  reason: 'player-traversal'; fromCell: number; toCell: number; direction: number; playerMovementDelta: number;
+}
+export interface FixedScreenCoverageSample {
+  valid: boolean; geometryEpoch: number; projectionSignature: string; playerSampleId: number;
+  along: number; previousAlong: number; cellId: number; anchorCenter: number;
+  intervalMin: number; intervalMax: number; transferSequence: number;
+  transfer: FixedScreenTransfer | null; presentedTransferSequence: number;
+}
+let coverageViewport: SideCoverageViewport | null = null;
+let coverage: FixedScreenCoverageSample | null = null;
+let coverageGeometry: FixedScreenCoverageGeometry | null = null;
+let geometrySignature = '';
+let geometryStableSamples = 0;
+let geometryEpoch = 0;
+let geometryBaseCenter = 0;
+let geometryBaseCell = 0;
+let geometryRebase = true;
+let appliedCoverageSampleId = -1;
+export function setSideCoverageViewport(viewport: SideCoverageViewport): void { coverageViewport = viewport; }
+export function resetFixedScreenCoverage(): void {
+  coverage = null; coverageGeometry = null; geometrySignature = ''; geometryStableSamples = 0; geometryRebase = true; appliedCoverageSampleId = -1;
+}
+export function getFixedScreenCoverage(): FixedScreenCoverageSample | null { return coverage; }
+/** R3F after-render boundary; applying a camera alone does not count as a presented frame. */
+export function noteFixedScreenCoveragePresented(): void {
+  if (coverage?.playerSampleId === appliedCoverageSampleId) coverage.presentedTransferSequence = coverage.transferSequence;
+}
+/** Exact projection of the corrected conservative worker envelope in the active side rig. */
+export function resolveFixedScreenCoverageGeometry(viewport: SideCoverageViewport, rig: LensRig): FixedScreenCoverageGeometry {
+  const { width: w, height: h } = viewport;
+  const vertical = rig.lift - rig.focusLift;
+  const depth = Math.hypot(rig.distance, vertical);
+  const cos = rig.distance / depth, sin = vertical / depth;
+  const tan = Math.tan(THREE.MathUtils.degToRad(viewport.fov) / 2);
+  let near = Infinity, bodyTop = Infinity, bodyBottom = -Infinity;
+  // Root -.83, sole -.96, head top .97; both facing endpoints use .72.
+  for (const up of [-1.79, 0.14]) for (const z of [-0.72, 0.72]) {
+    const d = (rig.distance - z) * cos + (rig.lift - up) * sin;
+    near = Math.min(near, d);
+    const screenUp = (up - rig.focusLift) * cos - z * sin;
+    const y = h * (1 - screenUp / (d * tan)) / 2;
+    bodyTop = Math.min(bodyTop, y); bodyBottom = Math.max(bodyBottom, y);
+  }
+  const left = viewport.safe.left + 18, right = w - viewport.safe.right - 18;
+  let top = viewport.safe.top + 18, bottom = h - viewport.safe.bottom - 18;
+  for (const rect of viewport.reservations) {
+    // Reservations are measured rectangles. Their component names do not
+    // determine which edge they occupy (debug/corner controls can move).
+    if ((rect.top + rect.bottom) / 2 < h / 2) top = Math.max(top, rect.bottom + 14);
+    else bottom = Math.min(bottom, rect.top - 14);
+  }
+  if (viewport.targetVertical) {
+    bodyTop = Math.min(bodyTop, viewport.targetVertical.top);
+    bodyBottom = Math.max(bodyBottom, viewport.targetVertical.bottom);
+  }
+  let offsetY = 0;
+  if (viewport.touch && w > h) {
+    const minimum = bodyBottom - bottom;
+    const maximum = bodyTop - top;
+    if (minimum <= maximum) offsetY = THREE.MathUtils.clamp(0, minimum, maximum);
+  }
+  const horizontalDepth = near * tan * viewport.aspect;
+  const halfSpan = Math.min((1 - 2 * left / w) * horizontalDepth, (2 * right / w - 1) * horizontalDepth) - 0.72 - 0.25;
+  const projectionSignature = JSON.stringify([w, h, viewport.fov, viewport.aspect, left, right, top, bottom, offsetY,
+    rig.distance, rig.lift, rig.focusLift, rig.elevation, rig.azimuth, viewport.restoreIdentity]);
+  return { projectionSignature, cellWidth: Math.max(0.001, 2 * halfSpan), offsetY,
+    valid: halfSpan > 0 && bodyTop - offsetY >= top && bodyBottom - offsetY <= bottom };
+}
+/** One caller samples once per frame; renderer and progression consume this same identity. */
+export function sampleFixedScreenCoverage(position: THREE.Vector3, playerSampleId: number, foreground = true): FixedScreenCoverageSample | null {
+  if (!active || !coverageViewport || rigTo.followQuant <= 0) return coverage;
+  if (coverage?.playerSampleId === playerSampleId) return coverage;
+  const geometry = resolveFixedScreenCoverageGeometry(coverageViewport, rigTo);
+  geometry.projectionSignature += JSON.stringify([active.origin.toArray(), active.up.toArray(), active.travelAxis.toArray(), active.depthAxis.toArray()]);
+  const along = position.clone().sub(active.origin).dot(active.travelAxis);
+  if (geometry.projectionSignature !== geometrySignature || !foreground) {
+    geometrySignature = geometry.projectionSignature; geometryStableSamples = 1; geometryRebase = true;
+  } else geometryStableSamples += 1;
+  coverageGeometry = geometry;
+  const previous = coverage;
+  const valid = geometry.valid && geometryStableSamples >= 2 && foreground;
+  let cellId = previous?.cellId ?? 0;
+  let center = previous?.anchorCenter ?? 0;
+  let transfer: FixedScreenTransfer | null = null;
+  let sequence = previous?.transferSequence ?? 0;
+  if (valid && geometryRebase) {
+    geometryEpoch += 1; geometryRebase = false;
+    geometryBaseCenter = center; geometryBaseCell = cellId;
+  } else if (valid && previous?.valid) {
+    cellId = geometryBaseCell + fixedScreenCellIndex(along - geometryBaseCenter, geometry.cellWidth);
+    center = geometryBaseCenter + (cellId - geometryBaseCell) * geometry.cellWidth;
+    const movement = along - previous.along;
+    if (cellId !== previous.cellId && Math.abs(movement) > 1e-5) {
+      sequence += 1;
+      transfer = { reason: 'player-traversal', fromCell: previous.cellId, toCell: cellId, direction: Math.sign(movement), playerMovementDelta: movement };
+    }
+  }
+  coverage = { valid, geometryEpoch, projectionSignature: geometrySignature, playerSampleId, along, previousAlong: previous?.along ?? along,
+    cellId, anchorCenter: center, intervalMin: center - geometry.cellWidth / 2, intervalMax: center + geometry.cellWidth / 2,
+    transferSequence: sequence, transfer, presentedTransferSequence: previous?.presentedTransferSequence ?? 0 };
+  return coverage;
+}
+export function clearSideCameraViewOffset(camera: THREE.Camera): void {
+  const perspective = camera as THREE.PerspectiveCamera;
+  if (perspective.isPerspectiveCamera && perspective.userData.earlySideViewOffset) {
+    perspective.clearViewOffset(); delete perspective.userData.earlySideViewOffset;
+  }
+}
+
 // --- The lens rig ---------------------------------------------------------------
 //
 // Side view, top-down, and isometric are the SAME external camera at different
@@ -122,6 +242,7 @@ export function getLensRig(): LensRig {
 }
 
 export function resetLensRig(): void {
+  resetFixedScreenCoverage();
   setLensRig(SIDE_RIG, 0);
 }
 
@@ -198,7 +319,7 @@ export function computeRigFrame(
     // the lens origin so the shot never bobs with terrain.
     _rigRel.copy(anchor).sub(lens.origin);
     const along = _rigRel.dot(lens.travelAxis);
-    const cell = fixedScreenCellIndex(along, rig.followQuant) * rig.followQuant;
+    const cell = coverage?.anchorCenter ?? (rig.followQuant === 1 ? 0 : fixedScreenCellIndex(along, rig.followQuant) * rig.followQuant);
     const depth = _rigRel.dot(lens.depthAxis);
     _rigAnchor.copy(lens.origin)
       .addScaledVector(lens.travelAxis, cell)
@@ -327,6 +448,14 @@ export function applyActiveRigTransform(camera: THREE.Camera, lens: SideLens, dt
     _frameUp.lerpVectors(_upFrom, _frameUp, k).normalize();
   }
   applyFrame(camera, _worldEye, _worldTarget, _frameUp);
+  const perspective = camera as THREE.PerspectiveCamera;
+  const geometry = coverageViewport ? resolveFixedScreenCoverageGeometry(coverageViewport, rigTo) : coverageGeometry;
+  if (perspective.isPerspectiveCamera && geometry?.offsetY && rigTo.elevation === 0 && rigTo.distance === 16) {
+    perspective.setViewOffset(coverageViewport!.width, coverageViewport!.height, 0, geometry.offsetY, coverageViewport!.width, coverageViewport!.height);
+    perspective.userData.earlySideViewOffset = true;
+  } else clearSideCameraViewOffset(camera);
+  // The after-render callback acknowledges this exact sample only after the scene render.
+  if (coverage && rigTo.followQuant > 0) appliedCoverageSampleId = coverage.playerSampleId;
 }
 
 const _overheadFwd = new THREE.Vector3();

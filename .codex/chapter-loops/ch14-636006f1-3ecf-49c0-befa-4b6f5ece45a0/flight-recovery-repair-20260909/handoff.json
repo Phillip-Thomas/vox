@@ -1,0 +1,81 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "well keep grinding through the blockers, being sure to eliminate stuff that doesnty make sense rather than add to the pile",
+  "contributor": "root, mechanical flight control repair",
+  "scope": "Stop the on-foot stuck watchdog from mutating flight directives based on the parked body. Clear flight controls before each rail and reset ground recovery state. Landing physics and authority unchanged. Focused supported diagnostic reached ch9-settle in 11.4s; real continuous approach still requires fresh proof. No new recovery controller, progress grant, creative pass or budget reset.",
+  "status": "focused-hardware-pass-final-verification-pending",
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/previous-state.json",
+    "sha256": "b4aab8fd37d538478363a3ecf3f6b33e117cc17d220e6d8b8a1fc4e309645436"
+  },
+  "priorFailure": {
+    "stage": "verify-final",
+    "message": "Probe continuity failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T04:26:18.401Z"
+  },
+  "captureStop": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/capture-stop.json",
+    "sha256": "9093ef15bad85daf56417613337bdec1ca419be96f717e99214ee8e6a2f0efe2"
+  },
+  "files": [
+    {
+      "path": "main/src/story/autopilot/primitives.test.ts",
+      "before": "08069b5b6677ea35d80dc1c37695fbe7dd61dd2c4b5f2fb0b9233ab6a70a01cd",
+      "after": "835048b86aaa7a8d1ec2de4e8681b36ee4f43d1a68828ab7e446963303381ba0"
+    },
+    {
+      "path": "main/src/story/autopilot/primitives.ts",
+      "before": "9ae6331a8dde577e2b9e91f74a28ac024e861b6f5b071922c792aadc3d92c8dc",
+      "after": "91a2a321bdfdcc078465dde47494e1b1ec3fd9602f901286b05a10f1172d78c5"
+    }
+  ],
+  "regression": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/tests-before.log",
+    "sha256": "a1ff8d8090baa6f49595b36943e36ba36923e311ff05f70e7c7eb0e77e1b3499"
+  },
+  "tests": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/tests-after.log",
+    "sha256": "77e064fe9bcdfe9fa36fd7e6044f61f87f82161715bf7d12706558341a0a4cbc"
+  },
+  "typescript": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/typescript.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "build": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/build.log",
+    "sha256": "64d721feeb3ef2de4ecf2f9d955fc43ab23cac3864dd50e55c6761dab1502e7c"
+  },
+  "source": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/source.json",
+    "sha256": "aa56d0c66184561da200a7dcb386d6d8ddf770605a39a5b76e6e9b5b7d49a4f8"
+  },
+  "preview": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/preview-owner.json",
+    "sha256": "e11e910dc27c30440ae099517f0dccb23f0268e0f8bb1dd0eb5823feb2505834"
+  },
+  "runtime": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/gpu-probe/raw-samples.json",
+    "sha256": "4ffd3c1d19c5b233733825138a845fa3378928eb1c6cfb8caa3ab517a3b3db8f"
+  },
+  "hardware": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/gpu-probe.log",
+    "sha256": "88d811ab93a85822ee356478f69bd7381ee441fe04916319ba29cfa86a418cfb"
+  },
+  "retainedUsage": {
+    "roleLaunches": 14,
+    "modelTurns": 414,
+    "inputTokens": 813455,
+    "cacheReadTokens": 23566776,
+    "outputTokens": 162438
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "at": "2026-09-09T04:30:22.816Z"
+}

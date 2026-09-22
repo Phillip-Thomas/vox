@@ -1,0 +1,12 @@
+{
+  "ticket": "c6447e24-7738-4741-92b6-e92bf9659c0e",
+  "at": "2026-09-08T20:35:19.147Z",
+  "task": {
+    "id": "capture-tooling",
+    "seconds": 720,
+    "writes": true,
+    "task": "Fix concrete Chapter14 capture transport blockers. Actual repo /home/thomasphillip/Projects/vox. Own ONLY main/tools/chapter-loop/control-capture.mjs, control-capture.test.mjs, capture-case.mjs, capture-case.test.mjs and new docs/chapter-loop/control-config.md. Root owns runner/renewal; no game edits, no GPU/browser probes, no subagents. Current main/chapter-ch14-controls.json has waits60000/240000 over max30000 and flat pause/Continue fields. Do NOT raise caps. Implement validation of case config BEFORE building or starting preview, with concise actionable errors. Add optional generic bootstrapSteps run through SAME ordinary-input executor before baseline readiness so a landing CTA or predecessor setup can be performed before runtime waits; retain Continue post-reload CTA-before-runtime ordering. Add generic bounded walk action, if feasible: target read from snapshot pointer or explicit position; steer using ordinary mouse/keyboard based on read-only player pose/heading, no state setters/teleports/scripts, explicit timeout<=30000 and cleanup key release, stop on no progress. Inspect only precise relevant telemetry field definitions in main/src/story/JourneyRuntimeProbeBridge.tsx and controller conventions; do not dump whole source manifests, run state, canon or transcripts. Document exact config schema, action types, envelope pointers, distinction between diagnostic chapter-entry manual proof versus earned full-story continuity. Manual proof may start at an existing story= predecessor route but must not claim fresh continuity. Existing transport fresh browser has no prior save; no importing forged saved state. Add focused tests for rejected config before any build, malformed bootstrap/walk, and invariants. Keep source reads/output under approximately12K tokens; result under2KB with touched files and actual tests. Full permissions and routine decisions authorized; report exact limitations without stopping for permission."
+  },
+  "permissionMode": "full",
+  "model": "opus"
+}

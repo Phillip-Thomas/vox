@@ -1,0 +1,58 @@
+{
+  "status": "BUDGET_EXHAUSTED",
+  "chapter": "ch14",
+  "next": null,
+  "spent": {
+    "activeMs": 2074607,
+    "roleLaunches": 7,
+    "modelTurns": 121,
+    "inputTokens": 206197,
+    "cacheReadTokens": 4563072,
+    "outputTokens": 36485
+  },
+  "limits": {
+    "activeMs": 28800000,
+    "endToEndMs": 28800000,
+    "firstPlayableMs": 5400000,
+    "roleLaunches": 14,
+    "modelTurns": 400,
+    "inputTokens": 1000000,
+    "cacheReadTokens": 20000000,
+    "outputTokens": 250000,
+    "roleMs": 2700000,
+    "roleTurns": 60,
+    "contextTokens": 32000,
+    "promptBytes": 48000,
+    "transcriptBytes": 16000000,
+    "lookCycles": 3,
+    "listenCycles": 2,
+    "infrastructureRetries": 1
+  },
+  "remaining": {
+    "activeMs": 26725393,
+    "roleLaunches": 7,
+    "modelTurns": 279,
+    "inputTokens": 793803,
+    "cacheReadTokens": 15436928,
+    "outputTokens": 213515
+  },
+  "priorSpend": null,
+  "preview": null,
+  "evidence": null,
+  "candidateSha256": null,
+  "findings": null,
+  "failure": {
+    "stage": "build",
+    "message": "budget:roleTurns",
+    "at": "2026-09-08T20:58:54.350Z"
+  },
+  "release": "Creation result only. Existing certification/release gates and publishing authority remain separate.",
+  "clock": {
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "elapsedMs": 1526351,
+    "limitMs": 28800000,
+    "remainingMs": 27273649,
+    "deadlineAt": "2026-09-09T04:33:28.000Z"
+  },
+  "elapsedMs": 1526351
+}

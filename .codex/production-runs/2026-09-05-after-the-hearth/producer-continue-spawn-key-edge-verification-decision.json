@@ -1,0 +1,16 @@
+{
+  "at": "2026-09-06T23:45:17.390759+00:00",
+  "decision": "Authorize one bounded8minute verification-only correction after first actualContinue109s showed preservedposition/prefix but instantaneousF was not accepted.",
+  "decidedBy": "delegate",
+  "authorityRef": {
+    "path": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+    "sha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338"
+  },
+  "priorVerifierBudgetMinutes": 20,
+  "priorOriginalDeadline": "2026-09-06T23:45:21.343614Z",
+  "additionalVerificationMinutes": 8,
+  "additionalSourceRepairPasses": 0,
+  "sourceMutationAuthorized": false,
+  "condition": "All previous verifier invocations finished; postfinally browsercleanup proven. Reuse readycurrentcandidate andstrictgates; only concrete private inputedge correction, no broadprep/newtests/build.",
+  "scope": "RealContinue plus new heldF and fullsuite once ifruntimepasses. Source tenthrepair remains unauthorized."
+}

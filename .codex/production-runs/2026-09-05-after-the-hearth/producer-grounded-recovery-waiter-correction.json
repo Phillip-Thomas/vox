@@ -1,0 +1,7 @@
+{
+  "at": "2026-09-07T00:10:25.534036+00:00",
+  "pid": 2441337,
+  "action": "SIGTERM owned idle Bash waiter only; browser never launched",
+  "cause": "Refusal output reused; exit-count race waits past actual completed launcher",
+  "instruction": "ROOT CURRENT 00:10Z: second run also refused BEFORE browser: reused capture already contains refusal.json. Preserve it and launch into a genuinely fresh sibling output now. Prior role-name correction is good. Your Bash waiter captured launcher exit count after run exit and is waiting for a nonexistent third exit; root is terminating ONLY that owned idle waiter to deliver this correction. Absolute deadline remains 2026-09-07T00:13:32.238446Z, do not infer an earlier deadline. All actual runtime gates unchanged. Private launcher role/output correction is authorized; no source changes or duplicate suite."
+}

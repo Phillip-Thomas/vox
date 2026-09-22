@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 134047,
+  "stop_reason": "end_turn",
+  "session_id": "ea5d6a01-e6e6-4a5a-9f9b-b092aa44db5f",
+  "total_cost_usd": 0.623804,
+  "usage": {
+    "input_tokens": 24,
+    "cache_creation_input_tokens": 27141,
+    "cache_read_input_tokens": 188012,
+    "output_tokens": 10258,
+    "output_tokens_details": {
+      "thinking_tokens": 1806
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 27141,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1682,
+        "cache_read_input_tokens": 29615,
+        "cache_creation_input_tokens": 3832,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3832
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1743,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001818,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 24,
+      "outputTokens": 10258,
+      "cacheReadInputTokens": 188012,
+      "cacheCreationInputTokens": 27141,
+      "webSearchRequests": 0,
+      "costUSD": 0.6219859999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 1806,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 12,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Finished at 22:50:31 UTC \u2014 inside the 22:51:49 deadline.\n\n**VERDICT**: CAPTURED-NO-VERDICT \u2014 run executed cleanly (launcher exit 0, probe exit 0, no timeout). No acceptance, no defect closure, no audible claim.\n\n**Run mechanics**\n| item | value |\n|---|---|\n| control gate | `activeRole=finale-authority-seam-runtime action=continue` matched; no exit 3/4 |\n| flock | fd 9 on `.heavy.lock`, exclusive, `ok:true`, problems `[]` |\n| adapter | ANGLE / NVIDIA GB10 PCIe, OpenGL 4.5.0 \u2014 real headed hardware |\n| probe elapsed | 76.628 s (expected ~75 s) |\n| trusted gesture | click@640,360, focus=true, pointerLock=**false**, userActivation=true, before completion |\n| seam attach | 10/10 resolved, 0 evaluation errors |\n| root preview | untouched |\n\n**Answers to the posed questions**\n- **mMA(false, atTime)** fired once at the edge: `atTime=62.408`, wall `1788734878448`, mono `63946.2` \u2014 **+6.3 ms after token creation** (`begin` seq27, mono 63939.1) and +0.3 ms after `startedAtMs=63945.9`. Context at that call: `built=true, ctxPresent=true, ctxState=running, ctxCurrentTime=62.408`, `transition=true, noop=false`.\n- **Score/bed 4.5 s endpoints**: `fadeEndAt = bedEndAt = ctx 66.908`, `bedCallbackPresent/Invoked=true`. Token expiry release landed at ctx `67.488` \u2014 **endpoints completed 0.580 s before expiry**.\n- **Already-released vs live retention**: **already-released / no-op.** The post-expiry mood pass (seq 51\u201353) reports `wasLeading=false, idleBefore=true, nowLeading=false, noop=true`. No second mMA(false). No live retention across the token window.\n- **Unused-token 5 s age limit**: qualified. cap 5, deadline 68945.9, released at `ageS=5.0731`, `overshootMs=73.1`, `beatBefore/moodBefore=null` (never consumed).\n- **Earlier E4(null) comparison**: consistent \u2014 early release with a built running context is reproducible here (+6.3 ms vs the earlier ~0.2 ms), not a one-off.\n- **Frame/CDP perturbation (explicit)**: 4193 deadline pin hits (4179 rate-skipped) evaluated in-browser during the ~5 s window; recorded ages spaced ~16.7 ms = 60 fps cadence. The 73.1 ms overshoot \u2248 4.4 frames, within instrumentation cost. **Not attributed to the game.**\n\n**Gaps recorded (no claims)**: context was built at all 7 mood-ctx samples, so no unbuilt-context gap; 8/10 breakpoints resolved column-inexact (statement, not sub-expression granularity); deadline curve is sampled not exhaustive; `cancel.reasonArg=null` both times; `score.beat/mood` null at and after the edge so ndjson does not corroborate seam lead state; `scoreDiagnostic` surfaces undefined at arm time.\n\n**WAV / cleanup**: `owned-sink.wav` 13,172,780 B, RIFF/WAVE 44.1 kHz 16-bit stereo, declared data 13,172,736 = actual, 68.608 s, from `paravoxia_finale_window.monitor` (not mic, not default monitor), recorder exit 0, preserved. Coverage complete (852 samples, 61.9 s pre-edge / 14.8 s post-edge). Sink module unloaded \u2014 no `paravoxia` module remains; default sink restored to `alsa_output.platform-NVDA2014_00.hdmi-stereo`; browser teardown proven, `forced=false`, no spawn/teardown errors, no incomplete cleanup.\n\n**Artifacts** (all preserved; prior attempts untouched, no control/metadata edits)\n- Capture: `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/manual-credit-finale/authority-seam-confirmed-20260906T224646Z/`\n- Logs: `.../logs/finale-authority-seam-confirmed-run/{stdout,stderr}.log` (stderr empty)\n- Report: `.../finale-authority-seam-confirmed-run-report.json` (8490 B, includes sha256 for all 9 capture files; `seam-events.json` `97e82ccb\u2026`, `owned-sink.wav` `d8731928\u2026`)\n\nEscape-attempt unproven-paused state remains a separate open item; nothing here speaks to it.",
+  "ttft_ms": 1502,
+  "type": "result",
+  "duration_ms": 245151,
+  "uuid": "54082cc0-eb2c-4e68-be39-736467c1a7ec",
+  "ttft_stream_ms": 745,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 745,
+  "queued_turn_count": 0
+}

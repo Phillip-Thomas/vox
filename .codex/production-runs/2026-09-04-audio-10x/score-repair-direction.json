@@ -1,0 +1,145 @@
+{
+  "schema": "paravoxia.directorRepairDirection.v1",
+  "director": "score",
+  "runId": "2026-09-04-audio-10x",
+  "contractVersion": "draft-v4",
+  "contractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+  "contractBindingNote": "This direction was authored against draft-v2 (sha256 384120dc02b2ea46d855c4d0a360fbd31a93eb47624c00d954eaac7f494a9a6d) and re-bound on 2026-09-05T06:14-04:00 to the active contract draft-v3 (sha256 776d676b90cc9c1007694b26f0000cfc61ecf85c256c81a72a0cdd324ea26ba1, snapshots/scene-contract.draft-v3.json) after the integration engineer applied contractAmendmentProposal as draft-v3. Substance unchanged: defectIds, directions, boundedActions, partAIntegrationRecord, evidenceRefs and verificationRoute are as authored; the proposal texts are now contract text (all five byte-equal in draft-v3; the new-term text landed at scope.nonGoals[15] because the schema forbids score.retirements). Re-bound again on 2026-09-05T07:46:00-04:00 to the active contract draft-v4 (sha256 672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d, snapshots/scene-contract.draft-v4.json, supersedes draft-v3 776d676b90cc9c1007694b26f0000cfc61ecf85c256c81a72a0cdd324ea26ba1) after the Stage 2 route-repair judgement (cohesion-judge-stage-2.md, score-audit-stage-2.md, HD-08 and HD-09 in human-decision.json) was folded in by the integration engineer. Substance unchanged: defectIds, directions, boundedActions, partAIntegrationRecord, evidenceRefs and verificationRoute are as authored; the draft-v3 proposal texts remain contract text where draft-v4 did not amend them, and where draft-v4 did amend them (acceptanceCriteria[5], score.mixIntent, performance.measurementPlan) the amendment supersedes the proposal wording carried in contractAmendmentProposal, which is kept here as history and is not re-proposed. The proposal sentences that draft-v4 corrected are the tail order (shipped order glue, safety, SFX join, limiter, ceiling), the no-makeup rule (now no dynamic and no hidden gain with exactly one static named reference gain TAIL_REFERENCE_GAIN_DB +1.99 dB), the BLOOM -14 Stage 2 term (now a Stage 5 arrangement rail), the -18 sum (recorded at Stage 2, re-asserted at Stage 4) and the about-12 ms SFX offset (now the measured LATENCY_COMP_MUSIC_VS_SFX_S 14.875 ms at 44.1 kHz). Stage 2 defects in the score lane are directed by the draft-v4 signature notes in score-contract-signoff.json, not by this file.",
+  "stage": "audio-stage-1-bed-timbre-mastering",
+  "defectIds": [
+    "D4",
+    "D6",
+    "D9"
+  ],
+  "contractChangeRequired": true,
+  "contractChangeRequiredDerivation": "TRUE because of D9 (the treatment/contract drift must be folded into draft-v3 with the colour-to-0.38 wording) and because this direction carries the D1 amendment proposal the judge routed to a draft-v3 cycle. D4 and D6 are repaired inside the signed terms (contractChangeRequired false for those two). The gate allows a director to direct only defects that director owns, so D1 (owner: human), D3/D7/D8/D10/D12 (owner: integration) and D13 (owner: human) are not in defectIds; their amendment text is carried in contractAmendmentProposal below for the triad to sign, and the Part A repairs I performed as my lane's integration engineer are recorded in partAIntegrationRecord.",
+  "directions": [
+    {
+      "id": "SRD-D4",
+      "owner": "score",
+      "defectIds": [
+        "D4"
+      ],
+      "contractChangeRequired": false,
+      "status": "repaired-awaiting-verifier",
+      "boundedAction": "Era-gated, named, slewed night trim on the alive bed. BED_NIGHT_TRIM_DB -2.0 and BED_NIGHT_TRIM_DAYLIGHT_ONSET 0.5 (tuning.ts); the trim rides the SAME padChoir-gated bed-bus rail as BED_ALIVE_LIFT (aliveTrim = 1 - (1 - BED_ALIVE_LIFT * 10^(BED_NIGHT_TRIM_DB * depth / 20)) * padChoir, written through rampParamAt with BED_ALIVE_LIFT_SLEW_S and mirrored on both room returns). depth = smoothstep over daylight below the onset, so every daylight >= 0.5 render is bit-identical by construction and only night moves. The shipped night mappings (SUB_NIGHT_GAIN_LIFT 0.28, NIGHT_SHIMMER_GAIN_LIFT 0.65) are NOT touched: they are texture and they ride gates.sub / gates.shimmer (colour), so editing them would move the colour-era hash.",
+      "measured": {
+        "fullTier": {
+          "bedSandboxNightLufsI": -20.51,
+          "wasLufsI": -18.99,
+          "bedSandboxDayLufsI": -20.48,
+          "dayFingerprintIdenticalToPinnedAfter": true,
+          "dayPcmMaxLsbDelta": 3,
+          "runToRunFloorOfUnchangedCodeMaxLsb": 3
+        },
+        "leanTier": {
+          "bedSandboxNightLufsI": -19.87,
+          "bedSandboxDayLufsI": -19.85,
+          "leanDayFingerprintIdenticalToVerifierRerun": true
+        },
+        "band": "-20.5 +/- 1 LU"
+      },
+      "evidenceRoute": "evidence/stage-1/after-d4/ (full), evidence/stage-1/after-d4-lean/ (lean), evidence/stage-1/after-d4-repeat/ (same-code repeat = LSB floor baseline); story-verifier re-measures bed-sandbox-night with independent ebur128 on the refreshed evidence/stage-1/after/ set before it is pinned as Stage 2 before/."
+    },
+    {
+      "id": "SRD-D6",
+      "owner": "score",
+      "defectIds": [
+        "D6"
+      ],
+      "contractChangeRequired": false,
+      "status": "repaired-awaiting-verifier",
+      "boundedAction": "Pure rail resolver extracted: resolveStage1Rails(input) in bedEngine.ts returns every Stage 1 gain/blend rail (padBusLevel, padOctaveLevel, padWanderDepthHz, padOrganLevel, padSpectralDepthHz, padDriveWet, padBreathLevel, xoverBypass/Low/High, subDesignBypass/Out, subDriveWet, leadDriveWet, aliveTrim) from world signals only; scheduleBar consumes it with the same expressions in the same evaluation order (day render fingerprint identical). Tests (tuning.stage1.test.ts): over a 6x6x6x6x3x2 grid of thermal/golden/daylight/turbulence/padLevel/tier at padChoir 0, every active rail is exactly 0, every bypass exactly 1, aliveTrim exactly 1; the classified-rail set equals the resolver's key set so no rail can escape the law; rails open monotonically with padChoir and blends stay complementary. Topology test (audioCore.topology.test.ts, READS audioCore through a recording fake context): live chain musicBus -> submerge -> sceneEnvelope -> visibilityGain -> [glue(-18/2.5/0.03/0.25/12) -> trim(GLUE_MAKEUP_COMP_DB) -> softClip(2x, curve installed)] -> safety compressor(threshold -20, ratio 8, attack/release/knee NEVER written) -> unity master -> route; exactly two compressors in the graph; SFX join = post-compressor master; offline mirror identical; glue:false = pre-Stage-1 topology.",
+      "evidenceRoute": "npx vitest run src/audio/generative/tuning.stage1.test.ts src/audio/audioCore.topology.test.ts (26 tests) inside npm run verify; story-verifier confirms in verification-report.json."
+    },
+    {
+      "id": "SRD-D9",
+      "owner": "score",
+      "defectIds": [
+        "D9"
+      ],
+      "contractChangeRequired": true,
+      "status": "reconciliation-filed; contract wording pending draft-v3",
+      "boundedAction": "score-treatment.md section 13 records the three graph deviations (two side panners per voice; oversample 'none' on the family drives; mono-below/sub-design gated by padChoir not gates.sub, with the plain consequence that the designed sub does not sound at colour) and withdraws the gates.sub intent from section 1. The two evidence wordings are corrected there and proposed for draft-v3 below: 'inaudible at colour' proven to era 0.35 and holding by construction to 0.38 (padChoir onset), not 0.5; bare-era regression = windowed fingerprint identical and max |delta| <= 2 LSB (<= -84 dBFS).",
+      "evidenceRoute": "contract gate on draft-v3 signatures; auditor re-reads score-treatment.md section 13 against bedEngine.ts."
+    }
+  ],
+  "contractAmendmentProposal": {
+    "targetRevision": "draft-v3",
+    "supersedes": "draft-v2 384120dc02b2ea46d855c4d0a360fbd31a93eb47624c00d954eaac7f494a9a6d",
+    "forDefectIds": [
+      "D1",
+      "D9",
+      "D10",
+      "D12",
+      "D13"
+    ],
+    "requiresSignaturesFrom": [
+      "chapter",
+      "score",
+      "cinematography"
+    ],
+    "humanDecisionRecord": "Taste is delegated (owner-2026-09-04 delegation); record the triad's signing of these terms in human-decision.json as delegated taste, per the judge's D1 ruling. The -14 LU BLOOM short-term target itself is NOT retargeted: owner-2026-09-04-loudness-minus18-lufs-minus1-dbtp stands.",
+    "exactReplacements": [
+      {
+        "path": "evidence.acceptanceCriteria[3]",
+        "reason": "D1: move BLOOM short-term to Stage 2; D4: make the night reference explicit; D12: LSB-ceiling wording; D9: colour-to-0.38 wording.",
+        "replaceWith": "Stage 1: five of five colour partials sound (from three of at most five); three WaveShaper stages plus a soft clip exist in the music path (from zero); the bed at alive measures -20.5 LU integrated plus or minus 1 LU alone on each owner bed excerpt, bed-sandbox-day, bed-sandbox-night, bed-contrast-A and bed-contrast-B, in both the full and the lean tier, leaving room for SFX to complete the sum at -18; true peak at or below -1 dBTP; the smoothness battery reports zero violations; score:fps median at or above 60; and a bare and colour era regression proves inaudibility on the crawl-to-ch1-fixed, bare-bed and colour-bed (era 0.35) renders before and after Stage 1 with the glue stage bypassed: the windowed fingerprint is identical and every 16-bit sample delta is at or under 2 LSB (at or below -84 dBFS, the renderer's run-to-run float floor), and with the glue engaged the same renders hold integrated loudness within 0.05 LU and true peak within 0.05 dB, the only sample-wise difference being the glue compressor's fixed look-ahead. Inaudibility at colour is proven at era 0.35 and holds by construction to era 0.38, the padChoir onset, not to 0.5. The BLOOM short-term term does not bind Stage 1: it is a property of the mastering tail, which the shipped safety compressor (threshold -20 dB, ratio 8, default 30 dB knee) caps, and the tail is Stage 2's contracted surface; it binds Stage 2 below."
+      },
+      {
+        "path": "evidence.acceptanceCriteria[5]",
+        "reason": "D1: BLOOM short-term -14 +/-1 LU becomes a Stage 2 acceptance term; the safety compressor retune is authorised as a Stage 2 contracted change; bare/colour hashes are re-baselined once with inaudibility evidence; D5 floor check; D10 latency figure.",
+        "replaceWith": "Stage 2: five stress scripts through the combined render (shipCrash over BLOOM, a 40-node mining burst, oxygen pulses under dive, terminal typing over a story lead, jetpack loop plus splash) each hold true peak at or below -1 dBTP and integrated loudness within 1.5 LU of -18; measured duck depth matches the duck matrix within 1 dB, including -6 dB on music within 40 ms of a ship impact (from 0 dB today); steady-state AudioParam writes fall under 60 per second (from roughly 1140); mining-metronome-probe.mjs returns an unchanged result; BLOOM short-term maximum measures -14 plus or minus 1 LU on the bed-led BLOOM of bed-sandbox-day and on the shipCrash-over-BLOOM stress script through the combined render, while the bed at alive still measures -20.5 plus or minus 1 LU integrated alone, so the window is opened by the mastering tail and never by an arrangement or story floor. To make that window possible Stage 2 is authorised, as a contracted change to main/src/audio/audioCore.ts, to retune the safety compressor from a programme squash into a true safety device behind the new true-peak limiter: named constants SAFETY_THRESH_DB -6, SAFETY_RATIO 20, SAFETY_KNEE_DB 3 (any value from 0 to 3 is permitted), SAFETY_ATTACK_S at most 0.003, SAFETY_RELEASE_S 0.1, with the limiter at TARGET_TP_DBTP -1 owning protection and the safety compressor acting only above it; Chrome's baked makeup gain for the new curve is cancelled by a named SAFETY_MAKEUP_COMP_DB trim measured exactly as GLUE_MAKEUP_COMP_DB is (a -30 dBFS probe tone through the offline chain with and without the stage), so the whole mastering tail keeps its pre-Stage-2 static gain at bare and colour level within 0.1 dB and no makeup exists anywhere in the chain. Because bare peaks at -25 dBTP sat inside the old 30 dB knee, the bare and colour era hashes are re-baselined ONCE at Stage 2 with before/after inaudibility evidence rendered through the old tail and the new tail: (a) a pre-tail tap of bare-bed, colour-bed and crawl-to-ch1-fixed is fingerprint identical with every 16-bit sample delta at or under 2 LSB, proving the change is confined to the tail; (b) through the tail the same three renders hold integrated loudness within 0.3 LU, short-term loudness within 1 LU at every 3 s window and true peak within 0.5 dB of the old tail; (c) the owner (or the delegated production lead) A/Bs the bare and colour renders at the Stage 2 audition and hears no change; the new renders are then pinned as the bare-era before hash for Stage 3 onward. A story-floor check renders the ch4-defy, refused and seam-ebb hand-back excerpts through the old and new tails and holds each within 0.25 LU. Stage 2 measures the full music-path latency of the finished tail (today about 12 ms: the glue compressor's and the safety compressor's fixed look-aheads of about 6 ms each; a DynamicsCompressor-based limiter adds another) and publishes it as LATENCY_COMP_MUSIC_PATH_S for Stage 3."
+      },
+      {
+        "path": "score.mixIntent",
+        "reason": "D1: the safety compressor's role changes; state the new mastering-tail order and the no-makeup rule explicitly.",
+        "replaceWith": "Named constants on the summed bus: TARGET_LUFS_I -18, TARGET_TP_DBTP -1, BED_ALIVE_ST_LUFS -20.5, BLOOM_ST_LUFS -14, VOICE_ST_LUFS -16, SFX_TRANSIENT_HEADROOM_DB 3.5, UI_LUFS -22. The bed sits 2 to 3 LU under target so world and player transients complete it rather than fight it, which is the condition for the duck matrix to stay subtle. The mastering tail, in order, is the Stage 1 glue (GLUE_THRESH_DB -18, GLUE_RATIO 2.5, knee 12, unity static gain), the Stage 2 true-peak limiter at TARGET_TP_DBTP, and a safety compressor that is a safety device and not a programme compressor (SAFETY_THRESH_DB -6, SAFETY_RATIO 20, SAFETY_KNEE_DB 0 to 3, SAFETY_ATTACK_S at most 0.003, SAFETY_RELEASE_S 0.1); the BLOOM window is opened by that retune and by nothing upstream of it. No makeup gain exists anywhere: every DynamicsCompressor's baked makeup is cancelled by a named, measured trim. UI and voice bypass the submerge filter because the institution is not underwater. Under a story lead the music duck column is capped at -3 dB."
+      },
+      {
+        "path": "performance.measurementPlan",
+        "reason": "D3/D10: name how the audio main-thread budget is measured and the latency figure Stage 3 must consume.",
+        "appendSentence": "The audio main-thread cost is measured by tools/audio-thread-cost-probe.mjs main on the SwiftShader gate: the summed duration of every timer callback (the bed and score lookahead schedulers; rAF writes intent only) per rAF frame, full tier at 1x and 4x and lean tier at 4x CPU throttle, against 1.5 ms per frame full and 3 ms per frame lean; the offline real-time factor per tier (tools/audio-thread-cost-probe.mjs offline) is the audio-thread DSP figure. LATENCY_COMP for Stage 3 is the measured full music-path latency of the Stage 2 tail (LATENCY_COMP_MUSIC_PATH_S), not the glue's 6 ms alone; SFX join post-tail, so the music-versus-SFX offset equals that figure (about 12 ms today)."
+      },
+      {
+        "path": "scope.nonGoals or score.retirements (new term)",
+        "reason": "D13: record the streamed-loop / drone-bank decision the treatment tied to the Stage 1 audition; the contract text omits it.",
+        "replaceWith": "Streamed texture stems and the drone bank in main/src/audio/musicEngine.ts are retired or kept by an explicit decision recorded at the Stage 1 owner audition (delegated to the production lead) and carried here as a Stage 1 or Stage 2 term; until that decision is recorded they remain shipped and unchanged, and no Stage 2 edit removes them."
+      }
+    ],
+    "musicalRationale": "A safety compressor at -20 dB / 8:1 with a 30 dB knee is a programme compressor: it acts on everything above -35 dBFS and turns the 6.5 LU BLOOM window the owner asked for into 2.3-3.4 LU (LRA 6.88 -> 3.26 corroborates). Once a true-peak limiter at -1 dBTP owns protection, the compressor's only legitimate job is to catch what the limiter's look-ahead cannot, so it moves up to -6 dB at 20:1 with a hard-ish knee and a fast attack, out of the programme's way. The Zimmer half of the brief lives in that window; the ODESZA half (sidechain breathing) is only audible if the tail stops flattening it. Retuning it twice (Stage 1 and again at Stage 2) would give the owner two audition deltas for one change, which is why it is a Stage 2 term and not a Stage 1 patch."
+  },
+  "partAIntegrationRecord": {
+    "note": "Repairs performed by the Score Director acting as integration engineer for the score lane; contractChangeRequired false for each. Not in defectIds because their canonical owner is integration; the owner's own direction may cite these.",
+    "D3": "tools/audio-thread-cost-probe.mjs added (offline throughput per tier before/after via a b631a52 worktree; main-thread timer ms/frame under the score at 1x/4x throttle, lean forced through the live navigator signals). Results in evidence/stage-1/perf.md and perf/*.json.",
+    "D7": "audio:check gains a 'glue-gain' check: measureGlueStaticGainDb re-measured every run, |gain| <= AUDIO_CHECK_GLUE_STATIC_GAIN_MAX_DB 0.05.",
+    "D8": "README deviation 4 corrected to BED_ALIVE_LIFT 1.1.",
+    "D12": "README and treatment wording: fingerprint identical and max |delta| <= 2 LSB (<= -84 dBFS); audio-stage-ab-compare.mjs asserts fingerprint parity plus the 2 LSB ceiling (BARE_ERA_LSB_CEILING) and labels the differing-sample count as a per-run observation. PARAVOXIA_AUDIO_10X_PLAN.md section 7 carries no bare-era LSB claim, so it is unchanged (editing it would also break the lock's authority hash for no wording gain)."
+  },
+  "boundedActions": [
+    "D4: BED_NIGHT_TRIM_DB -2.0 / BED_NIGHT_TRIM_DAYLIGHT_ONSET 0.5 on the padChoir-gated bed-bus rail; night bed -18.99 -> -20.51 LUFS (full), lean night -19.87; daylight renders unchanged by construction (fingerprint identical).",
+    "D6: resolveStage1Rails pure resolver + 12 rail-law tests (exactly 0/1 at padChoir 0) + audioCore.topology.test.ts (glue between visibilityGain and the safety compressor; safety compressor -20/8 with attack/release/knee never written; offline mirror identical).",
+    "D9: score-treatment.md section 13 reconciliation; draft-v3 wording proposed above (colour to 0.38; LSB ceiling).",
+    "D1 (proposal only, not applied): draft-v3 exact replacement text above — BLOOM -14 +/-1 to Stage 2 acceptance; Stage 2 authorised to retune the safety compressor to -6 dB / 20:1 / knee 0-3 dB / attack <= 3 ms / release 100 ms behind the -1 dBTP limiter with a named measured makeup cancel; bare/colour hashes re-baselined once with pre-tail fingerprint+LSB proof and through-tail loudness/envelope/audition inaudibility; ~12 ms music-path latency published as LATENCY_COMP_MUSIC_PATH_S for Stage 3."
+  ],
+  "evidenceRefs": [
+    "evidence/stage-1/after-d4/summary.json",
+    "evidence/stage-1/after-d4-lean/summary.json",
+    "evidence/stage-1/after-d4-repeat/summary.json",
+    "evidence/stage-1/perf.md",
+    "evidence/stage-1/README.md",
+    "score-treatment.md#13",
+    "main/src/audio/bedEngine.ts",
+    "main/src/audio/generative/tuning.ts",
+    "main/src/audio/generative/tuning.stage1.test.ts",
+    "main/src/audio/audioCore.topology.test.ts",
+    "main/src/audio/soak/excerpts.ts",
+    "main/tools/audio-stage-ab-compare.mjs",
+    "main/tools/audio-thread-cost-probe.mjs",
+    "cohesion-judge.md",
+    "defects.json"
+  ],
+  "verificationRoute": "story-verifier: (1) npm run verify (vitest incl. tuning.stage1 + audioCore.topology; audio:check incl. glue-gain); (2) independent ebur128 on the refreshed evidence/stage-1/after/ set, bed-sandbox-night full and lean in band; (3) re-run tools/audio-thread-cost-probe.mjs main --tier lean --throttle 4 and confirm the budget verdict; (4) confirm day/contrast fingerprints unchanged versus the previous after/ set. Then re-judge. D1/D9/D10/D12/D13 contract text: triad signs draft-v3 (Chapter and Cinematography re-sign; the safety-compressor retune is a protected-path grant and must be explicit in production/allowedPaths intent); no Stage 2 edit to audioCore.ts before draft-v3 is signed AND D4 is closed.",
+  "authoredBy": "score-director (Claude Fable 5.1) run 2026-09-04-audio-10x",
+  "authoredAt": "2026-09-05T06:05:00-04:00"
+}

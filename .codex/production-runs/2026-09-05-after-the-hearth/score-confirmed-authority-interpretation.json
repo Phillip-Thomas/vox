@@ -1,0 +1,129 @@
+{
+  "documentKind": "score-confirmed-authority-interpretation",
+  "director": "score",
+  "authoredBy": "Score Director (/root/score_director)",
+  "authoredAt": "2026-09-06T22:50:29.905422Z",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "disposition": "no-additional-score-authority-repair-established; retain-separate-adapter-lifecycle-discrepancy",
+  "conclusion": "No further score-source fidelity repair is necessary solely to make this already-released authority expire sooner, or to make it hold longer. The actual handoff starts the existing 4.5-second release about 0.4 ms after token creation. The later token cleanup does not own a second handoff. The signed direction has no minimum hold or attack; forcing either would add a requirement. Residual adapter bookkeeping remains a distinct recorded discrepancy, not evidence of extended musical authority and not a waived token-lifetime pass.",
+  "additionalScoreAuthorityRepairRequiredOnThisEvidence": false,
+  "unusedTokenCleanupAloneEstablishesMusicalFidelityRepairRequirement": false,
+  "literalAdapterLifetimeClaimedWithinFiveSeconds": false,
+  "contractAmendmentRequired": false,
+  "signedClauses": [
+    {
+      "ref": "scene-contract.json#/score/cues/5/barIntent",
+      "text": "Live only for at most five seconds measured on a monotonic clock from the live completion, then the existing 4.5 second release through the existing complementary authority fade; never restored, never repeated."
+    },
+    {
+      "ref": "scene-contract.json#/score/cues/5/mixIntent",
+      "text": "The release tail never owns camera, controls or progression; handback at anc.cg.handback is immediate and independent of it."
+    },
+    {
+      "ref": "scene-contract.json#/score/cues/5/silenceIntent",
+      "text": "No separate coda, no hydration, no replay, no deferral until unlock and no intensity boost to force an attack; new story, optional survey action, actor change, world change, reset, exit, pause, visibility loss, music mute and unavailable audio each invalidate the live token and release immediately."
+    },
+    {
+      "ref": "scene-contract.json#/reset/states/3/acceptanceCriterion",
+      "text": "Reset clears previous beat ownership. The single explicit exception is real first completion and its immediate handback/normal transition to done: it may create and finish the signed live-only token, at most five seconds then the existing 4.5-second release, without retaining any control or progression ownership. Pause, focus loss, quit, deep link, replay, sandbox, world or actor change, new story/optional survey, mute and unavailable audio cancel immediately. Any other beat exit cancels. No cancelled token resumes, hydrates or defers to unlock."
+    }
+  ],
+  "evidence": {
+    "seam": {
+      "ref": "verifier/captures/manual-credit-finale/authority-seam-confirmed-20260906T224646Z/seam-events.json",
+      "sha256": "97e82ccbdc0d94fe2a45ec2195570cac5a640d4200bf8ba7f09475ed5b72ce2d",
+      "arrayPointer": "/events/ev",
+      "stats": {
+        "count": 54,
+        "cap": 4000,
+        "capDrop": 0,
+        "dropped": {},
+        "skipTotal": 4179,
+        "skipped": {
+          "deadline": 4179
+        },
+        "seen": {
+          "authority-entry": 5,
+          "authority-tail": 5,
+          "bed-callback": 5,
+          "cancel": 2,
+          "deadline": 14,
+          "mood-entry": 7,
+          "mood-ctx": 7,
+          "mood-calls-mma": 7,
+          "begin": 1,
+          "release": 1
+        },
+        "evaluationErrors": 0
+      },
+      "records": 54,
+      "recordMeaning": "54 retained seam records, zero evaluation errors and cap drops. 4179 deadline observations were intentionally skipped; this is not an exhaustive event-per-frame trace.",
+      "tokenStartedAtMs": 63945.89999997616,
+      "actualAuthorityRelease": {
+        "seq": 34,
+        "mono": 63946.299999952316,
+        "millisecondsAfterTokenCreation": 0.3999999761581421,
+        "storyLeads": false,
+        "atTime": 62.408,
+        "crossfadeS": 4.5,
+        "masterPresent": true,
+        "targetGain": 0,
+        "fadeEndAt": 66.908
+      },
+      "supportingEventRefs": [
+        "/events/ev/27: begin restored=false, audioUnavailable=false, alreadyLive=false.",
+        "/events/ev/29-33: built=true, context running; final mood retunes while leading, then mood null changes leading true to false.",
+        "/events/ev/35: newFadeUntil=66.908 atTime=62.408, crossfadeS=4.5.",
+        "/events/ev/36: bedCallbackPresent=true and recorded bedCallbackInvoked=true at the callback callsite, storyLeads=false, atTime=62.408, durationS=4.5. This is callsite evidence, not independent PCM or bed-output measurement.",
+        "/events/ev/37-49: actual startedAtMs=63945.89999997616 and deadlineAtMs=68945.89999997616; seq49 observes age5.0043 and willRelease=true.",
+        "/events/ev/50: cleanup at mono69019, age5.0731, beatBefore/moodBefore=null.",
+        "/events/ev/51-53: mood null while already idle; built/running context67.488; wasLeading=false, nowLeading=false, transition=false, noop=true. No later authority-entry exists in retained events."
+      ]
+    },
+    "runtime": {
+      "ref": "verifier/captures/manual-credit-finale/authority-seam-confirmed-20260906T224646Z/runtime-record.json",
+      "sha256": "d86aeb5744124398acaf2581b547c64afd2a38a4769f62c291a607e117231353",
+      "gestureEvidence": "/probe/log: click@640,360 focus=true lock=false activation=true; the owning seam independently reports built/running context.",
+      "outcome": "CAPTURED-NO-VERDICT"
+    },
+    "previousInterpretation": {
+      "ref": "score-candidate-expiry-interpretation.json",
+      "sha256": "9ab1f35c50d406e5b6e8138c7f9fb5cb8080719e0ef01c0f58ad868a54f6e4c8"
+    },
+    "sourceHashesVerifiedUnchangedSincePreviousInterpretation": {
+      "main/src/story/commonGroundScore.ts": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+      "main/src/story/commonGroundDirector.ts": "73bceed58ff5f17df70d118d1c1091819e964e3ae5761af2b145956171cf0983",
+      "main/src/story/StoryDirectorDriver.tsx": "85327128819f44f745f58f72300da1595a5a2e0283bcdf8777f9495e608f493c",
+      "main/src/story/storyScore.ts": "94d560db834ed0067689e2b4784fb93a5fc6a962f0942082fbcd7038651f7d05",
+      "main/src/audio/scoreEngine.ts": "77c5392efb27f61293adf9a3c9a39f7f554f300394e25fc207dd5c218eda03d2"
+    }
+  },
+  "sourceSemantics": [
+    "main/src/story/commonGroundScore.ts:207-238,243-251,280-289: the token stores creation time, expires through a frame tick, and exposes freshly computed age while allocated; cleanup calls setScoreBeat(null), then clears override.",
+    "main/src/story/storyScore.ts:1017-1025: null beat delegates to setScoreMood(null).",
+    "main/src/audio/scoreEngine.ts:1712-1735: a null mood sets idle; actual scheduleStoryAuthority runs only when storyWasLeading differs from new leadership. Captured seq53 is a no-op for authority.",
+    "main/src/audio/scoreEngine.ts:123,1687-1698: the existing release targets score master zero and complementary callback with the same atTime and 4.5-second duration."
+  ],
+  "capAndResidualState": {
+    "liveAuthorityCapSeconds": 5,
+    "addedToleranceSeconds": 0,
+    "audibleMinimumRequired": false,
+    "forcedHoldRequired": false,
+    "interpretation": "The maximum limits live presentation ownership; a residual object that no longer carries that ownership is not additional music. This observed authority release is well before the maximum. Do not reinterpret the limit as five seconds plus a frame, restart the released cue, or demand a full five-second hold.",
+    "residualDiscrepancy": "The earlier noninstrumented 5.0024-second live-flag observation remains exactly recorded. The instrumented 5.0731-second cleanup is CDP-perturbed and must not replace it as an ordinary-runtime latency estimate. Neither is recast as a <=5-second adapter-lifetime pass.",
+    "boundedRouting": "Do not commission a score hold/fade repair from residual age alone. Producer/engineering may retain or address adapter bookkeeping as a separate mechanical lifecycle item; this role neither closes it nor mandates an audio change. If residual state is shown to retain/reacquire authority, block a new owner, delay handback or replay the cue, that functional evidence would require bounded fidelity correction under the existing limit."
+  },
+  "preservedConstraints": "Immediate handback; all real pause/quit/menu, focus/visibility, mute/zero-volume/unavailable-context, actor/world, reset, other-beat exit, new-story/optional-action cancellations; no hydration, replay or deferred unlock. No authority reassertion or second coda to compensate for early release.",
+  "limits": [
+    "Actual pause remains unproved: earlier Escape without pointer lock did not establish paused state. No cancellation acceptance is inferred from this normal window.",
+    "Owning-seam scheduling evidence is stronger than the former age-only inference, but it is not listening, taste, full automation-output verification, defect closure or chapter acceptance.",
+    "No source/probe/contract/signature changes, GPU activity, new review network or source-repair authorization by this role."
+  ],
+  "defectClosure": false,
+  "finalAcceptance": false,
+  "sourceRepairAuthorized": false,
+  "audibleOrTasteClaim": false
+}

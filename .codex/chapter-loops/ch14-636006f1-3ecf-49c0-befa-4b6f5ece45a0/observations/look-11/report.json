@@ -1,0 +1,64 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "3e000372200679e651789c4161f790889fa596988a14ec68e868aebaf7a766e2",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": false,
+    "acceptedAction": 0,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [
+    "ordinaryControls",
+    "acceptedAction",
+    "completePath"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-11/raw/cleanup.json",
+      "sha256": "c39827253898cc132ea5f88364a3cc707cfb8c6076ef83b47e5dc8d48bc46493"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-11/raw/frame-4.png",
+      "sha256": "d864ec00a2c80fb59f37c323626f6f257a47199b4f9bcb3343425bb67c13d1c3"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-11/raw/frame-5.png",
+      "sha256": "47a86b3f14ccc1b32472c22c8d0ad9bd02d4d362f30efc8926bfa8c954eff42e"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-11/raw/observations.json",
+      "sha256": "fe4f8c7567f6fd430432affb096ea52b425383b76f09e2c59025c9fbac05bba2"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-11/raw/provenance.json",
+      "sha256": "9863d27ff9521696908ed0ffa9ce331fcb496b9b1a301d205c338b71a5282338"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-11/raw/trace.ndjson",
+      "sha256": "04dae5598e9caa7f47964e2585b4e2b5a3b482832262b675f5e7805dbea09c74"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "Walk did not reach its target within the declared bound"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "7b3e3cddc2f8a3ec35e48368d498e0f7e14da65c12f188cc022d961f05d1b2ea",
+    "buildSha256": "569eaf89de9c51dff801d096c7348b8b77e51127f1b43895daddde7923bb186f",
+    "transportSha256": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820"
+  }
+}

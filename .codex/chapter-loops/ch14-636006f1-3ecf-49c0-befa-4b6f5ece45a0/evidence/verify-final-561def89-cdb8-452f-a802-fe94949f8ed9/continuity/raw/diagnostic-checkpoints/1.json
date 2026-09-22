@@ -1,0 +1,43 @@
+{
+  "schema": "paravoxia.diagnosticCheckpoint.v1",
+  "noncertifying": true,
+  "wallMs": 1788972195536,
+  "url": "http://127.0.0.1:43749/?story=1&movie=1&journeyprobe=1&journeylane=continuous&journeymode=movie&profile=HIGH",
+  "story": {
+    "active": true,
+    "chapter": "prologue",
+    "beat": "manifest",
+    "runId": 1
+  },
+  "objective": {
+    "id": null,
+    "health": "idle",
+    "revision": 0
+  },
+  "storageState": {
+    "cookies": [],
+    "origins": [
+      {
+        "origin": "http://127.0.0.1:43749",
+        "localStorage": [
+          {
+            "name": "pvx.v1.world.-1,-1",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"structures\":[],\"campfires\":[],\"trees\":[],\"stones\":[],\"forage\":[],\"flora\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.voxels",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"generationSchemaVersion\":1,\"fingerprint\":115629,\"removed\":[],\"added\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.player",
+            "value": "{\"pos\":[8,53.85,-6],\"forward\":[0,0,-1],\"pitch\":0}"
+          },
+          {
+            "name": "pvx.v1.global",
+            "value": "{\"inventory\":{},\"mawCharge\":0,\"era\":\"primitive\",\"milestones\":[\"story:started\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1\",\"dayPhase\":0.23199583333333695,\"vitals\":{\"health\":100,\"hunger\":100,\"thirst\":100,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":\"-1,-1\",\"currentWorldId\":\"-1,-1\",\"parkedPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16]},\"systemPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16],\"velocity\":[0,0,0]},\"locationMode\":\"surface\",\"repairHistory\":[]}}"
+          }
+        ]
+      }
+    ]
+  }
+}

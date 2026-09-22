@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 1752777,
+  "stop_reason": "end_turn",
+  "session_id": "b80b799f-267d-4af5-8438-13d50ba516f0",
+  "total_cost_usd": 17.192163999999995,
+  "usage": {
+    "input_tokens": 280,
+    "cache_creation_input_tokens": 261962,
+    "cache_read_input_tokens": 22408474,
+    "output_tokens": 134593,
+    "output_tokens_details": {
+      "thinking_tokens": 62322
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 261962,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1130,
+        "cache_read_input_tokens": 265132,
+        "cache_creation_input_tokens": 950,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 950
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1977,
+      "outputTokens": 21,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002082,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 280,
+      "outputTokens": 134593,
+      "cacheReadInputTokens": 22408474,
+      "cacheCreationInputTokens": 261962,
+      "webSearchRequests": 0,
+      "costUSD": 17.190081999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 62322,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 149,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done. Both defects are fixed, proven, and reported.\n\n## What was wrong\n\n**CG-IMPL-004** \u2014 `applyCommonGroundRail` spent the screening dwell via `ctx.noteScreeningAction()` and *then* called `ctx.performStoryInteraction`, whose first test is `screeningActionReady()`. Every ch13 act was refused against the dwell the rail had just paid for. That is the 300-second home movie under a ready `[F]`.\n\nThe chapter rail no longer *has* the cadence to spend \u2014 `CommonGroundRailContext` doesn't declare it, so consuming it is now a compile error, not a convention. The shared performer owns resolution, proximity, transaction predicates and the dwell. The stale `<= CG_CORE_REACH` act gate went with it (it applied the core's 4.2 reach to rungs the resolver measures at 2.0 and 3.4).\n\n**CG-IMPL-005** \u2014 the stateless polyline rescan is replaced by an ordered cursor keyed on run/actor/world/beat/route/tail-revision, with honest reconstruction from the body's own projection, never from ahead of it. No predicate reads it.\n\n## What the walking test found that a teleporting stub would have hidden\n\nI wrote the regression to walk a body against the production predicates, and it failed three times for real reasons:\n\n1. **Corner cutting froze the comparison at 4 of 18 units.** Turning 0.18 units early swings the body's projection *around* the corner farther than it walked that frame; `routeProgressUnits` refuses that frame and the refusal is permanent. Fixed by walking through turning vertices, not across them. The predicate was not touched \u2014 the body was made to walk. Raw frame log retained as the producer asked.\n2. **The survey recording began up to two units short of S**, in the housing's shadow, which cost the `fixed-reference` first-try class the long route was chosen to demonstrate. Now aims through the head and records on arrival; measured first sample 0.32 from S, class restored.\n3. **One blanket 1.2-unit stop** served route waypoints, a 1.25-unit occupancy cylinder and body approaches alike.\n\n## New findings\n\n**CG-IMPL-006** \u2014 `ch13-return` walked onto W-7744's own mounted inspection pose; my tighter pose radius would have made it worse. Now stops at body distance. No browser evidence exists for that beat, so I reported it rather than assuming it harmless. **CG-IMPL-007** \u2014 its flight grammar matches the shipped ch10/ch12 idioms; no defect, no change.\n\n## State\n\nTwo files changed, both in `allowedPaths`; the other 94 signed files verified byte-identical before the first edit and after the last. Typecheck 0, 348 files / 3026 tests (baseline 3018, +8), build 0, all static gates 0, triad gate 1708 checks. Both defects were temporarily reinstated to prove the regressions bite (6 and 4 failures); source restored and re-hashed.\n\nTwo things to flag: the triad gate **rewrites** the run-local `creative-run-quality-report.json` as a side effect \u2014 I restored it to root's archived hash and kept my post-repair run in evidence, so re-issue it if you want it to reflect this source. And nothing here was rendered, run in a browser or on a GPU; no movie success is claimed. The real headed ch13 movie remains the verifier's.",
+  "ttft_ms": 1439,
+  "type": "result",
+  "duration_ms": 1909504,
+  "uuid": "ba5927a9-9c3e-4329-a944-f2c885e8cd27",
+  "ttft_stream_ms": 687,
+  "time_to_request_ms": 21,
+  "first_content_frame_ms": 690,
+  "queued_turn_count": 0
+}

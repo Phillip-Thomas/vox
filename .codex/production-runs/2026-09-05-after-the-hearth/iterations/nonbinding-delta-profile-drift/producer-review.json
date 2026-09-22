@@ -1,0 +1,19 @@
+{
+  "schema": "paravoxia.producerAuxiliaryObservation.v1",
+  "at": "2026-09-06T17:47:05.832298+00:00",
+  "author": "creative-producer",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "path": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-delta.run-profile.json",
+  "recordedHash": "a0b0ecdd0df08f1866af39fb74645bc8eea1c05b008cf1e8856de60edc1444c2",
+  "observedHash": "605fb2efc36901bc9c012bda0a0d6e7552003888dd5f959420d612f5e57ae828",
+  "snapshotRef": "iterations/nonbinding-delta-profile-drift/paravoxia-creative-delta.run-profile.json",
+  "activeRunProfile": "paravoxia-creative-chapter@v1",
+  "activeProfileSha256": "f6ce3f3cea205b307fb0f19beb5c0390947c5d854b8090254c7b8f5c28ae1654",
+  "disposition": "Observed-only unrelated profile; preserve old manifest observation and exact fresh drift. Does not govern this chapter run or enter runtime/build. No source mutation or contract acceptance waiver.",
+  "rationale": "Reviewed exact delta: newModelCalls becomes defaultNewModelCalls plus affected-discipline and remaining-budget declarations for delta repairs. This run uses the unchanged chapter profile. All99 source files and other auxiliary bindings still match.",
+  "captureMayProceed": true,
+  "remainingAuxiliaryHashesStillRequired": true,
+  "fullVerifyRerunRequired": false,
+  "fullVerifyLogRef": "logs/arrival-common-verifier/verify.log",
+  "fullVerifyLogSha256": "e57a9dab67a87a31e54bfff8a3a3d6f334ca62b76098769acbddf4c15e68d6ba"
+}

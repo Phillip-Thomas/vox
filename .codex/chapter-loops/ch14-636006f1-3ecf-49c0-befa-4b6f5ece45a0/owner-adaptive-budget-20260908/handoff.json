@@ -1,0 +1,48 @@
+{
+  "kind": "Finish retained Chapter14 implementation; owner corrected scheduling hard stops",
+  "ownerRequest": "these things added to ensure time constraints shouldnt just hard gate if it doesnt finsih lol, it should influence it but not just stop the generation, thats an even bigger waste of time and tokens dont you think?",
+  "priorImplementationCheckpoint": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/checkpoint.json",
+    "sha256": "16c96b0c5c3ba2d44967e952bad807f1da055d48e67ac575208d15f1b620e13a"
+  },
+  "priorChecks": {
+    "typecheck.txt": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/typecheck.txt",
+      "sha256": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af"
+    },
+    "focused-tests.txt": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/focused-tests.txt",
+      "sha256": "216f14bb0b93cde958255789678fd95b42ba6b3fca7269574e8047a71061c03e"
+    },
+    "interaction-tests.txt": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/interaction-tests.txt",
+      "sha256": "8617e9b81c616777e6ab4543923396a927cf8556b57d521f23afe02bf521b3c6"
+    },
+    "control-validation.json": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/control-validation.json",
+      "sha256": "2867223c4bdd2907db10ec24bc0da8cbc93ada1f16afedfd8077144b7e7e0f9d"
+    },
+    "registry-check.txt": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/registry-check.txt",
+      "sha256": "cf6004e5cbddb0cd2537434cdf5022e64bff976f83ce941278a2b766a9b85c63"
+    },
+    "authority-check.txt": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/authority-check.txt",
+      "sha256": "e20ac81bd780678bb09ad3a0b8376870d3d707fa1f406c34802110b948db508b"
+    },
+    "journey-check.txt": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/journey-check.txt",
+      "sha256": "43f091be3493b311725348575fefad6a93e6cb8e71da85eb2a73de0fe491f67c"
+    }
+  },
+  "instructions": [
+    "Continue saved code and approved recipe. Prior builder7 was killed by the old 60-item scheduling gate, not a completed creative result. Its edits are retained. Do not replay planning or broadly rediscover the repo.",
+    "This owner policy supersedes prior repair text about deadlines or remaining look slots. Targets trigger progress.md and a focus on finishing; they do not terminate generation. The original captures and counts stay recorded. Only actual checked-gateway receipts prove playability.",
+    "Builder7 already corrected and validated all3 ordinary-control schemas, passive on-foot/CommonGround telemetry, typed action entries/policies, movie rail and projections. TypeScript,238 story tests+5 interaction tests,and journey contract gate pass on retained bytes. Reuse them until your changes invalidate their scope.",
+    "Start with exact retained failures: registry9 failures (ch14 revealRefs empty;4 checkpoint names absent from STORY_MILESTONES and exact storyEntryPoint clauses); authority16 (schema consts status/sources/runtimeBeatOrder/runtimeEvidenceChain stale,plus12 milestone/resume/transition checks). Read only relevant source functions and gate predicates in a bounded batch; patch integration without relaxing gates, inventing revelations, or changing actual durable story semantics. The exact authority schema path is now owned for synchronizing its contract constants.",
+    "After these targeted integration fixes, use observe to obtain the first real hardware playable proof. All previous look attempts stopped before browser; builder7 never called observe. Ordinary controls must earn actual predecessor CommonGround handback, all4 ch14 beats, physical reach, chosen durable question and real return. No teleport, storage injection, diagnostic completion credit, or minified offsets.",
+    "If a real gameplay/probe defect appears, capture its exact state/evidence, fix the affected path, and retry within this role when it is an ordinary reversible implementation fix. Do not return BLOCKED merely because estimated steps/time/look count was reached. Save progress.md periodically with next action so interruption preserves a usable handoff.",
+    "Keep required pause/recovery, real Continue equality and a newly accepted action, fresh earned continuity, actual AV and independent reviews. AV/continuity depend on real movie rails; final compose follows actual firstPlayable. Preserve public releaseStoryCeiling ch4-arrival and all other release/demo/publishing fields.",
+    "Output final JSON in the supplied schema, with actual {path,sha256} evidence. A build PASS requires the complete gateway playable receipt. Stop optional polish and documentation breadth; finish this path."
+  ]
+}

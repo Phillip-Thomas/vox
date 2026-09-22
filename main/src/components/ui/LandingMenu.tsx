@@ -14,26 +14,45 @@ import CoopPanel from './CoopPanel.tsx';
 import { isCoopAuthEnabled } from '../../game/multiplayerAuth.ts';
 import { unlockGameAudio } from '../../audio/gameAudio.ts';
 import {
+  STORY_CHAPTER_ORDER,
   beginStory,
   canContinueStory,
   getStoryStateSnapshot,
   hasCompletedStory,
-  useStoryState
+  storyEntryPoint,
+  useStoryState,
+  type StoryChapter
 } from '../../story/storyState.ts';
 import ControlsReference from './ControlsReference.tsx';
 
 /**
  * The landing screen. Renders over the SAME live <Canvas> that becomes the game:
  * during `phase==='menu'` EfficientScene runs the cinematic orbit camera, so the
- * world is fully generated and warm behind this glass. Because of that, "Play
- * Now" just flips the app phase (the player camera takes over — no remount, no
+ * world is fully generated and warm behind this glass. Because of that, "Free
+ * Play" just flips the app phase (the player camera takes over — no remount, no
  * second loading flash) and grabs pointer lock inside the click gesture.
  *
  * It also IS the loading screen: an opaque cover hides the cold first frames and
- * dissolves to a vignette once `sceneReady`, revealing the warmed planet. Play is
- * disabled until then.
+ * dissolves to a vignette once `sceneReady`, revealing the warmed planet. Free
+ * play is disabled until then.
+ *
+ * The story is the game. The primary call to action is derived from the save,
+ * the way a console front-end does it: a fresh install offers NEW GAME, a save
+ * in progress offers CONTINUE (with where it resumes), and a finished arc offers
+ * CONTINUE into the earned world. Starting over from an existing save is a
+ * destructive secondary action behind a confirmation; the sandbox is a
+ * secondary mode, never the default.
  */
 const PROFILE_ORDER: QualityProfile[] = ['ULTRA', 'HIGH', 'MEDIUM', 'LOW', 'POTATO'];
+
+/** Where a Continue resumes, in player terms (numbers only — chapter names are authored copy). */
+function continueSubtitle(chapter: StoryChapter): string {
+  if (chapter === 'prologue' || chapter === 'none') return 'Prologue';
+  const numbered = STORY_CHAPTER_ORDER.filter(entry => /^ch\d+$/.test(entry));
+  const index = numbered.indexOf(chapter);
+  if (index < 0) return 'Story';
+  return `Chapter ${index + 1} of ${numbered.length}`;
+}
 
 function unlockAudio(): void {
   void unlockGameAudio();
@@ -55,7 +74,7 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
   const { phase, sceneReady } = useAppState();
   const story = useStoryState();
   const isTouch = isTouchDevice();
-  const [panel, setPanel] = useState<null | 'controls' | 'graphics' | 'audio' | 'coop' | 'replay'>(null);
+  const [panel, setPanel] = useState<null | 'controls' | 'graphics' | 'audio' | 'coop' | 'newGame'>(null);
   const graphicsQuality = useSyncExternalStore(
     subscribeGraphicsQuality,
     getGraphicsQuality,
@@ -64,7 +83,12 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
   const profile = getQualityProfile();
   const coopEnabled = useMemo(() => isCoopAuthEnabled(), []);
   const compactMenu = useMemo(() => (typeof window === 'undefined' ? false : window.innerWidth <= 700), []);
-  const storyCompleted = hasCompletedStory();
+  const storyInProgress = canContinueStory();
+  // The historical hearth arc can be complete while a later chapter is live.
+  // Resume that chapter before offering the completed arc's world return.
+  const storyCompleted = !storyInProgress && hasCompletedStory();
+  const hasStorySave = storyCompleted || storyInProgress;
+  const resumePoint = storyInProgress ? storyEntryPoint() : null;
   // Keep the overlay mounted briefly after Play so it can fade out over the
   // now-live game instead of cutting hard.
   const [gone, setGone] = useState(phase !== 'menu');
@@ -77,6 +101,12 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
     setGone(false);
     return undefined;
   }, [phase]);
+
+  // Resumed chapters have no prologue overlay to hand the shell into play.
+  // A click can precede scene readiness, so finish that transition once ready.
+  useEffect(() => {
+    if (phase === 'menu' && sceneReady && story.active && story.chapter !== 'prologue') enterPlaying();
+  }, [phase, sceneReady, story.active, story.chapter]);
 
   if (gone) return null;
   const leaving = phase === 'playing';
@@ -94,6 +124,20 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
     if (!isTouch) {
       try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
     }
+  };
+
+  const startOrContinueStory = () => {
+    if (leaving || story.active || returningToStorySite) return;
+    unlockAudio();
+    if (storyCompleted) {
+      onReturnToStorySite();
+      return;
+    }
+    // The prologue overlay takes the screen immediately; the story-world swap
+    // and generation happen behind its opaque terminal.
+    beginStory();
+    const started = getStoryStateSnapshot();
+    if (!started.active || started.chapter !== 'prologue') play();
   };
 
   const chooseProfile = (p: QualityProfile) => {
@@ -175,82 +219,87 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap',
+        {/* Primary actions: the story CTA, the sandbox, and (with a save) a new game. */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap',
           animation: 'pvFloatIn 700ms 120ms cubic-bezier(0.22,1,0.36,1) both' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <button
+              onClick={startOrContinueStory}
+              disabled={returningToStorySite}
+              aria-describedby="landing-story-subtitle"
+              style={{
+                fontFamily: theme.font.ui,
+                fontSize: 17, fontWeight: 700, letterSpacing: '0.06em',
+                color: theme.color.void,
+                background: `linear-gradient(180deg, ${theme.color.accent}, ${theme.color.accentStrong})`,
+                border: 'none',
+                borderRadius: theme.radius.pill,
+                padding: '15px 42px',
+                cursor: returningToStorySite ? 'wait' : 'pointer',
+                boxShadow: '0 8px 30px rgba(56,189,248,0.45)',
+                transition: `all ${theme.transition.base}`,
+                outline: 'none'
+              }}
+            >
+              {returningToStorySite
+                ? '◈  Preparing Site…'
+                : hasStorySave ? '▶  Continue' : '▶  New Game'}
+            </button>
+            <div id="landing-story-subtitle" style={{
+              fontFamily: theme.font.mono, fontSize: 11, letterSpacing: '0.14em',
+              textTransform: 'uppercase', color: theme.color.textDim, paddingLeft: 6
+            }}>
+              {storyCompleted
+                ? 'Story complete · Return to your world'
+                : resumePoint
+                  ? `Resume · ${continueSubtitle(resumePoint.chapter)}`
+                  : 'Begin the story'}
+            </div>
+          </div>
+
           <button
             onClick={play}
             disabled={!sceneReady}
-            style={{
-              fontFamily: theme.font.ui,
-              fontSize: 17, fontWeight: 700, letterSpacing: '0.06em',
-              color: sceneReady ? theme.color.void : theme.color.textFaint,
-              background: sceneReady
-                ? `linear-gradient(180deg, ${theme.color.accent}, ${theme.color.accentStrong})`
-                : 'rgba(125,211,252,0.10)',
-              border: 'none',
-              borderRadius: theme.radius.pill,
-              padding: '15px 42px',
-              cursor: sceneReady ? 'pointer' : 'default',
-              boxShadow: sceneReady ? '0 8px 30px rgba(56,189,248,0.45)' : 'none',
-              transition: `all ${theme.transition.base}`,
-              outline: 'none'
-            }}
-          >
-            {sceneReady ? '▶  Play Now' : 'Generating world…'}
-          </button>
-
-          <button
-            onClick={() => {
-              if (leaving || story.active || returningToStorySite) return;
-              unlockAudio();
-              if (storyCompleted) {
-                onReturnToStorySite();
-                return;
-              }
-              // The prologue overlay takes the screen immediately; the story-world
-              // swap and generation happen behind its opaque terminal.
-              beginStory();
-              // A finished story re-enters the world as sandbox (earned stage).
-              if (!getStoryStateSnapshot().active) play();
-            }}
+            title="Open sandbox: explore, fly and build without the story"
             style={{
               fontFamily: theme.font.ui,
               fontSize: 15, fontWeight: 700, letterSpacing: '0.06em',
-              color: theme.color.accent,
+              color: sceneReady ? theme.color.accent : theme.color.textFaint,
               background: 'transparent',
-              border: `1px solid ${theme.color.accentSoft}`,
+              border: `1px solid ${sceneReady ? theme.color.accentSoft : 'rgba(125,211,252,0.14)'}`,
               borderRadius: theme.radius.pill,
               padding: '13px 30px',
-              cursor: returningToStorySite ? 'wait' : 'pointer',
+              cursor: sceneReady ? 'pointer' : 'default',
               transition: `all ${theme.transition.base}`,
               outline: 'none'
             }}
           >
-            {returningToStorySite
-              ? '◈  Preparing Site…'
-              : storyCompleted
-                ? '◈  Return to Site'
-                : canContinueStory() ? '◈  Continue Story' : '◈  Story'}
+            {sceneReady ? '◈  Free Play' : 'Generating world…'}
           </button>
 
-          {storyCompleted && (
+          {hasStorySave && (
             <GhostLink
-              active={panel === 'replay'}
-              aria-expanded={panel === 'replay'}
-              aria-controls="landing-replay-confirmation"
-              onClick={() => setPanel(p => p === 'replay' ? null : 'replay')}
-            >Replay Story</GhostLink>
+              active={panel === 'newGame'}
+              aria-expanded={panel === 'newGame'}
+              aria-controls="landing-new-game-confirmation"
+              style={{ marginTop: 7 }}
+              onClick={() => setPanel(p => p === 'newGame' ? null : 'newGame')}
+            >New Game</GhostLink>
           )}
 
           {!sceneReady && (
             <span style={{
-              width: 18, height: 18, borderRadius: '50%',
+              width: 18, height: 18, borderRadius: '50%', marginTop: 15,
               border: `2px solid ${theme.color.accentGhost}`,
               borderTopColor: theme.color.accent,
               animation: 'pvSpin 0.8s linear infinite', display: 'inline-block'
             }} />
           )}
+        </div>
 
+        {/* Settings row. */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', marginTop: -8,
+          animation: 'pvFloatIn 700ms 200ms cubic-bezier(0.22,1,0.36,1) both' }}>
           <GhostLink
             active={panel === 'controls'}
             aria-expanded={panel === 'controls'}
@@ -316,11 +365,13 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
           </Panel>
         )}
 
-        {panel === 'replay' && (
-          <Panel id="landing-replay-confirmation">
-            <PanelTitle>Replay Story</PanelTitle>
+        {panel === 'newGame' && (
+          <Panel id="landing-new-game-confirmation">
+            <PanelTitle>New Game</PanelTitle>
             <div style={{ color: theme.color.textDim, fontSize: 13, lineHeight: 1.55 }}>
-              Replay resets Story progress, the Story site, carried inventory, suit status, and saved Story pose. Worlds outside the Story site remain saved.
+              {storyCompleted
+                ? 'Starting over resets Story progress, the Story site, carried inventory, suit status, and saved Story pose. Worlds outside the Story site remain saved.'
+                : `Your current run (${continueSubtitle(resumePoint?.chapter ?? 'prologue')}) will be erased along with the Story site, carried inventory, suit status, and saved Story pose. Worlds outside the Story site remain saved.`}
             </div>
             <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
               <button
@@ -342,7 +393,7 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
                   background: 'rgba(252,165,165,0.08)', color: theme.color.danger,
                   fontFamily: theme.font.ui, fontWeight: 750, cursor: 'pointer'
                 }}
-              >Replay from Beginning</button>
+              >Start New Game</button>
             </div>
           </Panel>
         )}
@@ -361,7 +412,7 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
   );
 };
 
-const GhostLink: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { active?: boolean }> = ({ active, children, ...props }) => (
+const GhostLink: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { active?: boolean }> = ({ active, children, style, ...props }) => (
   <button
     {...props}
     style={{
@@ -369,7 +420,8 @@ const GhostLink: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { acti
       color: active ? theme.color.accent : theme.color.textDim,
       background: 'transparent', border: 'none', cursor: 'pointer',
       padding: '8px 4px', transition: `color ${theme.transition.base}`,
-      borderBottom: `1px solid ${active ? theme.color.accentSoft : 'transparent'}`
+      borderBottom: `1px solid ${active ? theme.color.accentSoft : 'transparent'}`,
+      ...style
     }}
   >
     {children}

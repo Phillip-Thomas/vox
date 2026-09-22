@@ -32,6 +32,9 @@ export const TERMINAL_FALL_SPEED = -55;
 /** Feet must clear the bottom of an opening by this much to walk through it. */
 const STEP_TOLERANCE = 0.45;
 const MAX_STEP_SECONDS = 0.05;
+// A long suspension is not movement time. Hidden/resumed frames are discarded by
+// the controller; this also bounds recovery from a foreground process stall.
+const MAX_FOREGROUND_FRAME_SECONDS = 2;
 
 /** The player's body, as prop collision sees it. */
 export const PLAYER_BODY: BodyMetrics = {
@@ -66,6 +69,31 @@ export interface WalkInput {
 }
 
 export const JUMP_SPEED = 6.4;
+
+/**
+ * Consume an ordinary foreground frame at the authored velocity, resolving the
+ * shell and solid furniture on every <=50ms step. Dropping the excess frame time
+ * makes a 3FPS player walk at 15% speed while the room's real-time fade continues.
+ */
+export function stepWalkFrame(
+  graph: SpaceStationGraph,
+  state: WalkState,
+  velocity: { x: number; z: number; jump?: boolean },
+  deltaSeconds: number,
+  props?: BlockerIndex
+): WalkState {
+  if (!Number.isFinite(deltaSeconds) || deltaSeconds <= 0) return state;
+  const elapsed = deltaSeconds > MAX_FOREGROUND_FRAME_SECONDS ? MAX_STEP_SECONDS : deltaSeconds;
+  const steps = Math.ceil(elapsed / MAX_STEP_SECONDS);
+  const step = elapsed / steps;
+  let next = state;
+  for (let i = 0; i < steps; i++) {
+    next = stepWalk(graph, next, {
+      dx: velocity.x * step, dz: velocity.z * step, jump: velocity.jump
+    }, step, props);
+  }
+  return next;
+}
 
 /**
  * Advance one step. Returns a new state; the input state is not mutated, so a

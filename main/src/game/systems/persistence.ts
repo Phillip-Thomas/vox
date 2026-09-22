@@ -11,6 +11,15 @@
 // are NOT persisted here (separate concern in efficientVoxelSystem).
 
 import { GENERATION_SCHEMA_VERSION } from '../schema.ts';
+// The chapter-13 store lives in the PURE state module, not in its director:
+// the director reaches storyState, storyState reaches this file, and importing
+// the director here would close that loop. Same reason, same shape, as habitat.
+import {
+  clearCommonGroundWorld,
+  settleCommonGroundIfNothingStaged,
+  serializeCommonGroundForWorld,
+  stageCommonGroundWorldPayload
+} from '../../story/commonGroundState.ts';
 import { getInventory, resetInventory, addItem } from './inventorySystem.ts';
 import { getMawCharge, setMawCharge } from './mawSystem.ts';
 import { getCurrentEra, getMilestones, advanceEraTo, markMilestone } from './progressionSystem.ts';
@@ -237,10 +246,35 @@ interface WorldSave {
   flora?: Array<[number, number, number]>;
   /** Installed/certified Habitat Core truth for this specific planet. */
   habitat?: HabitatWorldState;
+  /**
+   * Chapter 13's route/reference snapshot for this specific planet.
+   *
+   * WORLD SAVE ONLY. There is deliberately no GlobalSave field: the trace, the
+   * offered span and the held references are facts about one place, and the
+   * durable "this happened" lives where it already lives, in the milestone
+   * ledger. Optional keeps every legacy save readable.
+   */
+  commonGround?: unknown;
 }
 
 export function saveWorld(world: WorldSaveRef): void {
   const worldId = worldIdFor(world);
+  // An autosave for a world whose chapter state is not live must not DESTROY
+  // that world's chapter state.
+  //
+  // `saveWorld` writes a whole new record, so an absent `commonGround` deletes
+  // the saved one and a pristine initial snapshot overwrites it with emptiness. Both
+  // happened: an earned, unfinished ch13 survey (4 samples, 2.09 walked) was
+  // replaced by `phase: "idle"` during a Continue that had already moved on to
+  // another world. `serializeCommonGroundForWorld` now answers null whenever it
+  // has nothing authoritative to say, and the previously persisted blob is
+  // carried forward untouched. Explicit clearing still owns removal:
+  // `clearWorldStateForWorld` deletes the whole record, and a validated live
+  // snapshot always writes itself. This retains bytes that belong to another
+  // actor too — rejecting a foreign payload is a hydration decision, never a
+  // licence for this actor's empty state to erase it.
+  const liveCommonGround = worldId ? serializeCommonGroundForWorld(worldId) : null;
+  const carriedCommonGround = liveCommonGround ?? (worldId ? loadWorld(world)?.commonGround : undefined);
   const data: WorldSave = {
     worldId: worldId ?? undefined,
     seed: legacySeed(world),
@@ -250,7 +284,10 @@ export function saveWorld(world: WorldSaveRef): void {
     stones: getCollectedStones(),
     forage: getCollectedForage(),
     flora: getHarvestedFlora(),
-    ...(worldId ? { habitat: getHabitatWorldSnapshot(worldId) ?? undefined } : {})
+    ...(worldId ? { habitat: getHabitatWorldSnapshot(worldId) ?? undefined } : {}),
+    ...(carriedCommonGround === undefined || carriedCommonGround === null
+      ? {}
+      : { commonGround: carriedCommonGround })
   };
   write(scopedWorldKey(world).primary, data);
 }
@@ -272,6 +309,9 @@ export function clearWorldStateForWorld(world: WorldSaveRef): void {
   // its actor milestones were deliberately removed and deadlock settlement.
   const worldId = worldIdFor(world);
   if (worldId) clearHabitatWorld(worldId);
+  // THIS WORLD ONLY. Clearing Origin must never take Tidegarden's chapter state
+  // with it, and vice versa; the two-world arc has both.
+  if (worldId) clearCommonGroundWorld(worldId);
   const store = storage();
   if (!store) return;
   const key = scopedWorldKey(world);
@@ -299,6 +339,42 @@ export function restoreHabitatForWorld(world: WorldSaveRef): void {
   // yet and a scene subtree remounted. Explicit world clearing removes both
   // persistence and the live map through clearWorldStateForWorld.
   if (w?.habitat) applyHabitatWorldSnapshot(worldId, w.habitat);
+}
+
+/**
+ * Stage this world's chapter-13 blob. Identity (actor and world) is validated
+ * at first live use, so a foreign or malformed payload initializes local state
+ * instead of being grafted onto a live run.
+ */
+export function restoreCommonGroundForWorld(world: WorldSaveRef): void {
+  const worldId = worldIdFor(world);
+  if (!worldId) return;
+  stageCommonGroundWorldPayload(worldId, loadWorld(world)?.commonGround ?? null);
+  // A read that found NOTHING is a real answer ("no chapter state here", or a
+  // legacy record without the field), and it settles the world immediately. A
+  // read that found a payload settles nothing yet: the payload still has to be
+  // validated into live state, and until it is, an empty snapshot must not
+  // speak for this world. See `settleCommonGroundIfNothingStaged`.
+  settleCommonGroundIfNothingStaged(worldId);
+}
+
+/**
+ * Explicit scoped restart only; ordinary exits preserve the snapshot.
+ *
+ * This clears the STORED chapter field too. `saveWorld` now carries an
+ * unrepresented blob forward, so clearing only the live and pending maps would
+ * leave the payload on disk for the next save to resurrect — the opposite of an
+ * explicit restart. Scoped exactly: this world's chapter field only. Structures,
+ * campfires, habitat and every other world are untouched.
+ */
+export function clearCommonGroundForWorld(world: WorldSaveRef): void {
+  const worldId = worldIdFor(world);
+  if (!worldId) return;
+  clearCommonGroundWorld(worldId);
+  const stored = loadWorld(world);
+  if (!stored || stored.commonGround === undefined) return;
+  delete stored.commonGround;
+  write(scopedWorldKey(world).primary, stored);
 }
 /** Drop a world's persisted campfires (memory + the saved blob, other fields kept).
  *  Story entry uses this so a dev-jump's debug pre-place fire — or any stale fire —

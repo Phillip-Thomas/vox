@@ -1,8 +1,10 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TOUCH_DPAD_TOP_EDGE_PX } from '../../components/hud/hudChrome.ts';
 import {
   deriveStoryHudTopLeftOcclusion,
   getMeasuredStoryObjectiveCardHeight,
+  readEarlyFeedReservations,
+  solveEarlyFeedLayout,
   setMeasuredStoryObjectiveCardHeight,
   solveStoryEdgeLabelPresentation,
   solveStoryFeedLedgerPlacement,
@@ -13,7 +15,27 @@ import {
   STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX
 } from './storyHudLayout.ts';
 
-afterEach(() => setMeasuredStoryObjectiveCardHeight(0));
+afterEach(() => { setMeasuredStoryObjectiveCardHeight(0); vi.unstubAllGlobals(); });
+
+describe('early feed control reservations', () => {
+  it('discovers the separate debug disclosure button without a journal or HUD registration', () => {
+    const selector = '[data-testid="story-debug-panel"] > button[aria-controls="story-debug-disclosure"]';
+    const rect = { left: 332, top: 66, right: 376, bottom: 110, width: 44, height: 44 };
+    const node = { dataset: {}, matches: (value: string) => value === selector,
+      getBoundingClientRect: () => rect };
+    // Model selection separately from measurement: omitting the actual control
+    // selector must fail even if the placement solver accepts a supplied box.
+    vi.stubGlobal('document', { querySelectorAll: (value: string) => value.includes(selector) ? [node] : [] });
+    vi.stubGlobal('getComputedStyle', () => ({ display: 'block', visibility: 'visible' }));
+    const reservations = readEarlyFeedReservations();
+    expect(reservations).toEqual([{ id: 'story-debug-trigger', ...rect }]);
+    const placement = solveEarlyFeedLayout({ width: 390, height: 844,
+      safe: { top: 0, right: 0, bottom: 0, left: 0 }, reservations });
+    expect(placement.order).toEqual({ left: 18, top: 124, width: 354 });
+    vi.stubGlobal('getComputedStyle', () => ({ display: 'none', visibility: 'visible' }));
+    expect(readEarlyFeedReservations()).toEqual([]);
+  });
+});
 
 describe('free-era narrow-screen HUD layout', () => {
   it('does not reserve the old full objective card above 390x844 touch controls', () => {
@@ -440,5 +462,22 @@ describe('measured touch-control clearance', () => {
     expect(Number.isFinite(
       solveStoryHudLayout({ ...base, touchControlTopFromBottom: Number.NaN }).caption.bottom
     )).toBe(true);
+  });
+});
+
+
+describe('finalized collection feedback beside a story bearing', () => {
+  it.each([1280, 390])('keeps the measured marker clear of the toast at width %i', width => {
+    const layout = solveStoryHudLayout({ viewportWidth: width, viewportHeight: 720,
+      touch: width < 820, objectivePresent: true, objectiveHeight: 80 });
+    const toast = { left: width / 2 - 48, right: width / 2 + 48,
+      top: 54, bottom: 97, width: 96, height: 43 };
+    const result = solveStoryMarkerPresentation({ rawX: width / 2, rawY: 70,
+      labelWidth: 279, overlayWidth: 279, overlayHeight: 36, layout,
+      observedOverlays: [toast] });
+    const intersects = result.x - 139.5 < toast.right && result.x + 139.5 > toast.left
+      && result.y - 18 < toast.bottom && result.y + 18 > toast.top;
+    expect(intersects).toBe(false);
+    expect(result.y + 18).toBeLessThan(layout.marker.maxY);
   });
 });

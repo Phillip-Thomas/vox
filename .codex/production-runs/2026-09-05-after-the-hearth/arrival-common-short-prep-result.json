@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 754966,
+  "stop_reason": "end_turn",
+  "session_id": "7bf1ffb1-726e-41b9-bf77-f61206a83d0b",
+  "total_cost_usd": 4.926285000000001,
+  "usage": {
+    "input_tokens": 90,
+    "cache_creation_input_tokens": 154311,
+    "cache_read_input_tokens": 3665358,
+    "output_tokens": 61927,
+    "output_tokens_details": {
+      "thinking_tokens": 6027
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 154311,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1272,
+        "cache_read_input_tokens": 157811,
+        "cache_creation_input_tokens": 660,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 660
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1806,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001871,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 90,
+      "outputTokens": 61927,
+      "cacheReadInputTokens": 3665358,
+      "cacheCreationInputTokens": 154311,
+      "webSearchRequests": 0,
+      "costUSD": 4.9244140000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 6027,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 46,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Preparation complete \u2014 **`prepared-not-run`**, CPU-only, one pass.\n\n## What I found (evidence, not inference)\n\nRead the current **scene-v3** contract (`scene-contract.json`, sha `5ef85a32\u2026`, `frozen`) and the frozen runtime read-only:\n\n- `CG_ROUTE_SHORT` is a **straight z=12 line**, S(-26,51.05,12) \u2192 E(-42,51.05,12), 9 samples, **16 units**. `CG_ROUTE_LONG` is the z=14..22 detour, 36 units.\n- `manual-witness-hold-probe.mjs` hardcodes exactly `CG_ROUTE_LONG` minus its first vertex \u2014 confirming the existing rails can only earn `fixed-reference`.\n- `commonGroundDirector.tickWorkerTest`: `routeClass = held ? 'held-reference' : 'fixed-reference'`, `held` requiring the witness to be **both offered and occupied**. `footing-invalid` is never launderable by occupancy.\n- The **shipped** unit suite (`commonGroundRoute.test.ts`) already asserts short-holds-on-the-housing and short-completes-with-the-occupied-witness-at-W \u2014 so the lane defers to those rather than writing a looser proof. I did not trust the misnamed `manual-survey/` probe.\n\n**No instrumentation blocker:** current logic supports a truthful SHORT completion via the offered-and-occupied witness path.\n\n## Prepared (owned paths only)\n\n`verifier/probes/arrival-common-short/` \u2014 entrypoint `short-survey-probe.mjs` (`03931214\u2026`), pure `shortSurveyLogic.mjs`, `selftest.mjs`, `pin.json`, plus five hash-pinned byte copies of the manual helpers. Ordinary keys/authored `[F]`, labelled ch13-survey fixture (never called earned arrival), live-marker targets, real W test, witness occupancy held throughout, revision\u2192LONG branch chosen from the *actual* hold, one owned browser with try/finally + post-finally receipt, fd-9 inherited exclusive flock, scene-v3 + served-bytes identity, bounded waits with ~20 s stall diagnosis, failure refuses downstream acts.\n\n## Commands / exits\n\n| command | exit |\n|---|---|\n| `node \u2026/shortSurveyLogic.mjs --self-test` | 0 |\n| `node \u2026/selftest.mjs` | 0 |\n| `node \u2026/short-survey-probe.mjs --out /tmp/nonexistent-short-check` | 3 \u2014 `REFUSED-PREREQUISITE`, **no browser launched** |\n\n## Integrity\n\nManifest `6ef957c3\u2026` matches `verifier-control.json`; before/after hashes show **no drift** in any game source, contract, `verifier/probes/lib/*`, `arrival-common-manual/*`, `manual-focused/*` or `cg-journey-probe.mjs`.\n\n**Reported, not fixed:** the shared `verifier/probes/lib/cgContract.mjs` still pins the **scene-v2** contract sha, so its `loadContract()` would throw against the current scene-v3 bytes. My lane doesn't call it and binds to scene-v3 directly; repairing that shared helper belongs to another role.\n\nReports: `arrival-common-short-prep-report.json` / `.md`, logs in `logs/arrival-common-short-prep/`.",
+  "ttft_ms": 1681,
+  "type": "result",
+  "duration_ms": 755206,
+  "uuid": "e955452c-6968-4d98-876e-3af9416772c0",
+  "ttft_stream_ms": 1152,
+  "time_to_request_ms": 40,
+  "first_content_frame_ms": 1155,
+  "queued_turn_count": 0
+}

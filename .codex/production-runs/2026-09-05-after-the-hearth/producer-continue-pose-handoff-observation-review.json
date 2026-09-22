@@ -1,0 +1,162 @@
+{
+  "at": "2026-09-06T23:00:40.743115+00:00",
+  "disposition": "Actual saved pose and parked egress selector inputs measured; physical writer not observed. Narrow observer closure within original 720-second budget, no source repair yet.",
+  "captureRef": "verifier/captures/continue-pose-handoff/attempt-2026-09-06T2256Z",
+  "hashes": {
+    "summary.json": "a5876b7c66e9655fda46216f87f49838f947e60cc105a60f1d2b731ba6622727",
+    "continue-raf-telemetry.json": "c3670fa77ac687d0cbbf9a7ed13bebcbd18715187c890b86c04e023984539504",
+    "worldsave-pvx.v1.world.-1_-1.json": "cd9d68877732bf35fc951bb95ec9c2cfb3d95c75bddb0624c7b947691491be27",
+    "worldsave-after-continue-pvx.v1.world.-1_-1.json": "aeb9bfb3d98c3c88238c765a33670b022530175e8519ede92d6f5d934ead6e9a",
+    "0003-after-continue.png": "e319e4657175cc6cf77639b8f968adae8dd954b35746ad5f8bbaf5a81540a7ed",
+    "cleanup-receipt.json": "edbccfe0627264b5c7c6422711e166a8cf78ee1cf0ec847c75cc13e4747972ef"
+  },
+  "actualSavedPoints": 18,
+  "actualRestoredPoints": 18,
+  "allSavedFullPointObjectsEqualRestoredPrefix": true,
+  "retainedFrames": 365,
+  "retainedPostClickFrames": 362,
+  "jumps": [
+    {
+      "distanceUnits": 100.89161528338907,
+      "before": {
+        "ms": 780,
+        "beat": "ch13-survey",
+        "beatPublished": true,
+        "journeyProbePublished": true,
+        "systemFlightPublished": true,
+        "activePlanetId": "-1,-1",
+        "locationMode": "surface",
+        "renderOrigin": [
+          0,
+          0,
+          0
+        ],
+        "renderOriginSource": "journeyProbe.state.systemFlight.renderOrigin",
+        "cgPublished": true,
+        "worldBound": true,
+        "cgFoot": [
+          -31.979154534807165,
+          51.0199518007476,
+          20.34907575523135
+        ],
+        "capsule": [
+          -31.71623992919922,
+          52.789695739746094,
+          20.15188980102539
+        ],
+        "up": [
+          0.14606366978219276,
+          0.9831910772213851,
+          -0.10954775233664457
+        ],
+        "surveyPhase": "idle",
+        "anchorCount": 0,
+        "terrainSeed": 3215739679,
+        "playerRequested": [
+          8,
+          53.85,
+          -6
+        ],
+        "voxelDebugPublished": true,
+        "error": null,
+        "msSinceClick": 688
+      },
+      "after": {
+        "ms": 809,
+        "beat": "ch13-survey",
+        "beatPublished": true,
+        "journeyProbePublished": true,
+        "systemFlightPublished": true,
+        "activePlanetId": "-1,-1",
+        "locationMode": "surface",
+        "renderOrigin": [
+          0,
+          0,
+          0
+        ],
+        "renderOriginSource": "journeyProbe.state.systemFlight.renderOrigin",
+        "cgPublished": true,
+        "worldBound": true,
+        "cgFoot": [
+          53.58708386851315,
+          15.730256061001507,
+          -19.80281404579404
+        ],
+        "capsule": [
+          53.849998474121094,
+          17.5,
+          -20
+        ],
+        "up": [
+          0.14606366978219276,
+          0.9831910772213851,
+          -0.10954775233664457
+        ],
+        "surveyPhase": "drawing",
+        "anchorCount": 0,
+        "terrainSeed": 3215739679,
+        "playerRequested": [
+          8,
+          53.85,
+          -6
+        ],
+        "voxelDebugPublished": true,
+        "error": null,
+        "msSinceClick": 717
+      }
+    }
+  ],
+  "seam": {
+    "eventCount": 23,
+    "drops": 0,
+    "errors": 0,
+    "sites": {
+      "EfficientScene.landedPlayerSpawn": 16,
+      "resolveShipPlayerEgressPosition": 7
+    },
+    "observedSelectorInputs": {
+      "worldId": "-1,-1",
+      "actorId": "local",
+      "landedShipPos": [
+        53.5,
+        20,
+        -20
+      ],
+      "landedPlayerEgress": [
+        53.85,
+        17.5,
+        -20
+      ],
+      "initialPlayerPosition": [
+        -31.71623992919922,
+        52.789695739746094,
+        20.15188980102539
+      ],
+      "arrivalPoseSurface": [
+        10.5,
+        53.85,
+        -5.999999999999999
+      ],
+      "planetSize": 50,
+      "validatedPersistedParked": {
+        "unmeasured": true,
+        "reason": "local not identified in exact bundle"
+      }
+    },
+    "missing": "GA chosen value is not directly logged; disembark setTranslation pin and MjA faceChoice had zero hits. No click monotonic reference; initial events occur during menu boot, later events near/after Continue. Need actual RigidBody mount handoff and aligned clocks.",
+    "derivedFaceClaim": false
+  },
+  "renderedInspection": "Root viewed actual0003-after-continue.png: Origin seed3215739679, surface/fps, actual Survey end marker104m and F Offer recorded span work order. No blank frame; no taste verdict.",
+  "qualification": [
+    "Actual jump is100.89161528338907 units this run; earlier100.898264 was a different saved/parked pose. Do not mix positions across captures.",
+    "365 frames include3 pre-click frames, so362 post-click; helper labels365 post-click incorrectly. Valid tail still exceeds5s.",
+    "Saved full points preserved; commonGround entire object equality is not claimed.",
+    "Observer actually skipped walking/newF, so this is neither Continue action acceptance nor a new action failure.",
+    "4 resolved CDP locations are not4 measured sites; only scene selector and aZ entry emitted events.",
+    "A source correction would touch protected EfficientScene boundary. Standing owner delegation can authorize a narrow reviewed change after concrete causal handoff; no blanket permission or source edit now."
+  ],
+  "cleanupComplete": true,
+  "sourceRepairAuthorized": false,
+  "defectClosure": false,
+  "chapterAcceptance": false
+}

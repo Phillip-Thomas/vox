@@ -1,0 +1,14 @@
+{
+  "failure": {
+    "stage": "verify-final",
+    "message": "Probe manual failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T01:57:37.259Z"
+  },
+  "report": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-7c739ed3-c716-415e-9a84-2d0bc80c448e/manual/report.json",
+    "sha256": "dcc3fd624335e2217b608ffea3edf827b0b41a4a6506c8d1989a895f3d0047e5"
+  },
+  "observations": "Manual steps[26] stalled at body[-45.45245,49.77023,11.35128], below the return approach after repeated D input. The measured D direction had a sideways Z component; aiming only at the distant endpoint cut across the approach before correcting. Navigation and cleanup remained valid. Menu source repair is complete and separately tested.",
+  "fix": "Steer toward a short lookahead on the declared straight segment, using ordinary W/A/S/D diagonal chords and retaining shared keys. Preserve original full3D arrival and grounded/route predicates. Prioritize the existing Continue case to exercise the same approach plus the fixed menu before other checks. Export reviewer profile after real unload flush and equality, and provide verified installed hardware browser paths. Rebind profile origin if the owned preview port changes; never edit saved values."
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "paravoxia.directorSignoff.v1",
+  "director": "cinematography",
+  "contractVersion": "draft-v1",
+  "contractSha256": "291e75b0c19294f68d00add730b8fedf9ae232288b5ecb744ff2f39d6a969cc1",
+  "disposition": "approve-with-notes",
+  "signedBy": "Cinematography Director (Fable 5.1)",
+  "signedAt": "2026-09-05T09:45:00-04:00",
+  "notes": [
+    "Verified against cinematography-treatment.md (with reconciliation amendments), cinematography-peer-notes.jsonl and cinematography-reconciliation.jsonl: numeric colour script per district and vantage, pct-under-16 ceilings, legibility floor, and the monotonic ordering hall < apron < shelves < counter < concourse are carried verbatim into evidence.acceptanceCriteria and the syncAnchors.",
+    "Architecture limits carried: one material and one program, programs 13, POOL_SIZE 7 with three warm slots, radius-0 emissive fittings filtered out of the pool, plan plus zero draw calls under a baseline-plus-two ceiling, PostFX and ACES exposure 0.94 untouched, fog colour and density on the same threshold ramp.",
+    "Fade model carried: t=0 at the occupiedCellId change, THRESHOLD_FADE_SECONDS by destination (concourse 1.4, floor 1.0, apron/counter/shelves 0.8), snapshot restart on mid-ramp retarget, monotone with no overshoot, progress 1.0 at +1.4 s; low line opacity 0 through +0.8 s and 1 at +1.2 s (delay 0.8, fade 0.4), never re-animated.",
+    "Correction to my own reconciliation arithmetic, not to the contract: classic smoothstep (3t^2-2t^3) reaches only 0.945 at +1.2 s of a 1.4 s ramp, which fails the contracted 'at least 0.95 at +1.2 s'. The contract names no ease, so it is satisfiable. Integration must implement THRESHOLD_FADE_EASE as smootherstep (6t^5-15t^4+10t^3): 0.632 at +0.8 s, 0.977 at +1.2 s, 1.0 at +1.4 s, monotone, still slow at the start. This supersedes 'smoothstep' in cinematography-treatment.md amendment 2 and reconciliation note-ch-02/note-sc-02; no contract change is required.",
+    "Constant names THRESHOLD_FADE_EASE, LOW_LINE_PRESENTATION_DELAY_SECONDS and LOW_LINE_FADE_SECONDS do not appear in the contract text; the contract binds their values and asserts them in capture-t-concourse-open. Integration must still export all four constants by name from the station components so the deferred station-audio packet inherits them by reference, per Score's note-ci-02 disposition.",
+    "Marker ring scale rule clamp(d/18, 1, 12) is implementation under the contracted 'ring resolves to the bearing at any distance'; the treatment row governs the number. The +1.2 s capture sample must be taken on the first frame at or after +1.2 s, never the frame before, or the 0.95 assertion is measuring quantisation rather than the ramp.",
+    "HUD plan carried: edge-clamped warm ring, unified prompt at 50 percent plus 40 px, 5 by 5 px outlined crosshair at INK 0.85, DIM_INK 0.68 with a 4.5:1 contrast floor, controls hint surfaced verbatim desktop-only per Chapter's note-ci-01 decision, station-story-hud / station-prompt / station-crosshair / marker registered in hudSurfaces.ts under lock revision R1.",
+    "Wayfinding carried: jamb strips on both faces of every portal except the Kestrel lock, a single counter-to-concourse deck strip, the concourse-to-hall strip dropped, no text signage. Shot ledger sil-01 through sil-09 with 01b, 03b, 07b, the T-concourse-open strip, variants, and the reset matrix match the treatment. Turn plus pi over 2 in the capture spec is the 180 degree reversal from the tool's base yaw of minus pi over 2.",
+    "Headed real-GPU taste remains an open owner gate: hall haze as extent versus murk, counter flatness as unkindness, concourse as the only room that likes you."
+  ]
+}

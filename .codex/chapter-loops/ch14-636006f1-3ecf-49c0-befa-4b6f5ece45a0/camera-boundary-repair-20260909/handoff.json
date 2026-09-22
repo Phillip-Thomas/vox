@@ -1,0 +1,103 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "well keep grinding through the blockers, being sure to eliminate stuff that doesnty make sense rather than add to the pile",
+  "contributor": "root orchestrator, mechanical correctness correction",
+  "scope": "Classify measured HUD reservations by screen position instead of component name. Restore the original rail unchanged after the minimal geometry fix independently cleared the stall. Use the existing 1800-second continuity capture setting; no changed assertions, progression grants, creative stage, or generation clock.",
+  "status": "focused-runtime-pass-final-verification-pending",
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/previous-state.json",
+    "sha256": "3a65351ca39bdaba032e7a8465ec757d31adda666493b51d32d18d2d2d801070"
+  },
+  "priorFailure": {
+    "stage": "verify-final",
+    "message": "Probe continuity failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T02:37:14.464Z"
+  },
+  "priorRefinement": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/12-refine/result.json",
+    "sha256": "917f7526db5cb1938671379e5e375269fa8f954e699dd8d7f7f90919d9fa6fbc"
+  },
+  "files": [
+    {
+      "path": "main/chapter-ch14-controls.json",
+      "before": "6d233b8b67bec8356f632eab5c5ff4f130a366b6a6342a605adae239b1c80bf0",
+      "after": "365c91d819139538c16a44180ac30e2543bed5590dcc66e9f0fc16dac9e38886"
+    },
+    {
+      "path": "main/src/story/sideLens.ts",
+      "before": "150a00b20ce3d6196d46ba60af64046551cf8420cd0204678467779a218b8768",
+      "after": "238b210190995b6c7c4b32418eddb8c6736b12006a02b4eb7854d934afbdc833"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.test.ts",
+      "before": "9aff83f49eb4816e36f714b729317db3eebf6b26671e61a8019c0e6e49df9650",
+      "after": "8b351161cf3b99e997c09b135a6c1ca3691d1a2473ea0f3cee15041abc25c187"
+    }
+  ],
+  "tests": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/tests-minimal.log",
+    "sha256": "f34e0a6b4cd7f816878f319773a099c460f6a3c0cfd2891b0ce485ecc6173350"
+  },
+  "build": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/build-minimal.log",
+    "sha256": "19a1de39349a94ea044400f170099624d5adebe85435dec39cb58ff3114662b6"
+  },
+  "independentBaseline": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/verifier/result.json",
+    "sha256": "047cd116f9cb07c6cf0b447969434e4e5edd6cdb43226302ae82654655a57e6b"
+  },
+  "independentTransport": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/verifier/transport.json",
+    "sha256": "c727193e77c9b30ce4d79f5f6f2fea8eaf6a46ad2bf8f22118c77cc6c638ca8d"
+  },
+  "candidate": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/source-minimal.json",
+    "sha256": "a0895713ca4ccb94135e29655e8d6e8ccf746e3aef034d6fb8f1c65388134ae8"
+  },
+  "preview": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/preview-minimal-owner.json",
+    "sha256": "96dfac0cdffe2487826e2216bd029ae772dba7fc47fe4fb19521eef6603b1614"
+  },
+  "runtime": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/candidate-minimal/raw-samples.json",
+    "sha256": "ce02e26b750747f8d55c7926335b024ed491a76b09216dfb28e8463d543789ba"
+  },
+  "hardware": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/candidate-minimal.log",
+    "sha256": "7b62e643f72bf59f2925ed03bceaaee162f276aebe7c814fa39bdbd1a86079b9"
+  },
+  "runtimeLimit": {
+    "maxSessionSeconds": {
+      "before": 600,
+      "after": 1800
+    },
+    "commandTimeoutMs": {
+      "before": 1200000,
+      "after": 1860000
+    }
+  },
+  "priorUsage": {
+    "roleLaunches": 12,
+    "modelTurns": 323,
+    "inputTokens": 646604,
+    "cacheReadTokens": 20528640,
+    "outputTokens": 100201
+  },
+  "addedUsage": {
+    "roleLaunches": 1,
+    "modelTurns": 37,
+    "inputTokens": 69597,
+    "cacheReadTokens": 1082928,
+    "outputTokens": 26207
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "at": "2026-09-09T03:02:23.062Z"
+}

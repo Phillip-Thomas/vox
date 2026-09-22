@@ -2,9 +2,9 @@
 
 **Authored:** 2026-07-13
 
-**Runtime status:** **CORE PATH REACHABLE THROUGH `ch9-hearth` — SIGNED PHYSICAL RAIL IMPLEMENTED — ACCEPTANCE EVIDENCE/PUBLISH GATED**
+**Runtime status:** **FORMAL PATH THROUGH `ch10-transit`; STATION/RETURN SIDECAR IMPLEMENTED; COMMON GROUND APPROVED DIRECTION — ACCEPTANCE/PUBLISH GATED**
 
-**Documentation status:** **runtime-reality reconciliation — CURRENT THROUGH 2026-07-15**
+**Documentation status:** **runtime-reality reconciliation — CURRENT THROUGH 2026-09-06; EARLIER DELIVERY LINEAGE RETAINED**
 
 **Authorization provenance:** **OWNER-AUTHORIZED STAGED IMPLEMENTATION**
 
@@ -40,6 +40,92 @@ they reward capability and attention without becoming XP, consciousness scores,
 or gates on the critical path. The first interstellar warp still owns A5 Light.
 
 ---
+
+## 0. Current continuation packet — Common Ground, 2026-09-06
+
+This section supersedes dated “current/next” implementation claims below for
+the affected range; the July delivery rationale and protected later gates
+remain lineage. Runtime source remains authoritative for what exists.
+
+| Boundary | Current disposition |
+| --- | --- |
+| Formal sequence | WORKTREE-IMPLEMENTED through `ch10-transit`, then `done` |
+| Station visit and return | WORKTREE-IMPLEMENTED sidecar using ch11/ch12 receipts; registry IDs do not yet represent separate formal chapters |
+| Movie continuation | Existing station screening stops after cell acquisition/look-around; departure, actual flight/landing/install and subsequent entry still require integration |
+| Common Ground / ch13 | APPROVED DIRECTION; no runtime implementation or current audiovisual acceptance claimed by this documentation patch |
+| Public release | `ch4-arrival`; unchanged and separately gated |
+
+Authority is the three-director `council-v2` candidate and `CG-D01`–`CG-D12`
+decision register in `../.codex/story-runs/2026-09-06-common-ground/`, with
+`owner-story-decision.json` recording the user's standing delegation. The user
+requested creative plot-aligned continuation and explicitly approved autonomous
+in-scope decisions. This is not fictitious personal review of future media.
+
+Production order:
+
+1. Give the real second-hearth install its bounded acknowledgment; preserve
+   every installed/restored receipt and legacy save. Offer the stored-audit
+   review and explicit voluntary return from the working home.
+2. Preserve the ch11/ch12 sidecar identity through a typed external transition
+   with strict entry/exit evidence. Do not weaken direct registry adjacency or
+   add a restored-home guarantee to ch10. Extend the actual movie departure,
+   return flight, landing and cell installation without a `story=` reseed.
+3. Build `ch13-home`, `ch13-return`, `ch13-survey`, `ch13-common` through a
+   matching production lock and signed scene contract. Use chapter-local
+   state/director/world/beat/rail modules and one integrator for shared owners.
+4. Implement the actual walked trace, reversible tested-prefix/untested-tail
+   rules, two durable route classes, world-position witness hysteresis,
+   reciprocal crossing and W-7744's grounded independent test. Retain a bounded
+   local actor and optional repeat survey after completion. Existing
+   observation-ledger entries remain non-gating.
+5. Bind world/actor-scoped versioned persistence, resume/deep-link/reset,
+   objective/marker/F arbitration and one-shot semantic feedback. Preserve
+   unrelated dirty files, especially live beat/autopilot and audio work.
+6. Realize the accepted score and embodied staging through existing camera,
+   material, lighting and score authorities. No new shared audio graph, light
+   topology, world generation or alternate renderer is commissioned.
+
+The council's measured geometry basis selects a 12-unit reference range and a
+single passive backed instrument. The short route is 16 units with a 14-unit
+housing shadow; the fixed-reference-supported longer route is 36 units (61
+samples), 20 units and 125 percent longer. The common 18-unit passage has full
+held-reference coverage and a real eight-unit contiguous portion outside the
+fixed reference's useful coverage. The two route classes are therefore grounded
+in CPU evidence; no playable, rendered or hardware result is implied.
+
+The scene contract must bind the final connected head and separate near-end
+body positions: Terra cannot start inside the worker who holds her reference.
+After her actual comparison she explicitly offers and occupies the separate
+far reference for his independently initiated test. All current range, solid
+sight, grounding, occupancy and body-clearance rules remain active throughout.
+The tested survey class and her earned comparison are separate saved facts.
+
+Both independent caps (128 samples and 120 walked units) apply simultaneously;
+a winding path may hit the point cap first. Neither cap may be silently relaxed
+or a tested corner decimated. Keep one quiet instruction while tracing and
+distinguish range, solid, footing and temporary vacancy holds. Exact scene
+placement is bound before runtime; new interaction, day/night, actual terrain
+edits, supported-tier and headed hardware proof follows signed implementation.
+
+Acceptance is the run's `implementation-acceptance.md`: existing restored and
+pending-cell saves; actual continuous station-to-home-to-ch13 play; three cold
+movies with no timeout rescue; both route choices and their distinct saved
+repeatability; physical/reference refusal, revision and witness recovery;
+W-7744's necessary reciprocal contribution and real final arrival; correct
+objective/prompt/marker/feedback lifecycles; full verification; bounded audio
+tail and listening; night, mobile, reduced motion, low tier, replay/quit/focus
+and sandbox behavior; fresh independent story, score, cinema, player-experience
+and cohesion reviews. New scene approval is separate from publication.
+
+`CG-D03` answers only W-7744's local ch13 reinspection. `G-A5-01` and later
+offworld recurrence/turn questions remain open; the protected family key stays
+present. This local comparison is not the A6 collaboration milestone. First
+interstellar warp still owns A5, and all Worker 9/third-consciousness/Maker/
+greater-threat/ending boundaries remain intact. New ch13 voice follows the
+Bible's bounded `CG-D08` clarification; no global old-copy pass is implied.
+
+---
+
 
 ## 1. Outcome contract
 
@@ -221,7 +307,7 @@ it does not imply that a broader row's full signed acceptance is complete.
 
 | ID | Current truth | Remaining obligation | Done when |
 | --- | --- | --- | --- |
-| F01 | **WORKTREE-IMPLEMENTED:** typed state now continues from `ch4-audit` through `ch9-hearth` and `done` | Preserve the independent public ceiling at `ch4-arrival`; complete release evidence | Every implemented scene remains authoritative, replayable, and covered without widening release |
+| F01 | **WORKTREE-IMPLEMENTED:** typed state now continues from `ch4-audit` through `ch10-transit` and `done` | Preserve the independent public ceiling at `ch4-arrival`; complete release evidence | Every implemented scene remains authoritative, replayable, and covered without widening release |
 | F02 | **WORKTREE-IMPLEMENTED:** versioned milestone reconstruction and old-boundary resume semantics are covered | Add any newly encountered historical/corrupt-save fixtures without weakening the boundary | Old saves resume at an honest boundary without replay loss or accidental later completion |
 | F03 | **WORKTREE-IMPLEMENTED:** oxygen, Maw, Lift Cell/jet, boarding, and travel are story-gated | Human direct-input and cold-run leakage proof remains a release gate | No capability appears early; sandbox behavior remains correct outside story |
 | F04 | Progression milestones are actor-keyed | Main reality renderer and constellation reveal remain substantially global | Two perceivers can share one truth and receive different presentation/affordances without state leakage |
@@ -1581,12 +1667,14 @@ A packet is rejected if it:
 
 ## 13. Resume Here
 
-**Implementation checkpoint — 2026-07-15:** the owner-authorized core path and
-its signed local physical producers are worktree-implemented through
-`ch9-hearth`; `story-authority.json` records runtime ceiling `ch9-hearth`,
-release ceiling `ch4-arrival`, and terminal beat `done`. Release evidence and
-co-op embodied-receipt authority remain incomplete and must not be inferred
-from reachability.
+**Checkpoint refreshed — 2026-09-06:** the July 15 core-path checkpoint through
+`ch9-hearth` is retained below as delivery lineage. The current
+`story-authority.json` records formal runtime ceiling `ch10-transit`, release
+ceiling `ch4-arrival`, and terminal `done`; the station/return sidecar uses
+ch11/ch12 receipts. Section 0 now owns the Common Ground production resume.
+The older active-production contract identity remains intentionally unchanged
+until new runtime implementation and registration. Release evidence and co-op
+embodied-receipt authority remain incomplete; reachability does not prove them.
 
 Core systems implemented and mechanically verified:
 

@@ -1,0 +1,80 @@
+{
+ "main/src/game/systems/persistence.test.ts": {
+  "backup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/main__src__game__systems__persistence.test.ts",
+  "backupSha256": "c0c2b159b08b12d689bbac403e40069d21a2fdc5bfba6c45ace7dfe38063d734",
+  "beforeSha256": "c0c2b159b08b12d689bbac403e40069d21a2fdc5bfba6c45ace7dfe38063d734",
+  "existedBefore": true,
+  "takenAt": "2026-09-06T11:56:28.510338+00:00"
+ },
+ "main/src/game/systems/persistence.ts": {
+  "backup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/main__src__game__systems__persistence.ts",
+  "backupSha256": "c8d51b1d6055ba221cb910f3eb4cb28c943ac1dd037581a8c1acfa97a0765404",
+  "beforeSha256": "c8d51b1d6055ba221cb910f3eb4cb28c943ac1dd037581a8c1acfa97a0765404",
+  "existedBefore": true,
+  "takenAt": "2026-09-06T11:56:28.510252+00:00"
+ },
+ "main/src/story/StoryDirectorDriver.test.tsx": {
+  "beforeSha256": null,
+  "existedBefore": false
+ },
+ "main/src/story/StoryDirectorDriver.tsx": {
+  "backup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/main__src__story__StoryDirectorDriver.tsx",
+  "backupSha256": "284f981accdf1ecfaed567d0668329d084e353233b5d1e0cea295a9d60e4e32a",
+  "beforeSha256": "284f981accdf1ecfaed567d0668329d084e353233b5d1e0cea295a9d60e4e32a",
+  "existedBefore": true,
+  "takenAt": "2026-09-06T11:56:28.509700+00:00"
+ },
+ "main/src/story/commonGroundDirector.test.ts": {
+  "backup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/main__src__story__commonGroundDirector.test.ts",
+  "backupSha256": "02986e15185168adfd02e7e01eaa0103479f8e3645ac0626b53742dc0bc0021e",
+  "beforeSha256": "02986e15185168adfd02e7e01eaa0103479f8e3645ac0626b53742dc0bc0021e",
+  "existedBefore": true,
+  "takenAt": "2026-09-06T11:56:28.509606+00:00"
+ },
+ "main/src/story/commonGroundDirector.ts": {
+  "backup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/main__src__story__commonGroundDirector.ts",
+  "backupSha256": "81289ffd48e4260971b12b68dfd4bb8fa591faf03fc4a03ed1ba9cf847f64e6f",
+  "beforeSha256": "81289ffd48e4260971b12b68dfd4bb8fa591faf03fc4a03ed1ba9cf847f64e6f",
+  "existedBefore": true,
+  "takenAt": "2026-09-06T11:56:28.509362+00:00"
+ },
+ "main/src/story/commonGroundState.test.ts": {
+  "backup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/main__src__story__commonGroundState.test.ts",
+  "backupSha256": "578dcd265393a4603004455cadada7e01d2f642f6c9b5a44aa0bc7605279b446",
+  "beforeSha256": "578dcd265393a4603004455cadada7e01d2f642f6c9b5a44aa0bc7605279b446",
+  "existedBefore": true,
+  "takenAt": "2026-09-06T11:56:28.510172+00:00"
+ },
+ "main/src/story/commonGroundState.ts": {
+  "backup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/main__src__story__commonGroundState.ts",
+  "backupSha256": "2094b261328143dda5cfc198aa2791fceb470fefcf006e7cb06e7669d55db2bf",
+  "beforeSha256": "2094b261328143dda5cfc198aa2791fceb470fefcf006e7cb06e7669d55db2bf",
+  "existedBefore": true,
+  "takenAt": "2026-09-06T11:56:28.510081+00:00"
+ },
+ "main/src/story/signedSceneAvRuntime.test.ts": {
+  "backup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/main__src__story__signedSceneAvRuntime.test.ts",
+  "backupSha256": "390077a75338593c52253d02927c4378adb7a52e1fe936d5f905b2b728de3fff",
+  "beforeSha256": "390077a75338593c52253d02927c4378adb7a52e1fe936d5f905b2b728de3fff",
+  "existedBefore": true,
+  "takenAt": "2026-09-06T11:56:28.509958+00:00"
+ },
+ "main/src/story/signedSceneAvRuntime.ts": {
+  "backup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/main__src__story__signedSceneAvRuntime.ts",
+  "backupSha256": "9b513a850c81f0ae3a75b26ded69156e11c429b6ba227568fcda19d99818a982",
+  "beforeSha256": "9b513a850c81f0ae3a75b26ded69156e11c429b6ba227568fcda19d99818a982",
+  "existedBefore": true,
+  "takenAt": "2026-09-06T11:56:28.509830+00:00"
+ },
+ "main/src/story/world/CommonGroundWorld.test.tsx": {
+  "beforeSha256": null,
+  "existedBefore": false
+ },
+ "main/src/story/world/CommonGroundWorld.tsx": {
+  "backup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/main__src__story__world__CommonGroundWorld.tsx",
+  "backupSha256": "d564573757f160aabdf3868d11234a9945346f2e9efd4d2979053a0f51aea096",
+  "beforeSha256": "d564573757f160aabdf3868d11234a9945346f2e9efd4d2979053a0f51aea096",
+  "existedBefore": true,
+  "takenAt": "2026-09-06T11:56:28.509081+00:00"
+ }
+}

@@ -82,7 +82,8 @@ export const CLIENT_OWNED_MILESTONE_POLICY = Object.freeze({
     'story:a4:',
     'story:dive:',
     'story:capability:',
-    'story:reconstruct:'
+    'story:reconstruct:',
+    'story:ch14:'
   ])
 } as const);
 

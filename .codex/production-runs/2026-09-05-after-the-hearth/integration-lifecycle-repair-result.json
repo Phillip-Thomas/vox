@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 2732678,
+  "stop_reason": "end_turn",
+  "session_id": "ed6d8e11-34bf-4c00-8745-71eb532bab35",
+  "total_cost_usd": 43.86449550000001,
+  "usage": {
+    "input_tokens": 516,
+    "cache_creation_input_tokens": 460011,
+    "cache_read_input_tokens": 67905621,
+    "output_tokens": 212248,
+    "output_tokens_details": {
+      "thinking_tokens": 68299
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 460011,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1263,
+        "cache_read_input_tokens": 463567,
+        "cache_creation_input_tokens": 564,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 564
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2710,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002795,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 516,
+      "outputTokens": 212248,
+      "cacheReadInputTokens": 67905621,
+      "cacheCreationInputTokens": 460011,
+      "webSearchRequests": 0,
+      "costUSD": 43.86170050000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 68299,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 259,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "All artefacts are consistent and current. Final state:\n\n## What was implemented\n\n**CG-IMPL-007 \u2014 the chapter booted aboard the ship.** The causal owner is `storyState.initStoryFromSave`, which seeds `?story=ch13-survey`/`ch13-common` with `bootstrapOriginLaunchDebug()` \u2014 ending in `restoreBoardedSurfaceFlight()`. Correct for `ch8-launch`/`ch10-transit`, wrong for two beats that begin *after* ch13-return has landed and disembarked. Both now seed on foot through the shipped `restoreFlightAtLocation('surface')`: no exit receipt, no listener, no milestone, ship still parked. The screening rail can additionally leave a landed ship in those beats \u2014 rail-only, those beats only, ship-parked only, never a per-frame auto-disembark.\n\n**CG-IMPL-006 \u2014 one coordinate frame, wider than the rail.** `player()` returned the Rapier capsule *centre*; every ch13 pose is a *grounded* body origin 1.8 units below along the **local** up. The damage went past the arrival gate: the world's footing samples `cell(y\u22121.05)`, so a centre 1.8 up read the *empty* cell and silently refused the survey start, every trace sample and both reference offers \u2014 while `walkToward` stopped on tangential gait distance. One conversion at the chapter boundary now feeds recording, ground support, sockets, occupancy, clearance, arrival and progress alike. Nothing widened, clamped or disabled. `standAt()` now places a real capsule centre and the harness uses the real `surfaceGaitDistance`; reverting the fix fails **24 previously passing tests**.\n\n**CG-IMPL-008 \u2014 anchors.** Conditional signed anchors are no longer *prerequisites* (order guard, one-shot latch and required chain intact); a refused activation is retried exactly once at the entry seam and dropped otherwise \u2014 never a deferred acknowledgement; and root's late mid-beat-Continue concern was reproduced and fixed via receipt-satisfied predecessors that activate nothing and replay nothing.\n\n**Manual corner / CG-IMPL-009 \u2014 deliberately *not* patched.** Reproduced (17.83 walked, 4.000 credited), but honest recovery already exists: return to the frontier, re-traverse, exactly 18.0000. The frontier-creep candidate I built was withdrawn after root and Chapter showed it could be settled by lateral movement beside C. `commonGroundRoute.ts` differs in comments only. The usability cost is reported, not decided.\n\n## Two things I want to flag plainly\n\n- **I made a preservation error.** A mutation check used `git checkout --` in a deliberately dirty tree and reverted `storyState.ts` to HEAD, discarding the run's prior work on that file. I recovered it byte-exactly from root's immutable snapshot and re-verified all 96 files, but it should never have happened. The report records it, including the accurate chronology that the next two counterfactuals still used ad-hoc `/tmp` backups before I adopted the `finally`+rehash helper.\n- **The probe I added initially had an observer effect** \u2014 root caught it statically, before any capture. It called the planner, which advances the traversal cursor. It now reports only the plan the rail actually executed.\n\nChecks: `npm run test` **3068** (baseline 3026, +42, \u22120, none weakened), typecheck 0, build 0, ten static gates 0, triad implementation gate 0/1708. Nine changed files, all inside `allowedPaths`, none protected, no new source files.\n\nNothing here is gameplay evidence \u2014 no browser, GPU, render or audio. Source is stable for root's fresh gate and the verifier's frozen build.",
+  "ttft_ms": 1422,
+  "type": "result",
+  "duration_ms": 3177497,
+  "uuid": "e3ccd931-4890-44a3-8540-59d639cbc19c",
+  "ttft_stream_ms": 673,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 674,
+  "queued_turn_count": 0
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "paravoxia.visualReferenceChoice.v1",
+  "recordedAt": "2026-09-06T10:00:08.851417+00:00",
+  "selectedBy": "producer under explicit user instruction to continue and auto approve in-scope decisions",
+  "sourceRef": ".codex/production-runs/2026-09-05-ch9-baseline/evidence/bundle",
+  "localCopyRef": "evidence/reference-ch9-bundle",
+  "bundleSha256": "9382eb8c9b3124e5d855b8647538e65c7b451a89d72444cf7b08438661f8da65",
+  "reason": "Existing real-GPU captures of the shipped Tidegarden home provide a relevant visual comparison for the home from which Common Ground begins. Original protected bundle is unchanged.",
+  "knownCoverage": {
+    "frames": 33,
+    "beats": [
+      "ch9-settle",
+      "ch9-hearth"
+    ],
+    "hardware": "NVIDIA GB10; headed hardware-high",
+    "continuousVideo": false,
+    "settleReachedExit": true,
+    "hearthReachedExit": false
+  },
+  "priorPerceptAcceptanceVerified": false,
+  "limitations": [
+    "No verified previously accepted full-chapter percept bundle is available in the retained local evidence.",
+    "This is a comparison to captured earlier chapter imagery, not proof that the baseline previously passed a quality review or the whole story.",
+    "Fresh chapter13 absolute/pairwise reviews and all actual gameplay/AV evidence remain required; this reference choice cannot waive a failed candidate."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "role": "integration-engineer",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T16:52:54.325153+00:00",
+  "commissionSha256": "32f617c9980331840ee8bf5e17c30d3c501ed960a50d2fe6ac0f62323b2e6dd4",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceManifestSha256Before": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "One bounded seventh material repair: safe COMMON movie steering and exact scene-v3 arrival guidance/metadata; no geometry/proof relaxation, GPU or publication",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T17:31:29.918107+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "82186deb-65b8-4e1e-a9a5-97dd05b6208b",
+  "isError": false
+}

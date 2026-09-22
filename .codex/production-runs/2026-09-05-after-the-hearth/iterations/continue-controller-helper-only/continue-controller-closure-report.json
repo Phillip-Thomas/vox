@@ -1,0 +1,204 @@
+{
+  "role": "continue-controller-closure",
+  "registeredRuntimeRole": "continue-controller-closure-runtime",
+  "runtimeRoleStatus": "REGISTERED FOR FUTURE SERIAL PERMISSION — NOT INVOKED. No browser, no GPU, no preview, no build, no headed session was started in this audit.",
+  "run": "2026-09-05-after-the-hearth",
+  "authoredAt": "2026-09-06T16:43:25-04:00",
+  "authoredAtUtc": "2026-09-06T20:43:25+00:00",
+  "startedAt": "2026-09-06T16:39:24-04:00",
+  "mode": "CPU-only mechanical probe engineering. PREPARED, NOT RUN.",
+  "acceptance": {
+    "isAcceptance": false,
+    "newAcceptedAction": false,
+    "gameAcceptance": false,
+    "newActionProved": false,
+    "sourceMutationAuthorized": false,
+    "gameSourceMutated": false,
+    "note": "Nothing here proves a runtime action. No F was pressed, offered, forced or simulated against a live build."
+  },
+  "inputsRead": [
+    "CLAUDE.md",
+    "producer-earned-continue-3d-runtime-review.json",
+    "verifier/probes/earned-continue-3d/ (all modules, read-only)",
+    "verifier/captures/earned-continue-3d/attempt-1/trace.ndjson",
+    "verifier/captures/earned-continue-3d/attempt-1/probe-log.txt",
+    "main/src/story/commonGroundDirector.ts (read-only)",
+    "main/src/story/beats/ch13/ch13-survey.ts (read-only)"
+  ],
+  "ownedPaths": [
+    ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-controller-closure/",
+    ".codex/production-runs/2026-09-05-after-the-hearth/logs/continue-controller-closure/",
+    ".codex/production-runs/2026-09-05-after-the-hearth/continue-controller-closure-report.json",
+    ".codex/production-runs/2026-09-05-after-the-hearth/continue-controller-closure-report.md"
+  ],
+  "immutabilityRespected": {
+    "originalProbeDir": "verifier/probes/earned-continue-3d/ — copied with `cp -a`, never edited",
+    "originalEvidence": "verifier/captures/earned-continue-3d/attempt-1/ — read only",
+    "producerAndOtherRoleReports": "not opened for write",
+    "archivedBaseline": "iterations/manual-credit-finale-findings/source and preview 34413 not touched",
+    "gameSource": "main/ read only; no file under main/ was written by this role",
+    "concurrentIntegrationLane": "main/ shows 301 pre-existing modified paths owned by the independent source-integration lane. Their work is preserved and untouched. The commonGroundDirector.ts / ch13-survey.ts hashes below are READ-AT-AUDIT-TIME observations only — they are NOT declared a violation and NOT an accepted-runtime pin."
+  },
+  "defect1_calibrationThrash": {
+    "status": "CLOSED IN PRIVATE PROBE HELPER (CPU-proved), NOT RUN HEADED",
+    "confirmedMechanism": "walkTowards.runCalibration (earned-continue-3d-probe.mjs:439-483) latched basisUp from ONE cgSnap taken BEFORE four 450ms ordinary key presses, then compared that pre-round latch against live up in the steering loop (:508) with basisStale maxTiltDeg=12.",
+    "measuredEvidence": {
+      "traceRows": 255,
+      "calibrateRows": 88,
+      "walkRows": 36,
+      "basisStaleRows": 21,
+      "medianCalibrationMoveUnits": 1.878,
+      "approxUnitsWalkedPerCalibrationRound": 7.5,
+      "withinRoundUpRotationDeg": 32.49,
+      "withinRoundEvidence": "probe-log face-change-1 basisUp [0.8819740995662241,0.47129787575836607,~0] -> face-change-2 basisUp [0.4908086254793641,0.87126740622788,~0]",
+      "walkMs": 90778,
+      "bursts": 36,
+      "recalibrations": 21,
+      "finalDistanceToE": 90.05329428993107,
+      "medianBurstGross3dUnits": 1.985
+    },
+    "rootCause": "The calibration round's own ~7.5 units of ordinary walking across a curved face rotated up by 32.49 deg, which is >12 deg, so the very next loop pass declared the just-taken basis stale and calibrated again. Self-sustaining loop.",
+    "designAdopted": {
+      "perKeyLiveUp": "each key direction is stamped with the up measured at ITS OWN post-burst snapshot (upAtSample), never a pre-round latch",
+      "retentionThroughSmoothFaceChange": "a stored 3D direction is retained while its own upAtSample is within 45 deg of current AND it still projects usably into the CURRENT plane; chooseKey3d already re-projects on every use",
+      "retentionBoundRationale": "12 deg was a whole-basis latch test. The measured smooth change was 32.49 deg, so a 12 deg per-key bound would discard directions that still steer correctly and would reproduce the thrash. 45 deg keeps a direction only while its in-plane component is dominant.",
+      "steerabilityVsFreshness": "anyUsableNow is computed from whether ANY stored direction still projects usably now, NOT from whether any key is fresh. Conflating them was what let a merely-stale basis bypass the motion guard and re-trigger calibration.",
+      "meaningfulDirectedMotionGuard": "recalibrationDecision refuses while unitsSinceLastCalibration < minUnitsSinceCalib (default 6u, ~3x the measured 1.878u a calibration round induces) as long as some key still steers",
+      "hardCap": "maxCalibrations default 6; 21 rounds is unreachable",
+      "partialRecalibration": "only keys that actually went stale are re-measured",
+      "shortDisplacement": "unitsSinceLastCalibration is accumulated from REAL foot displacement (accumulateDirected); no motion is invented",
+      "noForbiddenMechanism": "no teleport, no pose setter, no autopilot, no rail, no enlarged timeout, no widened arrival radius"
+    },
+    "preservedProperties": [
+      "A/D produce measurable non-zero 3D directions on the +X face (they move in world Y there) — the original XZ null bug stays closed",
+      "a proper +Y frame calibrates and needs no recalibration",
+      "up can change without endless calibration",
+      "stallVerdict no-progress / obstacle detection is untouched",
+      "arrival and steering are decided on the published FOOT (bodyPose) in full XYZ against the live up; bodyCentre is never a fallback"
+    ],
+    "helperCallerAgreement": "The private helper consumes and returns exactly the shapes the existing tangentSteering3d chooseKey3d / groundTargetArrival / groundedActionGate consume; dirsFromEntries produces the map chooseKey3d already takes. Adaptation is proved by the selftest calling the REAL exported gates, not a mirror."
+  },
+  "defect2_objectTruthinessFGate": {
+    "status": "CLOSED IN PRIVATE PROBE HELPER (CPU-proved), NOT RUN HEADED",
+    "confirmedMechanism": "pinned/commonPassageLogic.pinned.mjs:582 promptOffersF returns an OBJECT {ok,why,matched,prompts}. earned-continue-3d-probe.mjs:1164 assigns that object to `offersF` and passes it at :1171 into newActionGate and at :1186 into groundedActionGate. Both gates test truthiness only (earnedContinueLogic.mjs:347, tangentSteering3d.mjs:388), so {ok:false} for an unrelated '[F] Drink' reads as offered.",
+    "authoredContractFromSource": {
+      "actionId": "story-ch13-offer-span",
+      "verb": "Offer the walked span",
+      "beat": "ch13-survey",
+      "surveyPhase": "drawing",
+      "directiveKey": "ch13:survey:offer-span",
+      "sourceRefs": [
+        "main/src/story/commonGroundDirector.ts:1627-1636 (survey.phase==='drawing' && reach(CG_POSES.E, CG_POINT_REACH))",
+        "main/src/story/commonGroundDirector.ts:1552 ('ch13:survey:offer-span' -> vector(CG_POSES.E))",
+        "main/src/story/beats/ch13/ch13-survey.ts:31,43 (authored intent: offer the walked span; 'Walking, and one [F]')"
+      ],
+      "notGuessed": "Read from the shipped source, not inferred."
+    },
+    "distinctNeighbouringAction": {
+      "actionId": "story-ch13-hold-witness",
+      "verb": "Offer this end",
+      "sourceRef": "main/src/story/commonGroundDirector.ts:1645-1650",
+      "finding": "This is a DIFFERENT action for a DIFFERENT survey state and must never satisfy the span-offer gate. The existing earned-continue-3d selftest.mjs:213 fixture used exactly this wrong verb ('[F] Offer this end') as its positive case, so the original suite could not have caught the mismatch."
+    },
+    "designAdopted": {
+      "helper": "signedSpanOfferAuthorization() wraps the pinned mayPressF({objectiveId, expectedObjectiveId, prompts, verbPattern}) and requires mayPressF(...).ok === true",
+      "binding": "current objectiveId === story-ch13-offer-span AND beat === ch13-survey AND survey.phase === 'drawing' AND FOOT arrival established from current ground evidence",
+      "outputContract": "the gates receive a BOOLEAN only; gateInputsFromAuthorization throws a TypeError if handed an object — the attempt-1 defect becomes a hard error rather than a silent truthy pass",
+      "refusals": "a later unrelated anchor/objective, a generic phase change, a stale beat, any other [F] prompt, and missing foot arrival each independently refuse",
+      "neverForce": "no click, no dispatched event, no direct verb call. F is only ever authorized, never pressed by this helper."
+    }
+  },
+  "commandsRun": [
+    {
+      "cwd": ".codex/production-runs/2026-09-05-after-the-hearth",
+      "cmd": "mkdir -p verifier/probes/continue-controller-closure logs/continue-controller-closure && cp -a verifier/probes/earned-continue-3d/. verifier/probes/continue-controller-closure/",
+      "result": "new private probe dir created; original untouched"
+    },
+    {
+      "cmd": "node --check verifier/probes/continue-controller-closure/earned-continue-3d-probe.mjs",
+      "result": "ENTRYPOINT_SYNTAX_OK"
+    },
+    {
+      "cmd": "for f in *.mjs pinned/*.mjs; do node --check \"$f\"; done",
+      "result": "ALL_SYNTAX_OK (every module in the new probe dir parses)"
+    },
+    {
+      "cmd": "node -e \"import('./liveCalibration.mjs').then(...)\"",
+      "result": "IMPORT_OK exports: SPAN_OFFER_CONTRACT,accumulateDirected,dirsFromEntries,faceChangeRetention,gateInputsFromAuthorization,keysNeedingRecalibration,recalibrationDecision,signedSpanOfferAuthorization,stampedCalibration,tiltDeg"
+    },
+    {
+      "cmd": "node liveCalibration.selftest.mjs",
+      "result": "liveCalibration.selftest: 34 passed, 0 failed",
+      "log": "logs/continue-controller-closure/liveCalibration.selftest.log"
+    },
+    {
+      "cmd": "node tangentSteering3d.selftest.mjs",
+      "result": "exit 0 — [earned-continue-3d tangentSteering3d self-test] OK — all CPU cases passed",
+      "log": "logs/continue-controller-closure/tangentSteering3d.selftest.log"
+    },
+    {
+      "cmd": "node groundFrame.selftest.mjs",
+      "result": "exit 0 — groundFrame.selftest: 25 checks, 0 failed",
+      "log": "logs/continue-controller-closure/groundFrame.selftest.log"
+    },
+    {
+      "cmd": "node selftest.mjs",
+      "result": "exit 0 — [arrival-common-earned selftest] 108/108 checks passed",
+      "log": "logs/continue-controller-closure/selftest.log",
+      "note": "Run EXACTLY ONCE, as a copy-integrity check of the new probe dir. Not re-run during iteration; the iteration loop used only liveCalibration.selftest.mjs."
+    }
+  ],
+  "toolchain": { "node": "v25.6.1", "browser": "none", "gpu": "none", "build": "none" },
+  "hashes": {
+    "newProbeFiles": {
+      "liveCalibration.mjs": "6afecbef12c627624a82fc7a4142821c059e6821fd74d1f0763b12f592539c61",
+      "liveCalibration.selftest.mjs": "449c2e22625040cce82885c8a43f8ca55f303734468411271ac21eee4eefe79d"
+    },
+    "copiedUnmodifiedFromEarnedContinue3d": {
+      "earned-continue-3d-probe.mjs": "2a9c9a542812952528875b4fde248c721f07a9f6b4a59fa86572799fd836b082",
+      "tangentSteering3d.mjs": "26c63b7dd602bfe926cd236e156d88c649795ffd5470aa52f4ef8c1a45d30d30",
+      "earnedContinueLogic.mjs": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1",
+      "pinned/commonPassageLogic.pinned.mjs": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c"
+    },
+    "gameSourceObservedReadOnly": {
+      "main/src/story/commonGroundDirector.ts": "3b2b95ccd1701b863348e147a8181a704c2ed73258467ea98617e06f0f25aba3",
+      "main/src/story/beats/ch13/ch13-survey.ts": "08f9d635212be77a4b3f4fa4dbdb5797f09fea77fbea4a5acf9e57615ae8b1d1",
+      "disclaimer": "Observation at audit time under an active concurrent integration lane. NOT a violation claim and NOT an accepted-runtime pin. A candidate repin must re-measure."
+    },
+    "hashFile": "logs/continue-controller-closure/probe-hashes.txt"
+  },
+  "newProbeDependencyManifest": {
+    "entrypoint": "verifier/probes/continue-controller-closure/earned-continue-3d-probe.mjs (byte-identical copy; the main-call adaptation is described here and is NOT yet applied to the entrypoint — see remainingRepinRequirements)",
+    "newPrivateModules": [
+      { "file": "liveCalibration.mjs", "imports": ["./pinned/commonPassageLogic.pinned.mjs (mayPressF)", "./tangentSteering3d.mjs (unit3, dot3, norm3, sub3, faceLabel, basisStale, calibrationSample)"], "exports": ["SPAN_OFFER_CONTRACT", "tiltDeg", "stampedCalibration", "keysNeedingRecalibration", "recalibrationDecision", "accumulateDirected", "dirsFromEntries", "faceChangeRetention", "signedSpanOfferAuthorization", "gateInputsFromAuthorization"] },
+      { "file": "liveCalibration.selftest.mjs", "imports": ["./liveCalibration.mjs", "./tangentSteering3d.mjs (chooseKey3d, groundedActionGate)", "./earnedContinueLogic.mjs (newActionGate)"], "checks": 34, "runtimeDeps": "none — pure CPU, no browser/DOM/GPU/filesystem" }
+    ],
+    "copiedModules": ["cgContract.pinned.mjs", "earned-continue-3d-probe.mjs", "earnedContinueLogic.mjs", "entryObservation.mjs", "groundFrame.selftest.mjs", "ownedSession.pinned.mjs", "pinned/", "poseObservation.mjs", "selftest.mjs", "sourceSnapshot.pinned.mjs", "tangentSteering3d.mjs", "tangentSteering3d.selftest.mjs"],
+    "externalDependencies": ["node >= 20 (built-ins only)", "playwright/chromium ONLY at headed runtime, not used here"],
+    "retainedStructure": ["real shipped browser helper", "headed GB10 session shape", "exclusive FD9 lock", "identity verdict (title Paravoxia + ANGLE renderer + index sha)", "ownership and cleanup receipts", "single preview — no duplicate preview is introduced"]
+  },
+  "preservedFacts": {
+    "landingAndPartialDrawingBeforeUnload": "preserved; unchanged by this role",
+    "menuCTAFirstContinueNoStoryRuntimeWaitBeforeClick": "preserved",
+    "rawAll4PoseKeysPlusDomStorageWrites": "preserved",
+    "allWorldSaveFullObjectPrefixEquality": "preserved — latest 19->20 full-prefix equality passed; the prior 18->19 result remains a SEPARATE record and counts are not blended",
+    "poseMovementCause": "no game cause established from the observed pose movement; not asserted here",
+    "worldKeyOrder": "out of scope — the scope auditor handles exact world key order separately",
+    "world_actor_prerequisites_noReplay_hold_support": "preserved as previously recorded; unmodified",
+    "noSourcePatchInferred": true
+  },
+  "remainingRepinRequirements": [
+    "Apply the main-call adaptation inside the copied entrypoint: replace the pre-round basisUp latch in walkTowards.runCalibration with per-key stampedCalibration(upAtSample from each key's own post-burst snapshot), and replace the :508 basisStale branch with recalibrationDecision() fed by accumulateDirected() over real foot displacement.",
+    "Replace earned-continue-3d-probe.mjs:1164 `const offersF = promptOffersF(...)` with signedSpanOfferAuthorization(...) and feed both gates via gateInputsFromAuthorization(auth) at :1171 and :1186.",
+    "Bind the live objectiveId source: confirm which published field carries the current action id (story-ch13-offer-span) in the runtime bridge before the headed run; if none is published, that is an OBSERVATION GAP and the gate must refuse rather than fall back to prompt text alone.",
+    "Candidate repin: re-measure index sha / source hashes against the build actually served, after the concurrent source-integration lane settles. The hashes recorded here are audit-time observations only.",
+    "Serial permission for role continue-controller-closure-runtime, plus a preview and headed GB10/FD9 session, before any browser step.",
+    "Full verification of the stable candidate remains outstanding; nothing here substitutes for it."
+  ],
+  "explicitNonClaims": [
+    "No claim that the shipped game failed to restore anything.",
+    "No claim that the survey route is inaccessible — the attempt-1 walk failure is now attributed to the private calibration thrash, so inaccessibility cannot be declared from it.",
+    "No new accepted action, no chapter acceptance, no runtime evidence of any kind was produced.",
+    "No hash of production source is declared a violation or an accepted runtime pin by this role."
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 399328,
+  "stop_reason": "end_turn",
+  "session_id": "feef48d9-d62e-44a1-a96f-3802e1c28651",
+  "total_cost_usd": 2.669741,
+  "usage": {
+    "input_tokens": 82,
+    "cache_creation_input_tokens": 83295,
+    "cache_read_input_tokens": 2088756,
+    "output_tokens": 31590,
+    "output_tokens_details": {
+      "thinking_tokens": 7833
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 83295,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1794,
+        "cache_read_input_tokens": 86609,
+        "cache_creation_input_tokens": 753,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 753
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2183,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0022530000000000002,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 82,
+      "outputTokens": 31590,
+      "cacheReadInputTokens": 2088756,
+      "cacheCreationInputTokens": 83295,
+      "webSearchRequests": 0,
+      "costUSD": 2.6674880000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 7833,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 47,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done at **20:05 UTC \u2014 ~7 min of the 20 min cap**. Game source: 99/99 clean, mutated nothing (the `main/` modifications are the run's pre-existing integration state, matching the pinned manifest exactly).\n\n## VERDICT: FAIL \u2014 real route not reached. Frontier reported, evidence retained, nothing accepted.\n\n**Gate (read first, as required):** `acceptedForBoundedRuntime: true`, control `activeRole=finale-window-runtime/continue`, `ready=true`, preview 34413 serving pinned index **and** bundle hashes. Launch was authorized.\n\n### What was actually measured about the chapter: nothing\nBoth attempts aborted in the probe's **pre-browser** guard chain. No browser, no GPU, no recorder, no WAV. So finalTexture token timing, score cue, AV anchors, storyActive/visible/focus/done, and audio duration/peak/energy are reported **NOT MEASURED** \u2014 not as negative observations. `pause`/`AudioContext`/`mute`/`cancelReason` remain missing by construction, unchanged.\n\n| Trial | Probe exit | Actual refusal |\n|---|---|---|\n| `window-1` (original, preserved) | 1 @ 276 ms | **discarded by the wrapper** |\n| `window-2` (single authorized correction + retry) | 1 | `fd 9 points at /proc/<pid>/fd/9, not \u2026/.heavy.lock` |\n\nThe wrapper only ever said \"probe never published browser-pid.json\". The retry was not an identical-fault rerun \u2014 I first corrected the harness (`probeLog` was persisted only on the success path, discarding the child console), and that correction is exactly what exposed the real refusal.\n\n### Both root-required corrections applied\n1. **Receipt shape** \u2014 `stopProbe` checked `receipt.stopped`/`stopError`, fields the real receipt never publishes, so a *missing* field read as success. Now requires `state==='stopped' && cleanupCompleted===true && sessionStopped===true && cleanupError===null` (strictly null); failure/no-session/unproved states retained without claiming teardown. Applying this correctly turned closure-checks C17a/C17c red because their fixtures still emitted `{stopped:true}` \u2014 the intended rejection. Fixtures updated to the real shape \u2192 **31/31**.\n2. **3 stale self-test expectations** \u2014 `avFullHasComplete/Handback` \u2192 the actual `avHasCgComplete/avHasCgHandback/signedSceneAv/activationHistoryAnchorIds`; the positive edge fixture now carries dual-18 committed COMMON (Terra 18 **and** Worker 18 **and** committed). Negatives preserved, 4 added. **33 checks/3 failed \u2192 37/0 failed.**\n\n### The frontier \u2014 observed vs inferred, stated separately\n**OBSERVED**, from an isolated diagnostic driving the wrapper's *own* `buildStdio` under a real `exec 9>LOCK; flock -x 9`: the child's in-process `readlinkSync('/proc/self/fd/9')` returns **the lock path**; `/proc/locks` shows `FLOCK ADVISORY WRITE` on the lock inode; an independent `flock -n -x` is **refused**. **The fd transport is correct and exclusivity genuinely holds across wrapper and child.** Only the *spawned* `readlink` returns the unresolved `/proc/<its own pid>/fd/9`.\n\n**INFERRED** (consistent, not directly instrumented): `verifyHeavyLock` resolves the fd via `execFileSync('readlink','-f','/proc/self/fd/9')`, where `/proc/self` is the readlink process, whose fd 9 is not the inherited lock (node's duped stdio fd being close-on-exec) \u2014 so **the probe refuses its own valid lock**.\n\n**One-line fix, deliberately NOT applied:** use in-process `fs.readlinkSync('/proc/self/fd/'+fd)`. My single correction/retry was spent, and the transport lane pinned \"verifyHeavyLock\u2026 unchanged and not weakened\" as a retained prior fix \u2014 changing it is root's call, not routine instrumentation. I stopped rather than take a third attempt.\n\n### Isolation and cleanup\nDefault sink unchanged before/after; no owned sink or module left loaded; no recorder, mic, default monitor or foreign stream touched; **no foreign process signalled** (the probe self-exited); root's preview untouched. `browserTeardownProven: false`, honestly \u2014 there was no browser to tear down.\n\n**Artifacts:** `finale-window-runtime-report.json` / `.md`, `logs/finale-window-runtime/` (prepared CLI, both wrapper logs, both diagnostics), `verifier/captures/finale-window/window-1/` and `window-2/` (incl. the retained `probe-console.log`).\n\nNo audible, causal, repair or acceptance claim is made; the StoryDirectorDriver suspicion is neither supported nor refuted by this lane.",
+  "ttft_ms": 1276,
+  "type": "result",
+  "duration_ms": 413406,
+  "uuid": "ee06cd94-8c52-40e7-8b26-a9be9d5705cd",
+  "ttft_stream_ms": 824,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 824,
+  "queued_turn_count": 0
+}

@@ -1,0 +1,519 @@
+{
+  "schema": "paravoxia.navigationWordingReport.v1",
+  "role": "mechanical integration engineer (terminology cleanup)",
+  "run": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+  "writtenAt": "2026-09-06T14:06:30.883599+00:00",
+  "direction": "producer-navigation-wording-direction.json",
+  "sourceManifestSha256Before": "ba4c3349c5a5700db0ef3ec6a38e29f2d92dc8edd8fff12d1f1f3840e040f630",
+  "materialBehaviorChange": false,
+  "gateChanged": false,
+  "preflight": {
+    "rehashedSourcePaths": 98,
+    "worktreeMismatchesBeforeEdit": 0,
+    "archiveMismatchesBeforeEdit": 0,
+    "archive": "iterations/navigation-before-wording/source",
+    "archiveManifestSha256": "ba4c3349c5a5700db0ef3ec6a38e29f2d92dc8edd8fff12d1f1f3840e040f630"
+  },
+  "changedFiles": {
+    "main/src/game/systems/persistence.test.ts": {
+      "before": "9c1dd65d948c17b37c12b26781966f7b36ee5b3aeca34c64cd3a333c4e99517a",
+      "after": "f25a2374547b1d6b5f50d92cb0893c71706e0b9492baf2c0214566d03a91ee28"
+    },
+    "main/src/game/systems/persistence.ts": {
+      "before": "f68be69f922abe670bf8a0a12246ad87ebb705e42b49ffd95466c6ca9cb631d7",
+      "after": "f01847c2695dcd636a3ba12f03b0b6e17ffc94614509a63097e19c21acd1f915"
+    },
+    "main/src/story/commonGroundDirector.test.ts": {
+      "before": "3dc70095f2aefcfb526b4cf289659bb625cbcc81f0a7742cc7d05c11e10f67ec",
+      "after": "8379b552bd076c4311ba333182e7f0399e0b82a60093a16feddcdc0ed1fb8492"
+    },
+    "main/src/story/commonGroundDirector.ts": {
+      "before": "23bd8ea59f156d9ba5c801e77acc353bd023cabbfde77af7a04cf195c2db921f",
+      "after": "980590b0add81f8e0ce6bdc182cb834940af336454435ff4d304a64e47ad11b5"
+    },
+    "main/src/story/commonGroundState.ts": {
+      "before": "900da8a2a52a93cfce206748fb7a0a4ee6763db3c4a513deb85a8bc732b35784",
+      "after": "7a3c03fb73cb715116ddbf1952fc2c312f52d1dac68b765b8097f4becdb0452e"
+    }
+  },
+  "untouchedFiles": {
+    "count": 93,
+    "hashes": {
+      "docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-journey-contract.schema.json": {
+        "before": "31cfdf19cc5a621bce2c88b8485e80602ecbbcc1c328f428a719bb4d55682bde",
+        "after": "31cfdf19cc5a621bce2c88b8485e80602ecbbcc1c328f428a719bb4d55682bde"
+      },
+      "docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-registry.schema.json": {
+        "before": "9a5546cb31b5585cf5d25487f3fe8c71dd6ea9640dad39b4aa93e50a8fd4f626",
+        "after": "9a5546cb31b5585cf5d25487f3fe8c71dd6ea9640dad39b4aa93e50a8fd4f626"
+      },
+      "docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json": {
+        "before": "c336a1c2ff2b1c2bb2a761838400802cad05a89197ebb48bee887b0c8444fc8b",
+        "after": "c336a1c2ff2b1c2bb2a761838400802cad05a89197ebb48bee887b0c8444fc8b"
+      },
+      "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json": {
+        "before": "100580dbf52df04a7bd83378c8b992524ef774e005a6af28c12f1e7a1d1f547c",
+        "after": "100580dbf52df04a7bd83378c8b992524ef774e005a6af28c12f1e7a1d1f547c"
+      },
+      "main/PARAVOXIA_STORY_BIBLE.md": {
+        "before": "6e0e0660fcaddad30a0c89435d914171c6a8e322cd6036e8534dfacf3387721a",
+        "after": "6e0e0660fcaddad30a0c89435d914171c6a8e322cd6036e8534dfacf3387721a"
+      },
+      "main/PARAVOXIA_STORY_EXECUTION_PLAN.md": {
+        "before": "78f7d30063227a472985d4bf4aaaeececeea84b7b131f06b15bf405f9dea397d",
+        "after": "78f7d30063227a472985d4bf4aaaeececeea84b7b131f06b15bf405f9dea397d"
+      },
+      "main/STORY.md": {
+        "before": "f36794117c7722c7012fa9caa92c89a168cf1c392eba99499104f2a18de0d468",
+        "after": "f36794117c7722c7012fa9caa92c89a168cf1c392eba99499104f2a18de0d468"
+      },
+      "main/chapter-journey-contract.json": {
+        "before": "d441395fca161b654c95dda86d111a2d592ca19dd83ed59adbbfdfc1dec0bdc2",
+        "after": "d441395fca161b654c95dda86d111a2d592ca19dd83ed59adbbfdfc1dec0bdc2"
+      },
+      "main/chapter-registry.json": {
+        "before": "6ae185a0944321e6b0c9b438e7df4b06bbee76da8463f9b72856a2196fd3bd98",
+        "after": "6ae185a0944321e6b0c9b438e7df4b06bbee76da8463f9b72856a2196fd3bd98"
+      },
+      "main/src/App.tsx": {
+        "before": "36abbf3822b828bc0e28f617ba0e5a1b436f39c2dab0b2e86e29683736b81980",
+        "after": "36abbf3822b828bc0e28f617ba0e5a1b436f39c2dab0b2e86e29683736b81980"
+      },
+      "main/src/components/spaceStation/SpaceStationSandbox.tsx": {
+        "before": "82a255d626326fab8a5986bf219caff70fcab43d94f201675198abccd0dea0af",
+        "after": "82a255d626326fab8a5986bf219caff70fcab43d94f201675198abccd0dea0af"
+      },
+      "main/src/components/spaceStation/StationScreeningDriver.tsx": {
+        "before": "0720e6fc0d25498e41026ef6b5a911f6c64b892cb4b88604283309fbe61365c5",
+        "after": "0720e6fc0d25498e41026ef6b5a911f6c64b892cb4b88604283309fbe61365c5"
+      },
+      "main/src/game/spaceStation/spaceStationStory.test.ts": {
+        "before": "52cfff79542d53e6ba77eb15f689e74a9b75243cea34b71be778ee9fbdcb8829",
+        "after": "52cfff79542d53e6ba77eb15f689e74a9b75243cea34b71be778ee9fbdcb8829"
+      },
+      "main/src/game/spaceStation/spaceStationStory.ts": {
+        "before": "c688c184c5a309955be711f2f459cd7cac6baa9cffb9a1a4a7696e293b7b9e9a",
+        "after": "c688c184c5a309955be711f2f459cd7cac6baa9cffb9a1a4a7696e293b7b9e9a"
+      },
+      "main/src/game/spaceStation/spaceStationUndock.test.ts": {
+        "before": "d363a8d654197c52964f3745a3a6417e2dbf89fd223bf35ee6907fb0390e44c8",
+        "after": "d363a8d654197c52964f3745a3a6417e2dbf89fd223bf35ee6907fb0390e44c8"
+      },
+      "main/src/game/spaceStation/spaceStationUndock.ts": {
+        "before": "f8806b7171abc9fcea79d451efcf2e40f7a43f5841540837b9d12dfca2d53441",
+        "after": "f8806b7171abc9fcea79d451efcf2e40f7a43f5841540837b9d12dfca2d53441"
+      },
+      "main/src/game/systems/interactionSystem.test.ts": {
+        "before": "96cc644c7b2d7ba840f204e665ef42778dbad60278568f1251bb6b198a9d711b",
+        "after": "96cc644c7b2d7ba840f204e665ef42778dbad60278568f1251bb6b198a9d711b"
+      },
+      "main/src/game/systems/interactionSystem.ts": {
+        "before": "4367379dbd226d98d2f40138bec0fd88f1a0aa44827ec2827efcae14a0db97ab",
+        "after": "4367379dbd226d98d2f40138bec0fd88f1a0aa44827ec2827efcae14a0db97ab"
+      },
+      "main/src/story/StoryDebugPanel.tsx": {
+        "before": "875443375da39429f91cb3ddf100a7fbae34400397ee4fb0d57f9cc9cdc9d8d1",
+        "after": "875443375da39429f91cb3ddf100a7fbae34400397ee4fb0d57f9cc9cdc9d8d1"
+      },
+      "main/src/story/StoryDirectorDriver.tsx": {
+        "before": "284f981accdf1ecfaed567d0668329d084e353233b5d1e0cea295a9d60e4e32a",
+        "after": "284f981accdf1ecfaed567d0668329d084e353233b5d1e0cea295a9d60e4e32a"
+      },
+      "main/src/story/auditWorkerPresence.test.ts": {
+        "before": "3bef56dd10132f40df3092bcdd583812b60945de8f3605fd5996db1a732478b2",
+        "after": "3bef56dd10132f40df3092bcdd583812b60945de8f3605fd5996db1a732478b2"
+      },
+      "main/src/story/auditWorkerPresence.ts": {
+        "before": "dfd53eda5841ad4383191c9828b08d9a0f213663cbc09c8d2d2aa3251ae5932e",
+        "after": "dfd53eda5841ad4383191c9828b08d9a0f213663cbc09c8d2d2aa3251ae5932e"
+      },
+      "main/src/story/autopilot/primitives.test.ts": {
+        "before": "158f5ac9451b00c37dc535ee9e1ef4c727b5b8f4f20364c7e85ee92428ad2f2d",
+        "after": "158f5ac9451b00c37dc535ee9e1ef4c727b5b8f4f20364c7e85ee92428ad2f2d"
+      },
+      "main/src/story/autopilot/primitives.ts": {
+        "before": "a6da0551072c1a39eaa7ce1d91e1546122955b4a9682ec2ccffb1cdf3c7da4ae",
+        "after": "a6da0551072c1a39eaa7ce1d91e1546122955b4a9682ec2ccffb1cdf3c7da4ae"
+      },
+      "main/src/story/autopilot/rail-ch13-common.ts": {
+        "before": "9df20c7dc5600da6ca4ce4ab677088b4944a32198c956fe64e92fdbc8f7a24ac",
+        "after": "9df20c7dc5600da6ca4ce4ab677088b4944a32198c956fe64e92fdbc8f7a24ac"
+      },
+      "main/src/story/autopilot/rail-ch13-home.ts": {
+        "before": "c8fea24cd23827663955fcde41dadea2b609a770c22ab5af91cc48741b4b8893",
+        "after": "c8fea24cd23827663955fcde41dadea2b609a770c22ab5af91cc48741b4b8893"
+      },
+      "main/src/story/autopilot/rail-ch13-return.ts": {
+        "before": "a1e04dc73e687b8c0ce68aca78aac653e8109bf69849e591229ce98b9ab82376",
+        "after": "a1e04dc73e687b8c0ce68aca78aac653e8109bf69849e591229ce98b9ab82376"
+      },
+      "main/src/story/autopilot/rail-ch13-survey.ts": {
+        "before": "4717372fccda26c8e808779f51c727aa61e4b2c7b6307b34b26edce579441a2d",
+        "after": "4717372fccda26c8e808779f51c727aa61e4b2c7b6307b34b26edce579441a2d"
+      },
+      "main/src/story/autopilot/rails.ts": {
+        "before": "f03c56f5e6d1c15d97541d5f20c8c9b17936cd67476f9a4ffd2e0f2826d96b6d",
+        "after": "f03c56f5e6d1c15d97541d5f20c8c9b17936cd67476f9a4ffd2e0f2826d96b6d"
+      },
+      "main/src/story/beats/allContracts.test.ts": {
+        "before": "5c2075682c806e21f2a276c0e745d8204400b5c3b0496c9ef7796344837272eb",
+        "after": "5c2075682c806e21f2a276c0e745d8204400b5c3b0496c9ef7796344837272eb"
+      },
+      "main/src/story/beats/beatRegistry.test.ts": {
+        "before": "c4986c70c7722e83b3dfe030d0b81e78423b2cf5729a4f1e343a559630ac3a16",
+        "after": "c4986c70c7722e83b3dfe030d0b81e78423b2cf5729a4f1e343a559630ac3a16"
+      },
+      "main/src/story/beats/ch13/ch13-common.ts": {
+        "before": "68368540c33cb2c49eca1802c9b559fb3cc2562951577a9a86846314b969686c",
+        "after": "68368540c33cb2c49eca1802c9b559fb3cc2562951577a9a86846314b969686c"
+      },
+      "main/src/story/beats/ch13/ch13-home.ts": {
+        "before": "5d97e8cea9f3a3e0307d9c7e16a4ce45e4470b9f75c5186bc9aca888630d374b",
+        "after": "5d97e8cea9f3a3e0307d9c7e16a4ce45e4470b9f75c5186bc9aca888630d374b"
+      },
+      "main/src/story/beats/ch13/ch13-return.ts": {
+        "before": "f0710d49683de2cd632853bd9db8cee95e5ee92d4c26f3a5c7bccd15626196e5",
+        "after": "f0710d49683de2cd632853bd9db8cee95e5ee92d4c26f3a5c7bccd15626196e5"
+      },
+      "main/src/story/beats/ch13/ch13-survey.ts": {
+        "before": "08f9d635212be77a4b3f4fa4dbdb5797f09fea77fbea4a5acf9e57615ae8b1d1",
+        "after": "08f9d635212be77a4b3f4fa4dbdb5797f09fea77fbea4a5acf9e57615ae8b1d1"
+      },
+      "main/src/story/beats/ch13/index.ts": {
+        "before": "dc144cd8c9bcb8a5003a0685a8947df39d5143fc494bb5a3e93b7256c86d4488",
+        "after": "dc144cd8c9bcb8a5003a0685a8947df39d5143fc494bb5a3e93b7256c86d4488"
+      },
+      "main/src/story/beats/definitions.ts": {
+        "before": "8da5464972a4eb33ba90b632d2e7688e24916e0cd30070f7ab675200ea7fffb8",
+        "after": "8da5464972a4eb33ba90b632d2e7688e24916e0cd30070f7ab675200ea7fffb8"
+      },
+      "main/src/story/beats/index.ts": {
+        "before": "f2df41b8e819ce3cffb11e85ea0fac95c92230c832ecf2341112de0d3d8f7884",
+        "after": "f2df41b8e819ce3cffb11e85ea0fac95c92230c832ecf2341112de0d3d8f7884"
+      },
+      "main/src/story/beats/markerTargets.ts": {
+        "before": "f3ab3856004307a8d6b21dbc6b3cbf0a0ad2c7714c2e1213ca12922f640aa3b9",
+        "after": "f3ab3856004307a8d6b21dbc6b3cbf0a0ad2c7714c2e1213ca12922f640aa3b9"
+      },
+      "main/src/story/beats/metadata.generated.ts": {
+        "before": "d3b97f03f7711c5b12ddf282fcaff5405c91c43c038a09439ced5ce47b460d76",
+        "after": "d3b97f03f7711c5b12ddf282fcaff5405c91c43c038a09439ced5ce47b460d76"
+      },
+      "main/src/story/beats/objectivePrimitives.ts": {
+        "before": "8770c1ff28f070d60bcd44db1e84b4b1cb23b38538ba61fe3d0b6cd0ceb36076",
+        "after": "8770c1ff28f070d60bcd44db1e84b4b1cb23b38538ba61fe3d0b6cd0ceb36076"
+      },
+      "main/src/story/beats/railDiscipline.test.ts": {
+        "before": "2dbe653e6a6c10eda45fdec96fb5c83c1d48d7351f80cee69ad8a6e8ee78aeaf",
+        "after": "2dbe653e6a6c10eda45fdec96fb5c83c1d48d7351f80cee69ad8a6e8ee78aeaf"
+      },
+      "main/src/story/beats/screeningParity.test.ts": {
+        "before": "6e866c31ec27d7da0c1592d2bb003aa34834777f2ec1de93a988f73f73073905",
+        "after": "6e866c31ec27d7da0c1592d2bb003aa34834777f2ec1de93a988f73f73073905"
+      },
+      "main/src/story/beats/worldHandles.ts": {
+        "before": "5a4aac0f7ca7a5244f32ceae341458abd844e9f95307f369c195ab0942bd4d64",
+        "after": "5a4aac0f7ca7a5244f32ceae341458abd844e9f95307f369c195ab0942bd4d64"
+      },
+      "main/src/story/commonGroundActor.ts": {
+        "before": "2592bc115e043ad2f17d00a72af1cd9c977e46dd4422c5839efbd02c4a3406bb",
+        "after": "2592bc115e043ad2f17d00a72af1cd9c977e46dd4422c5839efbd02c4a3406bb"
+      },
+      "main/src/story/commonGroundRoute.test.ts": {
+        "before": "69e1760a1e2296b363af1dea7a7efe7bdde72044e0cf4449cee0bbee28e29f88",
+        "after": "69e1760a1e2296b363af1dea7a7efe7bdde72044e0cf4449cee0bbee28e29f88"
+      },
+      "main/src/story/commonGroundRoute.ts": {
+        "before": "6025bc4c55098bb3bffc54dd04134fa3b666ef71361e22bba1a9b3fad7a1f1ff",
+        "after": "6025bc4c55098bb3bffc54dd04134fa3b666ef71361e22bba1a9b3fad7a1f1ff"
+      },
+      "main/src/story/commonGroundScore.test.ts": {
+        "before": "70630be669128d832814a82491d23c61f56927668f085f564920f4063fa3d535",
+        "after": "70630be669128d832814a82491d23c61f56927668f085f564920f4063fa3d535"
+      },
+      "main/src/story/commonGroundScore.ts": {
+        "before": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+        "after": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d"
+      },
+      "main/src/story/commonGroundState.test.ts": {
+        "before": "578dcd265393a4603004455cadada7e01d2f642f6c9b5a44aa0bc7605279b446",
+        "after": "578dcd265393a4603004455cadada7e01d2f642f6c9b5a44aa0bc7605279b446"
+      },
+      "main/src/story/emergentScoreDirector.test.ts": {
+        "before": "e0fdafa4d72e06bd195926eee6dbffa48619568b401a429dd96763ed4465161c",
+        "after": "e0fdafa4d72e06bd195926eee6dbffa48619568b401a429dd96763ed4465161c"
+      },
+      "main/src/story/emergentScoreDirector.ts": {
+        "before": "417d1735b4d7d00115b1c1a97527fd7ea0925c93a26f4a7c5d5940c559c33e1c",
+        "after": "417d1735b4d7d00115b1c1a97527fd7ea0925c93a26f4a7c5d5940c559c33e1c"
+      },
+      "main/src/story/emergentStoryDirector.test.ts": {
+        "before": "596f79cb230f95963cab20ed5813c0820fb4e8fc976cd865d1e0c2e5d3c50c9b",
+        "after": "596f79cb230f95963cab20ed5813c0820fb4e8fc976cd865d1e0c2e5d3c50c9b"
+      },
+      "main/src/story/emergentStoryDirector.ts": {
+        "before": "022d8609c651f3049b47eea6ed203d11de4a90eb7e6f6bafa284b3b5f3055737",
+        "after": "022d8609c651f3049b47eea6ed203d11de4a90eb7e6f6bafa284b3b5f3055737"
+      },
+      "main/src/story/emergentStoryEvents.test.ts": {
+        "before": "cf5feb33d7c150a6c7619f24dc1f139e4e939856a67ad1acc4723954deffacab",
+        "after": "cf5feb33d7c150a6c7619f24dc1f139e4e939856a67ad1acc4723954deffacab"
+      },
+      "main/src/story/emergentStoryEvents.ts": {
+        "before": "fa30f7af5e16a9283f635e79cedee2ad1372e95f468707652cca71e9397d0c8a",
+        "after": "fa30f7af5e16a9283f635e79cedee2ad1372e95f468707652cca71e9397d0c8a"
+      },
+      "main/src/story/generatedSceneAvRuntime.json": {
+        "before": "0433dc0a1032c6bc8ae2b301fd78b85002bda539b7447ccf7128a4b91229655b",
+        "after": "0433dc0a1032c6bc8ae2b301fd78b85002bda539b7447ccf7128a4b91229655b"
+      },
+      "main/src/story/signedSceneAvRuntime.test.ts": {
+        "before": "390077a75338593c52253d02927c4378adb7a52e1fe936d5f905b2b728de3fff",
+        "after": "390077a75338593c52253d02927c4378adb7a52e1fe936d5f905b2b728de3fff"
+      },
+      "main/src/story/signedSceneAvRuntime.ts": {
+        "before": "681339e20ca341c01c08527a1b5519a40d7703abcf7d65fdf44661ebc8fb9764",
+        "after": "681339e20ca341c01c08527a1b5519a40d7703abcf7d65fdf44661ebc8fb9764"
+      },
+      "main/src/story/stationReturnStory.test.ts": {
+        "before": "517db8683f78977618090a7be20a341248b5ea5c7be2db66d40a8eb3bce1a0a8",
+        "after": "517db8683f78977618090a7be20a341248b5ea5c7be2db66d40a8eb3bce1a0a8"
+      },
+      "main/src/story/stationReturnStory.ts": {
+        "before": "5844152757cd0788df28d349dae6eee092bdbc09df8e3c487111c71bbfe37b49",
+        "after": "5844152757cd0788df28d349dae6eee092bdbc09df8e3c487111c71bbfe37b49"
+      },
+      "main/src/story/storyBoundaryTelemetry.test.ts": {
+        "before": "6f5b79019391ffe5edabbff9a81726a63adfe9ceed635cf862b3e536ee0c2c5d",
+        "after": "6f5b79019391ffe5edabbff9a81726a63adfe9ceed635cf862b3e536ee0c2c5d"
+      },
+      "main/src/story/storyBoundaryTelemetry.ts": {
+        "before": "4da721807ff6d9215e748e925d70020d881f115d17bde04494e81b1379fc549f",
+        "after": "4da721807ff6d9215e748e925d70020d881f115d17bde04494e81b1379fc549f"
+      },
+      "main/src/story/storyDirector.test.ts": {
+        "before": "15b9dc1f6a4082b5f0b7a0fec939724917945cdbfe63bae2133e4210f85ef161",
+        "after": "15b9dc1f6a4082b5f0b7a0fec939724917945cdbfe63bae2133e4210f85ef161"
+      },
+      "main/src/story/storyDirector.ts": {
+        "before": "82fe1ca596ab6322aeb61c2f33ebed018b1ac1fc22a8fd10d3b2377aa2bf385b",
+        "after": "82fe1ca596ab6322aeb61c2f33ebed018b1ac1fc22a8fd10d3b2377aa2bf385b"
+      },
+      "main/src/story/storyInteractions.test.ts": {
+        "before": "2db194acbc3a262b32788bbf56f5b83a62f588962622caa589c68196f1cd981a",
+        "after": "2db194acbc3a262b32788bbf56f5b83a62f588962622caa589c68196f1cd981a"
+      },
+      "main/src/story/storyInteractions.ts": {
+        "before": "420646181820e2794914a944480adac214770fdd846906278576851d09384ee6",
+        "after": "420646181820e2794914a944480adac214770fdd846906278576851d09384ee6"
+      },
+      "main/src/story/storyObjectiveGuidance.test.ts": {
+        "before": "8fe8e902bb636b59f0d1667a20c5955ef8f9fc3c0ec47f89867f5b7510446643",
+        "after": "8fe8e902bb636b59f0d1667a20c5955ef8f9fc3c0ec47f89867f5b7510446643"
+      },
+      "main/src/story/storyObjectiveGuidance.ts": {
+        "before": "cc0e37a63c9023dc18d53566c31564d878b88b9542289630253255b9164891e6",
+        "after": "cc0e37a63c9023dc18d53566c31564d878b88b9542289630253255b9164891e6"
+      },
+      "main/src/story/storyScore.test.ts": {
+        "before": "24e4643b6e6c6de383004e6d1c34b526880c821828f9a8608bdefb21e742c286",
+        "after": "24e4643b6e6c6de383004e6d1c34b526880c821828f9a8608bdefb21e742c286"
+      },
+      "main/src/story/storyScore.ts": {
+        "before": "94d560db834ed0067689e2b4784fb93a5fc6a962f0942082fbcd7038651f7d05",
+        "after": "94d560db834ed0067689e2b4784fb93a5fc6a962f0942082fbcd7038651f7d05"
+      },
+      "main/src/story/storyState.test.ts": {
+        "before": "f425b6e4e9467585f6a46ba1d48a355cb3e85d36546ef666a69f516bec4d2e22",
+        "after": "f425b6e4e9467585f6a46ba1d48a355cb3e85d36546ef666a69f516bec4d2e22"
+      },
+      "main/src/story/storyState.ts": {
+        "before": "e8802af8a93e4e82623c96f5d81053b2fd8b74027570dcdfa90b3478a9449915",
+        "after": "e8802af8a93e4e82623c96f5d81053b2fd8b74027570dcdfa90b3478a9449915"
+      },
+      "main/src/story/storyWorldHandles.ts": {
+        "before": "6f6dd706168112ab18f8e13beb1e134249ebdc2b60eef23a7bca4e18084c4d9f",
+        "after": "6f6dd706168112ab18f8e13beb1e134249ebdc2b60eef23a7bca4e18084c4d9f"
+      },
+      "main/src/story/tidegardenRoute.ts": {
+        "before": "e7237efcf339efb599222a171a22b0c4b118712025f3f777030c08482b7e103e",
+        "after": "e7237efcf339efb599222a171a22b0c4b118712025f3f777030c08482b7e103e"
+      },
+      "main/src/story/ux/feedbackCues.test.ts": {
+        "before": "a3a2a4154b761fc57f4c340b22731f8c535bfcd7d9882906fc9ffa9c9b3bccc9",
+        "after": "a3a2a4154b761fc57f4c340b22731f8c535bfcd7d9882906fc9ffa9c9b3bccc9"
+      },
+      "main/src/story/ux/feedbackCues.ts": {
+        "before": "e8a076e2280ae4761d9ddba5b6d76682ee3e59636140c3ca6960bef15e548322",
+        "after": "e8a076e2280ae4761d9ddba5b6d76682ee3e59636140c3ca6960bef15e548322"
+      },
+      "main/src/story/ux/objectiveCommandFeedback.test.ts": {
+        "before": "57523e027209d98e0b97fd79b193b7b58f52f3cd55e195a752a577c7a8b620c2",
+        "after": "57523e027209d98e0b97fd79b193b7b58f52f3cd55e195a752a577c7a8b620c2"
+      },
+      "main/src/story/ux/objectiveCommandFeedback.ts": {
+        "before": "dad1453150ac880ba62e07559ff863b899e8d7b3a7ad658b838b2cace553162b",
+        "after": "dad1453150ac880ba62e07559ff863b899e8d7b3a7ad658b838b2cace553162b"
+      },
+      "main/src/story/ux/objectiveEventFeedback.test.ts": {
+        "before": "0d60b23182b09db70e7f1b57b213c954f5a9a927831825da918ace3b720c4fd2",
+        "after": "0d60b23182b09db70e7f1b57b213c954f5a9a927831825da918ace3b720c4fd2"
+      },
+      "main/src/story/ux/objectiveEventFeedback.ts": {
+        "before": "5d5ff442b660a7bc0d89b52f9cc5ac77fcd693108a6b5d5d6ee7fc74877165f3",
+        "after": "5d5ff442b660a7bc0d89b52f9cc5ac77fcd693108a6b5d5d6ee7fc74877165f3"
+      },
+      "main/src/story/world/AuditWorker.tsx": {
+        "before": "88fc065747f9c82aa9896e59d686b85f54e0c007a2ae76b646b369c400a34f3e",
+        "after": "88fc065747f9c82aa9896e59d686b85f54e0c007a2ae76b646b369c400a34f3e"
+      },
+      "main/src/story/world/CommonGroundWorld.test.tsx": {
+        "before": "a9c0eb4ac6000e960fd38a239b015e0a49572fd3c923fc206fb4c152bb8d64bb",
+        "after": "a9c0eb4ac6000e960fd38a239b015e0a49572fd3c923fc206fb4c152bb8d64bb"
+      },
+      "main/src/story/world/CommonGroundWorld.tsx": {
+        "before": "79b265c5e2c11feefc2380708372706f037c87cdd1e88e36533862ef49e6be1e",
+        "after": "79b265c5e2c11feefc2380708372706f037c87cdd1e88e36533862ef49e6be1e"
+      },
+      "main/src/story/world/StoryWorldProps.tsx": {
+        "before": "61ea2827b14bc0fe6a5bcc75604f01175462e0899d8562292b46cda6ad850cba",
+        "after": "61ea2827b14bc0fe6a5bcc75604f01175462e0899d8562292b46cda6ad850cba"
+      },
+      "main/src/story/world/TidegardenSettlementWorld.tsx": {
+        "before": "a1b8ff5292c38e6dbe1319708810573d4e28fbfcbe0006034b8ecaad7264122c",
+        "after": "a1b8ff5292c38e6dbe1319708810573d4e28fbfcbe0006034b8ecaad7264122c"
+      },
+      "main/story-authority.json": {
+        "before": "a302656509bfe430ab24f4ee9bb1a0531df253545cbc7b3b9df5b40e55c497ba",
+        "after": "a302656509bfe430ab24f4ee9bb1a0531df253545cbc7b3b9df5b40e55c497ba"
+      },
+      "main/tools/chapter-registry-gate.mjs": {
+        "before": "cb50ef45eae4be5293bfb25bec16046b24050c5ac4388c9d83e57a7b3a6680bc",
+        "after": "cb50ef45eae4be5293bfb25bec16046b24050c5ac4388c9d83e57a7b3a6680bc"
+      },
+      "main/tools/chapter-registry-generate.mjs": {
+        "before": "4ccf1d6b72cc7d6cfd35630d8a1ad69a759c6862448fea322a2846390ab636de",
+        "after": "4ccf1d6b72cc7d6cfd35630d8a1ad69a759c6862448fea322a2846390ab636de"
+      },
+      "main/tools/creative-triad-gate.mjs": {
+        "before": "1a57c5ce722d545a0a48ce7e7d86839581af3041f0132f932a4e3e45f875a0b1",
+        "after": "1a57c5ce722d545a0a48ce7e7d86839581af3041f0132f932a4e3e45f875a0b1"
+      },
+      "main/tools/generate-scene-av-runtime.mjs": {
+        "before": "a0681f65079a6232a8bbe95692bcf304e086b5a41703f1c1006d65b576eedfc0",
+        "after": "a0681f65079a6232a8bbe95692bcf304e086b5a41703f1c1006d65b576eedfc0"
+      },
+      "main/tools/lib/guidanceTargets.mjs": {
+        "before": "5bf024f3247af78f536330f545e796662d1fffbd050d9b7a8a3294dba977c319",
+        "after": "5bf024f3247af78f536330f545e796662d1fffbd050d9b7a8a3294dba977c319"
+      },
+      "main/tools/story-authority-gate.mjs": {
+        "before": "7987c19b313e197fbf61e5661bdeab1a3c3c9a80ad227d9eb353a566b9604171",
+        "after": "7987c19b313e197fbf61e5661bdeab1a3c3c9a80ad227d9eb353a566b9604171"
+      }
+    }
+  },
+  "lexicalChange": {
+    "rejectedWord": "the bare template-marker word flagged by implementation.placeholders",
+    "prosePhrasesUsed": [
+      "initial snapshot",
+      "uninitialized snapshot"
+    ],
+    "identifierRename": {
+      "file": "main/src/story/commonGroundDirector.test.ts",
+      "from": "placeholder",
+      "to": "initialSnapshot",
+      "scope": "test-local const plus its 3 references"
+    },
+    "changedLinesByFile": {
+      "main/src/game/systems/persistence.test.ts": 1,
+      "main/src/game/systems/persistence.ts": 1,
+      "main/src/story/commonGroundState.ts": 5,
+      "main/src/story/commonGroundDirector.test.ts": 15,
+      "main/src/story/commonGroundDirector.ts": 3
+    },
+    "totalChangedLines": 25,
+    "lineCountsUnchanged": true,
+    "residualRejectedWordOccurrences": 0,
+    "proof": {
+      "method": "Each changed line, with the new wording substituted back to the rejected word, is byte-identical to the archived before line; file line counts are unchanged; no other line differs.",
+      "nonLexicalChangedLines": 0,
+      "diffPath": "logs/navigation-wording/wording-lexical.diff",
+      "diffSha256": "869f639b1ae082c89b3017dc86641d2f8b6920aa9246a2e1a7d7b071de034b8f",
+      "script": "tmp/navigation-wording/prove-lexical.py"
+    },
+    "notChanged": [
+      "predicates",
+      "constants",
+      "calls",
+      "assertions",
+      "control flow",
+      "test count",
+      "public narrative copy",
+      "generated artifacts",
+      "gate scripts"
+    ]
+  },
+  "checks": [
+    {
+      "command": "npm run verify",
+      "cwd": "/home/thomasphillip/Projects/vox/main",
+      "startedAt": "2026-09-06T14:04:14Z",
+      "finishedAt": "2026-09-06T14:05:16Z",
+      "exitCode": 0,
+      "logPath": "logs/navigation-wording/verify.log",
+      "logSha256": "cf45406a988047111eddf84391ccda91e3e0340b42b8feb71e4dcf718c98dc99",
+      "logBytes": 39264
+    },
+    {
+      "command": "npm run story:ux:check",
+      "cwd": "/home/thomasphillip/Projects/vox/main",
+      "startedAt": "2026-09-06T14:05:23Z",
+      "finishedAt": "2026-09-06T14:05:25Z",
+      "exitCode": 0,
+      "logPath": "logs/navigation-wording/story-ux-check.log",
+      "logSha256": "f6389f56b462d9c30b430e2b9862ba5624cd3a251755a90f7c2af40915f0ac73",
+      "logBytes": 826
+    }
+  ],
+  "totals": {
+    "testFiles": 350,
+    "tests": 3139,
+    "source": "logs/navigation-wording/verify.log lines 588-589",
+    "storyUxSubset": {
+      "testFiles": 9,
+      "tests": 94
+    }
+  },
+  "bundleComparison": {
+    "method": "npm run build in main before the edits; npm run verify (which ends in vite build) after the edits; sha256 of every dist/**/*.js",
+    "before": {
+      "dist/assets/SpaceStationSandbox-CabWoklJ.js": "1dafd9993c60df42bf1e02e5ed3e11be8462cde9a9e792e991657d29bac43ab6",
+      "dist/assets/index-CbB2rmHN.js": "2a5d6b2fed2298552963ca368cbc7c79a488b11d6b0fcabe3b16b3a130a654d9",
+      "dist/assets/worldPrep.worker-D9jfWRDd.js": "5c34b2579d4869bbb97ca0d692cf14c2ed050c8983dce442c1ffcca1676bd0de"
+    },
+    "after": {
+      "dist/assets/SpaceStationSandbox-CabWoklJ.js": "1dafd9993c60df42bf1e02e5ed3e11be8462cde9a9e792e991657d29bac43ab6",
+      "dist/assets/index-CbB2rmHN.js": "2a5d6b2fed2298552963ca368cbc7c79a488b11d6b0fcabe3b16b3a130a654d9",
+      "dist/assets/worldPrep.worker-D9jfWRDd.js": "5c34b2579d4869bbb97ca0d692cf14c2ed050c8983dce442c1ffcca1676bd0de"
+    },
+    "identical": true
+  },
+  "limitations": [
+    "Wording-only change; no probe, GPU, browser or acceptance measurement was run or claimed.",
+    "The before bundle was built from the pre-edit worktree after the 98-hash rehash confirmed it matched the ba4 manifest; it is a same-tree comparison, not a rebuild of an archived commit.",
+    "Byte-identical dist JS substantiates unchanged runtime for the shipped bundle only; test files are not bundled.",
+    "Some rewritten comment lines are now longer than the surrounding wrap width; they were deliberately not re-wrapped to keep the diff strictly lexical.",
+    "The producer implementation gate itself was not modified or rerun here; root reruns it after collation."
+  ],
+  "runningChildProcesses": "none started by this role remain; no vitest/vite process was left running",
+  "inboxReread": {
+    "path": "integration-inbox.md",
+    "sha256": "af3e452527af0c115715da3964c9382c77d82bcd6eed5e150661941a82586735",
+    "bytes": 54932,
+    "fileModifiedAt": "2026-09-06T13:47:57.749160+00:00",
+    "rereadAt": "2026-09-06T14:06:20Z",
+    "latestEntry": "2026-09-06T13:47:57.750211+00:00 \u2014 final rejected-payload lifetime check",
+    "assessment": "All entries predate this wording direction (14:02:19Z); none adds or retracts scope for this terminology cleanup."
+  }
+}

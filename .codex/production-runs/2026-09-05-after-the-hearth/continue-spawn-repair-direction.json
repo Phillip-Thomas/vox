@@ -1,0 +1,64 @@
+{
+  "schema": "paravoxia.producerBoundedRepairDirection.v1",
+  "status": "authorized-after-finished-verifier-source-handoff",
+  "preparedAt": "2026-09-06T23:06:45.983762+00:00",
+  "sourceMutationAuthorized": true,
+  "sourceMutationPending": null,
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "contractChangeRequired": false,
+  "proposedMaterialRepairIteration": 9,
+  "defectIds": [
+    "CG-IMPL-011"
+  ],
+  "baselineSourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "baselineFileCount": 100,
+  "baselineTestFiles": 352,
+  "baselineTests": 3192,
+  "evidenceRefs": [
+    "producer-continue-pose-handoff-closure-review.json",
+    "continue-pose-handoff-closure-report.json",
+    "producer-continue-actual-handoff-audit-review.json"
+  ],
+  "proposedAllowedSourcePaths": [
+    "main/src/components/EfficientScene.tsx",
+    "main/src/components/EfficientScene.test.tsx",
+    "main/src/utils/playerSpawnSelection.ts",
+    "main/src/utils/playerSpawnSelection.test.ts"
+  ],
+  "existingProtectedPathToNarrow": [
+    "main/src/components/EfficientScene.tsx"
+  ],
+  "stillProtected": [
+    "main/src/components/EfficientPlayer.tsx",
+    "main/src/audio/"
+  ],
+  "scope": "Preserve the existing safety-validated matching saved on-foot pose at Continue controller initialization instead of replacing it with persisted parked-ship egress. Preserve actual later boarding/landing/disembark, safe invalid-save fallback, reset and other-world/actor behavior.",
+  "prohibited": [
+    "No forced topface or change to spawn safety predicates",
+    "No actor/world alias assumption from :p1 planet-slot keys",
+    "No route/arrival geometry, tolerance, credit or milestone grants",
+    "No score hold/fade/bookkeeping change bundled with pose correction",
+    "No changes to prior static receipts, scene contract or run profile",
+    "No GPU/browser/build/preview mutation during source work",
+    "No publication or defect acceptance"
+  ],
+  "proposedWallBudgetSeconds": 1200,
+  "requiredProof": [
+    "Meaningful regression on actual loaded saved pose and actual parked egress, old-source counterfactual fails and candidate passes. Test owning selection/lifecycle behavior rather than source regex.",
+    "Valid matching on-foot Continue, missing/unsafe/mismatched save safe fallback, actual ship boarding-to-disembark after restored session, new world/actor and reset behavior remain safe.",
+    "Independent actual earned partial save -> real Continue -> raw full-point equality -> retained walking pose -> newly accepted F/anc.cg.route-offered; then focused checks and one stable full suite.",
+    "Affected independent UX/continuity and all pending chapter acceptance remain required."
+  ],
+  "materialRepairIteration": 9,
+  "sourceHandoffAt": "2026-09-06T23:15:21.182511+00:00",
+  "allowedSourcePaths": [
+    "main/src/components/EfficientScene.tsx",
+    "main/src/components/EfficientScene.test.tsx",
+    "main/src/utils/playerSpawnSelection.ts",
+    "main/src/utils/playerSpawnSelection.test.ts"
+  ],
+  "budgetDecisionRef": "producer-continue-spawn-budget-decision.json",
+  "boundaryDecisionRef": "producer-continue-spawn-boundary-completion.json",
+  "baselineArchiveRef": "iterations/continue-spawn-findings/source"
+}

@@ -1,0 +1,162 @@
+{
+  "checkedAt": "2026-09-06T08:32:04.319705+00:00",
+  "sourceManifestRef": "initial-source-hashes.json",
+  "checked": 958,
+  "changedCount": 30,
+  "unexpectedCount": 0,
+  "missing": [],
+  "changed": [
+    {
+      "path": "main/src/story/storyState.test.ts",
+      "before": "5f458cf95d4bbfcb2d29031987fbcaf49a410e6d850e8308915c79aa465be440",
+      "current": "d5e109296dc4603047b86a1e13e1df1a38ae9e261e7cf08c3741372c8aaf43a3"
+    },
+    {
+      "path": "main/src/story/storyInteractions.ts",
+      "before": "d23254cd98b9fa65de12f6c90c3a97b4919b432308e73a42cba2b04df78c420e",
+      "current": "420646181820e2794914a944480adac214770fdd846906278576851d09384ee6"
+    },
+    {
+      "path": "main/src/story/signedSceneAvRuntime.test.ts",
+      "before": "56c91d5a02dc6511e3b93b3468a6954c4ead9e334a7244f4fe2ad0ce28b09a48",
+      "current": "4cf597db1e8629e60b166a6621b64e6862aa045c11b40e15f04bd0bf5676f728"
+    },
+    {
+      "path": "main/src/story/storyBoundaryTelemetry.test.ts",
+      "before": "37426d2b387cb1e8225e34c5755ad55209d1b0b33815f88ae0ac2b1e23efe757",
+      "current": "6f5b79019391ffe5edabbff9a81726a63adfe9ceed635cf862b3e536ee0c2c5d"
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "before": "1acd9ca92d89004ed0ff49c5db279448b606749bc520b5b04e326e37f71d219e",
+      "current": "82fe1ca596ab6322aeb61c2f33ebed018b1ac1fc22a8fd10d3b2377aa2bf385b"
+    },
+    {
+      "path": "main/src/story/storyObjectiveGuidance.test.ts",
+      "before": "97f7680698aa6952305fbd332b616f2c3a173636b5500d5da049bd9152475cb9",
+      "current": "8fe8e902bb636b59f0d1667a20c5955ef8f9fc3c0ec47f89867f5b7510446643"
+    },
+    {
+      "path": "main/src/story/auditWorkerPresence.ts",
+      "before": "7619167efb615e13bf24ff151fc92fe6b85051e47b9259c2674a41538f8321d8",
+      "current": "dfd53eda5841ad4383191c9828b08d9a0f213663cbc09c8d2d2aa3251ae5932e"
+    },
+    {
+      "path": "main/src/story/storyDirector.test.ts",
+      "before": "2450e17d0cbac1bf4544cbfef533fb47abd6170a4d8734cb9124c4d0fdebc50f",
+      "current": "15b9dc1f6a4082b5f0b7a0fec939724917945cdbfe63bae2133e4210f85ef161"
+    },
+    {
+      "path": "main/src/story/tidegardenRoute.ts",
+      "before": "16904583da2e22bd393feafd59f0d84c4b42cfea35e11fe2e483f0c972b00875",
+      "current": "e7237efcf339efb599222a171a22b0c4b118712025f3f777030c08482b7e103e"
+    },
+    {
+      "path": "main/src/story/storyBoundaryTelemetry.ts",
+      "before": "e77e53a1563a5cc29bd81dffd4c4249aa357bc68e33a2144c2272274151ec0d1",
+      "current": "4da721807ff6d9215e748e925d70020d881f115d17bde04494e81b1379fc549f"
+    },
+    {
+      "path": "main/src/story/storyWorldHandles.ts",
+      "before": "2fa464367b750fd45418ebfe8b402e1565e187f381dd6368abf3f74e859a9193",
+      "current": "6f6dd706168112ab18f8e13beb1e134249ebdc2b60eef23a7bca4e18084c4d9f"
+    },
+    {
+      "path": "main/src/story/storyState.ts",
+      "before": "878705bafae81fa6c7fd088e6fc544264b9ee89848fb05a353fd2e152b6030d4",
+      "current": "7d66ff3ed42ca18e0849af8ef2df8cc057fdcfa37c7bf0c9760081461d70d535"
+    },
+    {
+      "path": "main/src/story/emergentStoryDirector.test.ts",
+      "before": "2f78b32d01b05af67bca5cf0eb09e87e959e5ec996e96effe559dd966d99184d",
+      "current": "d0d0ba557ee2db86c2a11a1d58de0bd22b9d575f4113242a38a44c8261cc1e01"
+    },
+    {
+      "path": "main/src/story/emergentStoryDirector.ts",
+      "before": "d22984991cd46bad66d51841f288e695bc308b61dd999e9c46903893d295eadd",
+      "current": "022d8609c651f3049b47eea6ed203d11de4a90eb7e6f6bafa284b3b5f3055737"
+    },
+    {
+      "path": "main/src/story/signedSceneAvRuntime.ts",
+      "before": "248e72d45e20e832815a41f6bd4abeb3e8c184fd0bd1c9a282388cf2b5b444a1",
+      "current": "51f5802432708649fe39773079e5d4a193d469e226ec7fb2a6ef2192b4ae6a7c"
+    },
+    {
+      "path": "main/src/story/beats/objectivePrimitives.ts",
+      "before": "d1617080f497a57668f53848bf6f201f89fc82ce04c75d3cf7fa55fc002258b5",
+      "current": "46025fa3b0337bdcb755644a2f9b3f03f3013616430a3a9fa2b4e6f62a1659a8"
+    },
+    {
+      "path": "main/src/story/beats/metadata.generated.ts",
+      "before": "ef7c3dd76da0f6508c7f389746f7d6177e235878a18dd9d33e334b72a7c41d3d",
+      "current": "d3b97f03f7711c5b12ddf282fcaff5405c91c43c038a09439ced5ce47b460d76"
+    },
+    {
+      "path": "main/src/story/beats/definitions.ts",
+      "before": "8bd9caca3a418078909a32046b4c88ffa6a69665909de1bc4fdd0fe58eaca065",
+      "current": "8da5464972a4eb33ba90b632d2e7688e24916e0cd30070f7ab675200ea7fffb8"
+    },
+    {
+      "path": "main/src/story/beats/worldHandles.ts",
+      "before": "d08546bbde517c6bfca1ee23091bf5960b8b5701b10bbf7156302fbea8b648b6",
+      "current": "5a4aac0f7ca7a5244f32ceae341458abd844e9f95307f369c195ab0942bd4d64"
+    },
+    {
+      "path": "main/src/story/beats/index.ts",
+      "before": "c0c43148df906af691f635eb4b214bd52964822f46c58fb8dd9e0adbb20c2fa7",
+      "current": "f2df41b8e819ce3cffb11e85ea0fac95c92230c832ecf2341112de0d3d8f7884"
+    },
+    {
+      "path": "main/src/story/beats/allContracts.test.ts",
+      "before": "49b1a8b182b574cf2e9ba30aa4e88d8bbae82e68c929985c1c25cc5a47314a6b",
+      "current": "5c2075682c806e21f2a276c0e745d8204400b5c3b0496c9ef7796344837272eb"
+    },
+    {
+      "path": "main/src/story/beats/screeningParity.test.ts",
+      "before": "ce6e762bcd66f3535df263847ff22ee00ec070d5393fdeb8560154cf61055f22",
+      "current": "6e866c31ec27d7da0c1592d2bb003aa34834777f2ec1de93a988f73f73073905"
+    },
+    {
+      "path": "main/src/story/autopilot/primitives.ts",
+      "before": "381eb9936da434bbffe8e4cd2bebc4b4727e8047cd60a3e8f05e971d14615deb",
+      "current": "4cce7261ba455e28a31d77f300e339d5dd907c00c691208b824a058f723313ca"
+    },
+    {
+      "path": "main/src/game/systems/interactionSystem.ts",
+      "before": "37667895eb72f54b6fb9ea0203f10696a94a58ddb72742d9b3a97ebe3437e465",
+      "current": "4367379dbd226d98d2f40138bec0fd88f1a0aa44827ec2827efcae14a0db97ab"
+    },
+    {
+      "path": "main/src/game/systems/persistence.ts",
+      "before": "6b4f9ff830dbf0159ddc8942b42f7fa3f6d0e1bba57e0eddfb8af5a5a9d490ed",
+      "current": "c8d51b1d6055ba221cb910f3eb4cb28c943ac1dd037581a8c1acfa97a0765404"
+    },
+    {
+      "path": "main/src/story/StoryDebugPanel.tsx",
+      "before": "9d41894069ed5d89a857e336c38831ba10377e820161ce79c326fd129ca21b96",
+      "current": "875443375da39429f91cb3ddf100a7fbae34400397ee4fb0d57f9cc9cdc9d8d1"
+    },
+    {
+      "path": "main/src/story/StoryDirectorDriver.tsx",
+      "before": "46ed17413bbd37ecf5cadfa9b5b2feb67f694931f34b010ec3e3004a66e28c8c",
+      "current": "602f4a59b06ea4caf13afd59f0545e5aede0d587e0e1820db168cb8e94310005"
+    },
+    {
+      "path": "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+      "before": "d4a86689442cfb905e496545ee892c90026cf9984555ab5419ac07c40bfb8107",
+      "current": "82a255d626326fab8a5986bf219caff70fcab43d94f201675198abccd0dea0af"
+    },
+    {
+      "path": "main/src/components/spaceStation/StationScreeningDriver.tsx",
+      "before": "16defc01c53a7fe4653b5b7d043e9374b419f0072904bb403806329e49c86a6a",
+      "current": "0720e6fc0d25498e41026ef6b5a911f6c64b892cb4b88604283309fbe61365c5"
+    },
+    {
+      "path": "main/src/story/world/StoryWorldProps.tsx",
+      "before": "cdf09473848c93a5127984b434e5465f7941e51e4e8f24f83fbbead76b84b3ac",
+      "current": "61ea2827b14bc0fe6a5bcc75604f01175462e0899d8562292b46cda6ad850cba"
+    }
+  ],
+  "unexpected": [],
+  "status": "in_progress_observation_not_final_verification"
+}

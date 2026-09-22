@@ -1,0 +1,7 @@
+{
+  "url": "http://127.0.0.1:34995/",
+  "steps": [],
+  "trace": [],
+  "errors": [],
+  "error": "Error: locator.click: Error: strict mode violation: locator('canvas') resolved to 2 elements:\n    1) <canvas width=\"1280\" height=\"720\" data-engine=\"three.js r160\"></canvas> aka locator('canvas').first()\n    2) <canvas width=\"1280\" height=\"720\" aria-hidden=\"true\"></canvas> aka locator('canvas').nth(1)\n\nCall log:\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n"
+}

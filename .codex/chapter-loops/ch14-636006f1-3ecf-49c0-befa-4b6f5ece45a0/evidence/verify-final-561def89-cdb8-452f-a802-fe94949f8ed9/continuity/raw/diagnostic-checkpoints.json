@@ -1,0 +1,716 @@
+[
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/0.json",
+    "sha256": "89c426c6f564afd5cb7847534e1ae5ad7585d781c0fe301bd3fa0fae9891442a",
+    "wallMs": 1788972127057,
+    "beat": "crawl",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/1.json",
+    "sha256": "c877171dec56c26088e3cec7b14b55f2dc2e71cda7460a7f66630301815019b5",
+    "wallMs": 1788972195536,
+    "beat": "manifest",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/2.json",
+    "sha256": "14ee79ef9c16f31c25dc869dc5164cc25a9f3b9e56946b94a6ebb81df2326b45",
+    "wallMs": 1788972223626,
+    "beat": "voyage",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/3.json",
+    "sha256": "b23b1603ed1d541111dc1f4f9563e7cd25e9f66955299d49db2f25c591c04450",
+    "wallMs": 1788972321187,
+    "beat": "deflect",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/4.json",
+    "sha256": "e86cd152310a55b6f89fedbffa3427a9aa1bc38bed39dac14c1e31a35785614c",
+    "wallMs": 1788972342638,
+    "beat": "crash",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/5.json",
+    "sha256": "3fe76f690eecfa459ceaa007586d73efe58c3f0a189c51f4417ebeb1b61f9ab8",
+    "wallMs": 1788972352703,
+    "beat": "descent",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/6.json",
+    "sha256": "a128eb6e5ed6f92088df42576be7bd827bc6d64542a0e7675397be9f97dddbab",
+    "wallMs": 1788972360865,
+    "beat": "ch1-fixed",
+    "objectiveId": "ch1:fixed:recover-first-debris"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/7.json",
+    "sha256": "a54a8a07fbdbbae0022bf61e1782c4b567cd962fd34d7d418088091305eedb8a",
+    "wallMs": 1788972361651,
+    "beat": "ch1-fixed",
+    "objectiveId": "ch1:fixed:calibrate-extractor"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/8.json",
+    "sha256": "ef53f7c27333ada5dfe28f121e0d3d792119c4640876a432006e592aca24893b",
+    "wallMs": 1788972362776,
+    "beat": "ch1-fixed",
+    "objectiveId": "ch1:fixed:cross-camera-cell"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/9.json",
+    "sha256": "4b0f093f5bc519bbfa9654a0a319b953dd3298e24e3f310cde2eabb68f39e0a9",
+    "wallMs": 1788972369541,
+    "beat": "ch1-track",
+    "objectiveId": "ch1:track:tracking-transfer"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/10.json",
+    "sha256": "8a3483a798bfd78f1f3014f5a9a3740ba4b3d6205cb8da0e4a88d1a7aa24c2b4",
+    "wallMs": 1788972377092,
+    "beat": "ch1-raster",
+    "objectiveId": "ch1:raster:recover-quota"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/11.json",
+    "sha256": "13970dc826e97c64d22601c4eec13d2ed6cadabba7ee245c20f160d5c02d99f1",
+    "wallMs": 1788972398013,
+    "beat": "ch1-raster",
+    "objectiveId": "ch1:raster:extract-fiber-quota"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/12.json",
+    "sha256": "0f921b4a29d360f863fca4a48a0bfe56c9374e5e2f4de762c3022e212f3fa6e9",
+    "wallMs": 1788972403500,
+    "beat": "ch1-raster",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/13.json",
+    "sha256": "f00dca2b6a29ef4b17643ffc2f0f7ecc2b6ed0d06b51448845240b769758d487",
+    "wallMs": 1788972406113,
+    "beat": "ch1-depth",
+    "objectiveId": "ch1:depth:recover-supply-pods"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/14.json",
+    "sha256": "dca84aca0f9d01aafb4df45a8993049768fdeb006f49de7bcc8a3e7a9e0ab41b",
+    "wallMs": 1788972428836,
+    "beat": "ch1-nav",
+    "objectiveId": "ch1:nav:triangulation-1-of-3"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/15.json",
+    "sha256": "d5cb84f4d1af1c6856960be9c990893a9d68032246780dbeb664f3ee3cda73d2",
+    "wallMs": 1788972434583,
+    "beat": "ch1-nav",
+    "objectiveId": "ch1:nav:triangulation-2-of-3"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/16.json",
+    "sha256": "94734889ea5bf2f0038e02e3b629cb0987ea78ff64c10ae8daf3d746b19288fc",
+    "wallMs": 1788972442669,
+    "beat": "ch1-nav",
+    "objectiveId": "ch1:nav:triangulation-3-of-3"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/17.json",
+    "sha256": "7ff39ccabe7fe38126772873f21f7e3e36df7a1801ffeb7d1d37e3e201187faf",
+    "wallMs": 1788972445067,
+    "beat": "ch1-iso",
+    "objectiveId": "ch1:iso:reach-signal-source"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/18.json",
+    "sha256": "39c7911fb1e44c9c56b4385cbdb0a7241657efb09a7c85b32376f015a0cc6796",
+    "wallMs": 1788972454192,
+    "beat": "ch1-lift",
+    "objectiveId": "ch1:lift:perspective-transfer"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/19.json",
+    "sha256": "8cd2c53409d61771349b00be56e824ce30996bdc614409dd29917043dcca5efc",
+    "wallMs": 1788972461229,
+    "beat": "ch1-anomaly",
+    "objectiveId": "ch1:anomaly:calibrate-pan-tilt"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/20.json",
+    "sha256": "b9700d74e0a8d619c83263cb1fc4f986900bed9926617f08eeff9a6845916718",
+    "wallMs": 1788972469277,
+    "beat": "ch1-anomaly",
+    "objectiveId": "ch1:anomaly:classify-mass"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/21.json",
+    "sha256": "05657bd0d67133401faf49e0ca1f7b34430611a116942f3091fffcfae57a3e42",
+    "wallMs": 1788972483871,
+    "beat": "a1-ramp",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/22.json",
+    "sha256": "86a5dcca9876892805109ed030d3eec0dfce659824ff3f9dcc3ae6c57c7cea2c",
+    "wallMs": 1788972492181,
+    "beat": "ch2-color",
+    "objectiveId": "ch2:color:approach-redaction"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/23.json",
+    "sha256": "bd4d6b5ddec29ac4071a9061dee26ec995aa1b2837a4aa59677496a01f6139eb",
+    "wallMs": 1788972546352,
+    "beat": "ch2-approach",
+    "objectiveId": "ch2:approach:eat-fruit"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/24.json",
+    "sha256": "aafd01985454d4c6577d448dbd4d72fb5c3f8cb27e1076d2f6c11a3f79b946ac",
+    "wallMs": 1788972562163,
+    "beat": "a2-awakening",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/25.json",
+    "sha256": "a22a3672f88d5d8fb8e9cb33dbb2fb1df69a56769c06da3fdd163944a46e14ba",
+    "wallMs": 1788972572110,
+    "beat": "ch3-gather",
+    "objectiveId": "ch3:gather:craft-hatchet"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/26.json",
+    "sha256": "524c9749a22cb612a58286f714d477dc57e9c3c2efc05b85b8ffdfa54b6a7224",
+    "wallMs": 1788972593315,
+    "beat": "ch3-dusk",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/27.json",
+    "sha256": "cb3a304b590dac817baa8bd02e24990fe2b7d798d756848b69978cd266065b36",
+    "wallMs": 1788972638610,
+    "beat": "ch3-await-rest",
+    "objectiveId": "ch3:rest:wait-for-night"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/28.json",
+    "sha256": "d7506f57aff76fb185911bb14bb3f074027aad6f85e292dfddf8b6a2d5977695",
+    "wallMs": 1788972639916,
+    "beat": "ch3-await-rest",
+    "objectiveId": "ch3:rest:rest-at-fire"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/29.json",
+    "sha256": "00913ec5a957e9b443d8bb43fa4e780ef76b6375a792f06194b1558dbd1817d1",
+    "wallMs": 1788972640453,
+    "beat": "a3-dawn",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/30.json",
+    "sha256": "d2a071d4cab0b3b3693c90ec2e4420ec42d8585d1b56bc8f76ced3d2589ff397",
+    "wallMs": 1788972670816,
+    "beat": "ch3-thirst",
+    "objectiveId": "ch3:thirst:drink-water"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/31.json",
+    "sha256": "b68d85e321eaefe88bee314da52d0c0702e145fea3cfaab8c01d7a252f38980d",
+    "wallMs": 1788972717422,
+    "beat": "ch3-forage",
+    "objectiveId": "ch3:forage:eat-held-food"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/32.json",
+    "sha256": "218d9172aa9117ae51939ed18e9cbc120ba97df25677c59fce44a97e6acfc93c",
+    "wallMs": 1788972737571,
+    "beat": "ch3-forage",
+    "objectiveId": "ch3:forage:first-meal-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/33.json",
+    "sha256": "52b382ba7946baf4c79e601cdbe79a980ef98dcd70764f6afd17a33ee5c86058",
+    "wallMs": 1788972755669,
+    "beat": "ch3-signal",
+    "objectiveId": "ch3:signal:report-to-wreck"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/34.json",
+    "sha256": "bff8fd937d532c226662a87627c11c6e8ca86d01ca55bbdbc5eb76733085e1ed",
+    "wallMs": 1788972768802,
+    "beat": "ch4-vigil",
+    "objectiveId": "ch4:vigil:remain-at-wreck"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/35.json",
+    "sha256": "30406077a79f17c1536513c8b2113b71c8b14cbbc313968b68207742efb0b91e",
+    "wallMs": 1788972800366,
+    "beat": "ch4-vigil",
+    "objectiveId": "ch4:vigil:observe-night-sky"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/36.json",
+    "sha256": "858ae551d90da09098ca3c46a11529764cb2dfa2c63aaa929a5acd8dec208818",
+    "wallMs": 1788972855523,
+    "beat": "ch4-arrival",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/37.json",
+    "sha256": "9513071285f60fc029329623e6d65832fccecbd5d7e7dc3316de37ce9a5512ad",
+    "wallMs": 1788972907171,
+    "beat": "ch4-audit",
+    "objectiveId": "ch4:audit:attend-fire"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/38.json",
+    "sha256": "eb10d27eae22d5ffea42c5b2037cf2ffc8ec9388e486c5976af70a05d091d09d",
+    "wallMs": 1788972907981,
+    "beat": "ch4-audit",
+    "objectiveId": "ch4:audit:attend-life"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/39.json",
+    "sha256": "f72f73d0e0c403e4de601739d8ab428330a1cc8c1bd47bd1a36c42d14aa8af32",
+    "wallMs": 1788972917778,
+    "beat": "ch4-audit",
+    "objectiveId": "ch4:audit:attend-tree"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/40.json",
+    "sha256": "82b787bb3331eb4efc32139d0737edbe9c92517dde338a68a347a54d5303fdc3",
+    "wallMs": 1788972928259,
+    "beat": "ch4-audit",
+    "objectiveId": "ch4:audit:directive-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/41.json",
+    "sha256": "7b84611d40ed273aad810bf2a0c083dae5c117643591b8d00c153e5b47f8cfd7",
+    "wallMs": 1788972929580,
+    "beat": "ch4-comply",
+    "objectiveId": "ch4:comply:resolve-organics"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/42.json",
+    "sha256": "e8d6bfbb09e34df168183daddf4383e858a77e700e9235d753d6ab2f817eecb4",
+    "wallMs": 1788972938372,
+    "beat": "ch4-comply",
+    "objectiveId": "ch4:comply:regression-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/43.json",
+    "sha256": "0173d99a7abea0146508ae4e05d16eb3e4a4fef6ebca2ea31fac3d574791e69f",
+    "wallMs": 1788972939903,
+    "beat": "ch4-defy",
+    "objectiveId": "ch4:defy:test-protected-tree"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/44.json",
+    "sha256": "e9303e7e97b3350bd8e5e8c7763d1c2baf27d39139940cb2c6a416fff07c186d",
+    "wallMs": 1788972948170,
+    "beat": "ch4-defy",
+    "objectiveId": "ch4:defy:refuse-order"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/45.json",
+    "sha256": "70857d456884dd4c6eaace70cc96361003eb9e476e4df1afbeb018cdf39d4982",
+    "wallMs": 1788972948971,
+    "beat": "ch4-defy",
+    "objectiveId": "ch4:defy:refusal-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/46.json",
+    "sha256": "15fac6c77b4d3cd24341b3f1a876e01cf73773dca4a4aa67ad5749960155726a",
+    "wallMs": 1788972951355,
+    "beat": "a4-exhale",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/47.json",
+    "sha256": "2ad8d759186c809cbdd43596d099cdde74f9caec140b4858ded067c1c9491121",
+    "wallMs": 1788972961749,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:recover-field-kit"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/48.json",
+    "sha256": "20c75ef89e08fde4474034cfb08b27c99139c8041554e97c2e5df4a744d5a767",
+    "wallMs": 1788972962818,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:begin-repair"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/49.json",
+    "sha256": "445a89a014ba66d45bd6d42b07a247243f1f67387cf25a0f3d58b6f1c2f192c4",
+    "wallMs": 1788972963619,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:attend-repair"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/50.json",
+    "sha256": "6afea989a872b38e7f9a5f859d6e25aa5b15c6f4edaf9fda1592b9d0bb9adc71",
+    "wallMs": 1788972971862,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:purpose-gap"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/51.json",
+    "sha256": "15dcafdbd7342bd3fcbc84a63e3921f095de2b61685dd0cbc44d579377372009",
+    "wallMs": 1788972973725,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:observe-pond-response"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/52.json",
+    "sha256": "e0bd5b77cd5d8b8096c291df9124721a0e1823bf6ec263048c3a74413f10278c",
+    "wallMs": 1788972983156,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:resonance-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/53.json",
+    "sha256": "d990ecca7d82d8dc8ca8acb8c8253151e8e1e9746f7e142b7b3a647974590a66",
+    "wallMs": 1788972984247,
+    "beat": "ch6-dive",
+    "objectiveId": "dive:recover-keel-memory"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/54.json",
+    "sha256": "12396dabaf198d6ea785efa0dc8ace415bcefed0b0858e1ef195c0268a88c954",
+    "wallMs": 1788972987778,
+    "beat": "ch6-dive",
+    "objectiveId": "dive:surface-with-keel"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/55.json",
+    "sha256": "e72f6ea32867b1d885f0d1f0a996e13bb576e66b91d401c0e9412bc4e673ddac",
+    "wallMs": 1788972988848,
+    "beat": "ch6-dive",
+    "objectiveId": "dive:return-to-shore"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/56.json",
+    "sha256": "01ff2526d35184a0a3d42f5477c609888019c30aeb198aac9b987710f3a7fdc2",
+    "wallMs": 1788972991275,
+    "beat": "ch6-dive",
+    "objectiveId": "dive:shore-handoff"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/57.json",
+    "sha256": "b57c37549db04c3a72bac5b2269ee8e6d228c2c2e0c2ccc78bcf5255488dca53",
+    "wallMs": 1788972993719,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:diagnose"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/58.json",
+    "sha256": "e329254b925e417145ab291a13ed63874368e15267a6cfe69add9d59d0023c6e",
+    "wallMs": 1788972994253,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:repair:bench_online"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/59.json",
+    "sha256": "f72da14783ddfdf65f0be74eddad122405e16aa353c226601a67511e29db0eac",
+    "wallMs": 1788972995883,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:repair:frame_restored"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/60.json",
+    "sha256": "591b92932eb3ee11e607c361b75014b1449a13a6c12c92af3a8b60684870848c",
+    "wallMs": 1788972996971,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:repair:hull_sealed"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/61.json",
+    "sha256": "f965c2f5957a8e82ed66b02596b71133f43c9f945e24107c23fa196f36c1e068",
+    "wallMs": 1788972997783,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:repair:lift_online"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/62.json",
+    "sha256": "4bb5ce69aed44be648d9bae838c4ff416677f0f6b4bd6b4b286359151a2c8cd7",
+    "wallMs": 1788972998601,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:repair:flight_ready"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/63.json",
+    "sha256": "e456386fde5de84d19efa5654f87b6e2e578bfaa5b19aeca6b3e85df6994bafe",
+    "wallMs": 1788972999431,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:calibrating"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/64.json",
+    "sha256": "5c3201a22107340d7f498f1c31ffae76a0cc7f8c51a9b20ce647336c730feb69",
+    "wallMs": 1788973007488,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:ready"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/65.json",
+    "sha256": "f21187fb607c5ea9dfc3b6e35d55f53533771757d3638eac9a832a5d907c7fbc",
+    "wallMs": 1788973016398,
+    "beat": "ch7-board",
+    "objectiveId": "board:enter-hatch"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/66.json",
+    "sha256": "2b0387daa8485511c18b58dadf9dad629f4b4e78d5e95186e39498808c87d5eb",
+    "wallMs": 1788973016671,
+    "beat": "ch7-board",
+    "objectiveId": "board:hatch-in-progress"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/67.json",
+    "sha256": "ba0724381e181f6e254d833cbeba5be9aee292702a7a60e538424a0859a55b63",
+    "wallMs": 1788973017788,
+    "beat": "ch7-board",
+    "objectiveId": "board:pressure-seal"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/68.json",
+    "sha256": "b2dd00af7cf7be02d777c7aaeae6b629fcd88b785a6bf97d71c3c06f1a836ad6",
+    "wallMs": 1788973018313,
+    "beat": "ch8-launch",
+    "objectiveId": "ch8:launch:ignite"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/69.json",
+    "sha256": "c1cc850a6296f54a70d454979f450f57e8639ffca1eab0328384c0b64ce254ab",
+    "wallMs": 1788973021631,
+    "beat": "ch8-launch",
+    "objectiveId": "ch8:launch:climb"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/70.json",
+    "sha256": "8e7cadc5af19517c123440c27c39b0f2d8e41312058492b478d3c172dfc6a5d6",
+    "wallMs": 1788973023497,
+    "beat": "ch8-launch",
+    "objectiveId": "ch8:launch:orbital-handoff"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/71.json",
+    "sha256": "7e97631db4b8bf8d91220fd7fde282169655efddbed57ab2c992d18f976fe002",
+    "wallMs": 1788973038721,
+    "beat": "ch8-crossing",
+    "objectiveId": "ch8:crossing:acquire-sibling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/72.json",
+    "sha256": "585e6daa4f5ffb5d44488f4e103e8b0a1137ab9495caefd4429215f864472af9",
+    "wallMs": 1788973041965,
+    "beat": "ch8-crossing",
+    "objectiveId": "ch8:crossing:hold-course"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/73.json",
+    "sha256": "c76618d2526567f43d6f2fccda05dedcc8389f13cfe46abc43c26b0e78487715",
+    "wallMs": 1788973065574,
+    "beat": "ch8-landfall",
+    "objectiveId": "ch8:landfall:land-dry-level"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/74.json",
+    "sha256": "50e927e3ea1b39ffba8f8bc335a3f48c6645c9892b555cd9bbef695b25c043e6",
+    "wallMs": 1788973070275,
+    "beat": "ch8-landfall",
+    "objectiveId": "ch8:landfall:first-footfall"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/75.json",
+    "sha256": "c4016a7d8e3cb7016bf63192dae4e8fcc8b4d469a6a25e6bd8c55ad99ec61f9e",
+    "wallMs": 1788973071387,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:scan-waterline"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/76.json",
+    "sha256": "42987faada82c7044cf54a8c382d81fd921526b15c93d16c94daf53c13642aba",
+    "wallMs": 1788973080179,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:attend-waterline"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/77.json",
+    "sha256": "1bb64600521d41d6ce5ac3de37ccdbf379172e9931c8ce5a0ba1f33cce73266c",
+    "wallMs": 1788973080982,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:choose-site"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/78.json",
+    "sha256": "0e7965044ccf2bbd433ecf0db7443023dc87327e8a5c5c1253fecd0337fc4a16",
+    "wallMs": 1788973094276,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/79.json",
+    "sha256": "35be1f9362f0f8d165cb4cc46d0f71bd4dd3401c736027c14c0ef4d7b9bc987a",
+    "wallMs": 1788973096720,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/80.json",
+    "sha256": "3ce9d9cc44a312283e960cd132025fa06934f1a9af827e7e35be166488d97bcf",
+    "wallMs": 1788973101378,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/81.json",
+    "sha256": "7f5ab846965794246e9d1b335eecf97ae78dcffd083a9c51797b974fce88b222",
+    "wallMs": 1788973106852,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/82.json",
+    "sha256": "94aca45e5bd645bd1e1c2e3f4dcad9451ed5b10747e3242e4fad1a497ceea511",
+    "wallMs": 1788973109833,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/83.json",
+    "sha256": "a16e13025a94443fd14c86213157e73512f17222755af315a2e4ccba82435290",
+    "wallMs": 1788973112555,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/84.json",
+    "sha256": "7f2d3827b9640a6bb2400365ec018b89c1b20e2cc4db7d5a2024a24ca27aaf03",
+    "wallMs": 1788973125333,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/85.json",
+    "sha256": "4240b6b46482242bb4db7da6e6c76662d2b69ae9db75b82facc7a239be0f0c55",
+    "wallMs": 1788973132100,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:wait-night"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/86.json",
+    "sha256": "55d932fcdbe797e790ffc443c7ffd2978ead0ddd7b5e1565155be63af056129f",
+    "wallMs": 1788973134520,
+    "beat": "ch9-hearth",
+    "objectiveId": "settle:wait-night"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/87.json",
+    "sha256": "def4efa5c4da38fa7d6cce4f9ef01ab0f5e968cb02d6338d0c2c18f104756096",
+    "wallMs": 1788973222930,
+    "beat": "ch9-hearth",
+    "objectiveId": "settle:second-hearth-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/88.json",
+    "sha256": "8208384b4333312d89018af43e3a3d61bd9d18be2ed285eb928c94b5aa3ee853",
+    "wallMs": 1788973228730,
+    "beat": "done",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/89.json",
+    "sha256": "765cc2a71d94d7273280de0eb75f43c6adcf86943db914f5ad0ea1600b2374d8",
+    "wallMs": 1788973242725,
+    "beat": "ch10-cold",
+    "objectiveId": "station:fault-read"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/90.json",
+    "sha256": "854384c1581fed8a2479aed23a751d8de15d71fb96dd626e03bef4c778260b07",
+    "wallMs": 1788973243804,
+    "beat": "ch10-cold",
+    "objectiveId": "station:fabrication-attempt"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/91.json",
+    "sha256": "e51531452635f7d8326a9e37934770d7d50fabecd0d904405bb8061f955b61a6",
+    "wallMs": 1788973248462,
+    "beat": "ch10-ask",
+    "objectiveId": "station:return:crossing"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/92.json",
+    "sha256": "16681b3dc2aeea46bda45fb11292f9dbcfc0c3de2a12a3b6846810fbfc46080d",
+    "wallMs": 1788973261843,
+    "beat": "ch10-ask",
+    "objectiveId": "station:return:landfall"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/93.json",
+    "sha256": "61388b02e5eb61ab582203c7da9c4cde808b429a6a66208ecebb0ef150d6de33",
+    "wallMs": 1788973269630,
+    "beat": "ch10-ask",
+    "objectiveId": "station:relay-query"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/94.json",
+    "sha256": "59c29a0045ddd6f24b124b8b278bec1c1bf27ee95c1cc2147e2e0c6f6797f378",
+    "wallMs": 1788973281185,
+    "beat": "ch10-ask",
+    "objectiveId": "station:bearing-claim"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/95.json",
+    "sha256": "61d662068cbcf9d457fddf433bec66785a6a7be2e737bc779b3309f5ed0a851e",
+    "wallMs": 1788973282814,
+    "beat": "ch10-transit",
+    "objectiveId": "station:transit:reboard"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/96.json",
+    "sha256": "1c8cb9fe923035609b652e6cc39b27af5bd2efabbc93b2cd10f2a8ed5457a4e3",
+    "wallMs": 1788973284488,
+    "beat": "ch10-transit",
+    "objectiveId": "station:transit:ignite"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/97.json",
+    "sha256": "08b70afbc951ea91152d82773088baf89c690fdd740a7b1d9c673ae282cf68dc",
+    "wallMs": 1788973286095,
+    "beat": "ch10-transit",
+    "objectiveId": "station:transit:hold"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/98.json",
+    "sha256": "8cfd7173c1dda0ed7a321bdb036342a046adc638803413ac75f7945d76af90ad",
+    "wallMs": 1788973300774,
+    "beat": "ch10-transit",
+    "objectiveId": "station:transit:resolve"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/99.json",
+    "sha256": "863aaabc714bc14d1ae98252608a953e6b63109e2f0497efd46da3f12ae65bc1",
+    "wallMs": 1788973335693,
+    "beat": "done",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/100.json",
+    "sha256": "087742e4b256491cacce0ca68c43eec962a18ce6ea0e2404f4ace6e9698e6faa",
+    "wallMs": 1788973529860,
+    "beat": "done",
+    "objectiveId": "station:return:tidegarden"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9/continuity/raw/diagnostic-checkpoints/101.json",
+    "sha256": "e925de12759216b7597e85895f95d868ee8547437c3cb59ca5a7032a5b4a012d",
+    "wallMs": 1788973610404,
+    "beat": "done",
+    "objectiveId": "hearth:return:install-cell"
+  }
+]

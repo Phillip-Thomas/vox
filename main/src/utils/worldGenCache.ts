@@ -1,3 +1,5 @@
+import { unpackPreparedStoryAnchors } from '../story/world/preparedStoryAnchors.ts';
+import type { PreparedStoryAnchors } from '../story/world/storyAnchorResolver.ts';
 import * as THREE from 'three';
 import type { ProceduralWorldGenerator } from './proceduralWorldGenerator';
 import { GENERATION_SCHEMA_VERSION } from '../game/schema';
@@ -13,9 +15,13 @@ import type {
   TerrainVoxel
 } from './efficientVoxelSystem';
 import {
+  createWorldPrepRequest,
+  readValidatedArrival,
   validatePackedWorldPrepPayload,
-  type PackedWorldPrepPayload
+  type PackedWorldPrepPayload,
+  type WorldPrepRequest
 } from './worldPrepProtocol.ts';
+import { WorldPrepClient } from './worldPrepClient.ts';
 import { createResolvedWorldGenerator } from './resolvedWorldGenerator.ts';
 
 /**
@@ -41,6 +47,7 @@ import { createResolvedWorldGenerator } from './resolvedWorldGenerator.ts';
  */
 
 export interface CachedWorldGen {
+  preparedStoryAnchors?: PreparedStoryAnchors;
   /** Present for canonical worlds so readiness cannot alias a seed collision. */
   worldId?: string;
   profileId: string;
@@ -59,6 +66,13 @@ export interface CachedWorldGen {
   arrivalCandidate?: { x: number; y: number; z: number };
   /** Dry, level, ship-clear canonical arrival selected on first world entry. */
   validatedArrivalCandidate?: { x: number; y: number; z: number };
+  /**
+   * Highest voxel per top-face column, keyed `x,z` — built once per entry.
+   * Every story anchor resolves through `getWorldArrivalCandidate` with its own
+   * preferred column, and this map used to be rebuilt from ALL voxels on every
+   * call: a dozen anchors meant a dozen full scans on the main thread at boot.
+   */
+  topFaceColumns?: Map<string, { x: number; y: number; z: number }>;
 }
 
 export interface WorldPrepHydrationOptions {
@@ -232,6 +246,121 @@ export function getWorldGen(
  * a world ID prevents a different canonical planet with the same 32-bit seed from
  * satisfying readiness.
  */
+/**
+ * Resolve a world's generation without blocking the main thread.
+ *
+ * `getWorldGen` builds synchronously on a cache miss: it constructs the
+ * generator and runs the full O(R^3) cube scan on the caller's thread. A CPU
+ * profile of a cold boot on 2026-09-04 put that scan — plus the noise it
+ * drives — at ~1.75s in one block and ~3s in total, on EVERY cold entry to any
+ * beat. The world-prep worker and the cooperative hydration path already
+ * existed and already produced the same entry; they were only ever used for
+ * system travel. This is the same path, offered to cold boot.
+ *
+ * Contract:
+ *  - Cache hit: resolves immediately with the existing entry (no async gap
+ *    beyond the microtask), so callers that gate rendering on it do not flicker
+ *    on world swaps that were already prepared.
+ *  - Cache miss with a Worker available: one request per key is in flight at a
+ *    time; concurrent callers share it. The payload is hydrated with the same
+ *    cooperative budget system travel uses.
+ *  - No Worker, or any worker/hydration failure: falls back to the synchronous
+ *    build, recording a warp metric, so behaviour degrades to exactly what
+ *    shipped rather than to a missing world. Terrain is byte-identical either
+ *    way (`proceduralWorldGeneratorDeterminism.test.ts`).
+ */
+export interface EnsureWorldGenOptions {
+  /** Test seam: supply a client with a mock worker factory. */
+  client?: WorldPrepClientLike;
+  budgetMs?: number;
+  isCancelled?: () => boolean;
+}
+
+export interface WorldPrepClientLike {
+  prepare(request: WorldPrepRequest): Promise<PackedWorldPrepPayload>;
+}
+
+const inFlight = new Map<string, Promise<CachedWorldGen>>();
+let sharedClient: WorldPrepClientLike | null = null;
+
+function workerAvailable(): boolean {
+  return typeof Worker !== 'undefined' && typeof window !== 'undefined';
+}
+
+export async function ensureWorldGen(
+  size: number,
+  terrainSeed: number,
+  worldId?: string,
+  options: EnsureWorldGenOptions = {}
+): Promise<CachedWorldGen> {
+  // `async` so that a synchronous refusal (a non-canonical worldId is rejected
+  // by resolvePlanetProfile on every path) surfaces as a rejection, never as a
+  // throw out of a render effect. Cache hits still resolve in one microtask.
+  return ensureWorldGenInner(size, terrainSeed, worldId, options);
+}
+
+function ensureWorldGenInner(
+  size: number,
+  terrainSeed: number,
+  worldId: string | undefined,
+  options: EnsureWorldGenOptions
+): Promise<CachedWorldGen> {
+  const key = cacheKey(size, terrainSeed, worldId);
+  const existing = cache.get(key);
+  if (existing) return Promise.resolve(existing);
+  const pending = inFlight.get(key);
+  if (pending) return pending;
+
+  const client = options.client ?? (workerAvailable() ? (sharedClient ??= new WorldPrepClient()) : null);
+  // The worker protocol only prepares CANONICAL worlds (validateWorldPrepRequest
+  // insists on a parsable planet address whose seed matches). Seed-only and
+  // non-canonical worlds keep the synchronous path — they are the sandbox and
+  // tools, never a player's cold boot.
+  if (!client || worldId === undefined) {
+    markWarpMetric('worldgen:ensure_sync_fallback', { key, reason: client ? 'seed-only' : 'no-worker' });
+    return Promise.resolve(getWorldGen(size, terrainSeed, worldId));
+  }
+
+  let request: WorldPrepRequest;
+  try {
+    request = createWorldPrepRequest({
+      requestId: `boot:${worldId}:${terrainSeed}:${Date.now()}`,
+      worldId,
+      seed: terrainSeed,
+      planetSize: size,
+      activationEpoch: 0
+    });
+  } catch (error) {
+    markWarpMetric('worldgen:ensure_sync_fallback', {
+      key,
+      reason: error instanceof Error ? error.message : String(error)
+    });
+    return Promise.resolve(getWorldGen(size, terrainSeed, worldId));
+  }
+
+  const task = (async () => {
+    try {
+      const payload = await client.prepare(request);
+      const entry = await hydrateWorldGenCacheFromPackedPayload(payload, {
+        budgetMs: options.budgetMs ?? 2.5,
+        isCancelled: options.isCancelled
+      });
+      markWarpMetric('worldgen:ensure_hydrated', { key, voxels: entry.voxels.length });
+      return entry;
+    } catch (error) {
+      markWarpMetric('worldgen:ensure_sync_fallback', {
+        key,
+        reason: error instanceof Error ? error.message : String(error)
+      });
+      return cache.get(key) ?? getWorldGen(size, terrainSeed, worldId);
+    } finally {
+      inFlight.delete(key);
+    }
+  })();
+  inFlight.set(key, task);
+  return task;
+}
+
 export function hasWorldGenCacheEntry(
   size: number,
   terrainSeed: number,
@@ -468,6 +597,7 @@ export async function hydrateWorldGenCacheFromPackedPayload(
   });
   const voxelCount = payload.counts.voxels;
   const voxels = new Array<{ x: number; y: number; z: number }>(voxelCount);
+  const topFaceColumns = new Map<string, { x: number; y: number; z: number }>();
   const originalTerrain = new Array<TerrainVoxel>(voxelCount);
   const originalTerrainByCoord = new Map<string, OriginalTerrainData>();
   const buffers = payload.buffers;
@@ -490,6 +620,13 @@ export async function hydrateWorldGenCacheFromPackedPayload(
     const color = MATERIALS[material].color.clone();
     const voxel: TerrainVoxel = { x, y, z, blockId, deposit, material, color };
     voxels[index] = { x, y, z };
+    // Reuse this exact insertion-ordered index for live anchor endpoints. Build
+    // it inside the existing hydration slices, not in the first world render.
+    if (y >= 0) {
+      const columnKey = `${x},${z}`;
+      const current = topFaceColumns.get(columnKey);
+      if (!current || y > current.y) topFaceColumns.set(columnKey, voxels[index]);
+    }
     originalTerrain[index] = voxel;
     originalTerrainByCoord.set(coordKey(x, y, z), {
       blockId,
@@ -567,15 +704,30 @@ export async function hydrateWorldGenCacheFromPackedPayload(
     allWaterKeys.add(coordKey(cell.x, cell.y, cell.z));
     if ((index & 511) === 511) await maybeYield();
   }
+  // The worker's memoised answers, installed before any query touches the
+  // fresh generator: main-thread consumers now answer from these instead of
+  // recomputing the noise the worker already ran (protocol v3).
+  for (const chunk of generator.hydratePreparedFieldsInChunks({
+    existence: { keys: buffers.fieldExistenceKeys, values: buffers.fieldExistenceValues },
+    surfaceHeight: { keys: buffers.fieldSurfaceHeightKeys, values: buffers.fieldSurfaceHeightValues },
+    landOffset: { keys: buffers.fieldLandOffsetKeys, values: buffers.fieldLandOffsetValues }
+  })) {
+    void chunk;
+    await maybeYield();
+  }
   generator.hydratePreparedWaterCells(allWaterVoxels, allWaterKeys);
+  // The worker already ran the arrival-pad search; the main thread must not.
+  const validatedArrival = readValidatedArrival(buffers.validatedArrivalCandidate);
 
   const entry: CachedWorldGen = {
+    ...(buffers.storyAnchors.length ? { preparedStoryAnchors: unpackPreparedStoryAnchors(buffers.storyAnchors)! } : {}),
     worldId: payload.worldId,
     profileId: payload.profileId,
     profileVersion: payload.profileVersion,
     profileHash: payload.profileHash,
     generator,
     voxels,
+    topFaceColumns,
     originalTerrain,
     originalTerrainByCoord,
     initialVoxels,
@@ -587,7 +739,10 @@ export async function hydrateWorldGenCacheFromPackedPayload(
       x: buffers.arrivalCandidate[0],
       y: buffers.arrivalCandidate[1],
       z: buffers.arrivalCandidate[2]
-    }
+    },
+    ...(validatedArrival
+      ? { validatedArrivalCandidate: { x: validatedArrival[0], y: validatedArrival[1], z: validatedArrival[2] } }
+      : {})
   };
 
   if (options.isCancelled?.()) throw new Error('World-prep hydration was cancelled.');
@@ -607,13 +762,7 @@ export function getWorldArrivalCandidate(
   const entry = getWorldGen(size, terrainSeed, worldId);
   const defaultPreference = preferred.x === 4 && preferred.z === -4;
   if (defaultPreference && entry.arrivalCandidate) return { ...entry.arrivalCandidate };
-  const topByColumn = new Map<string, { x: number; y: number; z: number }>();
-  for (const voxel of entry.voxels) {
-    if (voxel.y < 0) continue;
-    const key = `${voxel.x},${voxel.z}`;
-    const current = topByColumn.get(key);
-    if (!current || voxel.y > current.y) topByColumn.set(key, voxel);
-  }
+  const topByColumn = (entry.topFaceColumns ??= buildTopFaceColumns(entry.voxels));
   let best: { x: number; y: number; z: number } | null = null;
   let bestDistanceSq = Number.POSITIVE_INFINITY;
   for (const voxel of topByColumn.values()) {
@@ -628,6 +777,24 @@ export function getWorldArrivalCandidate(
   const candidate = best ? { ...best } : { x: 0, y: Math.floor(size / 2), z: 0 };
   if (defaultPreference) entry.arrivalCandidate = candidate;
   return { ...candidate };
+}
+
+/**
+ * Identical to the loop this replaces, including insertion order, so the
+ * nearest-column search below iterates the same sequence and breaks ties the
+ * same way. Exported for the parity test.
+ */
+export function buildTopFaceColumns(
+  voxels: ReadonlyArray<{ x: number; y: number; z: number }>
+): Map<string, { x: number; y: number; z: number }> {
+  const topByColumn = new Map<string, { x: number; y: number; z: number }>();
+  for (const voxel of voxels) {
+    if (voxel.y < 0) continue;
+    const key = `${voxel.x},${voxel.z}`;
+    const current = topByColumn.get(key);
+    if (!current || voxel.y > current.y) topByColumn.set(key, voxel);
+  }
+  return topByColumn;
 }
 
 export function prewarmWorldGen(

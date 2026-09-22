@@ -1,0 +1,67 @@
+{
+  "beat": "ch4-vigil",
+  "settleS": 8,
+  "samples": 3,
+  "samplesTaken": [
+    {
+      "elapsedS": 5.014600000023842,
+      "fps": 60.024727794553684,
+      "writesPerS": 593.2676584345422,
+      "perMethodPerS": {
+        "value=": 0.8,
+        "cancelAndHoldAtTime": 61.6,
+        "setTargetAtTime": 529.7,
+        "setValueAtTime": 0.4,
+        "exponentialRampToValueAtTime": 0.4,
+        "linearRampToValueAtTime": 0.4
+      }
+    },
+    {
+      "elapsedS": 5.013300000071526,
+      "fps": 60.04029282023927,
+      "writesPerS": 579.2591705979231,
+      "perMethodPerS": {
+        "value=": 0.8,
+        "cancelAndHoldAtTime": 56.8,
+        "setTargetAtTime": 520.4,
+        "setValueAtTime": 0.4,
+        "exponentialRampToValueAtTime": 0.4,
+        "linearRampToValueAtTime": 0.4
+      }
+    },
+    {
+      "elapsedS": 5.011299999952317,
+      "fps": 60.06425478475926,
+      "writesPerS": 595.8533713863493,
+      "perMethodPerS": {
+        "value=": 1,
+        "cancelAndHoldAtTime": 59.9,
+        "setTargetAtTime": 533.8,
+        "setValueAtTime": 0.4,
+        "exponentialRampToValueAtTime": 0.4,
+        "linearRampToValueAtTime": 0.4
+      }
+    }
+  ],
+  "summary": {
+    "medianWritesPerS": 593.2676584345422,
+    "maxWritesPerS": 595.8533713863493,
+    "contextState": "running",
+    "beatLive": true
+  },
+  "generatedAt": "2026-09-05T11:11:03.615Z",
+  "sites": {
+    "setTargetAtTime @ /src/audio/scoreEngine.ts:825:19": 1404,
+    "setTargetAtTime @ /src/audio/scoreEngine.ts:830:21": 1404,
+    "setTargetAtTime @ /src/audio/scoreEngine.ts:831:25": 1404,
+    "setTargetAtTime @ /src/audio/scoreEngine.ts:832:26": 1404,
+    "cancelAndHoldAtTime @ rampParamAt (/src/audio/audioCore.ts:417:10)": 1247,
+    "setTargetAtTime @ rampParamAt (/src/audio/audioCore.ts:421:9)": 1247,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:796:17)": 351,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:804:17)": 351,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:805:17)": 351,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:806:21)": 351,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:811:21)": 351,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:816:25)": 351
+  }
+}

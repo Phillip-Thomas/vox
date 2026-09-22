@@ -1,0 +1,16 @@
+{
+  "role": "arrival-common-earned-runtimeor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T18:21:16.016003+00:00",
+  "commissionSha256": "1f58d296190670e6b586b204654ea782ec4d176e951c936bc95d40b0c49c4b02",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "Actual earned return/Origin/partial-save/realContinue/new-action proof; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T18:35:25.474801+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "ab105347-9211-474e-8e86-cca907f193d7",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

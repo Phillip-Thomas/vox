@@ -1,0 +1,208 @@
+{
+ "schema": "paravoxia.verification.manualCreditFinaleClosure.v1",
+ "role": "story-verifier-manual-credit-finale-closure",
+ "at": "2026-09-06T21:50:00Z",
+ "originalDeadline": "2026-09-06T22:04:34.043543+00:00",
+ "verdict": "PARTIAL \u2014 Priority1 PROVEN; Priority2 negative PROVEN + recovery FAILED (retained, unresolved); Priority3 UNPERFORMED",
+ "sourceIdentity": {
+  "expectedManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "liveManifestShaObservedByProbe": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "liveContractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sceneContractVersion": "scene-v3 (frozen, unchanged)",
+  "servedIndexSha256": "a9b880389deff7717b3d76b0f4a962beff1031a2ffa44fde427a5f0022353d8f",
+  "servedBundleSha256": "68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b",
+  "onDiskBundleSha256": "68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b",
+  "servedEqualsOnDisk": true,
+  "localSrcRecomputation": {
+   "scheme": "relpath+bytes over main/src",
+   "fileCount": 988,
+   "digest": "ab98595c7ff30f27d22645695c98f32d9ce7a340bd23e4c963ab98276ebe6851",
+   "note": "DIFFERENT scheme/scope from the producer 100-file manifest; NOT comparable and NOT a mismatch claim. Binding parity is the index+bundle hashes above, which match exactly."
+  }
+ },
+ "exclusiveGpuProof": {
+  "heavyLock": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "fd": 9,
+  "kind": "FLOCK",
+  "scope": "ADVISORY",
+  "mode": "WRITE",
+  "inode": 8397196,
+  "major": 259,
+  "minor": 2,
+  "ownedInProcess": true,
+  "contenders": [],
+  "note": "inherited exclusive fd9 acquired by launcher before every run; released after each"
+ },
+ "staticGate": {
+  "REUSED_NOT_RERUN": true,
+  "logRef": "logs/manual-credit-finale-verifier/verify.log",
+  "exitCode": 0,
+  "startedAt": "2026-09-06T21:29:55Z",
+  "finishedAt": "2026-09-06T21:30:57Z",
+  "testFilesPassed": 352,
+  "testsPassed": 3192,
+  "audioLawPassLines": 13,
+  "note": "counted from the retained log; fullverify was NOT run again, directly or via creative:repair:check --final"
+ },
+ "priority1": {
+  "status": "PROVEN",
+  "authoritativeRun": "verifier/captures/manual-credit-finale/full18-run8",
+  "gates": {
+   "actual-Terra-walked-the-full-18-unit-common-span": {
+    "pass": true,
+    "terraUnits": 18,
+    "verticesCrossed": 9
+   },
+   "grounded-supported-arrival-at-far-reference-T": {
+    "pass": true,
+    "horizontalToT": 0.16597702800100894,
+    "verticalToT": 0.11920530916140137,
+    "closestApproach3D": 0.20434842685059507,
+    "horizontalBound": 0.35,
+    "supported": true,
+    "note": "horizontal .35 and vertical recorded SEPARATELY from the 3D closest approach; no rule change"
+   },
+   "far-reference-actually-offered-by-authored-F-at-T": {
+    "pass": true,
+    "objectiveId": "ch13:common:offer-final-reference",
+    "prompt": "F | Offer this end"
+   },
+   "worker-reciprocal-E-to-C-actually-reached-18": {
+    "pass": true,
+    "finalWorkerUnits": 18
+   },
+   "worker-H-to-E-approach-2-units-stayed-UNCREDITED": {
+    "pass": true,
+    "finalWorkerUnits": 18,
+    "maxWorkerUnitsObserved": 18,
+    "creditedWouldBe": 20,
+    "evidence": "common.workerUnits settled at exactly 18, not 20; actor.travelled is leg-local and not the credited total"
+   },
+   "both-final-anchors-published": {
+    "pass": true,
+    "present": [
+     "anc.cg.complete",
+     "anc.cg.handback"
+    ]
+   },
+   "common-passage-committed-and-comparison-proved": {
+    "pass": true,
+    "committed": true,
+    "comparisonProved": true,
+    "stage": "arrived"
+   },
+   "guidance-cleared-and-controls-returned-immediately": {
+    "pass": true,
+    "objectiveId": null,
+    "prompts": []
+   }
+  },
+  "orderedVertexTrace_run8_terraUnits": "see summary.json; run7 trace: v1 2.2526, v2 4.0491, v3 6.0750, v4 8.2729, v5 10.2980, v6 12, v7 14.1910, v8 16.0945, v9 18",
+  "measuredNotGranted": true,
+  "rescuesOrNudges": 0
+ },
+ "priority2": {
+  "negative": {
+   "status": "PROVEN",
+   "gate": "early-cut-route-REFUSED-credit-at-C-without-returning",
+   "pass": true,
+   "observedTurnFootZ_run9": 14.091646106658438,
+   "observedTurnFootZ_run10": 14.170333769505234,
+   "commissionedTargetZ": 15.82,
+   "IMPORTANT": "The commissioned z=15.82 early turn was NOT achieved. The measured turn foot z is ~14.09/14.17, i.e. the turn happened right after vertex 1 and skipped vertex 2 entirely \u2014 a MORE severe cut than commissioned. The 15.82 scenario is UNTESTED. No value is labelled 15.82.",
+   "terraFrozenAt": {
+    "run9": 2.091646122036698,
+    "run10": 2.1703337873440898
+   },
+   "retainedPrefixNotPaidByLateWalking": true
+  },
+  "recovery": {
+   "status": "FAILED \u2014 RETAINED, UNRESOLVED",
+   "gate": "physical-return-and-ordinary-retraversal-completed-18-with-no-reset-or-second-grant",
+   "pass": false,
+   "firstCausalTrace": "cut-run9 (recovery used coarse walkTo arrive=0.5 \u2014 CONFOUNDED by probe instrumentation)",
+   "correctedTrace": "cut-run10 (recovery uses the SAME ordinary-pulse bounded plane crossing as the vertex loop)",
+   "run10Evidence": "all 8 retraversal vertices crossed=true, supported=true, horizontalToVertex 0.175-0.317 (all <= 0.35 bound), yet terraUnits stayed frozen at 2.1703337873440898 for every one of them",
+   "terraUnitsBeforeReturn": 2.1703337873440898,
+   "terraUnitsAfterRetraversal": 2.1703337873440898,
+   "usedReset": false,
+   "usedSecondGrant": false,
+   "usedRail": false,
+   "interpretation": "MEASUREMENT ONLY. After an early corner cut, physically returning and ordinarily retraversing the remaining route with bounded, supported crossings did not resume credit. Whether resumption is intended is a DESIGN question this role does not decide. Not called a defect.",
+   "dependentClaimStopped": "full-18-after-recovery"
+  }
+ },
+ "priority3": {
+  "status": "UNPERFORMED",
+  "threeColdCommonMovieRuns": "NOT RUN \u2014 no cold COMMON movie run was executed; 18/18, commit, both anchors, done, zero-rescue across 3 cold runs is UNMEASURED",
+  "finaleWindow": "NOT RUN \u2014 no finale-window run; token eligibility/deadline/release, done/active, control/guidance, focus/visibility/pause/mute/context, atomic rAF edge window, >=3s pre / 11.5s post, audio/output capture and dense edge frames are ALL UNMEASURED",
+  "audioClaims": "NONE. No hearing or taste claim is made. Prior recording lag 1.891s is neither assumed away nor resolved.",
+  "reason": "Original 45-minute deadline reached after Priority1 and Priority2 runs"
+ },
+ "notPerformed": [
+  "3 cold COMMON movie runs",
+  "finale window / audio",
+  "fps probes",
+  "screenshot strip reading",
+  "reset matrix",
+  "continuity variants",
+  "guided-player lifecycle matrix",
+  "creative:gate",
+  "full station/restoration/chapter journeys",
+  "earned Continue",
+  "variants/performance",
+  "independent creative/UX acceptance"
+ ],
+ "chapterAcceptance": "NOT CLAIMED. These tests cannot and do not accept the chapter.",
+ "probeCorrections": [
+  {
+   "run": "full18-run5",
+   "refusal": "ACTIVE_ROLE was 'story-verifier-manual-credit-finale'; control is '-closure'",
+   "browserLaunched": false
+  },
+  {
+   "run": "full18-run6",
+   "failure": "sampled pose 460ms after arrival at T: supported=false, vertical 4.209 (airborne). Added a settle wait that presses no key and writes no pose."
+  },
+  {
+   "run": "full18-run7",
+   "failure": "read reciprocal credit from actor c.worker (no numeric total) and guessed final anchors anc.cg.common-committed/reciprocal-proved. Corrected to common.workerUnits and the observed anc.cg.complete + anc.cg.handback."
+  },
+  {
+   "run": "cut-run9",
+   "failure": "recovery used coarse walkTo(arrive 0.5), not a bounded plane crossing. Corrected in run10."
+  }
+ ],
+ "artifacts": {
+  "captures": [
+   "verifier/captures/manual-credit-finale/full18-run6",
+   "verifier/captures/manual-credit-finale/full18-run7",
+   "verifier/captures/manual-credit-finale/full18-run8",
+   "verifier/captures/manual-credit-finale/cut-run9",
+   "verifier/captures/manual-credit-finale/cut-run10"
+  ],
+  "logs": "logs/manual-credit-finale-closure/",
+  "probeSnapshotsPerAttempt": [
+   "probe-snapshot-run5",
+   "probe-snapshot-run6",
+   "probe-snapshot-run7",
+   "probe-snapshot-run8",
+   "probe-snapshot-run9-cut",
+   "probe-snapshot-run10-cut"
+  ],
+  "launchers": [
+   "verifier/probes/manual-credit-finale/run-full18-closure.sh",
+   "verifier/probes/manual-credit-finale/run-cut-closure.sh"
+  ]
+ },
+ "preservation": {
+  "mutatedGameSource": false,
+  "mutatedContractOrGates": false,
+  "mutatedOldCapturesOrArchives": false,
+  "mutatedProducerControlOrInvocations": false,
+  "published": false,
+  "newPreviewStarted": false,
+  "foreignProcessesTouched": false,
+  "editedOnlyOwnedProbeFolder": true
+ }
+}

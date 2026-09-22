@@ -1,0 +1,261 @@
+{
+  "schema": "paravoxia.chapterRepairCheckpoint.v1",
+  "at": "2026-09-08T21:02:47.385021+00:00",
+  "run": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "status": "BUDGET_EXHAUSTED",
+  "failure": {
+    "stage": "build",
+    "message": "budget:roleTurns",
+    "at": "2026-09-08T20:58:54.350Z"
+  },
+  "active": null,
+  "recordedBuilderProcessAlive": false,
+  "ownerRequest": "lets fix the blockers you encountered and finish it up",
+  "publishingAuthorized": false,
+  "retainedRecipe": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/recipe.json",
+    "sha256": "f02385240f2dc2ce81acc74f7c5d111ab90de38a5a66a07781b1c38b7602befe"
+  },
+  "usageReported": {
+    "roleLaunches": 7,
+    "modelTurns": 121,
+    "inputTokens": 206197,
+    "cacheReadTokens": 4563072,
+    "outputTokens": 36485
+  },
+  "usageIncomplete": {
+    "role": "7-build",
+    "reason": "Hard work-item stop preceded turn.completed; provider reported no token totals. Zeros in transport are unknown, not zero spend. Ephemeral role has no retained resumable session file.",
+    "completedWorkItems": 60,
+    "tokenTotals": null
+  },
+  "limits": {
+    "activeMs": 28800000,
+    "endToEndMs": 28800000,
+    "firstPlayableMs": 5400000,
+    "roleLaunches": 14,
+    "modelTurns": 400,
+    "inputTokens": 1000000,
+    "cacheReadTokens": 20000000,
+    "outputTokens": 250000,
+    "roleMs": 2700000,
+    "roleTurns": 60,
+    "contextTokens": 32000,
+    "promptBytes": 48000,
+    "transcriptBytes": 16000000,
+    "lookCycles": 3,
+    "listenCycles": 2,
+    "infrastructureRetries": 1
+  },
+  "activeMs": 2074607,
+  "observations": {
+    "look": 2,
+    "listen": 0,
+    "firstPlayable": null,
+    "receipts": [],
+    "active": null
+  },
+  "refinementUsed": false,
+  "newRepairRequestedAt": "2026-09-08T20:33:28.000Z",
+  "operationDeadlineAt": "2026-09-09T04:33:28.000Z",
+  "firstPlayableDeadlineAt": "2026-09-08T22:03:28.000Z",
+  "passingEvidence": [
+    "113 adapter tests on independently reviewed infrastructure bytes",
+    "TypeScript",
+    "238 focused story tests plus 5 interaction tests",
+    "All 3 ordinary-control case schemas",
+    "Chapter journey contract gate"
+  ],
+  "remainingBlockers": [
+    "Terminal budget:roleTurns. Existing recover requires an infrastructure failure; unused retry is not authorization to replay interrupted unaccounted builder. No transition was bypassed.",
+    "Registry gate: 9 failures. Chapter14 revealRefs empty; 4 checkpoint keys missing from canonical STORY_MILESTONES and exact resume clauses.",
+    "Authority gate: 16 failures. Four schema const values stale and 12 milestone/resume/transition checks unresolved. Preserve actual durable record semantics and protected release fields; do not merely relax gates.",
+    "No successful ordinary-play hardware capture, real Continue equality plus newly accepted action, recovery, earned continuity, or AV evidence.",
+    "Compose and fresh independent player/AV/canon reviews not reached; no chapter or release acceptance."
+  ],
+  "efficiencyFinding": "Builder packet communicated deadlines but omitted the 60-work-item ceiling. Of 60 completed commands, heuristic classification is 37 inspection, 18 check/generation, 5 edit/artifact. Counts are not token measurements. Capture was never attempted.",
+  "resumeConstraints": [
+    "Use same checkpoint and signed recipe; no planning replay or replacement run.",
+    "Keep previous failures, unknown usage, spent captures, numerical caps, protected release fields and real arrival/route predicates.",
+    "No active role ticket exists; do not launch private replacement capture or synthesize build PASS.",
+    "Resolve a legitimate checked budget/accounting transition before any further creative role."
+  ],
+  "preview": null,
+  "evidence": {
+    "state.json": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/state.json",
+      "sha256": "698932ef5be2118436d65aac56586f6331fb30dfcff5804bb6c55a6c6f97ee18"
+    },
+    "observations.json": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/observations.json",
+      "sha256": "9064144b6dfa23a2a1c2854fb150c6b6a0c3d50867c468ad3c8cd2ea46f615f4"
+    },
+    "handback.json": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/handback.json",
+      "sha256": "c67f9df53d648d0f9fcd4f80d73185673517ed3fdf8b6fb80371d5bcc64a024d"
+    },
+    "builder/transport.json": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/transport.json",
+      "sha256": "3014b1a0c54dcaa3ec3c2e0495722df98e9274f5fd1c215d87dbc67f9d130769"
+    },
+    "builder/control-validation.json": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/control-validation.json",
+      "sha256": "2867223c4bdd2907db10ec24bc0da8cbc93ada1f16afedfd8077144b7e7e0f9d"
+    },
+    "builder/focused-tests.txt": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/focused-tests.txt",
+      "sha256": "216f14bb0b93cde958255789678fd95b42ba6b3fca7269574e8047a71061c03e"
+    },
+    "builder/interaction-tests.txt": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/interaction-tests.txt",
+      "sha256": "8617e9b81c616777e6ab4543923396a927cf8556b57d521f23afe02bf521b3c6"
+    },
+    "builder/typecheck.txt": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/typecheck.txt",
+      "sha256": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af"
+    },
+    "builder/registry-check.txt": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/registry-check.txt",
+      "sha256": "cf6004e5cbddb0cd2537434cdf5022e64bff976f83ce941278a2b766a9b85c63"
+    },
+    "builder/authority-check.txt": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/authority-check.txt",
+      "sha256": "e20ac81bd780678bb09ad3a0b8376870d3d707fa1f406c34802110b948db508b"
+    },
+    "builder/journey-check.txt": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/journey-check.txt",
+      "sha256": "43f091be3493b311725348575fefad6a93e6cb8e71da85eb2a73de0fe491f67c"
+    },
+    "builder/transcript.jsonl": {
+      "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/transcript.jsonl",
+      "sha256": "7c6d86a8dc05ea89f5ceb72cd8e38cd1834dcf8ddaa77a20c43ae0965bbe83e1"
+    }
+  },
+  "retainedSource": [
+    {
+      "path": "main/chapter-ch14-controls.json",
+      "sha256": "c217656a7fcf2d5147379d5e10ed8a4204c75e53a837d0d2424467fd316bbd60",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/chapter-ch14-controls.json"
+    },
+    {
+      "path": "main/chapter-journey-contract.json",
+      "sha256": "0527b772ada53b79f6d4c7f3be1e4df36bf198e7a26e05aa95710e1618b1baaf",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/chapter-journey-contract.json"
+    },
+    {
+      "path": "main/chapter-registry.json",
+      "sha256": "5456a84ab4e194ca35ab01da66cb6e8438b60078a179a9d96b2c6fe821fe8db2",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/chapter-registry.json"
+    },
+    {
+      "path": "main/src/App.tsx",
+      "sha256": "46c2c7ab6d54323fa7e281ccd24c8f9f74cdb8ace620acc467ec99614b779b12",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/App.tsx"
+    },
+    {
+      "path": "main/src/game/systems/interactionSystem.ts",
+      "sha256": "f7455cc7e48f6d3a567981f77285938380eda6f29526516dee726d742f686890",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/game/systems/interactionSystem.ts"
+    },
+    {
+      "path": "main/src/story/JourneyRuntimeProbeBridge.tsx",
+      "sha256": "362dacbb2ef8a29fd0a58c8add1a8e5d6cfae34c82e81d9cef32e975e1ca39dc",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/story/JourneyRuntimeProbeBridge.tsx"
+    },
+    {
+      "path": "main/src/story/autopilot/primitives.ts",
+      "sha256": "9ae6331a8dde577e2b9e91f74a28ac024e861b6f5b071922c792aadc3d92c8dc",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/story/autopilot/primitives.ts"
+    },
+    {
+      "path": "main/src/story/autopilot/rail-ch14.ts",
+      "sha256": "0478f41d0e4e7128cccd2f1137b11b0dffe5c1563eabefd24268156926523ddb",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/story/autopilot/rail-ch14.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch14/ch14-question.ts",
+      "sha256": "58cdc8489ab94a831fe3dd4a23b227c45e3fbe7ff06a26d1a0044a20a5403e1b",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/story/beats/ch14/ch14-question.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch14/ch14-record.ts",
+      "sha256": "3aae70b0a3df361337896cf069df9b33fa982b9609a9167f5e320d1379dfde9b",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/story/beats/ch14/ch14-record.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch14/ch14-return.ts",
+      "sha256": "24b94035a89e288b99414e30fe8c22e2e09dbb7a87a8b992e9e528ee9b0c5027",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/story/beats/ch14/ch14-return.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch14/ch14-scar.ts",
+      "sha256": "9e23798cccf602f882d714e268bc73f43415960a181b52f6ea3de61c9ffbc1d0",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/story/beats/ch14/ch14-scar.ts"
+    },
+    {
+      "path": "main/src/story/beats/definitions.ts",
+      "sha256": "7b6c5b3f2ea8a20eec58185f51c91d9afb3053831fe1b5c20563c8de038c8a94",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/story/beats/definitions.ts"
+    },
+    {
+      "path": "main/src/story/storyInteractions.ts",
+      "sha256": "b3f72ce62f0d49c72434445ecea1280db16507915d10aa2923b82834329035a9",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/story/storyInteractions.ts"
+    },
+    {
+      "path": "main/src/story/unfinishedMapDirector.ts",
+      "sha256": "5a250312ac1ac4f9e60593ae61f20846df562714992128e73dfbd3cfe8c5f5f4",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/src/story/unfinishedMapDirector.ts"
+    },
+    {
+      "path": "main/story-authority.json",
+      "sha256": "3df4ec68074e82b2c28c239f6ff42c78a36f2762a64b37c360d0c261b59fc7da",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/story-authority.json"
+    },
+    {
+      "path": "main/tools/chapter-loop.mjs",
+      "sha256": "8dd26720eaf6ddb052299af1c30283dffa0a19b77aefaf95a9ba681d838fee65",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/tools/chapter-loop.mjs"
+    },
+    {
+      "path": "main/tools/chapter-loop/budget.mjs",
+      "sha256": "a866f18fddc6e2d1336caa19983718f5a74afc48cd47b78a5f3773c08c0ed294",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/tools/chapter-loop/budget.mjs"
+    },
+    {
+      "path": "main/tools/chapter-loop/capture-case.mjs",
+      "sha256": "e1363737eb5dee2803c960099a0189f2b7a461d8f15ca233c445c79279c97ae3",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/tools/chapter-loop/capture-case.mjs"
+    },
+    {
+      "path": "main/tools/chapter-loop/capture-case.test.mjs",
+      "sha256": "46a9973164e85cf55b8ce2e46355bd1d3b140409728e9a14ccc167e530f7b63a",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/tools/chapter-loop/capture-case.test.mjs"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "sha256": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/tools/chapter-loop/control-capture.mjs"
+    },
+    {
+      "path": "main/tools/chapter-loop/finish-renewal.mjs",
+      "sha256": "0252d6abb9719c769ff3e252f01ce165acd7c2885444d591a3e897a2a8f213e6",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/tools/chapter-loop/finish-renewal.mjs"
+    },
+    {
+      "path": "main/tools/chapter-loop/finish-renewal.test.mjs",
+      "sha256": "991e34ce3c852e21bfba00f1e2f498a27a2da2269fdcce9f59b5aad92aa2284c",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/tools/chapter-loop/finish-renewal.test.mjs"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "sha256": "7dc211021965d004daae6d045424c82c592f50c81e4eadfaeb7aa2af8a1c9e1f",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/tools/chapter-loop/runner.mjs"
+    },
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.test.mjs",
+      "sha256": "84139bac5096c206c4305b23917df8ecd91e433429ee0d3f0b2fb6c2a5a0b04c",
+      "archive": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/terminal-checkpoint/source/main/tools/chapter-loop/runtime-capture.test.mjs"
+    }
+  ]
+}

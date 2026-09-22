@@ -4,6 +4,8 @@ import { VOXEL_SCALE } from '../../utils/cubeGravityConstants.ts';
 import type { SideLens } from '../sideLens.ts';
 import {
   SURVEY_BRACKET_LIMIT,
+  pickSideHarvestVoxel,
+  resolveSurveyTargetPresentation,
   surveyBracketDemand,
   collectHarvestBracketTargets,
   collectSalvageBracketTargets,
@@ -67,15 +69,15 @@ describe('harvest bracket targets', () => {
     expect(distances).toEqual([...distances].sort((a, b) => a - b));
   });
 
-  it('only scans rows off the walked plane — the ones extraction can reach', () => {
+  it('shares ordinary off-row ground probes and only above-ground on-row probes', () => {
     // Mirrors sideHarvestProbePointsOffRow: ground-level candidates sit one
     // voxel either side of the walked row, never in it.
-    const probed: number[] = [];
-    collectHarvestBracketTargets(player, lens, (_x, _y, z) => {
-      probed.push(z);
+    const probed: { y: number; z: number }[] = [];
+    collectHarvestBracketTargets(player, lens, (_x, y, z) => {
+      probed.push({ y, z });
       return null;
     });
-    expect(probed.every(z => Math.abs(z) === 1)).toBe(true);
+    expect(probed.every(({ y, z }) => Math.abs(z) === 1 || (z === 0 && y >= 25))).toBe(true);
   });
 
   it('gives every target a key stable across frames', () => {
@@ -97,7 +99,7 @@ describe('salvage bracket targets', () => {
     // ch1-raster will not advance until every piece is recovered, so a
     // collected piece must stop being designated the moment it is taken.
     const targets = collectSalvageBracketTargets(player, positions, i => i === 1);
-    expect(targets.map(t => t.key)).toEqual(['d:2', 'd:0']);
+    expect(targets.map(t => t.key)).toEqual(['d:2']);
     expect(targets.every(t => t.label === 'DEBRIS')).toBe(true);
   });
 
@@ -108,10 +110,10 @@ describe('salvage bracket targets', () => {
 });
 
 describe('bracket rect', () => {
-  it('keeps the box fully inside the viewport', () => {
+  it('never moves a real offscreen target onto empty on-screen ground', () => {
     const rect = solveSurveyBracketRect(-40, 900, 46, 800, 600);
-    expect(rect.x).toBe(23);
-    expect(rect.y).toBe(600 - 23);
+    expect(rect.x).toBe(-40);
+    expect(rect.y).toBe(900);
   });
 
   it('flips the label inboard when it would leave the frame', () => {
@@ -136,22 +138,22 @@ describe('survey bracket demand', () => {
       .toEqual({ harvest: true, salvage: false });
   });
 
-  it('designates both when both are outstanding', () => {
+  it('designates required salvage alone before outstanding fiber', () => {
     expect(surveyBracketDemand('ch1-raster', { fiber: true, debris: true }))
-      .toEqual({ harvest: true, salvage: true });
+      .toEqual({ harvest: false, salvage: true });
   });
 
   it('goes dark when the beat has nothing outstanding', () => {
     expect(surveyBracketDemand('ch1-raster', { fiber: false, debris: false }))
       .toEqual({ harvest: false, salvage: false });
     // ch1-fixed's quota met means the rung has moved on to the camera hand-off.
-    expect(surveyBracketDemand('ch1-fixed', { fiber: false, debris: true }))
+    expect(surveyBracketDemand('ch1-fixed', { fiber: false, debris: false }))
       .toEqual({ harvest: false, salvage: false });
   });
 
-  it('never designates debris on the beat that has none to give', () => {
+  it('opens fixed on actual debris0 before extraction', () => {
     expect(surveyBracketDemand('ch1-fixed', { fiber: true, debris: true }))
-      .toEqual({ harvest: true, salvage: false });
+      .toEqual({ harvest: false, salvage: true });
   });
 
   it('designates nothing outside the bracket beats', () => {
@@ -159,5 +161,41 @@ describe('survey bracket demand', () => {
       expect(surveyBracketDemand(beat, { fiber: true, debris: true }))
         .toEqual({ harvest: false, salvage: false });
     }
+  });
+});
+
+
+describe('retained action and truthful horizontal bearing', () => {
+  it.each([[1, 0, 0], [-1, 0, 0], [0, 0, 1], [0, 0, -1]])('maps the actual right movement axis %j, without using world X or screen sign', (x, y, z) => {
+    const movementRight = new THREE.Vector3(x, y, z), player = new THREE.Vector3(8, 50, -3);
+    for (const sign of [1, -1]) {
+      const approach = player.clone().addScaledVector(movementRight, sign * 7);
+      const result = resolveSurveyTargetPresentation({ ndc: new THREE.Vector3(-2, 0, 0), player, approach, movementRight, validApproach: true, nativeActionable: false });
+      expect(result.direction).toBe(sign > 0 ? 'D' : 'A');
+    }
+  });
+  it.each([[0.98, 0, 0], [2, 1.1, 0], [2, 0, 2], [NaN, 0, 0], [2, Infinity, 0], [2, 0, NaN]])('never turns label fit, vertical, behind or nonfinite projection %j into a bearing', (x, y, z) => {
+    const result = resolveSurveyTargetPresentation({ ndc: new THREE.Vector3(x, y, z), player: new THREE.Vector3(), approach: new THREE.Vector3(6, 0, 0), movementRight: new THREE.Vector3(1, 0, 0), validApproach: true, nativeActionable: false });
+    expect(result.direction).toBeNull();
+  });
+  it('preserves the exact supported approach and facing that select each yielded voxel through the native picker', () => {
+    const lens = makeLens(), player = new THREE.Vector3(0, 50, 0);
+    const probe = (x: number, y: number, z: number) => ({ yields: x === -3 && y === 24 && z === 1 });
+    const support = (position: THREE.Vector3) => position.x < -2;
+    const targets = collectHarvestBracketTargets(player, lens, probe, 10, support);
+    expect(targets.length).toBeGreaterThan(0);
+    for (const target of targets) {
+      expect(support(target.approach!)).toBe(true);
+      const picked = pickSideHarvestVoxel(target.approach!, lens, target.facing!, probe, true)!;
+      expect(target.key).toBe(`v:${picked.x},${picked.y},${picked.z}`);
+      expect(target.approach!.equals(target.position)).toBe(false);
+    }
+  });
+  it('keeps native extraction canonical and refuses a missing, invalid or zero-distance approach', () => {
+    const input = { ndc: new THREE.Vector3(2, 0, 0), player: new THREE.Vector3(), approach: new THREE.Vector3(8, 0, 0), movementRight: new THREE.Vector3(1, 0, 0), validApproach: true, nativeActionable: false };
+    expect(resolveSurveyTargetPresentation({ ...input, nativeActionable: true }).direction).toBeNull();
+    expect(resolveSurveyTargetPresentation({ ...input, validApproach: false }).direction).toBeNull();
+    expect(resolveSurveyTargetPresentation({ ...input, approach: undefined }).direction).toBeNull();
+    expect(resolveSurveyTargetPresentation({ ...input, approach: input.player }).direction).toBeNull();
   });
 });

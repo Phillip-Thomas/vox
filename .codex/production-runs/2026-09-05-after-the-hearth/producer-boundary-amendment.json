@@ -1,0 +1,85 @@
+{
+  "author": "creative-producer",
+  "authority": "user standing delegation: yes continue, and please auto approve everything",
+  "createdAt": "2026-09-06T06:49:25.145431+00:00",
+  "briefItemRef": "CG-S1-boundary-registry",
+  "originalBriefSha256": "6d1ccb44710bbd37de5681ae1f5f5c2d46d39cfc7031f3a00bd7ae3ae2a01223",
+  "updatedBriefSha256": "f028302d0881be54a12ddf4d58de699d0ab0376273b36e2c9b7592c9f054e0a8",
+  "addedTooling": [
+    {
+      "path": "main/tools/creative-triad-gate.mjs",
+      "symbol": "actionableWorkOrder; runSelfTest",
+      "why": "Admit literal shipped DELIVER travel and registered Space input without changing lifecycle guards or copy."
+    },
+    {
+      "path": "main/tools/story-authority-gate.mjs",
+      "symbol": "activeProduction/current implemented identity assertions",
+      "why": "Synchronize strict authority assertions to actual ch13 implementation and signed production, preserving all protected question and release gates."
+    },
+    {
+      "path": "main/tools/chapter-registry-generate.mjs",
+      "symbol": "generated journey external transition view",
+      "why": "Preserve typed external transition evidence across regeneration if required."
+    },
+    {
+      "path": "main/tools/lib/guidanceTargets.mjs",
+      "symbol": "validateGuidanceTargetContract; validateGuidanceTargetEvidence",
+      "why": "Represent the signed target-free boarded control interaction and require fresh accepted input plus actual control-state transition evidence; retain survey, travel and wait evidence checks."
+    },
+    {
+      "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json",
+      "symbol": "guidanceObjective targetMode:none kind conditional",
+      "why": "Mirror the checked control-only interact branch alongside travel and wait, retaining zero-target count, explicit ownership/readiness and strict raw input evidence."
+    }
+  ],
+  "addedTestPaths": [
+    "main/src/App.test.tsx",
+    "main/src/components/spaceStation/SpaceStationSandbox.test.tsx",
+    "main/src/components/spaceStation/StationScreeningDriver.test.tsx",
+    "main/src/game/spaceStation/spaceStationStory.test.ts",
+    "main/src/game/spaceStation/spaceStationUndock.test.ts",
+    "main/src/game/systems/interactionSystem.test.ts",
+    "main/src/game/systems/persistence.test.ts",
+    "main/src/story/StoryDirectorDriver.test.tsx",
+    "main/src/story/auditWorkerPresence.test.ts",
+    "main/src/story/autopilot/primitives.test.ts",
+    "main/src/story/autopilot/rail-ch13-common.test.ts",
+    "main/src/story/autopilot/rail-ch13-home.test.ts",
+    "main/src/story/autopilot/rail-ch13-return.test.ts",
+    "main/src/story/autopilot/rail-ch13-survey.test.ts",
+    "main/src/story/autopilot/rails.test.ts",
+    "main/src/story/beats/allContracts.test.ts",
+    "main/src/story/beats/beatRegistry.test.ts",
+    "main/src/story/beats/index.test.ts",
+    "main/src/story/beats/markerTargets.test.ts",
+    "main/src/story/beats/objectivePrimitives.test.ts",
+    "main/src/story/beats/screeningParity.test.ts",
+    "main/src/story/beats/worldHandles.test.ts",
+    "main/src/story/commonGroundActor.test.ts",
+    "main/src/story/commonGroundDirector.test.ts",
+    "main/src/story/commonGroundRoute.test.ts",
+    "main/src/story/commonGroundScore.test.ts",
+    "main/src/story/commonGroundState.test.ts",
+    "main/src/story/emergentScoreDirector.test.ts",
+    "main/src/story/emergentStoryDirector.test.ts",
+    "main/src/story/emergentStoryEvents.test.ts",
+    "main/src/story/signedSceneAvRuntime.test.ts",
+    "main/src/story/stationReturnStory.test.ts",
+    "main/src/story/storyBoundaryTelemetry.test.ts",
+    "main/src/story/storyDirector.test.ts",
+    "main/src/story/storyInteractions.test.ts",
+    "main/src/story/storyObjectiveGuidance.test.ts",
+    "main/src/story/storyScore.test.ts",
+    "main/src/story/storyState.test.ts",
+    "main/src/story/storyWorldHandles.test.ts",
+    "main/src/story/ux/feedbackCues.test.ts",
+    "main/src/story/ux/objectiveCommandFeedback.test.ts",
+    "main/src/story/ux/objectiveEventFeedback.test.ts",
+    "main/src/story/world/AuditWorker.test.tsx",
+    "main/src/story/world/CommonGroundWorld.test.tsx",
+    "main/src/story/world/StoryWorldProps.test.tsx",
+    "main/src/story/world/TidegardenSettlementWorld.test.tsx"
+  ],
+  "personallyReviewedByUser": false,
+  "publicationAuthorized": false
+}

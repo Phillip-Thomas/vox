@@ -1,6 +1,8 @@
 import React from 'react';
-import { useAudioSettings, setMusicMuted, setMusicVolume, setSfxVolume } from '../../audio/audioSettings.ts';
+import { useAudioSettings, setMusicMuted, setMusicVolume, setSfxVolume, setSoundCaptions } from '../../audio/audioSettings.ts';
+import { playSfx } from '../../audio/sfxEngine.ts';
 import { unlockGameAudio } from '../../audio/gameAudio.ts';
+import { areGameAudioRoutesConfirmed } from '../../audio/audioCore.ts';
 import { theme } from '../../ui/theme.ts';
 
 interface AudioControlsProps {
@@ -8,7 +10,7 @@ interface AudioControlsProps {
 }
 
 const AudioControls: React.FC<AudioControlsProps> = ({ compact = false }) => {
-  const { musicVolume, sfxVolume, muted } = useAudioSettings();
+  const { musicVolume, sfxVolume, muted, soundCaptions } = useAudioSettings();
   const musicPercent = Math.round(musicVolume * 100);
   const sfxPercent = Math.round(sfxVolume * 100);
 
@@ -36,7 +38,8 @@ const AudioControls: React.FC<AudioControlsProps> = ({ compact = false }) => {
         </div>
         <button
           onPointerDown={unlock}
-          onClick={() => setMusicMuted(!muted)}
+          onPointerEnter={() => { if (areGameAudioRoutesConfirmed()) playSfx('uiHover'); }}
+          onClick={() => { setMusicMuted(!muted); playSfx(muted ? 'uiClick' : 'uiBack'); }}
           style={{
             fontFamily: theme.font.ui,
             fontSize: 12,
@@ -67,6 +70,10 @@ const AudioControls: React.FC<AudioControlsProps> = ({ compact = false }) => {
         onUnlock={unlock}
         onChange={value => onVolumeInput(value, setSfxVolume)}
       />
+      <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 12, color: theme.color.textDim }}>
+        <input type="checkbox" checked={soundCaptions} onChange={event => { setSoundCaptions(event.currentTarget.checked); playSfx('uiClick'); }} />
+        Sound captions
+      </label>
     </div>
   );
 };

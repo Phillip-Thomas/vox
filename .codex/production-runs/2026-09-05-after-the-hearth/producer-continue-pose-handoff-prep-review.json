@@ -1,0 +1,16 @@
+{
+  "at": "2026-09-06T22:44:01.078239+00:00",
+  "reportRef": "continue-pose-handoff-prep-report.json",
+  "acceptedForMeasurement": false,
+  "acceptedForBoundedRuntimeCompletion": true,
+  "sourceDrift": [],
+  "concreteGaps": [
+    "Actualpointtableempty; generichelperreferences a fictionalobjectwithallcomponentlocals. Need realminifiedlocals/sourcepins, not thatobject. ActoridbelongscommandContext.actorId, notworld.actorId.",
+    "Offline candidate positions CAN be identified from exactbundle; browseronlyneededtoverifybreakpointresolution/hits. Do not spendfullflightwithzeroactualpoints.",
+    "pose-handoff-only annotatesbutdoesnotstopwalk. Mustenforcerealbranchbeforecontroller andreturndistinctobservationverdict, not originalFacceptance.",
+    "400eventbuffer must retaincriticaltransitionandreportactualdrops/errors. Count actualhits vs resolvedlocations separately."
+  ],
+  "alreadyUseful": "CopiedworkingContinueentry, realobserverinstall/finallyharvest, samefolderdepth, preservesoriginal180/120/90budgets andsource.",
+  "next": "Runtime owner finishesactualpoints/stopbranch thenoneactualContinueposewriterwindow underexclusiveGPU; no morebroadprepstage.",
+  "publicationAuthorized": false
+}

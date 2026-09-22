@@ -1,0 +1,58 @@
+{
+  "documentKind": "score-arrival-guidance-amendment-review",
+  "director": "score",
+  "runId": "2026-09-05-after-the-hearth",
+  "reviewedBy": "Score Director (/root/score_director)",
+  "reviewedAt": "2026-09-06T16:17:08.995739Z",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "proposalRef": "chapter-arrival-guidance-interpretation.json",
+  "proposalSha256": "c470b753cd4081d1d3d97e0bd6baa932b3dba9309eabd4ef3ef62e5b100f4315",
+  "proposalMarkdownSha256": "70b6783f3c95000e19fc310cd53ac9972ae2e447bb769537b1bbf0205e09336f",
+  "disposition": "approve",
+  "rationale": "The exact conditional arrival copy makes the already signed disembark/on-foot interval actionable under the same travel objective and real audit-site destination. It preserves physical W arrival, silent same-ID updates and every existing score eligibility boundary. No musical objection remains to this exact proposal.",
+  "contractChangeRequired": true,
+  "contractChangeReason": "Exact conditional guidance copy and its mirrored arrival acceptance require the bounded scene amendment; the required physical approach and Score direction are already signed.",
+  "scoreMeaningChanged": false,
+  "scoreTreatmentChangeRequired": false,
+  "sixCuesRetained": true,
+  "requiredInvariants": [
+    "Keep ch13:return:origin, kind travel, Origin · audit site, and its existing lift/physical-arrival anchors throughout the actual Origin arrival. Do not create a second required objective, input or score anchor.",
+    "Home quotation releases at actual return-chosen. Flight, landing, disembarkation and the complete on-foot approach remain under the existing world conductor; control-mode or copy changes never reselect restored-home or add an arrival cue.",
+    "One presentation-only acknowledgement belongs to actual course-objective entry. Conditional phase-copy replacement and restored reconstruction are silent; neither repeats entry feedback nor schedules a score event, intensity step, phrase restart or progress credit.",
+    "Only real grounded Origin, embodied state and physical W reach complete the existing arrival. World activation, landing alone, elapsed time, movie progress or text publication cannot earn it. Optional usable-hatch boarding does not become the mandatory arrival destination.",
+    "Physical arrival remains distinct from the audit cue: unreconciled begins only with actual mounted/performed repeated-measure. Proximity, marker visibility, disembarkation, copy selection and camera framing cannot manufacture the reinspection.",
+    "Existing Continue/reset and no-replay semantics remain. Reconstruct the actual next action without replaying home/arrival presentation; preserve the separate final-completion-only five-second token, existing 4.5-second release and all cancellations unchanged."
+  ],
+  "evidenceRefs": [
+    "chapter-arrival-guidance-interpretation.json#/proposedPhaseCopy",
+    "chapter-arrival-guidance-interpretation.json#/proposedChanges",
+    "scene-contract.json#/guidance/objectives/4",
+    "scene-contract.json#/story/events/6",
+    "scene-contract.json#/syncAnchors/3",
+    "scene-contract.json#/syncAnchors/4",
+    "scene-contract.json#/syncAnchors/5",
+    "scene-contract.json#/syncAnchors/6",
+    "scene-contract.json#/syncAnchors/7"
+  ],
+  "validation": {
+    "sixAssertedSceneTestsMatchFrozenBytes": true,
+    "proposalApplied": false,
+    "sourceEdits": false,
+    "contractEdits": false,
+    "newGpuOrRuntimeProbe": false,
+    "mediaHeard": false,
+    "runtimeAcceptance": false,
+    "finalSignature": false
+  },
+  "sourceManifestContext": {
+    "sha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "fileCount": 99,
+    "provenance": "Supplied frozen verification context, also named in Chapter proposal; not regenerated or independently verified in this bounded review."
+  },
+  "limitations": [
+    "Proposal concurrence only; exact amended scene bytes still require the normal signature/compilation step before routed implementation.",
+    "Hardware timing and the boarding regression are evidence reported by Chapter, not newly observed by this Score review. A scripted diagnostic is not manual UX or continuous-journey acceptance.",
+    "Future verification must show correct manual destination/action, silent same-ID transitions, one entry acknowledgement and unchanged Continue/reset behavior. No new source, score render, listening or acceptance claim is made."
+  ]
+}

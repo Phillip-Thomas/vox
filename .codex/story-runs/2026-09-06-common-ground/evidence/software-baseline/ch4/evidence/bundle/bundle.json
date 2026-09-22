@@ -1,0 +1,114 @@
+{
+  "schema": "capture-bundle-v1",
+  "subject": {
+    "id": "ch4@manual",
+    "kind": "paravoxia-chapter",
+    "prompt": null
+  },
+  "capture": {
+    "lane": "external",
+    "tier": "swiftshader-low",
+    "adapter": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+    "headed": false,
+    "resolution": {
+      "w": 1280,
+      "h": 720
+    },
+    "seed": "manual:HIGH",
+    "deterministic": false,
+    "motionRequired": true,
+    "clock": "wall-since-settle",
+    "buildSha": "b631a52",
+    "viewport": "1280x720",
+    "loop": {
+      "looping": false,
+      "periodSeconds": null
+    }
+  },
+  "build": {
+    "compileOk": true,
+    "runtimeOk": true
+  },
+  "frames": [
+    {
+      "file": "frames/f0000_t2.01s_opening-2.0s.png",
+      "role": "keyframe",
+      "voxRole": "still",
+      "label": "opening-2.0s",
+      "frame": 0,
+      "simTime": 2.008,
+      "salience": 1,
+      "sha256": "e3969f53c809aea08873c4baf1a1e75302b7ce7fed29dc5b167f36d5ac752ef2",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.997,
+        "meanLuma": 0.5091,
+        "maxLuma": 0.8994,
+        "contrast": 0.2203,
+        "clipped": 0,
+        "nearBlack": 0,
+        "colorfulness": 0.254,
+        "blank": false,
+        "meanLuma255": 129.82
+      },
+      "beat": "ch4-audit",
+      "hudFile": "hud/f0000_t2.01s_opening-2.0s.png"
+    },
+    {
+      "file": "frames/f0001_t66.97s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 1,
+      "simTime": 66.971,
+      "salience": 0.5,
+      "sha256": "f503338d77514177305c46a8ccff7aa7a17f751129a5b2acb438eb80fa160bae",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.6611,
+        "meanLuma": 0.1978,
+        "maxLuma": 0.9325,
+        "contrast": 0.1524,
+        "clipped": 0,
+        "nearBlack": 0.0803,
+        "colorfulness": 0.5142,
+        "blank": false,
+        "meanLuma255": 50.44
+      },
+      "beat": "ch4-audit",
+      "hudFile": "hud/f0001_t66.97s_strip.png"
+    }
+  ],
+  "sheet": {
+    "file": "sheet.png",
+    "tileW": 480,
+    "tileH": 270,
+    "tiles": 1,
+    "sha256": "69abbae6232f0a7f959ec829f78506001f0473b1c09c3457f6c74dbd8a4b88d5"
+  },
+  "digest": {
+    "file": "digest.md",
+    "sha256": "6710035544c9e92f52afddaa462658d9f2098c2e917413ac613e02158b5a1843"
+  },
+  "provenance": {
+    "generator": "paravoxia-chapter-evidence@v1",
+    "generatedAt": "2026-09-06T04:58:51.254Z",
+    "chapter": "ch4",
+    "lane": "manual",
+    "beats": [
+      "ch4-audit"
+    ],
+    "videos": [],
+    "sessions": [
+      {
+        "id": "ch4-audit",
+        "url": "/?story=ch4-audit&journeyprobe=1&profile=HIGH",
+        "frames": 2,
+        "bursts": 0,
+        "pageErrors": [],
+        "reachedExit": false,
+        "completedEvents": []
+      }
+    ],
+    "bundleSha256": "e9d52b3b8f208a319b579c0c60d6aa96236afeb4a9378b1d0ccefdf7ad8540a4"
+  }
+}

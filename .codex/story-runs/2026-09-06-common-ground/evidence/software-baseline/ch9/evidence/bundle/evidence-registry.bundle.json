@@ -1,0 +1,62 @@
+{
+  "schema": "paravoxia.evidenceRegistry.bundle.v1",
+  "generatedAt": "2026-09-06T04:55:34.956Z",
+  "entries": [
+    {
+      "ref": "percept:bundle",
+      "path": "evidence/bundle/bundle.json",
+      "sha256": "e3817290474d8895fb614fc2256e2b8051966615e4850fc7521a45c66419cb13",
+      "kind": "artifact",
+      "description": "percept capture-bundle-v1 manifest (hash-bound frames, bursts, sheet, digest)",
+      "bytes": 2925
+    },
+    {
+      "ref": "capture:contact-sheet",
+      "path": "evidence/bundle/sheet.png",
+      "sha256": "56608ded2fd15feb426966d20d851db4030b23ac02b0930efa29ce35335b71bf",
+      "kind": "frame",
+      "description": "chronological contact sheet; red numbers are frame indices",
+      "bytes": 217247
+    },
+    {
+      "ref": "percept:digest",
+      "path": "evidence/bundle/digest.md",
+      "sha256": "60d25068e5790fb1e36337f6c941adbd85aaeebdabb3665e7664b47f23a3634b",
+      "kind": "document",
+      "description": "temporal digest: beat/objective/caption/anchor timeline and burst scalars",
+      "bytes": 1187
+    },
+    {
+      "ref": "capture:frames-f0000-t2-00s-opening-2-0s-png",
+      "path": "evidence/bundle/frames/f0000_t2.00s_opening-2.0s.png",
+      "sha256": "05a0852132c074232ff484fe16d7a007118165f0c8e1e5ad1152e5df5cb56b02",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 0 (opening-2.0s, ch9-hearth)",
+      "bytes": 744673
+    },
+    {
+      "ref": "capture:frames-f0001-t46-09s-strip-png",
+      "path": "evidence/bundle/frames/f0001_t46.09s_strip.png",
+      "sha256": "4f3e648b2f27ec0f88ca5c09e09589957a1c46c9285a703c0717cc026b48d28c",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 1 (temporal, ch9-hearth)",
+      "bytes": 718119
+    },
+    {
+      "ref": "capture:hud-f0000-t2-00s-opening-2-0s-png",
+      "path": "evidence/bundle/hud/f0000_t2.00s_opening-2.0s.png",
+      "sha256": "45fc6911aee5cb93f91dcd5eb11f059b6b0de0ff063fa5425f99e38869ee6694",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 0",
+      "bytes": 835795
+    },
+    {
+      "ref": "capture:hud-f0001-t46-09s-strip-png",
+      "path": "evidence/bundle/hud/f0001_t46.09s_strip.png",
+      "sha256": "42c1e4e18a0b57d0e1522dcdd4c44596aa8e9f40f52817776fcd64abf09afea7",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 1",
+      "bytes": 741444
+    }
+  ]
+}

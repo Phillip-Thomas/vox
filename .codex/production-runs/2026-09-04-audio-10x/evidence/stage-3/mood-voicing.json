@@ -1,0 +1,5957 @@
+{
+  "generatedAt": "2026-09-05T12:05:37.344Z",
+  "defaultPolicy": "brain",
+  "moods": 62,
+  "withProgression": 39,
+  "brainVoiced": 29,
+  "changedByBrain": 9,
+  "demotedByGainGuard": [
+    {
+      "name": "ch1-nav",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch1-iso",
+      "reason": "exceeds-written-jump"
+    },
+    {
+      "name": "ch1-anomaly",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch2-color",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch2-approach",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch3-gather",
+      "reason": "exceeds-written-jump"
+    },
+    {
+      "name": "ch3-await-rest",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch3-thirst",
+      "reason": "exceeds-written-jump"
+    },
+    {
+      "name": "ch3-signal",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch4-vigil",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch4-arrival",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch4-audit",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch5-maw",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch6-dive",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch7-board",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch8-launch",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch8-landfall",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch7-reconstruct/route",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch7-reconstruct/calibration",
+      "reason": "no-gain"
+    },
+    {
+      "name": "ch7-board/outside",
+      "reason": "no-gain"
+    }
+  ],
+  "literalOrOverride": 33,
+  "allPitchClassSetsKept": true,
+  "allBassRootsKept": true,
+  "allTightIntervalsKept": true,
+  "maxVoiceDisplacementBefore": 11,
+  "maxVoiceDisplacementAfter": 9,
+  "meanMaxDisplacementBefore": 5.0256410256410255,
+  "meanMaxDisplacementAfter": 4.256410256410256,
+  "neverWorse": true,
+  "totalDisplacementBefore": 1291,
+  "totalDisplacementAfter": 958,
+  "rows": [
+    {
+      "name": "crawl",
+      "beat": "crawl",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "manifest",
+      "beat": "manifest",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "voyage",
+      "beat": "voyage",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "applied",
+      "chords": 2,
+      "changed": true,
+      "maxVoiceDisplacementBefore": 9,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 51,
+      "totalDisplacementAfter": 15,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          8,
+          12,
+          15
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          8,
+          12,
+          15
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          8,
+          3,
+          12
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          8,
+          3,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 9,
+          "brainMax": 5,
+          "literalTotal": 17,
+          "brainTotal": 5
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 9,
+          "brainMax": 5,
+          "literalTotal": 17,
+          "brainTotal": 5
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 9,
+          "brainMax": 5,
+          "literalTotal": 17,
+          "brainTotal": 5
+        }
+      ]
+    },
+    {
+      "name": "deflect",
+      "beat": "deflect",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "crash",
+      "beat": "crash",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "descent",
+      "beat": "descent",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          1,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          1,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch1-fixed",
+      "beat": "ch1-fixed",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch1-track",
+      "beat": "ch1-track",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          5,
+          12
+        ],
+        [
+          0,
+          5,
+          12
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          5,
+          12
+        ],
+        [
+          0,
+          5,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch1-raster",
+      "beat": "ch1-raster",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "applied",
+      "chords": 4,
+      "changed": true,
+      "maxVoiceDisplacementBefore": 11,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 103,
+      "totalDisplacementAfter": 41,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          8,
+          12,
+          15
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          10,
+          14,
+          17
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          8,
+          12,
+          15
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          10,
+          14,
+          17
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          8,
+          3,
+          12
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          10,
+          5,
+          14
+        ],
+        [
+          0,
+          7,
+          15
+        ],
+        [
+          8,
+          12,
+          15
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          10,
+          5,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 9,
+          "brainMax": 5,
+          "literalTotal": 17,
+          "brainTotal": 5
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 4,
+          "literalTotal": 10,
+          "brainTotal": 6
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 7,
+          "brainMax": 4,
+          "literalTotal": 14,
+          "brainTotal": 6
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 11,
+          "brainMax": 2,
+          "literalTotal": 21,
+          "brainTotal": 3
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 9,
+          "brainMax": 5,
+          "literalTotal": 17,
+          "brainTotal": 5
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 10,
+          "brainTotal": 10
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 7,
+          "brainMax": 4,
+          "literalTotal": 14,
+          "brainTotal": 6
+        }
+      ]
+    },
+    {
+      "name": "ch1-depth",
+      "beat": "ch1-depth",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "applied",
+      "chords": 4,
+      "changed": true,
+      "maxVoiceDisplacementBefore": 9,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 63,
+      "totalDisplacementAfter": 37,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          3,
+          7,
+          10
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          8,
+          12,
+          15
+        ],
+        [
+          0,
+          3,
+          7,
+          10
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          8,
+          12,
+          15
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          3,
+          7,
+          10
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          8,
+          3,
+          12
+        ],
+        [
+          0,
+          3,
+          10,
+          7
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          8,
+          3,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 10,
+          "brainTotal": 10
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 5,
+          "brainMax": 4,
+          "literalTotal": 10,
+          "brainTotal": 6
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 9,
+          "brainMax": 2,
+          "literalTotal": 17,
+          "brainTotal": 2
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 10,
+          "brainTotal": 7
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 5,
+          "brainMax": 4,
+          "literalTotal": 10,
+          "brainTotal": 6
+        }
+      ]
+    },
+    {
+      "name": "ch1-nav",
+      "beat": "ch1-nav",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 4,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 33,
+      "totalDisplacementAfter": 33,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          5,
+          7
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          5,
+          10,
+          12
+        ],
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          5,
+          7
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          5,
+          10,
+          12
+        ],
+        [
+          0,
+          7,
+          12
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          5,
+          7
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          5,
+          10,
+          12
+        ],
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          5,
+          7
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          5,
+          10,
+          12
+        ],
+        [
+          0,
+          7,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 3,
+          "brainTotal": 3
+        }
+      ]
+    },
+    {
+      "name": "ch1-iso",
+      "beat": "ch1-iso",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "exceeds-written-jump",
+      "chords": 4,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 9,
+      "maxVoiceDisplacementAfter": 9,
+      "totalDisplacementBefore": 61,
+      "totalDisplacementAfter": 61,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          3,
+          7,
+          14
+        ],
+        [
+          8,
+          12,
+          15
+        ],
+        [
+          5,
+          8,
+          12,
+          19
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          0,
+          3,
+          7,
+          14
+        ],
+        [
+          8,
+          12,
+          15
+        ],
+        [
+          5,
+          8,
+          12,
+          19
+        ],
+        [
+          3,
+          7,
+          10
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          3,
+          7,
+          14
+        ],
+        [
+          8,
+          12,
+          15
+        ],
+        [
+          5,
+          8,
+          12,
+          19
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          0,
+          3,
+          7,
+          14
+        ],
+        [
+          8,
+          12,
+          15
+        ],
+        [
+          5,
+          8,
+          12,
+          19
+        ],
+        [
+          3,
+          7,
+          10
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 9,
+          "brainMax": 9,
+          "literalTotal": 17,
+          "brainTotal": 17
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 9,
+          "brainMax": 9,
+          "literalTotal": 17,
+          "brainTotal": 17
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        }
+      ]
+    },
+    {
+      "name": "ch1-lift",
+      "beat": "ch1-lift",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          3,
+          7,
+          12
+        ],
+        [
+          0,
+          3,
+          7,
+          12
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          3,
+          7,
+          12
+        ],
+        [
+          0,
+          3,
+          7,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch1-anomaly",
+      "beat": "ch1-anomaly",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 2,
+      "maxVoiceDisplacementAfter": 2,
+      "totalDisplacementBefore": 9,
+      "totalDisplacementAfter": 9,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          1,
+          5,
+          8
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          1,
+          5,
+          8
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          1,
+          5,
+          8
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          1,
+          5,
+          8
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        }
+      ]
+    },
+    {
+      "name": "a1-ramp",
+      "beat": "a1-ramp",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          0,
+          3,
+          7
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          0,
+          3,
+          7
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch2-color",
+      "beat": "ch2-color",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 4,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 46,
+      "totalDisplacementAfter": 46,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          3,
+          8
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          1,
+          5,
+          8
+        ],
+        [
+          0,
+          3,
+          8
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          1,
+          5,
+          8
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          3,
+          8
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          1,
+          5,
+          8
+        ],
+        [
+          0,
+          3,
+          8
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          1,
+          5,
+          8
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 9,
+          "brainTotal": 9
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 10,
+          "brainTotal": 10
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 9,
+          "brainTotal": 9
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 10,
+          "brainTotal": 10
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        }
+      ]
+    },
+    {
+      "name": "ch2-approach",
+      "beat": "ch2-approach",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 2,
+      "maxVoiceDisplacementAfter": 2,
+      "totalDisplacementBefore": 6,
+      "totalDisplacementAfter": 6,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          1,
+          8
+        ],
+        [
+          0,
+          3,
+          8
+        ],
+        [
+          0,
+          1,
+          8
+        ],
+        [
+          0,
+          3,
+          8
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          1,
+          8
+        ],
+        [
+          0,
+          3,
+          8
+        ],
+        [
+          0,
+          1,
+          8
+        ],
+        [
+          0,
+          3,
+          8
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        }
+      ]
+    },
+    {
+      "name": "a2-awakening",
+      "beat": "a2-awakening",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          1,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          6,
+          7
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          1,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          6,
+          7
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch3-gather",
+      "beat": "ch3-gather",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "exceeds-written-jump",
+      "chords": 4,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 7,
+      "maxVoiceDisplacementAfter": 7,
+      "totalDisplacementBefore": 43,
+      "totalDisplacementAfter": 43,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          12,
+          15
+        ],
+        [
+          3,
+          7,
+          12
+        ],
+        [
+          10,
+          14,
+          17
+        ],
+        [
+          7,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          12,
+          15
+        ],
+        [
+          3,
+          7,
+          12
+        ],
+        [
+          10,
+          14,
+          17
+        ],
+        [
+          7,
+          10,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          12,
+          15
+        ],
+        [
+          3,
+          7,
+          12
+        ],
+        [
+          10,
+          14,
+          17
+        ],
+        [
+          7,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          12,
+          15
+        ],
+        [
+          3,
+          7,
+          12
+        ],
+        [
+          10,
+          14,
+          17
+        ],
+        [
+          7,
+          10,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 7,
+          "brainMax": 7,
+          "literalTotal": 12,
+          "brainTotal": 12
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 7,
+          "brainMax": 7,
+          "literalTotal": 12,
+          "brainTotal": 12
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 7,
+          "brainTotal": 7
+        }
+      ]
+    },
+    {
+      "name": "ch3-dusk",
+      "beat": "ch3-dusk",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "applied",
+      "chords": 2,
+      "changed": true,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 2,
+      "totalDisplacementBefore": 45,
+      "totalDisplacementAfter": 9,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          5,
+          12,
+          17,
+          21
+        ],
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          5,
+          12,
+          17,
+          21
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          5,
+          9,
+          12,
+          17
+        ],
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          5,
+          9,
+          12,
+          17
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 2,
+          "literalTotal": 15,
+          "brainTotal": 3
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 2,
+          "literalTotal": 15,
+          "brainTotal": 3
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 5,
+          "brainMax": 2,
+          "literalTotal": 15,
+          "brainTotal": 3
+        }
+      ]
+    },
+    {
+      "name": "ch3-await-rest",
+      "beat": "ch3-await-rest",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 21,
+      "totalDisplacementAfter": 21,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          15
+        ],
+        [
+          5,
+          12,
+          17
+        ],
+        [
+          0,
+          7,
+          15
+        ],
+        [
+          5,
+          12,
+          17
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          15
+        ],
+        [
+          5,
+          12,
+          17
+        ],
+        [
+          0,
+          7,
+          15
+        ],
+        [
+          5,
+          12,
+          17
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 7,
+          "brainTotal": 7
+        }
+      ]
+    },
+    {
+      "name": "a3-dawn",
+      "beat": "a3-dawn",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "applied",
+      "chords": 4,
+      "changed": true,
+      "maxVoiceDisplacementBefore": 7,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 67,
+      "totalDisplacementAfter": 32,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          4,
+          7,
+          11
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          7,
+          11,
+          14
+        ],
+        [
+          0,
+          4,
+          7,
+          12
+        ],
+        [
+          0,
+          4,
+          7,
+          11
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          7,
+          11,
+          14
+        ],
+        [
+          0,
+          4,
+          7,
+          12
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          4,
+          7,
+          11
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          7,
+          11,
+          14
+        ],
+        [
+          0,
+          12,
+          16,
+          7
+        ],
+        [
+          0,
+          11,
+          16,
+          7
+        ],
+        [
+          5,
+          12,
+          16,
+          9
+        ],
+        [
+          7,
+          11,
+          14
+        ],
+        [
+          0,
+          12,
+          16,
+          7
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 15,
+          "brainTotal": 15
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 4,
+          "brainTotal": 4
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 7,
+          "brainMax": 2,
+          "literalTotal": 14,
+          "brainTotal": 3
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 1,
+          "brainMax": 1,
+          "literalTotal": 1,
+          "brainTotal": 1
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 5,
+          "brainMax": 2,
+          "literalTotal": 15,
+          "brainTotal": 3
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 4,
+          "brainTotal": 3
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 7,
+          "brainMax": 2,
+          "literalTotal": 14,
+          "brainTotal": 3
+        }
+      ]
+    },
+    {
+      "name": "ch3-thirst",
+      "beat": "ch3-thirst",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "exceeds-written-jump",
+      "chords": 4,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 7,
+      "maxVoiceDisplacementAfter": 7,
+      "totalDisplacementBefore": 52,
+      "totalDisplacementAfter": 52,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          5,
+          9,
+          12
+        ],
+        [
+          7,
+          11,
+          14
+        ],
+        [
+          0,
+          4,
+          7,
+          12
+        ],
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          5,
+          9,
+          12
+        ],
+        [
+          7,
+          11,
+          14
+        ],
+        [
+          0,
+          4,
+          7,
+          12
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          5,
+          9,
+          12
+        ],
+        [
+          7,
+          11,
+          14
+        ],
+        [
+          0,
+          4,
+          7,
+          12
+        ],
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          5,
+          9,
+          12
+        ],
+        [
+          7,
+          11,
+          14
+        ],
+        [
+          0,
+          4,
+          7,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 4,
+          "brainTotal": 4
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 7,
+          "brainMax": 7,
+          "literalTotal": 14,
+          "brainTotal": 14
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 12,
+          "brainTotal": 12
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 4,
+          "brainTotal": 4
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 7,
+          "brainMax": 7,
+          "literalTotal": 14,
+          "brainTotal": 14
+        }
+      ]
+    },
+    {
+      "name": "ch3-forage",
+      "beat": "ch3-forage",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "applied",
+      "chords": 4,
+      "changed": true,
+      "maxVoiceDisplacementBefore": 9,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 90,
+      "totalDisplacementAfter": 32,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          4,
+          9,
+          12
+        ],
+        [
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          4,
+          7
+        ],
+        [
+          7,
+          11,
+          16
+        ],
+        [
+          0,
+          4,
+          9,
+          12
+        ],
+        [
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          4,
+          7
+        ],
+        [
+          7,
+          11,
+          16
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          4,
+          9,
+          12
+        ],
+        [
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          16
+        ],
+        [
+          7,
+          11,
+          16
+        ],
+        [
+          0,
+          12,
+          16,
+          9
+        ],
+        [
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          16
+        ],
+        [
+          7,
+          11,
+          16
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 10,
+          "brainTotal": 10
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 7,
+          "brainMax": 2,
+          "literalTotal": 12,
+          "brainTotal": 4
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 9,
+          "brainMax": 4,
+          "literalTotal": 16,
+          "brainTotal": 4
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 7,
+          "brainMax": 1,
+          "literalTotal": 14,
+          "brainTotal": 1
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 5,
+          "brainMax": 3,
+          "literalTotal": 10,
+          "brainTotal": 5
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 7,
+          "brainMax": 2,
+          "literalTotal": 12,
+          "brainTotal": 4
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 9,
+          "brainMax": 4,
+          "literalTotal": 16,
+          "brainTotal": 4
+        }
+      ]
+    },
+    {
+      "name": "ch3-signal",
+      "beat": "ch3-signal",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 4,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 40,
+      "totalDisplacementAfter": 40,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          0,
+          3,
+          7
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          5,
+          8,
+          12
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          0,
+          3,
+          7
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 10,
+          "brainTotal": 10
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 10,
+          "brainTotal": 10
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 7,
+          "brainTotal": 7
+        }
+      ]
+    },
+    {
+      "name": "ch4-vigil",
+      "beat": "ch4-vigil",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 21,
+      "totalDisplacementAfter": 21,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          6,
+          15
+        ],
+        [
+          5,
+          11,
+          17
+        ],
+        [
+          0,
+          6,
+          15
+        ],
+        [
+          5,
+          11,
+          17
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          6,
+          15
+        ],
+        [
+          5,
+          11,
+          17
+        ],
+        [
+          0,
+          6,
+          15
+        ],
+        [
+          5,
+          11,
+          17
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 7,
+          "brainTotal": 7
+        }
+      ]
+    },
+    {
+      "name": "ch4-arrival",
+      "beat": "ch4-arrival",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 1,
+      "maxVoiceDisplacementAfter": 1,
+      "totalDisplacementBefore": 3,
+      "totalDisplacementAfter": 3,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          0,
+          7,
+          13,
+          16
+        ],
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          0,
+          7,
+          13,
+          16
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          0,
+          7,
+          13,
+          16
+        ],
+        [
+          0,
+          7,
+          12,
+          16
+        ],
+        [
+          0,
+          7,
+          13,
+          16
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 1,
+          "brainMax": 1,
+          "literalTotal": 1,
+          "brainTotal": 1
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 1,
+          "brainMax": 1,
+          "literalTotal": 1,
+          "brainTotal": 1
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 1,
+          "brainMax": 1,
+          "literalTotal": 1,
+          "brainTotal": 1
+        }
+      ]
+    },
+    {
+      "name": "ch4-audit",
+      "beat": "ch4-audit",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 15,
+      "totalDisplacementAfter": 15,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ],
+        [
+          0,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ],
+        [
+          0,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 5,
+          "brainTotal": 5
+        }
+      ]
+    },
+    {
+      "name": "ch4-comply",
+      "beat": "ch4-comply",
+      "policy": "subtractive",
+      "effectivePolicy": "subtractive",
+      "brainGuard": "not-requested",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 15,
+      "totalDisplacementAfter": 15,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          6
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          6
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 5,
+          "brainTotal": 5
+        }
+      ]
+    },
+    {
+      "name": "ch4-defy",
+      "beat": "ch4-defy",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "a4-exhale",
+      "beat": "a4-exhale",
+      "policy": "ordered",
+      "effectivePolicy": "ordered",
+      "brainGuard": "not-requested",
+      "chords": 4,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 3,
+      "maxVoiceDisplacementAfter": 3,
+      "totalDisplacementBefore": 9,
+      "totalDisplacementAfter": 9,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          4,
+          7
+        ],
+        [
+          0,
+          4,
+          7,
+          9
+        ],
+        [
+          0,
+          4,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          4,
+          7
+        ],
+        [
+          0,
+          4,
+          7,
+          9
+        ],
+        [
+          0,
+          4,
+          7,
+          9,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          4,
+          7
+        ],
+        [
+          0,
+          4,
+          7,
+          9
+        ],
+        [
+          0,
+          4,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          4,
+          7
+        ],
+        [
+          0,
+          4,
+          7,
+          9
+        ],
+        [
+          0,
+          4,
+          7,
+          9,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch5-maw",
+      "beat": "ch5-maw",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 3,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 4,
+      "maxVoiceDisplacementAfter": 4,
+      "totalDisplacementBefore": 24,
+      "totalDisplacementAfter": 24,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          10
+        ],
+        [
+          5,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          10
+        ],
+        [
+          5,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          10
+        ],
+        [
+          5,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          10
+        ],
+        [
+          5,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 4,
+          "brainTotal": 4
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 3,
+          "brainTotal": 3
+        }
+      ]
+    },
+    {
+      "name": "ch6-dive",
+      "beat": "ch6-dive",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 3,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 7,
+      "maxVoiceDisplacementAfter": 7,
+      "totalDisplacementBefore": 27,
+      "totalDisplacementAfter": 27,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          5,
+          7
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          5,
+          7
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          5,
+          7
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          5,
+          7
+        ],
+        [
+          3,
+          7,
+          10
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 4,
+          "brainTotal": 4
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 7,
+          "brainMax": 7,
+          "literalTotal": 9,
+          "brainTotal": 9
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 4,
+          "brainTotal": 4
+        }
+      ]
+    },
+    {
+      "name": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch7-board",
+      "beat": "ch7-board",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 2,
+      "maxVoiceDisplacementAfter": 2,
+      "totalDisplacementBefore": 6,
+      "totalDisplacementAfter": 6,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        }
+      ]
+    },
+    {
+      "name": "ch8-launch",
+      "beat": "ch8-launch",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 3,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 4,
+      "maxVoiceDisplacementAfter": 4,
+      "totalDisplacementBefore": 27,
+      "totalDisplacementAfter": 27,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          2,
+          7,
+          9,
+          14
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          2,
+          7,
+          9,
+          14
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          2,
+          7,
+          9,
+          14
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          2,
+          7,
+          9,
+          14
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 4,
+          "brainMax": 4,
+          "literalTotal": 9,
+          "brainTotal": 9
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 7,
+          "brainTotal": 7
+        }
+      ]
+    },
+    {
+      "name": "ch8-crossing",
+      "beat": "ch8-crossing",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "applied",
+      "chords": 3,
+      "changed": true,
+      "maxVoiceDisplacementBefore": 9,
+      "maxVoiceDisplacementAfter": 7,
+      "totalDisplacementBefore": 72,
+      "totalDisplacementAfter": 48,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          3,
+          7,
+          9
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          7,
+          11,
+          14,
+          18
+        ],
+        [
+          0,
+          3,
+          7,
+          9
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          7,
+          11,
+          14,
+          18
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          3,
+          7,
+          9
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          7,
+          11,
+          14,
+          18
+        ],
+        [
+          0,
+          7,
+          9,
+          15
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          7,
+          11,
+          14,
+          18
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 7,
+          "brainMax": 7,
+          "literalTotal": 18,
+          "brainTotal": 18
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 6,
+          "brainTotal": 6
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 9,
+          "brainMax": 5,
+          "literalTotal": 24,
+          "brainTotal": 12
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 7,
+          "brainMax": 3,
+          "literalTotal": 18,
+          "brainTotal": 6
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 6,
+          "brainTotal": 6
+        }
+      ]
+    },
+    {
+      "name": "ch8-landfall",
+      "beat": "ch8-landfall",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 3,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 60,
+      "totalDisplacementAfter": 60,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          4,
+          7,
+          10
+        ],
+        [
+          5,
+          9,
+          12,
+          15
+        ],
+        [
+          0,
+          4,
+          7,
+          10,
+          14
+        ],
+        [
+          0,
+          4,
+          7,
+          10
+        ],
+        [
+          5,
+          9,
+          12,
+          15
+        ],
+        [
+          0,
+          4,
+          7,
+          10,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          4,
+          7,
+          10
+        ],
+        [
+          5,
+          9,
+          12,
+          15
+        ],
+        [
+          0,
+          4,
+          7,
+          10,
+          14
+        ],
+        [
+          0,
+          4,
+          7,
+          10
+        ],
+        [
+          5,
+          9,
+          12,
+          15
+        ],
+        [
+          0,
+          4,
+          7,
+          10,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 15,
+          "brainTotal": 15
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 15,
+          "brainTotal": 15
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 15,
+          "brainTotal": 15
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 15,
+          "brainTotal": 15
+        }
+      ]
+    },
+    {
+      "name": "ch9-settle",
+      "beat": "ch9-settle",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "applied",
+      "chords": 4,
+      "changed": true,
+      "maxVoiceDisplacementBefore": 10,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 80,
+      "totalDisplacementAfter": 36,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          4,
+          7
+        ],
+        [
+          5,
+          9,
+          12
+        ],
+        [
+          10,
+          14,
+          17
+        ],
+        [
+          0,
+          4,
+          7,
+          10
+        ],
+        [
+          0,
+          4,
+          7
+        ],
+        [
+          5,
+          9,
+          12
+        ],
+        [
+          10,
+          14,
+          17
+        ],
+        [
+          0,
+          4,
+          7,
+          10
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          4,
+          7
+        ],
+        [
+          5,
+          9,
+          12
+        ],
+        [
+          10,
+          5,
+          14
+        ],
+        [
+          0,
+          7,
+          16,
+          10
+        ],
+        [
+          0,
+          7,
+          16
+        ],
+        [
+          5,
+          9,
+          12
+        ],
+        [
+          10,
+          5,
+          14
+        ],
+        [
+          0,
+          7,
+          16,
+          10
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 10,
+          "brainTotal": 10
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 4,
+          "literalTotal": 10,
+          "brainTotal": 6
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 10,
+          "brainMax": 2,
+          "literalTotal": 20,
+          "brainTotal": 4
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 5,
+          "brainMax": 4,
+          "literalTotal": 10,
+          "brainTotal": 6
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "literalMax": 5,
+          "brainMax": 4,
+          "literalTotal": 10,
+          "brainTotal": 6
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "literalMax": 10,
+          "brainMax": 2,
+          "literalTotal": 20,
+          "brainTotal": 4
+        }
+      ]
+    },
+    {
+      "name": "ch9-hearth",
+      "beat": "ch9-hearth",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "applied",
+      "chords": 3,
+      "changed": true,
+      "maxVoiceDisplacementBefore": 7,
+      "maxVoiceDisplacementAfter": 7,
+      "totalDisplacementBefore": 44,
+      "totalDisplacementAfter": 32,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          4,
+          7,
+          10
+        ],
+        [
+          7,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          4,
+          7,
+          10
+        ],
+        [
+          7,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          12
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          4,
+          7,
+          10
+        ],
+        [
+          7,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          7,
+          10,
+          4
+        ],
+        [
+          7,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 7,
+          "brainMax": 7,
+          "literalTotal": 13,
+          "brainTotal": 13
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 5,
+          "brainTotal": 5
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 5,
+          "brainMax": 2,
+          "literalTotal": 8,
+          "brainTotal": 2
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 7,
+          "brainMax": 4,
+          "literalTotal": 13,
+          "brainTotal": 7
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 3,
+          "brainMax": 3,
+          "literalTotal": 5,
+          "brainTotal": 5
+        }
+      ]
+    },
+    {
+      "name": "ch7-reconstruct/diagnosis",
+      "beat": "ch7-reconstruct",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch7-reconstruct/bench",
+      "beat": "ch7-reconstruct",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch7-reconstruct/frame",
+      "beat": "ch7-reconstruct",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch7-reconstruct/hull",
+      "beat": "ch7-reconstruct",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch7-reconstruct/lift",
+      "beat": "ch7-reconstruct",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch7-reconstruct/hover",
+      "beat": "ch7-reconstruct",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch7-reconstruct/route",
+      "beat": "ch7-reconstruct",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 2,
+      "maxVoiceDisplacementAfter": 2,
+      "totalDisplacementBefore": 6,
+      "totalDisplacementAfter": 6,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        }
+      ]
+    },
+    {
+      "name": "ch7-reconstruct/calibration",
+      "beat": "ch7-reconstruct",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 2,
+      "maxVoiceDisplacementAfter": 2,
+      "totalDisplacementBefore": 9,
+      "totalDisplacementAfter": 9,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          15
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          15
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          15
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          15
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 3,
+          "brainTotal": 3
+        }
+      ]
+    },
+    {
+      "name": "ch7-board/outside",
+      "beat": "ch7-board",
+      "policy": "brain",
+      "effectivePolicy": "literal",
+      "brainGuard": "no-gain",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 2,
+      "maxVoiceDisplacementAfter": 2,
+      "totalDisplacementBefore": 6,
+      "totalDisplacementAfter": 6,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          5,
+          9,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        }
+      ]
+    },
+    {
+      "name": "ch7-board/hatch",
+      "beat": "ch7-board",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch7-board/vehicle-owner",
+      "beat": "ch7-board",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          14
+        ],
+        [
+          0,
+          7,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch7-board/cockpit",
+      "beat": "ch7-board",
+      "policy": "brain",
+      "effectivePolicy": "brain",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          9,
+          14
+        ],
+        [
+          0,
+          7,
+          9,
+          14
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch10-ask/cold-settled",
+      "beat": "ch10-ask",
+      "policy": "literal",
+      "effectivePolicy": "literal",
+      "brainGuard": "not-requested",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 24,
+      "totalDisplacementAfter": 24,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          -2,
+          7,
+          12
+        ],
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          -2,
+          7,
+          12
+        ]
+      ],
+      "voiced": [
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          -2,
+          7,
+          12
+        ],
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          -2,
+          7,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 8,
+          "brainTotal": 8
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 8,
+          "brainTotal": 8
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 8,
+          "brainTotal": 8
+        }
+      ]
+    },
+    {
+      "name": "ch10-ask/fault-ledger",
+      "beat": "ch10-ask",
+      "policy": "literal",
+      "effectivePolicy": "literal",
+      "brainGuard": "not-requested",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 24,
+      "totalDisplacementAfter": 24,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          -2,
+          7,
+          12
+        ],
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          -2,
+          7,
+          12
+        ]
+      ],
+      "voiced": [
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          -2,
+          7,
+          12
+        ],
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          -2,
+          7,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 8,
+          "brainTotal": 8
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 8,
+          "brainTotal": 8
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 8,
+          "brainTotal": 8
+        }
+      ]
+    },
+    {
+      "name": "ch10-ask/refused",
+      "beat": "ch10-ask",
+      "policy": "literal",
+      "effectivePolicy": "literal",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          -2,
+          7,
+          12
+        ],
+        [
+          -2,
+          7,
+          12
+        ]
+      ],
+      "voiced": [
+        [
+          -2,
+          7,
+          12
+        ],
+        [
+          -2,
+          7,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch10-ask/crossing-back",
+      "beat": "ch10-ask",
+      "policy": "literal",
+      "effectivePolicy": "literal",
+      "brainGuard": "not-requested",
+      "chords": 3,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 7,
+      "maxVoiceDisplacementAfter": 7,
+      "totalDisplacementBefore": 56,
+      "totalDisplacementAfter": 56,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          0,
+          3,
+          7,
+          9
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          0,
+          3,
+          7,
+          9
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ]
+      ],
+      "voiced": [
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          0,
+          3,
+          7,
+          9
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ],
+        [
+          -2,
+          4,
+          7,
+          10
+        ],
+        [
+          0,
+          3,
+          7,
+          9
+        ],
+        [
+          5,
+          9,
+          12,
+          16
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 1,
+          "brainMax": 1,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 7,
+          "brainMax": 7,
+          "literalTotal": 18,
+          "brainTotal": 18
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 6,
+          "brainMax": 6,
+          "literalTotal": 16,
+          "brainTotal": 16
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "literalMax": 1,
+          "brainMax": 1,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "literalMax": 7,
+          "brainMax": 7,
+          "literalTotal": 18,
+          "brainTotal": 18
+        }
+      ]
+    },
+    {
+      "name": "ch10-ask/relay-ask",
+      "beat": "ch10-ask",
+      "policy": "literal",
+      "effectivePolicy": "literal",
+      "brainGuard": "not-requested",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7,
+          12
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7,
+          12
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch10-ask/relay-answer",
+      "beat": "ch10-ask",
+      "policy": "literal",
+      "effectivePolicy": "literal",
+      "brainGuard": "not-requested",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7,
+          17
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7,
+          17
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7,
+          17
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7,
+          17
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch10-ask/bearing-claimed",
+      "beat": "ch10-ask",
+      "policy": "literal",
+      "effectivePolicy": "literal",
+      "brainGuard": "not-requested",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 2,
+      "maxVoiceDisplacementAfter": 2,
+      "totalDisplacementBefore": 6,
+      "totalDisplacementAfter": 6,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          5,
+          9,
+          17
+        ],
+        [
+          0,
+          7,
+          9,
+          17
+        ],
+        [
+          0,
+          5,
+          9,
+          17
+        ],
+        [
+          0,
+          7,
+          9,
+          17
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          5,
+          9,
+          17
+        ],
+        [
+          0,
+          7,
+          9,
+          17
+        ],
+        [
+          0,
+          5,
+          9,
+          17
+        ],
+        [
+          0,
+          7,
+          9,
+          17
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        }
+      ]
+    },
+    {
+      "name": "ch10-ask/transit-hold",
+      "beat": "ch10-ask",
+      "policy": "literal",
+      "effectivePolicy": "literal",
+      "brainGuard": "not-requested",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 2,
+      "maxVoiceDisplacementAfter": 2,
+      "totalDisplacementBefore": 6,
+      "totalDisplacementAfter": 6,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          5,
+          9,
+          17
+        ],
+        [
+          2,
+          7,
+          9,
+          17
+        ],
+        [
+          0,
+          5,
+          9,
+          17
+        ],
+        [
+          2,
+          7,
+          9,
+          17
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          5,
+          9,
+          17
+        ],
+        [
+          2,
+          7,
+          9,
+          17
+        ],
+        [
+          0,
+          5,
+          9,
+          17
+        ],
+        [
+          2,
+          7,
+          9,
+          17
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 2,
+          "brainMax": 2,
+          "literalTotal": 2,
+          "brainTotal": 2
+        }
+      ]
+    },
+    {
+      "name": "ch10-ask/seam-ebb",
+      "beat": "ch10-ask",
+      "policy": "literal",
+      "effectivePolicy": "literal",
+      "brainGuard": "not-requested",
+      "chords": 1,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 0,
+      "maxVoiceDisplacementAfter": 0,
+      "totalDisplacementBefore": 0,
+      "totalDisplacementAfter": 0,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          9,
+          17
+        ],
+        [
+          0,
+          9,
+          17
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          9,
+          17
+        ],
+        [
+          0,
+          9,
+          17
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 0,
+          "brainMax": 0,
+          "literalTotal": 0,
+          "brainTotal": 0
+        }
+      ]
+    },
+    {
+      "name": "ch10-ask/station-resolved",
+      "beat": "ch10-ask",
+      "policy": "literal",
+      "effectivePolicy": "literal",
+      "brainGuard": "not-requested",
+      "chords": 2,
+      "changed": false,
+      "maxVoiceDisplacementBefore": 5,
+      "maxVoiceDisplacementAfter": 5,
+      "totalDisplacementBefore": 21,
+      "totalDisplacementAfter": 21,
+      "neverWorsePerChange": true,
+      "pitchClassSetKept": true,
+      "bassRootKept": true,
+      "tightIntervalsKept": true,
+      "literal": [
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          9,
+          17,
+          29
+        ],
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          9,
+          17,
+          29
+        ]
+      ],
+      "voiced": [
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          9,
+          17,
+          29
+        ],
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          9,
+          17,
+          29
+        ]
+      ],
+      "perChange": [
+        {
+          "from": 0,
+          "to": 1,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 7,
+          "brainTotal": 7
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "literalMax": 5,
+          "brainMax": 5,
+          "literalTotal": 7,
+          "brainTotal": 7
+        }
+      ]
+    }
+  ]
+}

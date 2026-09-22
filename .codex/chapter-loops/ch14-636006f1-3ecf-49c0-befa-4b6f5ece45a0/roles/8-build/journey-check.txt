@@ -1,0 +1,18 @@
+{
+  "schema": "paravoxia.chapterJourneyContractGateReport.v1",
+  "status": "passed",
+  "manifest": "main/chapter-journey-contract.json",
+  "registry": "main/chapter-registry.json",
+  "schemaAuthority": "docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-journey-contract.schema.json",
+  "summary": {
+    "chapters": 13,
+    "objectives": 39,
+    "lifecycleContracts": 3,
+    "interactionContracts": 3,
+    "inputContracts": 1,
+    "optionalCapabilities": 1,
+    "escapedDefects": 6,
+    "lanes": 6
+  },
+  "issues": []
+}

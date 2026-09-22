@@ -1,0 +1,161 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "9728c899035272cf4d5df07a5367a587b1302d6be2e3fa0ce7a529f1ee1044aa",
+  "kind": "continue",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": true,
+    "acceptedAction": 2,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": true,
+    "clickedContinue": true,
+    "ctaBeforeRuntimeReady": true,
+    "stateEqual": true,
+    "newAcceptedAction": 6,
+    "hardware": true,
+    "cleanup": true,
+    "videoDecodes": true,
+    "audioDecodes": true,
+    "audioIsolated": true,
+    "mediaCleanup": true,
+    "mediaCaptured": true
+  },
+  "missing": [],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/cleanup.json",
+      "sha256": "d8111b6706898e1340b5db6df4a8f7c8d4e720c37aa957092676cbe2ec926c92"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/frame-4.png",
+      "sha256": "f3724dddd298e55ec2a825808880ddd7952bb98a3c5f27e9843ee31bc35fbec0"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/frame-5.png",
+      "sha256": "bb97f924c318346ee899a3e7970162d8a75e9d6f3dbdd33d89538b41a1208b78"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/frame-6.png",
+      "sha256": "488e37b5231284b73deafd12e101e361b7ac3ec5454d671b07631fb330ba099a"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/frame-7.png",
+      "sha256": "9190b38438f7cd540f254df52e8b1bca204494956654c4c6d641886da31cd076"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/media-proof.json",
+      "sha256": "a907b763e10bf3c7ce9ea12eb755cf1a69cf9d4a015eca91ea98d7bf9cb63c85"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/observations.json",
+      "sha256": "3b6992c1aaa41e8fa1547b0261145b23f18bfab8e0252df03e81e29bc8352731"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/provenance.json",
+      "sha256": "31015c2171cd5cef313892f239351a34cd741f90e6104410ca1d9b579c88b60c"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/review-storage.json",
+      "sha256": "c9c08790dbf8d53e33eae8f33b359952e92f3d110f229e731337f8e1d3101dd8"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/trace.ndjson",
+      "sha256": "4b64839599018c2ab3804de493af8d36843a85ee8e1e2c264659fc0f67d078b9"
+    }
+  ],
+  "reviewEntry": {
+    "storageState": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/raw/review-storage.json",
+      "sha256": "c9c08790dbf8d53e33eae8f33b359952e92f3d110f229e731337f8e1d3101dd8"
+    },
+    "origin": "http://127.0.0.1:36849",
+    "chapter": "ch14",
+    "beat": "ch14-scar"
+  },
+  "media": [
+    {
+      "kind": "frame",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/frame.png",
+      "sha256": "6445912d378e6510a4c78e29e259f60681ba3a9e43756969f34988cd8bac5d19"
+    },
+    {
+      "kind": "video",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/video.webm",
+      "sha256": "aabcbd0fb10253e1cd3cdd0f0732c384a44c077235b1553392512b971a11bf17"
+    },
+    {
+      "kind": "audio",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continue/audio.wav",
+      "sha256": "3119386c2d616a35f71f689580d572d1f6318bf5bffb36e7c254e3d052250790"
+    }
+  ],
+  "mediaTimeline": {
+    "clock": "host wall clock (Date.now)",
+    "alignment": "approximate; audio and video are separate unsynchronized recordings",
+    "uncertainty": "Offsets are host wall-clock differences between the recorder/context start and the observed gesture. The Playwright video timeline is frame-driven and the parec stream begins only after process spawn plus PulseAudio scheduling latency (unmeasured here). Audio and video are two independent recordings and are NOT muxed or sample-aligned: treat every offset as approximate guidance for seeking (order is reliable, absolute position is not), never as a synchronization claim.",
+    "audio": {
+      "startedAtWallMs": 1788925372386,
+      "stoppedAtWallMs": 1788925565751
+    },
+    "video": {
+      "startedAtWallMs": 1788925371978,
+      "stoppedAtWallMs": 1788925569282
+    },
+    "marks": [
+      {
+        "mark": "recording-started",
+        "note": null,
+        "wallMs": 1788925372386,
+        "audioOffsetSeconds": 0,
+        "videoOffsetSeconds": 0.408
+      },
+      {
+        "mark": "interruption",
+        "note": "ordinary page reload",
+        "wallMs": 1788925512682,
+        "audioOffsetSeconds": 140.296,
+        "videoOffsetSeconds": 140.704
+      },
+      {
+        "mark": "continue-cta",
+        "note": "click button:has-text(\"Continue\")",
+        "wallMs": 1788925515951,
+        "audioOffsetSeconds": 143.565,
+        "videoOffsetSeconds": 143.973
+      },
+      {
+        "mark": "new-action-start",
+        "note": null,
+        "wallMs": 1788925516275,
+        "audioOffsetSeconds": 143.889,
+        "videoOffsetSeconds": 144.297
+      },
+      {
+        "mark": "new-action-end",
+        "note": null,
+        "wallMs": 1788925557535,
+        "audioOffsetSeconds": 185.149,
+        "videoOffsetSeconds": 185.557
+      },
+      {
+        "mark": "recording-tail-end",
+        "note": null,
+        "wallMs": 1788925565545,
+        "audioOffsetSeconds": 193.159,
+        "videoOffsetSeconds": 193.567
+      }
+    ]
+  },
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 0,
+  "reused": false,
+  "status": "passed",
+  "errors": [],
+  "provenance": {
+    "sourceManifestSha256": "1d9b0c751ef1d464b9693dc471d1ef058213be91974fec93969f59ab50437d4f",
+    "buildSha256": "646ffd729782e01c81c0018dcb14bc02a86afd9c6829c319c2fbfb43245c4c7e",
+    "transportSha256": "8f4f5467737f5bc105f789851f352695fe41531a884adc18a86ea689207de2fd"
+  }
+}

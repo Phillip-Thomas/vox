@@ -1,0 +1,68 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "fix them",
+  "ownerAuthority": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-defect-repair-20260909/authority.json",
+    "sha256": "b1e7d5b75f779b04224bdf77dab6ce71ae42d22ad1fea8d75c7f883e0e76fa78"
+  },
+  "contributor": "root orchestrator, mechanical correctness correction",
+  "scope": "Finish the same authorized Continue defect: hydrate staged Chapter13 proof through the existing actor/world validator when Chapter14 ticks. Saved records and movement requirements remain authoritative. Three regressions cover late restore and foreign actor/world rejection. No new creative role or replayed anchors.",
+  "status": "implementation-complete-runtime-pending",
+  "priorRole": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/12-refine/result.json",
+    "sha256": "917f7526db5cb1938671379e5e375269fa8f954e699dd8d7f7f90919d9fa6fbc"
+  },
+  "priorFailure": {
+    "stage": "verify-final",
+    "message": "Probe continue failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T02:11:00.413Z"
+  },
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continue-proof-restore-20260909/previous-state.json",
+    "sha256": "a7896186bed0c78be302693b1bd121f4e584cc94931de4a7fb35d4852d314120"
+  },
+  "files": [
+    {
+      "path": "main/src/story/unfinishedMapDirector.ts",
+      "before": "81ccf228d5cd58b7553e626a59c37e9d37a5a78ddc697c2856188e0e3e30f3bd",
+      "after": "1c02bfb106ebce2b46057cb7c51ed15f37446b64faed1712a627652ca1122c26"
+    },
+    {
+      "path": "main/src/story/__fixtures__/chapter14-earned-common-ground.json",
+      "after": "8dd1e8301f337947647b92a961e5e3514005a79a102466f2295d53432429aeae"
+    },
+    {
+      "path": "main/src/story/unfinishedMapRestore.test.ts",
+      "after": "1d96cf10c718c8ddd4b6ad69a63ecf98707d6ff355a10298d27d471067b96446"
+    }
+  ],
+  "tests": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continue-proof-restore-20260909/tests-current.log",
+    "sha256": "734852b2c6d11d2584271ce7be3e07ae973b712e1ca00b1c61b0d0c388242268"
+  },
+  "typescript": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continue-proof-restore-20260909/typescript-passed.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "diagnosis": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/report.json",
+    "sha256": "d369ff4ec3b550543c495d2519c0cb576fa0dd35f425c66a0e8b87ee2322f71e"
+  },
+  "retainedUsage": {
+    "roleLaunches": 12,
+    "modelTurns": 323,
+    "inputTokens": 646604,
+    "cacheReadTokens": 20528640,
+    "outputTokens": 100201
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "at": "2026-09-09T02:13:26.145Z"
+}

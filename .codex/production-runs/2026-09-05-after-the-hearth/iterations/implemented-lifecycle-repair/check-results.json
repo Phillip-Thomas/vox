@@ -1,0 +1,184 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "compiledAt": "2026-09-06T11:18:48.693965+00:00",
+  "sourceManifestSha256": "51b25376aa6c87dc428249fcfd907811c592bc9dfdaf00d82c53112593ea02c3",
+  "productionScope": {
+    "status": "passed",
+    "evidenceRefs": [
+      "implementation.diff",
+      "implementation-source-manifest.json",
+      "production-lock.json",
+      "producer-boundary-completion.json"
+    ]
+  },
+  "creativeContract": {
+    "status": "passed",
+    "evidenceRefs": [
+      "contract-gate-pass.json",
+      "scene-v2-contract-gate.log",
+      "director-signoffs.json"
+    ]
+  },
+  "typecheck": {
+    "status": "passed",
+    "evidenceRefs": [
+      "evidence/integration-lifecycle-repair/typecheck.log",
+      "integration-lifecycle-repair-report.json"
+    ]
+  },
+  "tests": {
+    "status": "passed",
+    "evidenceRefs": [
+      "evidence/integration-lifecycle-repair/vitest-full.log",
+      "evidence/integration-lifecycle-repair/vitest-story.log"
+    ]
+  },
+  "build": {
+    "status": "passed",
+    "evidenceRefs": [
+      "evidence/integration-lifecycle-repair/build.log"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npm --prefix main run test",
+      "commandAsReported": "npm --prefix main run test",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/vitest-full.log",
+      "evidenceSha256": "cea80cb00bd72e58799bfe034b7ad6e3f1f014184865ee21296d9b340329343e"
+    },
+    {
+      "command": "npx vitest run src/story",
+      "commandAsReported": "npx vitest run src/story (cwd main)",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/vitest-story.log",
+      "evidenceSha256": "7f163cf93dfc625cc745732872496a0a3ddbab3c1379b102082a94b4cd8d53e5"
+    },
+    {
+      "command": "npx vitest run src/story/commonGround*.test.ts src/story/signedSceneAvRuntime.test.ts src/story/storyState.test.ts src/story/StoryDirectorDriver.test.tsx src/story/autopilot",
+      "commandAsReported": "npx vitest run src/story/commonGround*.test.ts src/story/signedSceneAvRuntime.test.ts src/story/storyState.test.ts src/story/StoryDirectorDriver.test.tsx src/story/autopilot (cwd main)",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/test-focused.log",
+      "evidenceSha256": "30d1b7ddfcaa34a3fa0dc8ad42b56cb0e638110f7f9adc790ab22fd600f17af4"
+    },
+    {
+      "command": "npm --prefix main run typecheck",
+      "commandAsReported": "npm --prefix main run typecheck",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/typecheck.log",
+      "evidenceSha256": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af"
+    },
+    {
+      "command": "npm --prefix main run build",
+      "commandAsReported": "npm --prefix main run build",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/build.log",
+      "evidenceSha256": "4b456176c72738f93d2f0346d7d26ddc3dacbee3d970d704634554663116bd58"
+    },
+    {
+      "command": "npm --prefix main run scene:av:check",
+      "commandAsReported": "npm --prefix main run scene:av:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/scene-av-check.log",
+      "evidenceSha256": "0ebbe1c5b18705236588fc5a372b568b04e1ca8262eca5c0371006083793d543"
+    },
+    {
+      "command": "npm --prefix main run story:authority",
+      "commandAsReported": "npm --prefix main run story:authority",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/story-authority.log",
+      "evidenceSha256": "674a8248d269b8a863d77e818d72d74a874ab392ffee5afcbfbf64a93ef1a034"
+    },
+    {
+      "command": "npm --prefix main run chapter:registry:check",
+      "commandAsReported": "npm --prefix main run chapter:registry:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/chapter-registry-check.log",
+      "evidenceSha256": "63d2098e42a51ec027bd147b0869fcfe164c546b86e7526cab424065907ce4b5"
+    },
+    {
+      "command": "npm --prefix main run chapter:journey:check",
+      "commandAsReported": "npm --prefix main run chapter:journey:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/chapter-journey-check.log",
+      "evidenceSha256": "720c32d0e5edc52899f812187f01eb4bcb341a48e6dd6d682049a44d0bcb6a1b"
+    },
+    {
+      "command": "npm --prefix main run creative:workflow:check",
+      "commandAsReported": "npm --prefix main run creative:workflow:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/creative-workflow-check.log",
+      "evidenceSha256": "c10c1eaf7983659984c10ae1b82a38e6d999989e1322a37b26ea90151d9314d3"
+    },
+    {
+      "command": "npm --prefix main run story:ladder:check",
+      "commandAsReported": "npm --prefix main run story:ladder:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/story-ladder-check.log",
+      "evidenceSha256": "5d3870e2dee99ac875e03422a3cc7b1bc860d60e80c0716fdcddc4996518c743"
+    },
+    {
+      "command": "npm --prefix main run guidance:target-check",
+      "commandAsReported": "npm --prefix main run guidance:target-check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/guidance-target-check.log",
+      "evidenceSha256": "9bde7c25054de66e8d4ce4798cde2e7608582b874c155755dbb2ac0e847ef431"
+    },
+    {
+      "command": "npm --prefix main run story:ux:check",
+      "commandAsReported": "npm --prefix main run story:ux:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/story-ux-check.log",
+      "evidenceSha256": "86a0781a1d9dfb3895f6821499843cd2a63a54a4974f9e99b82c127d960d82bb"
+    },
+    {
+      "command": "npm --prefix main run preview:check",
+      "commandAsReported": "npm --prefix main run preview:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/preview-check.log",
+      "evidenceSha256": "b304acbfe2aa68a2962c2c02c7ee9eb4828d3008b1425eaabc325b065123f976"
+    },
+    {
+      "command": "npm --prefix main run catalog:check",
+      "commandAsReported": "npm --prefix main run catalog:check",
+      "cwd": ".",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-lifecycle-repair/catalog-check.log",
+      "evidenceSha256": "d4fa8765ef0712ca47020a9df56cfa743b49a33c857e2387d8d729f847d97a4a"
+    }
+  ],
+  "scope": "Final lifecycle-repair implementation checks. Independent full verify, actual manual/movie/AV/hardware evidence and creative acceptance remain pending."
+}

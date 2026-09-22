@@ -1,0 +1,32 @@
+{
+  "schema": "paravoxia.producerScopeCompletion.v1",
+  "at": "2026-09-06T17:03:55.518750+00:00",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "sameRun": true,
+  "materialRepairIteration": 7,
+  "additionalRepairAuthorized": false,
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "addedPaths": [
+    {
+      "path": "main/tools/generate-scene-av-runtime.mjs",
+      "beforeSha256": "a0681f65079a6232a8bbe95692bcf304e086b5a41703f1c1006d65b576eedfc0"
+    },
+    {
+      "path": "main/chapter-registry.json",
+      "beforeSha256": "6ae185a0944321e6b0c9b438e7df4b06bbee76da8463f9b72856a2196fd3bd98"
+    },
+    {
+      "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+      "beforeSha256": "100580dbf52df04a7bd83378c8b992524ef774e005a6af28c12f1e7a1d1f547c",
+      "exactChange": "activeProduction.const.contractVersion scene-v2 -> scene-v3 only",
+      "why": "Existing story:authority manifest.schema-const failure after exact activeProduction v3 update"
+    }
+  ],
+  "reason": "Required exact v3 metadata bindings discovered in existing validator failures; both already within production lock.",
+  "directionRef": "arrival-common-repair-direction.json",
+  "addendumRef": "integration-arrival-common-scope-addendum.txt",
+  "consumedByActiveEngineer": false,
+  "sourceMutationByRoot": false,
+  "schemaConstAddedAt": "2026-09-06T17:23:03.153109+00:00",
+  "validatorLogicUnchanged": true
+}

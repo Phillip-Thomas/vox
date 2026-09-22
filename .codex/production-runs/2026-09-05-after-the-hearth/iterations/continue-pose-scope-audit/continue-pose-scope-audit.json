@@ -1,0 +1,120 @@
+{
+  "schema": "paravoxia.audit.continuePoseScope.v1",
+  "role": "continue-pose-scope-audit",
+  "startedAtUtc": "2026-09-06T20:35:49Z",
+  "startedAtLocal": "2026-09-06T16:35:52-04:00",
+  "endedAtLocal": "SEE logs/continue-pose-scope-audit/endedAt.txt (recorded by `date`, not handwritten)",
+  "budgetMinutes": 10,
+  "scope": "read-only source causal audit + existing-evidence binding; no browser, no build, no GPU, no source edit",
+  "correctionOfPriorRecord": {
+    "priorAudit": "continue-pose-source-audit.json",
+    "preserved": true,
+    "note": "Prior audit's handwritten endedAtUtc 20:42:40Z is false; its own result.json duration_api_ms=130605 from startedAt 20:31:08Z gives an actual end of ~20:33:19Z. Original file left unmodified."
+  },
+  "verdict": "CAUSE NARROWED AND RE-CLASSIFIED. The pose restore SUCCEEDS. The earned pose is CLOBBERED AFTER a successful restore by a story-world swap excursion to the sibling planet and back. Prior ranked candidate #1 (loadPlayerPose scope mismatch / null saved pose) is FALSIFIED by the recorded trace.",
+
+  "newlyEstablishedFacts": [
+    {
+      "fact": "':p1' is NOT an actor/multiplayer suffix. It is the PLANET SLOT segment inside the worldId string itself.",
+      "source": "src/game/starSystem.ts:90-94 planetWorldId(): slot===0 ? systemId : `${systemId}:p${slot}`",
+      "consequence": "base key 'pvx.v1.world.-1,-1.player' = story ORIGIN planet (slot 0); 'pvx.v1.world.-1,-1:p1.player' = TIDEGARDEN sibling (slot 1)."
+    },
+    {
+      "fact": "Both recorded WorldSave seeds are bound to slots by one shipped function.",
+      "source": "src/game/starSystem.ts:96-104 planetSeedForAddress(): slot 0 -> coordinateToSeed(x,y); slot!=0 -> nonZeroHash('paravox:planet:v1:x:y:slot')",
+      "consequence": "seed 3215739679 == slot 0 (origin); seed 1600321158 == slot 1 (Tidegarden). Confirmed against recorded worldsave blobs. The two keys are two PLANETS, not two scopes of one planet."
+    },
+    {
+      "fact": "There is NO base->:p1 copy writer. Exactly one function writes any '.player' key.",
+      "source": "grep of src for '.player': persistence.ts:459 (savePlayerPose write), :465 (loadPlayerPose read), :515 (clearPlayerPoseForWorld). No migration/promotion copies a pose between worldIds.",
+      "consequence": "The ':p1' pose write is an ordinary savePlayerPose call made while currentWorld was Tidegarden and the LIVE player pose was still the earned origin pose. The 'copy' framing in the runtime review is an artifact, not a mechanism."
+    },
+    {
+      "fact": "The restore actually WORKED on the first mount after Continue.",
+      "source": "verifier/captures/earned-continue-3d/attempt-1/trace.ndjson idx 107, phase 'continue', beat 'ch13-survey', bodyCentre [-31.990680694580078,52.78897476196289,21.41554069519043]",
+      "consequence": "EfficientScene.tsx:365-381 took resumeIsSafe=true and returned savedPosition verbatim, exactly as the prior CPU replay predicted. loadPlayerPose returned non-null, so the worldId string DID match. Prior candidate #1 is dead."
+    },
+    {
+      "fact": "The boot world resolver had the information to answer ORIGIN.",
+      "source": "globalsave.json lastPlanetWorldId='-1,-1', lastWorld={x:-1,y:-1}, milestone 'story:route:tidegarden:online' present; App.tsx:470-476; tidegardenRoute.ts:80-108",
+      "consequence": "With beat 'ch13-survey', resolveStoryBootWorldId sets originOwnedBeat=true -> returns STORY_PRIMARY_WORLD_ID '-1,-1'. The steady-state answer is correct."
+    },
+    {
+      "fact": "The clobber is a world EXCURSION, not a bad initial selection.",
+      "source": "domstorage-events.json ordering (logs/continue-pose-scope-audit/ordering.txt): idx76 writes the earned pose to ':p1', THEN idx80 writes [53.753990173339844,13.5,-14] to the origin base key. trace.ndjson idx107 (earned pose) -> idx108 [53.567,13.5,-14] one second later.",
+      "consequence": "Player was moved from the +Y face (radius 65.34) to the +X arrival shell (radius 57.16) AFTER a correct restore."
+    }
+  ],
+
+  "causalChain": [
+    "1. Continue mounts. resolveStoryBootWorldId answers the ORIGIN '-1,-1'. EfficientScene's useState initializer (EfficientScene.tsx:320-383) calls loadPlayerPose('-1,-1'), gets the earned +Y pose, isDryClearResumePosition returns true, and returns it verbatim. Observed live at trace idx107.",
+    "2. A story-world swap fires. App.tsx:537-545 recomputes storyRuntimeWorldId on EVERY render from `story` (tidegardenRoute.ts:157-168 -> resolveStoryBootWorldId). App.tsx:624-634 then does setPreviousWorld/resetSceneReady/setCurrentWorld the moment that answer differs from currentWorld.worldId. currentWorld becomes '-1,-1:p1'.",
+    "3. Leaving/among that world, the save effect's cleanup (App.tsx:1458-1460 doSave(false) -> savePlayerPose(world)) runs with the LIVE pose still equal to the earned origin pose, writing it into the Tidegarden key. That is domstorage idx75/76 - the apparent 'copy'.",
+    "4. The resolver settles back to the origin (beat 'ch13-survey' is origin-owned). currentWorld returns to '-1,-1' and EfficientScene REMOUNTS. Its useState initializer is a fresh mount, and the player is re-seated on the origin arrival shell at [53.75,13.5,-14]; the next autosave writes that over the base key (idx79/80), destroying the earned pose.",
+    "5. Net observable: base key holds the +X arrival shell, the sibling planet's key holds the earned +Y pose. Both recorded keys are explained without any scope mismatch, validator rescue, or storyAnchoredSpawn branch."
+  ],
+
+  "falsifiedThisSession": [
+    {
+      "hypothesis": "loadPlayerPose scope mismatch at Continue boot -> saved===null -> arrivalPose fallback (prior audit's ranked candidate #1)",
+      "method": "recorded trace binding, not inference",
+      "result": "FALSIFIED. trace.ndjson idx107 shows the earned pose LIVE after Continue, so loadPlayerPose returned the pose and the worldId string matched. The +X pose appears only at idx108, one sample later."
+    },
+    {
+      "hypothesis": "arrivalMode==='approach' short-circuit (prior candidate #3) caused the +X pose",
+      "method": "source read App.tsx:633",
+      "result": "NOT SUPPORTED as the initial cause: the swap effect sets arrivalMode 'approach' only for beat 'ch8-landfall'; the recorded beat is 'ch13-survey', so the swap sets 'surface'. It remains possible only on the REMOUNT leg and is not needed to explain the observation."
+    },
+    {
+      "hypothesis": "base->:p1 copy performed by an actor/world promotion or migration",
+      "method": "exhaustive grep for '.player' writers",
+      "result": "FALSIFIED. Only savePlayerPose writes it. No promotion path exists."
+    }
+  ],
+
+  "exactUnresolvedPredicate": {
+    "statement": "The literal value of `story.beat` (and `story.chapter`) on the render(s) between the successful restore and the Tidegarden swap - i.e. the argument passed to resolveStoryRuntimeWorldId/resolveStoryBootWorldId at App.tsx:537-545 during the ~1s window between trace idx107 and idx108.",
+    "why": "With beat 'ch13-survey' the resolver is stable on the origin and NO swap can occur. The recorded swap therefore proves the beat was transiently something else (null, or 'ch13-return', both of which yield tidegardenOwned=true because storyChapterAtLeast('ch13','ch9') is true and neither is in the originOwnedBeat list). The trace samples ~1s apart and shows 'ch13-survey' on both sides, so the transient value is NOT in the existing evidence.",
+    "discriminatingValues": [
+      "story.beat at each render where storyWorldSwapPending becomes true",
+      "the resulting storyRuntimeWorldId string",
+      "whether EfficientScene remounted once or twice"
+    ]
+  },
+
+  "smallestFreshObservation": {
+    "description": "ONE actual Continue from the same earned landing menu, recording only the beat/world swap sequence - no screenshots, no full run, no new beats.",
+    "instrumentation": "Poll on rAF (or a 100ms interval) and append: [performance.now(), window.__storyBeat, window.__voxelDebug?.spawn?.terrainSeed]. window.__voxelDebug.spawn is ALREADY SHIPPED at EfficientScene.tsx:301-314 and publishes terrainSeed + playerRequested, which distinguishes slot 0 (3215739679) from slot 1 (1600321158) on every mount without any source edit.",
+    "passFail": "If terrainSeed is observed as 1600321158 at any point during Continue, the Tidegarden excursion is proven and the beat sample on that tick names the offending beat value. If terrainSeed never leaves 3215739679, the swap is not world-driven and the re-seat must be attributed to a second EfficientScene mount on the origin instead.",
+    "budget": "single page load, < 30s of capture, existing preview; no new probe infrastructure",
+    "note": "This is a GPU/browser observation and is NOT claimed or performed here. It is the recommendation, for the producer to schedule."
+  },
+
+  "minimalInScopeSourceSeam": {
+    "confirmed": false,
+    "candidateSeam": "src/App.tsx:624-634 (story world swap effect) - it reacts to a per-render resolver answer with an immediate setCurrentWorld + resetSceneReady, with no guard that the story point is SETTLED. tidegardenRoute.ts's own header comments document two prior incidents of exactly this shape (ch10-ask and ch13-return crossings reclaimed by the boot answer).",
+    "whyNotProposedAsAPatch": "The transient beat value is not yet observed. Guarding the swap without knowing whether the beat is null or 'ch13-return' risks suppressing a legitimate swap. resolveStoryBootWorldId's treatment of beat===null is the specific thing to inspect: it currently falls through to the chapter-ordinal test, which answers Tidegarden for ANY chapter >= ch9 whose beat has not yet restored.",
+    "note": "resolveStoryBootWorldId ignores its first parameter entirely (`_savedWorldId`), so the correct saved lastPlanetWorldId '-1,-1' cannot break a tie during that transient. This is an observation about the signature, not a proposed edit."
+  },
+
+  "noFidelityDefectConfirmed": true,
+  "gpuUsed": false,
+  "browserLaunched": false,
+  "buildRun": false,
+  "cpuReplayRun": false,
+  "cpuReplayNote": "No CPU replay was needed or run this session: the recorded trace + DOMStorage ordering falsified the leading hypothesis directly, which is stronger evidence than a replay. No scratch file was created in the game tree.",
+  "sourceIntegrity": {
+    "manifestSha256Expected": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "gameSourceEdited": false,
+    "scratchCreatedInGameTree": false,
+    "dependencyHashes": "logs/continue-pose-scope-audit/dependency-hashes.txt"
+  },
+  "artifacts": [
+    ".codex/production-runs/2026-09-05-after-the-hearth/continue-pose-scope-audit.json",
+    ".codex/production-runs/2026-09-05-after-the-hearth/continue-pose-scope-audit.md",
+    ".codex/production-runs/2026-09-05-after-the-hearth/logs/continue-pose-scope-audit/ordering.txt",
+    ".codex/production-runs/2026-09-05-after-the-hearth/logs/continue-pose-scope-audit/dependency-hashes.txt",
+    ".codex/production-runs/2026-09-05-after-the-hearth/logs/continue-pose-scope-audit/globalsave-copy.json",
+    ".codex/production-runs/2026-09-05-after-the-hearth/logs/continue-pose-scope-audit/endedAt.txt"
+  ]
+}

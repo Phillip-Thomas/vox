@@ -1,0 +1,14 @@
+{
+  "updatedAt": "2026-09-07T00:22:30.573643+00:00",
+  "action": "stop",
+  "activeRole": "finale-authority-seam-runtime",
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "instruction": "OWNER HAS EXPLICITLY STOPPED chapter work. Stop capture and release every owned browser/recorder/sink/lock safely. No further probes, retries, source edits, suites, or role launches. Root is auditing cost/history.",
+  "currentPreviewUrl": "http://127.0.0.1:34825/",
+  "previewOwnershipRef": "verifier/artifacts/preview-ownership.json",
+  "currentIndexSha256": "74025800f5312519a92b480a15b493c3b27f971f0cbcbe1ec2b571342d4f4c82",
+  "currentBuildHash": "580d08f712fc3d27ef004bc0307a5bdaa1707e8b736f68030816b5f4afd877ec",
+  "nonbindingAuxiliaryObservationRef": "producer-nonbinding-auxiliary-observation.json",
+  "currentBundlePath": "/assets/index-Ddqg7x9Y.js",
+  "currentBundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9"
+}

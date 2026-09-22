@@ -1,0 +1,187 @@
+{
+ "schema": "paravoxia.verifier.finaleWrapperTransport.v1",
+ "role": "finale-wrapper-transport engineer",
+ "at": "2026-09-06T19:55:45.014802+00:00",
+ "runtimeStatus": "PREPARED NOT RUN",
+ "statusMeaning": "CPU only. No browser, no GPU, no sink, no recorder, no preview, no build, no game edit happened in this lane. The only child processes started were short-lived node/bash/flock CPU processes belonging to the fd-transport check.",
+ "gameSourceMutationAuthorized": false,
+ "sourceUnchanged": {
+  "gameFileCount": 99,
+  "mismatches": 0,
+  "toleratedAuxiliary": 1,
+  "note": "all 99 manifest-listed game paths rehashed clean; the single tolerated mismatch is the pre-declared non-binding delta run-profile"
+ },
+ "scopeOwned": [
+  "verifier/probes/finale-window/finale-window-runtime.mjs",
+  "verifier/probes/finale-window/finale-window-probe.mjs (bounded stop path only)",
+  "verifier/probes/finale-window/closure-checks.mjs",
+  "logs/finale-wrapper-transport/",
+  "finale-wrapper-transport-report.json",
+  "finale-wrapper-transport-report.md"
+ ],
+ "priorFixesRetained": [
+  "unsupported browser.process() removal + owned-CDP pid (C11/C11b)",
+  "dual 18-unit committed edge predicate (C7)",
+  "verifyHeavyLock in the probe is unchanged and not weakened"
+ ],
+ "faultsAddressed": [
+  {
+   "id": 1,
+   "blockerLine": 184,
+   "was": "spawn stdio ['ignore','pipe','pipe'] closed the inherited exclusive fd 9; the child preflight requires --heavy-lock-fd 9",
+   "fix": "validateInheritedLockFd() proves the handed descriptor is open and points at the lock file (the wrapper never opens or flocks anything); buildStdio() keeps 0/1/2, fills 3..8 with 'ignore' and places the PARENT's descriptor at CHILD fd 9; the child argv now carries --heavy-lock <path> --heavy-lock-fd 9, the same number.",
+   "proof": "C16 spawns a REAL cpu-only node grandchild under a real 'exec 9>LOCK; flock -x 9' through the wrapper's OWN buildStdio: the grandchild reports readlink(/proc/self/fd/9)==lock, fstat(9) dev+inode identical to the lock file, and an independent 'flock -n -x' FAILS (the inherited flock is real). The grandchild never takes a second lock: the contention probe is non-blocking and immediate. C16b covers missing/low/wrong-target/unopened fd refusals.",
+   "checks": [
+    "C16",
+    "C16b"
+   ]
+  },
+  {
+   "id": 2,
+   "blockerLine": 209,
+   "was": "verifySinkOwnership called with sinkIndex:null while real sink-input rows carry the NUMERIC sink index, so a real stream could never match",
+   "fix": "resolveSinkIndex() parses `pactl list short sinks` and returns the EXACT numeric index of the newly created sink; missing, ambiguous (duplicate name) and non-numeric index all REFUSE. verifySinkOwnership now refuses outright on an unresolved index instead of silently matching a name.",
+   "proof": "C17 drives the ACTUAL wrapper functions with realistic multi-row pactl fixtures (alsa hdmi + null sink) and a realistic 'Sink: 2' sink-input row; C17a runs the ACTUAL runCombinedCapture end to end against those fixtures. PID-tree ownership refusal retained and re-asserted (foreign pid on the owned numeric index => foreign-stream-on-owned-sink).",
+   "checks": [
+    "C17",
+    "C17a",
+    "C14",
+    "C15"
+   ]
+  },
+  {
+   "id": 3,
+   "blockerLine": 239,
+   "was": "the probe child was scoped inside try and never stopped or waited on pid/ownership/timeout failure; the finally stopped only the recorder and the sink",
+   "fix": "the child handle is declared before the try and owned from the instant spawn returns. stopProbe() runs in the finally on EVERY path: it writes a bounded cooperative stop-request.json, sends SIGTERM to ITS OWN child only, waits up to 25 s for real exit, escalates to SIGKILL with an 8 s bound, then reads the probe's cleanup-receipt.json. The sink module is unloaded only AFTER that, and the wrapper exits (which is when root's heavy lock is released) only after it. The probe gained a bounded stop path: SIGTERM/SIGINT/SIGHUP and the stop file both route through the SAME createOwnedSessionGuard stopOnce(), closing the probe's OWN adopted browser and writing a receipt; a 20 s unref'd hard-exit timer bounds it. Errors during bring-up and the sampler still clean up through the pre-existing adopt-first path.",
+   "proof": "C17a (ownership refusal), C17b (child 'error' event + no pid), C17c (session timeout) each inject a real failure into the ACTUAL runCombinedCapture and assert: stop file written, SIGTERM sent, no live child after the finally, teardown receipt observed, teardown order recorder -> probe -> sink unload. C17e greps both files for pkill/killall/pgrep/global chrome/34413 and finds none: only the wrapper's own child handle is ever signalled.",
+   "checks": [
+    "C17a",
+    "C17b",
+    "C17c",
+    "C17e"
+   ]
+  },
+  {
+   "id": 4,
+   "blockerLine": 238,
+   "was": "the session deadline began AFTER up to 120 s pid wait + 90 s ownership wait, so the claimed 360 s whole bound was really 570 s; child 'error' events were unhandled",
+   "fix": "ONE absolute deadline is taken at session start and every wait (pid, ownership, probe, recheck) is bounded by remaining(). 'error' handlers on both the child and the recorder record spawnErrors and abort instead of hanging. The recorder is stopped and reaped, then the exact module is unloaded, on every path.",
+   "proof": "C17c: a 4 s maxSessionS run finishes in seconds, the record proves sessionDeadlineMs - sessionStartMs == 4000, the failure is the absolute-bound path, and the recorder/sink/child are all torn down.",
+   "checks": [
+    "C17c"
+   ]
+  }
+ ],
+ "headerCorrected": {
+  "was": "'the recorder starts BEFORE the browser child'",
+  "now": "the header states the ACTUAL order: lock fd validated -> sink created -> numeric sink index resolved -> browser child -> OWN-STREAM OWNERSHIP VERIFIED -> recorder started -> probe waited -> probe stopped and reaped -> sink unloaded.",
+  "why": "isolated own-stream verification is deliberately kept BEFORE recording; recording first would mean recording an unverified sink. C17c asserts recorder-started comes after ownership-verified in the phase log."
+ },
+ "measurementBinding": {
+  "removed": "MIN_RECORDER_S = 73.5 s guessed duration and its 'coveredCompletionPlusHold' boolean",
+  "added": "assessCoverage() reads the probe's ACTUAL window.ndjson, takes the wallMs of the sample whose edgeVerdict.edge is true, and requires the recorder's own wallclock interval to span edge-3000 ms through edge+11500 ms",
+  "onFailure": "outcome becomes INCOMPLETE-EVIDENCE-RETAINED with the exact reason (recorder-started-after-required-pre-edge-span / recorder-stopped-before-required-post-edge-span / no-completion-edge-in-window); the partial wav and all evidence are KEPT and the cue is never replayed or extended",
+  "proof": "C17d, including the explicit case that a 73.5 s recording which does not contain the edge is NOT coverage"
+ },
+ "isolationUnchanged": {
+  "uniqueRunOwnedSink": "paravoxia_finale_window_20260906",
+  "pulseSinkChildOnlyEnv": true,
+  "defaultSinkNeverSet": "re-read and compared; C18 greps the wrapper for set-default-sink/@DEFAULT_MONITOR@/@DEFAULT_SOURCE@/alsa_input/default.monitor and finds none",
+  "recordsOnly": "paravoxia_finale_window_20260906.monitor",
+  "ownershipRecheckedDuringRecording": "every 15 s; a foreign stream appearing mid-recording aborts"
+ },
+ "cpuChecks": {
+  "suite": "verifier/probes/finale-window/closure-checks.mjs",
+  "total": 31,
+  "passed": 31,
+  "failed": 0,
+  "browserLaunched": false,
+  "gpuUsed": false,
+  "sinkCreated": false,
+  "recorderStarted": false,
+  "gameSourceTouched": false,
+  "log": "logs/finale-wrapper-transport/closure-checks.json"
+ },
+ "olderStructuralSelfTest": {
+  "command": "node verifier/probes/finale-window/finale-window-probe.mjs --self-test",
+  "checks": 33,
+  "failed": 3,
+  "failures": [
+   "installer-reads-avFullHasComplete ",
+   "installer-reads-avFullHasHandback ",
+   "edge-on-done-plus-history "
+  ],
+  "exitCode": 1,
+  "honestNote": "These 3 failures are in the OLDER string-search self-test (the same suite whose structural searches missed every earlier blocker). They concern the installer/edge source strings, which this lane did not touch, and no pre-change baseline exists (the file is untracked), so I do NOT claim they pre-date me with certainty. The EXECUTING checks over exactly that behaviour \u2014 C3-C9, which run the actual installer in a vm and the actual edge predicate \u2014 all pass. Root should treat the 3 string-search failures as an open, unresolved discrepancy in the old suite, not as a cleared item.",
+  "log": "logs/finale-wrapper-transport/probe-selftest.json"
+ },
+ "artifactHashes": {
+  "verifier/probes/finale-window/finale-window-runtime.mjs": "9bd9518f803b647fefd69eb2ed2de5282619e749a78c2eacea4ca2b8c03fec5b",
+  "verifier/probes/finale-window/finale-window-probe.mjs": "10e60a433c66228718b06477241515e63f96cb7ebeb83f8e01e6c6f8bb416b03",
+  "verifier/probes/finale-window/closure-checks.mjs": "8744da4a62eaa87b8f423865eb30dc6a9213f3b8cb01af26279a0d627e7e1137",
+  "verifier/probes/finale-window/windowSampler.mjs": "c984535db45b4f8717b57e335d2cb2b1f6e93dfa579485f651b24a5b79ff5c68"
+ },
+ "preparedInvocation": {
+  "runtimeStatus": "PREPARED NOT RUN \u2014 root assigns control and runs this after the 3 SHORT cleanups and this report's inspection",
+  "preconditions": [
+   "verifier-control.json activeRole == 'finale-window-runtime' and action == 'continue' (currently 'common-exact-input-runtime', so the probe's role gate REFUSES today)",
+   "verification-ready.json ready == true",
+   "root's 34413 preview running at the pinned index/bundle hashes",
+   "the heavy lock is held by the invoking shell on fd 9 and is NOT taken by this wrapper",
+   "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/finale-window/window-1 must not exist or must be empty (the probe refuses a non-fresh out dir)"
+  ],
+  "heavyLockPath": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "heavyLockPathNote": "taken from verifier/artifacts/verifier-findings.prior-source-58f275f6.json; root must confirm this is the lock it holds \u2014 the wrapper REFUSES if fd 9 does not point at exactly this path",
+  "command": "cd /home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth && exec 9>\"/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock\" && flock -x 9 && node verifier/probes/finale-window/finale-window-runtime.mjs --out /home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/finale-window/window-1 --sink paravoxia_finale_window_20260906 --max-session-s 360 --heavy-lock /home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock --heavy-lock-fd 9 --child-lock-fd 9",
+  "wrapperOut": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/finale-window/window-1",
+  "childArgvBuiltByTheWrapper": [
+   "<node>",
+   "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/finale-window/finale-window-probe.mjs",
+   "--out",
+   "finale-window/window-1",
+   "--unmuted",
+   "--pulse-sink",
+   "paravoxia_finale_window_20260906",
+   "--heavy-lock",
+   "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+   "--heavy-lock-fd",
+   "9"
+  ],
+  "outMatchAssertion": "the wrapper refuses unless resolve(verifier/captures, childOut) === resolve(wrapper --out); wrapper --out and child --out are the SAME directory",
+  "identity": {
+   "previewUrl": "http://127.0.0.1:34413/",
+   "immutable": true,
+   "activeRoleRequired": "finale-window-runtime",
+   "sourceFileCount": 99
+  },
+  "bounds": {
+   "absoluteWholeSessionS": 360,
+   "probeStopGraceMs": 25000,
+   "probeStopKillMs": 8000
+  },
+  "expectedOutputs": [
+   "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/finale-window/window-1/runtime-record.json",
+   "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/finale-window/window-1/owned-sink.wav",
+   "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/finale-window/window-1/window.ndjson",
+   "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/finale-window/window-1/summary.json",
+   "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/finale-window/window-1/cleanup-receipt.json",
+   "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/finale-window/window-1/probe-console.log"
+  ],
+  "readFirstOnCompletion": [
+   "runtime-record.json .coverage.complete and .coverage.reason",
+   "runtime-record.json .cleanupComplete, .incompleteCleanup, .spawnErrors, .teardownErrors",
+   "runtime-record.json .probeTeardown.browserTeardownProven"
+  ]
+ },
+ "notClaimed": [
+  "no audible, causal, repair or acceptance claim is made",
+  "no real sink, browser, recorder or flock-holding GPU run was exercised here; the fd transport was proven with a REAL flock and REAL node children, but the sink and browser paths were driven with fixtures and fake children",
+  "prior lanes' wrapper syntax checks and mocks did NOT prove real fd inheritance, real sink-index matching or real cleanup; this report does not inherit those claims"
+ ],
+ "harnessFileIncident": {
+  "what": "I briefly overwrote finale-wrapper-transport-invocation.json, which is the RUNNER's receipt, not mine.",
+  "action": "I deleted my version rather than fabricate the original startedAt/commissionSha256. run-finale-wrapper-transport.py rewrites this receipt in full from its own in-memory state when this session ends, so the correct receipt will be restored automatically; if the runner is killed before that, the file will simply be absent.",
+  "disclosed": true
+ }
+}

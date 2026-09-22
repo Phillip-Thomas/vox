@@ -1,0 +1,54 @@
+{
+  "updatedAt": "2026-09-06T09:01:42.898617+00:00",
+  "stage": "Scene-v2 integration and implementation gate complete; independent verifier cleared for full verify and gameplay evidence",
+  "userAuthority": "continue story creatively; auto approve all in-scope decisions",
+  "councilV2": "approved 4.7485; final-scorecard-v2.json",
+  "sceneNotes": "six losslessly compiled, all recipient-resolved/accepted",
+  "directors": "All three exact scene-v2 signatures complete",
+  "lock": "bounded-runtime; exact signatures and contract gate passed before first runtime edit",
+  "toolingChange": "DELIVER/FLY/Space plus explicit no-target control-input evidence in gate, guidanceTargets helper, scene schema. Selftest passed1727 including positive/negative control evidence.",
+  "activeCliSession": null,
+  "activeCliScript": null,
+  "activeOutput": "verifier-progress.md; story-verifier-stream.jsonl",
+  "next": [
+    "complete bounded scene-v2 implementation",
+    "independent full verify and real owned preview/browser evidence",
+    "fresh independent review network and bounded repairs",
+    "actual chapter delivery with honest evidence boundaries"
+  ],
+  "preparedIntegrationTransport": "run-integration-engineer.py",
+  "runtimeSourcesEdited": true,
+  "publicationAuthorized": false,
+  "sceneContractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "allNonSignatureContractChecksPass": true,
+  "pendingCorrections": [
+    "independent full verify and actual chapter/movie journeys",
+    "headed hardware/audio/visual evidence and fresh independent review network"
+  ],
+  "contractCounts": {
+    "anchors": 28,
+    "shots": 9,
+    "scoreCues": 6,
+    "objectives": 17
+  },
+  "contractGateChecks": 1668,
+  "allThreeExactSignatures": true,
+  "initialFocusedTests": {
+    "files": 2,
+    "passed": 37,
+    "acceptance": "initial tests only; producer findings remain open"
+  },
+  "producerFindingsRef": "integration-inbox.md (17 implementation findings; actual fixes pending verification)",
+  "integratorHasReadLatestInbox": true,
+  "preparedVerifierTransport": "run-story-verifier.py (guarded by completed integration-v2)",
+  "boundaryCompletionRef": "producer-boundary-completion.json (3 necessary generated/registration surfaces; original hashes verified; late-reporting deviations recorded)",
+  "gpuLockLastObservation": {
+    "at": "2026-09-06T08:31:48.561833+00:00",
+    "unowned": true,
+    "acquired": false
+  },
+  "activeVerifierSession": 67159,
+  "verifierStage": "Cleared by verification-ready.json",
+  "preparedImplementationSnapshotCompiler": "compile-implementation-snapshot.py",
+  "implementationGateChecks": 1708
+}

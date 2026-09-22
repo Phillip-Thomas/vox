@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 473233,
+  "stop_reason": "end_turn",
+  "session_id": "054fddde-db81-483d-a5af-78eff6497a30",
+  "total_cost_usd": 2.6140039999999996,
+  "usage": {
+    "input_tokens": 54,
+    "cache_creation_input_tokens": 98352,
+    "cache_read_input_tokens": 1398332,
+    "output_tokens": 37167,
+    "output_tokens_details": {
+      "thinking_tokens": 9962
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 98352,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1548,
+        "cache_read_input_tokens": 101446,
+        "cache_creation_input_tokens": 718,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 718
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1783,
+      "outputTokens": 18,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001873,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 54,
+      "outputTokens": 37167,
+      "cacheReadInputTokens": 1398332,
+      "cacheCreationInputTokens": 98352,
+      "webSearchRequests": 0,
+      "costUSD": 2.6121309999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 9962,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 34,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "## COMMON terminal-waypoint source audit \u2014 complete\n\n**Deliverables (only owned paths written):**\n- `common-terminal-source-audit.json` `6bc39c20\u20261d26ed7`\n- `common-terminal-source-audit.md` `0d27a750\u2026fcb4cdd3`\n- `verifier/probes/common-terminal-audit/{common-terminal-repro.mjs, column-cause.mjs}`\n- `logs/common-terminal-audit/{repro.json, column-cause.json}`\n\nNo game/contract/manifest/defect/other-probe edit. No GPU, browser, build, or verify. Frozen manifest `dc63fbae\u2026` untouched.\n\n### Answer\nThe fifth repair's exact-goal handoff is **correctly refused** at COMMON vertex 3. `railGoal(CG_ROUTE_COMMON, 3, 0.6)` = `(-44.6, 51.05, 16)` \u2014 reproduced bit-exact against the captured rail. The 0.6 signed overshoot exceeds `reach = VOXEL_SCALE/2 \u2212 PLAYER_CAPSULE_RADIUS = 0.5`, so `exactGoalFootprintColumns` demands column `(-46, \u00b7, 16)`. The **shipped planner returns `unreachable / start-column-not-traversable`** there: cell (\u221223, 8) is **surface water**. Refusal `footprint-not-certified` \u2192 `applyTerminalExactGoal` keeps the snapped centre `(-44, 52.85, 16)` \u2192 `steerFreeToward` releases all controls inside 0.2 \u2192 closest approach to the published goal **0.4356 > 0.35**. Unsatisfiable \u2014 the CG-IMPL-010 deadlock reached through a *legitimate safety refusal*, not through arithmetic the repair fixed.\n\nMeasured pose corroborates exactly: 0.1777 from the vertex (< dead zone), 0.7598 from the goal, and `terraUnits` 5.845337 = **0.154663** short of the 6 walked units vertex 3 represents.\n\nSecondary, evidence-backed: the live tilted up (\u22120.0198 x) converts the 1.8-unit foot(51.05)/clearance(52.85) convention gap into +0.0357 of *tangential* error, so the true offset is 0.6356, not 0.6 \u2014 the shipped `0.6 \u2212 0.2 = 0.4` margin is a lower bound.\n\n### COMMON vs the passing survey\nNot a sign/parity/quantization asymmetry. **Every** `CG_ROUTE_LONG` turn vertex certifies and takes the handoff, including the negative-x overshoots at \u221228.6/\u221230.6/\u221232.6/\u221242.6. Three COMMON goals fail: vertex 3 (water at \u221246,16), vertex 6 (**face edge** at x=\u221250, the planetSize-50 boundary), vertex 9 = terminal C (water at \u221248,10).\n\n### Rail only, or authored geometry?\n**Both \u2014 rail-only is provably insufficient.** At turning vertices 3/6 an outgoing-leg overshoot would certify (observation, not a proposal). At vertex 9 there is **no outgoing leg**; `terminalOvershoot` points into water and no direction choice exists \u2014 so the terminal-overshoot device or the authored western end of `CG_ROUTE_COMMON` must change, which is a Chapter Director decision.\n\nRT-1/RT-2/RT-3 named as failing on current code; RT-2 is the missing invariant (tests assert the refusal, never that the refusal path stays walkable). All unsafe-rejection controls listed and preserved. None of the forbidden remedies proposed.\n\n**Limitation:** CPU reconstruction of *generated* terrain (seed 3215739679, world \u22121,\u22121, planetSize 50, VOXEL_SCALE 2); `voxelSystem` empty, so **live persisted voxels are not represented**. `terminalExactGoalHandoff`/`exactGoalFootprintColumns`/`railGoal` were transcribed (bundle doesn't export them) \u2014 equivalence is inference; planner/terrain calls are evidence. Minimal live discriminator named: one hardware `cg-journey-probe` publishing the runtime refusal string + `certifyColumn` result for the terminal column.\n\n**Not acceptance, not chapter verification, no publication. No repair authorized \u2014 Root must review before any seventh material repair.** Final clock `2026-09-06T16:20:21Z`.",
+  "ttft_ms": 1755,
+  "type": "result",
+  "duration_ms": 474423,
+  "uuid": "51d8af2a-3f85-45ef-8eeb-36c0e24caacb",
+  "ttft_stream_ms": 1178,
+  "time_to_request_ms": 19,
+  "first_content_frame_ms": 1180,
+  "queued_turn_count": 0
+}

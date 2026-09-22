@@ -1,0 +1,20 @@
+[
+  {
+    "role": "inventory",
+    "attempt": 1,
+    "status": "transport-timeout",
+    "sessionId": "f8571674-a0f9-4567-8d46-241c19cfe5b0",
+    "result": "Request timed out",
+    "sourcePromptSha256": "557c6280d55dc778c7e0fdf828a7efa451091c5038054b53343ed6996afe22ef",
+    "retry": "fresh read-only opus CLI under unrestricted network; no prior substantive output"
+  },
+  {
+    "role": "canon",
+    "attempt": 1,
+    "status": "transport-timeout",
+    "sessionId": "c1deb56c-0c81-4e11-adf2-ded05f9264bf",
+    "result": "Request timed out",
+    "sourcePromptSha256": "9dbf46b6ca001ce0878697c9d761d6cef611a28c9c027c9548f8caf3e7b504e5",
+    "retry": "fresh read-only opus CLI under unrestricted network; no prior substantive output"
+  }
+]

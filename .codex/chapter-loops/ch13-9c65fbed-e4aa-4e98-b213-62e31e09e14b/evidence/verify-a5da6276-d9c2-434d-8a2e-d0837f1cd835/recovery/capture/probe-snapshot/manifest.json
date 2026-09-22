@@ -1,0 +1,13 @@
+{
+ "deps": [
+  {
+   "file": "finale-window-probe.mjs",
+   "sha256": "1725d41943add8c37a1351afc483468bb2b7b1a75c76bdf82ac4bc7281469b2d"
+  },
+  {
+   "file": "windowSampler.mjs",
+   "sha256": "c984535db45b4f8717b57e335d2cb2b1f6e93dfa579485f651b24a5b79ff5c68"
+  }
+ ],
+ "archivedAt": "2026-09-07T01:02:54.190Z"
+}

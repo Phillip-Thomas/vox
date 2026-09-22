@@ -35,6 +35,9 @@ import EmergentAuditSites from './EmergentAuditSites.tsx';
 import A4WorldChoreography from './A4WorldChoreography.tsx';
 import MawPondResonance from './MawPondResonance.tsx';
 import { shouldMountAuditWorker } from '../auditWorkerPresence.ts';
+import CommonGroundWorld from './CommonGroundWorld.tsx';
+import { STORY_PRIMARY_WORLD_ID } from '../tidegardenRoute.ts';
+import { STORY_MILESTONES } from '../storyState.ts';
 import { isSceneReadyForWorld, useAppState } from '../../state/appState.ts';
 import { hasMilestone } from '../../game/systems/progressionSystem.ts';
 import { FIELD_PACK_DROPPED_MILESTONE } from '../emergentAudit.ts';
@@ -131,7 +134,8 @@ const StoryWorldProps: React.FC<{
   const auditWorkerMounted = shouldMountAuditWorker(
     story.chapter,
     commandContext.world.worldId,
-    departureComplete
+    departureComplete,
+    hasMilestone(STORY_MILESTONES.ch13Complete, commandContext.actorId)
   );
 
   useEffect(() => {
@@ -248,6 +252,18 @@ const StoryWorldProps: React.FC<{
       {/* W-7744 — hidden until arrival writes his pose; the A4 -> Chapter 5
           evidence boundary removes him after his grounded flight and pack tear. */}
       {auditWorkerMounted && <AuditWorker />}
+      {/* The survey apparatus and the drawn trace. Chapter 13 only, on the
+          Origin world only, so the sandbox and every other chapter are
+          untouched and the reset matrix's sandbox no-op is structural. */}
+      {(story.chapter === 'ch13'
+        || hasMilestone(STORY_MILESTONES.ch13Complete, commandContext.actorId)) && (
+        <CommonGroundWorld
+          planetSize={planetSize}
+          terrainSeed={terrainSeed}
+          worldId={commandContext.world.worldId}
+          active={commandContext.world.worldId === STORY_PRIMARY_WORLD_ID}
+        />
+      )}
       <FieldPack
         planetSize={planetSize}
         terrainSeed={terrainSeed}

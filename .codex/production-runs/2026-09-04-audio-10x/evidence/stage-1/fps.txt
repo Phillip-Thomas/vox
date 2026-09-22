@@ -1,0 +1,3 @@
+npm run score:fps (fps-score-probe.mjs, SwiftShader gate 640x360, stage=material, era=1.000, a3-dawn stress mood with the bed scheduler alive)
+SwiftShader baseline: [60.38, 60.41, 60.39, 60.40, 60.40] fps  median=60.40
+SwiftShader with score: [60.55, 60.38, 60.40, 60.37, 60.37] fps median=60.38 p10=60.37 ratio=1.000 retainedMax>=60=true swiftshader=true richScore=true audio=running -> PASS

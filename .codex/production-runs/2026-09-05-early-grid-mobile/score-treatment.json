@@ -1,0 +1,798 @@
+{
+  "schema": "paravoxia.scoreTreatmentProposal.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "proposalVersion": "early-score-v1",
+  "chapterCandidateVersion": "early-grid-mobile-v1",
+  "authoredBy": "score-director",
+  "authoredAt": "2026-09-05T19:26:17.249494+00:00",
+  "status": "independent-preparatory-treatment-unsigned",
+  "actualSceneContractVersion": null,
+  "actualSceneContractSha256": null,
+  "contractChangeRequired": true,
+  "scope": {
+    "affectedBeats": [
+      "ch1-fixed",
+      "ch1-track",
+      "ch1-raster"
+    ],
+    "adjacentContinuity": [
+      "descent",
+      "ch1-depth"
+    ],
+    "thesis": "Preserve original music; real transaction speaks, redundant guidance chirps recede, unbolt remains the first attention release.",
+    "newArrangement": false,
+    "runtimeEdited": false,
+    "buildBrowserGpuOrAuditionPerformed": false,
+    "canonicalNotesAuthored": false,
+    "signatureAuthored": false
+  },
+  "authority": {
+    "productionLockRef": "production-lock.json",
+    "ownerScopeRef": "owner-decisions.md",
+    "decisionBriefRef": "decision-brief.json",
+    "routineChoicesAuthorized": true,
+    "planningOnlyUntilContract": true,
+    "publishAllowed": false,
+    "audio10xStage3": "Separate draft-v4 and unsigned proposed-v5 lane; no approval or mutation by this packet."
+  },
+  "grounding": {
+    "capturedSourceRevision": "working-tree:1eb27bf00229c442169280f126f0f3f15bcad63d3581af76f5c0b8e4d3d0d1a8",
+    "sourceManifest": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/evidence/runtime-candidate2-build/source-before.json",
+    "sourceManifestSha256": "a581f00a822346d4f920a027376167d55784de9671d18f1a8b6623310f96473e",
+    "sourceArchive": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/evidence/runtime-candidate2-build/source.tar.gz",
+    "planningSourceRevision": "working-tree:846b658bb386a2defd80693513705fc74010c4c35cc4daf7aa241d10f39232e9",
+    "runArtifacts": [
+      {
+        "path": "production-lock.md",
+        "sha256": "de06784ff4650eafa61ef250068c8a92c4e89ff8b829e48363af56db7728ea83"
+      },
+      {
+        "path": "production-lock.json",
+        "sha256": "f77661be80d2d5d7fc674610a600a35a79f18463e7a13c0008e0ab3e111be9ba"
+      },
+      {
+        "path": "planning-source-manifest.json",
+        "sha256": "09215bd6805e324e34039f9d8e674c07a6d0310de6763f8d0eb4fd6f7e5db623"
+      },
+      {
+        "path": "owner-decisions.md",
+        "sha256": "1a91d33af1e4a2828f5d5c1d4387d885d39e726de9459d0d6d0bef6500002d9c"
+      },
+      {
+        "path": "story-intent.md",
+        "sha256": "979b0ccffecc4a462b50fa98698620a2f5971cfc01f6967c143c92219ea536e5"
+      },
+      {
+        "path": "chapter-treatment.json",
+        "sha256": "5a582598cd5d38291010042b0382075fe30ad146efe254a8e9ec7e61f55afe5f"
+      },
+      {
+        "path": "decision-brief.json",
+        "sha256": "310d50f9dd3e29c3e9e06c42c60c3a81567596a09acae6def8e0d1134c5c8189"
+      },
+      {
+        "path": "shipped-visual-baseline.json",
+        "sha256": "46395cee350f1ee4a6b7c0c310d550baf7ce0e6f6630a5ece8a25a3ac19a434b"
+      },
+      {
+        "path": "shipped-ux-baseline.json",
+        "sha256": "3b388660d31ffe84ba5518f53429e22f423b206aa7e08f7cc27e9a99d0b374f8"
+      }
+    ],
+    "viewedFrames": [
+      {
+        "path": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0090-ch1-fixed.png",
+        "sha256": "3b9e0f5170781be98705faec4234082045f08de310601c06aba529210ec775ce",
+        "inspection": "viewed actual supplied full-page frame; no new capture"
+      },
+      {
+        "path": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0107-ch1-fixed.png",
+        "sha256": "9e1b970acc25795122d76b26026cb51d39821055c2ad1cbf3222b78e0ee16462",
+        "inspection": "viewed actual supplied full-page frame; no new capture"
+      }
+    ],
+    "baselineMeasurements": {
+      "naturalSoleClearanceApprox": [
+        0.839,
+        0.98
+      ],
+      "portraitFullyOffscreenSamples": 31,
+      "maximumNaturalBrackets": 4
+    },
+    "audioLimitation": "Baseline rolling three-second diagnostics are not exact per-objective counts or audition. No audio file auditioned.",
+    "currentDifference": "storyDirector.ts current hash differs from captured candidate solely by the inspected concurrent on-entry and per-tick flash zeroing additions. Relevant receipt/score code matches captured sections."
+  },
+  "sourceBindings": [
+    {
+      "path": "main/src/story/storyScore.ts",
+      "symbols": [
+        "MOODS",
+        "MOOD_TONIC_CHAINS",
+        "TONIC_CHAIN_POLICY",
+        "STORY_HIT_ANCHORS",
+        "STORY_BUNDLE_MEMBERS",
+        "armStoryHit",
+        "setScoreBeat"
+      ],
+      "inspectedSha256": "c808910f08e0f4c698e14ce4b977b387c621718911887ff043c9f8946dcfe8a0",
+      "capturedCandidateSha256": "c808910f08e0f4c698e14ce4b977b387c621718911887ff043c9f8946dcfe8a0",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "symbols": [
+        "currentCh1FixedObjectiveState",
+        "currentCh1RasterObjectiveState",
+        "syncFoundationalStoryObjective",
+        "completeFoundationalObjective",
+        "onBeatEntered",
+        "storyDirectorTick",
+        "armBundle",
+        "bundleFires",
+        "bundleSfx",
+        "tickTrackUnlock"
+      ],
+      "inspectedSha256": "4cfeace8d1a8e3fbf90cd48fef8fced3718dc89b4aa57ff5bf63e3f669749806",
+      "capturedCandidateSha256": "2b4e84770cd6ff0f986ad0e6c9a835d441b6696897de543d15da1aaa99d91e1b",
+      "matchesCapturedCandidate": false,
+      "baselineSnapshotRef": "baseline-source/main/src/story/storyDirector.ts",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "symbols": [
+        "activateGuidedStoryObjective",
+        "acknowledgeGuidedStoryCompletion",
+        "acknowledgeGuidedStoryProgress",
+        "clearGuidedStoryObjective",
+        "resetGuidedObjectiveFeedbackForTests"
+      ],
+      "inspectedSha256": "0e9dc3058f1fb1d405b0e565767de319790ed794eb2dd597beaa82d48dc39b05",
+      "capturedCandidateSha256": "0e9dc3058f1fb1d405b0e565767de319790ed794eb2dd597beaa82d48dc39b05",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/ux/objectiveDirector.ts",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/ux/objectiveCommandFeedback.ts",
+      "symbols": [
+        "COUNTED_ITEMS",
+        "acknowledgeObjectiveCommand"
+      ],
+      "inspectedSha256": "15886ed4d3d3184824016faf75a2902ff176e9a5ea8b41a6b306f99893c43108",
+      "capturedCandidateSha256": "15886ed4d3d3184824016faf75a2902ff176e9a5ea8b41a6b306f99893c43108",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/ux/objectiveCommandFeedback.ts",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "symbols": [
+        "StoryUxFeedbackCue",
+        "emitStoryUxFeedbackCue",
+        "subscribeStoryUxFeedback"
+      ],
+      "inspectedSha256": "df0f070c7bced43d28dbb54709d9445e5f3329b6a4f9d548b361f5ee81751fb5",
+      "capturedCandidateSha256": "df0f070c7bced43d28dbb54709d9445e5f3329b6a4f9d548b361f5ee81751fb5",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/ux/feedbackCues.ts",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/ux/objectiveRestore.ts",
+      "symbols": [
+        "beginGuidedObjectiveRestore",
+        "readGuidedObjectiveRestore"
+      ],
+      "inspectedSha256": "681a2de6ce4ea93f22be99984767b5d9dcd1b8ca0f8e336462cc02b879628d79",
+      "capturedCandidateSha256": "681a2de6ce4ea93f22be99984767b5d9dcd1b8ca0f8e336462cc02b879628d79",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/ux/objectiveRestore.ts",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/ux/objectiveEventFeedback.ts",
+      "symbols": [
+        "acknowledgeObjectiveStoryEvent"
+      ],
+      "inspectedSha256": "5d5ff442b660a7bc0d89b52f9cc5ac77fcd693108a6b5d5d6ee7fc74877165f3",
+      "capturedCandidateSha256": "5d5ff442b660a7bc0d89b52f9cc5ac77fcd693108a6b5d5d6ee7fc74877165f3",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/ux/objectiveEventFeedback.ts",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/debrisSalvage.ts",
+      "symbols": [
+        "collectDebris",
+        "isDebrisCollected",
+        "DEBRIS_LOOT",
+        "backfillLegacyDebrisStone",
+        "seedDebrisCollected"
+      ],
+      "inspectedSha256": "53b03bf890f6f2a500beb20e4a322452b577fc2e56f099fab0b89e2a483309de",
+      "capturedCandidateSha256": "53b03bf890f6f2a500beb20e4a322452b577fc2e56f099fab0b89e2a483309de",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/world/DebrisField.tsx",
+      "symbols": [
+        "DebrisField",
+        "collectable",
+        "PICKUP_RADIUS"
+      ],
+      "inspectedSha256": "47765bf875a495d24a334212c54bdcc498cbffa5b9e5640f3fa14516520fcf9e",
+      "capturedCandidateSha256": "47765bf875a495d24a334212c54bdcc498cbffa5b9e5640f3fa14516520fcf9e",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/components/EfficientPlayer.tsx",
+      "symbols": [
+        "commitMine",
+        "updateMining"
+      ],
+      "inspectedSha256": "e2742c6516db572c6493d4e377792550ac75631ac26a39e0acb96157baa36cba",
+      "capturedCandidateSha256": "e2742c6516db572c6493d4e377792550ac75631ac26a39e0acb96157baa36cba",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/components/EfficientPlayer.tsx",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/game/gameplayCommands.ts",
+      "symbols": [
+        "mineVoxelCommand"
+      ],
+      "inspectedSha256": "345091e689b87f25a2284a8d54bdd2f161b3fec9b2596fa2fc5479e34e3fd241",
+      "capturedCandidateSha256": "345091e689b87f25a2284a8d54bdd2f161b3fec9b2596fa2fc5479e34e3fd241",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/game/commandDispatchAdapter.ts",
+      "symbols": [
+        "subscribeFinalizedLocalGameplayCommand",
+        "dispatchGameplayCommandWithTransport"
+      ],
+      "inspectedSha256": "982d10a2c6add9f3c6958ca8d12738e82ad0d258580d2637dc5d05c55397aa2a",
+      "capturedCandidateSha256": "982d10a2c6add9f3c6958ca8d12738e82ad0d258580d2637dc5d05c55397aa2a",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/components/audio/AudioDirector.tsx",
+      "symbols": [
+        "AudioDirector finalized local command subscription"
+      ],
+      "inspectedSha256": "f5b16dbb306fc5413e7236705a2ddc402ab9532107e0033ec8026588662fdb94",
+      "capturedCandidateSha256": "f5b16dbb306fc5413e7236705a2ddc402ab9532107e0033ec8026588662fdb94",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/audio/voice/voicePresentation.ts",
+      "symbols": [
+        "voiceTypewriterGapMs",
+        "voiceVisibleText",
+        "suspendVoicePresentation"
+      ],
+      "inspectedSha256": "7871f27ee50c8a3b8912382fe1456224369382691660df9ddf190a022d3429dd",
+      "capturedCandidateSha256": "7871f27ee50c8a3b8912382fe1456224369382691660df9ddf190a022d3429dd",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/audio/sfxEngine.ts",
+      "symbols": [
+        "SfxEngine.play",
+        "SfxEngine.fire",
+        "playSfx",
+        "sfxRecipe"
+      ],
+      "inspectedSha256": "872b412d99d8aab3ddb0807fec58a574013d6142bd82d6fffcf75fe6de864b18",
+      "capturedCandidateSha256": "872b412d99d8aab3ddb0807fec58a574013d6142bd82d6fffcf75fe6de864b18",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/audio/sfx/coverageRecipes.ts",
+      "symbols": [
+        "COVERAGE_RECIPES"
+      ],
+      "inspectedSha256": "d6cad7d796e8bdb2b3d49922a61001a37ce5d536c5620b57eaf73040a06c6043",
+      "capturedCandidateSha256": "d6cad7d796e8bdb2b3d49922a61001a37ce5d536c5620b57eaf73040a06c6043",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/audio/mix/audioEventBus.ts",
+      "symbols": [
+        "postAudioEvent",
+        "onAudioEvent"
+      ],
+      "inspectedSha256": "95defa28b87930290df21fddb621947caa78ab481fffecb70107f519e20266bb",
+      "capturedCandidateSha256": "95defa28b87930290df21fddb621947caa78ab481fffecb70107f519e20266bb",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/audio/mix/audioEventQueue.ts",
+      "symbols": [
+        "AudioEventQueue.post",
+        "AudioEventQueue.flush"
+      ],
+      "inspectedSha256": "a053546d9b429b59f0b454d1ebc94b659592657894fbbc419c53b85ec204b51a",
+      "capturedCandidateSha256": "a053546d9b429b59f0b454d1ebc94b659592657894fbbc419c53b85ec204b51a",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/audio/mix/sfxCategories.ts",
+      "symbols": [
+        "SFX_CATEGORY",
+        "SFX_DUCK_SOURCE"
+      ],
+      "inspectedSha256": "0cb5b517d71fafe02ec0dee1cc8c9cc19e432062e0b91b47250dca82e4e5249b",
+      "capturedCandidateSha256": "0cb5b517d71fafe02ec0dee1cc8c9cc19e432062e0b91b47250dca82e4e5249b",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/audio/sfxRateLimiter.ts",
+      "symbols": [
+        "SfxRateLimiter"
+      ],
+      "inspectedSha256": "2a3006e22229b23634bd66ac91cb80e4cf620e233c6d843f32ea8f16de64dd0c",
+      "capturedCandidateSha256": "2a3006e22229b23634bd66ac91cb80e4cf620e233c6d843f32ea8f16de64dd0c",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/storyState.ts",
+      "symbols": [
+        "beginStory",
+        "restartStory",
+        "beginGuidedObjectiveRestore call sites"
+      ],
+      "inspectedSha256": "d64223e6e2d69bd05a826d6419f0d6c229ec6f57e163c994d9193ce1a2bee9d5",
+      "capturedCandidateSha256": "d64223e6e2d69bd05a826d6419f0d6c229ec6f57e163c994d9193ce1a2bee9d5",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": null,
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/ux/README.md",
+      "symbols": [
+        "Runtime entry points",
+        "Hard guardrails",
+        "Creative-council ownership"
+      ],
+      "inspectedSha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85",
+      "capturedCandidateSha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/ux/README.md",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.test.ts",
+      "symbols": [
+        "guided story objective contract",
+        "objective feedback never claims unearned completion"
+      ],
+      "inspectedSha256": "003229e3832a52f27f1036510e26fe130b31ffe9214d3f69cbb42fa169cb5324",
+      "capturedCandidateSha256": "003229e3832a52f27f1036510e26fe130b31ffe9214d3f69cbb42fa169cb5324",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/ux/objectiveDirector.test.ts",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/ux/objectiveCommandFeedback.test.ts",
+      "symbols": [
+        "confirmed objective transaction feedback"
+      ],
+      "inspectedSha256": "aead2da542a65afc7e1c5a0187b1657e8f38d5f93d4943208eea462edccfd822",
+      "capturedCandidateSha256": "aead2da542a65afc7e1c5a0187b1657e8f38d5f93d4943208eea462edccfd822",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/ux/objectiveCommandFeedback.test.ts",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/ux/objectiveEventFeedback.test.ts",
+      "symbols": [
+        "confirmed event feedback"
+      ],
+      "inspectedSha256": "0d60b23182b09db70e7f1b57b213c954f5a9a927831825da918ace3b720c4fd2",
+      "capturedCandidateSha256": "0d60b23182b09db70e7f1b57b213c954f5a9a927831825da918ace3b720c4fd2",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/ux/objectiveEventFeedback.test.ts",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-fixed.ts",
+      "symbols": [
+        "beatCh1Fixed"
+      ],
+      "inspectedSha256": "f25bea6ca7ca18e54bc0c918f39b3dc1ba46da2fcc83711de7d09c93d4c50474",
+      "capturedCandidateSha256": "f25bea6ca7ca18e54bc0c918f39b3dc1ba46da2fcc83711de7d09c93d4c50474",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/beats/ch1/ch1-fixed.ts",
+      "role": "read-only-grounding"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-raster.ts",
+      "symbols": [
+        "beatCh1Raster"
+      ],
+      "inspectedSha256": "bcf3f28a258ecc367adf24cfcd25a0e497ab5010ecba9fd80d3e5a4ac5395e99",
+      "capturedCandidateSha256": "bcf3f28a258ecc367adf24cfcd25a0e497ab5010ecba9fd80d3e5a4ac5395e99",
+      "matchesCapturedCandidate": true,
+      "baselineSnapshotRef": "baseline-source/main/src/story/beats/ch1/ch1-raster.ts",
+      "role": "read-only-grounding"
+    }
+  ],
+  "sourceFindings": [
+    "Existing finalized local command subscription in AudioDirector already routes to objectiveCommandFeedback; do not duplicate it.",
+    "collectDebris writes milestone before all item stacks; require an after-all-loot receipt, never raw milestone or inventory observation.",
+    "Fixed current positive fiber emits progress; first confirmed completion must supersede it.",
+    "Raster recover-quota currently counts fiber/stone although new Chapter phase means salvage.",
+    "feedbackCues schedules future SFX without cancellation; early arbitration must hold unscheduled intent and revalidate before immediate dispatch.",
+    "entered/completed/progress IDs need actual run lifecycle semantics; the current explicit reset is test-named.",
+    "SFX queue collapses same ID/frame and consecutive held ID, not cross-ID receipt/entry collisions."
+  ],
+  "proposedContractFieldBindings": {
+    "guidance.objectives": "For the exact IDs below: objective verb, progression predicate, real receipt source, confirmed-action requirement, native SFX ownership, semantic cue, audible/coalesced disposition, successor publication and reset lineage.",
+    "syncAnchors": "Bind early pickup/harvest/raster receipts to accepted post-commit edges, early.coverage.transfer to shared movement geometry epoch; preserve anc.track.unbolt and anc.descent.impact definitions.",
+    "score": "Reuse MOODS/tonic/era/transport and existing recipes unchanged. Add early feedback rendering rules and named anchor-relative onset window; no new arrangement.",
+    "variants": "Same meanings on desktop/touch/portrait/landscape, reduced motion and low tier; no audio-only guidance; unavailable audio reconstructs without backlog.",
+    "reset": "Cancel unscheduled intents on unrelated replacement, later actual action, exit, hide/pause, seed/resume/new run, quit/sandbox; distinguish normal successor and new-run feedback reset.",
+    "performance": "At most one pending early semantic receipt sound; bounded event work; no per-frame node churn or new score scheduler.",
+    "evidence": "Exact source+contract+artifact hashes, transaction/lifecycle/native+semantic/audio admission ledger, decoded continuous AV and independent score/UX review."
+  },
+  "proposedObjectiveAudio": [
+    {
+      "id": "ch1:fixed:recover-first-debris",
+      "anchor": "early.pickup.receipt",
+      "cause": "collectDebris(0) first real path AFTER milestone and all loot commits",
+      "predicate": "isDebrisCollected(0)",
+      "nativeSfx": "terminalKey",
+      "semantic": "objective-complete",
+      "confirmedAction": true,
+      "audibleSemantic": "objectiveComplete after native attack",
+      "successor": "ch1:fixed:calibrate-extractor",
+      "successorEntry": "semantic once; audible coalesced with receipt"
+    },
+    {
+      "id": "ch1:fixed:calibrate-extractor",
+      "anchor": "early.harvest.receipt",
+      "cause": "finalized local command; local actor; voxel_mined payload.drops contains positive biofiber; actual predicate edge",
+      "predicate": "getItemCount(biofiber)>=1; honor genuine prior inventory without replay",
+      "nativeSfx": "mine",
+      "semantic": "objective-complete instead of objective-progress",
+      "confirmedAction": true,
+      "audibleSemantic": "objectiveComplete after native attack",
+      "successor": "ch1:fixed:cross-camera-cell",
+      "successorEntry": "semantic once; audible coalesced with receipt"
+    },
+    {
+      "id": "ch1:fixed:cross-camera-cell",
+      "anchor": "early.coverage.transfer",
+      "cause": "movement-caused shared camera transfer after Chapter arming in stable geometry epoch",
+      "predicate": "Chapter armed resources and Cinema shared transfer event; no historical crossing or resize",
+      "nativeSfx": "storyGlitch once at real cut",
+      "semantic": "objective-complete",
+      "confirmedAction": true,
+      "audibleSemantic": "coalesced with cut and existing unbolt; no new completion sound",
+      "successor": "ch1:track:tracking-transfer",
+      "successorEntry": "silent; preserve unbolt"
+    },
+    {
+      "id": "ch1:track:tracking-transfer",
+      "anchor": "anc.track.unbolt",
+      "cause": "existing armBundle / bundleFires / bundleSfx",
+      "predicate": "existing timing/hold/transfer",
+      "nativeSfx": "storyAwaken bundled with bloom",
+      "semantic": "no new reward cue for wait",
+      "audibleSemantic": "none added",
+      "successor": "ch1:raster:recover-quota",
+      "successorEntry": "at most one existing entry on actual new action; no already-satisfied intermediate entry"
+    },
+    {
+      "id": "ch1:raster:recover-quota",
+      "anchor": "early.raster.receipt",
+      "cause": "real post-commit required debris receipt in indices0,1,2; piece0 normally preearned",
+      "predicate": "[0,1,2].every(isDebrisCollected)",
+      "nativeSfx": "terminalKey once per actual collectible",
+      "semantic": "nonterminal objective-progress; terminal objective-complete; never both for same receipt",
+      "confirmedAction": true,
+      "audibleSemantic": "partial extra progress withheld; terminal objectiveComplete after native attack",
+      "successor": "ch1:raster:extract-fiber-quota if still outstanding; otherwise normal hold/next beat",
+      "successorEntry": "semantic once for actual next action; audible coalesced with final receipt"
+    },
+    {
+      "id": "ch1:raster:extract-fiber-quota",
+      "anchor": "early.raster.receipt",
+      "cause": "finalized local positive fiber command and relevant quota edge",
+      "predicate": "fiber>=6, stone>=4, three required debris receipts; existing minimum/hold preserved",
+      "nativeSfx": "mine",
+      "semantic": "nonterminal objective-progress; terminal objective-complete; never repeat at hold expiry",
+      "confirmedAction": true,
+      "audibleSemantic": "partial extra progress withheld; terminal objectiveComplete after native attack",
+      "successor": "existing ch1-depth objective after unchanged hold",
+      "successorEntry": "existing depth semantics, no acquired pod/earned quota replay"
+    }
+  ],
+  "tuningProposal": {
+    "EARLY_RECEIPT_ACK_MIN_MS": 120,
+    "EARLY_RECEIPT_ACK_MAX_MS": 240,
+    "relativeTo": "real post-commit receipt anchor, monotonic timestamp",
+    "status": "initial proposed mix bounds, not measured audition result",
+    "voiceGapAuthority": "voiceTypewriterGapMs; do not retime narrative/music; drop when no valid gap fits bound",
+    "progressNativeOnly": true,
+    "targetRetargetCue": null,
+    "newPitchOrRecipe": null
+  },
+  "pendingIntentProposal": {
+    "maximumPending": 1,
+    "identity": [
+      "existing runId",
+      "restore version",
+      "actual receipt/event ID",
+      "objective ID",
+      "publication lineage"
+    ],
+    "semanticEmission": "exactly once at authoritative edge, independent of audible rendering",
+    "normalSuccessor": "expected atomic successor from same receipt remains valid",
+    "cancelOn": [
+      "unrelated objective replacement",
+      "later actual action supersedes intent",
+      "beat exit",
+      "pause",
+      "hidden/focus loss",
+      "seed",
+      "Continue reconstruction",
+      "new run",
+      "quit",
+      "sandbox"
+    ],
+    "unavailableAudio": "record silent disposition; no unlock/focus backlog",
+    "afterDispatch": "existing short native/semantic envelope may finish; existing output/visibility policies govern, not a claim of WebAudio cancellation",
+    "outcomes": [
+      "played",
+      "coalesced-with-native",
+      "coalesced-with-completion",
+      "coalesced-with-cut/unbolt",
+      "canceled",
+      "expired",
+      "audio-unavailable"
+    ]
+  },
+  "proposedRuntimeBoundary": [
+    {
+      "path": "main/src/story/ux/objectiveCommandFeedback.ts",
+      "symbols": [
+        "COUNTED_ITEMS",
+        "acknowledgeObjectiveCommand"
+      ],
+      "condition": "Required if this treatment is accepted: early-specific phase relevance and threshold completion replace the current generic fixed/raster progress behavior.",
+      "action": "Reuse existing finalized local transaction; positive counted drops and local actor only; completion takes precedence over progress; do not change later objective mappings."
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "symbols": [
+        "activateGuidedStoryObjective",
+        "acknowledgeGuidedStoryCompletion",
+        "acknowledgeGuidedStoryProgress",
+        "clearGuidedStoryObjective",
+        "resetGuidedObjectiveFeedbackForTests"
+      ],
+      "proposedSymbols": [
+        "resetGuidedObjectiveFeedbackForRun"
+      ],
+      "condition": "Required for correlation/coalescing and true new-run reset; new production symbol is proposed, not present.",
+      "action": "Add optional presentation context without changing progression. Confirm real completion after restore. Clear feedback sets only on true new run; preserve Continue silence and next actual action audibility."
+    },
+    {
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "symbols": [
+        "StoryUxFeedbackCue",
+        "emitStoryUxFeedbackCue",
+        "subscribeStoryUxFeedback"
+      ],
+      "proposedSymbols": [
+        "cancelPendingStoryUxFeedback",
+        "EARLY_RECEIPT_ACK_MIN_MS",
+        "EARLY_RECEIPT_ACK_MAX_MS"
+      ],
+      "condition": "Required for the proposed early-only audible arbitration and cancellable bounded pending intent; symbols explicitly proposed.",
+      "action": "Deliver semantic listeners exactly once; correlate receipt with native SFX; coalesce redundant entry/progress; delay optional completion 120..240ms relative to receipt; revalidate before ordinary immediate playSfx; trace played/coalesced/canceled/expired."
+    },
+    {
+      "path": "main/src/story/debrisSalvage.ts",
+      "symbols": [
+        "collectDebris"
+      ],
+      "proposedSymbols": [
+        "subscribeDebrisCollectionReceipt"
+      ],
+      "condition": "Only if no equivalent after-all-loot receipt seam exists at integration; current inspected source has none. Proposed export may be kept private with an equivalent existing boundary.",
+      "action": "Emit one presentation-only receipt after original idempotent milestone+loot commit; seed/backfill never emit. Do not change original native terminalKey or loot."
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "symbols": [
+        "syncFoundationalStoryObjective",
+        "completeFoundationalObjective",
+        "onBeatEntered",
+        "storyDirectorTick"
+      ],
+      "condition": "Chapter-owned shared integration for the accepted early predicate/receipt packet.",
+      "action": "Reconcile post-commit receipt and successor atomically, shared movement transfer only, no timer-derived completion. Cancel stale early presentation on pause/exit. Preserve all bundle helpers and note concurrent flash repair."
+    },
+    {
+      "path": "main/src/story/ux/objectiveRestore.ts",
+      "symbols": [
+        "beginGuidedObjectiveRestore",
+        "readGuidedObjectiveRestore"
+      ],
+      "condition": "Only if existing restore version plus runtime runId cannot identify cancellation/new-run boundaries import-safely.",
+      "action": "Expose minimal import-safe restore/run identity; no audio graph import, save field, or new progression state."
+    },
+    {
+      "path": "main/src/story/storyState.ts",
+      "symbols": [
+        "beginStory",
+        "restartStory",
+        "beginGuidedObjectiveRestore call sites"
+      ],
+      "condition": "Only if existing run/restore publication does not notify the feedback boundary before reconstruction.",
+      "action": "Publish transient restore/new-run intent before state subscribers; do not mutate earned receipts or change Continue location."
+    },
+    {
+      "path": "main/src/story/ux/objectiveCommandFeedback.test.ts",
+      "symbols": [
+        "confirmed objective transaction feedback"
+      ],
+      "condition": "When affected implementation is integrated.",
+      "action": "Positive real local completion vs partial, irrelevant, preearned, duplicate, restored, superseded and optimistic/rolled-back actions."
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.test.ts",
+      "symbols": [
+        "guided story objective contract",
+        "objective feedback never claims unearned completion"
+      ],
+      "condition": "When feedback/reset implementation is integrated.",
+      "action": "True first completion after restore; same-ID new run; expected successor retention; unrelated replacement/pause cancellation."
+    },
+    {
+      "path": "main/src/story/ux/feedbackCues.test.ts",
+      "symbols": [
+        "proposed focused early-feedback arbitration tests"
+      ],
+      "condition": "Create only if the pending-intent mechanism is implemented; this file/suite is a proposal.",
+      "action": "Advance fake clock through receipt window, voice-gap, cancellation and supersession; prove semantic/audio separation and no stale callback effect."
+    }
+  ],
+  "protectedReadOnlyReferences": [
+    "main/src/story/storyScore.ts",
+    "main/src/audio/scoreEngine.ts",
+    "main/src/audio/bedEngine.ts",
+    "main/src/audio/generative/",
+    "main/src/audio/sfxEngine.ts",
+    "main/src/audio/sfx/coverageRecipes.ts",
+    "main/src/audio/voice/",
+    "main/src/audio/mix/",
+    "main/src/components/audio/AudioDirector.tsx",
+    "main/public/audio/"
+  ],
+  "exactExistingAnchorPreservation": {
+    "anc.track.unbolt": {
+      "source": "main/src/story/storyScore.ts::STORY_HIT_ANCHORS",
+      "kind": "bloom",
+      "quantize": "beat",
+      "capMs": 450,
+      "sfx": "storyAwaken",
+      "timingOwner": "main/src/story/storyDirector.ts::armBundle/bundleSfx/bundleFires/tickTrackUnlock",
+      "changeRequested": false
+    },
+    "anc.descent.impact": {
+      "changeRequested": false
+    },
+    "allOtherStoryHitAnchors": {
+      "changeRequested": false
+    }
+  },
+  "acceptance": [
+    {
+      "id": "early-score-real-first-completion",
+      "required": "In ordinary unpaused audio-ready natural and earned-Continue routes, first genuine debris0 and positive fiber completions each emit exactly one confirmed semantic completion, render one objectiveComplete, and leave native receipt sounds intact.",
+      "reject": "Generic inventory notification, mine charging tick, restore suppression that persists after genuine action."
+    },
+    {
+      "id": "early-score-one-receipt-one-meaning",
+      "required": "Every real receipt has stable identity; completion replaces progress on terminal edge; next-entry sound coalesced; target changes never retrigger entries.",
+      "reject": "Different SFX IDs colliding despite same-ID bus dedupe; later hold repeats completion."
+    },
+    {
+      "id": "early-score-restore",
+      "required": "Seed/backfill/earned Continue and already-satisfied predicates produce no acquisition audio; next actual action is audible; true replay can sound same IDs once again.",
+      "reject": "Reset implemented only through test helper; Continue replays completed receipts."
+    },
+    {
+      "id": "early-score-cancellation",
+      "required": "120..240ms optional completion onset relative to receipt; expected immediate successor retains it; unrelated replacement/later action/pause/hide/exit/reset cancels; unavailable/expired audio produces no backlog.",
+      "reject": "Already scheduled future WebAudio node described as canceled; stale timer posts sound or progression."
+    },
+    {
+      "id": "early-score-raster-economy",
+      "required": "Required receipts0..2; six fiber/four stone; optional3..5 ordinary native audio only; unchanged pods/economy; legitimate out-of-order resources honored.",
+      "reject": "Progress from unrelated fiber/stone while salvage objective is active; extra mandatory salvage or grants."
+    },
+    {
+      "id": "early-score-cut-unbolt",
+      "required": "One static blip only for real shared movement transfer; restore/resize silent; authored unbolt bundle unchanged and no optional feedback intrudes.",
+      "reject": "Resize counts as action; crossing or inventory waits for musical grid; second bloom."
+    },
+    {
+      "id": "early-score-observability",
+      "required": "Correlate run/restore/publication/event ID, positive delta, semantic edge, actual native and semantic dispatch/admission/outcome, audiovisual onset and target state.",
+      "reject": "Rolling three-second diagnostics or playSfx spies alone described as heard-event proof."
+    },
+    {
+      "id": "early-score-review",
+      "required": "Source and contract hashed continuous natural/manual desktop+portrait AV and focused audio excerpts, variant/reset negative cases, relevant existing checks, fresh score continuity and player experience reports.",
+      "reject": "Movie alone stands for manual guidance or diagnostic seed stands for natural entry; treatment called audition/approval."
+    }
+  ],
+  "requestedVerification": {
+    "mechanicalOwner": "root-designated verifier, respecting sole runtime_verifier2 GPU lease and current audio 40-stem work",
+    "existingTests": [
+      "main/src/story/ux/objectiveCommandFeedback.test.ts",
+      "main/src/story/ux/objectiveDirector.test.ts",
+      "main/src/story/ux/objectiveEventFeedback.test.ts",
+      "main/src/game/commandDispatchAdapter.test.ts",
+      "main/src/story/beats/ch1/ch1Contracts.test.ts",
+      "main/src/story/storyScore.stage3.test.ts"
+    ],
+    "checks": [
+      "final signed creative contract gate",
+      "story UX and classified ladder regression",
+      "focused after-commit debris/positive-yield and cancellation tests when implementation exists",
+      "decoded natural/manual continuous AV with exact lifecycle and audio-event traces",
+      "adjacent unbolt excerpt and protected source comparison"
+    ],
+    "newArrangementSoak": "Not requested while musical sources stay unchanged; route normal deterministic/OfflineAudioContext/soak/mix gates to audio owner only if that boundary changes.",
+    "independentReviews": [
+      "score-continuity-auditor",
+      "player-experience-auditor"
+    ],
+    "allEvidenceStatus": "requested; no new runtime evidence or approval claimed"
+  },
+  "peerNotes": {
+    "path": "score-preparatory-notes.jsonl",
+    "count": 2,
+    "routes": [
+      "score->chapter",
+      "score->cinematography"
+    ],
+    "canonical": false,
+    "recipientReplies": null,
+    "next": "After both independent treatments and actual same-hash candidate exist, author two grouped canonical first-wave notes and recipient-authored terminal replies before any signoff."
+  },
+  "materialConflictRouting": "Root and existing audio owner if protected audio/arrangement/voice or unbolt timing would need change; no unresolved new owner-only decision identified."
+}

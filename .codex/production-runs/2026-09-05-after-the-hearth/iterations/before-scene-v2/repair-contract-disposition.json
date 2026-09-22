@@ -1,0 +1,15 @@
+{
+  "schema": "paravoxia.repairContractDisposition.v1",
+  "runId": "{{RUN_ID}}",
+  "baseContractVersion": "draft-v0",
+  "activeContractVersion": "draft-v0",
+  "activeContractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
+  "defectRegisterSha256": "{{SHA256_OF_DEFECT_REGISTER}}",
+  "contractChangeRequired": false,
+  "route": "no-repair",
+  "directionRefs": [],
+  "triadResignRequired": false,
+  "triadResignComplete": false,
+  "decidedBy": "{{CREATIVE_PRODUCER_ID}}",
+  "decidedAt": "{{ISO_8601}}"
+}

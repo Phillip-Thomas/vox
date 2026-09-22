@@ -1,0 +1,48 @@
+{
+  "iteration": 2,
+  "candidateChanged": false,
+  "runtimeChanged": false,
+  "scope": "CG-D12 bounded authority corrections, no creative intent change",
+  "findings": [
+    {
+      "id": "D1",
+      "disposition": "repaired",
+      "action": "Correct obsolete arrival terminal/code claims."
+    },
+    {
+      "id": "D2",
+      "disposition": "repaired",
+      "action": "Refresh exact quoted runtime ceilings and dated resume pointer."
+    },
+    {
+      "id": "D3",
+      "disposition": "repaired",
+      "action": "Explicitly acknowledge inherited post-A4 grammar divergence without rewriting copy."
+    },
+    {
+      "id": "D4",
+      "disposition": "not-a-contract-contradiction",
+      "action": "128 samples and120units are independent maxima, not a promise all120unit paths fit. Cinema independently confirms this; add explicit delivery clarification, preserve signed caps."
+    },
+    {
+      "id": "D5",
+      "disposition": "clarified",
+      "action": "Future two-route requirement explicitly labels outer class unestablished and arena reopening condition."
+    },
+    {
+      "id": "D6",
+      "disposition": "clarified",
+      "action": "Name exact reference/instrument sockets and heights as geometry precondition, already deferred by candidate."
+    },
+    {
+      "id": "D7",
+      "disposition": "repaired",
+      "action": "Distinguish installed receipt from missing habitat/copy/audio acknowledgment."
+    },
+    {
+      "id": "D8",
+      "disposition": "repaired",
+      "action": "Add generated definitions/registry source references; explicitly retain old production identity until runtime."
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "task": "diagnose retained Chapter1 camera-crossing blocker",
+  "verdict": "fail",
+  "causeEstablished": true,
+  "certifies": "immutable-preview-build-only",
+  "notCertified": "current working-tree source (may be edited by root; not read as authority for this finding)",
+  "run": {
+    "url": "http://127.0.0.1:46451/?story=ch1-fixed&movie=1&journeyprobe=1&profile=HIGH",
+    "previewOwner": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/fixes-handback-20260909/preview-owner.json",
+    "previewOwnerBuild": "c96acb1da0ae117b5b0eb85ddf868f283e7c1960dc93915650e2de98880f6390",
+    "servedBundle": "/assets/index-B4uyILAX.js",
+    "servedBundleSha256": "f98e8114ebf833feb9e7bfff38f69b91235c3f4b50080730de10391e8f6b80b2",
+    "browser": "/snap/bin/chromium headed DISPLAY=:0, --use-gl=angle --use-angle=gl --ignore-gpu-blocklist --no-sandbox --mute-audio",
+    "playwrightModule": "/home/thomasphillip/Projects/vox/main/node_modules/playwright-core/index.mjs",
+    "lock": "flock -s /home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+    "viewport": "1280x720 @dpr1, non-touch, safe insets 0",
+    "observationSeconds": 88,
+    "samples": 18,
+    "stateInjection": "none (passive DOM + window.__storyBeat/__storyObjective/__autopilot + __paravoxiaJourneyProbe.snapshot reads only)",
+    "serverLaunched": false,
+    "sourceEdited": false
+  },
+  "observedBlockage": {
+    "beatForWholeRun": "ch1-fixed",
+    "objective": { "id": "ch1:fixed:cross-camera-cell", "kind": "travel", "markerLabel": "NEXT CAMERA", "health": "ready", "workOrder": ["WALK [A]/[D] TO THE NEXT CAMERA."] },
+    "prerequisitesMet": "ledger read 'DEBRIS 1/1 · FIBER 1/1' from t=12s onward",
+    "movement": "player along-axis x 11.72 -> 37.00 (~25 m travelled), then pinned at exactly x=37.00 from t=57s to t=88s",
+    "siteCamLabel": "REC SITE CAM 04-A for all 18 samples (camCell never written; label is siteCamLabel(feedRuntime.camCell))",
+    "cameraCuts": 0,
+    "fixedCutCaption": "never fired",
+    "railBackstop": "[autopilot] rail-stuck: ch1-fixed @55s - objective incomplete after 55s; not-planned",
+    "measuredHudReservations": [
+      { "id": "feed-work-order", "top": 26, "bottom": 46, "left": 18, "right": 698 },
+      { "id": "feed-camera-status", "top": 26, "bottom": 65.6, "left": 1155.4, "right": 1262 },
+      { "id": "feed-ledger", "top": 682, "bottom": 702, "left": 18, "right": 1262 },
+      { "id": "story-debug-trigger", "top": 66, "bottom": 110, "left": 1222, "right": 1266 }
+    ]
+  },
+  "rootCause": {
+    "summary": "resolveFixedScreenCoverageGeometry misclassifies the TOP-anchored 'story-debug-trigger' HUD rect as a BOTTOM reservation, collapsing the usable vertical band to bottom=52 < top=79.6. geometry.valid is then unsatisfiable every frame, so fixed-screen coverage is never valid, no camera cell transfer can ever be produced, and ch1-fixed can never advance.",
+    "arithmetic": {
+      "topStart": "safe.top + 18 = 18",
+      "topAfterWorkOrder": "max(18, 46+14) = 60",
+      "topAfterCameraStatus": "max(60, 65.6+14) = 79.6",
+      "bottomStart": "720 - safe.bottom - 18 = 702",
+      "bottomAfterLedger": "min(702, 682-14) = 668",
+      "bottomAfterDebugTrigger": "min(668, 66-14) = 52",
+      "result": "bottom 52 < top 79.6 -> empty band; validity test requires bodyTop-offsetY >= 79.6 AND bodyBottom-offsetY <= 52 while bodyBottom > bodyTop by construction -> unsatisfiable for ANY fov/rig/DPR/body extent",
+      "offsetY": "0 (offsetY is only non-zero when viewport.touch && w>h; this run is non-touch)"
+    },
+    "chain": [
+      "storyHudLayout.readEarlyFeedReservations emits a rect with id 'story-debug-trigger' (the ?story= debug disclosure button, measured at top=66 bottom=110, i.e. top-right under the camera-status block)",
+      "sideLens.resolveFixedScreenCoverageGeometry whitelists only feed-work-order / feed-camera-status / story-journal-trigger for the TOP branch; every other id-bearing rect falls to the ELSE branch and drives bottom = min(bottom, rect.top - 14)",
+      "geometry.valid === false on every frame",
+      "sampleFixedScreenCoverage yields coverage.valid === false, so cellId/anchorCenter stay frozen at 0, transfer stays null, transferSequence stays 0",
+      "computeRigFrame uses `coverage?.anchorCenter ?? 0`, so the fixed-screen camera stays bolted at cell 0 for the whole beat while the worker walks ~29 m to screen-right and off frame (matches the captured stills: static wide shot, no worker)",
+      "storyDirector ch1-fixed case guards the entire cell/transfer block behind `if (coverage?.valid)`, so camCell, d.fixedCells, fixedTransferAwaitingPaint and completeFoundationalObjective('ch1:fixed:cross-camera-cell') are all unreachable",
+      "advanceToBeat('ch1-track') requires fixedTransferAwaitingPaint > 0 -> permanently unreachable"
+    ],
+    "corroboratingAsymmetry": "The sibling solver solveEarlyFeedLayout (storyHudLayout.ts:750, bundle QUe()) explicitly classifies 'story-debug-trigger' AND 'hud-corner-actions' as UPPER reservations. Only the sideLens classifier omits them. Both classifiers are present verbatim in the immutable served bundle.",
+    "immutableBundleEvidence": "grep of /assets/index-B4uyILAX.js contains verbatim: for(const k of e.reservations)k.id===\"feed-work-order\"||k.id===\"feed-camera-status\"||k.id===\"story-journal-trigger\"||!k.id&&k.bottom<=i/2?u=Math.max(u,k.bottom+14):(k.id||k.top>=i/2)&&(f=Math.min(f,k.top-14)); and hb() emitting 'story-debug-trigger' / 'hud-corner-actions'"
+  },
+  "decisiveSourcePointer": {
+    "primary": "main/src/story/sideLens.ts:121-124 (resolveFixedScreenCoverageGeometry reservation classifier) - top whitelist omits 'story-debug-trigger' and 'hud-corner-actions', both of which are top-anchored and both of which are emitted by readEarlyFeedReservations",
+    "validityGate": "main/src/story/sideLens.ts:139-140 (valid: halfSpan > 0 && bodyTop-offsetY >= top && bodyBottom-offsetY <= bottom)",
+    "emitter": "main/src/story/ux/storyHudLayout.ts:734-745 (readEarlyFeedReservations; ids list line 736, debug-trigger selector line 738)",
+    "correctClassifierForComparison": "main/src/story/ux/storyHudLayout.ts:750 (solveEarlyFeedLayout upper set includes story-debug-trigger and hud-corner-actions)",
+    "consumerThatStalls": "main/src/story/storyDirector.ts:2366-2404 (ch1-fixed case; guard at 2369, advance condition at 2397-2403)",
+    "cameraSymptom": "main/src/story/sideLens.ts computeRigFrame - `const cell = coverage?.anchorCenter ?? ...` keeps the fixed-screen frame at cell 0 when coverage is invalid"
+  },
+  "notTheCause": {
+    "travelBandWall": "CH1_2D_TRAVEL_BAND.gather = 29 (storyDirector.ts:542) with lens origin x=8 walls the worker at x=37.00, which is what pins the autopilot from t=57s. This is downstream, not causal: the worker reached along=29, roughly 2x the ~14.5 half-cell at 1280x720, so a valid coverage geometry would have produced the crossing well before the wall.",
+    "railLoop": "main/src/story/beats/ch1/rail-ch1-fixed.ts:15 requests pos + travelAxis*30 every tick, so once the wall is hit there is no self-recovery; this makes the stall permanent but does not create it."
+  },
+  "objectiveVisualDefects": [
+    { "frame": "shots/t017s-ch1-fixed.png", "beat": "ch1-fixed", "defect": "traverse objective is standing ('WALK [A]/[D] TO THE NEXT CAMERA.') but no worker/subject is present anywhere in frame; only the centre reticle" },
+    { "frame": "shots/t063s-ch1-fixed.png", "beat": "ch1-fixed", "defect": "same static wide shot as t017s with the worker still absent - the fixed-screen frame has not moved or cut in 46s while the player position advanced 33.49 -> 37.00" },
+    { "frame": "shots/final.png", "beat": "ch1-fixed", "defect": "SITE CAM tag still reads 04-A at t=88s; no camera cut ever presented" }
+  ],
+  "artifacts": {
+    "dir": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/verifier",
+    "probeScript": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/verifier/ch1-fixed-blocker-probe.mjs",
+    "rawSamples": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/verifier/raw-samples.json",
+    "screenshots": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-boundary-repair-20260909/verifier/shots"
+  }
+}

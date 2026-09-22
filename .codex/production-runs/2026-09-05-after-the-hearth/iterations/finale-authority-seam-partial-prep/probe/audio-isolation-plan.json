@@ -1,0 +1,65 @@
+{
+  "schema": "paravoxia.verifier.audioIsolationPlan.v1",
+  "state": "PREPARED-NOT-EXECUTED",
+  "preparedAt": "2026-09-06T18:23:00Z",
+  "lane": "finale-window",
+  "feasibility": "FEASIBLE-IN-OWNED-HARNESS",
+  "observedFacilities": {
+    "server": "PipeWire (pactl info: Server String /run/user/1000/pulse/native, protocol 35, pipewire-pulse shim)",
+    "pactl": "/home/linuxbrew/.linuxbrew/bin/pactl",
+    "parecord": "/home/linuxbrew/.linuxbrew/bin/parecord",
+    "pw-record": "/usr/bin/pw-record",
+    "ffmpeg": "/home/linuxbrew/.linuxbrew/bin/ffmpeg",
+    "existingSinks": ["60\talsa_output.platform-NVDA2014_00.hdmi-stereo\tPipeWire\ts32le 2ch 48000Hz\tSUSPENDED"],
+    "existingNullSinks": "none",
+    "microphoneUse": "none planned; no source/input device is opened by any command below"
+  },
+  "isolationMechanism": {
+    "principle": "Create ONE probe-owned null sink, point ONLY the probe's own Chromium child at it via that child's environment, and record that sink's OWN monitor. The system default sink is never changed, no other client is moved, and the default monitor (which would be a mixed capture of every application) is never recorded.",
+    "steps": [
+      "1. Create the owned sink (records the module id for exact teardown).",
+      "2. Launch the probe's Chromium with PULSE_SINK=paravoxia_finale_window in its environment ONLY. libpulse routes that client's streams to the named sink; the shell default and every other client are untouched.",
+      "3. Verify, before recording, that the sink-inputs on paravoxia_finale_window are exactly the probe's own browser process tree (application.process.id in the probe child's descendants) and that no other client is attached. If any foreign stream is attached, ABORT and record UNPREPARED rather than capture a mixed stream.",
+      "4. Record only paravoxia_finale_window.monitor for a bounded duration.",
+      "5. Unload the module in a finally, and verify it is gone."
+    ],
+    "fallbackIfPulseSinkIgnored": "pactl move-sink-input <id> paravoxia_finale_window for ONLY the sink-input ids whose application.process.id is in the probe child's process tree. This moves the probe's own stream and nothing else; it is reversible by unloading the sink (streams fall back automatically).",
+    "shippedOutputTapConsidered": {
+      "exists": false,
+      "checked": ["window.__voxAudioDiag (audioCore.ts:368) returns describeGameAudioOutputRoutes() — a STRING describing the installed route; it exposes no node, no MediaStream and no context state.", "No shipped destination/MediaStreamAudioDestinationNode tap or recorder exists on any game global."],
+      "conclusion": "There is no shipped in-page tap that can be observed without adding a hook or patching a global. Both are forbidden here, so OS-level isolation is the only honest route to live output."
+    }
+  },
+  "muteAudioFinding": {
+    "fact": "main/tools/lib/previewServer.mjs CHROMIUM_ARGS includes '--mute-audio', and openParavoxia() offers no way to override args.",
+    "consequence": "Every existing capture in this run, including journey-common-1, ran MUTED at the browser output stage even though the page AudioContext could be 'running'. A live-output recording under the shipped openParavoxia path would record silence and that silence would mean nothing about the game.",
+    "resolution": "finale-window-probe.mjs --unmuted launches the SAME headed hardware route (chromePath(), headless:false, CHROMIUM_ARGS + --enable-gpu --use-angle=gl, assertHardwareGl) with only '--mute-audio' filtered out. No source file is edited; nothing headless and nothing SwiftShader is used."
+  },
+  "preparedCommands": {
+    "createSink": "pactl load-module module-null-sink sink_name=paravoxia_finale_window sink_properties=device.description=paravoxia_finale_window",
+    "recordCreatedModuleId": "pactl load-module ... > logs/finale-window-prep/pulse-module-id.txt",
+    "listenersBeforeRecord": "pactl list sink-inputs | grep -E 'Sink Input|application.process.id|Sink:'",
+    "launchChild": "PULSE_SINK=paravoxia_finale_window node verifier/probes/finale-window/finale-window-probe.mjs --unmuted --out finale-window/window-1 ...",
+    "record": "parecord --device=paravoxia_finale_window.monitor --file-format=wav --rate=48000 --channels=2 verifier/captures/finale-window/window-1/output.wav",
+    "boundRecording": "timeout 60 parecord --device=paravoxia_finale_window.monitor --file-format=wav --rate=48000 --channels=2 <out>/output.wav",
+    "teardown": "pactl unload-module \"$(cat logs/finale-window-prep/pulse-module-id.txt)\"",
+    "verifyTeardown": "pactl list short modules | grep -c paravoxia_finale_window   # must print 0",
+    "verifyNoDefaultChange": "pactl info | grep 'Default Sink'  # compared before/after; must be unchanged"
+  },
+  "refusals": [
+    "No default-monitor recording (that is a mixed system capture and is never evidence of this game's output).",
+    "No microphone or any source device is opened.",
+    "No change of the system default sink, no move of any stream that is not the probe's own child.",
+    "No offline score render substituted for live output.",
+    "No AudioContext construction, resume, patch or global monkey-patch in the page."
+  ],
+  "notExecutedHere": "No sink was created, no module loaded, no recorder started, no browser launched. Only command syntax was validated (see logs/finale-window-prep/audio-syntax-check.log).",
+  "metadataToRecordWithAnyFutureCapture": [
+    "pactl info (before and after), default sink name unchanged",
+    "loaded module id and its unload receipt",
+    "the exact sink-input ids attached to the owned sink and their application.process.id",
+    "recorder argv, start/end wall clock, byte size, sample rate, channels",
+    "the browser launch argv actually used (proving --mute-audio absent)",
+    "the fact that a waveform is an OUTPUT recording, not an audibility or taste judgement"
+  ]
+}

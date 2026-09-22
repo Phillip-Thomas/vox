@@ -1,0 +1,30 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "failureSha256": "4814649bd9d5a1468affbfdb41f76e25501d470b57ecb879eec0c5fab542e499",
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": "b00a44117c71ed1c23a0983e8a7a39530f5da20b1f4a037e4cf1b5241adc365d",
+      "after": "65fd4f66511ea94458f2f5d83421920d16af1802b693a16a1b810c40761a39d7"
+    }
+  ],
+  "ownerAuthorization": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continue-input-repair-20260909/owner-authorization-driver.json",
+    "sha256": "efccf73815e94e498760c1deee6585bd3adeec8395c7dfb6164643d4f50e2f5e"
+  },
+  "diagnosis": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continue-input-repair-20260909/diagnosis-driver.json",
+    "sha256": "419070957deac1cf1628c09aa9192b5c3623c1dff8e5b40b0e5f28e559e9d8e3"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run chapter:loop:test",
+    "actualCommand": "npm --prefix main run chapter:loop:test",
+    "log": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continue-input-repair-20260909/tests-driver.log",
+      "sha256": "4c2ad20d45374cc079cbd5da27d7edb5af9d79d4d566dea3d6f381dc534cb25a"
+    },
+    "filesSha256": "e4c19cc10c6d9be908fac4b6ccdb0d5e88ec55e9115b463bf70eb0c45b9aa064"
+  }
+}

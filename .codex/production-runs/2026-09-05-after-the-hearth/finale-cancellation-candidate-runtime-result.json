@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 253814,
+  "stop_reason": "end_turn",
+  "session_id": "1fc48f6d-f600-4577-8b9f-d2261790174b",
+  "total_cost_usd": 1.2341665,
+  "usage": {
+    "input_tokens": 54,
+    "cache_creation_input_tokens": 41313,
+    "cache_read_input_tokens": 763511,
+    "output_tokens": 17469,
+    "output_tokens_details": {
+      "thinking_tokens": 3719
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 41313,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1860,
+        "cache_read_input_tokens": 46787,
+        "cache_creation_input_tokens": 832,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 832
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2206,
+      "outputTokens": 16,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002286,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 54,
+      "outputTokens": 17469,
+      "cacheReadInputTokens": 763511,
+      "cacheCreationInputTokens": 41313,
+      "webSearchRequests": 0,
+      "costUSD": 1.2318805,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 3719,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 31,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Final handoff pins revalidated. Reporting.\n\n**VERDICT: FAIL \u2014 requested cancellation variant NOT measured. Repin PASS; capture infrastructure PASS; seam instrumentation did not attach to the current bundle, so no pause/cancellation evidence exists.**\n\n## Private repin check (first, as required) \u2014 PASS\n\n| Pin | Expected | Actual | Result |\n|---|---|---|---|\n| source manifest | `2de3fa2a\u2026bb9f63` | `2de3fa2a\u2026bb9f63` | PASS |\n| source files / drift | 103 | 103, **0 drift** | PASS |\n| preview index | `74025800\u20264d4c82` | same | PASS |\n| bundle `/assets/index-Ddqg7x9Y.js` | `4b41a7d5\u20263c83e9` | same | PASS |\n| control activeRole/action | `finale-authority-seam-runtime` / `continue` | same | PASS |\n\nSource stayed frozen for the whole measurement; all four pins **revalidated again at final handoff** (last two commands) and root preview survived.\n\n## Measurements (1 bounded attempt, GB10 headed)\n\n| Item | Value |\n|---|---|\n| Outcome | `CAPTURED-NO-VERDICT`, exit 0 |\n| headed / adapter | `true` / `ANGLE (NVIDIA GB10/PCIe, OpenGL 4.5.0)` \u2014 real hardware, not swiftshader |\n| Window | sealed `window-complete`, edge @63783.6ms, 854 atomic samples, 4273 frames, **0 sample errors** |\n| WAV (decoded) | **3293184 frames @ 44100 Hz = 74.67537414965986 s**, 2ch \u2014 matches producer's 74.675 s, *not* the miscomputed 68.608 s |\n| Wall/PCM alignment | recorder wall interval and PCM duration reported **separately**; wall coverage complete \u2260 sample-aligned coverage. Not conflated. |\n| Cleanup | browser session stopped, `cleanupCompleted: true`, **0 null-sinks remaining**, root preview untouched (`stopsRootPreview: false`) |\n\n## Why the variant failed (concrete, from trace)\n\n`seam attached: 0/10 resolved`. Every breakpoint in `seamLogpoints.mjs` is pinned by line/column to the **previous bundle** \u2014 resolved IDs read `2:7839:190104:index-C1X65dZp\\.js`, but the current pinned bundle is `index-Ddqg7x9Y.js`. With zero logpoints resolved, no `begin` event fired, so the token-creation observation never occurred and my pause poll never armed: `pause: null`, `gesture: null` in `seam-events.json`.\n\n**Consequence: no token was observed, the HUD Pause button was never clicked, and nothing about cancellation was tested.** I am not reporting any pause, cancellation, token-invalidation, or Resume result.\n\n## Private instrumentation fixes made (authorized, private folder only)\n\n1. Replaced the Escape-only `pause-cancel` scenario with `pause-button-cancel`: trusted `page.mouse.click` on the real HUD button (`aria-label=\"Pause and open star map\"` \u2225 `\"Pause\"`), fired at token age ~1.2 s (<5 s), read-only state reads only, no game setters. It explicitly sets `inconclusive` unless real paused state (`paused`/star map/Resume) is observed \u2014 button activation alone never counts as paused.\n2. Repointed five stale `EXPECTED` pins (manifest, previewUrl 37395\u219234825, index, bundle path, bundle sha, fileCount 100\u2192103). This was a real fault: attempt 0 aborted with `manifest hash is not the pinned one`.\n\nBoth preserved; failure capture from attempt 0 preserved.\n\n## Explicit remaining gaps (all untested \u2014 none claimed passed)\n\n- Actual interruption/cancellation: pause click, cancel reason, token invalidation, no reactivation after real Resume.\n- Silent completed-save lifecycle: quit-to-menu \u2192 landing Continue, completed-save token absence, no completion-cue/anchor replay, no delayed unlock cue, controls/objective lifecycle.\n- All variants (visibility-loss, mobile, reduced motion, low tier). No mute/context/world/actor variant was exercised.\n- **Blocker for any retry:** `seamLogpoints.mjs` line/column pins must be re-derived against `index-Ddqg7x9Y.js` first; the recorder is otherwise sound.\n\nI did not touch game source, contracts, the full suite, publishing, or producer transport/control files, and ran no static suite for the private change.\n\n## Artifacts\n\n- Capture (attempt 1): `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/manual-credit-finale/pause-cancel-20260907T001707Z/`\n- Preserved failure (attempt 0): `\u2026/verifier/captures/manual-credit-finale/pause-cancel-20260907T001610Z/`\n- Probes: `\u2026/verifier/probes/manual-credit-finale/finale-cancellation-candidate/` (`run-pause-cancel.sh`, `finale-window-probe.mjs`)\n- Logs: `\u2026/verifier/logs/finale-cancellation-candidate/pause-cancel-0.log`, `pause-cancel-1.log`",
+  "ttft_ms": 2668,
+  "type": "result",
+  "duration_ms": 333751,
+  "uuid": "d267c24f-8528-4698-8196-7a84883b8fc2",
+  "ttft_stream_ms": 1208,
+  "time_to_request_ms": 31,
+  "first_content_frame_ms": 1208,
+  "queued_turn_count": 0
+}

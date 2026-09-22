@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 514895,
+  "stop_reason": "end_turn",
+  "session_id": "dd1f4501-34dd-4d21-98ad-b62dcf0f424c",
+  "total_cost_usd": 3.620587,
+  "usage": {
+    "input_tokens": 98,
+    "cache_creation_input_tokens": 100193,
+    "cache_read_input_tokens": 3108098,
+    "output_tokens": 42461,
+    "output_tokens_details": {
+      "thinking_tokens": 7103
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 100193,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1312,
+        "cache_read_input_tokens": 102704,
+        "cache_creation_input_tokens": 1556,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1556
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2528,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002593,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 98,
+      "outputTokens": 42461,
+      "cacheReadInputTokens": 3108098,
+      "cacheCreationInputTokens": 100193,
+      "webSearchRequests": 0,
+      "costUSD": 3.617994,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 7103,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 55,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Finished at 20:17:34Z, inside the 20:19:37Z deadline.\n\n**VERDICT**: pass \u2014 actual ordinary-input COMMON corner discriminator delivered, with a falsifiable causal result.\n\n## Measurements\n\n| Stage | Result |\n|---|---|\n| SHORT held-reference prerequisite | PROVEN, ordinary W/S/E + real F gates, ~53s |\n| Grounded E, no H pass-through | REACHED via S(-26,12)\u2192(-26,22)\u2192(-42,22)\u2192E(-42,12); foot y **50.989** signed, supported=true, bodyCentre/up recorded separately |\n| Common stage pre-arm | beat `ch13-common`, stage `holding-h`, `anc.cg.witness-held`, worker at H from actual `{x,y,z}` object |\n| LP-A / LP-B arming | exact scriptId+7839:193729 / 7839:219885, no relocation, `Debugger.paused` observed = **0** at arm and after walk |\n| Vertex 1 (-42,14) | crossed, s=**0.089**, supported, 1 pulse |\n| Vertex 2 (-42,16) | crossed, s=**0.075**, supported, 1 pulse |\n| Vertex 3 (-44,16) | crossed, s=**0.106**, supported, 2 pulses |\n| Vertex 4 (-44,18) | crossed, s=**0.060**, supported, 1 pulse |\n| Records | 146 callee / 146 caller, paired 1:1, **0 dropped** |\n\n## Causal result\n\nThe callee was entered 146 times, each paired with the caller guard \u2014 so the walked/support and reference guards **actually passed**. 138 calls carried positive actual displacement, yet `terraUnits` stayed **0** through all four vertices. Replaying the **real** captured callee (instrumentation removed, `Debugger.disable` issued, frozen argument copy) returned `gainOnReplay 0` on all 138. Numeric gap: **0 of 18** route units. The `chainReturns` zero-gain label is kept qualified as accounting; the causal claim rests only on the real replay. Body-body clearance is **absent** from this credit chain \u2014 measured separately, never fabricated as true. Caveat: instrumentation deopt changes frame distribution; the deltas remain actual.\n\n## Course corrections consumed\n\nRoot issued two preflight directions; both were applied on CPU before any browser: urlRegex over-escaping (replaced with exact URL binding + a match/reject test), provider shape (`snapshot.diagnostic.common/.worker`), worker position as an `{x,y,z}` object rather than an array with a guessed `atH`, duplicate callee breakpoint merged into one condition, scriptId strictness (null now fails), forward aim point at vertex+incoming\u00b70.15, required vertex gates that stop dependent walking, and teardown-before-replay. I also removed a `page.reload()` I had briefly introduced, which would have destroyed the earned state, and killed a duplicate launcher that risked a second browser.\n\n## Artifacts\n\n- Probe: `verifier/probes/common-physical-discriminator/common-physical-discriminator-probe.mjs`\n- Captures: `verifier/captures/common-physical-discriminator/run2/` (raw + chained records, `credit-replay.json`, context frames, source snapshot, trace) \u2014 failed `run1` preserved\n- Logs: `verifier/logs/common-physical-discriminator/`\n- Reports: `common-physical-discriminator-report.json` / `.md`; ready artifact `common-physical-discriminator-ready.json`\n\nOne browser, exclusive fd9 lock held throughout, headed on ANGLE/NVIDIA (no headless), clean `probe-finally` teardown with the root preview untouched. No game source, contract, or build was modified. This is a bounded diagnosis, not acceptance.",
+  "ttft_ms": 1384,
+  "type": "result",
+  "duration_ms": 1093364,
+  "uuid": "d27aed7a-8bc2-48f2-8846-25dd1cb278c7",
+  "ttft_stream_ms": 812,
+  "time_to_request_ms": 29,
+  "first_content_frame_ms": 812,
+  "queued_turn_count": 0
+}

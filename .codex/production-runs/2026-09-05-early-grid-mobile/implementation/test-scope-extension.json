@@ -1,0 +1,18 @@
+{
+  "authority": "Root authorized two test-only paths on 2026-09-05. Originals preserved in before/.",
+  "contractSha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a",
+  "expectationMappings": {
+    "storyDirector.test.ts": [
+      "quota-complete clears objective/order within two frames before unchanged hold",
+      "canonical six work orders exclude echoes but preserve source record",
+      "fixed first objective is actual debris0, then positive harvest, then movement"
+    ],
+    "surveyBrackets.test.ts": [
+      "one phase-matched target; salvage before fiber",
+      "fixed debris0 is actionable",
+      "actual target center never clamped",
+      "ordinary picker parity includes safe above-ground on-row probes; ground probes remain off-row",
+      "nonfinite fallback preserved and fixed in runtime"
+    ]
+  }
+}

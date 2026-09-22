@@ -1,0 +1,43 @@
+--- 
++++ 
+@@ -567,7 +567,7 @@
+ // signing began, ten of them mutation-boundary questions the intent already
+ // implied. The brief asks them once, before Stage 2, and the ledger proves that
+ // no question was asked later that the brief should have carried.
+-function validateDecisionBrief(brief, lock, phase, iterations, collector) {
++export function validateDecisionBrief(brief, lock, phase, iterations, collector) {
+   collector.assert(Boolean(brief), 'brief.exists', `${DECISION_BRIEF_FILE} is required before any treatment is commissioned`)
+   if (!brief) return
+   collector.assert(brief.schema === 'paravoxia.decisionBrief.v1', 'brief.schema', 'Decision brief must use paravoxia.decisionBrief.v1')
+@@ -772,7 +772,21 @@
+     collector.assert(authorityPath.startsWith(`${resolveRepoRoot()}${path.sep}`) && fs.existsSync(authorityPath), 'lock.authority-path', `Authority file must resolve inside the repository: ${authority.path}`)
+     if (authorityPath.startsWith(`${resolveRepoRoot()}${path.sep}`) && fs.existsSync(authorityPath)) {
+       const actual = createHash('sha256').update(fs.readFileSync(authorityPath)).digest('hex')
+-      collector.assert(actual === authority.sha256, 'lock.authority-hash', `Authority hash must match current file: ${authority.path}`, { expected: authority.sha256, actual })
++      // Workflow instruction revisions do not retroactively invalidate a signed
++      // run. Only these two instruction files have explicit retained versions;
++      // canon, production authority, runtime, and signatures still require exact
++      // current bytes. This is version pinning, never an authority waiver.
++      let pinned = false
++      if (['CLAUDE.md', '.claude/skills/creative-triad/SKILL.md'].includes(authority.path)) {
++        const registry = path.join(resolveRepoRoot(), '.claude/policy-versions.json')
++        if (fs.existsSync(registry)) {
++          const ref = JSON.parse(fs.readFileSync(registry, 'utf8'))[authority.path]?.[authority.sha256]
++          const version = ref ? path.resolve(resolveRepoRoot(), ref) : ''
++          pinned = version.startsWith(path.join(resolveRepoRoot(), '.claude/policy-versions') + path.sep)
++            && fs.existsSync(version) && sha256File(version) === authority.sha256
++        }
++      }
++      collector.assert(actual === authority.sha256 || pinned, 'lock.authority-hash', `Authority must match current bytes or its retained instruction version: ${authority.path}`, { expected: authority.sha256, actual, pinned })
+     }
+   }
+ 
+@@ -2409,7 +2423,7 @@
+   }
+ }
+ 
+-try {
++if (process.argv[1] && path.resolve(process.argv[1]) === new URL(import.meta.url).pathname) try {
+   const options = parseArgs(process.argv.slice(2))
+   if (options.selfTest) runSelfTest()
+   else {

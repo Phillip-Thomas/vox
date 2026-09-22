@@ -1,0 +1,52 @@
+{
+  "schema": "paravoxia.productionLock.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "mode": "scene",
+  "status": "locked",
+  "sourceRevision": "working-tree:846b658bb386a2defd80693513705fc74010c4c35cc4daf7aa241d10f39232e9",
+  "runProfileRef": "paravoxia-creative-scene@v1",
+  "releaseCandidate": false,
+  "authority": [
+    {
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "section": "Owner gate lift; bounded existing-story repair; current owner early-grid/mobile instruction",
+      "sha256": "88f85610c81eb3deae605ea01c0d2f53994487048e0d6029fb3240b1d51909de"
+    }
+  ],
+  "mutationBoundary": "planning-only",
+  "allowedPaths": [
+    ".codex/production-runs/2026-09-05-early-grid-mobile/"
+  ],
+  "protectedPaths": [
+    "main/src/audio/",
+    "main/src/components/audio/",
+    "main/public/audio/"
+  ],
+  "lockedBeats": [
+    "ch1-fixed",
+    "ch1-track",
+    "ch1-raster",
+    "ch1-depth"
+  ],
+  "currentRestrictions": {
+    "storyCeiling": "ch4-arrival",
+    "postArrivalStoryMutationAllowed": false,
+    "copyChangeDecisionRefs": [
+      "owner-decisions.md#current-owner-instruction"
+    ],
+    "protectedAudioPaths": [
+      "main/src/audio/",
+      "main/src/components/audio/",
+      "main/public/audio/"
+    ],
+    "openGateRefs": [
+      "current-shipped-visual-baseline",
+      "three-peer-director-contract",
+      "independent-player-audit",
+      "objective-lifecycle-and-variant-evidence"
+    ]
+  },
+  "canonicalPreviewUrl": null,
+  "publishAllowed": false,
+  "frozenAt": "2026-09-05T17:27:44.544208+00:00"
+}

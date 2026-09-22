@@ -1,0 +1,157 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "continue",
+  "standingAuthorization": "Fix blockers and finish the existing chapter autonomously; eliminate repeated full movie work.",
+  "contributor": "root mechanical repair",
+  "scope": "Aim at a higher actual trunk ring above foreground stones while retaining ordinary picker authority. Preserve the passive observer and same-tab run identity across native station page navigation. Allow the return walk its two existing leg budgets, retaining collision and interaction gates. Skip only an observation interrupted by document navigation; application errors and closed browsers still fail. No grants, teleports, changed acceptance predicates, new creative pass, provider change, publishing or budget reset.",
+  "status": "focused-hardware-pass-resume-existing-final-verification",
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/stable-candidate-handoff-20260909/previous-state.json",
+    "sha256": "0af5f39ace56a0cb368c805648d7ce0c5a477454987b7a08c5ac3b4bf50bc055"
+  },
+  "priorFailure": {
+    "stage": "verify-final",
+    "message": "Probe continuity failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T04:49:47.697Z"
+  },
+  "files": [
+    {
+      "path": "main/src/App.tsx",
+      "before": "b937fc35321ae2d0db0f0b7dfb9fef2eec9cbe1be27d4c818a3c86ad5ec8eeca",
+      "after": "d37ad50d5b322e96f5fd9347b9edb945114c365290d2b5c5128ab4292488f001"
+    },
+    {
+      "path": "main/src/components/spaceStation/StationScreeningDriver.tsx",
+      "before": "0720e6fc0d25498e41026ef6b5a911f6c64b892cb4b88604283309fbe61365c5",
+      "after": "f64ec7f087e9c5b6a32e337d9b6657445614a6121e8116adcdaf551379c593ff"
+    },
+    {
+      "path": "main/src/game/spaceStation/spaceStationNavigation.test.ts",
+      "before": "7e7aa39ea96114291fe03fe46b242638e1c9520189b5265af03a04961e907d02",
+      "after": "4b5ffb8bd09dec356a20944cc6fd17b6e4f07efb4cba8d44370890e6b256c37f"
+    },
+    {
+      "path": "main/src/game/spaceStation/stationScreening.ts",
+      "before": "3f90462049802947e32ccbd4044895cf58e3b454110bd9a0b6e46ec4790f8347",
+      "after": "4165e679c0a27f7393aff0ab36641d2b6ec21ceb4bc4aa612283445ce9775293"
+    },
+    {
+      "path": "main/src/story/autopilot/constructionTreePlan.test.ts",
+      "before": "77e48c599f7b30c7679ee46a244eb739b38182000ed46f125b7b396cc7e8787e",
+      "after": "a4e7d59b8ed66464716e67d3554681526819579803029bc71fbf90761e4efb92"
+    },
+    {
+      "path": "main/src/story/autopilot/constructionTreePlan.ts",
+      "before": "18590e2888516485824567cc9eb9df8623f352cd8bc1127a034c664afe9c2fb9",
+      "after": "b2214a03be53169892a61de4245f836e62ab1d52938e336d2d1385d677550670"
+    },
+    {
+      "path": "main/src/story/storyMovieResume.test.ts",
+      "before": "8e9d054df04f8d3eed780a46ce782f9b53a61d83dc43012577f6ca5756205ea8",
+      "after": "40b6d50296ce0ed736e2f60bee7910502ab89ac30259782798f48470e2e1ddbf"
+    },
+    {
+      "path": "main/src/story/storyState.ts",
+      "before": "702bf903e89a3516e6d55b8f96d328e48d2f2c80e314eb2205d9f12b382214f0",
+      "after": "ccf13ac35d42c02a5c62bb1cde539cbfc4711bcb63b60c9e8d83ed7be41d241f"
+    },
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.mjs",
+      "before": "641bace8687416c0f1d893884efa134577439eb269c14361e4cd808e0567e132",
+      "after": "d94b5b79f607a2416e0d197889bbcb7376674882b68085296b0e3d38339e1eb8"
+    },
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.test.mjs",
+      "before": "deb94fa187be3513ea26cc1b1d6baf7dfbd056cb8aef07cb9df87abec67920a4",
+      "after": "57f5285822cfd10c44e29e2eff954db69abcf1e2cef90dd36777d346005eab1d"
+    }
+  ],
+  "evidence": {
+    "treeRegression": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/tree-aim-repair-20260909/tests-regression-before.log",
+      "sha256": "6d27bf7d201578371be43a3505ea4f3683928c8b847720ddb543fe5df5adce96"
+    },
+    "treeChecks": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/tree-aim-repair-20260909/tests-final.log",
+      "sha256": "cce4fa1cad05d8f8dc758f62b2a880993e47c5227001d7501f2c57985c6a4a03"
+    },
+    "treeRuntime": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/tree-aim-repair-20260909/focused-proof.json",
+      "sha256": "456a1a07333c4bc63dc74d64b2900031a8b8b79ceddfca7d5e642c3acaadd41d"
+    },
+    "sameTabRegression": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-observation-repair-20260909/tests-before.log",
+      "sha256": "1b25bb63500bc2e566438232704c14d49c495c4e3c159c5f83c0f8e9ec15a587"
+    },
+    "sameTabChecks": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-observation-repair-20260909/tests-after.log",
+      "sha256": "ffad22fcb91e183a413243240f80986e4b02c73170c82247f228064801b32c80"
+    },
+    "departureRegression": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-departure-repair-20260909/tests-before.log",
+      "sha256": "746ae827874a6bf133a5303db2395eabaa8253b9d8166e476217e1dcc7c558e2"
+    },
+    "departureChecks": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-departure-repair-20260909/tests-after.log",
+      "sha256": "86c7022717bb194f1e21b5776a3e651410ae15da75e5cbc97252c34c7f7bccfa"
+    },
+    "navigationFailure": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-observation-repair-20260909/navigation-probe/result.json",
+      "sha256": "95af6d4a782cbfa788f53226a456f1420b4b40766b8453169d1c05cf988eddaa"
+    },
+    "navigationPass": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-departure-repair-20260909/focused-proof.json",
+      "sha256": "7d04ab7c6e89bd6eee406fe0e40afce15aed11b1e3c9000a95b36fdeb9100388"
+    },
+    "navigationProbeError": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-departure-repair-20260909/navigation-probe/result.json",
+      "sha256": "0c63ec75a23c963f3227f3df48c08a2b9aea7853cafd7a81e1f50c20eeca180b"
+    },
+    "navigationRaw": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-departure-repair-20260909/navigation-probe-complete/result.json",
+      "sha256": "6f4f01a712bac8cc63ce31560ccf7534b9ebc41b15f70dfd9b3f5ee8a4b079d6"
+    },
+    "localChapter14Completion": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/ch13-forward-2/result.json",
+      "sha256": "ea5400bbe947d31df572d2a6b8d9e263d45533e1d8f0fe68d3666fa6efdf5ff5"
+    },
+    "transportChecks": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/stable-candidate-handoff-20260909/transport-tests.log",
+      "sha256": "62ce430b967d6be0d4eba8bcb4c085553253294c4a4e3fb5118658890b632236"
+    },
+    "typescript": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-departure-repair-20260909/typescript.log",
+      "sha256": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af"
+    },
+    "build": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-departure-repair-20260909/build.log",
+      "sha256": "630a6291d3e126f42f7b44d12151846595c15bb724df715f29439c882036a58d"
+    },
+    "source": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-departure-repair-20260909/source.json",
+      "sha256": "bca98b8cb10c4a49ab165117269b4160f3cb89c25a4ec38c8c8d3e7e654a48dc"
+    },
+    "preview": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-departure-repair-20260909/preview-owner.json",
+      "sha256": "a2b116ec14d98a1eff7360e76563b92ea87c9cf6b841391052eb495bc07ae120"
+    }
+  },
+  "retainedUsage": {
+    "roleLaunches": 16,
+    "modelTurns": 423,
+    "inputTokens": 846529,
+    "cacheReadTokens": 23679131,
+    "outputTokens": 174567
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "remaining": "Existing full fresh continuity, recovery/manual/Continue/AV checks, independent final reviews and release certification. Local diagnostic replays do not certify these gates.",
+  "at": "2026-09-09T16:41:42.576Z"
+}

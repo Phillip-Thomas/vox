@@ -1,0 +1,77 @@
+{
+  "mode": "adaptive",
+  "targets": {
+    "roleLaunches": {
+      "used": 10,
+      "target": 14,
+      "remaining": 4,
+      "exceeded": false
+    },
+    "modelTurns": {
+      "used": 287,
+      "target": 400,
+      "remaining": 113,
+      "exceeded": false
+    },
+    "inputTokens": {
+      "used": 527044,
+      "target": 1000000,
+      "remaining": 472956,
+      "exceeded": false
+    },
+    "cacheReadTokens": {
+      "used": 19526784,
+      "target": 20000000,
+      "remaining": 473216,
+      "exceeded": false
+    },
+    "outputTokens": {
+      "used": 87911,
+      "target": 250000,
+      "remaining": 162089,
+      "exceeded": false
+    },
+    "roleTurns": {
+      "used": 46,
+      "target": 60,
+      "remaining": 14,
+      "exceeded": false
+    },
+    "roleMs": {
+      "used": 619036,
+      "target": 2700000,
+      "remaining": 2080964,
+      "exceeded": false
+    },
+    "activeMs": {
+      "used": 5237003,
+      "target": 28800000,
+      "remaining": 23562997,
+      "exceeded": false
+    },
+    "endToEndMs": {
+      "used": 6904892,
+      "target": 28800000,
+      "remaining": 21895108,
+      "exceeded": false
+    }
+  },
+  "nearing": [
+    "cacheReadTokens"
+  ],
+  "action": "finish-existing-work",
+  "instruction": "Save progress.md with changed paths, exact outstanding defects, evidence and the next action. Stop optional exploration and polish. Reuse passing checks; finish the current implementation and required proof. Scheduling overruns do not terminate generation.",
+  "accountingGaps": [
+    {
+      "role": "7-build",
+      "transport": {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/transport.json",
+        "sha256": "3014b1a0c54dcaa3ec3c2e0495722df98e9274f5fd1c215d87dbc67f9d130769"
+      },
+      "session": "01a082c7-393c-7fe3-80f3-802a6754d95c",
+      "retainedWorkItems": 60,
+      "tokens": null,
+      "explanation": "Previous scheduling hard stop prevented terminal usage reporting. Reported totals exclude this unknown spend; this role is not replayed as a free call."
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import { hasMilestone } from '../game/systems/progressionSystem.ts';
 import { STORY_MILESTONES, type StoryBeat } from './storyState.ts';
 import {
   clearStoryScoreMoodOverride,
+  CH10_VARIANT_BEAT,
   getChapter7BoardingScoreMood,
   getChapter7ReconstructionScoreMood,
   getChapter10ScoreMood,
@@ -140,19 +141,6 @@ const CH10_VARIANT_INTENSITY: Readonly<Partial<Record<Chapter10ScoreVariant, num
   ));
 
 /** The beat each ch10 variant belongs to; a variant may not cross a beat. */
-const CH10_VARIANT_BEAT: Readonly<Record<Chapter10ScoreVariant, StoryBeat>> = Object.freeze({
-  'cold-settled': 'ch10-cold',
-  'fault-ledger': 'ch10-cold',
-  refused: 'ch10-cold',
-  'crossing-back': 'ch10-ask',
-  'relay-ask': 'ch10-ask',
-  'relay-answer': 'ch10-ask',
-  'bearing-claimed': 'ch10-ask',
-  'transit-hold': 'ch10-transit',
-  'seam-ebb': 'ch10-transit',
-  'station-resolved': 'ch10-transit'
-});
-
 /**
  * The chapter's durable score facts. Exactly the milestones the story lane
  * already persists — the score keeps NO progression of its own, which is what

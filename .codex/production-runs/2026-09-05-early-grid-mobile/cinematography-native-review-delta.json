@@ -1,0 +1,166 @@
+{
+  "schema": "paravoxia.cinematographyNativeReviewDelta.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "authoredBy": "cinematography",
+  "authoredAt": "2026-09-05T21:00:30.419505+00:00",
+  "reviewedContractVersion": "draft-v1",
+  "reviewedContractSha256": "2ef9a016f8c803a1fadbf456d75b7fe1e6a9ae79f072854024d29704ee346410",
+  "status": "boundary-amendment-required-before-signature",
+  "preserveFirstBlades": true,
+  "runtimeEdited": false,
+  "canonicalSignature": null,
+  "nativeFieldOperations": [
+    {
+      "operation": "appendUnique",
+      "path": "production.allowedPaths",
+      "value": "main/src/story/feed/SurveyBracketOverlay.tsx"
+    },
+    {
+      "operation": "appendUnique",
+      "path": "production.allowedPaths",
+      "value": "main/src/components/CameraControls.tsx"
+    }
+  ],
+  "successorLockMirrorOperations": [
+    {
+      "operation": "appendUnique",
+      "path": "allowedPaths",
+      "value": "main/src/story/feed/SurveyBracketOverlay.tsx"
+    },
+    {
+      "operation": "appendUnique",
+      "path": "allowedPaths",
+      "value": "main/src/components/CameraControls.tsx"
+    }
+  ],
+  "implementationBoundaryAppendEntries": [
+    {
+      "path": "main/src/story/feed/SurveyBracketOverlay.tsx",
+      "symbols": [
+        "SurveyBracketOverlay",
+        "label placement/metrics",
+        "one static designation"
+      ],
+      "condition": "Required to implement the agreed existing bracket presentation.",
+      "scope": "One static 46px bracket with 9px arms, 12px/18px exact DEBRIS/BIOFIBER label and .08em tracking; right/left/above full-label placement and measured rectangle. No pulse, target-center clamping, duplicate marker or new HUD.",
+      "source": "cinematography-treatment.json"
+    },
+    {
+      "path": "main/src/components/CameraControls.tsx",
+      "symbols": [
+        "CameraControls useFrame active side camera branch",
+        "perspective projection reset"
+      ],
+      "condition": "Only if existing sideLens entry points cannot publish actual camera/viewport or own the required same-camera projection application and cleanup.",
+      "scope": "Wire existing active side-camera authority and clear its side-only viewOffset on no-longer-needed/exit/sandbox; preserve eye, orientation, 75deg FOV, existing camera modes and later/sandbox authority. No new camera stack.",
+      "source": "cinematography-treatment.json"
+    },
+    {
+      "path": "main/src/story/sideLens.ts",
+      "symbols": [
+        "LensRig",
+        "computeRigFrame",
+        "fixedScreenCellIndex",
+        "applyActiveRigTransform",
+        "applyRigCameraTransform",
+        "resetLensRig",
+        "clearSideLens"
+      ],
+      "proposedSymbols": [
+        "SideCoverageViewport",
+        "FixedScreenCoverageGeometry",
+        "FixedScreenCoverageSample",
+        "FixedScreenTransfer",
+        "setSideCoverageViewport",
+        "resolveFixedScreenCoverageGeometry",
+        "sampleFixedScreenCoverage",
+        "getFixedScreenCoverage",
+        "resetFixedScreenCoverage"
+      ],
+      "condition": "Required for the already agreed single viewport-aware coverage sample consumed by renderer and director.",
+      "scope": "Exact frozen coverageProposal math, stable geometry epoch, player sample/transfer identity, minimal conditional same-camera viewOffset and its cleanup. Only post-arm player-traversal counts/sounds; initialization/resize/orientation/FOV/layout/restore rebase silently. No physics or camera lineage change.",
+      "source": "cinematography-treatment.json"
+    },
+    {
+      "path": "main/src/story/StoryDirectorDriver.tsx",
+      "symbols": [
+        "StoryDirectorDriver useFrame actual viewport/projection publication and frame order"
+      ],
+      "condition": "Required only where this existing driver publishes the active sample or establishes director/render ordering.",
+      "scope": "Publish actual camera/viewport and current measured reservations; share one coverage result per player sample; prove one presented destination fixed frame before unbolt. Preserve other story-driver behavior.",
+      "source": "cinematography-treatment.json"
+    },
+    {
+      "path": "main/src/story/ux/storyHudLayout.ts",
+      "symbols": [
+        "solveStoryFeedLedgerPlacement",
+        "readStoryHudSafeAreaInsets",
+        "readTouchControlClearance"
+      ],
+      "proposedSymbols": [
+        "solveEarlyFeedLayout"
+      ],
+      "condition": "Required for the agreed measured early work-order/status/ledger/caption/target/control reservations.",
+      "scope": "Use actual CSS viewport, safe area, touch controls and full text/target rectangles; maintain 14px clearances and 18px body edges; do not replace later layout systems or hardcode portrait reference coordinates as universal.",
+      "source": "cinematography-treatment.json"
+    },
+    {
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "symbols": [
+        "RegulationFeedHud work-order",
+        "camera-status",
+        "feed-ledger",
+        "voicedOrder/voiceVisibleText boundary"
+      ],
+      "condition": "Required for the agreed canonical imperative and compact existing status/receipt presentation.",
+      "scope": "Keep existing camera-status compact and measurable; one imperative, 900ms foreground receipt then quota-capped completed counts; no duplicate prompts or new HUD. Track HOLD stays unvoiced and existing system renderer owns visible first sentence.",
+      "source": "cinematography-treatment.json"
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "symbols": [
+        "ERA_RIGS",
+        "FIXED_SCREEN_CELL replacement",
+        "storyDirectorTick ch1-fixed branch",
+        "currentCh1FixedObjectiveState",
+        "tickTrackUnlock",
+        "onBeatEntered"
+      ],
+      "condition": "Required where the current duplicated fixed-cell geometry is replaced by the accepted sideLens sample and existing unbolt is armed.",
+      "scope": "Preserve rig values and actual input permissions; only consume the single coverage sample, never recompute an independent cell. Keep resource predicates, real movement event and presented-frame ordering atomic with existing track bundle authority.",
+      "source": "cinematography-treatment.json"
+    }
+  ],
+  "reason": "The frozen Cinema sourceSymbols and coverageProposal were not fully concretized in the 37-path/symbol ceiling. These entries authorize only previously authored behavior, not a new creative choice. Mirror production-lock.json and its exact MD representation; regenerate candidate hash and frozen receipt. Keep original draft-v1 bytes and native exchanges authentic.",
+  "creativeFieldDelta": null,
+  "performancePosition": {
+    "outcome": "accepted-as-proposed-future-acceptance",
+    "targetFps": 60,
+    "minimumFps": 30,
+    "maximumFrameTimeMs": 40,
+    "maximumDrawCalls": 70,
+    "maximumShaderPrograms": 30,
+    "maximumGpuMemoryMb": 256,
+    "verifiedCameraStateSamples": 70,
+    "sampleSource": "assembly/originals/shipped-visual-baseline.json",
+    "sampleSourceSha256": "46395cee350f1ee4a6b7c0c310d550baf7ce0e6f6630a5ece8a25a3ac19a434b",
+    "conditions": [
+      "Absolute observed maxima are sampled baseline ceilings, not a measured all-variant runtime pass.",
+      "Retain stricter matched-case +0 draw calls, +0 programs, +0 lights, no new textures/geometries.",
+      "256 means MiB of application-owned GL buffers/textures/renderbuffers only; baseline unmeasured, actual format/attachment/allocation bytes required, unobservable remains unavailable, renderer.info.memory counts do not prove bytes.",
+      "No incremental resource allowance; preserve protected audio sources and serialized hardware verification."
+    ]
+  },
+  "compiledReview": {
+    "cinematography": "exact Stage3 replacement",
+    "palette": "exact frozen contribution",
+    "shots": 9,
+    "shotChanges": "Only native evidence-reference qualification; every creative field matches first contribution plus Stage3 operations.",
+    "syncAnchors": 14,
+    "anchorChanges": "Cinema-owned fields exact; independently authored Score cue relationships merged.",
+    "guidanceObjectives": 6,
+    "scoreCues": 19,
+    "baselineMapping": "Lossless actualCamera/raw observedTraceAnchor retained; stable anchors associate beat context only, never claim new event occurrence/timing.",
+    "runtimeEvidence": "Future planned captures remain open; this authoring review is not implementation/media/UX acceptance."
+  }
+}

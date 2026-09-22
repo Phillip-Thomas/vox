@@ -1,0 +1,21 @@
+{
+  "schema": "paravoxia.producerProbePreparationReview.v1",
+  "at": "2026-09-06T17:59:29.006607+00:00",
+  "author": "creative-producer",
+  "acceptedForDedicatedRuntime": true,
+  "captureAuthorizedNow": false,
+  "reportRef": "arrival-common-short-prep-report.json",
+  "reportSha256": "65c418991b008d72a38a99cf6cf979f261f3b034ae87ea6d43c702a591a363f6",
+  "invocationRef": "arrival-common-short-prep-invocation.json",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "verifiedNewFileHashes": 9,
+  "sourceFilesIndependentlyRehashed": 99,
+  "sourceDrift": [],
+  "qualifications": [
+    "Prepared only; no gameplay or naive-UX acceptance. Actual SHORT must be distinguished from any LONG revision and from held class alone.",
+    "The copied cgContract retains v2 but its loader is unused; the new entrypoint reads and checks exact current v3 directly. No shared helper is changed.",
+    "Report sourceIntegrity describes files in its before/after digest lists, not necessarily all99manifest/auxiliary files. Root independently rehashed all99; known unused delta-profile observation remains separate.",
+    "Report prose says URL from ownership; entrypoint additionally requires CLI --url and --expect-source-manifest and matches them to ownership. Future commission supplies actual current values."
+  ],
+  "nextAction": "Dedicated serial headed hardware SHORT runtime after existing GPU roles; actual FD9 exclusive lock, current root preview identity, clean output and cleanup required."
+}

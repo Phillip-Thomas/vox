@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-06T20:11:17.064686+00:00",
+  "privateFixesAuthorized": true,
+  "gameSourceMutationAuthorized": false,
+  "gpuGrant": false,
+  "requiredBeforeGpu": [
+    "Worker position is actual CommonGroundPoint OBJECT {x,y,z}, per commonGroundActorPosition at commonGroundActor.ts304 and getCommonGroundDiagnostic1785. Current Array.isArray fallback wk.atH rejects every real worker. Read finite actual x/y/z, preserve existing H physical horizontal/vertical bounds; do not guess wk.atH.",
+    "The same callee location is set twice (LP_FN and LP_A); CDP can refuse duplicate exact breakpoint. Combine function capture and LP_A record in ONE condition at the exact callee site. Save resulting combined bytes.",
+    "Disable/remove all logpoints before invoking the retained pure function for replay; otherwise its calls append into the very live array being replayed and pollute actual-input evidence. Freeze/copy records first, retain all raw calls separately, replay copied captured args.",
+    "Exact scriptID must be observed and equal, not pass when wantScriptId is null. Save final Debugger.paused count after walk, not merely at arming."
+  ],
+  "next": "Routine CPU corrections now; root will hand GPU after finale clean termination. Existing finaledeadline unaffected. Do not launch on this log notice: verifier-control remains sole authority."
+}

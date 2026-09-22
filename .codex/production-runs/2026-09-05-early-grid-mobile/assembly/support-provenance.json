@@ -1,0 +1,878 @@
+{
+  "checkedAt": "2026-09-05T20:41:53.860336+00:00",
+  "baselineOriginalSha256": "46395cee350f1ee4a6b7c0c310d550baf7ce0e6f6630a5ece8a25a3ac19a434b",
+  "baselineNativeSha256": "aba8da108b70aea647e63d768cd790f100c86d364fbfb370b03a8977a68ae135",
+  "captures": 120,
+  "sourceSnapshots": 52,
+  "receipts": [
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0001-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0001-ch1-fixed.png",
+      "sha256": "aee1210939ce9599723bd3ea81c01f29cae4beb923a682ef5be6bb4494c08f3f"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0022-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0022-ch1-fixed.png",
+      "sha256": "598f1472d885ce13a90c45555a5d269e0545f5a1dc26646743eb6ef4d39b2e3f"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0022-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0022-ch1-fixed-canvas.png",
+      "sha256": "7546343c53cb881b5798600ac39e03e97b9d81443866f7837ad5436dd64ce1df"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0050-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0050-ch1-fixed.png",
+      "sha256": "b288629d04467037737955778010f917676dac213fa45e4f4940079a61585562"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0050-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0050-ch1-fixed-canvas.png",
+      "sha256": "cf5c0b313ea92a9b9e74926d5e4a404a638f34104c3588c6e09e9123f3a68a69"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0081-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0081-ch1-fixed.png",
+      "sha256": "827ab02eb7de81b22ddc749332a8decc126828a4dcd02df11d273a50ff726090"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0081-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0081-ch1-fixed-canvas.png",
+      "sha256": "bcc6acc8f1829701039dec4d21ba076b0eecaa1690b9b685982fd353938bbef8"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0112-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0112-ch1-fixed.png",
+      "sha256": "cb81a336859ffbcf78076c56b77526e0271bdca9907403ac670701dc487c52ae"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0112-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0112-ch1-fixed-canvas.png",
+      "sha256": "3972d01fa217ebc0e547f369e37b6505adbeab355f0d8150cf060449fe8c8051"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0145-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0145-ch1-fixed.png",
+      "sha256": "fa0fd2eefb5094dc01a392d4469cc76fd40ab211b4e600782fa8dbf95cde524f"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0145-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0145-ch1-fixed-canvas.png",
+      "sha256": "0b48e9e0d2bb88cd914464a2f31adb770662919b247d4bafa6ece922a7dbf080"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0178-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0178-ch1-fixed.png",
+      "sha256": "d77043ea0821f3c5f27dfa09b903c1d3ce99a660ee4418e156b4f8b80d17a344"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0178-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0178-ch1-fixed-canvas.png",
+      "sha256": "7ea425507ab32dcaecc80767c7cf3dbcda8d0fffd24dc72e52f20596526dd24d"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0209-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0209-ch1-fixed.png",
+      "sha256": "cd685594ecd06b93b7644c110ad5c4d0e1b5110b4914e68e00848525eca6f8fc"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0209-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0209-ch1-fixed-canvas.png",
+      "sha256": "68348bf932390ed23b9b12e100dc4a17ca4caf60053f6c426ee9f6a7ae91ce41"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0241-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0241-ch1-fixed.png",
+      "sha256": "708088695bfc5381664d8b6628c0058de5027c0f7d4640f9d4fda43c186a525c"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0241-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0241-ch1-fixed-canvas.png",
+      "sha256": "b3abf7545e6d6579569ca01c29ae9baaaa6fb750e5298d64411d5a8d23141bba"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0270-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0270-ch1-fixed.png",
+      "sha256": "fb5564e7c7df74cf4dd5880cfeb67ce5a0e4f539fac5c4afdfca2568d0109c9a"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0270-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0270-ch1-fixed-canvas.png",
+      "sha256": "87c2f680d03f09a1b9e8005f21a9fe9a21016e387030b9cfbe75b85fcfd3e8c1"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0300-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0300-ch1-fixed.png",
+      "sha256": "2b0cfcf18495b494f790897b63c7198ef63b4c762db8fdaac60c8601ca0a6f8c"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2-0300-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-boundary-v2-0300-ch1-fixed-canvas.png",
+      "sha256": "82230028798cb4c1deaa57bfaf03f911296b174bfd407343b85e8036e8368394"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0001-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-movie-0001-ch1-fixed.png",
+      "sha256": "22213e81e0a293e29f036b55b1e535d1977cff63d19f9f53da4e1b36e7f681f7"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0012-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-movie-0012-ch1-fixed.png",
+      "sha256": "7b28ef1a16af705a30adee9deb3d79b447841c4ad165e4da1733082ea8aafa40"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0019-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-movie-0019-ch1-fixed.png",
+      "sha256": "a2b7a37735df12ba1340e18825ddf0fa43540c454fc026c6b77a4cca485c0a90"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0033-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-movie-0033-ch1-fixed.png",
+      "sha256": "0ba6c202448ef855a97945d91f0be86dc4afa0e6b4cd898d4cc8d4a599dfbb00"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0034-ch1-track.png",
+      "stagedPath": "baseline-media/desktop-movie-0034-ch1-track.png",
+      "sha256": "f6458b7992c8af01fc81cdcf39080ae5097198b2e47308b61b19a23e99162897"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0048-ch1-track.png",
+      "stagedPath": "baseline-media/desktop-movie-0048-ch1-track.png",
+      "sha256": "098c521683b50ac71a24bb0d9cd385f1163b6ec4a486e498a2ad2fc24a5586d7"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0057-ch1-raster.png",
+      "stagedPath": "baseline-media/desktop-movie-0057-ch1-raster.png",
+      "sha256": "e975e591843eb68ed9f88ec0a9a5ad8351bc62a74962e333f922e04f7a1eb1c8"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0071-ch1-raster.png",
+      "stagedPath": "baseline-media/desktop-movie-0071-ch1-raster.png",
+      "sha256": "f921c6bc865eaad1fc4a52910e83ba916271f12d858a0776ff51cf6de9b70724"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0086-ch1-raster.png",
+      "stagedPath": "baseline-media/desktop-movie-0086-ch1-raster.png",
+      "sha256": "7acdf0f8c1f67213eb924904b07770edf65505e1e89a55a504c3cd7b3fe33a6f"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0101-ch1-raster.png",
+      "stagedPath": "baseline-media/desktop-movie-0101-ch1-raster.png",
+      "sha256": "19440cd60b8fc7a340630df4d829fb0b136bc3f10b01e58324ed9d4c06f54a81"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0116-ch1-raster.png",
+      "stagedPath": "baseline-media/desktop-movie-0116-ch1-raster.png",
+      "sha256": "f43f2f87379da063d28633b736c4a4ef71bb38c0ad495085aed8ba54eb77b587"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0131-ch1-raster.png",
+      "stagedPath": "baseline-media/desktop-movie-0131-ch1-raster.png",
+      "sha256": "05c0636323309344b2424d65752bf560c44de429d191376580c777153a34cda4"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0136-ch1-raster.png",
+      "stagedPath": "baseline-media/desktop-movie-0136-ch1-raster.png",
+      "sha256": "6b2d45cf0c3958fc426e3b9f4e658d8a6263580309046767dba2fa96702c0a0a"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0145-ch1-depth.png",
+      "stagedPath": "baseline-media/desktop-movie-0145-ch1-depth.png",
+      "sha256": "3635ca1f6cce8bd94c2685fe9f29a2fc264777d7e47414cc3478c969e4bd1c8d"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0001-descent.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0001-descent.png",
+      "sha256": "8c662ed2b3a2a2449cb8e8d6bc76903054070b4bc451fd6ea154ffcff67a5e90"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0027-descent.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0027-descent.png",
+      "sha256": "b993db693c20019103d2501132ac07e32577fdc85dfea4a55c4de310dedc5ea6"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0027-descent-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0027-descent-canvas.png",
+      "sha256": "c66a4dcc2c3de02541511512eced1b20944afc5967014bee01a1ffcae41016f8"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0056-descent.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0056-descent.png",
+      "sha256": "f7667e10e110f345eaabc2d86b09fb181ecfebda86203d15c51ad3bc844fca6e"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0056-descent-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0056-descent-canvas.png",
+      "sha256": "8f3b7935343c4db87233e91da38f07e2347e9dafd21337caba10a7d11e3aba31"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0088-descent.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0088-descent.png",
+      "sha256": "cfba11e655002c0d9044f5436f0dee88fb4f921e93026c3b446f8a2727fff7d5"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0088-descent-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0088-descent-canvas.png",
+      "sha256": "cd7f4ab9e865d740bc6f14e741480d1df45e305cf5a12e30d0fbf64f9a4076e8"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0090-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0090-ch1-fixed.png",
+      "sha256": "3b9e0f5170781be98705faec4234082045f08de310601c06aba529210ec775ce"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0090-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0090-ch1-fixed-canvas.png",
+      "sha256": "9cf6c67a049189b61956bddeab53e9930652e05ebe6b494aab8fd11684c4abd8"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0122-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0122-ch1-fixed.png",
+      "sha256": "ad7f5ba24a089f3d0568c6fa22ff12883a2505c4f2b24763101cfeeb768da8ae"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0122-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0122-ch1-fixed-canvas.png",
+      "sha256": "605e8a500bbf6b6cd0680482699441927223e7c03c5e289d0660bf9b2968e09e"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0154-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0154-ch1-fixed.png",
+      "sha256": "d3d1c128534c1b8bbcb5761a524312908db2b892111ff86585889fed48cb67f3"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0154-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0154-ch1-fixed-canvas.png",
+      "sha256": "b4daa4da6e05e5adff085bb97ebc1e96885238879052ed41506b47963e474e6e"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0185-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0185-ch1-fixed.png",
+      "sha256": "227b18b65c21375eb5fe4d6d24405288d8456d232c32ecbc294d1c211e609922"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0185-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0185-ch1-fixed-canvas.png",
+      "sha256": "dd316d0646efc48efc636184ac84f0d4e201b43a9064fcd23048c69526f172c4"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0215-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0215-ch1-fixed.png",
+      "sha256": "f97b948a4a069c3f6bfc798fda0de1d5a01c2de23bc5252476661b93bda8d43b"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0215-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0215-ch1-fixed-canvas.png",
+      "sha256": "f1dae28ac73a12dc852e0738577f3585a3f6dd23f688c54a3105f3bcb39e05dc"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0247-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0247-ch1-fixed.png",
+      "sha256": "dc52ac25ad33a33db07d1bc0b2473446c8909de6ba6b4a231d617743cc5d6800"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0247-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0247-ch1-fixed-canvas.png",
+      "sha256": "94b3cdb3b2ca9c4ebf1c334935a5bdd7564a16b1d622c79a86dea813e5d4658e"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0276-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0276-ch1-fixed.png",
+      "sha256": "5799ef3edd93647c5addc463be92b330c81682b01b8a80f1bb93d7bcf999bf92"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0276-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0276-ch1-fixed-canvas.png",
+      "sha256": "65e30b4562452d785c36831db0852b16f9ae63eaa263c0194d4fda19aacd8ce2"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0308-ch1-fixed.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0308-ch1-fixed.png",
+      "sha256": "f6e589e4e07f1a7751c08be2c86917d13bc93ff7bf5110b6ffafadacb3cf1095"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0308-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/desktop-natural-boundary-0308-ch1-fixed-canvas.png",
+      "sha256": "0c7d06159620ea13867a2551c1abe78074b1c9556ef812f3048b0cb39ae70047"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0001-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0001-ch1-fixed.png",
+      "sha256": "8b242c0ef9629aeff145e2bce3a70c7d97a76e81d4d183788633c10aae980565"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0025-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0025-ch1-fixed.png",
+      "sha256": "098ded5221016228fb178cde5475398bce91b853da48f2bfc72d78d0c6ca8963"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0025-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0025-ch1-fixed-canvas.png",
+      "sha256": "3b379a0077c78085d002ff178951bf7724da77ffc851608fc655c24845a05b43"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0052-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0052-ch1-fixed.png",
+      "sha256": "046a1944c9e4986b0618ba5f07de4193f97dc28f2996e8f4b6afeb02810d5003"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0052-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0052-ch1-fixed-canvas.png",
+      "sha256": "c7cd930c140a42be8c58274ff39d4fc382fd5648539c0b7808f4ccc0192e3441"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0070-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0070-ch1-fixed.png",
+      "sha256": "db1c9664b5e93f7d9b1b37f973afcd467fcd1c5169dc15dd3e27183bd84b923e"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0070-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0070-ch1-fixed-canvas.png",
+      "sha256": "b830851c7f29f69c9466b82e44ebe95b144e8730b0350e834a5b86f1800fe0a8"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0102-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0102-ch1-fixed.png",
+      "sha256": "2616a77bad606fc2ff724392ed65a9ca159c19b3c054d7ccd291208b76f4d12a"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0102-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0102-ch1-fixed-canvas.png",
+      "sha256": "0d23789417529907e7b342147853c01085090f6bbfb8b6c47f3ae6a53cb0eb25"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0103-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0103-ch1-fixed.png",
+      "sha256": "43979720b9b3a3baea02d4fa9aa96ebfdc6615c11ac8c18282b114a27c88aba5"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0103-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0103-ch1-fixed-canvas.png",
+      "sha256": "1bcba687c50b3d477887e694a90d191539af349ddc1b67a8159adaaddd4a6e77"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0135-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0135-ch1-fixed.png",
+      "sha256": "9a15d39f40429536813c051123124d52bea9a3e82a6fd8d63d4f603f9c3341ff"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0135-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0135-ch1-fixed-canvas.png",
+      "sha256": "d4ad7b1f0fd050ef8b96b03a2807f6106be29e546e8d3c9e59e48e582e454a9c"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0167-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0167-ch1-fixed.png",
+      "sha256": "ee19bbcb829b8899a787741b579f496c9db72d157f62838a3aae7932d7e3dbf0"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0167-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0167-ch1-fixed-canvas.png",
+      "sha256": "a9f7a87368804565fea9de85fe66fb81475852c69228b2e1113efe623f2f64a1"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0199-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0199-ch1-fixed.png",
+      "sha256": "5600feb9c0125e6eb8e9da02a2796eb60b4a7ba23deb6ce297bae91665aa3c88"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0199-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0199-ch1-fixed-canvas.png",
+      "sha256": "a9f7a87368804565fea9de85fe66fb81475852c69228b2e1113efe623f2f64a1"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0231-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0231-ch1-fixed.png",
+      "sha256": "e98f0f93526ee58e65a10d01f822fd343a32677bb8a0edda91ffb0a5d94e1bac"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0231-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0231-ch1-fixed-canvas.png",
+      "sha256": "a9f7a87368804565fea9de85fe66fb81475852c69228b2e1113efe623f2f64a1"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0262-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0262-ch1-fixed.png",
+      "sha256": "e59068cad515e772bb9b5d4df5d0f774734efcd861d655d694a6d9a48ec25654"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0262-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0262-ch1-fixed-canvas.png",
+      "sha256": "a9f7a87368804565fea9de85fe66fb81475852c69228b2e1113efe623f2f64a1"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0294-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0294-ch1-fixed.png",
+      "sha256": "1cd3b9e2a538888f5a095450518f9000e1b6d478583ab18dec73ab6b69d79ad6"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2-0294-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-boundary-v2-0294-ch1-fixed-canvas.png",
+      "sha256": "a9f7a87368804565fea9de85fe66fb81475852c69228b2e1113efe623f2f64a1"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0001-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-movie-0001-ch1-fixed.png",
+      "sha256": "4b2b5197798bfcd60eba4ea391327e128bbe02df5526fc4ca2199cdde0dab161"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0013-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-movie-0013-ch1-fixed.png",
+      "sha256": "9d80482da0cf880e19771220a6ae5fff5535546ef05bfa6d61061729d0850fc8"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0020-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-movie-0020-ch1-fixed.png",
+      "sha256": "5e48a7d49e037983c113a1c32b36ae6af54c307a67bfda0ee227ba65565df0da"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0028-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-movie-0028-ch1-fixed.png",
+      "sha256": "1e612be997ce489e78248a69d041d1fe459675cb3cfd34dd881f46ea9ab4a81f"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0036-ch1-track.png",
+      "stagedPath": "baseline-media/portrait-movie-0036-ch1-track.png",
+      "sha256": "30b2a76068d97c2fe1d11b93e254552716e3c1fc47d9339a08865a48c1809a2a"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0048-ch1-track.png",
+      "stagedPath": "baseline-media/portrait-movie-0048-ch1-track.png",
+      "sha256": "ebc2e71d3209735766d81473a13acaf72b58c45436ef991f41fce7a00291ea34"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0061-ch1-raster.png",
+      "stagedPath": "baseline-media/portrait-movie-0061-ch1-raster.png",
+      "sha256": "636fc31ee7bf6bbef8695888041035259a90b5a33ddeddc676687cc31ac7484e"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0076-ch1-raster.png",
+      "stagedPath": "baseline-media/portrait-movie-0076-ch1-raster.png",
+      "sha256": "0616549484b608d87a4f9f26c8843021d5f26998ba79a4ed8d8083ca39249e52"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0090-ch1-raster.png",
+      "stagedPath": "baseline-media/portrait-movie-0090-ch1-raster.png",
+      "sha256": "a18fbe890aa8f2498bb98ef39c6a0d7d578bd1a58a19855e443a04d68ec1fac2"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0105-ch1-raster.png",
+      "stagedPath": "baseline-media/portrait-movie-0105-ch1-raster.png",
+      "sha256": "3bf132e5075376bb468215efc377c85f7e890180814347d76b9d8eadc8e960ee"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0120-ch1-raster.png",
+      "stagedPath": "baseline-media/portrait-movie-0120-ch1-raster.png",
+      "sha256": "7a74749e440118ea797d05e3a726b604ed57f67912ccfea90c3d9e41b8e03262"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0135-ch1-raster.png",
+      "stagedPath": "baseline-media/portrait-movie-0135-ch1-raster.png",
+      "sha256": "b1d52b97119ef590d201c0304d9439c2d1b374961c0a00089f64b18d687bcc79"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0141-ch1-raster.png",
+      "stagedPath": "baseline-media/portrait-movie-0141-ch1-raster.png",
+      "sha256": "48a89c0a1881f14cb8dac50bc4bd59685d32fe7f9fe90cc09dc39fc18bdcacc3"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0150-ch1-depth.png",
+      "stagedPath": "baseline-media/portrait-movie-0150-ch1-depth.png",
+      "sha256": "2e5359c6d72f0839e01c36485c68963df79371408edc870e9818fb2546de4007"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0001-descent.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0001-descent.png",
+      "sha256": "ff8e379d793975ac1788cb637ab971504ff7166c4c9806a9252d93ad3087d231"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0025-descent.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0025-descent.png",
+      "sha256": "9d656eaa5cd30596b2d0c176bea9c8c5b15631eb63d9478e3bb471efb9d8ed5f"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0025-descent-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0025-descent-canvas.png",
+      "sha256": "b8a0072adfdfd054d079795f2d3b3cb9f67845354d35e015d8f91d280587a66a"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0054-descent.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0054-descent.png",
+      "sha256": "0c40468b37deb783dc6faf20c255c6a2e01867a5b35464c846dcff0f094f8121"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0054-descent-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0054-descent-canvas.png",
+      "sha256": "caf0657ab31310ae03771a5739e3b2fc42d85d048f1c49fd2996c29f928361db"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0085-descent.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0085-descent.png",
+      "sha256": "87aa657a219bb9ae46fe2f5b793c3c9f6585259ac8b03d4799fb70abc67c2697"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0085-descent-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0085-descent-canvas.png",
+      "sha256": "63394ca9eaf5193afb7b0b5b5262a7bf975481804b4e388bb1303f790902279b"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0088-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0088-ch1-fixed.png",
+      "sha256": "0232564f456ebc3d5afbde74204fc0169cd8a5567a4ba5d8976ec6e84f9066fe"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0088-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0088-ch1-fixed-canvas.png",
+      "sha256": "eda35538154eda48c8a140697e6a0f286e15f558d6a08e7cca186fdc9f8cd88b"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0107-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0107-ch1-fixed.png",
+      "sha256": "9e1b970acc25795122d76b26026cb51d39821055c2ad1cbf3222b78e0ee16462"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0107-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0107-ch1-fixed-canvas.png",
+      "sha256": "b0faad9cbc0efaaf371805fe5ea72d73da26cc47c64f425c97eb80663abb6f53"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0137-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0137-ch1-fixed.png",
+      "sha256": "9755f526d0f7cbb28a800f5778d9550851e8281e541549c021b3bb03c2405ea5"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0137-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0137-ch1-fixed-canvas.png",
+      "sha256": "bc3edc3a28331caac162f259d40f97aeddeb22c19709d75aacd5353dd31fb61b"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0138-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0138-ch1-fixed.png",
+      "sha256": "df97c01d46ec3bb0b333fd528de2d6b3a0772c61e7e8b97521085b0594fa979d"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0138-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0138-ch1-fixed-canvas.png",
+      "sha256": "97d0a5b98bb9ed01299fb87e36e004e1f195dbda63d2b7ed0ee40d189fbb8171"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0172-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0172-ch1-fixed.png",
+      "sha256": "a60c8a32abd6e497bbf4cd1e8a4c64bad0d530457adcf17d7c5cf61776db2644"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0172-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0172-ch1-fixed-canvas.png",
+      "sha256": "7aafccb4f399c8847d64ab11beeae1cd9b2f0a9cd884c242bd2573516b52e4e2"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0206-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0206-ch1-fixed.png",
+      "sha256": "726f59252a277d9735b13ccd37232c75178e3dac884b218ab771c2d03d60b99f"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0206-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0206-ch1-fixed-canvas.png",
+      "sha256": "a9f7a87368804565fea9de85fe66fb81475852c69228b2e1113efe623f2f64a1"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0239-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0239-ch1-fixed.png",
+      "sha256": "bf95efca5736c6c5c94f6358a088d356fbdf5c726ce6693ba34e9cafadd7f0da"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0239-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0239-ch1-fixed-canvas.png",
+      "sha256": "a9f7a87368804565fea9de85fe66fb81475852c69228b2e1113efe623f2f64a1"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0272-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0272-ch1-fixed.png",
+      "sha256": "c41f223460f91e3c66ca3ef404e9b68f07ac035497da4a511111645b3497ea2b"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0272-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0272-ch1-fixed-canvas.png",
+      "sha256": "a9f7a87368804565fea9de85fe66fb81475852c69228b2e1113efe623f2f64a1"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0305-ch1-fixed.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0305-ch1-fixed.png",
+      "sha256": "5069d931cb761e4fe37667f36ef5e8608cbd3826c6cca64774f878eae5bf96cc"
+    },
+    {
+      "originalPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0305-ch1-fixed-canvas.png",
+      "stagedPath": "baseline-media/portrait-natural-boundary-0305-ch1-fixed-canvas.png",
+      "sha256": "a9f7a87368804565fea9de85fe66fb81475852c69228b2e1113efe623f2f64a1"
+    },
+    {
+      "originalPath": "main/src/components/EfficientPlayer.tsx",
+      "stagedPath": "baseline-source/main/src/components/EfficientPlayer.tsx",
+      "sha256": "e2742c6516db572c6493d4e377792550ac75631ac26a39e0acb96157baa36cba"
+    },
+    {
+      "originalPath": "main/src/components/mobile/TouchControls.tsx",
+      "stagedPath": "baseline-source/main/src/components/mobile/TouchControls.tsx",
+      "sha256": "d84363940b939616a4b9587469efa4ddc9f06f33d9774018730da380b700dcb9"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/a1-ramp.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/a1-ramp.ts",
+      "sha256": "4ba6d871c7d512f9358e1aa896525c606d2edd178fa909295286ee3b11158173"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/ch1-anomaly.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/ch1-anomaly.ts",
+      "sha256": "a8656ffb6d5b9c3c56b722c3e1b6fc1bd2420dddd7a0f2a398098a8cd7f82cf0"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/ch1-depth.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/ch1-depth.ts",
+      "sha256": "9e48438b273cb8e421b06b852be1e3f8c5c3fe917162185a03d3e852beb46971"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/ch1-fixed.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/ch1-fixed.ts",
+      "sha256": "f25bea6ca7ca18e54bc0c918f39b3dc1ba46da2fcc83711de7d09c93d4c50474"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/ch1-iso.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/ch1-iso.ts",
+      "sha256": "50a059ab2070550723f87bff4a6cad161e2db78e3192d5b74fdcf55056053ee3"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/ch1-lift.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/ch1-lift.ts",
+      "sha256": "3ced51796a5ac4d0387f9a5ad643a6fde67c60d9a68a14b932d4a71f401dea44"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/ch1-nav.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/ch1-nav.ts",
+      "sha256": "351b495b0b4b8fd68a8fdfbcc79fbc933f28c0ce380eb7b7a1deb3f0c022c258"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/ch1-raster.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/ch1-raster.ts",
+      "sha256": "bcf3f28a258ecc367adf24cfcd25a0e497ab5010ecba9fd80d3e5a4ac5395e99"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/ch1-track.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/ch1-track.ts",
+      "sha256": "fb165e6e613bf8953cabe99dbe9d40e0fd4bdce833e5ce81c807f4900c3a3133"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/ch1Contracts.test.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/ch1Contracts.test.ts",
+      "sha256": "669f4fe25e92ad7b00b399e1d21b614112aede071bda02709f3d64df162be9d3"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/descent.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/descent.ts",
+      "sha256": "e62adf389007bfc33aea415bab73863aba0b471505825c82db1d05e3500728d6"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/index.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/index.ts",
+      "sha256": "26db5e74fada52ea0705290217f064c6f8c4628f226d627baec876853bad2d31"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/rail-ch1-anomaly.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-anomaly.ts",
+      "sha256": "0cd7ddd2e13eb83d8887bd853c2a2773e8e2324a65561f7cd8d064bd18b5d190"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/rail-ch1-depth.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-depth.ts",
+      "sha256": "c28730ed618d05229ec6321aed8c52c57c733e2b919bd312ea439ac6930dd9d4"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/rail-ch1-fixed.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-fixed.ts",
+      "sha256": "742ec193204c80c9613d61e689e9416baaca4552b646404ad2c805ec80f3da3c"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/rail-ch1-iso.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-iso.ts",
+      "sha256": "6fa34978fab70eda127ae86abf3ef9914a3ccbe6ce7f1c3b9ca7635faa07e461"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/rail-ch1-nav.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-nav.ts",
+      "sha256": "37a8aff21aeec7f4dcefcd52ee0ab03a0e52fd755c98e00920d8c258bfc6d358"
+    },
+    {
+      "originalPath": "main/src/story/beats/ch1/rail-ch1-raster.ts",
+      "stagedPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-raster.ts",
+      "sha256": "d5bbfdb5803b6f237a1637e1d7a391f2253b74d0b7eb3b2cb0d519c6b2983889"
+    },
+    {
+      "originalPath": "main/src/story/feed/FeedOverlay.tsx",
+      "stagedPath": "baseline-source/main/src/story/feed/FeedOverlay.tsx",
+      "sha256": "971632e2a0c0b97780d66215da8a2d4f8e40d8269f7ba1f240dbdef559c47450"
+    },
+    {
+      "originalPath": "main/src/story/feed/RegulationFeedHud.test.tsx",
+      "stagedPath": "baseline-source/main/src/story/feed/RegulationFeedHud.test.tsx",
+      "sha256": "5a9301b25b85641ffeb77ef8555f00284e97019ac87f67af764a67d287569c5a"
+    },
+    {
+      "originalPath": "main/src/story/feed/RegulationFeedHud.tsx",
+      "stagedPath": "baseline-source/main/src/story/feed/RegulationFeedHud.tsx",
+      "sha256": "80188c72ea6603bfd03758c577a886c6b54d0b00fece4f51a782f297a929bbb0"
+    },
+    {
+      "originalPath": "main/src/story/feed/SurveyBracketDriver.tsx",
+      "stagedPath": "baseline-source/main/src/story/feed/SurveyBracketDriver.tsx",
+      "sha256": "cc7095b17df6b2e0cf8bb13da4e5ee77af6c864861c471bf410d70085ca35bdb"
+    },
+    {
+      "originalPath": "main/src/story/feed/SurveyBracketOverlay.tsx",
+      "stagedPath": "baseline-source/main/src/story/feed/SurveyBracketOverlay.tsx",
+      "sha256": "554c2f1b7ecf0fe503f825101b5849af4af5bb4bfe1933d43274c8f9ebfcd6fc"
+    },
+    {
+      "originalPath": "main/src/story/feed/regulationVoice.ts",
+      "stagedPath": "baseline-source/main/src/story/feed/regulationVoice.ts",
+      "sha256": "8306b3ddc0b1bac1dd321cb6830db1c9cdc28380fe720c0db9d0368ab9e12182"
+    },
+    {
+      "originalPath": "main/src/story/feed/surveyBrackets.test.ts",
+      "stagedPath": "baseline-source/main/src/story/feed/surveyBrackets.test.ts",
+      "sha256": "67a3f44ac4276e98cac59960dba2e1ed5e26e93718cd90d612635b21f80692d4"
+    },
+    {
+      "originalPath": "main/src/story/feed/surveyBrackets.ts",
+      "stagedPath": "baseline-source/main/src/story/feed/surveyBrackets.ts",
+      "sha256": "63472544657dee31e7f4922d089135b1eac9c3b91e1a6c132631bd7447702124"
+    },
+    {
+      "originalPath": "main/src/story/sideLens.ts",
+      "stagedPath": "baseline-source/main/src/story/sideLens.ts",
+      "sha256": "fc7df685de532005cefaeb2c94f57c1d2575740c8ce6a8f381dfe9cc9e06f10b"
+    },
+    {
+      "originalPath": "main/src/story/storyDirector.ts",
+      "stagedPath": "baseline-source/main/src/story/storyDirector.ts",
+      "sha256": "2b4e84770cd6ff0f986ad0e6c9a835d441b6696897de543d15da1aaa99d91e1b"
+    },
+    {
+      "originalPath": "main/src/story/storyInputPolicy.ts",
+      "stagedPath": "baseline-source/main/src/story/storyInputPolicy.ts",
+      "sha256": "0f80bb1b9d2b75875e4602173e91b4afda90c20523506ef109575c6e25bbc888"
+    },
+    {
+      "originalPath": "main/src/story/ux/README.md",
+      "stagedPath": "baseline-source/main/src/story/ux/README.md",
+      "sha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85"
+    },
+    {
+      "originalPath": "main/src/story/ux/StoryGuidanceHud.test.tsx",
+      "stagedPath": "baseline-source/main/src/story/ux/StoryGuidanceHud.test.tsx",
+      "sha256": "509fa6d6118dee60a49d5b46dcc87f728eeb952c69fff1548e919dfaf4438b21"
+    },
+    {
+      "originalPath": "main/src/story/ux/StoryGuidanceHud.tsx",
+      "stagedPath": "baseline-source/main/src/story/ux/StoryGuidanceHud.tsx",
+      "sha256": "933db268e6f6a34c1d22d3dcebbba3296b6cf4f94def89e1ef47fbb2da225aca"
+    },
+    {
+      "originalPath": "main/src/story/ux/cinematicHud.test.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/cinematicHud.test.ts",
+      "sha256": "f6226a18249facab177c28a3534d9d9a9432c72a01fedf78f2c316864ccafefe"
+    },
+    {
+      "originalPath": "main/src/story/ux/cinematicHud.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/cinematicHud.ts",
+      "sha256": "39e1d327b2296d33b0fe64d593a89b60a4e1a8177d85d3078b60d5a66ea3ae67"
+    },
+    {
+      "originalPath": "main/src/story/ux/feedbackCues.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/feedbackCues.ts",
+      "sha256": "df0f070c7bced43d28dbb54709d9445e5f3329b6a4f9d548b361f5ee81751fb5"
+    },
+    {
+      "originalPath": "main/src/story/ux/inputGlyphs.test.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/inputGlyphs.test.ts",
+      "sha256": "e49d444e408eea33e2f450829ee2b5eed90917514c03b99d6e0b19475d71d363"
+    },
+    {
+      "originalPath": "main/src/story/ux/inputGlyphs.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/inputGlyphs.ts",
+      "sha256": "a11df2f1fc1b9f8fb3e1cf143205c4fab8b5fa29fd420a9eb683474875338187"
+    },
+    {
+      "originalPath": "main/src/story/ux/objectiveCommandFeedback.test.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/objectiveCommandFeedback.test.ts",
+      "sha256": "aead2da542a65afc7e1c5a0187b1657e8f38d5f93d4943208eea462edccfd822"
+    },
+    {
+      "originalPath": "main/src/story/ux/objectiveCommandFeedback.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/objectiveCommandFeedback.ts",
+      "sha256": "15886ed4d3d3184824016faf75a2902ff176e9a5ea8b41a6b306f99893c43108"
+    },
+    {
+      "originalPath": "main/src/story/ux/objectiveDirector.test.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/objectiveDirector.test.ts",
+      "sha256": "003229e3832a52f27f1036510e26fe130b31ffe9214d3f69cbb42fa169cb5324"
+    },
+    {
+      "originalPath": "main/src/story/ux/objectiveDirector.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/objectiveDirector.ts",
+      "sha256": "0e9dc3058f1fb1d405b0e565767de319790ed794eb2dd597beaa82d48dc39b05"
+    },
+    {
+      "originalPath": "main/src/story/ux/objectiveEventFeedback.test.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/objectiveEventFeedback.test.ts",
+      "sha256": "0d60b23182b09db70e7f1b57b213c954f5a9a927831825da918ace3b720c4fd2"
+    },
+    {
+      "originalPath": "main/src/story/ux/objectiveEventFeedback.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/objectiveEventFeedback.ts",
+      "sha256": "5d5ff442b660a7bc0d89b52f9cc5ac77fcd693108a6b5d5d6ee7fc74877165f3"
+    },
+    {
+      "originalPath": "main/src/story/ux/objectiveRestore.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/objectiveRestore.ts",
+      "sha256": "681a2de6ce4ea93f22be99984767b5d9dcd1b8ca0f8e336462cc02b879628d79"
+    },
+    {
+      "originalPath": "main/src/story/ux/storyGuidancePresentation.test.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/storyGuidancePresentation.test.ts",
+      "sha256": "86841e018a5f9e77c2385f0d2cd1a4ca0e44797d4d6a60290bdd656a190464eb"
+    },
+    {
+      "originalPath": "main/src/story/ux/storyGuidancePresentation.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/storyGuidancePresentation.ts",
+      "sha256": "a6418424dd01bcb799c93a3dcd1010d7782750e2f6da7340916d3de1ddc7c46e"
+    },
+    {
+      "originalPath": "main/src/story/ux/storyHudLayout.test.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/storyHudLayout.test.ts",
+      "sha256": "42a3cebfd57e54286c6b12ba8578e79d568eb3a499010e22b21631809a70ec6a"
+    },
+    {
+      "originalPath": "main/src/story/ux/storyHudLayout.ts",
+      "stagedPath": "baseline-source/main/src/story/ux/storyHudLayout.ts",
+      "sha256": "6e7e124158e01a38ccb070eed4e872177b47063e57347437b2d82259a53c05af"
+    },
+    {
+      "originalPath": "main/src/story/world/SideWorkerAvatar.tsx",
+      "stagedPath": "baseline-source/main/src/story/world/SideWorkerAvatar.tsx",
+      "sha256": "c0b0c82a351c3db3e04bbe602986175cce3fa263407691c421a694b7f83c106f"
+    },
+    {
+      "originalPath": "main/src/utils/cubeGravityConstants.ts",
+      "stagedPath": "baseline-source/main/src/utils/cubeGravityConstants.ts",
+      "sha256": "c0a71ab046b5d5324a7a0562b4a7b0db720cba4451ac51aabd9336f5a133c399"
+    }
+  ],
+  "nativeMapping": {
+    "descent": "anc.descent.impact",
+    "ch1-fixed": "early.fixed.ready",
+    "ch1-track": "anc.track.unbolt",
+    "ch1-raster": "early.raster.ready",
+    "ch1-depth": "early.depth.settled"
+  },
+  "authoredFirstBladesUnmodified": true,
+  "uxBaselineNativeSha256": "9bfe7c9e8b61180a44218b57ef333aeacf46b141ad0fa27a579f6aeac8a85288"
+}

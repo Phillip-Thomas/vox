@@ -1,0 +1,144 @@
+[
+  {
+    "id": "CG-JUDGE-001",
+    "title": "Stale present-tense beat range in a patched governing document",
+    "taxonomyCategory": "shipped_claim_mismatch",
+    "severity": "low",
+    "evidence": [
+      "main/PARAVOXIA_STORY_EXECUTION_PLAN.md:310 now reads 'typed state now continues from ch4-audit through ch10-transit and done' (independently re-read in this pass)",
+      "main/story-authority.json runtimeBeatOrder ends ch10-transit, done",
+      "check-results-v2.json v2CanonLanguageVerification 'F01 cell row reads ch10-transit' = pass",
+      "documentation-audit-v2.md (iteration-2 R1 marked repaired)"
+    ],
+    "ownerRole": "documentation-patch-engineer",
+    "routingTarget": "none \u2014 closed",
+    "status": "fixed-verified-by-independent-reread",
+    "acceptanceAuthority": "story cohesion judge, iteration 3",
+    "scope": "One table cell in the F01 row. Repair confirmed at source, not accepted on report."
+  },
+  {
+    "id": "CG-JUDGE-002",
+    "title": "Refreshed snapshotDate over intentionally retained stale production identity",
+    "taxonomyCategory": "reference_or_manifest_drift",
+    "severity": "low",
+    "evidence": [
+      "main/story-authority.json:3 snapshotDate 2026-09-06",
+      "main/story-authority.json:50 activePath -> 2026-07-13-distance-between-fires",
+      "main/story-authority.json:62-68 activeProduction.runId 2026-07-13-distance-between-fires",
+      "inventory-open-issues.json OI-1",
+      "check-results-v2.json 'activeProduction manifest deliberately remains the old pre-runtime identity' = intentional-and-declared"
+    ],
+    "ownerRole": "story-inventory-verifier",
+    "routingTarget": "verify-story-authority",
+    "status": "accepted-pending-scene-contract",
+    "acceptanceAuthority": "creative producer; disclosed in Bible and Execution Plan",
+    "scope": "Manifest identity fields only; must move at, and only at, signed ch13 implementation/registration."
+  },
+  {
+    "id": "CG-JUDGE-003",
+    "title": "Dual-route and reciprocal-necessity premise proven only as CPU preproduction measurement",
+    "taxonomyCategory": "causal_gap",
+    "severity": "medium",
+    "evidence": [
+      "council-geometry-basis.json routeClassProof (short 16 / unsupported 14 / long 36 / ratio 2.25 / 61 samples / common 18 / 73 dense points)",
+      "selected-geometry-qualification.json SHA 521e78f5f1b3e76772a89a057de71e07fd037253fc4fd52100b737f50c7c4018",
+      "staged-geometry-qualification.md (all 31 samples and 73 dense points in range 12 from H, max 10.01, clearance 2.00)",
+      "story-authority-candidate.md:54 'Sign exact arena geometry only after two actual dry grounded routes...'",
+      "story-authority-candidate.md:108 'does not claim a completed physical scene'",
+      "alignment-report-v2.md \u00a7Delta ('support distinct proposed tactics, not current player perception')",
+      "dissent-register.md \u00b65 (failure to demonstrate the two route classes reopens the arena)"
+    ],
+    "ownerRole": "chapter-director",
+    "routingTarget": "cross-examine-story-directions at the scene-contract geometry gate",
+    "status": "open-accepted-as-declared-precondition (materially advanced from iteration 2 by measurement)",
+    "acceptanceAuthority": "three council-v2 signatures plus delegated owner decision accept it AS AN OPEN GATE, not as satisfied live evidence; reopening the bounded arena remains owner-level",
+    "scope": "Live-world realisation of the measured route classes, reciprocal necessity, edited terrain and playable interaction. Non-blocking for documentation only because the candidate refuses to sign the arena and states the reopening condition."
+  },
+  {
+    "id": "CG-JUDGE-004",
+    "title": "Inherited authorship/guidance-register debt carried into a guidance-heavy new chapter",
+    "taxonomyCategory": "agency_misrepresentation",
+    "severity": "low",
+    "evidence": [
+      "naive-reader-report.md \u00a73 SEVERITY 1 and \u00a76 items 1 and 3",
+      "alignment-scope-dispositions.json A1/A2/A4 existing-runtime-perception-debt-unresolved",
+      "story-authority-candidate.md:76 (per-verb objective enumeration plus two new final objectives)",
+      "story-authority-candidate.md:76 'one quiet standing objective: no per-sample prompt, chime or turn reward'",
+      "alignment-report-v2.md \u00a7Delta (quiet tracing 'does not repair old Maw/settlement copy')"
+    ],
+    "ownerRole": "chapter-director",
+    "routingTarget": "align-intent-with-cold-read at scene contract; older-copy portion remains uncommissioned",
+    "status": "partially-repaired-for-ch13; inherited portion open",
+    "acceptanceAuthority": "owner for any older-copy pass; chapter director for ch13 guidance wording",
+    "scope": "ch13 guidance register only. Does not close, reopen or re-scope pre-existing runtime perception debt."
+  },
+  {
+    "id": "CG-JUDGE-005",
+    "title": "Terra's in-chapter opposition and belief movement under-pressurised",
+    "taxonomyCategory": "character_motivation_gap",
+    "severity": "low",
+    "evidence": [
+      "story-authority-candidate.md:21 (revised Terra row) and :44-45 (before/after lines)",
+      "canon-decision-register.json CG-D04 ('Her wanted final comparison needs W-7744's maintained reference, outside the fixed plate range')",
+      "council-geometry-basis.json / staged-geometry-qualification.md (8-unit contiguous span outside fixed-reference coverage)",
+      "arena-director-notes.json CG-A-CH-CIN response ('Her moving body and the maintained reference cannot occupy the required positions simultaneously')",
+      "alignment-report-v2.md \u00a7Delta ('perception not yet measured')"
+    ],
+    "ownerRole": "chapter-director",
+    "routingTarget": "direct-story-correction at scene contract (staging and response envelope only)",
+    "status": "documentation-repaired; residual staging/perception obligation open",
+    "acceptanceAuthority": "creative producer; no owner canon decision required",
+    "scope": "Blocking and response envelope so the dependence is felt. No new canon, mechanic, external threat or clock."
+  },
+  {
+    "id": "CG-JUDGE-006",
+    "title": "In-flight geometry pass 2 must not be back-credited to signed decisions",
+    "taxonomyCategory": "reference_or_manifest_drift",
+    "severity": "low",
+    "evidence": [
+      "story-authority-candidate.md:108 'Pass-one phantom-voxel inference is superseded by geometry-pass2; no late measurement is back-credited to old signatures'",
+      "council-v2 signatures cite geometryBasisSha256 b7999bb589cfcf2d420af1f25f59780026c0ea7909a65b52d1f26fb2088ee55a explicitly",
+      "check-results-v2.json artifactHashes bind the measurement set to this iteration",
+      "geometry-arena.json bare-water search recorded as failed and not approved"
+    ],
+    "ownerRole": "creative-producer",
+    "routingTarget": "none \u2014 closed",
+    "status": "resolved-superseded",
+    "acceptanceAuthority": "story cohesion judge, iteration 3",
+    "scope": "Provenance only. Council-v1 signatures remain credited with nothing later; the v2 signatures cite the measurement by hash."
+  },
+  {
+    "id": "CG-JUDGE-007",
+    "title": "Frozen production lock binds the superseded council-v1 candidate hash",
+    "taxonomyCategory": "reference_or_manifest_drift",
+    "severity": "low",
+    "evidence": [
+      "production-lock.json:96 documentationCandidateSha256 = 790b2894a48d6eb2a24816dede8ff8d911448e217e18f394d25be35444cd87ae",
+      "production-lock.json:94 frozenAt 2026-09-06T04:15:03Z",
+      "story-authority-candidate.md SHA-256 133d1dbe54a9f51e68d9fd67997042d1494059e30707a5da6c308d403cebc2fb",
+      "owner-story-decision.json, director-signoffs.json and check-results-v2.json all bind the v2 hash"
+    ],
+    "ownerRole": "creative-producer",
+    "routingTarget": "verify-story-authority / lock-story-correction-scope",
+    "status": "open",
+    "acceptanceAuthority": "creative producer; no owner decision required",
+    "scope": "Lock manifest identity only. Record a successor/amendment entry; do not retro-edit frozen bytes. No mutation boundary, allowed path or ceiling is affected."
+  },
+  {
+    "id": "CG-JUDGE-008",
+    "title": "Dissent register not extended to the council-v2 arena round; one open scene objection lives only in a signature limitation",
+    "taxonomyCategory": "unresolved_director_dissent",
+    "severity": "low",
+    "evidence": [
+      "dissent-register.md title and body scoped to 'Common Ground council v1'",
+      "director-signoffs.json chapter limitations: 'Scene objection cg.scene.chapter-cinema.reciprocal remains open'",
+      "arena-director-notes.json (six routes, all effectiveStatus accepted-by-recipient) is the only compiled v2 dissent evidence",
+      "cinematography signoff limitation: 'This signature does not close the open scene objection or certify that check'"
+    ],
+    "ownerRole": "creative-producer",
+    "routingTarget": "cross-examine-story-directions",
+    "status": "open",
+    "acceptanceAuthority": "creative producer; no owner decision required",
+    "scope": "Register of record only. The objection is stated honestly elsewhere and is not suppressed; the defect is traceability, not consensus-by-omission."
+  }
+]

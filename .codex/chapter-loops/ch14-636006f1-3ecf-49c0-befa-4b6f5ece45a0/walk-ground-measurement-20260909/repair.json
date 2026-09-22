@@ -1,0 +1,35 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "failureSha256": "4480ee84cc3425cd3210ef84ab3bc2e7f966ead40a814ec874b86acb606d817f",
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/capture-case.test.mjs",
+      "before": "1338a0bb6151b68b6b0b85cc0f9663a734a57aba5b077b7825703f65ad9b3f12",
+      "after": "b4b00405437da0fa01cf7fd46ef06dee2aa25f025fd66039b23a0cb98cba75c1"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": "ea5d4f04c4e6848bd837364b42b369f6cb321a5020f3d025d35a3c489219b5a8",
+      "after": "00650836b95f7b08fa59d89e133f46fd621b555567288604993b926490085e43"
+    }
+  ],
+  "ownerAuthorization": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-ground-measurement-20260909/owner-authorization.json",
+    "sha256": "4a475768521d174e171d1df299e86d5e795f92cd112a87183252c4b3f636413e"
+  },
+  "diagnosis": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-ground-measurement-20260909/diagnosis.json",
+    "sha256": "a6e18c940d4c965e9671da832924e61476612b345754543f17ace6c32925cf5f"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run chapter:loop:test",
+    "actualCommand": "npm --prefix main run chapter:loop:test",
+    "log": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-ground-measurement-20260909/tests.log",
+      "sha256": "c74ce6a172829f5a120eed0ec18d9abefe6fc18067d2a609de2a44bf558ddbd5"
+    },
+    "filesSha256": "64d9c16b7344fb5be2acd239f819c1817a0b369335f05db218c74a2128a733f0"
+  }
+}

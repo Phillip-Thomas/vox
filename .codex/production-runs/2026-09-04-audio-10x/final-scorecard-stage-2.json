@@ -1,0 +1,218 @@
+{
+  "schema": "paravoxia.creativeScorecard.v1",
+  "runId": "2026-09-04-audio-10x",
+  "stage": "2",
+  "stageBeat": "audio-stage-2-game-mix",
+  "contractVersion": "draft-v3",
+  "contractSha256": "776d676b90cc9c1007694b26f0000cfc61ecf85c256c81a72a0cdd324ea26ba1",
+  "mode": "chapter",
+  "runProfileRef": "paravoxia-creative-chapter@v1",
+  "rubricRef": "paravoxia-creative-cohesion@v1",
+  "categories": [
+    {
+      "slug": "narrative_and_player_causality",
+      "weight": 14,
+      "score": 4.8,
+      "rationale": "No verb, objective, copy or beat predicate moves. Story authority honoured in the mix: -3 dB story-lead cap measured; story floors within 0.01 LU; bare/colour identical. Every acknowledgement cue now passes a held-level law and +10.34 ms path delay — under a frame, recorded for the Stage 3 UX audit.",
+      "evidenceRefs": [
+        "evidence/stage-2/ab-results.md#duck.cap",
+        "evidence/stage-2/ab-results.md#floor",
+        "naive-audience-report-stage-2.md#alignment-fact",
+        "main/src/audio/sfxEngine.ts:290"
+      ],
+      "defectRefs": [
+        "S2-D10"
+      ]
+    },
+    {
+      "slug": "audiovisual_emotional_alignment",
+      "weight": 16,
+      "score": 4.5,
+      "rationale": "Effects rise from 20 dB to 9.5 dB under the bed; music steps aside 6 dB in 35 ms and returns in 0.8 s without pumping; quiet passages unchanged to 0.01 dB. But the blind hears a broadband recession (\"mixed rather than orchestrated\"), a 16 dB clearance that may be too much room, and the BLOOM peak is still absent (deferred, not delivered).",
+      "evidenceRefs": [
+        "naive-audience-report-stage-2.md#a",
+        "naive-audience-report-stage-2.md#d",
+        "evidence/stage-2/ab-results.md#bloom.smax"
+      ],
+      "defectRefs": [
+        "S2-D2",
+        "S2-J5"
+      ]
+    },
+    {
+      "slug": "cinematic_composition_and_lens",
+      "weight": 14,
+      "score": 4.6,
+      "rationale": "No image term moves. A Stage 3 image-sync hazard was found (C6 trigger stale; 14.875 ms music-vs-SFX skew) and Cinematography has drafted the amendment; until signed, anchor timing semantics are unbound.",
+      "evidenceRefs": [
+        "c6-amendment.md",
+        "evidence/stage-2/README.md#deviation-5",
+        "implementation.diff"
+      ],
+      "defectRefs": [
+        "S2-D3",
+        "S2-D4"
+      ]
+    },
+    {
+      "slug": "score_coherence_and_sync",
+      "weight": 12,
+      "score": 4.5,
+      "rationale": "Tail order correct and shared by live/mirror; duck matrix row-for-row within 0.0 dB; SYMPHONY LAW clean; 0 smoothness violations; no clicks introduced. Three acceptance terms unmet by architecture (BLOOM, -18 sum, writes/s), mixIntent wording wrong in two sentences, one active duck row unmeasured.",
+      "evidenceRefs": [
+        "score-audit-stage-2.md",
+        "evidence/stage-2/ab-results.md",
+        "verification-report.json#stage2"
+      ],
+      "defectRefs": [
+        "S2-D1",
+        "S2-D5",
+        "S2-D8",
+        "S2-J1",
+        "S2-J5"
+      ]
+    },
+    {
+      "slug": "palette_light_and_render_cohesion",
+      "weight": 10,
+      "score": 4.8,
+      "rationale": "Sound-as-rendering holds through the mix: bare, colour and floors unchanged to 0.01 dB; quietest second untouched everywhere; ui/voice dry because the institution is not underwater; sandbox and menu unity by law.",
+      "evidenceRefs": [
+        "evidence/stage-2/ab-results.md#rebaseline",
+        "naive-audience-report-stage-2.md#c",
+        "main/src/audio/mix/mixSnapshot.ts"
+      ],
+      "defectRefs": []
+    },
+    {
+      "slug": "transition_and_state_integrity",
+      "weight": 10,
+      "score": 4.5,
+      "rationale": "Snapshot mixer pure and deterministic; dirty-checked, slewed writes; start-anchored duck envelopes. Gaps: cap resolved at schedule time only; two doors to the SFX muffle; per-flush dedupe vs stated per-frame; the sandbox-no-op probe cannot engage mining; dive stress script steps where play is continuous.",
+      "evidenceRefs": [
+        "score-audit-stage-2.md#4",
+        "score-audit-stage-2.md#5",
+        "verification-report.json#stage2.metronome"
+      ],
+      "defectRefs": [
+        "S2-D4",
+        "S2-D7",
+        "S2-D10",
+        "S2-D11",
+        "S2-J2",
+        "S2-J4"
+      ]
+    },
+    {
+      "slug": "creative_ambition_and_specificity",
+      "weight": 10,
+      "score": 4.5,
+      "rationale": "A bespoke, honest mix architecture (subtract-only tail, story-lead cap, dry REGULATION, one createMixTail) rather than a preset. Yet the mix reads as competent recession, not authored gesture — the stage's own peak ambition (BLOOM window) was not delivered here.",
+      "evidenceRefs": [
+        "naive-audience-report-stage-2.md",
+        "score-audit-stage-2.md#protected-strengths",
+        "evidence/stage-2/README.md"
+      ],
+      "defectRefs": [
+        "S2-D2"
+      ]
+    },
+    {
+      "slug": "interaction_accessibility_and_variants",
+      "weight": 6,
+      "score": 4.4,
+      "rationale": "Lean tier not re-rendered through the new tail; audio-thread cost not re-measured at 4x for Stage 2; +10.34 ms acknowledgement delay and held-level law unaudited by a player-experience reader (skip accepted with condition).",
+      "evidenceRefs": [
+        "verification-report.json#stage2.commands"
+      ],
+      "defectRefs": [
+        "S2-J7"
+      ]
+    },
+    {
+      "slug": "performance_and_implementation_fidelity",
+      "weight": 5,
+      "score": 4.4,
+      "rationale": "verify 2460 green, score:fps 60.39, audio:check 13/13, every builder number reproduced bit-identically by the verifier. Writes/s term unmet (593 vs 60); ms/frame not re-measured; latency constants single-rate.",
+      "evidenceRefs": [
+        "verification-report.json#stage2",
+        "evidence/stage-2/audio-check.log",
+        "evidence/stage-2/verify.log"
+      ],
+      "defectRefs": [
+        "S2-D6",
+        "S2-D4",
+        "S2-J7"
+      ]
+    },
+    {
+      "slug": "evidence_review_and_learning",
+      "weight": 3,
+      "score": 4.6,
+      "rationale": "Self-incriminating deviation log, honest limiter write-up, verifier reproduction, blind report declaring its limits. Weakened by a README double-count, a stale human-decision binding, a 5 ms-bin margin claim and a Stage 3 start recorded before judgement.",
+      "evidenceRefs": [
+        "evidence/stage-2/README.md",
+        "verification-report.json#stage2",
+        "human-decision.json",
+        "iteration-ledger.jsonl"
+      ],
+      "defectRefs": [
+        "S2-D9",
+        "S2-J3",
+        "S2-J6",
+        "S2-J8"
+      ]
+    }
+  ],
+  "weightedScore": 4.58,
+  "categoryFloor": 4.4,
+  "fullCategoryCoverage": true,
+  "thresholds": {
+    "sceneWeighted": 4.75,
+    "sceneFloor": 4.3,
+    "flagshipWeighted": 4.8,
+    "flagshipFloor": 4.5,
+    "applied": "chapter profile 4.75 / 4.30"
+  },
+  "openDefects": {
+    "critical": 0,
+    "high": 3,
+    "mediumUnaccepted": 5,
+    "low": 11
+  },
+  "passes": {
+    "weighted": false,
+    "floor": true,
+    "noCriticalOrHigh": false,
+    "noUnacceptedMediumInFlooredCategories": true
+  },
+  "decision": "route_repair",
+  "releaseReady": false,
+  "humanTasteApproval": {
+    "status": "pending",
+    "gate": "headed-owner-audition-per-stage",
+    "note": "Owner A/B of bare/colour (acceptanceCriteria[5](c)) and the six excerpts through the new tail; blind question for the ear: is 6.4 dB broadband recession too much, and is the 20.013 s mining snap a defect."
+  },
+  "draftV4Amendment": {
+    "required": true,
+    "paths": [
+      "evidence.acceptanceCriteria[5]",
+      "evidence.acceptanceCriteria[6]",
+      "score.mixIntent",
+      "score.cues[0..9].mixIntent",
+      "performance.measurementPlan",
+      "Stage 3 acceptance criterion (applyRails dirty-check <60 writes/s; SFX forward-scheduling at five bundle members)",
+      "Stage 4 acceptance criterion (-18 +/-1.5 with stated SFX density)",
+      "Stage 5 acceptance criterion (BLOOM arrangement rail)",
+      "cinematography-contract-signoff.json#conditions.C6",
+      "human-decision.json (bind sha; acceptedExceptions HD-08(1); HD-09)"
+    ]
+  },
+  "stage3Conditions": "Stage 3 may continue on scoreEngine/storyScore MOODS voicing and the applyRails dirty-check ONLY. No bundleAt latency or SFX-forward-scheduling code before the C6 draft-v4 text is tri-signed; no edit to main/src/audio/audioCore.ts or main/src/audio/mix/** (Stage 2 surface, single owner until the amendment closes); Stage 3 before/ pins Stage 2 after/. The parallel start recorded at ledger iteration 7 (07:09) is accepted in effect because no file under main/src or main/tools changed after 07:05 (verifier measurement at 07:18 uncontaminated).",
+  "confidence": {
+    "level": "medium-high",
+    "note": "All numbers independently reproduced; taste categories rest on signal analysis, not listening; lean tier and audio-thread cost not re-measured at Stage 2."
+  },
+  "judge": "scene-cohesion-judge (Claude Fable 5.1)",
+  "judgedAt": "2026-09-05T07:40:00-04:00"
+}

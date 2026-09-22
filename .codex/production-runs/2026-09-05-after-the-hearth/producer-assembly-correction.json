@@ -1,0 +1,14 @@
+{
+  "previousContractSha256": "907dc39b21728d29c068cc586f7aee73bc517b4d7a54210c7166ac54447f22cf",
+  "contractSha256": "ecce3e98270a9041b071e3c627090b228cfaab8a34e6c847296bd775baac3a74",
+  "authoredBy": "creative-producer",
+  "basis": "Chapter exact correction list plus agreeing Score/Cinema lane reviews; no changed creative direction",
+  "changed": [
+    "six exact event repairs mirrored to anchors",
+    "explicit voluntary revision-ready before F and quiet suffix draw afterwards"
+  ],
+  "anchors": 28,
+  "newPhysicalVerbs": 0,
+  "newObjectivePairs": 0,
+  "runtimeMutated": false
+}

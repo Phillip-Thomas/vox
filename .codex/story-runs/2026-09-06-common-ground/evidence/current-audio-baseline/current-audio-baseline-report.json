@@ -1,0 +1,463 @@
+{
+  "kind": "OFFLINE RENDER — NOT a listening / live combined-AV / performance acceptance",
+  "capturedAt": "2026-09-06T05:36:17.132Z",
+  "gitHead": "b631a52065a1a69fecac0331e69515c306408641",
+  "chromium": "chromium-1217",
+  "harnessTitle": "Paravoxia current-audio-baseline harness",
+  "renderPath": "main/src/audio/soak/offlineRender.ts :: renderStoryBeatOffline (shipped offline mirror)",
+  "bundleBytes": 1209029,
+  "bundleSha256": "b3c2807e6f0f6e98230a7102ea416a5cb7550a93c9e901e4c7d050decbbb1082",
+  "sourceHashes": {
+    "src/audio/soak/offlineRender.ts": {
+      "sha256": "9a5e2810733da268de3831d4beae61f73de857422fc0ef0a6b9e6fef437b1adb",
+      "bytes": 26344,
+      "mtime": "2026-09-05T22:01:44.881Z"
+    },
+    "src/audio/soak/audioAnalysis.ts": {
+      "sha256": "15d5dd423a05374e65a7e5e215a35978c949390ade084acd6e3d8f4e8cf41ad6",
+      "bytes": 27069,
+      "mtime": "2026-09-05T10:25:04.005Z"
+    },
+    "src/audio/soak/excerpts.ts": {
+      "sha256": "9b7d880fdc063aff1a3e8503d2c2e84309dfe67da85753bef20273dfb6a84c86",
+      "bytes": 102141,
+      "mtime": "2026-09-05T23:00:30.172Z"
+    },
+    "src/audio/scoreEngine.ts": {
+      "sha256": "77c5392efb27f61293adf9a3c9a39f7f554f300394e25fc207dd5c218eda03d2",
+      "bytes": 84735,
+      "mtime": "2026-09-05T15:49:09.469Z"
+    },
+    "src/audio/audioCore.ts": {
+      "sha256": "e5026a7a273f957c615cbc4e048fe5f6b932916d21390c3c16bb52555626e8f9",
+      "bytes": 46079,
+      "mtime": "2026-09-05T16:11:05.914Z"
+    },
+    "src/audio/musicPrimitives.ts": {
+      "sha256": "4d0267788f5be821b22517674f00b3c128546a8633b8fef804206015ac9df709",
+      "bytes": 3375,
+      "mtime": "2026-09-05T01:44:32.727Z"
+    },
+    "src/audio/musicDirector.ts": {
+      "sha256": "f4c671ff3101813423751f8f981a272474fd6d3252ac68323cfda46d63d2d795",
+      "bytes": 10068,
+      "mtime": "2026-07-27T19:39:15.418Z"
+    },
+    "src/audio/musicEngine.ts": {
+      "sha256": "a19d45b58eb8e113a25a34c9f11ffcd5ee7ed2f2552e2cabb8417107cd2d31a5",
+      "bytes": 26636,
+      "mtime": "2026-07-27T19:39:15.419Z"
+    },
+    "src/audio/bedEngine.ts": {
+      "sha256": "4ccfca10f0f0b3511c6f184dabb80c40217f58099b0d26ebaabb7b70ea76d9dd",
+      "bytes": 84289,
+      "mtime": "2026-09-05T22:53:47.830Z"
+    },
+    "src/audio/mix/mixSnapshot.ts": {
+      "sha256": "4373f00743541ba2d82163ab181193cee6efb4b03d16c335e20a702f9ff7436b",
+      "bytes": 4733,
+      "mtime": "2026-09-05T16:11:05.850Z"
+    },
+    "src/audio/mix/mixTuning.ts": {
+      "sha256": "c1904582d5788a5ff7af13499526e60855dd58428bda74695d9ec47cd63b212e",
+      "bytes": 8666,
+      "mtime": "2026-09-05T12:14:45.735Z"
+    },
+    "src/audio/generative/motif.ts": {
+      "sha256": "502ff3dbc2961a2a9fe477f1ad3aca693c34d43559d7ec106c4e242c1c50b5d2",
+      "bytes": 13858,
+      "mtime": "2026-09-05T15:46:00.205Z"
+    },
+    "src/audio/generative/tuning.ts": {
+      "sha256": "15f7671fdbc4c4df4dbf31a636bffd4691ac72c1b735314312b003a59818bc99",
+      "bytes": 43372,
+      "mtime": "2026-09-05T22:53:47.828Z"
+    },
+    "src/story/storyScore.ts": {
+      "sha256": "94d560db834ed0067689e2b4784fb93a5fc6a962f0942082fbcd7038651f7d05",
+      "bytes": 60281,
+      "mtime": "2026-09-05T22:18:09.779Z"
+    }
+  },
+  "excerpts": [
+    {
+      "name": "ch4-audit_current",
+      "file": "evidence/current-audio-baseline/ch4-audit_current.wav",
+      "spec": {
+        "name": "ch4-audit_current",
+        "beat": "ch4-audit",
+        "intensity": 0.42,
+        "seconds": 10,
+        "era": 1,
+        "legacyScene": "deepSpace"
+      },
+      "sha256": "b9f4af0f9024974a76c688b23aeab06bb3c8f733cc216ca1ff8e23638ba11417",
+      "onDiskBytes": 1764044,
+      "renderWallMs": 1012,
+      "analysis": {
+        "seconds": 10,
+        "peak": 0.25597861409187317,
+        "rms": 0.07868764934829015,
+        "nanCount": 0,
+        "clipCount": 0,
+        "longestSilenceS": 0,
+        "maxWindowRms": 0.12226646164732537,
+        "maxSmoothnessDeltaRms": 0.005263643788990538,
+        "maxSmoothnessDeltaAtS": 9,
+        "maxSmoothnessDeltaDb": 0.42835030675770225,
+        "maxSmoothnessDeltaDbAtS": 9,
+        "maxSmoothnessPreviousRms": 0.10412354603718744,
+        "maxSmoothnessCurrentRms": 0.10938718982617798,
+        "smoothnessViolations": 0
+      },
+      "loudness": {
+        "integratedLufs": -22.580656478980654,
+        "shortTermMaxLufs": -21.043839690914663,
+        "momentaryMaxLufs": -18.955910607481613,
+        "loudnessRangeLu": 4.012705389663871,
+        "truePeakDbtp": -11.832905722895273,
+        "samplePeakDbfs": -11.835926332033026,
+        "correlation": 0.9814271849678409
+      },
+      "windowedRmsDb": [
+        -29.77758401735788,
+        -23.76942560692988,
+        -21.21198696765314,
+        -22.227829983950716,
+        -18.68924880871672,
+        -24.321619287755073,
+        -28.977726131202232,
+        -25.03897700941319,
+        -20.873062556135444,
+        -18.7560902638346
+      ],
+      "overallRmsDb": -22.081868565222912,
+      "maxInterSampleStep": 0.01433420181274414,
+      "nonFiniteSamples": 0,
+      "samplesAtOrOverFullScale": 0,
+      "renderedChannels": 2,
+      "renderedSampleRate": 44100,
+      "renderedFrames": 441000,
+      "renderedDurationS": 10,
+      "wavBytes": 1764044,
+      "moodResolved": {
+        "tempo": 58,
+        "wave": "square",
+        "chord": [
+          0,
+          6,
+          7
+        ],
+        "baseline": 0.42,
+        "pad": 0.1,
+        "sub": 0.14,
+        "ost": 0.035,
+        "octave": 24
+      }
+    },
+    {
+      "name": "ch9-hearth_current",
+      "file": "evidence/current-audio-baseline/ch9-hearth_current.wav",
+      "spec": {
+        "name": "ch9-hearth_current",
+        "beat": "ch9-hearth",
+        "intensity": 0.28,
+        "seconds": 10,
+        "era": 1,
+        "legacyScene": "deepSpace"
+      },
+      "sha256": "32f80b133c0f15592c34c257abbf26febebb03cbfa06f7310db7222282687047",
+      "onDiskBytes": 1764044,
+      "renderWallMs": 1113,
+      "analysis": {
+        "seconds": 10,
+        "peak": 0.27199217677116394,
+        "rms": 0.07320522109066113,
+        "nanCount": 0,
+        "clipCount": 0,
+        "longestSilenceS": 0,
+        "maxWindowRms": 0.10321342082942735,
+        "maxSmoothnessDeltaRms": 0.028241961629705117,
+        "maxSmoothnessDeltaAtS": 8.6,
+        "maxSmoothnessDeltaDb": 3.224461396730108,
+        "maxSmoothnessDeltaDbAtS": 8.6,
+        "maxSmoothnessPreviousRms": 0.06282746292245558,
+        "maxSmoothnessCurrentRms": 0.0910694245521607,
+        "smoothnessViolations": 0
+      },
+      "loudness": {
+        "integratedLufs": -22.39926019093528,
+        "shortTermMaxLufs": -21.298760611014277,
+        "momentaryMaxLufs": -19.88125821916283,
+        "loudnessRangeLu": 2.062417843290266,
+        "truePeakDbtp": -11.308544998503354,
+        "samplePeakDbfs": -11.308871745343641,
+        "correlation": 0.916759089679233
+      },
+      "windowedRmsDb": [
+        -30.19955583214566,
+        -24.338734926093608,
+        -22.04735260157313,
+        -22.427222738103296,
+        -19.937453746762042,
+        -23.258914563261712,
+        -24.24118147822306,
+        -23.17641394624612,
+        -21.913365249604336,
+        -21.480665576801986
+      ],
+      "overallRmsDb": -22.70915886790278,
+      "maxInterSampleStep": 0.01969674974679947,
+      "nonFiniteSamples": 0,
+      "samplesAtOrOverFullScale": 0,
+      "renderedChannels": 2,
+      "renderedSampleRate": 44100,
+      "renderedFrames": 441000,
+      "renderedDurationS": 10,
+      "wavBytes": 1764044,
+      "moodResolved": {
+        "tempo": 56,
+        "wave": "triangle",
+        "chord": [
+          0,
+          4,
+          7,
+          10,
+          14
+        ],
+        "baseline": 0.28,
+        "pad": 0.17,
+        "sub": 0.08,
+        "ost": 0.024,
+        "octave": 12
+      }
+    },
+    {
+      "name": "ch10-station-resolved_current",
+      "file": "evidence/current-audio-baseline/ch10-station-resolved_current.wav",
+      "spec": {
+        "name": "ch10-station-resolved_current",
+        "beat": "ch10-transit",
+        "intensity": 0.24,
+        "seconds": 10,
+        "era": 1,
+        "legacyScene": "deepSpace",
+        "ch10Variant": "station-resolved",
+        "carrierAlive": true
+      },
+      "sha256": "438abbace21655b3040775ebdaa6524710d134839cd64ab647dd34ef076b98c5",
+      "onDiskBytes": 1764044,
+      "renderWallMs": 1066,
+      "analysis": {
+        "seconds": 10,
+        "peak": 0.2801995277404785,
+        "rms": 0.07471508729480007,
+        "nanCount": 0,
+        "clipCount": 0,
+        "longestSilenceS": 0,
+        "maxWindowRms": 0.10634802958277625,
+        "maxSmoothnessDeltaRms": 0.006979695497534882,
+        "maxSmoothnessDeltaAtS": 9,
+        "maxSmoothnessDeltaDb": 0.6136030847136822,
+        "maxSmoothnessDeltaDbAtS": 8.8,
+        "maxSmoothnessPreviousRms": 0.08864183865152508,
+        "maxSmoothnessCurrentRms": 0.09513030957912567,
+        "smoothnessViolations": 0
+      },
+      "loudness": {
+        "integratedLufs": -22.504808761443602,
+        "shortTermMaxLufs": -21.383687004184598,
+        "momentaryMaxLufs": -19.764525809956687,
+        "loudnessRangeLu": 2.253609427989211,
+        "truePeakDbtp": -11.048745384436884,
+        "samplePeakDbfs": -11.05065202053929,
+        "correlation": 0.9490212682500159
+      },
+      "windowedRmsDb": [
+        -30.101355299756996,
+        -24.347865697761712,
+        -21.967238557092582,
+        -22.65317815312852,
+        -19.736683950807155,
+        -24.046007818934978,
+        -25.169425512949143,
+        -24.085376263311655,
+        -21.451796381054287,
+        -19.69866650776613
+      ],
+      "overallRmsDb": -22.53183383590763,
+      "maxInterSampleStep": 0.019517771899700165,
+      "nonFiniteSamples": 0,
+      "samplesAtOrOverFullScale": 0,
+      "renderedChannels": 2,
+      "renderedSampleRate": 44100,
+      "renderedFrames": 441000,
+      "renderedDurationS": 10,
+      "wavBytes": 1764044,
+      "moodResolved": null
+    }
+  ],
+  "failures": [],
+  "moodsResolved": {
+    "ch4-audit": {
+      "chord": [
+        0,
+        6,
+        7
+      ],
+      "progression": [
+        [
+          0,
+          6,
+          7
+        ],
+        [
+          0,
+          1,
+          7
+        ]
+      ],
+      "melody": {
+        "scale": [
+          0,
+          1,
+          6,
+          7,
+          10,
+          12
+        ],
+        "density": 0.16
+      },
+      "pattern": [
+        0,
+        null,
+        null,
+        6,
+        null,
+        null,
+        7,
+        null
+      ],
+      "tempo": 58,
+      "wave": "square",
+      "pad": 0.1,
+      "sub": 0.14,
+      "ost": 0.035,
+      "riser": 0.12,
+      "baseline": 0.42,
+      "octave": 24
+    },
+    "ch9-hearth": {
+      "chord": [
+        0,
+        4,
+        7,
+        10,
+        14
+      ],
+      "progression": [
+        [
+          0,
+          4,
+          7,
+          10
+        ],
+        [
+          7,
+          10,
+          14
+        ],
+        [
+          0,
+          7,
+          12
+        ]
+      ],
+      "melody": {
+        "scale": [
+          0,
+          2,
+          4,
+          7,
+          9,
+          10,
+          12,
+          14
+        ],
+        "density": 0.26
+      },
+      "pattern": [
+        0,
+        null,
+        null,
+        null,
+        7,
+        null,
+        null,
+        null
+      ],
+      "tempo": 56,
+      "wave": "triangle",
+      "pad": 0.17,
+      "sub": 0.08,
+      "ost": 0.024,
+      "riser": 0.05,
+      "baseline": 0.28,
+      "octave": 12
+    },
+    "ch10-transit/station-resolved": {
+      "chord": [
+        0,
+        7,
+        12,
+        17,
+        29
+      ],
+      "progression": [
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          9,
+          17,
+          29
+        ]
+      ],
+      "melody": {
+        "scale": [
+          0,
+          7,
+          12,
+          17
+        ],
+        "density": 0.1
+      },
+      "pattern": [
+        0,
+        null,
+        null,
+        null,
+        17,
+        null,
+        null,
+        null
+      ],
+      "tempo": 68,
+      "wave": "triangle",
+      "pad": 0.17,
+      "sub": 0.1,
+      "ost": 0,
+      "riser": 0.04,
+      "baseline": 0.44,
+      "octave": 12
+    }
+  },
+  "notes": [
+    "ch10-station-resolved was rendered at intensity rail 0.24 (carried from the 2026-08-11 ch10 probe convention), NOT its authored baseline 0.44. ch4-audit (0.42) and ch9-hearth (0.28) were rendered at their authored baselines.",
+    "era rail pinned to 1 (alive) for all three; the offline mirror default. No per-beat era table exists in source for these beats.",
+    "legacyScene deepSpace drives the legacy procedural music rim alongside the score, so each render is the combined MUSIC bus. No SFX/voice cues were scripted: these are NOT combined music+SFX renders."
+  ]
+}

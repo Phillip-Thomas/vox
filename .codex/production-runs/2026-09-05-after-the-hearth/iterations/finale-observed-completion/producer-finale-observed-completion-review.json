@@ -1,0 +1,89 @@
+{
+  "at": "2026-09-06T20:26:00.382790+00:00",
+  "reportRef": "finale-window-capture-continuation-report.json",
+  "reportSha256": "bf32094ad51f9f0fcd878549982fb10b464209f4b0ba4bcc2b3e53c281e38285",
+  "invocationRef": "finale-window-capture-continuation-invocation.json",
+  "isAcceptance": false,
+  "boundedCaptureObtained": true,
+  "sourceMutationAuthorized": false,
+  "artifactHashesChecked": [
+    {
+      "path": "verifier/captures/finale-window/window-4/runtime-record.json",
+      "expected": "15ac452d999aa6776093cfc36338598c91339774f7bd4c5efd63b72e6f52ac55",
+      "actual": "15ac452d999aa6776093cfc36338598c91339774f7bd4c5efd63b72e6f52ac55"
+    },
+    {
+      "path": "verifier/captures/finale-window/window-4/summary.json",
+      "expected": "73043b612ad70014bffb32e0d19bb9f14d67f654810c387856b392c281afd907",
+      "actual": "73043b612ad70014bffb32e0d19bb9f14d67f654810c387856b392c281afd907"
+    },
+    {
+      "path": "verifier/captures/finale-window/window-4/owned-sink.wav",
+      "expected": "766d304847b5037c9ea9bff1010b17e59b38ddb5b5844b6ca2c5a5419e60a24f",
+      "actual": "766d304847b5037c9ea9bff1010b17e59b38ddb5b5844b6ca2c5a5419e60a24f"
+    },
+    {
+      "path": "verifier/captures/finale-window/window-4/window.ndjson",
+      "expected": "95e3a09bb90cadb14b4ed90a843b5af272e028a6dee720e4a42c45985ee5df1b",
+      "actual": "95e3a09bb90cadb14b4ed90a843b5af272e028a6dee720e4a42c45985ee5df1b"
+    },
+    {
+      "path": "verifier/captures/finale-window/window-4/cleanup-receipt.json",
+      "expected": "ceabb1fd81e74657c549203e8f749a11a4ccccfbb3678878721970ccedc2640c",
+      "actual": "ceabb1fd81e74657c549203e8f749a11a4ccccfbb3678878721970ccedc2640c"
+    },
+    {
+      "path": "verifier/probes/finale-window/finale-window-probe.mjs",
+      "expected": "356fa23a3d840fa108ec7ab2be24a8fc92d46baec0c898727a5534a4862ba73a",
+      "actual": "356fa23a3d840fa108ec7ab2be24a8fc92d46baec0c898727a5534a4862ba73a"
+    }
+  ],
+  "atomicEdge": {
+    "index": 179,
+    "tMs": 62877.299999952316,
+    "wallMs": 1788726092396,
+    "terra": 18,
+    "worker": 18,
+    "committed": true,
+    "bothAnchors": true,
+    "beat": "done",
+    "active": false,
+    "textureAgeSeconds": 0.021199999928474426,
+    "nextSampleDeltaMs": 13.5,
+    "nextTexture": null,
+    "visibleAndFocusedAtBoth": true,
+    "audioRouteAtBoth": [
+      "game: direct (running)",
+      "game: direct (running)"
+    ]
+  },
+  "window": {
+    "retainedSamples": 847,
+    "preEdgeSampleMs": 2991.6999999284744,
+    "postEdgeSampleMs": 11512.900000095367,
+    "rollingOlderSamplesEvicted": 3377,
+    "capHit": false,
+    "sampleErrors": 0
+  },
+  "audio": {
+    "frames": 3080192,
+    "sampleRate": 44100,
+    "channels": 2,
+    "durationSeconds": 69.84562358276644,
+    "recorderProcessWallSeconds": 71.737,
+    "pcmVsProcessWallDifferenceSeconds": 1.891376417233559,
+    "sampleWallAlignment": "Process spawn/stop wallclock is not first/last PCM sample timestamp; exact bin-to-edge alignment unproved. Preserve recording as same-session output, use timings with latency uncertainty."
+  },
+  "sourceInference": {
+    "reuses": "finale-lifecycle-audit.json",
+    "necessaryPredicate": "StoryDirectorDriver.tsx145: foreground includes story.active. At observed active=false, foreground must be false regardless of remaining conjuncts. Line151 invokes suspendCommonGroundPresentation; commonGroundDirector1753 cancels final token. The earlier-priority frame runs before the normal postdone deadline tick.",
+    "limit": "Specific dynamic calling stack and paused/mute/context at clearing frame remain unrecorded. Do not claim all alternatives excluded or infer an audible failure from token absence. Static normaldone cancellation path contradicts intended retention exception and merits bounded fidelity routing."
+  },
+  "qualifications": [
+    "Initial hook inventory was taken before CommonGround hook publication. Actual847samples expose score via snapshot; initialundefined is not missing score throughout.",
+    "Numerical image luma does not prove visualquality/noUXdefects. Root viewed earlybaseline mostlyblankscene withdebugHUD and postseal0 readableterrain/water/palms plusdebugpanels; no firsttimeUX/fullvisualacceptance.",
+    "RawRMS is owned outputenergy, not cueisolation/hearing/taste. Processwall/PCMduration mismatch prevents exact samplealignment claim.",
+    "3377dropped records are documented rolling prehistory eviction, not proof of missing samples inside retained3s/11.5swindow."
+  ],
+  "next": "Carry bounded state/audio baseline and existing audit into affected Score interpretation; await other active baseline verifiers before any game source change."
+}

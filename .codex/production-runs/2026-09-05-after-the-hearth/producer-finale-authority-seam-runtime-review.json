@@ -1,0 +1,18 @@
+{
+  "at": "2026-09-06T22:42:46.130201+00:00",
+  "acceptedForAudioReleaseProof": false,
+  "captures": [
+    "verifier/captures/manual-credit-finale/authority-seam-normal-20260906T223703Z",
+    "verifier/captures/manual-credit-finale/authority-seam-pause-20260906T223906Z"
+  ],
+  "actualFacts": [
+    "Normalbegin token started63968.5ms; deadlinecheck age5.0093; releaseentryage5.0894 including~80ms observationoverhead; not an exactunperturbeddeadline measurement.",
+    "All7 observed normalmood-ctx calls builtfalse/ctxPresentfalse. No authority-entry orbedcallback hits; cannot prove audio-authority timing from this capture.",
+    "Atcreation scoremoodselected thennullagainabout0.2msaftercreation; withactualbuiltcontext an earlynormalrelease is plausible, not yet measured.",
+    "Pause attemptedEscapearound1.098s afterbeginentry, but no actualpausedstate proven; only2cancelhits bothpretoken/livefalse. No actualpause-cancellationfailure diagnosis.",
+    "4000cap hit because3968 deadline:drop events filled buffer;169normal capdrops, zeroevalerrors. Droppedcounters mustnot themselvesappendperframe.",
+    "Launcher bypassed proven finale-window-runtime.mjs Pulsewrapper and called probe directly; no ownedWAV/runtime-record created. Need restore realownedruntimewrapper.",
+    "Bothbrowsercleanupreceipts complete; source100unchanged."
+  ],
+  "next": "One actual normalexpiry capture with realtrustedcanvasgesture and actualbuilt/runningcontext through preservedouterPulsewrapper, within original12min deadline. Existingcaptures preserved; no gamepatch."
+}

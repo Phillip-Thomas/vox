@@ -36,6 +36,19 @@
         "ch10-ask",
         "ch10-transit"
       ]
+    },
+    {
+      "id": "common-ground@scene-v3",
+      "sceneId": "common-ground",
+      "contractVersion": "scene-v3",
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/scene-contract.json",
+      "sha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+      "coversBeats": [
+        "ch13-home",
+        "ch13-return",
+        "ch13-survey",
+        "ch13-common"
+      ]
     }
   ],
   "chapters": [
@@ -1941,7 +1954,9 @@
       "before": [
         "ch9"
       ],
-      "after": [],
+      "after": [
+        "ch13"
+      ],
       "entry": {
         "beat": "ch10-cold",
         "requirements": [
@@ -2133,6 +2148,492 @@
           "maxRepairLoops": 4
         }
       }
+    },
+    {
+      "id": "ch13",
+      "order": 11,
+      "beats": [
+        "ch13-home",
+        "ch13-return",
+        "ch13-survey",
+        "ch13-common"
+      ],
+      "before": [
+        "ch10"
+      ],
+      "after": [
+        "ch14"
+      ],
+      "entry": {
+        "beat": "ch13-home",
+        "requirements": [
+          "milestone:story:ch11-station-departed",
+          "milestone:story:ch12-bonded-cell-installed",
+          "milestone:story:ch12-hearth-restored",
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:world/tidegarden",
+          "state:control/on-foot"
+        ],
+        "stateRefs": [
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive",
+          "state:world/tidegarden",
+          "state:control/on-foot",
+          "state:station/departed",
+          "state:hearth/restored"
+        ]
+      },
+      "exit": {
+        "beat": "ch13-common",
+        "guarantees": [
+          "milestone:story:ch13-fault-reviewed",
+          "milestone:story:ch13-return-chosen",
+          "milestone:story:ch13-origin-landed",
+          "milestone:story:ch13-route-tested",
+          "milestone:story:ch13-reciprocal-crossed",
+          "milestone:story:ch13-complete",
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive",
+          "state:world/origin",
+          "state:story/ch13-reciprocal-proof"
+        ],
+        "stateRefs": [
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive",
+          "state:world/origin",
+          "state:control/on-foot",
+          "state:station/departed",
+          "state:hearth/restored",
+          "state:story/ch13-reciprocal-proof"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "ch13-home",
+          "key": "ch13ReturnChosen",
+          "milestone": "story:ch13-return-chosen",
+          "resumeBeat": "ch13-return",
+          "evidenceRefs": [
+            "milestone:story:ch13-fault-reviewed",
+            "state:hearth/restored"
+          ]
+        },
+        {
+          "beat": "ch13-return",
+          "key": "ch13OriginLanded",
+          "milestone": "story:ch13-origin-landed",
+          "resumeBeat": "ch13-survey",
+          "evidenceRefs": [
+            "milestone:story:ch13-return-chosen",
+            "state:world/origin",
+            "state:control/on-foot"
+          ]
+        },
+        {
+          "beat": "ch13-survey",
+          "key": "ch13RouteTested",
+          "milestone": "story:ch13-route-tested",
+          "resumeBeat": "ch13-common",
+          "evidenceRefs": [
+            "milestone:story:ch13-origin-landed"
+          ]
+        },
+        {
+          "beat": "ch13-common",
+          "key": "ch13Complete",
+          "milestone": "story:ch13-complete",
+          "resumeBeat": "done",
+          "evidenceRefs": [
+            "milestone:story:ch13-reciprocal-crossed",
+            "state:story/ch13-reciprocal-proof"
+          ]
+        }
+      ],
+      "objectiveRefs": [
+        "runtime:src/story/beats/objectivePrimitives.ts#chapter-13-objective-ladders",
+        "runtime:src/story/commonGroundDirector.ts#chapter-13-guidance"
+      ],
+      "revealRefs": [
+        "scene:common-ground@scene-v3#reveal:rv.cg.acknowledged-home",
+        "scene:common-ground@scene-v3#reveal:rv.cg.repeated-measure",
+        "scene:common-ground@scene-v3#reveal:rv.cg.real-comparison",
+        "scene:common-ground@scene-v3#reveal:rv.cg.route-classes",
+        "scene:common-ground@scene-v3#reveal:rv.cg.relational-reading"
+      ],
+      "avBoundary": {
+        "sceneContractRefs": [
+          "common-ground@scene-v3"
+        ],
+        "entry": {
+          "anchorRefs": [
+            "scene:common-ground@scene-v3#anchor:anc.cg.cell-installed",
+            "scene:common-ground@scene-v3#anchor:anc.cg.home-steady"
+          ],
+          "scoreRefs": [
+            "scene:common-ground@scene-v3#score:sc.cg.hearth-held"
+          ],
+          "cameraRefs": [
+            "scene:common-ground@scene-v3#camera:shot.cg.home"
+          ],
+          "paletteRefs": [
+            "scene:common-ground@scene-v3#palette:pal.cg.origin-tidegarden"
+          ]
+        },
+        "exit": {
+          "anchorRefs": [
+            "scene:common-ground@scene-v3#anchor:anc.cg.complete",
+            "scene:common-ground@scene-v3#anchor:anc.cg.handback"
+          ],
+          "scoreRefs": [
+            "scene:common-ground@scene-v3#score:sc.cg.independent-settled"
+          ],
+          "cameraRefs": [
+            "scene:common-ground@scene-v3#camera:shot.cg.complete"
+          ],
+          "paletteRefs": [
+            "scene:common-ground@scene-v3#palette:pal.cg.origin-tidegarden"
+          ]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "scene:common-ground@scene-v3#evidence",
+          "runtime:src/story/commonGroundState.test.ts#bounded-trace-state",
+          "runtime:src/story/commonGroundRoute.test.ts#reference-and-footing-refusals",
+          "runtime:src/story/commonGroundDirector.test.ts#chapter-13-guidance",
+          "runtime:src/story/storyBoundaryTelemetry.test.ts#chapter-13-boundary"
+        ],
+        "requiredObjectiveBeats": [
+          "ch13-home",
+          "ch13-return",
+          "ch13-survey",
+          "ch13-common"
+        ],
+        "requiredVariantProfiles": [
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 480000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch14",
+      "beats": [
+        "ch14-record",
+        "ch14-scar",
+        "ch14-question",
+        "ch14-return"
+      ],
+      "entry": {
+        "beat": "ch14-record",
+        "requirements": [
+          "milestone:story:ch13-fault-reviewed",
+          "milestone:story:ch13-return-chosen",
+          "milestone:story:ch13-origin-landed",
+          "milestone:story:ch13-route-tested",
+          "milestone:story:ch13-reciprocal-crossed",
+          "milestone:story:ch13-complete",
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive",
+          "state:world/origin",
+          "state:story/ch13-reciprocal-proof"
+        ],
+        "stateRefs": [
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive",
+          "state:world/origin",
+          "state:control/on-foot",
+          "state:station/departed",
+          "state:hearth/restored",
+          "state:story/ch13-reciprocal-proof"
+        ]
+      },
+      "exit": {
+        "beat": "ch14-return",
+        "guarantees": [
+          "milestone:story:ch13-fault-reviewed",
+          "milestone:story:ch13-return-chosen",
+          "milestone:story:ch13-origin-landed",
+          "milestone:story:ch13-route-tested",
+          "milestone:story:ch13-reciprocal-crossed",
+          "milestone:story:ch13-complete",
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive",
+          "state:world/origin",
+          "state:story/ch13-reciprocal-proof",
+          "milestone:story:ch14:question-retained",
+          "milestone:story:ch14:return-recorded",
+          "milestone:story:ch14:complete"
+        ],
+        "stateRefs": [
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive",
+          "state:world/origin",
+          "state:control/on-foot",
+          "state:station/departed",
+          "state:hearth/restored",
+          "state:story/ch13-reciprocal-proof"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "ch14-record",
+          "key": "ch14SurveyIndexed",
+          "milestone": "story:ch14:survey-indexed",
+          "resumeBeat": "ch14-scar",
+          "evidenceRefs": [
+            "milestone:story:ch14:record-opened",
+            "milestone:story:ch14:survey-indexed"
+          ]
+        },
+        {
+          "beat": "ch14-scar",
+          "key": "ch14ScarObserved",
+          "milestone": "story:ch14:scar-observed",
+          "resumeBeat": "ch14-question",
+          "evidenceRefs": [
+            "milestone:story:ch14:scar-observed"
+          ]
+        },
+        {
+          "beat": "ch14-question",
+          "key": "ch14QuestionRetained",
+          "milestone": "story:ch14:question-retained",
+          "resumeBeat": "ch14-return",
+          "evidenceRefs": [
+            "milestone:story:ch14:question-retained"
+          ]
+        },
+        {
+          "beat": "ch14-return",
+          "key": "ch14Complete",
+          "milestone": "story:ch14:complete",
+          "resumeBeat": "done",
+          "evidenceRefs": [
+            "milestone:story:ch14:return-selected",
+            "milestone:story:ch14:return-recorded",
+            "milestone:story:ch14:complete"
+          ]
+        }
+      ],
+      "objectiveRefs": [
+        "runtime:src/story/unfinishedMapDirector.ts#unfinishedMapObjective"
+      ],
+      "revealRefs": [
+        "runtime:src/story/unfinishedMapState.ts#MAP_QUESTIONS"
+      ],
+      "avBoundary": {
+        "sceneContractRefs": [],
+        "entry": {
+          "anchorRefs": [
+            "runtime:src/story/unfinishedMapDirector.ts#anc.um.record-opened",
+            "runtime:src/story/unfinishedMapDirector.ts#anc.um.scar-observed",
+            "runtime:src/story/unfinishedMapDirector.ts#anc.um.question-retained",
+            "runtime:src/story/unfinishedMapDirector.ts#anc.um.return-selected"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/unfinishedMapScore.ts#mapScoreAnchor"
+          ],
+          "cameraRefs": [
+            "runtime:src/components/ch14/UnfinishedMapPanel.tsx#UnfinishedMapPanel"
+          ],
+          "paletteRefs": [
+            "runtime:src/components/ch14/unfinishedMap.css#um-record"
+          ]
+        },
+        "exit": {
+          "anchorRefs": [
+            "runtime:src/story/unfinishedMapDirector.ts#anc.um.return-recorded",
+            "runtime:src/story/unfinishedMapDirector.ts#anc.um.handback"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/unfinishedMapScore.ts#mapScoreAnchor"
+          ],
+          "cameraRefs": [
+            "runtime:src/components/ch14/UnfinishedMapPanel.tsx#UnfinishedMapPanel"
+          ],
+          "paletteRefs": [
+            "runtime:src/components/ch14/unfinishedMap.css#um-record"
+          ]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "runtime:src/story/unfinishedMapState.test.ts#physical-attendance",
+          "runtime:src/story/autopilot/rail-ch14.ts#tick"
+        ],
+        "requiredObjectiveBeats": [
+          "ch14-record",
+          "ch14-scar",
+          "ch14-question",
+          "ch14-return"
+        ],
+        "requiredVariantProfiles": [
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 480000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      },
+      "order": 12,
+      "before": [
+        "ch13"
+      ],
+      "after": []
+    }
+  ],
+  "externalTransitions": [
+    {
+      "id": "ch10->ch13-via-station",
+      "from": {
+        "chapter": "ch10",
+        "exitBeat": "ch10-transit"
+      },
+      "to": {
+        "chapter": "ch13",
+        "entryBeat": "ch13-home"
+      },
+      "hostSegments": [
+        "station(ch11)",
+        "return(ch12)"
+      ],
+      "producedReceipts": [
+        "story:ch11-station-departed",
+        "story:ch11-bonded-cell-acquired",
+        "story:ch12-bonded-cell-installed",
+        "story:ch12-hearth-restored"
+      ],
+      "entryGuarantees": [
+        "state:story/complete",
+        "state:free-play/two-world-handoff",
+        "state:reality/alive",
+        "state:world/tidegarden",
+        "state:control/on-foot",
+        "state:station/departed",
+        "state:hearth/restored"
+      ],
+      "evidenceRefs": [
+        "runtime:src/game/spaceStation/spaceStationStory.ts#STATION_STORY_MILESTONES",
+        "runtime:src/story/stationReturnStory.ts#STATION_RETURN_MILESTONES",
+        "runtime:src/story/storyBoundaryTelemetry.ts#deriveStoryBoundaryState",
+        ".codex/production-runs/2026-08-11-ch10-station-introduction/station-continuation-contract.md#station:return:tidegarden and hearth:return:install-cell"
+      ],
+      "rationale": "Chapter 10 ends at a 1,500-unit standoff with the bearing held and the ship in flight; chapter 13 opens on foot at a restored second hearth on Tidegarden. Those two boundaries are BOTH true and they are not the same state, because two unregistered host segments run between them: the station visit that issues the sealed cell, and the return that installs it. Declaring the transition is how the registry stays honest about that gap. Ordinary adjacency remains exact everywhere else; nothing is added to chapter 10 exit and nothing is dropped from chapter 13 entry."
     }
   ]
 }

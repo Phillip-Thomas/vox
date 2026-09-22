@@ -1,0 +1,1576 @@
+{
+ "schema": "paravoxia.sceneVerificationReport.v1",
+ "runId": "2026-09-04-audio-10x",
+ "contractVersion": "draft-v2",
+ "contractSha256": "384120dc02b2ea46d855c4d0a360fbd31a93eb47624c00d954eaac7f494a9a6d",
+ "generatedAt": "2026-09-05T05:30:00-04:00",
+ "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641 (working tree)",
+ "canonicalUrl": "http://127.0.0.1:<ephemeral>/score-soak.html (probe-owned HMR-off vite server)",
+ "scope": "audio-stage-1-bed-timbre-mastering \u2014 independent re-measurement by story-verifier; builder numbers treated as claims",
+ "commands": [
+  {
+   "command": "npm --prefix main run audio:check",
+   "status": "pass",
+   "exitCode": 0,
+   "evidenceRef": "evidence/stage-1/verify-rerun/audio-check.log"
+  },
+  {
+   "command": "node tools/audio-stage-evidence-probe.mjs evidence/stage-1/verify-rerun/full --only bed-sandbox-day,story-beat",
+   "status": "pass",
+   "exitCode": 0,
+   "evidenceRef": "evidence/stage-1/verify-rerun/rerun-full.log"
+  },
+  {
+   "command": "node tools/audio-stage-evidence-probe.mjs evidence/stage-1/verify-rerun/lean --only bed-sandbox-day,story-beat --quality lean",
+   "status": "pass",
+   "exitCode": 0,
+   "evidenceRef": "evidence/stage-1/verify-rerun/rerun-lean.log"
+  },
+  {
+   "command": "node tools/audio-stage-evidence-probe.mjs evidence/stage-1/verify-rerun/noglue --glue off --only bare-bed,color-bed,bare-story-ch1-fixed",
+   "status": "pass",
+   "exitCode": 0,
+   "evidenceRef": "evidence/stage-1/verify-rerun/rerun-noglue.log"
+  },
+  {
+   "command": "npm --prefix main run score:fps",
+   "status": "pass",
+   "exitCode": 0,
+   "evidenceRef": "evidence/stage-1/verify-rerun/fps.log"
+  },
+  {
+   "command": "npx vitest run src/audio/generative/timbre.test.ts src/audio/generative/tuning.stage1.test.ts src/audio/audioCore.test.ts src/audio/sfxEngine.test.ts src/audio/soak",
+   "status": "pass",
+   "exitCode": 0,
+   "evidenceRef": "evidence/stage-1/verify-rerun/vitest.log"
+  },
+  {
+   "command": "ffmpeg showspectrumpic + ffprobe decode check over 12 before/after excerpt wavs",
+   "status": "pass",
+   "exitCode": 0,
+   "evidenceRef": "evidence/stage-1/spectrograms"
+  },
+  {
+   "command": "ffmpeg ebur128 (independent analyzer) over 12 before/after excerpt wavs",
+   "status": "pass",
+   "exitCode": 0,
+   "evidenceRef": "evidence/stage-1/verify-rerun/ebur128.txt"
+  },
+  {
+   "command": "npm --prefix main run verify",
+   "status": "not_run",
+   "exitCode": null,
+   "evidenceRef": "not run by request (machine memory constraint); builder log at evidence/stage-1/verify.log"
+  }
+ ],
+ "audio": {
+  "authorizedToChange": true,
+  "changed": true,
+  "status": "pass_with_one_claim_disagreement",
+  "measurements": {
+   "audioCheck": {
+    "integratedLufs": -20.4,
+    "shortTermMaxLufs": -18.75,
+    "momentaryMaxLufs": -18.16,
+    "loudnessRangeLu": 3.26,
+    "truePeakDbtp": -9.15,
+    "correlation": 0.922,
+    "smoothnessViolations": 0,
+    "smoothnessMaxDb": 1.39,
+    "replayDeltaMax": 8.91e-05,
+    "replayDeltaGate": 0.0001,
+    "replayFingerprint": "20cce7f62ba5b87d",
+    "wallSeconds": 25.5,
+    "wallBudgetSeconds": 40,
+    "sfxCues": "30/30"
+   },
+   "excerptsRerendered": [
+    {
+     "name": "bed-sandbox-day",
+     "tier": "full",
+     "integratedLufs": -20.48,
+     "shortTermMaxLufs": -18.12,
+     "truePeakDbtp": -9.37,
+     "correlation": 0.936,
+     "loudnessRangeLu": 3.59,
+     "smoothnessViolations": 0,
+     "fingerprintSha256Prefix": "405233644eaa"
+    },
+    {
+     "name": "story-beat",
+     "tier": "full",
+     "integratedLufs": -20.18,
+     "shortTermMaxLufs": -18.28,
+     "truePeakDbtp": -9.64,
+     "correlation": 0.875,
+     "loudnessRangeLu": 2.4,
+     "smoothnessViolations": 0,
+     "fingerprintSha256Prefix": "20044c2de1bf"
+    },
+    {
+     "name": "bed-sandbox-day",
+     "tier": "lean",
+     "integratedLufs": -19.85,
+     "shortTermMaxLufs": -17.72,
+     "truePeakDbtp": -9.54,
+     "correlation": 0.892,
+     "loudnessRangeLu": 3.1,
+     "smoothnessViolations": 0,
+     "fingerprintSha256Prefix": "eaab70c4d9fe"
+    },
+    {
+     "name": "story-beat",
+     "tier": "lean",
+     "integratedLufs": -20.18,
+     "shortTermMaxLufs": -18.28,
+     "truePeakDbtp": -9.64,
+     "correlation": 0.875,
+     "loudnessRangeLu": 2.4,
+     "smoothnessViolations": 0,
+     "fingerprintSha256Prefix": "20044c2de1bf"
+    }
+   ],
+   "independentEbur128": {
+    "tolerance": "0.1 LU / 0.1 dB rounding of ffmpeg output",
+    "agreementWithAbResults": "12 of 12 before/after excerpts agree on integrated LUFS and true peak"
+   },
+   "bareEraRegression": [
+    {
+     "name": "bare-bed",
+     "windowedFingerprintIdenticalToBefore": true,
+     "maxLsbDelta": 0,
+     "differingSamples": 0
+    },
+    {
+     "name": "color-bed",
+     "windowedFingerprintIdenticalToBefore": true,
+     "maxLsbDelta": 1,
+     "differingSamples": 128,
+     "firstAtSeconds": 1.021,
+     "deltaDbfs": -90.31
+    },
+    {
+     "name": "bare-story-ch1-fixed",
+     "windowedFingerprintIdenticalToBefore": true,
+     "maxLsbDelta": 2,
+     "differingSamples": 3634,
+     "firstAtSeconds": 25.965,
+     "deltaDbfs": -84.29,
+     "claimDisagreement": "ab-results.md claims max 1 LSB / 6 differing samples; independent re-render measures 2 LSB / 3634 samples after the 24 s story handoff. Render is not bit-deterministic at that floor across runs; windowed fingerprint still identical."
+    }
+   ],
+   "scoreFps": {
+    "median": 60.39,
+    "p10": 60.38,
+    "baselineMedian": 60.38,
+    "ratio": 1,
+    "p95FrameTimeMs": 16.8,
+    "gate": "SwiftShader 640x360, stage=material, era=1.000",
+    "result": "PASS"
+   },
+   "targetedTests": {
+    "files": 6,
+    "tests": 41,
+    "passed": 41,
+    "failed": 0,
+    "skipped": 0
+   }
+  },
+  "evidenceRefs": [
+   "evidence/stage-1/verify-rerun/audio-check.log",
+   "evidence/stage-1/verify-rerun/rerun-full.log",
+   "evidence/stage-1/verify-rerun/rerun-lean.log",
+   "evidence/stage-1/verify-rerun/rerun-noglue.log",
+   "evidence/stage-1/verify-rerun/bare-era-lsb-delta.txt",
+   "evidence/stage-1/verify-rerun/ebur128.txt",
+   "evidence/stage-1/verify-rerun/fps.log",
+   "evidence/stage-1/verify-rerun/vitest.log"
+  ]
+ },
+ "performance": {
+  "status": "pass",
+  "targetFps": 60,
+  "measuredFps": 60.39,
+  "p95FrameTimeMs": 16.8,
+  "drawCalls": null,
+  "shaderOrGpuNotes": "ANGLE/Vulkan SwiftShader device; audio=running, richScore=true, scoreLeading=true",
+  "memoryNotes": "host had 14 GB available before each heavy step; one heavy process at a time",
+  "evidenceRefs": [
+   "evidence/stage-1/verify-rerun/fps.log"
+  ]
+ },
+ "flow": {
+  "coldRunsRequired": 0,
+  "coldRunsPassed": 0,
+  "movieCompletedWithoutRescue": null,
+  "timeoutRescues": null,
+  "evidenceRefs": [],
+  "note": "not in Stage 1 scope"
+ },
+ "exactAnchors": [],
+ "variants": {
+  "desktop": {
+   "status": "pass",
+   "focalParity": true,
+   "evidenceRefs": [
+    "evidence/stage-1/verify-rerun/full"
+   ]
+  },
+  "mobile": {
+   "status": "not_applicable",
+   "focalParity": false,
+   "evidenceRefs": []
+  },
+  "reducedMotion": {
+   "status": "not_applicable",
+   "focalParity": false,
+   "evidenceRefs": []
+  },
+  "lowestQuality": {
+   "status": "pass",
+   "focalParity": true,
+   "evidenceRefs": [
+    "evidence/stage-1/verify-rerun/lean"
+   ],
+   "note": "lean tier bed-sandbox-day measures -19.85 LUFS (+0.63 LU vs full), correlation 0.892 vs 0.936; still inside the -20.5 +/-1 LU band and at -9.54 dBTP. story-beat lean render is fingerprint-identical to full."
+  }
+ },
+ "resetMatrix": [],
+ "storyUx": {
+  "status": "not_applicable",
+  "reportRef": "objective-lifecycle-evidence.json",
+  "evidenceRefs": []
+ },
+ "headedGates": [
+  {
+   "gate": "stage_1_owner_audition_timbre_loudness_width_feel",
+   "required": true,
+   "status": "pending",
+   "evidenceRefs": [
+    "evidence/stage-1/spectrograms",
+    "raw-audiovisual-evidence.json"
+   ]
+  }
+ ],
+ "blockingDefects": [],
+ "openDeviations": [
+  {
+   "id": "bloom-short-term",
+   "term": "BLOOM short-term -14 +/-1 LU",
+   "measured": "S-max -18.12 (day), -16.95 (night), -16.88 (contrast A), -18.94 (contrast B), -18.75 (bed-check)",
+   "status": "not_met",
+   "routed": "builder deviation 1; Stage 2 limiter or owner retune"
+  },
+  {
+   "id": "bed-alive-night",
+   "term": "bed alive -20.5 +/-1 LU alone",
+   "measured": "-18.99 on bed-sandbox-night",
+   "status": "out_of_band_by_0.51_LU",
+   "routed": "builder note: pre-Stage-1 night world mapping"
+  },
+  {
+   "id": "bare-era-lsb",
+   "term": "bare-era regression max 1 LSB",
+   "measured": "2 LSB / 3634 samples on bare-story-ch1-fixed in an independent re-render",
+   "status": "claim_exceeded",
+   "routed": "verifier finding; fingerprint parity still holds, delta floor -84.29 dBFS"
+  }
+ ],
+ "overallStatus": "measurements_recorded_stage_1_numbers_reproduce_except_one_bare_era_claim",
+ "stage1Repair": {
+  "measuredAt": "2026-09-05T06:30:00-04:00",
+  "actor": "story-verifier (independent re-measurement of iteration 4 / stage-1-repair-loop)",
+  "ledgerEntry": "iteration 4, route stage-1-repair-loop, 2026-09-05T06:06:10-04:00",
+  "machineState": {
+   "memAvailableGb": 15,
+   "vitestOrTscRunningAtStart": false,
+   "note": "~250 leaked idle vite dev servers from other sessions (mostly ~/Projects/Paraform) were resident; no vitest/tsc; available memory above the 12 GB floor, so the gate was run"
+  },
+  "loudnessEbur128": {
+   "tool": "ffmpeg 8.0.1, ebur128=metadata=1:peak=true, final lavfi.r128 frame",
+   "renders": [
+    {
+     "path": "evidence/stage-1/after/bed-sandbox-night_seed5-verdant_Ds-dorian_78bpm-4-4.wav",
+     "claimedLufs": -20.51,
+     "measuredLufs": -20.514,
+     "deltaLu": -0.004,
+     "loudnessRangeLu": 3.26,
+     "truePeakDbtp": -8.38,
+     "withinTolerance": true
+    },
+    {
+     "path": "evidence/stage-1/after/bed-sandbox-day_seed5-verdant_Ds-dorian_78bpm-4-4.wav",
+     "claimedLufs": -20.48,
+     "measuredLufs": -20.49,
+     "deltaLu": -0.01,
+     "loudnessRangeLu": 3.59,
+     "truePeakDbtp": -9.37,
+     "withinTolerance": true
+    },
+    {
+     "path": "evidence/stage-1/after-d4-lean/bed-sandbox-night_seed5-verdant_Ds-dorian_78bpm-4-4_lean.wav",
+     "claimedLufs": -19.87,
+     "measuredLufs": -19.877,
+     "deltaLu": -0.007,
+     "loudnessRangeLu": 2.77,
+     "truePeakDbtp": -8.64,
+     "withinTolerance": true
+    },
+    {
+     "path": "evidence/stage-1/after-d4-lean/bed-sandbox-day_seed5-verdant_Ds-dorian_78bpm-4-4_lean.wav",
+     "claimedLufs": -19.85,
+     "measuredLufs": -19.859,
+     "deltaLu": -0.009,
+     "loudnessRangeLu": 3.1,
+     "truePeakDbtp": -9.55,
+     "withinTolerance": true
+    }
+   ],
+   "otherRefreshedAfterRenders": [
+    {
+     "path": "evidence/stage-1/after/bed-contrast-A_seed8-frozen_F-lydian_66bpm-6-8.wav",
+     "measuredLufs": -20.532,
+     "truePeakDbtp": -8.66
+    },
+    {
+     "path": "evidence/stage-1/after/bed-contrast-B_seed10-volcanic_Gs-aeolian_83bpm-4-4.wav",
+     "measuredLufs": -21.074,
+     "truePeakDbtp": -9.47
+    },
+    {
+     "path": "evidence/stage-1/after/bed-check.wav",
+     "measuredLufs": -20.413,
+     "truePeakDbtp": -9.14
+    },
+    {
+     "path": "evidence/stage-1/after/combined-check.wav",
+     "measuredLufs": -20.41,
+     "truePeakDbtp": -9.14
+    },
+    {
+     "path": "evidence/stage-1/after/story-beat_a3-dawn_intensity-build.wav",
+     "measuredLufs": -20.183,
+     "truePeakDbtp": -9.63
+    },
+    {
+     "path": "evidence/stage-1/after/era-transition_seed5-verdant_Ds-dorian_78bpm-4-4.wav",
+     "measuredLufs": -22.583,
+     "truePeakDbtp": -9.04
+    },
+    {
+     "path": "evidence/stage-1/after/bare-bed.wav",
+     "measuredLufs": -34.547,
+     "truePeakDbtp": -25.19
+    },
+    {
+     "path": "evidence/stage-1/after/bare-story-ch1-fixed.wav",
+     "measuredLufs": -35.959,
+     "truePeakDbtp": -25.35
+    },
+    {
+     "path": "evidence/stage-1/after/color-bed.wav",
+     "measuredLufs": -27.287,
+     "truePeakDbtp": -19.17
+    }
+   ],
+   "worstTruePeakDbtp": -8.38,
+   "readmeWorstTruePeakClaimDbtp": -7.28,
+   "readmeWorstTruePeakNote": "README states worst -7.28 dBTP (night); ffmpeg ebur128 on the refreshed night render measures -8.38 dBTP. Both are far inside the <= -1 dBTP term; the README figure is the pre-refresh number."
+  },
+  "targetedVitest": {
+   "command": "npx vitest run src/audio/generative/tuning.stage1.test.ts src/audio/audioCore.topology.test.ts src/audio/generative/timbre.test.ts src/audio/audioCore.test.ts",
+   "status": "pass",
+   "testFiles": 4,
+   "tests": 26,
+   "failed": 0,
+   "durationSeconds": 0.961
+  },
+  "audioThreadCostProbe": {
+   "command": "node main/tools/audio-thread-cost-probe.mjs main --throttle 4 --tier lean",
+   "status": "pass",
+   "renderer": "ANGLE SwiftShader (Vulkan 1.3.0)",
+   "tier": "lean",
+   "throttle": "4x",
+   "baselineMsPerFrame": 0,
+   "bedLedMsPerFrame": 0.029,
+   "storyLedMsPerFrame": 0.064,
+   "worstMsPerFrame": 0.064,
+   "budgetMsPerFrame": 3,
+   "builderClaimMsPerFrame": 0.067,
+   "longestCallbackMs": 3.1,
+   "timerCallsPerSecond": 33.41,
+   "fpsMedian": {
+    "baseline": 60.42,
+    "bedLed": 60.4,
+    "storyLed": 60.39
+   },
+   "evidenceRef": "evidence/stage-1/perf/main-lean-4x-verifier.json"
+  },
+  "audioCheck": {
+   "command": "npm --prefix main run audio:check",
+   "status": "pass",
+   "integratedLufs": -20.4,
+   "shortTermMaxLufs": -18.75,
+   "momentaryMaxLufs": -18.16,
+   "loudnessRangeLu": 3.26,
+   "truePeakDbtp": -9.15,
+   "correlation": 0.922,
+   "smoothnessViolations": 0,
+   "smoothnessMaxDb": 1.39,
+   "silenceSeconds": 0,
+   "sfxCues": "30/30",
+   "replayDeltaMax": 3.08e-05,
+   "replayDeltaGate": 0.0001,
+   "replayFingerprint": "20cce7f62ba5b87d",
+   "glueGainDb": 0.0022,
+   "glueGainGateDb": 0.05,
+   "glueGainCheckPresent": true,
+   "wallSeconds": 25.5,
+   "wallBudgetSeconds": 40
+  },
+  "fullVerify": {
+   "command": "npm --prefix main run verify",
+   "status": "pass",
+   "exitCode": 0,
+   "wallSecondsApprox": 95,
+   "timeoutMinutes": 20,
+   "stages": {
+    "catalog:check": "pass",
+    "scene:av:check": "pass",
+    "creative:workflow:check": "pass (185 checks)",
+    "chapter:registry:check": "pass (3820 checks)",
+    "chapter:journey:check": "pass",
+    "typecheck": "pass",
+    "story:authority": "pass",
+    "test": "pass (297 files, 2432 tests, 1 file skipped, 5 todo)",
+    "audio:check": "pass (incl. glue-gain 0.0022 dB)",
+    "build": "pass (vite 6.3.5, 1111 modules, 5.42s)"
+   },
+   "failures": [],
+   "evidenceRef": "evidence/stage-1/verify-repair-verifier.log"
+  },
+  "claimsVsMeasured": "all four loudness claims, the targeted vitest count, the lean 4x main-thread budget, the audio:check glue-gain check and the full verify reproduce; no failures observed",
+  "notMeasuredHere": [
+   "D5 floor renders",
+   "D11 extra story mood",
+   "D15 mining-metronome probe",
+   "score:fps standalone gate (covered indirectly by the cost probe's fps medians)",
+   "BLOOM short-term deviation 1 (unchanged, still open)"
+  ]
+ },
+ "stage2": {
+  "scope": "audio-stage-2-game-mix \u2014 independent re-measurement by story-verifier; builder numbers treated as claims",
+  "contractVersion": "draft-v3",
+  "contractSha256": "776d676b90cc9c1007694b26f0000cfc61ecf85c256c81a72a0cdd324ea26ba1",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641 (working tree, Stage 0+1+2 uncommitted)",
+  "measuredAt": "2026-09-05T07:18:36-04:00",
+  "host": {
+   "freeGbAtVerifyStart": 16,
+   "note": "available memory 16 GB; swap 13/15 GB in use; no other vitest/tsc running"
+  },
+  "commands": [
+   {
+    "command": "npm --prefix main run audio:check",
+    "exitCode": 0,
+    "result": "13/13 PASS incl. safety-gain -0.0046 dB, limiter-gain -0.0001 dB, tail-reference -0.0074 dB, tail-latency music 25.215 ms / sfx 10.340 ms, ceiling-tp -1.615 dBTP; wall 27.2 s (budget 40 s)",
+    "artifact": "evidence/stage-2/verifier/audio-check.log"
+   },
+   {
+    "command": "node main/tools/audio-stage-evidence-probe.mjs <scratch> --only '' --ceiling --latency --gains --duck shipCrash,terminalCorrupt,shipLand,terminalAlarm",
+    "exitCode": 0,
+    "result": "ceiling sweep bit-identical to builder after/summary.json; latency identical; gains identical; duck traces reproduce",
+    "artifact": "evidence/stage-2/verifier/ceiling-duck.log"
+   },
+   {
+    "command": "node main/tools/audio-stage2-compare.mjs <mirror of evidence/stage-2>",
+    "exitCode": 0,
+    "result": "ab-results.md byte-identical to builder's apart from the Generated timestamp",
+    "artifact": "evidence/stage-2/verifier/ab-results-verifier.md"
+   },
+   {
+    "command": "node main/tools/audio-param-writes-probe.mjs ch4-vigil 8 3 --trace",
+    "exitCode": 0,
+    "result": "median 593.3 writes/s, max 595.9 (builder claimed 590.4/588.3)",
+    "artifact": "evidence/stage-2/verifier/param-writes.log"
+   },
+   {
+    "command": "PARAVOXIA_URL=http://127.0.0.1:5313 node main/mining-metronome-probe.mjs ch1-fixed",
+    "exitCode": 0,
+    "result": "loop guard never engaged, max admit 1.33/s, max suppressed/3 s 0, 0 page/console errors",
+    "artifact": "evidence/stage-2/verifier/metronome.log"
+   },
+   {
+    "command": "npx vitest run src/audio/mix src/audio/audioCore.topology.test.ts src/audio/audioCore.test.ts src/audio/sfxEngine.test.ts src/audio/sfxRateLimiter.test.ts",
+    "exitCode": 0,
+    "result": "11 files / 52 tests passed",
+    "artifact": "evidence/stage-2/verifier/vitest-subset.log"
+   },
+   {
+    "command": "npm --prefix main run score:fps",
+    "exitCode": 0,
+    "result": "median 60.39, p10 60.38, ratio 1.000, PASS",
+    "artifact": "evidence/stage-2/verifier/fps.log"
+   },
+   {
+    "command": "npm --prefix main run verify",
+    "exitCode": 0,
+    "result": "304 test files passed / 1 skipped; 2460 tests passed / 5 todo; audio:check 27.2 s; build ok",
+    "artifact": "evidence/stage-2/verifier/verify.log"
+   }
+  ],
+  "stressScripts": {
+   "method": "ffmpeg 8.0.1 ebur128 peak=true on evidence/stage-2/after/*.wav (independent of the in-page analyser)",
+   "truePeakRequirement": "<= -1 dBTP",
+   "integratedRequirement": "-18 +/- 1.5 LU",
+   "rows": [
+    {
+     "render": "stress-shipcrash-bloom",
+     "integratedLufs": -20.4,
+     "shortTermMaxLufs": -18.077,
+     "truePeakDbtp": -9,
+     "truePeakMet": true,
+     "integratedMet": false
+    },
+    {
+     "render": "stress-mining-burst",
+     "integratedLufs": -20.5,
+     "shortTermMaxLufs": -18.85,
+     "truePeakDbtp": -4.9,
+     "truePeakMet": true,
+     "integratedMet": false
+    },
+    {
+     "render": "stress-oxygen-dive",
+     "integratedLufs": -21.7,
+     "shortTermMaxLufs": -18.917,
+     "truePeakDbtp": -8.9,
+     "truePeakMet": true,
+     "integratedMet": false
+    },
+    {
+     "render": "stress-terminal-storylead",
+     "integratedLufs": -20.4,
+     "shortTermMaxLufs": -18.874,
+     "truePeakDbtp": -9.5,
+     "truePeakMet": true,
+     "integratedMet": false
+    },
+    {
+     "render": "stress-jetpack-splash",
+     "integratedLufs": -20.7,
+     "shortTermMaxLufs": -18.84,
+     "truePeakDbtp": -9.5,
+     "truePeakMet": true,
+     "integratedMet": false
+    }
+   ],
+   "worstTruePeakDbtp": -4.9
+  },
+  "ceilingSweep": {
+   "method": "999 Hz sine burst into the SFX path, 4x oversampled true peak, re-rendered by the verifier",
+   "rows": [
+    {
+     "inputDbfs": -6,
+     "truePeakDbtp": -6.032
+    },
+    {
+     "inputDbfs": 0,
+     "truePeakDbtp": -1.872
+    },
+    {
+     "inputDbfs": 6,
+     "truePeakDbtp": -1.615
+    },
+    {
+     "inputDbfs": 12,
+     "truePeakDbtp": -1.581
+    }
+   ],
+   "bitIdenticalToBuilder": true,
+   "note": "no WAV artifact exists for the burst renders; measureCeilingTruePeakDbtp returns scalars only, so no burst spectrogram could be produced"
+  },
+  "duckTraces": {
+   "method": "audio-stage-evidence-probe --duck (5 ms window RMS ratio of ducked vs reference 16 s renders); verifier recomputed depth/attack/recovery from the raw traceDb arrays",
+   "sfxPathLatencyS": 0.01034,
+   "artifact": "evidence/stage-2/verifier/duck-recompute.json",
+   "rows": [
+    {
+     "edge": "shipCrash",
+     "tableDb": -6,
+     "measuredMinDb": -6,
+     "rawWithin1dbS": 0.045,
+     "rawFullDepthS": 0.05,
+     "onsetAdjWithin1dbS": 0.03466,
+     "onsetAdjFullDepthS": 0.03966,
+     "onsetAdjRecoveredS": 0.83966
+    },
+    {
+     "edge": "shipLand",
+     "tableDb": -6,
+     "measuredMinDb": -6,
+     "rawWithin1dbS": 0.045,
+     "rawFullDepthS": 0.05,
+     "onsetAdjWithin1dbS": 0.03466,
+     "onsetAdjFullDepthS": 0.03966,
+     "onsetAdjRecoveredS": 0.83966
+    },
+    {
+     "edge": "terminalCorrupt",
+     "tableDb": -4,
+     "measuredMinDb": -4,
+     "rawWithin1dbS": 0.035,
+     "rawFullDepthS": 0.04,
+     "onsetAdjWithin1dbS": 0.02466,
+     "onsetAdjFullDepthS": 0.02966,
+     "onsetAdjRecoveredS": 0.66966
+    },
+    {
+     "edge": "terminalAlarm",
+     "tableDb": -4,
+     "measuredMinDb": -4,
+     "rawWithin1dbS": 0.035,
+     "rawFullDepthS": 0.04,
+     "onsetAdjWithin1dbS": 0.02466,
+     "onsetAdjFullDepthS": 0.02966,
+     "onsetAdjRecoveredS": 0.66966
+    }
+   ],
+   "traceWindowS": 0.005,
+   "maxTraceDeltaVsBuilderDb": 0.01
+  },
+  "paramWrites": {
+   "beat": "ch4-vigil",
+   "samplesPerSecond": [
+    593.3,
+    579.3,
+    595.9
+   ],
+   "medianPerSecond": 593.3,
+   "target": "< 60",
+   "attribution": [
+    {
+     "site": "/src/audio/scoreEngine.ts:825-832 setTargetAtTime",
+     "countSincePageLoad": 1404
+    },
+    {
+     "site": "rampParamAt /src/audio/audioCore.ts:417 cancelAndHoldAtTime",
+     "countSincePageLoad": 1247
+    },
+    {
+     "site": "rampParamAt /src/audio/audioCore.ts:421 setTargetAtTime",
+     "countSincePageLoad": 1247
+    },
+    {
+     "site": "applyRails /src/audio/scoreEngine.ts:796-816 setTargetAtTime",
+     "countSincePageLoad": 351
+    }
+   ],
+   "beforeReproducible": false,
+   "beforeNote": "the pre-Stage-2 source is not present in the working tree; the builder's 2275.9/s 'before' median could not be re-measured"
+  },
+  "metronome": {
+   "beat": "ch1-fixed",
+   "loopGuardEngaged": false,
+   "maxAdmitRatePerSec": 1.33,
+   "maxSuppressedPer3s": 0,
+   "pageErrors": 0,
+   "consoleErrors": 0,
+   "perStanceInventoryDelta": [
+    7,
+    4,
+    7,
+    2
+   ],
+   "perStanceCompletionCycles": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "perStanceActiveMiningSeconds": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "builderBeforeMaxSuppressedPer3s": 5,
+   "note": "reproduces the builder's after-run field for field; differs from the builder's before-run on maxSuppressedPer3s (5 -> 0)"
+  },
+  "rebaseline": {
+   "preTailTap": {
+    "method": "verifier int16 sample-by-sample diff of before-pretail vs after-pretail WAVs plus fingerprintSha256 comparison",
+    "rows": [
+     {
+      "render": "bare-bed",
+      "fingerprintIdentical": true,
+      "maxInt16Delta": 1,
+      "maxDeltaDbfs": -90.31,
+      "differingSamples": 4,
+      "totalSamples": 4233600
+     },
+     {
+      "render": "bare-story-ch1-fixed",
+      "fingerprintIdentical": true,
+      "maxInt16Delta": 1,
+      "maxDeltaDbfs": -90.31,
+      "differingSamples": 4,
+      "totalSamples": 5292000
+     },
+     {
+      "render": "color-bed",
+      "fingerprintIdentical": true,
+      "maxInt16Delta": 1,
+      "maxDeltaDbfs": -90.31,
+      "differingSamples": 122,
+      "totalSamples": 4233600
+     }
+    ]
+   },
+   "throughTail": {
+    "method": "ffmpeg ebur128 (0.1 dB reporting resolution on I and true peak)",
+    "rows": [
+     {
+      "render": "bare-bed",
+      "iBefore": -34.5,
+      "iAfter": -34.6,
+      "sMaxBefore": -34.179,
+      "sMaxAfter": -34.186,
+      "tpBefore": -25.2,
+      "tpAfter": -25.2
+     },
+     {
+      "render": "bare-story-ch1-fixed",
+      "iBefore": -36,
+      "iAfter": -35.9,
+      "sMaxBefore": -34.179,
+      "sMaxAfter": -34.186,
+      "tpBefore": -25.3,
+      "tpAfter": -25.3
+     },
+     {
+      "render": "color-bed",
+      "iBefore": -27.3,
+      "iAfter": -27.3,
+      "sMaxBefore": -26.586,
+      "sMaxAfter": -26.593,
+      "tpBefore": -19.2,
+      "tpAfter": -19.2
+     }
+    ]
+   },
+   "ownerAudition": "not performed by the verifier"
+  },
+  "floorMoods": {
+   "method": "ffmpeg ebur128",
+   "requirement": "integrated within 0.25 LU; short-term after <= before + 0.5 LU",
+   "rows": [
+    {
+     "render": "floor-ch4-defy",
+     "iBefore": -33.1,
+     "iAfter": -33.1,
+     "sMaxBefore": -32.88,
+     "sMaxAfter": -32.884
+    },
+    {
+     "render": "floor-refused",
+     "iBefore": -26.9,
+     "iAfter": -26.9,
+     "sMaxBefore": -26.695,
+     "sMaxAfter": -26.708
+    },
+    {
+     "render": "floor-seam-ebb",
+     "iBefore": -23.2,
+     "iAfter": -23.2,
+     "sMaxBefore": -22.879,
+     "sMaxAfter": -22.873
+    }
+   ]
+  },
+  "bloomShortTerm": {
+   "requirement": "-14 +/- 1 LU",
+   "rows": [
+    {
+     "render": "bed-sandbox-day",
+     "shortTermMaxLufs": -17.902,
+     "met": false
+    },
+    {
+     "render": "stress-shipcrash-bloom",
+     "shortTermMaxLufs": -18.077,
+     "met": false
+    }
+   ]
+  },
+  "bedAlive": {
+   "requirement": "-20.5 +/- 1 LU",
+   "rows": [
+    {
+     "render": "bed-sandbox-day",
+     "integratedLufs": -20.4
+    },
+    {
+     "render": "bed-sandbox-night",
+     "integratedLufs": -20.4
+    },
+    {
+     "render": "bed-contrast-A",
+     "integratedLufs": -20.4
+    },
+    {
+     "render": "bed-contrast-B",
+     "integratedLufs": -21
+    }
+   ],
+   "met": true
+  },
+  "spectrograms": {
+   "tool": "ffmpeg showspectrumpic 1600x400 legend=1",
+   "dir": "evidence/stage-2/spectrograms",
+   "renders": [
+    "stress-shipcrash-bloom",
+    "stress-mining-burst",
+    "stress-oxygen-dive",
+    "stress-terminal-storylead",
+    "stress-jetpack-splash"
+   ],
+   "variants": [
+    "before",
+    "after"
+   ],
+   "count": 10,
+   "burstRendersCaptured": false
+  }
+ },
+ "stage2Repair": {
+  "scope": "audio stage-2 repair loop \u2014 independent re-measurement by story-verifier; builder numbers treated as claims (measurements only, no judgement)",
+  "contractVersion": "draft-v4 (repair loop is integration-owned; no contract change re-measured here)",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641 (working tree, uncommitted Stage 0+1+2)",
+  "measuredAt": "2026-09-05T07:56:00-04:00",
+  "host": {
+   "freeGbAtStart": 16,
+   "freeGbBeforeEachHeavyStep": 16,
+   "note": "available memory 16 GB throughout; one heavy process at a time; no dev server left running; a concurrent build shares the working tree"
+  },
+  "workingTreeDrift": {
+   "checked": "main/src/audio/**/*.ts mtimes before and after the re-measurement window (07:52:25 \u2192 07:55 EDT)",
+   "result": "no drift \u2014 89 files identical mtimes; newest source 2026-09-05T07:47:51 (soakPage.ts, excerpts.ts) predates every measurement here",
+   "postMeasurementDrift": {
+    "detectedAt": "2026-09-05T07:56:58-04:00",
+    "files": [
+     {
+      "path": "main/src/audio/mix/duckMatrix.ts",
+      "mtime": "07:56:31",
+      "note": "untracked, rewritten by the concurrent build after all measurements here"
+     },
+     {
+      "path": "main/src/audio/mix/duckMatrix.test.ts",
+      "mtime": "07:56:56",
+      "note": "untracked, rewritten 25 s after its source"
+     },
+     {
+      "path": "main/src/audio/sfxEngine.test.ts",
+      "mtime": "07:56:31",
+      "note": "tracked, +54/-17 lines"
+     }
+    ],
+    "effectOnMeasurements": "none \u2014 every figure in this section was measured 07:52-07:56:30, before these writes",
+    "transientRedObserved": "npx vitest run src/audio/mix/duckMatrix.test.ts src/audio/sfxEngine.test.ts at 07:57:08 showed 4 failed / 8 passed while duckMatrix.test.ts was mid-write; both files re-ran green individually at 07:57:18 and the full mix+soak suite re-ran 10 files / 58 tests passed at 07:57:23 (duckMatrix grew 4 -> 7 tests). Torn-write artifact of the concurrent build, not a defect of the repair loop."
+   }
+  },
+  "claims": [
+   {
+    "id": "S2-D4 tail latency per rate",
+    "claim": "44100 Hz music 25.215 ms / sfx 10.340 ms; 48000 Hz music 24.667 ms / sfx 10.000 ms",
+    "command": "node main/tools/audio-stage-evidence-probe.mjs <scratch> --only '' --latency --latency-rates 44100,48000",
+    "exitCode": 0,
+    "measured": {
+     "44100": {
+      "musicMs": 25.215,
+      "musicSamples": 1112,
+      "sfxMs": 10.34,
+      "sfxSamples": 456,
+      "musicVsSfxMs": 14.875
+     },
+     "48000": {
+      "musicMs": 24.667,
+      "musicSamples": 1184,
+      "sfxMs": 10,
+      "sfxSamples": 480,
+      "musicVsSfxMs": 14.667
+     }
+    },
+    "deltaFromClaim": "0.000 ms on all four figures",
+    "status": "confirmed",
+    "artifact": "evidence/stage-2/verifier/repair/latency-summary.json"
+   },
+   {
+    "id": "S2-J3/J5 duck traces at 1 ms",
+    "claim": "shipCrash within-1-dB 34.7 ms / full 40.7 ms; terminalCorrupt 23.7 / 30.7; oxygenCritical 140.7 / 199.7; story-lead caps -3.0 dB",
+    "command": "node main/tools/audio-stage-evidence-probe.mjs <scratch> --only '' --duck shipCrash,shipLand,terminalCorrupt,terminalAlarm,oxygenCritical  (+ a second run with --duck shipCrash,terminalCorrupt --duck-story-lead)",
+    "exitCode": 0,
+    "measured": {
+     "onsetLatencyMs": 10.3,
+     "windowMs": 1,
+     "shipCrash": {
+      "minDb": -6,
+      "within1dbMs": 34.7,
+      "fullDepthMs": 40.7,
+      "recoveredMs": 844.7,
+      "dbAtAttack": -4.06
+     },
+     "shipLand": {
+      "minDb": -6,
+      "within1dbMs": 34.7,
+      "fullDepthMs": 40.7,
+      "recoveredMs": 844.7,
+      "dbAtAttack": -4.06
+     },
+     "terminalCorrupt": {
+      "minDb": -4,
+      "within1dbMs": 23.7,
+      "fullDepthMs": 30.7,
+      "recoveredMs": 674.7,
+      "dbAtAttack": -2.48
+     },
+     "terminalAlarm": {
+      "minDb": -4,
+      "within1dbMs": 23.7,
+      "fullDepthMs": 30.7,
+      "recoveredMs": 674.7,
+      "dbAtAttack": -2.48
+     },
+     "oxygenCritical": {
+      "minDb": -3,
+      "within1dbMs": 140.7,
+      "fullDepthMs": 199.7,
+      "recoveredMs": 1855.7,
+      "dbAtAttack": -2.82
+     },
+     "shipCrash@story-lead": {
+      "minDb": -3,
+      "within1dbMs": 28.7,
+      "fullDepthMs": 40.7,
+      "recoveredMs": 704.7
+     },
+     "terminalCorrupt@story-lead": {
+      "minDb": -3,
+      "within1dbMs": 20.7,
+      "fullDepthMs": 30.7,
+      "recoveredMs": 619.7
+     }
+    },
+    "deltaFromClaim": "0.0 ms on every published figure; caps -3.0 dB reproduced",
+    "reproducibility": "series values differ from the builder JSON on 8 of ~7000 trace samples by 0.01 dB (renderer float floor); all headline times and depths identical",
+    "status": "confirmed",
+    "artifact": "evidence/stage-2/verifier/repair/duck-1ms-summary.json, evidence/stage-2/verifier/repair/duck-1ms-storylead-summary.json"
+   },
+   {
+    "id": "S2-J2 dive ramp band edge",
+    "claim": "ramped render: 2-8 kHz falls as a slew, not a step",
+    "command": "node main/tools/audio-band-edge-probe.mjs evidence/stage-2/repair/after-dive-ramp/stress-oxygen-dive.wav --from 7 --to 12 --step 0.1  (and --from 8 --to 9.2 on evidence/stage-2/after/stress-oxygen-dive.wav)",
+    "exitCode": 0,
+    "measured": {
+     "rampedHiBandDb": {
+      "9.2": 22.8,
+      "9.3": 18.5,
+      "9.4": 16.8,
+      "9.5": 12.3,
+      "9.6": 9.1,
+      "9.7": 6.4,
+      "9.8": 7.2,
+      "9.9": 4.9
+     },
+     "rampedFall": "16.78 dB, probe fall metric 22.12 -> 5.35 dB between 7.3 s and 9.9 s = 2.6 s; the monotone body of the fall (22.8 -> 4.9 dB) spans 9.2-9.9 s = 0.7 s = 7 analysis steps",
+     "steppedHiBandDb": {
+      "8.3": 22.1,
+      "8.4": 22,
+      "8.5": 14.1,
+      "8.6": 10.4,
+      "8.7": 6.6,
+      "8.8": 6.5,
+      "8.9": 5.2,
+      "9.0": 4.7
+     },
+     "steppedFall": "15.54 dB between 8.5 s and 8.7 s = 0.2 s = 2 analysis steps"
+    },
+    "deltaFromClaim": "both README tables reproduce cell for cell (0.0-0.1 dB); the change is distributed over >=7 x 0.1 s steps, i.e. not a step edge",
+    "note": "the fall is >= 1 s only under the probe endpoint rule (2.6 s); the substantive travel measures 0.7 s, which is what the README itself states",
+    "status": "confirmed (not-a-step); \">= 1 s\" holds only on the probe endpoint rule, 0.7 s on the monotone body",
+    "artifact": "evidence/stage-2/verifier/repair/band-edge-ramped.json, evidence/stage-2/verifier/repair/band-edge-stepped.json"
+   },
+   {
+    "id": "S2-J7 lean renders",
+    "claim": "bed-sandbox-day I -19.71 LUFS, story-beat I -19.46 LUFS (lean tier through the shipped tail)",
+    "command": "ffmpeg -i <wav> -filter_complex ebur128=peak=true -f null -  (and -af loudnorm=print_format=json for 2-decimal input_i)",
+    "exitCode": 0,
+    "measured": {
+     "bed-sandbox-day_lean": {
+      "ebur128IntegratedLufs": -19.7,
+      "ebur128TruePeakDbfs": -9.2,
+      "ebur128LraLu": 3.2,
+      "loudnormInputI": -19.76,
+      "loudnormInputTp": -9.2
+     },
+     "story-beat_lean": {
+      "ebur128IntegratedLufs": -19.5,
+      "ebur128TruePeakDbfs": -8.9,
+      "ebur128LraLu": 2.4,
+      "loudnormInputI": -19.51,
+      "loudnormInputTp": -8.9
+     }
+    },
+    "deltaFromClaim": "ebur128 agrees at its 0.1 LU print precision; loudnorm input_i differs by 0.05 LU on both files (analyser difference, same sign) \u2014 inside a 0.1 LU tolerance",
+    "status": "confirmed",
+    "artifact": "evidence/stage-2/verifier/repair/lean-ebur128.log"
+   },
+   {
+    "id": "audio unit tests",
+    "claim": "mix + soak suites green",
+    "command": "npx vitest run src/audio/mix src/audio/soak (from main/)",
+    "exitCode": 0,
+    "measured": "10 test files passed, 55 tests passed, 0 failed, duration 1.19 s",
+    "status": "confirmed",
+    "artifact": "evidence/stage-2/verifier/repair/vitest-audio-mix-soak.log",
+    "postDriftRerun": "10 files / 58 tests passed at 07:57:23 after the concurrent build added 3 duckMatrix tests"
+   },
+   {
+    "id": "audio:check",
+    "claim": "13/13 PASS, wall 27.3 s of 40 s",
+    "command": "npm --prefix main run audio:check",
+    "exitCode": 0,
+    "measured": "13/13 PASS; I -20.20 LUFS, S-max -18.58, TP -8.79 dBTP; wall 27.2 s and 27.4 s across two runs (budget 40 s); tail-latency line pins both rates; replay-hash fingerprint 00f1f436c7d4c4a3 identical to builder, replay-delta 1.17e-5 and 4.70e-6 (float floor), pcm hashes differ run to run as deviation 9 states",
+    "status": "confirmed",
+    "artifact": "evidence/stage-2/verifier/repair/audio-check.log"
+   }
+  ],
+  "discrepancies": [],
+  "notMeasuredHere": [
+   "cost-main-*.json (audio-thread-cost-probe) \u2014 not re-run; registered by hash only",
+   "dive-edge-*.png spectrograms \u2014 not re-generated; registered by hash + ffprobe",
+   "S2-D7 / S2-D11 documentation closures \u2014 no mechanical measurement exists"
+  ],
+  "evidenceRegistry": "14 repair/ WAV+PNG+JSON artifacts appended to evidence-registry.json (entries 191-204) with sha256 and ffprobe for media"
+ },
+ "stage3": {
+  "scope": "audio-stage-3-composed-sync \u2014 independent re-measurement by story-verifier; builder numbers treated as claims",
+  "contractVersion": "draft-v4",
+  "contractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641 (working tree; Stage 0-3 uncommitted PLUS concurrent Stage 4/5/6 edits landed 09:32-10:05 \u2014 see hostConcurrency)",
+  "measuredAt": "2026-09-05T10:12:14.552321-04:00",
+  "host": {
+   "freeGbAtVerifyStart": 16,
+   "note": "available memory 16 GB at each heavy step; swap 14/15 GB in use; no other vitest/tsc running at verify start; one heavy probe at a time"
+  },
+  "hostConcurrency": {
+   "note": "main/src files modified after the Stage 3 evidence pins (moods-B-brain.json mtime 09-05 08:06)",
+   "mtimeSnapshot": "evidence/stage-3/verify-rerun/mtimes-at-verify.txt",
+   "examples": [
+    "main/src/audio/generative/tuning.ts 09:56",
+    "main/src/audio/generative/bedConductor.ts 09:53",
+    "main/src/audio/generative/pulse.ts 09:50",
+    "main/src/audio/bedEngine.ts 09:41",
+    "main/src/audio/voice/voiceBus.ts 09:57",
+    "main/src/game/spaceStation/spaceStationDressing.ts 10:05"
+   ]
+  },
+  "commands": [
+   {
+    "command": "npx vitest run src/story/storyScore.stage3.test.ts src/audio/generative/hitSchedule.test.ts src/audio/generative/moodConstraint.test.ts src/audio/scoreEngine.test.ts",
+    "exitCode": 0,
+    "result": "4 files / 90 tests passed (storyScore.stage3 37, hitSchedule 13, moodConstraint 18, scoreEngine 22); README claims 39 tests in storyScore.stage3.test.ts, measured 37",
+    "artifact": "evidence/stage-3/verify-rerun/ (console)"
+   },
+   {
+    "command": "node main/tools/hit-sync-probe.mjs --beat ch1-lift --start ch1-iso --runs 3",
+    "exitCode": 0,
+    "result": "3 firings anc.lift.perspective-issued; all within cap; 0.53-0.85 frames late",
+    "artifact": "evidence/stage-3/verify-rerun/sync/ch1-lift"
+   },
+   {
+    "command": "node main/tools/hit-sync-probe.mjs --beat a2-awakening --start ch2-approach --runs 3",
+    "exitCode": 0,
+    "result": "6 firings (feed-wall-falls, hand-back); all within cap; 0.02-1.14 frames late",
+    "artifact": "evidence/stage-3/verify-rerun/sync/a2-awakening"
+   },
+   {
+    "command": "node main/tools/hit-sync-probe.mjs --beat a3-dawn --start ch3-await-rest --runs 3",
+    "exitCode": 0,
+    "result": "6 firings (first-blade, material-lands); bar rung at every firing; 0.07-0.71 frames late",
+    "artifact": "evidence/stage-3/verify-rerun/sync/a3-dawn"
+   },
+   {
+    "command": "node main/tools/audio-hit-onset-probe.mjs",
+    "exitCode": 0,
+    "result": "30/30 rows PASS, max |onset error| 0.045 ms, pre-roll silence at every row",
+    "artifact": "evidence/stage-3/verify-rerun/hit-onset.json"
+   },
+   {
+    "command": "node main/tools/audio-mood-identity-probe.mjs (62 moods, --wav)",
+    "exitCode": 0,
+    "result": "62/62 rendered, nan=0, smoothness=0 at every mood",
+    "artifact": "evidence/stage-3/verify-rerun/moods-verify.json"
+   },
+   {
+    "command": "node main/tools/audio-mood-identity-probe.mjs --compare-wav evidence/stage-3/wav/B-brain <rerun>",
+    "exitCode": 0,
+    "result": "62/62 moods within max 8 LSB, worst residual -87.31 dBFS, |dRMS| <= 0.0038 dB",
+    "artifact": "evidence/stage-3/verify-rerun/wav-verify-vs-Bbrain.json"
+   },
+   {
+    "command": "node main/tools/audio-param-writes-probe.mjs ch4-vigil 8 3",
+    "exitCode": 0,
+    "result": "median 21.5 writes/s, samples 21.5 / 21.3 / 61.6, fps 60/59/60",
+    "artifact": "evidence/stage-3/verify-rerun/param-writes.json"
+   },
+   {
+    "command": "npm --prefix main run audio:check",
+    "exitCode": 0,
+    "result": "13/13 PASS, wall 27.4 s (budget 40 s); tail-latency 44100 music 25.215 / sfx 10.340 ms, 48000 music 24.667 / sfx 10.000 ms",
+    "artifact": "evidence/stage-3/verify-rerun/audio-check.log"
+   },
+   {
+    "command": "npm --prefix main run score:fps",
+    "exitCode": 0,
+    "result": "median 60.39, p10 60.37, ratio 1.000, worstFrame 16.80 ms, audio running",
+    "artifact": "evidence/stage-3/verify-rerun/fps.log"
+   },
+   {
+    "command": "npm --prefix main run verify",
+    "exitCode": 0,
+    "result": "GREEN end to end: typecheck 0 errors (the Stage 6 voiceBus.ts error the builder recorded is fixed at this tree, mtime 09:57), story:authority ok, 318 files / 2644 tests passed / 1 file+5 todo skipped, audio:check 13/13, build 5.59 s",
+    "artifact": "evidence/stage-3/verify-rerun/verify.log"
+   }
+  ],
+  "liveSync": {
+   "probe": "main/tools/hit-sync-probe.mjs",
+   "lane": "movie, headless SwiftShader 1280x720, natural predecessor entry",
+   "beats": [
+    "ch1-lift",
+    "a2-awakening",
+    "a3-dawn"
+   ],
+   "runsPerBeat": 3,
+   "firings": 15,
+   "slackWithinCapCount": 15,
+   "fitsCapTrue": 15,
+   "withinFrameBudgetCount": 15,
+   "worstImageVsOnsetFrames": 1.14,
+   "imageEarlierThanOnsetCount": 0,
+   "stateLaterThanImageCount": 0,
+   "stateMemberAbsentCount": 6,
+   "sfxPostedLateCount": 0,
+   "sfxAheadMsRange": [
+    74.5,
+    87.8
+   ],
+   "fallbackCount": 0,
+   "sampleRateKeys": [
+    48000
+   ],
+   "windowFpsMin": 58.4,
+   "windowMaxGapMsMax": 83.3,
+   "rows": [
+    {
+     "beat": "a2-awakening",
+     "start": "ch2-approach",
+     "run": 1,
+     "anchorId": "anc.a2.feed-wall-falls",
+     "quantumLanded": "beat",
+     "slackMs": 31.2,
+     "capMs": 454.5,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 1.51,
+     "imageVsOnsetFrames": 0.09,
+     "fireLatenessBeatClockMs": -6.0,
+     "stateNotLaterThanImage": null,
+     "sfxScheduledAheadMs": 79.2,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 64.67,
+     "windowFps": 60,
+     "windowMaxGapMs": 16.8
+    },
+    {
+     "beat": "a2-awakening",
+     "start": "ch2-approach",
+     "run": 1,
+     "anchorId": "anc.a2.hand-back",
+     "quantumLanded": "beat",
+     "slackMs": 299.0,
+     "capMs": 454.5,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 3.21,
+     "imageVsOnsetFrames": 0.19,
+     "fireLatenessBeatClockMs": -30.2,
+     "stateNotLaterThanImage": true,
+     "sfxScheduledAheadMs": null,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 64.67,
+     "windowFps": 58.4,
+     "windowMaxGapMs": 66.7
+    },
+    {
+     "beat": "a2-awakening",
+     "start": "ch2-approach",
+     "run": 2,
+     "anchorId": "anc.a2.feed-wall-falls",
+     "quantumLanded": "beat",
+     "slackMs": 435.0,
+     "capMs": 454.5,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 18.97,
+     "imageVsOnsetFrames": 1.14,
+     "fireLatenessBeatClockMs": 5.1,
+     "stateNotLaterThanImage": null,
+     "sfxScheduledAheadMs": 83.0,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 64.67,
+     "windowFps": 60,
+     "windowMaxGapMs": 16.8
+    },
+    {
+     "beat": "a2-awakening",
+     "start": "ch2-approach",
+     "run": 2,
+     "anchorId": "anc.a2.hand-back",
+     "quantumLanded": "beat",
+     "slackMs": 291.0,
+     "capMs": 454.5,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 2.0,
+     "imageVsOnsetFrames": 0.12,
+     "fireLatenessBeatClockMs": -25.2,
+     "stateNotLaterThanImage": true,
+     "sfxScheduledAheadMs": null,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 64.67,
+     "windowFps": 59.2,
+     "windowMaxGapMs": 33.4
+    },
+    {
+     "beat": "a2-awakening",
+     "start": "ch2-approach",
+     "run": 3,
+     "anchorId": "anc.a2.feed-wall-falls",
+     "quantumLanded": "beat",
+     "slackMs": 411.0,
+     "capMs": 454.5,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 0.3,
+     "imageVsOnsetFrames": 0.02,
+     "fireLatenessBeatClockMs": -12.8,
+     "stateNotLaterThanImage": null,
+     "sfxScheduledAheadMs": 75.0,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 56.67,
+     "windowFps": 60,
+     "windowMaxGapMs": 16.8
+    },
+    {
+     "beat": "a2-awakening",
+     "start": "ch2-approach",
+     "run": 3,
+     "anchorId": "anc.a2.hand-back",
+     "quantumLanded": "beat",
+     "slackMs": 304.3,
+     "capMs": 454.5,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 4.67,
+     "imageVsOnsetFrames": 0.28,
+     "fireLatenessBeatClockMs": -31.4,
+     "stateNotLaterThanImage": true,
+     "sfxScheduledAheadMs": null,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 56.67,
+     "windowFps": 59.6,
+     "windowMaxGapMs": 33.4
+    },
+    {
+     "beat": "a3-dawn",
+     "start": "ch3-await-rest",
+     "run": 1,
+     "anchorId": "anc.a3.first-blade",
+     "quantumLanded": "bar",
+     "slackMs": 1069.5,
+     "capMs": 2750,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 11.13,
+     "imageVsOnsetFrames": 0.67,
+     "fireLatenessBeatClockMs": -38.7,
+     "stateNotLaterThanImage": null,
+     "sfxScheduledAheadMs": null,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 56.67,
+     "windowFps": 59,
+     "windowMaxGapMs": 50.1
+    },
+    {
+     "beat": "a3-dawn",
+     "start": "ch3-await-rest",
+     "run": 1,
+     "anchorId": "anc.a3.material-lands",
+     "quantumLanded": "bar",
+     "slackMs": 1528.9,
+     "capMs": 2750,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 2.89,
+     "imageVsOnsetFrames": 0.17,
+     "fireLatenessBeatClockMs": -100.7,
+     "stateNotLaterThanImage": true,
+     "sfxScheduledAheadMs": null,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 56.67,
+     "windowFps": 58.4,
+     "windowMaxGapMs": 83.3
+    },
+    {
+     "beat": "a3-dawn",
+     "start": "ch3-await-rest",
+     "run": 2,
+     "anchorId": "anc.a3.first-blade",
+     "quantumLanded": "bar",
+     "slackMs": 586.0,
+     "capMs": 2750,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 1.35,
+     "imageVsOnsetFrames": 0.08,
+     "fireLatenessBeatClockMs": -32.3,
+     "stateNotLaterThanImage": null,
+     "sfxScheduledAheadMs": null,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 72.67,
+     "windowFps": 59.8,
+     "windowMaxGapMs": 33.3
+    },
+    {
+     "beat": "a3-dawn",
+     "start": "ch3-await-rest",
+     "run": 2,
+     "anchorId": "anc.a3.material-lands",
+     "quantumLanded": "bar",
+     "slackMs": 1515.6,
+     "capMs": 2750,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 11.78,
+     "imageVsOnsetFrames": 0.71,
+     "fireLatenessBeatClockMs": -87.3,
+     "stateNotLaterThanImage": true,
+     "sfxScheduledAheadMs": null,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 72.67,
+     "windowFps": 58.4,
+     "windowMaxGapMs": 83.3
+    },
+    {
+     "beat": "a3-dawn",
+     "start": "ch3-await-rest",
+     "run": 3,
+     "anchorId": "anc.a3.first-blade",
+     "quantumLanded": "bar",
+     "slackMs": 572.6,
+     "capMs": 2750,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 9.35,
+     "imageVsOnsetFrames": 0.56,
+     "fireLatenessBeatClockMs": -38.1,
+     "stateNotLaterThanImage": null,
+     "sfxScheduledAheadMs": null,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 64.67,
+     "windowFps": 60,
+     "windowMaxGapMs": 16.8
+    },
+    {
+     "beat": "a3-dawn",
+     "start": "ch3-await-rest",
+     "run": 3,
+     "anchorId": "anc.a3.material-lands",
+     "quantumLanded": "bar",
+     "slackMs": 1526.2,
+     "capMs": 2750,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 1.11,
+     "imageVsOnsetFrames": 0.07,
+     "fireLatenessBeatClockMs": -122.0,
+     "stateNotLaterThanImage": true,
+     "sfxScheduledAheadMs": null,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 64.67,
+     "windowFps": 58.8,
+     "windowMaxGapMs": 66.6
+    },
+    {
+     "beat": "ch1-lift",
+     "start": "ch1-iso",
+     "run": 1,
+     "anchorId": "anc.lift.perspective-issued",
+     "quantumLanded": "beat",
+     "slackMs": -190.2,
+     "capMs": 400,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 8.86,
+     "imageVsOnsetFrames": 0.53,
+     "fireLatenessBeatClockMs": 1.8,
+     "stateNotLaterThanImage": true,
+     "sfxScheduledAheadMs": 79.8,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 64.67,
+     "windowFps": 60,
+     "windowMaxGapMs": 16.8
+    },
+    {
+     "beat": "ch1-lift",
+     "start": "ch1-iso",
+     "run": 2,
+     "anchorId": "anc.lift.perspective-issued",
+     "quantumLanded": "beat",
+     "slackMs": -302.2,
+     "capMs": 400,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 14.19,
+     "imageVsOnsetFrames": 0.85,
+     "fireLatenessBeatClockMs": 12.1,
+     "stateNotLaterThanImage": true,
+     "sfxScheduledAheadMs": 87.8,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 64.67,
+     "windowFps": 60,
+     "windowMaxGapMs": 16.8
+    },
+    {
+     "beat": "ch1-lift",
+     "start": "ch1-iso",
+     "run": 3,
+     "anchorId": "anc.lift.perspective-issued",
+     "quantumLanded": "beat",
+     "slackMs": -294.2,
+     "capMs": 400,
+     "fitsCap": true,
+     "rungsDegraded": 0,
+     "path": "story-grid",
+     "imageVsOnsetMs": 11.52,
+     "imageVsOnsetFrames": 0.69,
+     "fireLatenessBeatClockMs": 4.9,
+     "stateNotLaterThanImage": true,
+     "sfxScheduledAheadMs": 74.5,
+     "fallback": false,
+     "sampleRateKey": 48000,
+     "latencyCompMs": 64.67,
+     "windowFps": 60,
+     "windowMaxGapMs": 16.8
+    }
+   ]
+  },
+  "offlineOnset": {
+   "probe": "main/tools/audio-hit-onset-probe.mjs",
+   "anchors": 10,
+   "phases": [
+    6,
+    6.37,
+    6.71
+   ],
+   "rows": 30,
+   "pass": 30,
+   "maxOnsetErrorMs": 0.045351473920263174,
+   "requirementMs": 1.0,
+   "preRollSilenceAllRows": true,
+   "artifact": "evidence/stage-3/verify-rerun/hit-onset.json"
+  },
+  "moodIdentity": {
+   "inventoryCount": 62,
+   "nanCount": 0,
+   "smoothnessViolations": 0,
+   "sourceLiteralHashes": {
+    "method": "sha256 of each authored table literal in main/src/story/storyScore.ts vs git b631a52",
+    "MOODS": "identical",
+    "CH7_RECONSTRUCTION_MOODS": "identical",
+    "CH7_BOARDING_MOODS": "identical",
+    "CH10_MOODS": "identical"
+   },
+   "fingerprintIdenticalVsBuilderPins": {
+    "moods-before": 1,
+    "moods-A-dirty": 13,
+    "moods-B-brain": 15,
+    "of": 62
+   },
+   "builderPinCrossChecks": {
+    "before_vs_A-nodirty": 62,
+    "A-dirty_vs_B-brain": 57,
+    "floor_vs_A-nodirty": "5/5 (5-mood floor set)"
+   },
+   "pcmComparisonVsBuilderBbrain": {
+    "moods": 62,
+    "identical": 0,
+    "maxAbsDeltaLsb": 8,
+    "worstResidualDbfs": -87.31,
+    "maxAbsRmsDeltaDb": 0.0041
+   },
+   "artifacts": [
+    "evidence/stage-3/verify-rerun/moods-verify.json",
+    "evidence/stage-3/verify-rerun/wav-verify-vs-Bbrain.json"
+   ]
+  },
+  "paramWrites": {
+   "beat": "ch4-vigil",
+   "settleS": 8,
+   "samples": 3,
+   "windowMs": 5000,
+   "writesPerSecond": [
+    21.5,
+    21.3,
+    61.6
+   ],
+   "median": 21.5,
+   "max": 61.6,
+   "requirement": "< 60 steady state",
+   "artifact": "evidence/stage-3/verify-rerun/param-writes.json"
+  },
+  "stripCoverage": {
+   "capturedFrames": 225,
+   "note": "hit-sync strips at anc.lift.perspective-issued, anc.a2.feed-wall-falls and anc.a3.first-blade contain only f+0..f+3 (screencast starts after the fire-3 frame at those anchors); the negative-frame side of the -1/+2 budget is covered numerically by imageVsOnsetFrames, not by a frame",
+   "overlayAnchorLabel": "the burned overlay's 'anchor' line reports the most recently ARMED anchor, so both a2 strips carry 'anc.a2.hand-back'; the strip directory name is the authoritative anchor id"
+  }
+ }
+}

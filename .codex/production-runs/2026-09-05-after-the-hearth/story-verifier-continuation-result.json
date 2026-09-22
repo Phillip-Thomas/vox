@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 1057204,
+  "stop_reason": "end_turn",
+  "session_id": "a1ce0991-bd2b-4bd5-91f4-db5c03aaa563",
+  "total_cost_usd": 10.077758500000002,
+  "usage": {
+    "input_tokens": 212,
+    "cache_creation_input_tokens": 197106,
+    "cache_read_input_tokens": 12185655,
+    "output_tokens": 80311,
+    "output_tokens_details": {
+      "thinking_tokens": 15759
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 197106,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1394,
+        "cache_read_input_tokens": 202382,
+        "cache_creation_input_tokens": 915,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 915
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 4961,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0050360000000000005,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 212,
+      "outputTokens": 80311,
+      "cacheReadInputTokens": 12185655,
+      "cacheCreationInputTokens": 197106,
+      "webSearchRequests": 0,
+      "costUSD": 10.072722500000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 15759,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 111,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "All 96 signed source files still hash-identical after every probe; old captures preserved; root's preview untouched and serving. Ending the role as instructed.\n\n## VERDICT: **FAIL (interim checkpoint)** \u2014 not final chapter verification\n\nThe repaired source passes every static gate, and the ch13-home interaction repair genuinely holds. Two **blocking runtime defects** stop the chapter before any route traversal can be measured, so the CG-IMPL-005 repair remains **untested in a browser**.\n\n### Major findings\n\n**Passes.** `npm run verify` exit 0 \u2014 348 files / **3026 tests** / build ok; `creative:gate --phase implementation` 1708 checks; `story:ux:check` 94 tests; changed-source tests 212. Readiness gate satisfied and **96/96 signed source files independently rehashed, 0 drift**. Preview identity verified myself (title, index hash, and the served bundle actually containing `railTraversal`).\n\n**CG-IMPL-004 not reproducible** on hardware: `ch13:home:review` at 7 ms with exact signed copy, performed through the **shared** performer (`resolver-perform`, prompt cleared 0 ms), choose-return at 2165 ms, beat advance at 2777 ms, 0 nudges/errors \u2014 versus the pre-repair 300 s stall.\n\n**Blocker VF-DEEPLINK-1** \u2014 `?story=ch13-survey` boots **inside the landed Kestrel**: 243 s stall, `walkedPathUnits 0.000`, `controlMode 'flight'` in all 2237 samples, rail asking `walk` the whole time. Cockpit frame with `Ship: landed` proves it. `commonGroundRailPlan()` has an `exit-ship` branch only for `ch13-return`.\n\n**Blocker VF-RAIL-2 (new, \u2260 004/005)** \u2014 with a labelled disembark she walked 58.6 real units to the survey start, then stood on it for ~4.5 minutes with `[F] Begin recording your route` live and never acted. Reconciled against the real body as you asked, which *sharpened* it: her **feet** are 0.143 from S (capsule centre \u2212 1.3 \u2212 0.5 = 50.99, within 0.06 of the authored plane), but the rail compares the **capsule centre in full 3D**, giving 1.745 against a 0.70 gate. A **coordinate-frame mismatch, not a tight radius** \u2014 I prescribe no fix. The 3026 tests miss it because `standAt()` places a **zero-height body** at the authored pose y.\n\n**VF-ANCHOR-OBS-1 revised** \u2014 I withdraw my \"all four home anchors are continuous-only\" inference per Score's binding reading; the missing home-steady/fault-reviewed/return-chosen is now an **open anomaly** with two unconfirmed source candidates. No audibility claim anywhere \u2014 nothing was listened to.\n\n**Not measured, not claimed:** all route traversal and the 18 units, both route classes, manual-corner recovery (never reached), three cold runs, station\u2192home bridge, full story movie, 28 anchors, variants, reset matrix, any fps/timing, any audio. The five typed final artifacts are deliberately **not** authored rather than filled with unmeasured booleans.\n\n### Artifacts\n`verification-lifecycle-interim-report.{json,md}` \u00b7 `verifier-findings.json` (blockers bundled for one pass) \u00b7 `verifier-progress.md` \u00b7 captures `verifier/captures/post/{home-movie-2,survey-movie-1,survey-diag-1,common-diag-1}` (per-file sha256 in the JSON) \u00b7 logs `verifier/logs/post-repair/` \u00b7 probe `verifier/probes/cg-journey-probe.mjs` (self-test passes). Pre-repair evidence untouched.\n\n### Preview ownership\n`http://127.0.0.1:43617/` is **root's** (exec session 9968), still running and usable for review \u2014 my exit does not stop it. I started no server and orphaned none. No source edits, no teleports, no timeout dressed as success. Independent re-verification of the changed source is still required; publication not authorized.",
+  "ttft_ms": 1491,
+  "type": "result",
+  "duration_ms": 1786690,
+  "uuid": "5e9d853e-6e2a-4b39-9973-4c68990baa41",
+  "ttft_stream_ms": 739,
+  "time_to_request_ms": 19,
+  "first_content_frame_ms": 739,
+  "queued_turn_count": 0
+}

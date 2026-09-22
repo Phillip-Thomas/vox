@@ -1,0 +1,29 @@
+{
+  "schema": "paravoxia.audioThreadCost.offline.v1",
+  "generatedAt": "2026-09-05T09:52:50.913Z",
+  "root": "/tmp/claude-1000/-home-thomasphillip-Projects-vox/d0b2a995-d2fd-439d-9749-d2bf9c077619/scratchpad/before-b631a52/main",
+  "method": "renderExcerpt",
+  "quality": "single-tier",
+  "excerpt": "bed-sandbox-day",
+  "runs": [
+    {
+      "wallS": 14.255,
+      "audioS": 210,
+      "realtimeFactor": 0.068,
+      "dspMsPerFrameEquivalent": 1.131
+    },
+    {
+      "wallS": 14.05,
+      "audioS": 210,
+      "realtimeFactor": 0.067,
+      "dspMsPerFrameEquivalent": 1.115
+    }
+  ],
+  "best": {
+    "wallS": 14.05,
+    "audioS": 210,
+    "realtimeFactor": 0.067,
+    "dspMsPerFrameEquivalent": 1.115
+  },
+  "note": "Wall time covers OfflineAudioContext rendering plus the harness loudness/health analysis of the rendered buffer; the DSP-per-frame figure is therefore an upper bound on the audio thread's cost."
+}

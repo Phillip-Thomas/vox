@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 3702889,
+  "stop_reason": "end_turn",
+  "session_id": "7bf11b90-87c3-410c-bf15-fd2ac154caa0",
+  "total_cost_usd": 74.26598899999996,
+  "usage": {
+    "input_tokens": 594,
+    "cache_creation_input_tokens": 685492,
+    "cache_read_input_tokens": 118610260,
+    "output_tokens": 323976,
+    "output_tokens_details": {
+      "thinking_tokens": 67534
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 685492,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1258,
+        "cache_read_input_tokens": 689345,
+        "cache_creation_input_tokens": 214,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 214
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 3469,
+      "outputTokens": 20,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0035689999999999997,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 594,
+      "outputTokens": 323976,
+      "cacheReadInputTokens": 118610260,
+      "cacheCreationInputTokens": 685492,
+      "webSearchRequests": 0,
+      "costUSD": 74.26241999999996,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 67534,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 301,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Chapter 13 \"Common Ground\" is implemented end to end against the signed `scene-v1` contract (gate receipt + three signatures verified, and the live bytes re-hashed, before the first edit).\n\n**One blocking external condition, reported not worked around:** `scene-contract.json` was replaced in place with an unsigned **scene-v2** (`4dbf722b\u2026`) mid-implementation, while `contract-gate-pass.json` and `director-signoffs.json` remain `scene-v1` (`ecce3e98\u2026`) and the producer's own record says \"three fresh signatures and contract gate pending\". I did **not** re-pin the runtime to an unsigned revision, so five gate invocations now fail on that single cause \u2014 `chapter:registry:check` (2/4285), `chapter:registry:smoke`, `scene:av:check`, `story:authority` (1/1039), `story:authority:smoke`. All five passed clean before the re-freeze. The common-only guide exception is not implemented, per the inbox.\n\n**Key paths**\n- New: `main/src/story/commonGround{State,Route,Director,Actor,Score}.ts`, `world/CommonGroundWorld.tsx`, `beats/ch13/{4 beats,index}.ts`, `autopilot/rail-ch13-{home,return,survey,common}.ts`\n- Seams: `storyState`, `storyDirector`, `StoryDirectorDriver`, `emergentStoryDirector`, `storyInteractions`, `storyWorldHandles`, `storyBoundaryTelemetry`, `auditWorkerPresence`, `signedSceneAvRuntime`, `tidegardenRoute`, `beats/{objectivePrimitives,worldHandles,definitions,index,metadata.generated}`, `autopilot/primitives`, `world/StoryWorldProps`, `game/systems/{interactionSystem,persistence}`, `spaceStation/{StationScreeningDriver,SpaceStationSandbox}`\n- Data/tools: `chapter-registry.json` (+`externalTransitions` `ch10->ch13-via-station`), `chapter-journey-contract.json`, `story-authority.json`, `chapter-registry-gate.mjs`, `story-authority-gate.mjs`, `generate-scene-av-runtime.mjs`, two schemas\n\n**Tests/commands** \u2014 `npm run typecheck` pass; `npm run test` 348 files / 2972 tests pass; `npm run build` pass; `chapter:journey:check` 0 issues; journey/registry smokes, `guidance:target-check`, `story:ladder:check`, `preview:check`, `catalog:check`, `creative:workflow:check`, `creative:smoke` pass. New behavioural suites: `commonGroundState` (20), `commonGroundRoute` (27), `commonGroundDirector` (38), `commonGroundScore` (10).\n\nAll 16 + residual inbox corrections are addressed (two slots, strict tuple hydration, real walked distance, displacement-bounded ordered progress, body-sweep walk mask, completion-edge score eligibility with real audio availability, revision without replaying his approach, fail-closed world queries, T-only final reference with no rewind, exact arrival, physical hold edges, witness at any qualified pose, persistent local tester + repeat, world-scoped records, real colliders/live revision, and a hardened external-transition gate with ten negative self-tests).\n\nRemaining issues: the scene-v2 pin (root's to unblock \u2014 re-pin is mechanical), and no measured render/audio/GPU/journey evidence \u2014 that is the independent story-verifier's. Nothing published, deployed, reset, stashed or checked out; 322 dirty/untracked entries preserved.",
+  "ttft_ms": 1638,
+  "type": "result",
+  "duration_ms": 4194352,
+  "uuid": "c3b88588-79d1-40ac-8d55-e42dc475c04c",
+  "ttft_stream_ms": 827,
+  "time_to_request_ms": 32,
+  "first_content_frame_ms": 827,
+  "queued_turn_count": 0
+}

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { MaterialType } from '../types/materials.ts';
 import { voxelSystem } from './efficientVoxelSystem.ts';
 import { FAUNA_REGION_ID } from './faunaModel.ts';
+import { FAUNA_TRIANGLE_BUDGET } from './faunaGeometry.ts';
 import type { FaunaNavigationObstacles } from './faunaNavigationObstacles.ts';
 import {
   FAUNA_KINDS,
@@ -14,6 +15,7 @@ import {
   createFaunaGeometry,
   createFaunaMaterial,
   createFaunaRenderSnapshot,
+  faunaDetailForProfile,
   faunaKindId,
   faunaLevelTransitionLift,
   faunaScaleForKind,
@@ -441,13 +443,48 @@ describe('faunaField', () => {
         expect(new Set(regions).size).toBeGreaterThan(2);
       }
       const triangles = (geometry.index?.count ?? geometry.getAttribute('position').count) / 3;
-      expect(triangles).toBeGreaterThan(100);
-      expect(triangles).toBeLessThanOrEqual(800);
+      expect(triangles).toBeGreaterThan(1000);
+      expect(triangles).toBeLessThanOrEqual(FAUNA_TRIANGLE_BUDGET.high);
       prepareFaunaInstanceAttributes(geometry, 1);
       // instanceMatrix consumes four more locations; WebGL2 only guarantees 16.
       expect(Object.keys(geometry.attributes).length + 4).toBeLessThanOrEqual(16);
       geometry.dispose();
     }
+  });
+
+  it('scales sculpt detail with the graphics tier inside each triangle budget', () => {
+    const profile = buildFaunaProfile(12345);
+    for (const kind of FAUNA_KINDS) {
+      const counts = (['high', 'medium', 'low'] as const).map(detail => {
+        const geometry = createFaunaGeometry(kind, profile, detail);
+        const triangles = (geometry.index?.count ?? geometry.getAttribute('position').count) / 3;
+        expect(triangles).toBeLessThanOrEqual(FAUNA_TRIANGLE_BUDGET[detail]);
+        geometry.dispose();
+        return triangles;
+      });
+      expect(counts[0]).toBeGreaterThan(counts[1]);
+      expect(counts[1]).toBeGreaterThan(counts[2]);
+    }
+    expect(faunaDetailForProfile('ULTRA')).toBe('high');
+    expect(faunaDetailForProfile('MEDIUM')).toBe('medium');
+    expect(faunaDetailForProfile('POTATO')).toBe('low');
+  });
+
+  it('blends rig weights across sculpted joints instead of hard part seams', () => {
+    const profile = buildFaunaProfile(12345);
+    const geometry = createFaunaGeometry('grazer', profile);
+    const surface = geometry.getAttribute('aFaunaSurface');
+    let partial = 0;
+    let neck = 0;
+    for (let index = 0; index < surface.count; index++) {
+      const weight = surface.getZ(index);
+      if (surface.getY(index) === 1) neck++;
+      if (weight > 0.1 && weight < 0.9) partial++;
+    }
+    // A soft neck/shoulder transition needs a real population of in-between weights.
+    expect(neck).toBeGreaterThan(200);
+    expect(partial).toBeGreaterThan(100);
+    geometry.dispose();
   });
 
   it('keeps every fauna mesh finite, outward wound, and valid for front-face culling', () => {
@@ -548,7 +585,7 @@ describe('faunaField', () => {
       expect(material.depthWrite).toBe(true);
       expect(material.blending).toBe(THREE.NormalBlending);
       expect(material.side).toBe(kind === 'dragonfly' ? THREE.DoubleSide : THREE.FrontSide);
-      expect(material.customProgramCacheKey()).toBe('fauna-field-v9');
+      expect(material.customProgramCacheKey()).toBe('fauna-field-v10');
       keys.add(material.customProgramCacheKey());
       expect(faunaKindId(kind)).toBeGreaterThanOrEqual(0);
       material.dispose();

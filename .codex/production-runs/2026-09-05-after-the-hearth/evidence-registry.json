@@ -1,0 +1,147 @@
+{
+  "schema": "paravoxia.evidenceRegistry.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "authoredBy": "independent story-verifier (navigation-repair continuation)",
+  "writtenAt": "2026-09-06T14:55:29.581382+00:00",
+  "isAcceptance": false,
+  "publicationAuthorized": false,
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "previewUrl": "http://127.0.0.1:38803/",
+  "groups": {
+    "staticGate": [
+      {
+        "path": "logs/verifier-navigation/verify.log",
+        "sha256": "a3eaf4fbfa043c0ffb718a67209e5382dc42e2d5671002f41a8811316a429ab4",
+        "bytes": 39125
+      },
+      {
+        "path": "logs/verifier-navigation/selftest.log",
+        "sha256": "efaa7f1d6485afd0bb6fa675f98a3faaa743f2c3bea0d0333f2cb99725d3c619",
+        "bytes": 197
+      }
+    ],
+    "check1_survey": [
+      {
+        "path": "verifier/captures/navigation/survey-movie-1/summary.json",
+        "sha256": "13f1b9bef0ce24a734be316fac94084aca457398a73bc183cb5872e4026f0da9",
+        "bytes": 1051882
+      },
+      {
+        "path": "verifier/captures/navigation/survey-movie-1/cleanup-receipt.json",
+        "sha256": "4432bb146340df4b482a30564ae9ee537b00d3f719310f8b87ceca0e9063c755",
+        "bytes": 1052
+      },
+      {
+        "path": "verifier/captures/navigation/survey-movie-1/0106-stall-fail.png",
+        "sha256": "78559956d17b0abd1b64d0a77c4d36e114b5f567fa8f07214a567f0c8f86d544",
+        "bytes": 955447
+      },
+      {
+        "path": "verifier/captures/navigation/survey-movie-1/trace.ndjson",
+        "sha256": "83e9859c3531b53fffff9092a51f29a4bec33415402d8f1d14b66d41c9e13bb0",
+        "bytes": 28608695
+      }
+    ],
+    "check2_dataPreservation": [
+      {
+        "path": "verifier/captures/partial-continue/run-5/summary.json",
+        "sha256": "dbd68de5012df5007aee0d6ad3ccd7efb13ac333aa1816039cee896b8a2e7411",
+        "bytes": 59014
+      },
+      {
+        "path": "verifier/captures/partial-continue/run-5/worldsave-pvx.v1.world.-1_-1.json",
+        "sha256": "5252dfd74a2391ecbae41b99a619703b9e25999f093fb733593094d97463f514",
+        "bytes": 1305
+      },
+      {
+        "path": "verifier/captures/partial-continue/run-5/worldsave-after-continue-pvx.v1.world.-1_-1.json",
+        "sha256": "5252dfd74a2391ecbae41b99a619703b9e25999f093fb733593094d97463f514",
+        "bytes": 1305
+      },
+      {
+        "path": "verifier/captures/partial-continue/run-5/globalsave.json",
+        "sha256": "8b46dcebffa8d762ae9a69ece2d6b050df475446294322e3178039ef1cd111a3",
+        "bytes": 3377
+      },
+      {
+        "path": "verifier/captures/partial-continue/run-5/cleanup-receipt.json",
+        "sha256": "b5fd829d1db95d3bb4b21f0c4dff1d3e431bb1e01feb1760cfc677a9d4a6c23d",
+        "bytes": 1242
+      },
+      {
+        "path": "verifier/captures/partial-continue/run-5/0003b-after-walk-to-W.png",
+        "sha256": "47e92a17de5e9cd968d6742e5c1f61738b13f77de669305f0aaaf5f21ebaf95d",
+        "bytes": 758689
+      }
+    ],
+    "check2_earnedReturnBlocked": [
+      {
+        "path": "verifier/captures/partial-continue/earned-1/summary.json",
+        "sha256": "54fdd3f9ad9981bb3ef3209932d4c594eea787dc2776ea6e2914253b3d5b54f9",
+        "bytes": 8298
+      },
+      {
+        "path": "verifier/captures/partial-continue/earned-2/summary.json",
+        "sha256": "017ce7ee985a6eaf9855811cac81d299a8ea7845b4407bf3c2992d93ad801151",
+        "bytes": 109556
+      },
+      {
+        "path": "verifier/captures/partial-continue/earned-2/failure.json",
+        "sha256": "325d7148ff3c7ea416fbca3aa9664a51c697efaf9c9172b747b7cc26d8e8e0bc",
+        "bytes": 906
+      },
+      {
+        "path": "verifier/captures/partial-continue/earned-2/cleanup-receipt.json",
+        "sha256": "9b4bbf70f1fb47c99c0c064b1f975efd8c561b6e2caaba1053f6f3b62a6f4c96",
+        "bytes": 1242
+      },
+      {
+        "path": "verifier/captures/partial-continue/earned-2/0000a-origin-landed.png",
+        "sha256": "6df94bad801798c39a8adbed660476d5486130d22baba34e9e731251393f213d",
+        "bytes": 520376
+      },
+      {
+        "path": "verifier/captures/partial-continue/earned-2/trace.ndjson",
+        "sha256": "db32d32206aa5bf39444e34576acf2871b068a2a99daaea0b4485982ddd30283",
+        "bytes": 534433
+      }
+    ],
+    "probes": [
+      {
+        "path": "verifier/probes/partial-continue-earned/earned-return-continue-probe.mjs",
+        "sha256": "a9fefa6b61043d6658c983235271e29df0b0bf6089430ad8e7a249f24e93220e",
+        "bytes": 41308
+      }
+    ],
+    "reports": [
+      {
+        "path": "verification-navigation-report.json",
+        "sha256": "f0291bafb3f57523bd550e57ba4fbd3489de987836d39461bd8b3b175e24552d",
+        "bytes": 14116
+      },
+      {
+        "path": "verifier-findings.json",
+        "sha256": "81e586f0bf15e285adf95c2723918f8a677435a6bb6c0ea8f909c9c2f5119563",
+        "bytes": 14446
+      },
+      {
+        "path": "verifier-navigation-progress.md",
+        "sha256": "8a37aa52b2c23ebba42bbc43574433c804beda5a2786969955e2c02d5cc13adb",
+        "bytes": 18896
+      }
+    ]
+  },
+  "preservedPriorFailedCaptures": [
+    "verifier/captures/partial-continue/run-1",
+    "verifier/captures/partial-continue/run-2",
+    "verifier/captures/partial-continue/run-3",
+    "verifier/captures/partial-continue/run-4"
+  ],
+  "notes": [
+    "All hashes computed by the verifier over the actual files on disk.",
+    "run-5 before/after-Continue worldsave files share sha256 5252dfd7... \u2014 that identity IS the preservation proof.",
+    "earned-1 and earned-2 are FAILED captures, retained deliberately."
+  ],
+  "missingAtWrite": []
+}

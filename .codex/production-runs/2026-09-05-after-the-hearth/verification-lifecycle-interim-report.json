@@ -1,0 +1,759 @@
+{
+  "schema": "paravoxia.verificationLifecycleInterimReport.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "role": "story-verifier (independent)",
+  "kind": "INTERIM FAILURE CHECKPOINT \u2014 not final chapter verification, not a scorecard, not a publication decision",
+  "writtenAt": "2026-09-06T10:21:35.552777+00:00",
+  "publicationAuthorized": false,
+  "verdict": "FAIL (interim) \u2014 the repaired build passes every static gate and the ch13-home interaction repair holds, but two blocking runtime defects stop the chapter before any route traversal can be measured.",
+  "identity": {
+    "contractVersion": "scene-v2",
+    "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+    "sourceManifestSha256": "58f275f6130914f878942774fd4b4c6ce74327755c33ae257965a9dbeed40e70",
+    "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+    "sourceFilesRehashedByVerifier": {
+      "checked": 96,
+      "mismatch": 0,
+      "missing": 0
+    },
+    "previewUrl": "http://127.0.0.1:43617/",
+    "previewOwner": "root-production-preview (root exec session 9968)",
+    "previewIndexSha256": "1f3272687745880e7800b5349795bc4b55eb1ea8ee12a08b340716bcf05b823a",
+    "servedBundle": "/assets/index-CVcXc2R8.js",
+    "servedBundleSha256": "c34f18505c959cbe966d676984cf99ef6f1bff3dd3a1d4ef60cd349c36fca9d9",
+    "servedBundleCarriesRepair": "contains railTraversal (CG-IMPL-005 ordered cursor) and the exact signed marker labels",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "rendererClass": "hardware",
+    "headed": true,
+    "heavyLock": "acquired per probe with flock -n and released on exit; no other owner waited on, bypassed or terminated"
+  },
+  "staticGate": {
+    "command": "npm --prefix main run verify",
+    "exitCode": 0,
+    "testFiles": 348,
+    "tests": 3026,
+    "build": "ok",
+    "log": "verifier/logs/post-repair/verify-postrepair.log",
+    "logSha256": "44622391eb0bbc7bb152ab68ed407f5f03ac468917ea1c0d2df8a65df36c5d19",
+    "creativeGateImplementation": {
+      "command": "npm run creative:gate -- --run <run> --phase implementation",
+      "exitCode": 0,
+      "checks": 1708
+    },
+    "targeted": {
+      "story:ux:check": "9 files / 94 tests, exit 0",
+      "changed-source (commonGround* + autopilot)": "13 files / 212 tests, exit 0",
+      "smokes": "chapter:registry, chapter:journey, story:authority, creative, chapter:accept, chapter:journey:probe \u2014 all exit 0"
+    },
+    "limit": "Static/CPU only. It proves nothing about rendering, traversal, hearing, hardware timing or the movie bridge \u2014 and in fact both blockers below are invisible to it."
+  },
+  "blockersForOneBoundedIntegrationPass": [
+    {
+      "id": "VF-DEEPLINK-1",
+      "severity": "blocking",
+      "title": "ch13-survey / ch13-common entry boots aboard the landed Kestrel and cannot recover",
+      "measured": {
+        "stallMs": 243230,
+        "playerWalkedUnits": 0.0,
+        "playerPos": [
+          8,
+          53.85,
+          -6
+        ],
+        "workerPos": [
+          -34,
+          51.1,
+          10
+        ],
+        "spaceFlight": "{phase:'surface', controlMode:'flight'} in all 2237 samples (module default is 'fps')",
+        "railState": "routeAction 'walk', clock 3.1->238.3 s, stillTime 0.8-1.5",
+        "teleportNudgesTotal": 0,
+        "pageErrors": 0,
+        "interactionAttempts": 0
+      },
+      "picture": "verifier/captures/post/survey-movie-1/0039-root-checkpoint.png \u2014 view from inside the cockpit; debug HUD 'Ship: landed', 'Flight: surface / flight'",
+      "sourceCandidate": "main/src/story/commonGroundDirector.ts commonGroundRailPlan(): an 'exit-ship' branch exists only under case 'ch13-return' (~line 1930). The 'ch13-survey' and 'ch13-common' cases never inspect controlMode.",
+      "limit": "Confined to direct beat entry as far as measured. Whether continuous play is affected is UNMEASURED, because the continuous path is blocked by VF-RAIL-2."
+    },
+    {
+      "id": "VF-RAIL-2",
+      "severity": "blocking",
+      "title": "Rail arrival comparison uses the capsule CENTRE in full 3D against ground-authored poses, so the movie can never press F at the survey start",
+      "measured": {
+        "playerBodyCentreY": "52.79-52.80 in all 2643 samples",
+        "authoredS": [
+          -26,
+          51.05,
+          12
+        ],
+        "minDistanceCentreToS": 1.745,
+        "horizontalDistanceToS": 0.13,
+        "derivedFeetY": 50.99,
+        "distanceFeetToS": 0.143,
+        "railGate": "CG_RAIL_START_AIM 0.35 + CG_RAIL_ROUTE_ARRIVE 0.35 = 0.70",
+        "resolverReach": "CG_POINT_REACH 2.0 (satisfied by 1.745, margin 0.255 \u2014 which is why the prompt shows)",
+        "timeStandingOnTheMark": "261 of 354 pose-ledger entries (~4.5 min) within 0.5 horizontal units of S",
+        "livePromptThroughout": "F | Begin recording your route",
+        "teleportNudgesTotal": 0,
+        "actsPerformed": 0
+      },
+      "picture": "verifier/captures/post/survey-diag-1/0038-strip-ch13-survey.png \u2014 marker reads 'survey start \u00b7 begin a route \u00b7 0m' with the F prompt live",
+      "reconciliation": "Feet = capsule centre - (HALF_HEIGHT 1.3 + RADIUS 0.5) = 50.99, i.e. within 0.06 of the authored ground plane. The body HAS arrived; only the comparison frame disagrees. This is a coordinate-frame (centre-vs-feet / vertical inclusion) mismatch, not a too-tight radius.",
+      "whyTestsMissedIt": "main/src/story/commonGroundDirector.test.ts:99 standAt() sets the world position to the authored pose y \u2014 a zero-height body \u2014 so every rail regression runs at vertical offset 0.",
+      "gatesBelowTheLiveOffset": [
+        "CG_RAIL_ROUTE_ARRIVE 0.35",
+        "CG_RAIL_POSE_ARRIVE 0.6",
+        "CG_RAIL_START_AIM+ARRIVE 0.70",
+        "CG_RAIL_CORNER_OVERSHOOT 0.6"
+      ],
+      "noPrescription": "Whether to reconcile the frame or otherwise is the integrator's call. Widening radii would mask this and could relax genuine physical clearance rules."
+    }
+  ],
+  "openAnomalyForTheSamePass": {
+    "id": "VF-ANCHOR-OBS-1 (revised)",
+    "statement": "Deep-linked ch13-home performed both real F acts through the shared resolver and set both milestones, yet activationHistoryAnchorIds stayed empty in-loop. Per Score's binding interpretation only anc.cg.cell-installed needs the live install boundary, so the absence of home-steady / fault-reviewed / return-chosen is an anomaly, not expected.",
+    "sourceCandidates": [
+      "noteAnchor() latches runtime.firedAnchors before calling activateSignedSceneAnchorById and discards its boolean, so a rejected activation is spent locally and never retried",
+      "activateAnchor() refuses an anchor while an earlier pending ordered same-beat anchor (cell-installed) is unactivated"
+    ],
+    "notProven": "activateAnchor's return value was not instrumented. No audibility claim is made; nothing was listened to."
+  },
+  "confirmedWorking": [
+    {
+      "id": "CG-IMPL-004",
+      "result": "NOT REPRODUCIBLE on the repaired build",
+      "detail": "ch13:home:review entered at 7 ms with exact signed label and work order; performed through the SHARED performer (interactionTrace source 'resolver-perform', outcome 'returned', prompt cleared, latency 0 ms); ch13:home:choose-return at 2165 ms; beat advanced to ch13-return at 2777 ms; 0 nudges, 0 page errors. Pre-repair home-movie-1 stalled on the same objective for the full 300 s."
+    },
+    {
+      "id": "signed guidance copy",
+      "result": "exact",
+      "detail": "Every objective observed (home:review, home:choose-return, return:board, return:launch, survey:offer, survey:start, common:reciprocal) carried the exact signed marker label and work order. ch13:common:reciprocal showed the scene-v2 PREPARATION conditional work order verbatim: 'W-7744 is taking up the reference position.' / 'Give him room to reach it. When the guide appears, follow it from the survey end.'"
+    },
+    {
+      "id": "body-blockage rule",
+      "result": "consistent (synthetic state)",
+      "detail": "With Terra 0.38 horizontal units from W-7744 he moved 0.2 units and HELD; no displacement, no teleport. Observed in an unearned deep-link fixture, so it is an observation, not proof."
+    },
+    {
+      "id": "checkpoint control",
+      "result": "proven",
+      "detail": "Root's control 'pause' was picked up within the 10 s poll; the probe stopped at the next sample and still wrote all frames, the full trace and a complete summary with checkpointed:true."
+    }
+  ],
+  "notMeasured_notClaimed": [
+    "The CG-IMPL-005 ordered-cursor repair in a browser \u2014 NO route traversal was ever entered. Retarget-to-visited-start, corner shortcuts, the ordered 18 units, long-vs-short route classes and first-try-legal long success are ALL unmeasured.",
+    "Manual-corner deviation and honest recovery \u2014 NOT REACHED. The commonGroundRoute.ts:444-479 projection risk stays a source/test risk only, kept separate from the two measured blockers.",
+    "Three cold focused chapter journeys; both route classes; the continuous station->home->ch13 bridge.",
+    "Full story movie from the beginning.",
+    "The 28 signed anchors as a set; 17+2 objective lifecycles end to end; reset matrix (8 triggers); mobile / reduced-motion / lowest-tier variants; pause / focus / quit / deep-link / replay.",
+    "Any performance, fps, draw-call, memory or timing figure.",
+    "Any score, cue, spacing, release or audio behaviour. NOTHING WAS LISTENED TO and no hearing claim is made anywhere; SFX figures elsewhere are runtime queue observations only.",
+    "The headed chapter:evidence bundle for chapter13.",
+    "Typed final artifacts (verification-report, objective-lifecycle-evidence, chapter-journey-evidence, raw-audiovisual-evidence, evidence-registry) \u2014 deliberately NOT authored, because filling their schemas now would mean writing booleans without measurements."
+  ],
+  "prerequisiteFixturesUsed": [
+    {
+      "type": "ordinary-disembark",
+      "input": "KeyF (the shipped surface+flight exit handler, App.tsx:1516-1525)",
+      "usedIn": [
+        "post/survey-diag-1",
+        "post/common-diag-1"
+      ],
+      "grants": "nothing \u2014 no milestone, position, progress or route credit",
+      "labelling": "These two runs are DIAGNOSTIC. They are not cold journeys, not continuous proof, and are not reported as either."
+    }
+  ],
+  "integrity": {
+    "gameSourceEdited": false,
+    "thresholdsOrPredicatesChanged": false,
+    "teleportOrProgressGrantUsed": false,
+    "timeoutTreatedAsRescueOrSuccess": false,
+    "unrunChecksMarkedPass": false,
+    "creativeJudgementOffered": false,
+    "oldEvidenceOverwritten": false,
+    "serversOrphaned": false,
+    "note": "Pre-repair captures (smoke-home, home-movie-1, control-ch10-cold) and verifier/logs/verify.log are preserved untouched; all new measurements live under verifier/captures/post/ and verifier/logs/post-repair/."
+  },
+  "rawMedia": {
+    "post/home-movie-2": [
+      {
+        "path": "verifier/captures/post/home-movie-2/0000-obj-enter-ch13_home_review.percept.png",
+        "bytes": 4250,
+        "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0000-obj-enter-ch13_home_review.png",
+        "bytes": 94278,
+        "sha256": "162af15c07f9c8cd5dce345e4417cc94a41828ceb528f0675318da4c4dcd42c3"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0002-strip-ch13-home.percept.png",
+        "bytes": 849533,
+        "sha256": "a369451a4428fce5df9abee84355a49657ac53ef85862fb5580b186d99e4d23d"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0002-strip-ch13-home.png",
+        "bytes": 87526,
+        "sha256": "f8ff60d2da86fc601cdb6549198b29c74e0a4fb66397a5cc448faaa6f3f428bf"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0004-obj-enter-ch13_home_choose-return.percept.png",
+        "bytes": 1081224,
+        "sha256": "30a85c5af4dca1010410ef37a14ffaee8868463c673435a025f115c24fb85b5b"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0004-obj-enter-ch13_home_choose-return.png",
+        "bytes": 374844,
+        "sha256": "036f5eb1b55fef44989b5687d83e1e5f2f2f9c01fd6992d19f015cc2bf25a5cc"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0006-beat-ch13-return.percept.png",
+        "bytes": 948378,
+        "sha256": "a9c31ad65dfacd6f15cfdf113a3fd8bbad5eb33b8d7099ba8b32c46a6a225930"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0006-beat-ch13-return.png",
+        "bytes": 1005642,
+        "sha256": "8279cfe49462933a0015b7ca91ef228cc5eac09ce3760acc176e83296f5a774d"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0008-obj-enter-ch13_return_board.percept.png",
+        "bytes": 921897,
+        "sha256": "1ee843eb7f70a1160962571658cce4ba48d4fb8c1d8a9db42d7e80276c837db9"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0008-obj-enter-ch13_return_board.png",
+        "bytes": 566019,
+        "sha256": "50f2a0f48d3e98c5dc6dd3f6feee44c688f637bacbbc7b39268704c7c936c829"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0010-stop-reached-beat_ch13-return.percept.png",
+        "bytes": 707654,
+        "sha256": "5e274eaf7b2b54793f00e29a0111577c05bf1b3e680161a95884e296f35ea1fa"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/0010-stop-reached-beat_ch13-return.png",
+        "bytes": 776212,
+        "sha256": "d32b67a970c893e24a3fae8ff59a28b69fc66ecebb2fb3384eb049f5d7832f44"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/summary.json",
+        "bytes": 40537,
+        "sha256": "14aabfa5a63cb4996f5045bc5594adf29608b9f0d71f1e59fa274118bb66e406"
+      },
+      {
+        "path": "verifier/captures/post/home-movie-2/trace.ndjson",
+        "bytes": 39143,
+        "sha256": "95dbe18c4838d8a0c6b3955a87fb419cadf604e7fc04441f88a53d6feafc877f"
+      }
+    ],
+    "post/survey-movie-1": [
+      {
+        "path": "verifier/captures/post/survey-movie-1/0000-obj-enter-ch13_survey_offer.png",
+        "bytes": 76782,
+        "sha256": "d6573a6d9d6d3b191ab7a62289b16885f544d29398530db19c17bf60e4d01dd1"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0001-strip-ch13-survey.percept.png",
+        "bytes": 4250,
+        "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0001-strip-ch13-survey.png",
+        "bytes": 70839,
+        "sha256": "af8f41b6da9dfd6253d8cdbd00388a5bd3e25f7a2d58e010e8ce852b966f2b01"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0003-anchor-anc.cg.repeated-measure.percept.png",
+        "bytes": 676819,
+        "sha256": "5b5defb0a98426366d65875b747b04ad293136e040dabeb395d787da00afcf3d"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0003-anchor-anc.cg.repeated-measure.png",
+        "bytes": 693517,
+        "sha256": "dfde1fef84eba23abc7152a1d0346fc981095ff0abf64e255a245fc0f008cb8c"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0005-after-anchor-anc.cg.repeated-measure.percept.png",
+        "bytes": 670108,
+        "sha256": "2c390b1beb35cf856d0358915c7248aa06f35605d3f9c3c2379a9d19f8e791cc"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0005-after-anchor-anc.cg.repeated-measure.png",
+        "bytes": 689715,
+        "sha256": "8fde78fe020c4f3ef2a23d030a82e0f10c1943cb8965eb800c6d1b1a7e1c1988"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0007-strip-ch13-survey.percept.png",
+        "bytes": 642191,
+        "sha256": "7acef95338a6bf00a1579de10ecf37be0882f6bfdd901baca6be72bf2f5086b3"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0007-strip-ch13-survey.png",
+        "bytes": 662670,
+        "sha256": "91b1f16809ee2e20f31292f6957508fff14c24a7fe9bc2211ee1533fa2145ea8"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0009-strip-ch13-survey.percept.png",
+        "bytes": 639457,
+        "sha256": "97cf03cdd7e295e9c04dab129b57bd9356035974478ff7ba9d892b91e022e666"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0009-strip-ch13-survey.png",
+        "bytes": 656014,
+        "sha256": "f918fdfd31d559cfe5b78c4a5be210868a33f1fc88639934a05ab3de38b1eeb8"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0011-strip-ch13-survey.percept.png",
+        "bytes": 651516,
+        "sha256": "bca17519f2c744dbc59c3d3d70ac2cf05483819cad1ecb5e9cdeb524899f85bb"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0011-strip-ch13-survey.png",
+        "bytes": 670770,
+        "sha256": "fc8d0328be73a83073029a27610ab23a31e88583743319c17b68346cce7e7acf"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0013-strip-ch13-survey.percept.png",
+        "bytes": 650352,
+        "sha256": "b5a41665e3eb61dba2bb11cc6e78e78ff8c7a65f5ff2d5890aff269bd95bdf1c"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0013-strip-ch13-survey.png",
+        "bytes": 668617,
+        "sha256": "c5ac77447263e85909046b5741bf435963868ca4b3ec270062a9057e05a067e2"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0015-strip-ch13-survey.percept.png",
+        "bytes": 649891,
+        "sha256": "e76b44dadd766d65a703dc5a9d9976c4f52ac11dcfe94f209b4f010fca6cc9af"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0015-strip-ch13-survey.png",
+        "bytes": 665949,
+        "sha256": "4cadafb0e4caea8066359cbfabc920159ced629d19914d7286553db2c53a9c27"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0017-strip-ch13-survey.percept.png",
+        "bytes": 653999,
+        "sha256": "3d33d6060f5959769045c6cab2c9f9871da90c69a6554383ea82f2469d53d4df"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0017-strip-ch13-survey.png",
+        "bytes": 671263,
+        "sha256": "cdda019b1e0677eab3edd360f5444fdc1eac32376d2962ea06843ce994383c69"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0019-strip-ch13-survey.percept.png",
+        "bytes": 670774,
+        "sha256": "d9bc2b98ce6cc35ecd0639ca9f673928a94dea8bcb10953ffd616f7e058bbdad"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0019-strip-ch13-survey.png",
+        "bytes": 689900,
+        "sha256": "4e5f0d47d9f827681a13a1fe85e6755d0b9c981faa32ca8492134d1dc6e3ac05"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0021-strip-ch13-survey.percept.png",
+        "bytes": 690439,
+        "sha256": "86dc6e5a9286abf4fe3ae4fa0f2da1fa52396bf4338759293e4610e5c4dca45e"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0021-strip-ch13-survey.png",
+        "bytes": 705459,
+        "sha256": "229119e8b47a29de82acb5cbc095bc1ae3f969a84271136b2aeaf46f3ffbf78f"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0023-strip-ch13-survey.percept.png",
+        "bytes": 594499,
+        "sha256": "f3dc1fed1ee0f6d0bac830720374786a3f8211b48f690729193219407643d3f5"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0023-strip-ch13-survey.png",
+        "bytes": 623277,
+        "sha256": "8829c4e85f24707470ffea3ae52968d153575485ba594d320789adb8a5eaa9a0"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0025-strip-ch13-survey.percept.png",
+        "bytes": 564923,
+        "sha256": "2b81f1382097bf16d90625785931c12b90b91c011d416de4bbcd2c5b6bea43d2"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0025-strip-ch13-survey.png",
+        "bytes": 596498,
+        "sha256": "e8ef316db1fa290e5903294bd82001444e593abe91556b0e679777ac92509dde"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0027-strip-ch13-survey.percept.png",
+        "bytes": 557770,
+        "sha256": "e37fa8167664218c38321f59c1e506d5c54c98fb798f9077f6ac3bfbec11e80f"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0027-strip-ch13-survey.png",
+        "bytes": 589242,
+        "sha256": "44c6386cb8c6df77be1635c80b3f5eab048960544b9b6e1443d4804466944f06"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0029-strip-ch13-survey.percept.png",
+        "bytes": 555963,
+        "sha256": "32500c2f6055422ab9dca5a8ee63f3fc456192a04f3a17280d2ca1b9accb888e"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0029-strip-ch13-survey.png",
+        "bytes": 587483,
+        "sha256": "27734f16d8d2d5fab29a70c77a3b0fd30f3b0a16ea18c51b5c59e85d6420f8db"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0031-strip-ch13-survey.percept.png",
+        "bytes": 562319,
+        "sha256": "926b10240a05fa7beebfa51e17af69b92edfabd512f4a33d8c9e8a1957399d3f"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0031-strip-ch13-survey.png",
+        "bytes": 592957,
+        "sha256": "7e7c38c6dd55eea212bb9ff76f47db238de3b9fdaaac3be9229c7b977d00f749"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0033-strip-ch13-survey.percept.png",
+        "bytes": 565816,
+        "sha256": "31464ea8cd707a25b0578b65f373d748030e142a933af4283157e9f931632930"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0033-strip-ch13-survey.png",
+        "bytes": 595736,
+        "sha256": "6507d49ac1b59bbe88244dfeb22fa470ccfcbb61615df77de2a21778a4095e08"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0035-strip-ch13-survey.percept.png",
+        "bytes": 583285,
+        "sha256": "486bbca203eccbf496b0af20eb3a5ca6124d5bd98094723528ca26c5c24e8040"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0035-strip-ch13-survey.png",
+        "bytes": 609955,
+        "sha256": "52b13343b2337430115ae290234224364e519d4ab9257b702eb6b80b135038c7"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0037-strip-ch13-survey.percept.png",
+        "bytes": 606302,
+        "sha256": "78f75441cac5a3e157748b9ca9e421a21f943c987a586505d3164edb4e41fe12"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0037-strip-ch13-survey.png",
+        "bytes": 633031,
+        "sha256": "a403dcbc62e48cdf7cae3d38c779355f4d1de0935fd87e8eedaecaf5dc4034d1"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/0039-root-checkpoint.png",
+        "bytes": 673105,
+        "sha256": "ffdd61b97d57647cf51f2fcc05c529f35ed3988b912f2c3514195b55d5ae7a59"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/summary.json",
+        "bytes": 96994,
+        "sha256": "7e97b62ecf29b83d388ba91a34f593920067e4be49193197839643860b01b378"
+      },
+      {
+        "path": "verifier/captures/post/survey-movie-1/trace.ndjson",
+        "bytes": 21582951,
+        "sha256": "09e258bbcda5fb672d04c8942c1539fb1509a6c7f0a58987841c24c68ee97ff8"
+      }
+    ],
+    "post/survey-diag-1": [
+      {
+        "path": "verifier/captures/post/survey-diag-1/0000-obj-enter-ch13_survey_offer.png",
+        "bytes": 86937,
+        "sha256": "70edaf6dc09dfb9a2ab67f40c82e17547a615e4640a7d06132db038264f7dea8"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0001-strip-ch13-survey.percept.png",
+        "bytes": 4250,
+        "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0001-strip-ch13-survey.png",
+        "bytes": 86937,
+        "sha256": "70edaf6dc09dfb9a2ab67f40c82e17547a615e4640a7d06132db038264f7dea8"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0003-anchor-anc.cg.repeated-measure.percept.png",
+        "bytes": 924512,
+        "sha256": "96d110660e46ae96f2da5abc323d88c9a08745e35af2e442f8b4116cf5b18907"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0003-anchor-anc.cg.repeated-measure.png",
+        "bytes": 1074732,
+        "sha256": "630445896272ad1a943d52d45b4078de4e22ef01e17d87d1a51a5a0ed5b2607d"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0005-after-anchor-anc.cg.repeated-measure.percept.png",
+        "bytes": 1218914,
+        "sha256": "97a23cb3df21ebfc5faac8d958f104b9c34de89061d46d7628ee4b0522c03d39"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0005-after-anchor-anc.cg.repeated-measure.png",
+        "bytes": 1143441,
+        "sha256": "a3a978469e79eed8835c186e591571796a8a9c623a0ed30cc4402a3c6e98f33d"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0007-obj-enter-ch13_survey_start.png",
+        "bytes": 1283084,
+        "sha256": "b498582e5d0b14a658a696da0ad0cac4f38e0a03411a398f3c0e99e28b5bc051"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0008-anchor-anc.cg.demonstration-opened.percept.png",
+        "bytes": 1318627,
+        "sha256": "6ace0ee2368ca964de7883e7259bebdf8fea345fe1906e048c307c6d957be3d3"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0008-anchor-anc.cg.demonstration-opened.png",
+        "bytes": 1286492,
+        "sha256": "c9f2b146e9bf12a7a4f80202f7472b83156302cc147471bd40182f0da425aa70"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0010-after-anchor-anc.cg.demonstration-opened.percept.png",
+        "bytes": 1421974,
+        "sha256": "30d538e484f1f5e6956ad4ce88dc60a246ae05dfa129f380f9e86b2a4eea024e"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0010-after-anchor-anc.cg.demonstration-opened.png",
+        "bytes": 1323514,
+        "sha256": "4ea25b52e1cd58ac10684b0aef7f5978fec7b82c65dfabd169fa186ea0901f41"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0012-strip-ch13-survey.percept.png",
+        "bytes": 1407175,
+        "sha256": "97696dc280258489ff30ab78738b558d5ef8ab76660dec6661c1864786b79b9a"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0012-strip-ch13-survey.png",
+        "bytes": 1365720,
+        "sha256": "3d112583c963120c7f4946e4ebf6460a739d7967b3706e0b156776de01e404c0"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0014-strip-ch13-survey.percept.png",
+        "bytes": 1370485,
+        "sha256": "46ad03ac37ed82b7c62bf3c0faa4fdfe4278de17044e8a9a933b3a6ce80b77de"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0014-strip-ch13-survey.png",
+        "bytes": 1329684,
+        "sha256": "886bf5001f14c70c3c62db464d05114d19abf9bca4958ecb39a83e3b58e05feb"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0016-strip-ch13-survey.percept.png",
+        "bytes": 1392285,
+        "sha256": "ee3d4991e5e0cac37c036a245018bc805eec87b4019f0cac91d6cf1b6d5cc0f7"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0016-strip-ch13-survey.png",
+        "bytes": 1361269,
+        "sha256": "888bee3dd9fcd21475fcae6d2248cc7a5aeabef0572391f856d6dbeb7efb1a7c"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0018-strip-ch13-survey.percept.png",
+        "bytes": 1355335,
+        "sha256": "9f7519b2a26e0c28693d7bdaf0c3a33a9139e16535fa3a7a0b606033b6ec0089"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0018-strip-ch13-survey.png",
+        "bytes": 1329428,
+        "sha256": "95b13f969290563637f7cfa99e26b6b7793c768fca453863fd68ecf3b749f18d"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0020-strip-ch13-survey.percept.png",
+        "bytes": 1380856,
+        "sha256": "59941e47ea440bf4caa3cf61b21f0337cc48f4c3d8ce0eb2bf5865195f9df602"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0020-strip-ch13-survey.png",
+        "bytes": 1335527,
+        "sha256": "3f8533232cc0de54a831366b8e9bdbb338c39bfebcd8ea5e8bf81971151e1d65"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0022-strip-ch13-survey.percept.png",
+        "bytes": 1357313,
+        "sha256": "01da2ae277089b69a7e011b49043f188f842d69e6121a80ee524c4ce0fbe2fa8"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0022-strip-ch13-survey.png",
+        "bytes": 1297756,
+        "sha256": "1b10b97ccc6d5e9c66f05379ba7faf355c6ad47fa8ac05cb64ed05941916493d"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0024-strip-ch13-survey.percept.png",
+        "bytes": 1149152,
+        "sha256": "50a8954470c6eb83e24b716a95d15a41df568cdea767325f8585ef85b6f1c304"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0024-strip-ch13-survey.png",
+        "bytes": 1101172,
+        "sha256": "71d66429c2e61332918e4a681b37e621395e8d7bfd10bd5acd253d55537130e2"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0026-strip-ch13-survey.percept.png",
+        "bytes": 1100052,
+        "sha256": "48c488f0a2f50270bfe7ef628fb4de8b9532c0bbedc55be1bff682c45dd8bb8a"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0026-strip-ch13-survey.png",
+        "bytes": 1090526,
+        "sha256": "1ea04df324f669120bf58cb13e4c3df10e94d170d058b6da2138be14f115da3d"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0028-strip-ch13-survey.percept.png",
+        "bytes": 1044814,
+        "sha256": "fd70d798f7dcc30a304b4c0340e8958ae848ba6671adce0fa6db4dc22991a76f"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0028-strip-ch13-survey.png",
+        "bytes": 1055718,
+        "sha256": "86d57c1767d314a95de3b6bb2a45a0e5e013c1879bd113bf694e91f7350fded1"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0030-strip-ch13-survey.percept.png",
+        "bytes": 1032915,
+        "sha256": "23c18710be5450fa1690c8738228332851cec8f2090912a71668c062b745f292"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0030-strip-ch13-survey.png",
+        "bytes": 1029303,
+        "sha256": "142b320ec61060915f49fd4b1a2d80e3eeb1a45daf17fc3916de477d96c44604"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0032-strip-ch13-survey.percept.png",
+        "bytes": 1037215,
+        "sha256": "855cb3db9cd34b33465aefa9a567e1a25a8dbe554f58df8a98f0886022fd2b8f"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0032-strip-ch13-survey.png",
+        "bytes": 1033922,
+        "sha256": "8b1243a320e04b659bd0ec7b309d7d9adba9ad497836d853f47a5533b0746c98"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0034-strip-ch13-survey.percept.png",
+        "bytes": 1157230,
+        "sha256": "69923e6c783848361144473dc280b072b772e7df2fbc39982b242ee5419db6d8"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0034-strip-ch13-survey.png",
+        "bytes": 1122132,
+        "sha256": "23ed6edac72fd6ac3ab5ce88c5fd173454a54c5c4929c59bce8da31aebe84ff8"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0036-strip-ch13-survey.percept.png",
+        "bytes": 1399795,
+        "sha256": "a7b285f84012c4d95e9a9e57582e389e02ad0bb9647db7dbfbc972bb1899df9c"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0036-strip-ch13-survey.png",
+        "bytes": 1374476,
+        "sha256": "5a095d3331558ddc628a301cfe5f819ab636465966b97d5b33f664cc1f733b56"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0038-strip-ch13-survey.percept.png",
+        "bytes": 1318092,
+        "sha256": "1b63fad00a6344604ad8795b032165bd9a8f42d6453483bdb2c950db7202ac80"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/0038-strip-ch13-survey.png",
+        "bytes": 1293352,
+        "sha256": "d58b01dafe7c66145e6fee72e84957f7845582b72f10a5724d98b49ebd79eb63"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/summary.json",
+        "bytes": 120197,
+        "sha256": "e9070765aaed4a29050c9b4c7b7f3dbfbca71c0981e4a90b8f091ddf2e1205a1"
+      },
+      {
+        "path": "verifier/captures/post/survey-diag-1/trace.ndjson",
+        "bytes": 30578289,
+        "sha256": "945d7945bd570dfa460e9a0ea6a86ddd78ad215336256e3d69af276eb9ae9491"
+      }
+    ],
+    "post/common-diag-1": [
+      {
+        "path": "verifier/captures/post/common-diag-1/0000-obj-enter-ch13_common_reciprocal.png",
+        "bytes": 93264,
+        "sha256": "2253dad37a914c531f39d4d0be75b944de83e97cb6cfd64f1b44f90afaca4271"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0001-strip-ch13-common.percept.png",
+        "bytes": 4250,
+        "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0001-strip-ch13-common.png",
+        "bytes": 93264,
+        "sha256": "2253dad37a914c531f39d4d0be75b944de83e97cb6cfd64f1b44f90afaca4271"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0003-strip-ch13-common.percept.png",
+        "bytes": 832502,
+        "sha256": "f0d972613ce7ecc2508783c3ad8e16e72fe3341e380ce6feb41496c15216f9db"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0003-strip-ch13-common.png",
+        "bytes": 871483,
+        "sha256": "6b1eee9146d8bc7616cff8281b2fbc78e9077fd63d02643d5a05f49889163dbd"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0005-strip-ch13-common.percept.png",
+        "bytes": 822175,
+        "sha256": "10fd082e2500101fdd8de0929c5fcdcaa261582699cd04dc032b3ecebd0c0171"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0005-strip-ch13-common.png",
+        "bytes": 853645,
+        "sha256": "ceff0066e9e54808a6f605f4a9122bd9fafe69aa245a3bfe4adcd264abc06a03"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0007-strip-ch13-common.percept.png",
+        "bytes": 807169,
+        "sha256": "ead9e8412e139ec2a948185c75e51fa1289fea5e0df3e59f4b34b1d496185a28"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0007-strip-ch13-common.png",
+        "bytes": 844051,
+        "sha256": "33266a6a61a33277906ba36aebf2cb930d6b64e32aae5c4b4e519270b62d8de6"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0009-strip-ch13-common.percept.png",
+        "bytes": 788379,
+        "sha256": "953fc68b5a728c28b732fb01371604683b591cb6914d086b5547ceb77058ae70"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0009-strip-ch13-common.png",
+        "bytes": 829462,
+        "sha256": "28d9dc2a3561a2f3bfe7fe3943d252f158b89b74eb979c3ca0c749f473692f89"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0011-strip-ch13-common.percept.png",
+        "bytes": 881402,
+        "sha256": "4b96b9d9124a5a617d47f7518e218a24ef1d5e1bb6d6cc71c75a774468ed70f8"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/0011-strip-ch13-common.png",
+        "bytes": 893899,
+        "sha256": "4c24d182ab3ace7a54117c29c096dfc018cc23463f09a134773210520f97213a"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/summary.json",
+        "bytes": 65711,
+        "sha256": "f966fe35adc1a2bcc9cb21519bbbfbebfdbaa015ee2210c13a9bf8e27b8aa461"
+      },
+      {
+        "path": "verifier/captures/post/common-diag-1/trace.ndjson",
+        "bytes": 14341510,
+        "sha256": "6c2cbf14ac4b4c740f6e092175338c839e8d2be083437342a551e5e15a80b777"
+      }
+    ]
+  },
+  "probes": [
+    {
+      "path": "verifier/probes/cg-journey-probe.mjs",
+      "sha256": "faa94f1df6ab62808ae41c1d8cabb7522347ec4d5362c4aec5b3c822fb8404bb",
+      "selfTest": "node cg-journey-probe.mjs --self-test \u2014 passes with no browser, preview or game source"
+    }
+  ]
+}

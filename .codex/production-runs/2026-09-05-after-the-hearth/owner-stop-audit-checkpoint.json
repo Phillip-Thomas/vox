@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-07T00:22:50.500789+00:00",
+  "ownerInstruction": "Stop chapter work and audit waste",
+  "activeVerifierPid": 2462843,
+  "activeVerifierAction": "SIGTERM thenSIGCONT after safe capture cleanup; no further chapter work",
+  "innerProbePid": 2465790,
+  "innerProbeAction": "cooperative SIGTERM handler",
+  "noFurtherChapterWorkAuthorized": true,
+  "cleanupConfirmedAt": "2026-09-07T00:23:15.272157+00:00",
+  "cleanupComplete": true,
+  "defaultSinkUnchanged": true,
+  "captureRef": "verifier/captures/manual-credit-finale/pause-cancel-20260907T002300Z"
+}

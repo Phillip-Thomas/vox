@@ -144,7 +144,17 @@ The portable workflow and project-local bindings live under
 ## Checks
 
 ```bash
-npm --prefix main run story:hud:sweep
+npm --prefix main run verify:visual      # builds, boots its own preview, sweeps
+npm --prefix main run story:hud:sweep    # sweep alone, against a server you run
+npm --prefix main run story:ladder:trace # what the player is told/allowed, per beat
+                                         #   --baseline / --compare; ?beatregistry=off
+                                         #   serves the legacy tables on the same build
+node main/tools/story-ladder-diff.mjs --allow-health
+                                         # classifies a compare's diffs against the
+                                         #   marker-gate rule (health may only improve)
+npm --prefix main run perf:boot          # cold-boot long tasks; --baseline uses
+                                         #   ?worldprep=sync (legacy synchronous world-gen)
+npm --prefix main run perf:boot:attrib   # CPU attribution with sourcemaps + GL identity
 npm --prefix main run story:ux:check
 npm --prefix main run chapter:journey:check
 npm --prefix main run chapter:journey:smoke

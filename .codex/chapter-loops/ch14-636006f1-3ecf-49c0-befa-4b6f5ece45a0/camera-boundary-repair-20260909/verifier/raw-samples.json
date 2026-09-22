@@ -1,0 +1,2224 @@
+{
+  "url": "http://127.0.0.1:46451/?story=ch1-fixed&movie=1&journeyprobe=1&profile=HIGH",
+  "samples": [
+    {
+      "t": 1788922405712,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:recover-first-debris",
+        "kind": "interact",
+        "markerLabel": "DEBRIS",
+        "workOrder": [
+          "WALK OVER THE DEBRIS TO RECOVER IT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": null,
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK OVER THE DEBRIS TO RECOVER IT.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 0/1 · FIBER 0/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:recover-first-debris",
+        "kind": "interact",
+        "markerLabel": "DEBRIS",
+        "workOrder": [
+          "WALK OVER THE DEBRIS TO RECOVER IT."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 1
+      },
+      "game": null,
+      "elapsedMs": 2046
+    },
+    {
+      "t": 1788922410787,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 2.2,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          11.72,
+          52.79,
+          -6
+        ],
+        "goal": [
+          41.7,
+          52.8,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "BIOFIBER LOGGED.",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 7122
+    },
+    {
+      "t": 1788922415794,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 7.1,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          24.82,
+          52.79,
+          -6
+        ],
+        "goal": [
+          54.8,
+          52.8,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 1.1,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 553.1,
+          "right": 1262,
+          "bottom": 573.1,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-caption",
+          "left": 320,
+          "top": 587.1,
+          "right": 960,
+          "bottom": 633.6,
+          "width": 640,
+          "height": 46.5
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "(it walks. it stops. it hums at the",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 12128
+    },
+    {
+      "t": 1788922420800,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 12,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          33.49,
+          52.79,
+          -6
+        ],
+        "goal": [
+          63.5,
+          52.8,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 1.2,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 17135
+    },
+    {
+      "t": 1788922425899,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 16.9,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          36.41,
+          53.98,
+          -6
+        ],
+        "goal": [
+          66.4,
+          54,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": true,
+          "right": false,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0.2,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 22233
+    },
+    {
+      "t": 1788922430905,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 21.8,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          35.13,
+          54.73,
+          -6
+        ],
+        "goal": [
+          65.1,
+          54.7,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": true,
+          "right": false,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0.7,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": false
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 27238
+    },
+    {
+      "t": 1788922435909,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 26.7,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          35.72,
+          53.88,
+          -6
+        ],
+        "goal": [
+          65.7,
+          53.9,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 1.1,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 553.1,
+          "right": 1262,
+          "bottom": 573.1,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-caption",
+          "left": 320,
+          "top": 587.1,
+          "right": 960,
+          "bottom": 633.6,
+          "width": 640,
+          "height": 46.5
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "(the worker repeats. t",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 32244
+    },
+    {
+      "t": 1788922441033,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 31.6,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          37,
+          53.09,
+          -6
+        ],
+        "goal": [
+          67,
+          53.1,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0.6,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 37367
+    },
+    {
+      "t": 1788922446038,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 36.5,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          35.35,
+          54.02,
+          -6
+        ],
+        "goal": [
+          65.4,
+          54,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 1,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 42372
+    },
+    {
+      "t": 1788922451047,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 41.4,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          36.63,
+          53.37,
+          -6
+        ],
+        "goal": [
+          66.6,
+          53.4,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 1,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 47381
+    },
+    {
+      "t": 1788922456158,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 46.3,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          36.86,
+          53.3,
+          -6
+        ],
+        "goal": [
+          66.9,
+          53.3,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 1.6,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 553.1,
+          "right": 1262,
+          "bottom": 573.1,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-caption",
+          "left": 320,
+          "top": 587.1,
+          "right": 960,
+          "bottom": 633.6,
+          "width": 640,
+          "height": 46.5
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "(no directive requires watching this one so closely. the watching continues anyway.)",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 52493
+    },
+    {
+      "t": 1788922461164,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 51.2,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          37,
+          52.79,
+          -6
+        ],
+        "goal": [
+          67,
+          52.8,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 2,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 57498
+    },
+    {
+      "t": 1788922466168,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 56.1,
+        "backstops": 0,
+        "stuck": 1,
+        "pos": [
+          37,
+          52.79,
+          -6
+        ],
+        "goal": [
+          67,
+          52.8,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 2.2,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 62502
+    },
+    {
+      "t": 1788922471288,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 61.1,
+        "backstops": 0,
+        "stuck": 1,
+        "pos": [
+          37,
+          53.98,
+          -6
+        ],
+        "goal": [
+          67,
+          54,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0.2,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 67623
+    },
+    {
+      "t": 1788922476294,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 65.9,
+        "backstops": 0,
+        "stuck": 1,
+        "pos": [
+          37,
+          54.71,
+          -6
+        ],
+        "goal": [
+          67,
+          54.7,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0.7,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": false
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 72628
+    },
+    {
+      "t": 1788922481303,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 70.8,
+        "backstops": 0,
+        "stuck": 1,
+        "pos": [
+          37,
+          53.84,
+          -6
+        ],
+        "goal": [
+          67,
+          53.8,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 1.1,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 77637
+    },
+    {
+      "t": 1788922486435,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 75.8,
+        "backstops": 0,
+        "stuck": 1,
+        "pos": [
+          37,
+          54.74,
+          -6
+        ],
+        "goal": [
+          67,
+          54.7,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0.6,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": false
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 82769
+    },
+    {
+      "t": 1788922491441,
+      "beat": "ch1-fixed",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch1-fixed",
+        "clock": 80.7,
+        "backstops": 0,
+        "stuck": 1,
+        "pos": [
+          37,
+          53.88,
+          -6
+        ],
+        "goal": [
+          67,
+          53.9,
+          -6
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": true,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 1.1,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": {
+          "originZ": -6,
+          "depthAxisZ": 1,
+          "band": 0,
+          "drift": 0
+        },
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "feed-work-order",
+          "left": 18,
+          "top": 26,
+          "right": 698,
+          "bottom": 46,
+          "width": 680,
+          "height": 20
+        },
+        {
+          "id": "feed-camera-status",
+          "left": 1155.4,
+          "top": 26,
+          "right": 1262,
+          "bottom": 65.6,
+          "width": 106.6,
+          "height": 39.6
+        },
+        {
+          "id": "feed-ledger",
+          "left": 18,
+          "top": 682,
+          "right": 1262,
+          "bottom": 702,
+          "width": 1244,
+          "height": 20
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": "WALK [A]/[D] TO THE NEXT CAMERA.",
+      "captionText": "",
+      "ledgerText": "DEBRIS 1/1 · FIBER 1/1",
+      "camStatusText": "REC SITE CAM 04-A",
+      "probeBeat": "ch1-fixed",
+      "probeObjective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "NEXT CAMERA",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 5
+      },
+      "game": null,
+      "elapsedMs": 87775
+    }
+  ],
+  "consoleLines": [
+    "log: [poses] ` = pin a vantage (with reason)   V = copy all pins to clipboard",
+    "info: [co-op] Firebase anonymous session ready {uid: Gnpj1y5WLFbrPV9tNKWb7VVb6er2}",
+    "warning: using deprecated parameters for the initialization function; pass a single object instead",
+    "log: [poses] ` = pin a vantage (with reason)   V = copy all pins to clipboard",
+    "warning: [shader-warmup] initial render released without complete preparation {outcome: timeout, elapsedMs: 3820.7000000476837, compiledTargets: 2, worldAvailableAtMs: 3946.9000000953674, worldMountedAtMs: null}",
+    "error: [autopilot] rail-stuck: ch1-fixed @55s — objective incomplete after 55s; not-planned"
+  ]
+}

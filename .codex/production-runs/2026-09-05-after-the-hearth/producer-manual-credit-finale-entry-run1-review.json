@@ -1,0 +1,16 @@
+{
+  "at": "2026-09-06T21:26:23.252554+00:00",
+  "captureRef": "verifier/captures/manual-credit-finale/entry-crossing-run1/summary.json",
+  "captureSha256": "ffb29a471920f81369eadbc74288df5b5ddcce2abde28767cf95fde2e47f29fe",
+  "classification": "PROBE-BINDING-ERROR-INCONCLUSIVE for candidate route repair",
+  "reason": "Exact candidate bundle URL failed retained old regex index-BiDWGouH\\.js$. Legacy SHORT-HELD-REFERENCE-PROVEN exit0 describes setup only; candidate route measurement stopped before credit discriminator.",
+  "candidateSourceUnchanged": true,
+  "gameRestoreFailure": false,
+  "fullPassageProven": false,
+  "next": "Private binding fix and fresh capture; no game patch or broad review from this failed measurement.",
+  "frameInspection": {
+    "path": "verifier/captures/manual-credit-finale/entry-crossing-run1/after-held-test.png",
+    "sha256": "8cfbf0b8ef975dd83c66faa459dfcd6e1442db43fe80e5b294b8f27d79773930",
+    "observation": "Root viewed actual1280x720 frame: rendered Origin environment, marker far reference/check my route and current objective; debug overlays open. Confirms visible candidate scene only, not guidance usability, full passage, beauty or taste acceptance."
+  }
+}

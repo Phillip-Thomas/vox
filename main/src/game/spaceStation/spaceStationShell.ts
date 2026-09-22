@@ -70,6 +70,8 @@ export interface SpaceStationBox {
    * code guessing from one global constant.
    */
   radius?: number;
+  /** Unlit fitting output in linear colour; omitted means full output. */
+  emissionScale?: number;
 }
 
 export const WALL_THICKNESS = 0.6;

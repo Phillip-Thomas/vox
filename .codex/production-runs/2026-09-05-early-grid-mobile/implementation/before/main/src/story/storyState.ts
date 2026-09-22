@@ -1,0 +1,1062 @@
+import { beginGuidedObjectiveRestore } from './ux/objectiveRestore.ts';
+import { BEAT_METADATA } from './beats/metadata.generated.ts';
+import { useSyncExternalStore } from 'react';
+import {
+  setVoxelRealityStage,
+  type VoxelRealityStage
+} from '../game/systems/realityRenderSystem.ts';
+import {
+  advanceEraTo,
+  getMilestones,
+  hasMilestone,
+  markMilestone,
+  removeMilestone,
+  removeMilestonesByPrefix,
+  replaceEraForRollback
+} from '../game/systems/progressionSystem.ts';
+import { addItem, getItemCount, removeItem, resetInventory } from '../game/systems/inventorySystem.ts';
+import { setStoryForcedDayPhase } from './storyDayPhase.ts';
+import { seedDebrisCollected } from './debrisSalvage.ts';
+import { seedSupplyPodsCollected } from './supplyPods.ts';
+import {
+  clearCampfiresForWorld,
+  clearPlayerPoseForWorld,
+  clearVoxelEditsForWorld,
+  clearWorldStateForWorld
+} from '../game/systems/persistence.ts';
+import { createWorldIdentity } from '../game/worldIdentity.ts';
+import { STORY_COORDINATE } from './world/storyWorld.ts';
+import { resetMaw } from '../game/systems/mawSystem.ts';
+import { resetVitals } from '../game/systems/survivalVitals.ts';
+import { resetWaterskin } from '../game/systems/consumeSystem.ts';
+import { resetJetpackFuel } from '../game/systems/jetpackSystem.ts';
+import { clearStoryText } from './storyText.ts';
+import { resetStoryClock } from './storyClock.ts';
+import {
+  applyShipRestorationSnapshot,
+  resetShipRestoration
+} from '../game/systems/shipRestoration.ts';
+import {
+  debugStartInDescent,
+  debugStartInSpace,
+  resetTravel
+} from '../state/spaceFlight.ts';
+import {
+  bootstrapTidegardenHabitatDebug,
+  bootstrapTidegardenLandfallDebug,
+  bootstrapTidegardenSurfaceDebug,
+  resumeTidegardenLandfallFromSave
+} from './tidegardenLandfallBootstrap.ts';
+import { tidegardenIdentity } from './tidegardenRoute.ts';
+import { resetEmergentStoryEvents } from './emergentStoryEvents.ts';
+import { resetEmergentMawRepairRitual } from './emergentMawRepair.ts';
+import { AUTHORED_DIVE_MILESTONES, resetAuthoredDiveRuntime } from './emergentDive.ts';
+import { EMERGENT_CAPABILITY_MILESTONES } from './emergentCapabilities.ts';
+import {
+  PHYSICAL_BOARDING_MILESTONE,
+  PHYSICAL_BOARDING_SEALED_MILESTONE
+} from './physicalBoardingReceipts.ts';
+import { bootstrapOriginLaunchDebug } from './originLaunchBootstrap.ts';
+
+// --- Story mode state ---------------------------------------------------------
+//
+// Singleton external store (the appState.ts pattern): the DOM overlays (terminal
+// prologue, regulation feed HUD), the in-Canvas director driver, and the input
+// gates in EfficientPlayer/CameraControls all read story progress, and React
+// context does not cross the react-three-fiber reconciler boundary.
+//
+// The story is the fidelity ladder: each "awakening" beat raises the voxel
+// reality stage (bare -> color -> material). Checkpoints persist as ordinary
+// progression milestones (story:*), which already round-trip through the global
+// save — the store itself holds only live session state.
+
+export type StoryChapter =
+  | 'none' | 'prologue'
+  | 'ch1' | 'ch2' | 'ch3' | 'ch4' | 'ch5' | 'ch6' | 'ch7' | 'ch8' | 'ch9'
+  | 'ch10'
+  | 'complete';
+
+export type StoryBeat =
+  // prologue (terminal overlay, app phase stays 'menu')
+  | 'crawl' | 'manifest' | 'voyage' | 'deflect' | 'crash'
+  // chapter 1 — the monochrome ladder: crash-landing descent, then the history
+  // of game perspectives one era at a time — fixed-screen, the tracking unlock,
+  // the scrolling side-scroller (quota + salvage), its locked-row pod recovery,
+  // top-down nav, isometric height, the 2D→3D lift, the embodied pan-tilt survey
+  | 'descent' | 'ch1-fixed' | 'ch1-track' | 'ch1-raster'
+  | 'ch1-depth' | 'ch1-nav' | 'ch1-iso'
+  | 'ch1-lift' | 'ch1-anomaly' | 'a1-ramp'
+  // chapter 2 — color, and the tree
+  | 'ch2-color' | 'ch2-approach' | 'a2-awakening'
+  // chapter 3 — grain
+  | 'ch3-gather' | 'ch3-dusk' | 'ch3-await-rest' | 'a3-dawn'
+  // chapter 3's tail — the first day alive (each remaining sense gets its scene)
+  | 'ch3-thirst' | 'ch3-forage' | 'ch3-signal'
+  // chapter 4 — the other worker, the ordered regression, and Breath
+  | 'ch4-vigil' | 'ch4-arrival' | 'ch4-audit' | 'ch4-comply' | 'ch4-defy' | 'a4-exhale'
+  // chapters 5–9 — repair the instrument, return with breath, restore and fly
+  | 'ch5-maw' | 'ch6-dive'
+  | 'ch7-reconstruct' | 'ch7-board'
+  | 'ch8-launch' | 'ch8-crossing' | 'ch8-landfall'
+  | 'ch9-settle' | 'ch9-hearth'
+  // chapter 10 — the station introduction. Re-activated from INSIDE `done` free
+  // play: the second hearth's core runs on an issued component, the world
+  // cannot answer it, and the one channel that never closed answers instead.
+  // The signed chapter ends at the threshold — a bearing held. After that
+  // hand-back, ordinary free flight may continue into the station approach.
+  | 'ch10-cold' | 'ch10-ask' | 'ch10-transit'
+  | 'done';
+
+export interface StorySnapshot {
+  active: boolean;
+  chapter: StoryChapter;
+  beat: StoryBeat | null;
+  /** In-memory scene remount token for an explicit clean replay. */
+  runId: number;
+}
+
+// Milestone ids (persisted checkpoints). Free-form strings by design — see
+// progressionSystem. Choices persist as `story:choice:<cardId>:<optionId>`.
+export const STORY_MILESTONES = {
+  started: 'story:started',
+  prologueSeen: 'story:prologue-seen',
+  ch1Track: 'story:ch1:track',
+  ch1Quota: 'story:ch1:quota',
+  ch1Depth: 'story:ch1:depth',
+  ch1Nav: 'story:ch1:nav',
+  ch1Iso: 'story:ch1:iso',
+  a1: 'story:a1',
+  a2: 'story:a2',
+  a3: 'story:a3',
+  /** Survival senses arrive ONE BY ONE — each HUD element appears when the
+   *  story first names its sensation (the self-discovery arc). */
+  senseInventory: 'story:sense:inventory',
+  senseHealth: 'story:sense:health',
+  senseTemp: 'story:sense:temp',
+  senseWater: 'story:sense:water',
+  senseFood: 'story:sense:food',
+  senseStamina: 'story:sense:stamina',
+  senseOxygen: 'story:sense:oxygen',
+  senseJet: 'story:sense:jet',
+  senseMaw: 'story:sense:maw',
+  /** Ch3's tail + chapter 4 checkpoints (the first day alive → the auditor). */
+  ch3Drank: 'story:ch3:drank',
+  ch3Ate: 'story:ch3:ate',
+  ch3Signal: 'story:ch3:signal',
+  ch4Vigil: 'story:ch4:vigil',
+  ch4Arrived: 'story:ch4:arrived',
+  ch4Audit: 'story:ch4:audit-complete',
+  ch4Complied: 'story:ch4:compliance-complete',
+  ch4Defied: 'story:ch4:refusal-complete',
+  a4: 'story:a4',
+  a4Handback: 'story:a4:handback',
+  ch5Maw: 'story:ch5:maw-repaired',
+  ch6Dive: 'story:ch6:keel-banked',
+  ch7Reconstructed: 'story:ch7:flight-ready',
+  ch7Boarded: 'story:ch7:boarded',
+  ch8Launched: 'story:ch8:launched',
+  ch8Crossed: 'story:ch8:crossed',
+  ch8Landfall: 'story:ch8:landfall',
+  ch9Settled: 'story:ch9:settled',
+  ch9Hearth: 'story:ch9:hearth',
+  /**
+   * Chapter 10 — station introduction. Milestone ids are spelled exactly as the
+   * frozen scene contract spells them (hyphenated, not `story:ch10:`): the
+   * contract is the sole creative authority and these strings are quoted in it.
+   */
+  ch10ColdNoticed: 'story:ch10-cold-noticed',
+  ch10FaultRead: 'story:ch10-fault-read',
+  ch10FabricationRefused: 'story:ch10-fabrication-refused',
+  ch10RelayAsked: 'story:ch10-relay-asked',
+  ch10RelayAnswered: 'story:ch10-relay-answered',
+  /** Durable, and never un-claimed: the bearing, once claimed, is the fiction. */
+  ch10BearingClaimed: 'story:ch10-bearing-claimed',
+  ch10TransitIgnited: 'story:ch10-transit-ignited',
+  /** The seam latch. One milestone, two trigger paths, monotonic in the beat. */
+  ch10SeamPassed: 'story:ch10-seam-passed',
+  ch10StationResolved: 'story:ch10-station-resolved',
+  ch10Complete: 'story:ch10-complete',
+  /**
+   * Earned at Chapter 10's threshold hand-back. Until then, the dock offer,
+   * approach advisory, canDock grant and KeyF commit-and-navigate path stay
+   * inert in story worlds. Once the introduction has resolved the station as a
+   * place, the existing flight-to-berth procedure becomes the player's next
+   * action rather than a separate debug-only route.
+   */
+  stationDockingAuthorized: 'story:station-docking-authorized',
+  /**
+   * Legacy slice terminal. Saves that finished the A0→A3 slice carry it; the
+   * story now CONTINUES past it (they resume at ch3-thirst). The live terminal
+   * checkpoint is retained for old saves, but it is no longer a terminal.
+   */
+  complete: 'story:complete'
+} as const;
+
+let snapshot: StorySnapshot = { active: false, chapter: 'none', beat: null, runId: 0 };
+
+const listeners = new Set<() => void>();
+
+function emit(): void {
+  for (const listener of listeners) listener();
+}
+
+function setSnapshot(patch: Partial<StorySnapshot>): void {
+  snapshot = { ...snapshot, ...patch };
+  // Dev affordance (mirrors window.__game): lets capture harnesses watch beats.
+  if (typeof window !== 'undefined') {
+    (window as unknown as { __storyBeat?: string | null }).__storyBeat = snapshot.beat;
+  }
+  emit();
+}
+
+function subscribe(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+function getSnapshot(): StorySnapshot {
+  return snapshot;
+}
+
+export function useStoryState(): StorySnapshot {
+  return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+}
+
+/** Non-hook live read for per-frame loops / event handlers. */
+export function getStoryStateSnapshot(): StorySnapshot {
+  return snapshot;
+}
+
+export function subscribeStory(listener: () => void): () => void {
+  return subscribe(listener);
+}
+
+// --- resume derivation --------------------------------------------------------
+
+export interface StoryEntryPoint {
+  chapter: StoryChapter;
+  beat: StoryBeat;
+}
+
+/**
+ * Where a (re)entering player lands, derived from persisted milestones. The
+ * awakenings are the checkpoints; un-checkpointed sub-beats re-derive from world
+ * state (e.g. quota progress re-reads the inventory).
+ */
+export function storyEntryPoint(): StoryEntryPoint {
+  // Chapter 10 is a RE-ACTIVATION out of `done`, so its rungs are read before
+  // the two-world terminal below: a save that has noticed the cold resumes
+  // inside ch10, and a save that finished ch10 returns to free play.
+  if (hasMilestone(STORY_MILESTONES.ch10Complete)) return { chapter: 'complete', beat: 'done' };
+  if (hasMilestone(STORY_MILESTONES.ch10BearingClaimed)) return { chapter: 'ch10', beat: 'ch10-transit' };
+  if (hasMilestone(STORY_MILESTONES.ch10FabricationRefused)) return { chapter: 'ch10', beat: 'ch10-ask' };
+  if (hasMilestone(STORY_MILESTONES.ch10ColdNoticed)) return { chapter: 'ch10', beat: 'ch10-cold' };
+  if (hasMilestone(STORY_MILESTONES.ch9Hearth)) return { chapter: 'complete', beat: 'done' };
+  if (hasMilestone(STORY_MILESTONES.ch9Settled)) return { chapter: 'ch9', beat: 'ch9-hearth' };
+  if (hasMilestone(STORY_MILESTONES.ch8Landfall)) return { chapter: 'ch9', beat: 'ch9-settle' };
+  if (hasMilestone(STORY_MILESTONES.ch8Crossed)) return { chapter: 'ch8', beat: 'ch8-landfall' };
+  if (hasMilestone(STORY_MILESTONES.ch8Launched)) return { chapter: 'ch8', beat: 'ch8-crossing' };
+  if (hasMilestone(STORY_MILESTONES.ch7Boarded)) return { chapter: 'ch8', beat: 'ch8-launch' };
+  if (hasMilestone(STORY_MILESTONES.ch7Reconstructed)) return { chapter: 'ch7', beat: 'ch7-board' };
+  if (hasMilestone(STORY_MILESTONES.ch6Dive)) return { chapter: 'ch7', beat: 'ch7-reconstruct' };
+  if (hasMilestone(STORY_MILESTONES.ch5Maw)) return { chapter: 'ch6', beat: 'ch6-dive' };
+  if (hasMilestone(STORY_MILESTONES.a4Handback)) return { chapter: 'ch5', beat: 'ch5-maw' };
+  if (hasMilestone(STORY_MILESTONES.a4)) return { chapter: 'ch4', beat: 'a4-exhale' };
+  if (hasMilestone(STORY_MILESTONES.ch4Defied)) return { chapter: 'ch4', beat: 'a4-exhale' };
+  if (hasMilestone(STORY_MILESTONES.ch4Complied)) return { chapter: 'ch4', beat: 'ch4-defy' };
+  if (hasMilestone(STORY_MILESTONES.ch4Audit)) return { chapter: 'ch4', beat: 'ch4-comply' };
+  if (hasMilestone(STORY_MILESTONES.ch4Arrived)) return { chapter: 'ch4', beat: 'ch4-audit' };
+  if (hasMilestone(STORY_MILESTONES.ch4Vigil)) return { chapter: 'ch4', beat: 'ch4-arrival' };
+  if (hasMilestone(STORY_MILESTONES.ch3Signal)) return { chapter: 'ch4', beat: 'ch4-vigil' };
+  if (hasMilestone(STORY_MILESTONES.ch3Ate)) return { chapter: 'ch3', beat: 'ch3-signal' };
+  if (hasMilestone(STORY_MILESTONES.ch3Drank)) return { chapter: 'ch3', beat: 'ch3-forage' };
+  // Legacy slice-complete saves land here too (a3 is always marked with it):
+  // the story continues into the first day alive.
+  if (hasMilestone(STORY_MILESTONES.a3)) return { chapter: 'ch3', beat: 'ch3-thirst' };
+  if (hasMilestone(STORY_MILESTONES.a2)) return { chapter: 'ch3', beat: 'ch3-gather' };
+  if (hasMilestone(STORY_MILESTONES.a1)) return { chapter: 'ch2', beat: 'ch2-color' };
+  if (hasMilestone(STORY_MILESTONES.ch1Iso)) return { chapter: 'ch1', beat: 'ch1-anomaly' };
+  if (hasMilestone(STORY_MILESTONES.ch1Nav)) return { chapter: 'ch1', beat: 'ch1-iso' };
+  if (hasMilestone(STORY_MILESTONES.ch1Depth)) return { chapter: 'ch1', beat: 'ch1-nav' };
+  if (hasMilestone(STORY_MILESTONES.ch1Quota)) return { chapter: 'ch1', beat: 'ch1-depth' };
+  if (hasMilestone(STORY_MILESTONES.ch1Track)) return { chapter: 'ch1', beat: 'ch1-raster' };
+  if (hasMilestone(STORY_MILESTONES.prologueSeen)) return { chapter: 'ch1', beat: 'ch1-fixed' };
+  return { chapter: 'prologue', beat: 'crawl' };
+}
+
+/**
+ * Single source of truth for which reality stage a story point renders at:
+ * the feed chapters are unresolved (`bare`), A1 brings color, A3 brings material
+ * (which the first-day tail and chapter 4 keep — A4's `alive` comes later).
+ */
+export function stageForStoryPoint(entry: StoryEntryPoint): VoxelRealityStage {
+  if (entry.chapter === 'complete') return 'alive';
+  if (entry.chapter === 'ch5' || entry.chapter === 'ch6' || entry.chapter === 'ch7'
+    || entry.chapter === 'ch8' || entry.chapter === 'ch9'
+    || entry.chapter === 'ch10') return 'alive';
+  if (entry.chapter === 'ch4') {
+    return entry.beat === 'a4-exhale' && hasMilestone(STORY_MILESTONES.a4)
+      ? 'alive'
+      : 'material';
+  }
+  if (entry.chapter === 'ch3') {
+    // Chapter 3 straddles A3: the tail beats (the first day alive) are post-dawn.
+    return beatIndex(entry.beat) >= beatIndex('ch3-thirst') ? 'material' : 'color';
+  }
+  if (entry.chapter === 'ch2') return 'color';
+  return 'bare';
+}
+
+/** True when a save exists mid-story (drives the menu's "Continue Story" label).
+ *  Keyed on the LIVE terminal (ch4Arrived), not the legacy slice terminal —
+ *  finished-slice saves see "Continue Story" again and resume at ch3-thirst. */
+export function canContinueStory(): boolean {
+  // Derived from the resume ladder rather than from one terminal milestone: a
+  // save that has re-activated into chapter 10 has somewhere to continue TO
+  // again, and the ladder is the single authority on where that is.
+  return hasMilestone(STORY_MILESTONES.started) && storyEntryPoint().chapter !== 'complete';
+}
+
+/** True only once the two-world arc has returned control at the second hearth. */
+export function hasCompletedStory(): boolean {
+  return hasMilestone(STORY_MILESTONES.ch9Hearth);
+}
+
+// --- deep links / debug jumps ---------------------------------------------------
+//
+// EVERY beat is a jump target (`?story=<beat>`), which gives a "before" and an
+// "after" for every key point: jumping to a transition beat (a1-ramp,
+// a2-awakening, a3-dawn) plays that awakening immediately; jumping to the beat
+// after it starts in the settled post-awakening state. Legacy short aliases kept.
+
+/** Canonical beat order — drives milestone/item seeding and the debug panel. */
+export const STORY_BEAT_ORDER: readonly StoryBeat[] = [
+  'crawl', 'manifest', 'voyage', 'deflect', 'crash',
+  'descent', 'ch1-fixed', 'ch1-track', 'ch1-raster',
+  'ch1-depth', 'ch1-nav', 'ch1-iso',
+  'ch1-lift', 'ch1-anomaly', 'a1-ramp',
+  'ch2-color', 'ch2-approach', 'a2-awakening',
+  'ch3-gather', 'ch3-dusk', 'ch3-await-rest', 'a3-dawn',
+  'ch3-thirst', 'ch3-forage', 'ch3-signal',
+  'ch4-vigil', 'ch4-arrival', 'ch4-audit', 'ch4-comply', 'ch4-defy', 'a4-exhale',
+  'ch5-maw', 'ch6-dive',
+  'ch7-reconstruct', 'ch7-board',
+  'ch8-launch', 'ch8-crossing', 'ch8-landfall',
+  'ch9-settle', 'ch9-hearth',
+  // ch10 opens from `done` free play, but it is ordered BEFORE the terminal
+  // beat: `done` is the runtime terminal (the registry gate pins it as the last
+  // authority beat) and free play is where the chapter both starts and ends.
+  'ch10-cold', 'ch10-ask', 'ch10-transit',
+  'done'
+];
+
+const JUMP_ALIASES: Record<string, StoryBeat> = {
+  ch1: 'ch1-raster',
+  a1: 'ch1-anomaly',
+  ch2: 'ch2-color',
+  a2: 'ch2-approach',
+  ch3: 'ch3-gather',
+  a3: 'ch3-await-rest',
+  day: 'ch3-thirst',
+  ch4: 'ch4-vigil',
+  audit: 'ch4-audit',
+  breath: 'a4-exhale',
+  maw: 'ch5-maw',
+  dive: 'ch6-dive',
+  repair: 'ch7-reconstruct',
+  launch: 'ch8-launch',
+  tidegarden: 'ch8-landfall',
+  base: 'ch9-settle',
+  hearth: 'ch9-hearth',
+  ch10: 'ch10-cold',
+  station: 'ch10-transit'
+};
+
+/** True ONLY for a `?story=<beat|alias>` dev jump — not `?story=1`, not the menu
+ *  Story button. Debug-only world affordances (the campfire pre-place) gate here so
+ *  they can never fire in a real run. */
+export function isStoryDeepLink(): boolean {
+  const p = parseStoryParam();
+  return p !== null && p !== 'full';
+}
+
+/**
+ * Physical prerequisite for isolated beat rehearsals. A normal story run
+ * carries the player's own fire across these beats; a deep link reconstructs
+ * it so audit/arrival interactions exercise the same world fact instead of
+ * stalling on a milestone-only approximation.
+ */
+export function debugBeatNeedsCampfire(beat: StoryBeat | null): boolean {
+  return beat === 'ch3-dusk'
+    || beat === 'ch3-await-rest'
+    || beat === 'a3-dawn'
+    || beat === 'ch4-vigil'
+    || beat === 'ch4-arrival'
+    || beat === 'ch4-audit'
+    || beat === 'ch4-comply';
+}
+
+/**
+ * Before the fire is built (ch3-gather and everything upstream), the story world
+ * must hold NO campfire. A phantom — a dev-jump's debug pre-place, autosaved into
+ * the shared story-world save — would otherwise be restored and skip the player
+ * past the craft (the director reads a standing fire as "built"). The rested
+ * checkpoint (ch3-thirst+) resumes past ch3-dusk, so a real fire is kept.
+ */
+function clearStalePreFireCampfires(beat: StoryBeat): void {
+  if (beatIndex(beat) >= beatIndex('ch3-dusk')) return;
+  clearCampfiresForWorld(createWorldIdentity(STORY_COORDINATE));
+}
+
+export function chapterForBeat(beat: StoryBeat): StoryChapter {
+  return beat === 'done' ? 'complete' : BEAT_METADATA[beat].chapter;
+}
+
+function beatIndex(beat: StoryBeat): number {
+  return STORY_BEAT_ORDER.indexOf(beat);
+}
+
+/** `?story=1` = full run from the menu; `?story=<beat|alias>` = dev jump. */
+export function parseStoryParam(): 'full' | StoryBeat | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = new URLSearchParams(window.location.search).get('story');
+    if (!raw) return null;
+    if (raw === '1') return 'full';
+    if (raw in JUMP_ALIASES) return JUMP_ALIASES[raw];
+    return (STORY_BEAT_ORDER as readonly string[]).includes(raw) ? (raw as StoryBeat) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Everything a beat presumes has already happened: milestones (so resume/HUD
+ * logic agrees) and inventory (so the ledger and the campfire chain are live).
+ */
+function seedForBeat(beat: StoryBeat): void {
+  const m = STORY_MILESTONES;
+  const at = beatIndex(beat);
+  markMilestone(m.started);
+  if (at >= beatIndex('descent')) markMilestone(m.prologueSeen);
+  if (at >= beatIndex('ch1-raster')) markMilestone(m.ch1Track);
+  if (at >= beatIndex('ch1-depth')) {
+    markMilestone(m.ch1Quota);
+    addItem('biofiber', 6);
+    addItem('stone', 4);
+    seedDebrisCollected(); // wood/flint arrive as the recovered hull debris
+  }
+  if (at >= beatIndex('ch1-nav')) {
+    markMilestone(m.ch1Depth);
+    seedSupplyPodsCollected(); // biofuel/flint/wood arrive as the recovered pods
+  }
+  if (at >= beatIndex('ch1-iso')) markMilestone(m.ch1Nav);
+  if (at >= beatIndex('ch1-lift')) markMilestone(m.ch1Iso);
+  if (at >= beatIndex('ch2-color')) markMilestone(m.a1);
+  if (at >= beatIndex('ch3-gather')) markMilestone(m.a2); // campfire mats all earned upstream
+  if (at >= beatIndex('ch3-gather')) markMilestone(m.senseHealth); // embodiment reports a body
+  if (at >= beatIndex('ch3-dusk')) {
+    // Introduced during the gather act — later jumps arrive with them.
+    markMilestone(m.senseInventory);
+    markMilestone(m.senseTemp);
+  }
+  // The first day alive: each tail beat presumes the previous scene resolved.
+  if (at >= beatIndex('ch3-thirst')) markMilestone(m.a3);
+  if (at >= beatIndex('ch3-forage')) {
+    markMilestone(m.senseWater);
+    markMilestone(m.ch3Drank);
+  }
+  if (at >= beatIndex('ch3-signal')) {
+    markMilestone(m.senseFood);
+    markMilestone(m.ch3Ate);
+  }
+  if (at >= beatIndex('ch4-vigil')) {
+    markMilestone(m.ch3Signal);
+    markMilestone(m.senseStamina);
+  }
+  if (at >= beatIndex('ch4-arrival')) markMilestone(m.ch4Vigil);
+  if (at >= beatIndex('ch4-audit')) markMilestone(m.ch4Arrived);
+  if (at >= beatIndex('ch4-comply')) {
+    markMilestone(m.ch4Audit);
+    markMilestone('story:audit:fire-mismatch');
+    markMilestone('story:audit:life-mismatch');
+    markMilestone('story:audit:tree-mismatch');
+  }
+  if (at >= beatIndex('ch4-defy')) {
+    markMilestone(m.ch4Complied);
+    markMilestone('story:comply:fire-doused');
+    markMilestone('story:comply:organics-resolved');
+    markMilestone('story:comply:regression-settled');
+  }
+  if (at >= beatIndex('a4-exhale')) {
+    markMilestone(m.ch4Defied);
+    markMilestone('story:defy:refusal-committed');
+  }
+  if (at >= beatIndex('ch5-maw')) {
+    markMilestone(m.a4);
+    markMilestone(m.a4Handback);
+    markMilestone('story:a4:field-pack-dropped');
+    if (getItemCount('faulty_maw') === 0 && getItemCount('iron_maw') === 0) addItem('faulty_maw', 1);
+  }
+  if (at >= beatIndex('ch6-dive')) {
+    markMilestone(m.ch5Maw);
+    markMilestone('maw_repaired');
+    // Isolated dive rehearsals reconstruct the already-lived player direction
+    // and its visible pond response; the dive itself still has to author water,
+    // oxygen, sonar, acquisition, surfacing and dry banking from scratch.
+    markMilestone('story:maw:first-direction-resolved');
+    markMilestone('story:maw:pond-resonance-visible');
+    markMilestone(m.senseMaw);
+    const faultyMawCount = getItemCount('faulty_maw');
+    if (faultyMawCount > 0) removeItem('faulty_maw', faultyMawCount);
+    const repairKitCount = getItemCount('maw_repair_kit');
+    if (repairKitCount > 0) removeItem('maw_repair_kit', repairKitCount);
+    if (getItemCount('iron_maw') === 0) addItem('iron_maw', 1);
+    advanceEraTo('emergent');
+  }
+  if (at >= beatIndex('ch7-reconstruct')) {
+    markMilestone(m.ch6Dive);
+    markMilestone(EMERGENT_CAPABILITY_MILESTONES.oxygenOnline);
+    markMilestone(m.senseOxygen);
+    markMilestone(AUTHORED_DIVE_MILESTONES.waterlineEntered);
+    markMilestone(AUTHORED_DIVE_MILESTONES.keelSonarRevealed);
+    markMilestone(AUTHORED_DIVE_MILESTONES.surfacedWithKeel);
+    markMilestone('story:item:kestrel-keel-memory:acquired');
+    markMilestone('story:item:kestrel-keel-memory:banked');
+    if (getItemCount('kestrel_keel_memory') === 0) addItem('kestrel_keel_memory', 1);
+  }
+  if (at >= beatIndex('ch7-board')) {
+    markMilestone(m.ch7Reconstructed);
+    applyShipRestorationSnapshot({ repairStage: 'flight_ready' });
+  }
+  if (at >= beatIndex('ch8-launch')) {
+    // Chapter 8 begins after the staged hatch transaction has completed. A
+    // direct rehearsal must reconstruct that entire predecessor boundary, not
+    // only its summary checkpoint, or the repaired hull correctly refuses to
+    // expose either an exterior hatch or cockpit ownership.
+    markMilestone(PHYSICAL_BOARDING_SEALED_MILESTONE);
+    markMilestone(PHYSICAL_BOARDING_MILESTONE);
+    markMilestone(m.ch7Boarded);
+  }
+  if (at >= beatIndex('ch8-crossing')) markMilestone(m.ch8Launched);
+  if (at >= beatIndex('ch8-landfall')) markMilestone(m.ch8Crossed);
+  if (at >= beatIndex('ch9-settle')) markMilestone(m.ch8Landfall);
+  if (at >= beatIndex('ch9-hearth')) markMilestone(m.ch9Settled);
+  // Chapter 10 re-activates from a FINISHED two-world arc, so every ch10 jump
+  // target (and the terminal `done` target) reconstructs the completed story
+  // plus the durable settlement receipts free play depends on — the second
+  // hearth exists, the handoff happened, and ST-0's render predicate is true.
+  // Bounded to the ch10 targets themselves: `?story=done` must keep seeding the
+  // shipped free-play state exactly as before, with no chapter-10 receipts.
+  const inChapter10 = at >= beatIndex('ch10-cold') && at <= beatIndex('ch10-transit');
+  if (inChapter10) {
+    markMilestone(m.ch9Hearth);
+    markMilestone(m.ch4Arrived);
+    markMilestone(m.complete);
+    // tidegardenSettlement's durable receipts, by id (importing the module here
+    // would close a cycle: it reads story state).
+    markMilestone('story:tidegarden:relationship-attended');
+    markMilestone('story:tidegarden:habitat-core-online');
+    markMilestone('story:tidegarden:shelter-certified');
+    markMilestone('story:tidegarden:safe-rest-completed');
+    markMilestone('story:tidegarden:two-world-handoff');
+  }
+  if (inChapter10 && at >= beatIndex('ch10-ask')) {
+    markMilestone(m.ch10ColdNoticed);
+    markMilestone(m.ch10FaultRead);
+    markMilestone(m.ch10FabricationRefused);
+  }
+  if (inChapter10 && at >= beatIndex('ch10-transit')) {
+    markMilestone(m.ch10RelayAsked);
+    markMilestone(m.ch10RelayAnswered);
+    markMilestone(m.ch10BearingClaimed);
+  }
+  if (at >= beatIndex('done')) {
+    markMilestone(m.ch9Hearth);
+    markMilestone(m.ch4Arrived);
+    markMilestone(m.complete);
+    // A real playthrough arrives at `done` through the second hearth, so the
+    // rehearsal must arrive carrying the same durable settlement receipts. The
+    // two-world handoff in particular is half of ST-0's render predicate: seed
+    // it and the rehearsal sky keeps its fact; omit it and `?story=done` is a
+    // free play no real player has ever had.
+    markMilestone('story:tidegarden:relationship-attended');
+    markMilestone('story:tidegarden:habitat-core-online');
+    markMilestone('story:tidegarden:shelter-certified');
+    markMilestone('story:tidegarden:safe-rest-completed');
+    markMilestone('story:tidegarden:two-world-handoff');
+  }
+}
+
+/**
+ * Explicit debug/movie jumps are reproducible rehearsals, not checkpoint
+ * resumes. Clear only Story-owned progression plus the pinned Story world's
+ * authored state; unrelated sandbox worlds and milestones remain untouched.
+ */
+function resetDebugStoryRun(storyWorld: ReturnType<typeof createWorldIdentity>): void {
+  removeMilestonesByPrefix('story:');
+  removeMilestone('maw_repaired');
+  replaceEraForRollback('primitive');
+  resetInventory();
+  resetMaw();
+  resetVitals();
+  resetWaterskin();
+  resetJetpackFuel();
+  resetShipRestoration();
+  resetTravel();
+  resetEmergentStoryEvents();
+  resetEmergentMawRepairRitual();
+  resetAuthoredDiveRuntime();
+  for (const world of [storyWorld, tidegardenIdentity()]) {
+    clearWorldStateForWorld(world);
+    clearCampfiresForWorld(world);
+    clearVoxelEditsForWorld(world);
+    clearPlayerPoseForWorld(world);
+  }
+  clearStoryText();
+  resetStoryClock();
+  setStoryForcedDayPhase(null);
+}
+
+function movieRunRequested(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return new URLSearchParams(window.location.search).get('movie') === '1';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Migrate durable predecessor evidence implied by a persisted Story checkpoint.
+ * Surface persistence cannot distinguish cockpit from exterior occupancy, so
+ * this intentionally does not transfer controls on Continue.
+ */
+function reconcileCompletedBoardingReceipts(entry: StoryEntryPoint): void {
+  if (entry.chapter !== 'ch8' || entry.beat !== 'ch8-launch') return;
+  if (!hasMilestone(STORY_MILESTONES.ch7Boarded)) return;
+  // ch7Boarded is only authored after both physical receipts exist. Repair
+  // early saves without guessing whether their persisted surface occupancy was
+  // inside or outside the cockpit.
+  markMilestone(PHYSICAL_BOARDING_SEALED_MILESTONE);
+  markMilestone(PHYSICAL_BOARDING_MILESTONE);
+}
+
+/**
+ * Save migration for Chapter 10 completions recorded before docking was joined
+ * to the story route. Those saves already earned the threshold hand-back; do
+ * not make their players replay the chapter just to expose the same berth that
+ * a new completion exposes.
+ */
+function grantChapter10DockingAuthorization(): void {
+  markMilestone(STORY_MILESTONES.stationDockingAuthorized);
+}
+
+function reconcileCompletedChapter10DockingAuthorization(): void {
+  if (!hasMilestone(STORY_MILESTONES.ch10Complete)) return;
+  grantChapter10DockingAuthorization();
+}
+
+// --- lifecycle ----------------------------------------------------------------
+
+/**
+ * Called once at App boot, AFTER restoreGlobal() (milestones are loaded). Handles
+ * the `?story=` deep links; the menu Story button drives the normal path via
+ * beginStory(). Does nothing on a plain sandbox boot.
+ */
+/**
+ * `?keep=1` — boot into whatever state is already in storage.
+ *
+ * Every other dev entry deliberately starts pristine, which is right for a beat
+ * jump and exactly wrong after restoring a snapshot: the reset would wipe the
+ * moment the snapshot exists to preserve. This flag is set by the snapshot
+ * restore path and by nothing else.
+ */
+function keepExistingStateRequested(): boolean {
+  if (typeof window === 'undefined') return false;
+  return new URLSearchParams(window.location.search).get('keep') === '1';
+}
+
+export function initStoryFromSave(): void {
+  // Runs after restoreGlobal, including on a plain no-query boot and `?keep=1`.
+  // A debug beat jump may clear it again immediately; that is correct because a
+  // fresh ch10-transit rehearsal has not reached its threshold hand-back yet.
+  reconcileCompletedChapter10DockingAuthorization();
+  const param = parseStoryParam();
+  // A restored snapshot already IS the state to boot into — terrain, poses,
+  // milestones and all. Leave every one of them alone.
+  if (keepExistingStateRequested()) return;
+  if (!param) return;
+  // Dev flows (`?story=` jumps, movie runs) start from PRISTINE terrain AND a
+  // pristine spawn — debug sessions used to accumulate each other's
+  // strip-mining, and a pose saved in a mined pit would resurrect INSIDE the
+  // restored terrain. The menu path (beginStory, no param) keeps both.
+  const storyWorld = createWorldIdentity(STORY_COORDINATE);
+  for (const world of [storyWorld, tidegardenIdentity()]) {
+    clearVoxelEditsForWorld(world);
+    clearPlayerPoseForWorld(world);
+  }
+  if (param === 'full') {
+    // A screening is a full deterministic rehearsal. Normal `?story=1` keeps
+    // its Continue semantics; movie mode must never inherit completed pickups.
+    if (movieRunRequested()) restartStory();
+    else beginStory();
+    return;
+  }
+  // Dev BEAT jumps start pristine, then reconstruct only the prerequisites for
+  // their chosen beat. This prevents a replayed crash from inheriting completed
+  // debris/pods and silently skipping the two profile collection acts.
+  const runId = snapshot.runId + 1;
+  resetDebugStoryRun(storyWorld);
+  beginGuidedObjectiveRestore('seed');
+  seedForBeat(param);
+  const chapter = chapterForBeat(param);
+  if (chapter === 'complete') {
+    // The finished two-world arc returns to free play at the earned living stage.
+    setVoxelRealityStage('alive');
+    setSnapshot({ active: false, chapter: 'complete', beat: 'done', runId });
+    return;
+  }
+  // Reconstruct the physical location before publishing the story beat. Store
+  // subscribers (objective, score, camera) must never observe a crossing or
+  // landfall paired with the previous surface-flight snapshot for one frame.
+  if (param === 'ch8-launch') bootstrapOriginLaunchDebug();
+  else if (param === 'ch8-crossing') debugStartInSpace();
+  else if (param === 'ch8-landfall') {
+    bootstrapTidegardenLandfallDebug();
+    debugStartInDescent();
+  } else if (param === 'ch9-settle' || param === 'ch9-hearth') {
+    bootstrapTidegardenSurfaceDebug();
+  } else if (param === 'ch10-cold' || param === 'ch10-ask') {
+    // Both ch10 surface beats begin at the second hearth on Tidegarden, so the
+    // jump target reconstructs the same physical world a continuous run holds —
+    // including the certified hearth itself, which chapter 10 opens inside.
+    bootstrapTidegardenSurfaceDebug();
+    bootstrapTidegardenHabitatDebug();
+  } else if (param === 'ch10-transit') {
+    // The transit launches from the first world at the wreck, in ch8 grammar.
+    // The hearth is still reconstructed: the player may fly home to it, and the
+    // ST-0 predicate reads the same durable settlement facts either way.
+    bootstrapTidegardenHabitatDebug();
+    bootstrapOriginLaunchDebug();
+  }
+  setVoxelRealityStage(stageForStoryPoint({ chapter, beat: param }));
+  setSnapshot({ active: true, chapter, beat: param, runId });
+}
+
+/**
+ * Enter story mode (menu Story button / ?story=1). Resumes from the persisted
+ * checkpoint; a fresh save starts at the prologue.
+ */
+export function beginStory(): void {
+  markMilestone(STORY_MILESTONES.started);
+  const entry = storyEntryPoint();
+  if (entry.beat !== 'crawl') beginGuidedObjectiveRestore('resume');
+  if (entry.chapter === 'complete') {
+    // Finished players re-enter their world as sandbox, at their earned stage.
+    setVoxelRealityStage(stageForStoryPoint(entry));
+    setSnapshot({ active: false, chapter: 'complete', beat: 'done' });
+    return;
+  }
+  clearStalePreFireCampfires(entry.beat);
+  // Crossing is a checkpoint before landing, not permission to materialize on
+  // foot. Rehydrate the real atmospheric pose (or a safe approach fallback)
+  // before publishing the landfall beat so its director can only observe future
+  // physical touchdown and egress actions.
+  reconcileCompletedBoardingReceipts(entry);
+  if (entry.beat === 'ch8-landfall') resumeTidegardenLandfallFromSave();
+  setVoxelRealityStage(stageForStoryPoint(entry));
+  setSnapshot({ active: true, chapter: entry.chapter, beat: entry.beat });
+}
+
+/** Explicit, destructive replay requested by the player. Preserves non-Story
+ * progression and every non-Story world, but resets the carried loadout and the
+ * pinned Story site so the opening cannot inherit completed-run advantages. */
+export function restartStory(): void {
+  const storyWorld = createWorldIdentity(STORY_COORDINATE);
+  removeMilestonesByPrefix('story:');
+  removeMilestone('maw_repaired');
+  replaceEraForRollback('primitive');
+  resetInventory();
+  resetMaw();
+  resetVitals();
+  resetWaterskin();
+  resetJetpackFuel();
+  resetShipRestoration();
+  resetTravel();
+  resetEmergentStoryEvents();
+  resetEmergentMawRepairRitual();
+  resetAuthoredDiveRuntime();
+  // This arc owns two authored planets. Replay must reset both or the old p1
+  // Habitat receipt survives while every `story:` actor receipt is removed,
+  // leaving the new run unable to install, certify, or rest at its second hearth.
+  for (const world of [storyWorld, tidegardenIdentity()]) {
+    clearWorldStateForWorld(world);
+    clearVoxelEditsForWorld(world);
+    clearPlayerPoseForWorld(world);
+  }
+  clearStoryText();
+  resetStoryClock();
+  setStoryForcedDayPhase(null);
+  setVoxelRealityStage('bare');
+  setSnapshot({ active: false, chapter: 'none', beat: null, runId: snapshot.runId + 1 });
+  beginStory();
+}
+
+/** Director-only: move to the next beat (and chapter, when the beat crosses). */
+export function advanceToBeat(beat: StoryBeat): void {
+  setSnapshot({ chapter: chapterForBeat(beat), beat });
+}
+
+/**
+ * Chapter 10's entry mechanism: the story RE-ACTIVATES out of `done` free play.
+ *
+ * `advanceToBeat` cannot do this — free play is `active: false`, and the beat is
+ * only observed while the story owns the frame. Durable `storyComplete` stays
+ * true throughout chapter 10 (the two-world arc is not un-finished by it); only
+ * the live session's story-active flag changes. Idempotent: a second call while
+ * the beat already leads is a no-op, so no producer can double-enter a beat.
+ */
+export function reactivateStoryAtBeat(beat: StoryBeat): boolean {
+  if (snapshot.active && snapshot.beat === beat) return false;
+  const chapter = chapterForBeat(beat);
+  setVoxelRealityStage(stageForStoryPoint({ chapter, beat }));
+  setSnapshot({ active: true, chapter, beat });
+  return true;
+}
+
+/** The two-world arc's end: hand the world back without erasing either world. */
+export function completeStory(): void {
+  markMilestone(STORY_MILESTONES.a3);
+  markMilestone(STORY_MILESTONES.ch4Arrived);
+  markMilestone(STORY_MILESTONES.ch9Hearth);
+  markMilestone(STORY_MILESTONES.complete);
+  // The earned senses are part of the earned world — never strand the HUD gates.
+  // (Oxygen/jet/maw stay UNDISCOVERED: they arrive live, or in chapter 4's coda.)
+  markMilestone(STORY_MILESTONES.senseInventory);
+  markMilestone(STORY_MILESTONES.senseHealth);
+  markMilestone(STORY_MILESTONES.senseTemp);
+  markMilestone(STORY_MILESTONES.senseWater);
+  markMilestone(STORY_MILESTONES.senseFood);
+  markMilestone(STORY_MILESTONES.senseStamina);
+  setVoxelRealityStage('alive');
+  setStoryForcedDayPhase(null); // the day cycle is the player's now
+  setSnapshot({ active: false, chapter: 'complete', beat: 'done' });
+}
+
+/**
+ * Chapter 10's terminal: the threshold hand-back. Commits the chapter's final
+ * durable checkpoint and returns the world through the same completion path the
+ * two-world arc used, so free play resumes in space with the bearing held and
+ * nothing about the finished story un-finished.
+ */
+export function completeChapter10(): void {
+  markMilestone(STORY_MILESTONES.ch10Complete);
+  // Owner direction 2026-08-13: the working station approach must continue
+  // from the story flight. Grant at the hand-back rather than at bearing claim
+  // so Chapter 10 still owns its 1,500-unit reveal and cold hold; the normal
+  // approach driver then publishes the corridor inside 1,400 and offers [F]
+  // only when its existing alignment, range and closing-speed gates all pass.
+  grantChapter10DockingAuthorization();
+  completeStory();
+}
+
+/** Quit-to-menu mid-story: progress is already in milestones; go dormant. */
+export function deactivateStory(): void {
+  if (!snapshot.active) return;
+  setStoryForcedDayPhase(null); // never leave the sandbox sun frozen
+  setSnapshot({ active: false });
+}
+
+/** Persist a prologue event-card choice (echoed by Ch1's work order). */
+export function recordStoryChoice(cardId: string, optionId: string): void {
+  markMilestone(`story:choice:${cardId}:${optionId}`);
+}
+
+const WORKER_NAME_PREFIX = 'story:name:';
+
+/**
+ * Persist the name the player gave the fellow worker in the voyage naming
+ * interstitial. Rides the milestone store (no new save field) — the name is
+ * stored (and always read) lowercase.
+ */
+export function recordWorkerName(name: string): void {
+  const clean = name.trim().toLowerCase();
+  if (clean) markMilestone(`${WORKER_NAME_PREFIX}${clean}`);
+}
+
+/**
+ * The name the player gave the fellow worker (lowercase), or null if unnamed.
+ * Scans milestones for `story:name:<name>` — downstream copy (VOYAGE_STRANGE_LINES
+ * `{name}`, and any later chapter that refers to the worker) reads it here.
+ */
+export function getWorkerName(): string | null {
+  const found = getMilestones().find(id => id.startsWith(WORKER_NAME_PREFIX));
+  return found ? found.slice(WORKER_NAME_PREFIX.length) : null;
+}
+
+// --- derived reads ------------------------------------------------------------
+
+/** The Regulation Feed owns the screen (sandbox HUD hidden) until A2 completes. */
+export function storyHudTakeover(s: StorySnapshot = snapshot): boolean {
+  if (!s.active || !s.beat) return false;
+  return s.beat !== 'done' && BEAT_METADATA[s.beat].hud.feedEffects;
+}
+
+/**
+ * The persistent objective card belongs to the player's embodied view. The
+ * ch1 lift remains regulation-camera owned for its entire authored blend; its
+ * hand-off completes at `ch1-anomaly`, and every later active beat keeps the
+ * same objective/marker presentation even when the regulation feed still owns
+ * other chapter chrome.
+ */
+export function storyUsesEmbodiedGuidanceHud(s: StorySnapshot = snapshot): boolean {
+  if (!s.active || !s.beat) return false;
+  return s.beat !== 'done' && BEAT_METADATA[s.beat].hud.embodiedGuidance;
+}
+
+/**
+ * The early monochrome-ladder beats that (a) are camera-owned takeover eras with
+ * no embodied guidance HUD yet, but (b) still accept player locomotion. These
+ * are exactly the interactive external-camera beats — the fixed-screen harvest,
+ * the raster quota, the work-line pods, top-down nav, and the isometric climb.
+ * The frozen "plays" cutscenes around them (descent, the tracking unbolt, the
+ * 2D→3D lift) hold the feet at moveSpeedScale 0 and are deliberately excluded,
+ * as are the prologue overlays (which own their own input) and every later beat
+ * (ch1-anomaly onward already mounts the embodied touch controls).
+ *
+ * On touch, these beats otherwise leave the player with no movement affordance,
+ * so a themed virtual D-PAD mounts here in place of the analog joystick.
+ */
+export const EARLY_TOUCH_DPAD_BEATS: ReadonlySet<StoryBeat> = new Set(
+  Object.entries(BEAT_METADATA).filter(([, beat]) => beat.hud.earlyTouchDpad).map(([id]) => id as StoryBeat)
+);
+
+export function storyUsesEarlyTouchDpad(s: StorySnapshot = snapshot): boolean {
+  if (!s.active || !s.beat) return false;
+  return EARLY_TOUCH_DPAD_BEATS.has(s.beat);
+}
+
+/** Ship/star-map affordances stay hidden while any story chapter is live. */
+export function storyHudMask(s: StorySnapshot = snapshot): boolean {
+  return s.active;
+}
+
+/**
+ * The monochrome ladder ANCHORS to the deterministic arrival site (the strip,
+ * the wreck, the pods, the mesa are all placed off it). While those chapters
+ * run, the spawn is the arrival — a saved pose (off-row, in the pond, mid-map)
+ * must never override it. Free chapters (ch2+) resume where the player stood.
+ */
+/**
+ * Canonical chapter order, DERIVED from the beat order rather than written down
+ * a second time: the first beat that names a chapter fixes that chapter's
+ * position. One authority, so a new chapter joins the ordering the moment its
+ * beats join STORY_BEAT_ORDER.
+ */
+export const STORY_CHAPTER_ORDER: readonly StoryChapter[] = (() => {
+  const ordered: StoryChapter[] = [];
+  for (const beat of STORY_BEAT_ORDER) {
+    const chapter = chapterForBeat(beat);
+    if (!ordered.includes(chapter)) ordered.push(chapter);
+  }
+  return ordered;
+})();
+
+/**
+ * Chapter comparison by ORDER, never by name shape.
+ *
+ * The world props used to ask this with `/^ch[5-9]$/`, which reads as "chapter
+ * five or later" and is not: it silently excluded ch10 (the relay's own scenery
+ * stopped rendering the moment the station chapter began) and would exclude
+ * every chapter after it too. Ordering is the fact being asked about, so
+ * ordering is what this compares. `none` is nowhere in the story and is never
+ * at-or-after anything.
+ */
+export function storyChapterAtLeast(
+  chapter: StoryChapter,
+  reference: StoryChapter
+): boolean {
+  const at = STORY_CHAPTER_ORDER.indexOf(chapter);
+  const from = STORY_CHAPTER_ORDER.indexOf(reference);
+  return at >= 0 && from >= 0 && at >= from;
+}
+
+/**
+ * The world is the lived-in one: the first day alive onward. Props that are
+ * scenery before the klaxon and live afterwards — the wreck relay above all —
+ * gate on this, and it must stay true for every chapter from five onward,
+ * including the ones that do not exist yet.
+ */
+export function storyFirstDayOrLater(s: StorySnapshot = snapshot): boolean {
+  if (s.chapter === 'complete') return true;
+  if (s.chapter === 'ch4') return true;
+  if (storyChapterAtLeast(s.chapter, 'ch5')) return true;
+  return s.beat === 'ch3-thirst' || s.beat === 'ch3-forage' || s.beat === 'ch3-signal';
+}
+
+/**
+ * Whether a load should place the player back at the authored arrival anchor
+ * rather than their saved position.
+ *
+ * The external-camera eras want this: they are bolted to a lens whose origin IS
+ * the crash site, and their whole play space is the strip around it. `ch1-anomaly`
+ * is not one of them. It is the first embodied beat, and its subject sits on a
+ * DIFFERENT CUBE FACE — crossing the gravity edge to reach it is the beat's
+ * entire action. Anchoring that beat's spawn threw a player who reloaded
+ * mid-crossing back to the arrival on the top face, losing the climb, the
+ * crossing, and the eight-sector sweep (which `onBeatEntered` clears). So the
+ * anchor ends where the external cameras do, at the lift.
+ */
+export function storyAnchoredSpawn(s: StorySnapshot = snapshot): boolean {
+  if (!s.active) return false;
+  if (s.chapter === 'prologue') return true;
+  if (s.chapter !== 'ch1' || !s.beat) return false;
+  return beatIndex(s.beat) <= beatIndex('ch1-lift');
+}
+
+// Survival chrome is INTRODUCED, not assumed: each sense appears when the story
+// names it (ch3's "so that is thirst. how strange, to need."), then stays. Pure
+// sandbox saves (story never started) see everything — the gates only exist
+// inside a story save.
+
+/**
+ * Flora/fauna dormancy in the story world: life beyond trees and grass belongs
+ * to a LATER awakening (A4 "Breath"). Milestone-driven so no cutscene's effect
+ * ramps can flash a glimpse; lifts the moment the future awakening marks it.
+ */
+export function storyLifeDormant(): boolean {
+  if (!hasMilestone(STORY_MILESTONES.started)) return false;
+  return !hasMilestone('story:a4');
+}
+
+export function storyHudHideVitals(): boolean {
+  if (!hasMilestone(STORY_MILESTONES.started)) return false;
+  return !hasMilestone(STORY_MILESTONES.senseHealth);
+}
+
+/** Which suit-HUD stat rows have been DISCOVERED (pure sandbox: everything). */
+export type SuitStat =
+  | 'health' | 'hunger' | 'thirst' | 'warmth' | 'stamina' | 'oxygen'
+  | 'jet' | 'maw';
+
+const STAT_SENSE: Record<SuitStat, string> = {
+  health: STORY_MILESTONES.senseHealth,
+  hunger: STORY_MILESTONES.senseFood,
+  thirst: STORY_MILESTONES.senseWater,
+  warmth: STORY_MILESTONES.senseTemp,
+  stamina: STORY_MILESTONES.senseStamina,
+  oxygen: STORY_MILESTONES.senseOxygen,
+  jet: STORY_MILESTONES.senseJet,
+  maw: STORY_MILESTONES.senseMaw
+};
+
+export function storyStatVisible(stat: SuitStat): boolean {
+  if (!hasMilestone(STORY_MILESTONES.started)) return true;
+  return hasMilestone(STAT_SENSE[stat]);
+}
+
+export function storyHudHideInventory(): boolean {
+  if (!hasMilestone(STORY_MILESTONES.started)) return false;
+  return !hasMilestone(STORY_MILESTONES.senseInventory);
+}

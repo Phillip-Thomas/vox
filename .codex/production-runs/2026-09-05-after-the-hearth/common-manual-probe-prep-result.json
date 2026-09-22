@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 557479,
+  "stop_reason": "end_turn",
+  "session_id": "1212c589-eb63-4882-91d4-96ae765fe23f",
+  "total_cost_usd": 3.1190420000000003,
+  "usage": {
+    "input_tokens": 56,
+    "cache_creation_input_tokens": 107867,
+    "cache_read_input_tokens": 1616746,
+    "output_tokens": 49171,
+    "output_tokens_details": {
+      "thinking_tokens": 5197
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 107867,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1482,
+        "cache_read_input_tokens": 108292,
+        "cache_creation_input_tokens": 3294,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3294
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2354,
+      "outputTokens": 18,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002444,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 56,
+      "outputTokens": 49171,
+      "cacheReadInputTokens": 1616746,
+      "cacheCreationInputTokens": 107867,
+      "webSearchRequests": 0,
+      "costUSD": 3.116598,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 5197,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 31,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Prep complete. Concise summary:\n\n**Task: harness preparation only \u2014 NOT RUN.** No browser, GPU, preview, build, or capture. `verification-ready.json ready=false` and `verifier-control.json action=hold`, so I did not launch anything; instead I *exercised* the probe's own preflight guard against the live control files: **exit 3, `launched=false`**, refusals = ready=false \u00b7 control hold \u00b7 no external heavy lock \u00b7 manifest-sha mismatch.\n\n**New owned files** (nothing else mutated \u2014 no game source, no canonical evidence/gate/manifest/defect/control, no existing probe, no capture bytes, no game tests):\n\n| file | sha256 |\n|---|---|\n| `verifier/probes/common-manual-focused/commonPassageLogic.mjs` | `917807d70b363922b433f2b5e3188f4ed93c8ddcc04fdf0b7bc3be742fe05dc6` |\n| `verifier/probes/common-manual-focused/common-passage-probe.mjs` | `11c4a7d1373ae0aee603f80d828f487d284311244457696b9d4a8d6100b2cdc5` |\n| `verifier/probes/common-manual-focused/selftest.mjs` | `52b2ba18368421174eb0f97172f7810197c90e4c3a0f8dc17b742dfdf4ffbce1` |\n\nplus `logs/common-manual-focused-prep/{node-check,selftest,refusal-demo}.log` and `common-manual-probe-prep-report.{json,md}`.\n\n**Probe shape** (all ordinary keys/F, manual lane): readiness+identity (`<title>Paravoxia</title>`, ANGLE, headed, real canvas click after readiness, pointer lock, four horizontal-motion key receipts, capsule centre vs grounded pose vs actual support) \u2192 survey earned W/S/draw/E/witness-F to `anc.cg.route-tested` and `ch13:common:reciprocal` \u2192 H held by W verified \u2192 Terra's ordered ten-vertex 18-unit E\u2192C passage \u2192 **`--mode deviation`**: early turn at **z 15.82 before the z=16 corner** (COMMON case, explicitly not the survey drawing loop), far excursion to C must buy *no* credit, ordinary return to the unfinished frontier, physical traversal of the omitted corner, resume **without extra F or reset** \u2192 T with exact objective + literal `[F] Offer this end` checked before pressing \u2192 release phase asserting `workerUnits \u2265 18`, `committed`, `anc.cg.complete/handback`.\n\n**Assertions**: 18 credited **and** physical arrival at C **and** live support **and** credit accruing while walking (reference proxy) **and** every leg reached by measured distance **and** measured player\u2194worker clearance \u2265 1 **and** monotone prefix \u2014 endpoint body alone fails. Failed leg stops the probe before any later F and is never labelled arrived; unavailable fields \u2192 `INCONCLUSIVE`, never fabricated.\n\n**Static validation**: `node --check` clean \u00d73; **43/43 self-tests pass** (zero-motion, vertical-only settling, uninitialised body, timeout/stall-never-arrival, prompt/objective negatives, preflight & identity refusals, endpoint-pumping and unrestored-credit negatives).\n\n**Runtime contract**: `--url` mandatory (no 38803 default), unique `--out`, `--expect-source-manifest` binds the future root manifest, externally acquired `--heavy-lock`, per-phase budgets, before/after probe-source snapshots, cleanup once in `finally`, final log line after the summary write. Two runs needed (`reference` then `deviation`) since `terraUnits` is monotone per session.\n\n**Limitations**: labelled deep fixture `?story=ch13-survey` (no Origin-landed, no full story, no earned Continue, no naive UX); source-read waypoints \u21d2 no first-time-usability claim; manual `rail` expected null and unused; no new bridges, so player reference/sight is only inferred. CG-IMPL-009 and the conditional corner risk remain open; no acceptance, no defect closure.",
+  "ttft_ms": 1169,
+  "type": "result",
+  "duration_ms": 557173,
+  "uuid": "a6633577-5e48-4125-9f00-29367af0e680",
+  "ttft_stream_ms": 714,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 714,
+  "queued_turn_count": 0
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "paravoxia.producer.privateProbeDirection.v1",
+  "at": "2026-09-06T20:03:50.973772+00:00",
+  "authority": "Standing user authorization for routine reversible implementation/checks. No game/material repair loop consumed.",
+  "evidence": "verifier/captures/finale-window/window-2/probe-console.log",
+  "causalFinding": "verifyHeavyLock in finale-window-probe.mjs calls execFileSync(readlink,[ -f,/proc/self/fd/9 ]). /proc/self refers to the spawned readlink process, whose stdio lacksFD9, not the probe process that owns the inherited descriptor. WrapperbuildStdio correctly retainsFD9.",
+  "boundedFix": "Read the descriptor from the probe process with fs.readlinkSync(/proc/self/fd/9), or explicitly bind process.pid with equivalent actualfstat/inodecheck. Preserve exclusive kernelFLOCK WRITE and independent contention checks. Distinguish actual flock exit1 contention from unrelated errors. No weakening actualsharedlock.",
+  "requiredCheck": "Exercise actual exported verifyHeavyLock under realinheritedexclusiveFD9, not just wrapperbuildStdio with a copied reader. Wrong/missingfd and non-heldlock remain failures.",
+  "next": "Finish current ownerreport/handback, then correctprivateprobe and run sameonecombinedfinale measurement on unchangedsource. Originalwindow1/2 retained. Routineprivatecorrectioncap is producer-controlled; no new ownerapproval needed.",
+  "sourceMutationAuthorized": false
+}

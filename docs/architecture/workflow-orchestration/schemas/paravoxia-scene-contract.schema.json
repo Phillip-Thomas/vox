@@ -678,7 +678,7 @@
       ],
       "properties": {
         "id": {
-          "$ref": "#/$defs/stableId"
+          "$ref": "#/$defs/runtimeObjectiveId"
         },
         "agencyWindowRef": {
           "$ref": "#/$defs/stableId"
@@ -702,7 +702,7 @@
           "$ref": "#/$defs/nonEmptyString"
         },
         "requiresMarker": {
-          "const": true
+          "type": "boolean"
         },
         "workOrder": {
           "type": "array",
@@ -745,8 +745,121 @@
         },
         "acceptanceCriterion": {
           "$ref": "#/$defs/nonEmptyString"
+        },
+        "targetMode": {
+          "enum": [
+            "directional-marker",
+            "survey-bracket",
+            "none"
+          ]
+        },
+        "targetContract": {
+          "$ref": "#/$defs/guidanceTargetContract"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "requiresMarker": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "targetMode",
+              "targetContract"
+            ],
+            "properties": {
+              "targetMode": {
+                "enum": [
+                  "survey-bracket",
+                  "none"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "requiresMarker": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "targetMode": {
+                "const": "directional-marker"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "targetMode"
+            ],
+            "properties": {
+              "targetMode": {
+                "const": "survey-bracket"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "requiresMarker": {
+                "const": false
+              },
+              "kind": {
+                "const": "interact"
+              },
+              "targetContract": {
+                "properties": {
+                  "maxVisibleTargets": {
+                    "const": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "targetMode"
+            ],
+            "properties": {
+              "targetMode": {
+                "const": "none"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "requiresMarker": {
+                "const": false
+              },
+              "kind": {
+                "enum": [
+                  "travel",
+                  "wait",
+                  "interact"
+                ]
+              },
+              "targetContract": {
+                "properties": {
+                  "maxVisibleTargets": {
+                    "const": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "guidanceFeedback": {
       "type": "object",
@@ -2125,6 +2238,65 @@
         },
         "directorSignoffsRef": {
           "$ref": "#/$defs/ref"
+        },
+        "acceptanceBands": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "Every numeric acceptance band stated in acceptanceCriteria, with the reachability that proves the band can be met. A band-shaped criterion with no entry here cannot be signed (creative-triad-gate contract.band-unstructured).",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "criterionRef",
+              "band",
+              "reachability"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "criterionRef": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Path of the acceptance criterion this band structures, e.g. evidence.captures[10].acceptanceCriterion or evidence.acceptanceCriteria[2]"
+              },
+              "band": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "number"
+                }
+              },
+              "unit": {
+                "type": "string"
+              },
+              "reachability": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "source",
+                  "values"
+                ],
+                "properties": {
+                  "source": {
+                    "$ref": "#/$defs/nonEmptyString"
+                  },
+                  "values": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2214,6 +2386,49 @@
         },
         "acceptanceCriterion": {
           "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "runtimeObjectiveId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[:._-][a-z0-9]+)*$"
+    },
+    "guidanceTargetContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ownerRef",
+        "selectionRef",
+        "readinessCriterion",
+        "completionCriterion",
+        "maxVisibleTargets",
+        "evidenceFields"
+      ],
+      "properties": {
+        "ownerRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "selectionRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "readinessCriterion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "completionCriterion": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "maxVisibleTargets": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidenceFields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
         }
       }
     }

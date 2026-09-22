@@ -1,0 +1,67 @@
+{
+  "schema": "paravoxia.directorRepairDirection.v1",
+  "director": "score",
+  "authoredBy": "score-director /root/audio_score_direction",
+  "authoredAt": "2026-09-05T21:57:10.482Z",
+  "contractVersion": "draft-v5",
+  "contractSha256": "843609d181abf6425425de6cf8e07324743e8d784bc741edff47e499f26bf20e",
+  "contractChangeRequired": true,
+  "status": "concrete-successor-proposal-awaiting-fresh-triad",
+  "defectIds": [
+    "R-SCORE-STRESS-ENERGY",
+    "R-SCORE-SPARSE-STRESS-CLASSIFICATION",
+    "R-SCORE-BLOOM-CONTRAST-B",
+    "R-SCORE-LEAN-BED-BALANCE"
+  ],
+  "combinedSceneApproved": false,
+  "runtimeActivationAuthorized": false,
+  "ownerTasteApproved": false,
+  "feasibility": {
+    "universalNumericIncompatibility": false,
+    "finding": "The numeric bed and sum intervals alone admit solutions. The frozen sparse fixture signals and permitted no-relevel/no-recipe-change architecture demonstrably fail; post-tail stems do not prove an upper bound over every legal alternate composition. Fixed finite event energy contributes approximately E_event/T to a sustained non-silent programme, so imposing a fixed 2-3 LU average completion on arbitrarily sparse passages conflicts with the atmospheric/density intent. Averages and transient headroom are different quantities.",
+    "recommendation": "Correct the five fixtures' acceptance classification explicitly rather than adding activity or changing the music to satisfy an unrelated average. No new event-conditioned orchestration is proposed."
+  },
+  "sourceCandidate": {
+    "base": "Immutable Candidate4 plus failed draft-v5 10.4/.10 trial",
+    "bloomRailDb": 10.5,
+    "bloomLiftSustain": 0.09836813546324956,
+    "sustainFormula": "0.1 * (10^(10.4/20)-1) / (10^(10.5/20)-1)",
+    "leanBalanceDb": -1.25,
+    "leanMultiplier": 0.8659643233600653,
+    "leanGate": "Actual quality lean and existing padChoir in resolveStage1Rails; no fixture/seed/time/gain-meter branch",
+    "leanFormula": "aliveTrim = 1 - (1 - BED_ALIVE_LIFT * nightTrim * q) * padChoir; q=1 full, q=10^(-1.25/20) lean",
+    "sourcePaths": [
+      "main/src/audio/generative/tuning.ts",
+      "main/src/audio/bedEngine.ts"
+    ],
+    "existingSourceOwners": [
+      "main/src/audio/generative/bedConductor.ts: liftOf and pad/texture rail application",
+      "main/src/audio/generative/pulse.ts: liftTarget and slewEnvelope",
+      "main/src/audio/bedEngine.ts: resolveStage1Rails, bedBus and both room-return aliveTrim applications"
+    ],
+    "newEventOrArrangementOwnership": false,
+    "preserved": "No harmony, motif, note count, family ownership, phrase/section/event time, BUILD cap, pulse, camera, caption, story state, SFX recipe or shared tail change",
+    "predictionLimit": "Single exact candidate; neither a proven global minimum nor a guaranteed pass. No further setting search is authorized."
+  },
+  "acceptanceCorrection": {
+    "removed": "Absolute -19.5 LUFS I lower bound on each of five fixed sparse stress fixtures in both tiers",
+    "retained": "I <= -16.5 and TP <= -1; original entire windows, fixtures, density, seed, duck, recipe, story/floor/bed/BLOOM/variation/UX/audition gates",
+    "added": "I_actual_sum >= I_matching_music_ducked -0.10 LU; same complete window and identical controls/source/tier; report both original and successor verdicts",
+    "scope": "These five sparse fixtures only; no numerical change to standalone bed or BLOOM acceptance",
+    "approval": "Not active. Requires an explicit new delegated owner-direction record plus authentic complete triad reconciliation/signatures on a compiled new hash."
+  },
+  "evidenceRefs": [
+    "measurements-and-arithmetic.json",
+    "score-contract-field-deltas.json",
+    "report.md",
+    "../audio-bloom-trial-v5/verifier-completion/report.json",
+    "../audio-bloom-trial-v5/verifier-completion/lean-before-trial-comparison.json",
+    "../audio-bloom-trial-v5/verifier-completion/stress-before-trial-comparison.json",
+    "../audio-contract-assembly/score-contract-signoff.json"
+  ],
+  "requiredPeerQuestions": {
+    "chapter": "Accept or object to the explicit sparse-stress lower-bound removal and exact quality/crest correction as preserving atmospheric intent and all real action/state/refusal meaning; no new musical response or fictional activity.",
+    "cinematography": "Accept or object to the exact negative quality correction and existing crest envelope without visual timing/grade/control response; retain C6, station baseline and all original image/UX gates."
+  },
+  "remainingEvidence": "New same-source full/lean four-bed, original stress, raw float pre/shared tail, original chip/story-floor/refusal/BUILD and explicit voice fixtures; original and successor verdicts both preserved; fresh peer and owner/delegated A/B; all existing independent runtime/UX/performance obligations."
+}

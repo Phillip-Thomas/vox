@@ -1,0 +1,248 @@
+{
+  "schema": "paravoxia.producer.actualRecoveryReview.v1",
+  "at": "2026-09-06T23:15:21.137889+00:00",
+  "disposition": "Actual physical return before frontier and supported ordered nine-vertex retraversal to18 established. Initial negative path stopped at unsupported vertex3, so fresh end-to-end C-negative remains unproved. No route source defect established; permit completed verifier handoff for independent known Continue correction.",
+  "captureRef": "verifier/captures/manual-credit-finale/recovery-candidate-run1",
+  "hashes": {
+    "summary.json": "01d4b9416f472ac7183752ebb1417f41ce0a40ef38e5281b790ecee00df7ae01",
+    "trace.ndjson": "5befb4b9442a3d07c5313a3e8f80fff816992b30d785aa9cd4abb8df7333beb4",
+    "credit-records.raw.json": "fd7b6febee8950d979f9b0719891d19499caa0df426c2dd9c3cab0e8865afa09",
+    "after-physical-return-and-retraversal.png": "edf360d2fc469bc41cb272b1a41541d1f36027706dd9d1d9109f008e22520b42"
+  },
+  "actualCutTurn": {
+    "observedFoot": [
+      -43.963280016158976,
+      50.55553213550477,
+      14.275022413379595
+    ],
+    "observedFootZ": 14.275022413379595,
+    "skippedCornerZ": 16,
+    "shortOfCornerBy": 1.7249775866204047,
+    "note": "ACTUAL observed foot at the early turn; not asserted to equal 15.82"
+  },
+  "retainedCreditAfterInterruptedCut": 2.275022428217211,
+  "actualInitialNegativeVertices": [
+    {
+      "vertex": 1,
+      "finalFoot": [
+        -41.99680676563026,
+        50.989798523684655,
+        14.275022428100655
+      ],
+      "supported": true,
+      "horizontalToVertex": 0.27504096550172336
+    },
+    {
+      "vertex": 3,
+      "finalFoot": [
+        -44.055859190520394,
+        55.37727799038485,
+        16.268770190060998
+      ],
+      "supported": false,
+      "horizontalToVertex": 0.27451350464233754
+    }
+  ],
+  "atCClaimRejected": true,
+  "atCQualification": "cutOutcome.reachedC=true and frame after-early-cut-route-at-C are hardcoded/mislabelled. Only vertices1 and3 ran, and vertex3 supportedfalse stopped forward sequence. Do not call this endpoint refusal. Root independently checked older cut-run10: it also has only vertices1/3 and supportedfalse at3; it does NOT supply the missing C-negative proof. Earlier root commentary has been corrected.",
+  "returnBeforeFrontier": {
+    "target": [
+      -42,
+      51.05,
+      12
+    ],
+    "measuredFoot": [
+      -42.44660525560542,
+      50.98900435819689,
+      12.299745526716817
+    ],
+    "bodyCentre": [
+      -42.46577453613281,
+      52.788902282714844,
+      12.299745559692383
+    ],
+    "supported": true,
+    "retainedCredit": 2.3069190151400694,
+    "creditedFrontierZ": 14.30691901514007,
+    "marginBeforeFrontier": 2.007173488423252,
+    "footSource": "actual-foot"
+  },
+  "retraversal": [
+    {
+      "label": "retraverse-(-42,14)",
+      "target": [
+        -42,
+        51.05,
+        14
+      ],
+      "crossed": true,
+      "finalS": 0.30745689044309366,
+      "horizontalToVertex": 0.3192029608539978,
+      "supported": true,
+      "stopReason": null,
+      "terraUnits": 2.3074568905598962
+    },
+    {
+      "label": "retraverse-(-42,16)",
+      "target": [
+        -42,
+        51.05,
+        16
+      ],
+      "crossed": true,
+      "finalS": 0.12940007553605426,
+      "horizontalToVertex": 0.15546483334185654,
+      "supported": true,
+      "stopReason": null,
+      "terraUnits": 4
+    },
+    {
+      "label": "retraverse-(-44,16)",
+      "target": [
+        -44,
+        51.05,
+        16
+      ],
+      "crossed": true,
+      "finalS": 0.14016705179732014,
+      "horizontalToVertex": 0.19076472929942112,
+      "supported": true,
+      "stopReason": null,
+      "terraUnits": 6.129400075486313
+    },
+    {
+      "label": "retraverse-(-44,18)",
+      "target": [
+        -44,
+        51.05,
+        18
+      ],
+      "crossed": true,
+      "finalS": 0.1148200543998783,
+      "horizontalToVertex": 0.179977301599398,
+      "supported": true,
+      "stopReason": null,
+      "terraUnits": 8.138787310224927
+    },
+    {
+      "label": "retraverse-(-46,18)",
+      "target": [
+        -46,
+        51.05,
+        18
+      ],
+      "crossed": true,
+      "finalS": 0.06721597087911846,
+      "horizontalToVertex": 0.13304747922045915,
+      "supported": true,
+      "stopReason": null,
+      "terraUnits": 10.067443969195566
+    },
+    {
+      "label": "retraverse-(-48,18)",
+      "target": [
+        -48,
+        51.05,
+        18
+      ],
+      "crossed": true,
+      "finalS": 0.15878649606690232,
+      "horizontalToVertex": 0.19595100676319196,
+      "supported": true,
+      "stopReason": null,
+      "terraUnits": 12
+    },
+    {
+      "label": "retraverse-(-48,16)",
+      "target": [
+        -48,
+        51.05,
+        16
+      ],
+      "crossed": true,
+      "finalS": 0.13809029099704873,
+      "horizontalToVertex": 0.2016822495195261,
+      "supported": true,
+      "stopReason": null,
+      "terraUnits": 14.138090291224115
+    },
+    {
+      "label": "retraverse-(-48,14)",
+      "target": [
+        -48,
+        51.05,
+        14
+      ],
+      "crossed": true,
+      "finalS": 0.12334639443103157,
+      "horizontalToVertex": 0.1849351676173723,
+      "supported": true,
+      "stopReason": null,
+      "terraUnits": 16.123346394526067
+    },
+    {
+      "label": "retraverse-(-48,12)",
+      "target": [
+        -48,
+        51.05,
+        12
+      ],
+      "crossed": true,
+      "finalS": 0.1085453307753319,
+      "horizontalToVertex": 0.16829266007335972,
+      "supported": true,
+      "stopReason": null,
+      "terraUnits": 18
+    }
+  ],
+  "recoveredCommon": {
+    "stage": "holding-h",
+    "terraUnits": 18,
+    "comparisonProved": true,
+    "finalReferenceOffered": false,
+    "finalReferenceOccupied": false,
+    "workerUnits": 0,
+    "committed": false
+  },
+  "resetUsed": false,
+  "secondGrantUsed": false,
+  "railUsed": false,
+  "farReferenceQualification": "Actual grounded T measured. Private historical vertex3 failure kept pressF globally blocked; no F was sent and no new game action failure or Worker18 negative is established. Prior full18-run8 still supplies independent successful F/Worker18/commit proof.",
+  "renderedInspection": "Root viewed actual after-physical-return-and-retraversal.png: nonblank Origin scene, current objective Far reference \u00b7 offer this end, standing [F] Offer this end. No taste verdict.",
+  "cleanup": {
+    "schema": "paravoxia.verifier.ownedSessionGuard.v1",
+    "probe": "common-entry-crossing-probe.mjs",
+    "writtenAt": "2026-09-06T23:12:15.221Z",
+    "phase": "post-finally",
+    "supersedesForCleanupState": "summary.json .cleanup (captured pre-finally; its sessionStopped is a pre-cleanup value, not the outcome)",
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "label": "arrival-common-short session",
+    "adopted": true,
+    "adoptedAtMs": 1788736254571,
+    "cleanupRequests": 1,
+    "sessionStopInvocations": 1,
+    "sessionStopped": true,
+    "cleanupError": null,
+    "cleanupReason": "probe-finally",
+    "stopsOnlyProbeOwnedSession": true,
+    "stopsRootPreview": false,
+    "killsProcesses": false,
+    "hidesFailureExitCode": false,
+    "note": "Recorded AFTER the finally block ran. This is the actual cleanup outcome of the browser session this probe owned. A stop-failed or never-requested state is reported honestly and does NOT alter the capture outcome, the retained evidence, or the process exit code. It says nothing about the game.",
+    "outcomeUnchanged": true
+  },
+  "closing": {
+    "ok": true,
+    "problems": []
+  },
+  "elapsedMs": 82773,
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "currentSourceReaderFinishedAt": "2026-09-06T23:13:57.654849+00:00",
+  "nextNegativeProbeCorrection": "Retain positive vOk failure records for invalid cut points; a negative path may keep walking to C under actual game inputs without claiming those points valid. Gate actual reachedC from measured foot; stop before invented C claims. After supported full recovery, unrelated prior negative observation must not be called a new game F rejection. Preserve exact game predicates and record raw negatives honestly.",
+  "sourceHandoffMayProceedForKnownContinueCause": true,
+  "sourceRepairAuthorizedByThisReview": false,
+  "routeRepairAuthorized": false,
+  "defectClosure": false,
+  "chapterAcceptance": false
+}

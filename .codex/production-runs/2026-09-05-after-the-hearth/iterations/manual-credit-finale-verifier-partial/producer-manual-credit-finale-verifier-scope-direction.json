@@ -1,0 +1,20 @@
+{
+  "at": "2026-09-06T21:32:59.073238+00:00",
+  "reason": "Verifier measured only4corners (8.2units), repeated to repair replay, then ran fullverify early. Full18/manual far-reference Worker18, actual earlycut recovery,3coldCOMMON and actual finale remain unperformed. Preserve successful static receipt; no duplicate fullsuite.",
+  "originalVerifierStartedAt": "2026-09-06T21:19:34.043543+00:00",
+  "originalVerifierDeadline": "2026-09-06T22:04:34.043543+00:00",
+  "sourceChanged": false,
+  "candidateSourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "fullVerify": {
+    "startedAt": "2026-09-06T21:29:55Z",
+    "finishedAt": "2026-09-06T21:30:57Z",
+    "exitCode": 0,
+    "logRef": "logs/manual-credit-finale-verifier/verify.log",
+    "sha256": "0586695825bc6d4db5abf4aad7226720c30c39b099b7d84751cdef84efcf5919",
+    "qualification": "Ran before all affected runtime despite commission. Successful exact source command reusable; ordering does not prove runtime."
+  },
+  "scopeDirection": "Finish actual full ordered18/far-reference F+Worker18, earlycut refusal and physical return/retraversal,3coldCOMMON and finale. Do not stop at4corner discriminator or another replay. Same original verifier45min deadline; no new source repair.",
+  "controlFileDelivery": "Earlier control instruction edits not demonstrated actively consumed by CLI; direct fresh bounded continuation required.",
+  "interruptedOwnedPid": 2140652,
+  "signal": "SIGINT"
+}

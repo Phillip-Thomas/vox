@@ -1,0 +1,17 @@
+{
+  "at": "2026-09-06T20:13:56.993728+00:00",
+  "fromRole": "finale-window-runtime",
+  "toRole": "common-physical-discriminator",
+  "reason": "Finale window3 stopped due private sampler install error; released actual browser/sink/lock. Finale may correct CPU while COMMON measures, then regain GPU.",
+  "sourceFilesRehashed": 99,
+  "sourceDrift": [],
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "finaleRuntimeRef": "verifier/captures/finale-window/window-3/runtime-record.json",
+  "finaleRuntimeSha256": "66c1863c85308eb6c7d0862b323434412cb6511c5f63238b4db2161a89e66907",
+  "cleanupComplete": true,
+  "browserGone": true,
+  "kernelLockEntries": [],
+  "commonReadySha256": "18318250dbfcaf157f7727f15459da0359b49834a1ad95544c89aba4bef13462",
+  "gameSourceMutationAuthorized": false,
+  "isAcceptance": false
+}

@@ -1,0 +1,16 @@
+{
+  "role": "arrival-common-probe-prepor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T16:53:54.369345+00:00",
+  "commissionSha256": "838495f24360028d28b2f131e99b835b53b12b91add35a5841b1882294e100a2",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "sourceFrozen": false,
+  "sourceReference": "iterations/arrival-common-findings/source",
+  "scope": "Tighten copied manual/earned instrumentation only during source integration; no GPU/game edits or acceptance",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T17:05:02.731612+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "9301f4eb-4b33-41c3-9bd3-db48da48cae4",
+  "isError": false,
+  "gameSourceMutationAuthorized": false
+}

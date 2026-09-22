@@ -14,8 +14,8 @@ const shot = async n => { try { await page.screenshot({ path: resolve(OUT, n), t
 await page.goto('http://localhost:5173/', { waitUntil: 'domcontentloaded', timeout: 45000 }).catch(()=>{});
 await page.bringToFront();
 // wait for Play enabled
-await page.waitForFunction(() => [...document.querySelectorAll('button')].some(x=>/play now/i.test(x.textContent||'')&&!x.disabled), null, { timeout: 60000 }).catch(()=>console.log('ready timeout'));
-await page.evaluate(() => [...document.querySelectorAll('button')].find(x=>/play now/i.test(x.textContent||''))?.click());
+await page.waitForFunction(() => [...document.querySelectorAll('button')].some(x=>/free play/i.test(x.textContent||'')&&!x.disabled), null, { timeout: 60000 }).catch(()=>console.log('ready timeout'));
+await page.evaluate(() => [...document.querySelectorAll('button')].find(x=>/free play/i.test(x.textContent||''))?.click());
 await page.waitForTimeout(1500);
 // seed inventory (same singleton module the app already loaded)
 const seeded = await page.evaluate(async () => {

@@ -1,0 +1,74 @@
+{
+  "schema": "paravoxia.producerFindingsReview.v1",
+  "author": "creative-producer",
+  "reviewedAt": "2026-09-06T16:49:54.646379+00:00",
+  "acceptedForBoundedRepair": true,
+  "defectIds": [
+    "CG-IMPL-010",
+    "CG-IMPL-014"
+  ],
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "sourceFilesRehashed": 99,
+  "completedRoles": [
+    {
+      "ref": "common-manual-runtime-invocation.json",
+      "sha256": "a6abba70f3bf5b3ae00873dfb0943e72f1ad9da355068ac404482ffc1aeaf0d0",
+      "finishedAt": "2026-09-06T16:34:53.178964+00:00"
+    },
+    {
+      "ref": "earned-continue-probe-prep-invocation.json",
+      "sha256": "fbacfd39d865efd7a4bb4b26f63bd9dc598ac0004ced03b2156b603014156675",
+      "finishedAt": "2026-09-06T16:37:47.281574+00:00"
+    },
+    {
+      "ref": "entry-discriminator-invocation.json",
+      "sha256": "3d87b155751a2efefa83cd6c575a88e477e4ff60f973846fb74c5c5d6c003b91",
+      "finishedAt": "2026-09-06T16:43:56.661509+00:00"
+    },
+    {
+      "ref": "story-verifier-handoff-standby-invocation.json",
+      "sha256": "771eb0c8aea488a70c6c1d293e41e453ec61be43c0ddd925684c20b0a2883d9a",
+      "finishedAt": "2026-09-06T16:22:58.507371+00:00"
+    },
+    {
+      "ref": "common-terminal-source-audit-invocation.json",
+      "sha256": "9a50e746fef8e565c714dd32b3e8e18c1a2a246d233878dcd5bb167da026fe3b",
+      "finishedAt": "2026-09-06T16:20:42.140664+00:00"
+    }
+  ],
+  "evidenceRefs": [
+    "producer-handoff-standby-verification-review.json",
+    "producer-common-terminal-audit-review.json",
+    "chapter-common-terminal-interpretation.json",
+    "producer-common-manual-runtime-review.json",
+    "producer-earned-continue-prep-review.json",
+    "entry-discriminator-report.json"
+  ],
+  "entryDiagnostic": {
+    "reportSha256": "8934d75496c0a7dc4d28ed70e33a0ebc4b2e504a59955e398c665ac011d036ff",
+    "summarySha256": "41dd94d678e3aa9286acfd631347762bae7d80d59ea1437897cf46427a5e3531",
+    "firstOrdinaryClickLocked": true,
+    "ordinaryWPulseMs": 100,
+    "actualDisplacementXZ": 0.5130553240321118,
+    "cleanup": {
+      "stopped": true,
+      "invoked": true,
+      "reason": "probe-finally",
+      "requests": 1,
+      "error": null
+    },
+    "priorFailureCause": "Unknown; not reproduced. No game input patch justified.",
+    "instrumentationLimit": "Two observer TypeErrors from treating Window/Document as Element. Missing click-event metadata; errors are instrumentation errors. Actual pointerlockchange and body movement remain measured. Future observer must handle Window/Document safely."
+  },
+  "manualCommonStatus": "Unmeasured: two earlier entry attempts stopped before gameplay. Successful diagnostic is not COMMON reference or deviation proof.",
+  "earnedContinueStatus": "Prepared only; require exact Origin -1,-1 and anc.cg.origin-landed in both actual AV and chapter histories before future runtime.",
+  "repairConstraints": "Preserve original COMMON route, C, strict ordered physical18 and unsafe-footprint refusal. Implement signed v3 arrival-copy phases silently under existing origin objective.",
+  "gameplayAcceptance": false,
+  "publicationAuthorized": false,
+  "rootVisualInspection": {
+    "at": "2026-09-06T16:52:06.697781+00:00",
+    "path": "verifier/captures/entry-discriminator/diag-1/frame-after-w-pulse.png",
+    "sha256": "49adc777ed53ea54a117755df246188f640875a98b857ed22d5ae33262e49224",
+    "observation": "Visible rendered Origin surface, crosshair, W-7744 offer-route marker and standing objective; diagnostic debug overlays remain. This is an entry diagnostic frame, not COMMON traversal or visual acceptance."
+  }
+}

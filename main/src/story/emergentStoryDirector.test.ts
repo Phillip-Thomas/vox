@@ -1,4 +1,17 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { registerStoryMarkerWorld } from './beats/markerTargets.ts';
+import {
+  clearAllCommonGroundWorlds,
+  CG_POSES,
+  type CommonGroundSnapshot
+} from './commonGroundState.ts';
+import {
+  commonGroundSnapshot,
+  registerCommonGroundWorld,
+  resetCommonGroundRuntime
+} from './commonGroundDirector.ts';
+import { resetCommonGroundActor } from './commonGroundActor.ts';
+import { storyWorldHandles } from './storyWorldHandles.ts';
 import { CORRIDOR_RANGE, SCAN_RANGE } from '../game/spaceStation/spaceStationApproach.ts';
 import { subscribeStoryUxFeedback } from './ux/feedbackCues.ts';
 import {
@@ -21,6 +34,7 @@ import {
   CH10_CARRIER_OCTAVE_DEGREE,
   getChapter10ScoreMood,
   getStoryScoreMood,
+  getStoryBundleTrace,
   resetStoryScoreRuntime,
   type Chapter10ScoreVariant
 } from './storyScore.ts';
@@ -130,6 +144,7 @@ import {
   activateGuidedStoryObjective,
   clearGuidedStoryObjective,
   getActiveGuidedStoryObjective,
+  resetGuidedObjectiveFeedbackForTests,
   getGuidedStoryObjectiveHealth,
   observeGuidedStoryMarker
 } from './ux/objectiveDirector.ts';
@@ -418,7 +433,18 @@ function buildHabitatRoom(): void {
 }
 
 describe('emergent story director — evidence-gated post-arrival continuity', () => {
+  afterEach(() => registerStoryMarkerWorld(null));
   beforeEach(() => {
+    // These tests own progression facts and explicitly provide a resident world.
+    // Separate Chapter 10 cases below exercise missing/late real marker handles.
+    const fixture = { position: new THREE.Vector3(4, 52, 8) };
+    registerStoryMarkerWorld({
+      target: name => storyWorldHandles.target(name) ?? fixture,
+      gather: resource => storyWorldHandles.gather(resource) ?? fixture,
+      audit: beat => storyWorldHandles.audit(beat) ?? fixture,
+      settlement: id => storyWorldHandles.settlement(id) ?? fixture,
+      commonGround: objectiveId => storyWorldHandles.commonGround(objectiveId) ?? fixture
+    });
     deactivateStory();
     resetProgression();
     resetInventory();
@@ -441,7 +467,7 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
     beginStory();
   });
 
-  it('publishes chapter guidance at beat entry before the first Canvas tick', () => {
+  it('publishes chapter guidance at beat entry when its world targets are resident', () => {
     enterBeat('ch5-maw');
     expect(getActiveGuidedStoryObjective()).toMatchObject({
       id: 'maw:recover-field-kit',
@@ -583,6 +609,9 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
     expect(hasMilestone(EMERGENT_AUDIT_MILESTONES.a4Alive)).toBe(false);
     tick(0.02);
     expect(hasMilestone(EMERGENT_AUDIT_MILESTONES.a4Alive)).toBe(true);
+    const exhale = [...getStoryBundleTrace()].reverse().find(row => row.anchorId === 'anc.a4.life-front')!;
+    expect(exhale.authoredCommitAt?.beatClock).toBe(exhale.schedulingArmAt.beatClock);
+    expect(exhale.authoredCommits[0].cause).toBe('immediate');
     expectBeat('a4-exhale');
     expect(commitA4PondResponse(true, WORLD_ID).ok).toBe(true);
     expect(commitA4HerdCrest(5, 2, WORLD_ID).ok).toBe(true);
@@ -1875,15 +1904,14 @@ describe('chapter 10 — the station introduction', () => {
       aboard: true
     });
 
-    // Disembarking before ignition returns to the locator with a fresh cue —
-    // exactly what ch8's launch ladder does.
+    // The locator returns visually; the signed audio lifecycle acknowledges
+    // each objective id once per session, so revisiting it adds no new cue.
     expect(exitShip()).toBe(true);
     emergentStoryDirectorTick(0.016);
     expect(getActiveGuidedStoryObjective()?.id).toBe('station:transit:reboard');
     expect(cues).toEqual([
       'station:transit:reboard',
-      'station:transit:ignite',
-      'station:transit:reboard'
+      'station:transit:ignite'
     ]);
 
     // ENTRY PATH TWO — the `?story=ch10-transit` deep link / reload: the claim
@@ -2138,7 +2166,10 @@ describe('chapter 10 — the station introduction', () => {
     for (let i = 0; i < 600; i++) emergentStoryDirectorTick(1);
     expect(hasMilestone(STORY_MILESTONES.ch10BearingClaimed)).toBe(false);
     expect(getStoryStateSnapshot().beat).toBe('ch10-ask');
-  });
+  // This simulates ~4s of story time and has sat at ~80% of vitest's default
+  // 5s budget; it timed out twice on 2026-09-04 purely from CPU contention with
+  // browser probes on the same machine. The bound is generous on purpose.
+  }, 20_000);
 
   it('answers before the asking finishes, once, from the shared anchor', () => {
     const recorder = recordStoryLines(() => beatClock);
@@ -2458,5 +2489,108 @@ describe('emergent chapter 10 score director', () => {
     });
     // An anchor arriving after the chapter has been left moves nothing.
     expect(noteChapter10ScoreAnchor('anc.ch10.station-resolved')).toBeNull();
+  });
+});
+
+// --- ch13: the preparing-to-ready swap is silent and keeps ONE objective ---------------
+
+describe('the common comparison prepares, then silently becomes ready', () => {
+  let releaseWorld: (() => void) | null = null;
+
+  beforeEach(() => {
+    resetProgression();
+    clearGuidedStoryObjective();
+    resetGuidedObjectiveFeedbackForTests();
+    clearAllCommonGroundWorlds();
+    resetCommonGroundRuntime({ clearWorlds: true });
+    resetCommonGroundActor();
+    releaseWorld?.();
+    releaseWorld = registerCommonGroundWorld({
+      worldId: '',
+      footing: { revision: 'test', isSupported: point => Math.abs(point.y - 51.05) < 0.001 },
+      extraSolids: []
+    });
+  });
+
+  afterEach(() => {
+    releaseWorld?.();
+    releaseWorld = null;
+  });
+
+  function positionWorker(mutate: (snapshot: CommonGroundSnapshot) => void): void {
+    mutate(commonGroundSnapshot());
+  }
+
+  it('enters at route-tested with the preparing copy, one marker and one cue', () => {
+    const cues: string[] = [];
+    const stop = subscribeStoryUxFeedback(cue => {
+      if (cue.type === 'objective-enter') cues.push(cue.objectiveId);
+    });
+    enterBeat('ch13-common');
+    positionWorker(snapshot => {
+      snapshot.common.stage = 'positioning-to-h';
+      snapshot.common.workerPose = { ...CG_POSES.E };
+    });
+    tick(0.016);
+
+    const preparing = getActiveGuidedStoryObjective();
+    expect(preparing?.id).toBe('ch13:common:reciprocal');
+    expect(preparing?.markerLabel).toBe('Far reference \u00b7 check my route');
+    expect(preparing?.workOrder).toEqual([
+      'W-7744 is taking up the reference position.',
+      'Give him room to reach it. When the guide appears, follow it from the survey end.'
+    ]);
+    // No holding claim, and no guide, before his body is actually at H.
+    expect(preparing?.workOrder.join(' ')).not.toContain('holding');
+    expect(preparing?.workOrder.join(' ')).not.toContain('guide line');
+    expect(cues).toEqual(['ch13:common:reciprocal']);
+    stop();
+  });
+
+  it('replaces the text IN PLACE at his real arrival, with no second cue', () => {
+    const cues: string[] = [];
+    const stop = subscribeStoryUxFeedback(cue => {
+      if (cue.type === 'objective-enter') cues.push(cue.objectiveId);
+    });
+    enterBeat('ch13-common');
+    positionWorker(snapshot => {
+      snapshot.common.stage = 'positioning-to-h';
+      snapshot.common.workerPose = { ...CG_POSES.E };
+    });
+    tick(0.016);
+    expect(cues).toEqual(['ch13:common:reciprocal']);
+
+    // He arrives. Same objective id, same destination, new standing order.
+    positionWorker(snapshot => {
+      snapshot.common.stage = 'holding-h';
+      snapshot.common.workerPose = { ...CG_POSES.H };
+    });
+    tick(0.016);
+
+    const ready = getActiveGuidedStoryObjective();
+    expect(ready?.id).toBe('ch13:common:reciprocal');
+    expect(ready?.markerLabel).toBe('Far reference \u00b7 check my route');
+    expect(ready?.workOrder).toEqual([
+      'W-7744 is holding the reference.',
+      'Walk the guide line to check your route from this end.'
+    ]);
+    // THE WHOLE POINT: the readiness is a text replacement, not a re-entry.
+    expect(cues).toEqual(['ch13:common:reciprocal']);
+    stop();
+  });
+
+  it('does not re-cue when the same standing order is republished every frame', () => {
+    const cues: string[] = [];
+    const stop = subscribeStoryUxFeedback(cue => {
+      if (cue.type === 'objective-enter') cues.push(cue.objectiveId);
+    });
+    enterBeat('ch13-common');
+    positionWorker(snapshot => {
+      snapshot.common.stage = 'holding-h';
+      snapshot.common.workerPose = { ...CG_POSES.H };
+    });
+    for (let frame = 0; frame < 30; frame += 1) tick(0.016);
+    expect(cues).toEqual(['ch13:common:reciprocal']);
+    stop();
   });
 });

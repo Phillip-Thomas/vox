@@ -1,0 +1,112 @@
+{
+  "schema": "paravoxia.chapterLoopContinuationAssessment.v1",
+  "at": "2026-09-07T01:10:31.643546+00:00",
+  "runId": "ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b",
+  "status": "BLOCKED_INFRASTRUCTURE",
+  "acceptance": false,
+  "newStoryBeats": false,
+  "preview": {
+    "url": "http://127.0.0.1:34825/?story=ch13-home",
+    "kind": "diagnostic",
+    "indexMatches": true
+  },
+  "source": {
+    "manifest": {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/implementation-source-manifest.json",
+      "sha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63"
+    },
+    "rehashCount": 103,
+    "drift": []
+  },
+  "verified": {
+    "pauseResume": {
+      "proof": {
+        "hardware": true,
+        "cleanup": true,
+        "interrupted": true,
+        "recovered": true,
+        "acceptedAction": 1,
+        "cancellationObserved": true,
+        "available": true
+      },
+      "report": {
+        "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/recovery/report.json",
+        "sha256": "eccb73c0fe19de74f99c698bcbba3b38e6c536e3b53033729edd0f4a69ad241f"
+      },
+      "frame": {
+        "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/recovery/capture/after-real-resume.png",
+        "sha256": "be689930df1480930a578490b1588f65ea43b3959507ba47a3bc51d41bad0371"
+      }
+    },
+    "manualCommonEnding": {
+      "scope": "Direct ch13-survey fixture, not full preceding-chapter continuity",
+      "terraUnits": 18,
+      "workerUnits": 18,
+      "committed": true,
+      "cleanup": {
+        "schema": "paravoxia.verifier.ownedSessionGuard.v1",
+        "probe": "common-entry-crossing-probe.mjs",
+        "writtenAt": "2026-09-07T01:07:35.157Z",
+        "phase": "post-finally",
+        "supersedesForCleanupState": "summary.json .cleanup (captured pre-finally; its sessionStopped is a pre-cleanup value, not the outcome)",
+        "state": "stopped",
+        "cleanupCompleted": true,
+        "label": "arrival-common-short session",
+        "adopted": true,
+        "adoptedAtMs": 1788743163196,
+        "cleanupRequests": 1,
+        "sessionStopInvocations": 1,
+        "sessionStopped": true,
+        "cleanupError": null,
+        "cleanupReason": "probe-finally",
+        "stopsOnlyProbeOwnedSession": true,
+        "stopsRootPreview": false,
+        "killsProcesses": false,
+        "hidesFailureExitCode": false,
+        "note": "Recorded AFTER the finally block ran. This is the actual cleanup outcome of the browser session this probe owned. A stop-failed or never-requested state is reported honestly and does NOT alter the capture outcome, the retained evidence, or the process exit code. It says nothing about the game.",
+        "outcomeUnchanged": true
+      },
+      "report": {
+        "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/manual/capture/summary.json",
+        "sha256": "658ff90c5ca9f371b14f00a10a110ac5fa392abfa8438232897b92564a6110f9"
+      }
+    }
+  },
+  "continue": {
+    "stateEquality": true,
+    "newAcceptedAction": false,
+    "classification": "INCONCLUSIVE_NEW_ACTION_INPUT",
+    "basis": "Existing probe still calls keyboard.press(KeyF) at line1474; the retained known-good baseline required trusted80ms held F across rendered frames. Missing new anchor is not assigned as a game regression.",
+    "report": {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/summary.json",
+      "sha256": "3dfcd537e50010832590a626eca5d45916db7e43d787a2218f799135d6dbd73c"
+    }
+  },
+  "blockers": [
+    "Manual compatibility adapter expects capture/cleanup-receipt.json; this probe writes its actual post-finally cleanup receipt inside summary.json.cleanup. Browser cleanup is proven; adapter normalization failed.",
+    "Continue input must use the already verified held80ms F protocol before a fresh newly accepted action can pass.",
+    "Live AV media binding, full earned entry/exit continuity and independent experience review remain incomplete."
+  ],
+  "budget": {
+    "activeMs": 284509,
+    "roleLaunches": 0,
+    "reportedRoleUsage": {
+      "roleLaunches": 0,
+      "modelTurns": 0,
+      "inputTokens": 0,
+      "cacheReadTokens": 0,
+      "outputTokens": 0
+    },
+    "infrastructureRecoveriesUsed": 1,
+    "infrastructureRecoveriesRemaining": 0,
+    "scope": "Runner work only; root orchestration and preceding preparation are not included in these counters.",
+    "remainingGoalTokens": null
+  },
+  "validation": {
+    "runnerTests": 22,
+    "runnerTestsPassed": true,
+    "legacyConfigChecks": 185,
+    "legacyConfigChecksPassed": true
+  },
+  "policy": "Retain the terminal checkpoint and failures. No second infrastructure recovery or replacement run was started."
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "failureSha256": "5e0412f4ccc093f1101e0efd55f39681953a51e5c396c8b13ebda7f92e658ecc",
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/capture-case.test.mjs",
+      "before": "c75aac1b6d562901a24ec8f3fbd70520bd921a8c3bbe242ecbd52160985473f1",
+      "after": "1338a0bb6151b68b6b0b85cc0f9663a734a57aba5b077b7825703f65ad9b3f12"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": "753ff94568c813b6e0f360b510de67f3c570a0d0107ed71c4ac317bba2c89acd",
+      "after": "ea5d4f04c4e6848bd837364b42b369f6cb321a5020f3d025d35a3c489219b5a8"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "27af0e86d1ce9e9c004cef07eff8dd67bd9a2e97e2c475656e2c0dbb1efb911c",
+      "after": "18b1c9d451df4daa58d11b505a5fabe6a37268712a415b3577735970aca0c68f"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "d0271ac993592479924b9ae382ff7ebcb44f1ed4988ebd38b8d82d095d795d72",
+      "after": "b077226eaa9764980268502d32e5b29a9d782cd274bedea35971145580323427"
+    }
+  ],
+  "reviewPreviewConfig": {
+    "path": "main/chapter-ch14-controls.json",
+    "sha256": "6d233b8b67bec8356f632eab5c5ff4f130a366b6a6342a605adae239b1c80bf0"
+  },
+  "ownerAuthorization": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-motion-repair-20260909/owner-authorization.json",
+    "sha256": "79c971a2dca01b37d2085b8abcba9e16e03f87966ebd667392e0304abc7b20d4"
+  },
+  "diagnosis": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-motion-repair-20260909/diagnosis.json",
+    "sha256": "fa735462290ef452a7f252e8048bde60ad2bdc18a88029f51af5c2d4228f0a78"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run chapter:loop:test",
+    "actualCommand": "npm --prefix main run chapter:loop:test",
+    "log": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-motion-repair-20260909/tests.log",
+      "sha256": "4db81038a0475a3fdf202f76e5c51c7edbfa402fb32c4e34e4e6bbcd2a16d570"
+    },
+    "filesSha256": "26fb6e531275c3abd604446dc88bd48fe4f279fa845d741628fd5df7bbbec782"
+  }
+}

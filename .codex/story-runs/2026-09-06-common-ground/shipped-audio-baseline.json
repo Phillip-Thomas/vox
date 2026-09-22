@@ -1,0 +1,75 @@
+{
+  "distinguishCodeFromListened": "Everything below marked 'code' is authored table/state read from source. Everything marked 'rendered-analysis' is an OfflineAudioContext WAV render plus numeric analysis captured on 2026-08-12. NOTHING below is a human-listened validation, and no current aural validation is claimed.",
+  "cueAndMoodOwnership_code": {
+    "perBeatMoodTable": "main/src/story/storyScore.ts :: MOODS — one entry per StoryBeat through ch9-hearth. ch9-settle: chord [0,4,7,10,14], tempo 82, triangle, baseline 0.38. ch9-hearth: chord [0,4,7,10,14], progression [[0,4,7,10],[7,10,14],[0,7,12]], melody density 0.26, tempo 56, triangle, pad 0.17, sub 0.08, ost 0.024, riser 0.05, baseline 0.28.",
+    "chapter10Variants": "CH10_MOODS + CH10_VARIANT_BEAT, 10 variants over 3 beats: ch10-cold owns cold-settled / fault-ledger / refused; ch10-ask owns crossing-back / relay-ask / relay-answer / bearing-claimed; ch10-transit owns transit-hold / seam-ebb / station-resolved. Variant selection is a pure resolver over durable milestones, so a mid-transit reload re-establishes the same variant.",
+    "authoredCensus": "storyScore.ts exposes a read-only inventory of every authored mood entry (MOODS plus ch7 reconstruction/boarding variants plus ch10 variants); the file's own comment cites a 62-entry authored census.",
+    "composedTimelineBeats": "COMPOSED_TIMELINE_BEATS = descent, ch1-lift, a1-ramp, a2-awakening, a3-dawn, a4-exhale, ch5-maw. Nothing in ch6–ch10 is a composed timeline.",
+    "hitAnchors": "STORY_HIT_ANCHORS maps anchor ids to owning beats; anchorTempo() throws if an anchor's beat has no MOODS entry. ch10 anchors observed in code: anc.ch10.bearing-claimed, anc.ch10.threshold-handback.",
+    "intensityControl": "setScoreIntensity is driven from beat entry/completion: a4-exhale entry sets 0.04; the ch4 refusal commit sets 0."
+  },
+  "motifs_code": {
+    "ch10TonicChain": "TONIC_CHAIN 'ch10' covers ch10-cold/ch10-ask/ch10-transit at mode 'absolute', offset 0 — the literal MOODS roots untransposed. Frozen comment: the station is deliberately the first destination the score refuses a tonal home.",
+    "voicingPolicy": "All three ch10 beats resolve voicingPolicy 'literal'. ch10 variant subtractions render literal under the ch10 beat rule (the ch4-comply law).",
+    "carrier": "CH10_CARRIER_DEGREE — a suspended-fourth/eleventh colour (degree 17, second voice doubling at 29) that is scale-legal in both home modes and a chord tone of neither. Born as the unreleased final tone of the relay-answer figure; present in every variant from relay-answer through station-resolved.",
+    "institutionalReuses": "Three reuses, no inventions: the square wave (institution since ch1), the carrier pitch, and machine time (REGULATION figures carry uniform velocity, zero drop probability, fixed articulation against the world's seeded variation).",
+    "crossChapterDNA": "cold-settled = ch9-hearth DNA with the melody cut and the floor dropped a whole step. crossing-back = ch8-crossing DNA at 68 BPM, mirrored, colder, dropped step riding in the sub. transit-hold = ch8 flight DNA with the carrier held. station-resolved quotes the hearth's closing cell once."
+  },
+  "silenceAndSubtraction_code": {
+    "refused": "melody voice does not return for the remainder of ch10-cold; the beat exits quiet. Refusal as subtraction.",
+    "seam-ebb": "ost 0, pattern reduced to a single downbeat; percussion and ostinato ebb to zero leaving pad, sub and carrier. Acknowledgment by subtraction.",
+    "station-resolved": "ost 0 retained (the ostinato the seam ebbed away does NOT return); pad 0.17 / sub 0.10 sit strictly under a4-exhale's 0.18 / 0.10 on the steady window — the destination may not out-measure the awakening. No mediant, no braam, no lead entrance.",
+    "bearing-claimed": "nothing anticipates the claim; the pad re-voices around the carrier. A build would convert the rite into a timer."
+  },
+  "transitions_code": {
+    "ch9-hearth to ch10-cold": "same home over the wrong floor; a whole step, not a semitone (the semitone is the shipped dread interval and this chapter has no antagonist).",
+    "relay-ask to relay-answer": "same level, same timbre family, same register, zero dynamic accent; the [0,7] cell keeps sounding straight through the variant boundary. ONE anchor drives both K8's paint-begin and the answer figure's audio onset in the same frame — a deliberate simultaneity, not a tuned offset.",
+    "beatEntryHook": "setScoreBeat retunes the whole instrument to the beat's mood; a moodOverride can be installed and cleared per beat and is dropped on reset.",
+    "handback": "the ch10-transit threshold hand-back clears the work order and the guided objective and completes chapter 10; no score cue literal was located at that point beyond the anchor note."
+  },
+  "stationSidecarAudio_code": {
+    "finding": "NO audio is wired on the station page. A grep for musicDirector / setScoreMood / playSfx / audio across main/src/components/spaceStation returned only two comment hits. SpaceStationLighting.tsx explicitly says its THRESHOLD_FADE_SECONDS and LOW_LINE timing constants exist so that 'a future station-audio packet inherits them by reference, never by transcription.' The station visit and the return/install currently have no authored cue, mood, or motif ownership."
+  },
+  "baselineEvidenceOnDisk": {
+    "renderedAnalysisArtifacts": {
+      "dir": ".codex/production-runs/2026-08-11-ch10-station-introduction/evidence/score/",
+      "capturedAt": "2026-08-12T00:56:59.460Z (ch10-score-report.json)",
+      "files": [
+        "ab_cold-entry_A-hearth-close.wav",
+        "ab_cold-entry_B-ch10-cold.wav",
+        "ab_cold-entry_measure.json",
+        "relay_ask-figure.wav",
+        "relay-answer_metric.wav",
+        "relay-answer_onsets.json",
+        "relay-answer_ref-ch5-maw.wav",
+        "relay_ask-through-answer_combined.wav",
+        "transit_seam-ebb_combined.wav",
+        "station-resolved_combined.wav",
+        "resolved_ref-a4-exhale.wav",
+        "resolved_ref-a4-exhale-authored.wav",
+        "resolved_vs_a4_rms.json",
+        "handback_release.wav",
+        "regression_ch1-ch9_moods.json",
+        "ch10-score-report.json",
+        "ch10-score-repair-report.json"
+      ],
+      "probeScripts": [
+        ".codex/production-runs/2026-08-11-ch10-station-introduction/ch10-score-probe.mjs",
+        ".../ch10-score-repair-probe.mjs",
+        ".../mood-regression.mjs"
+      ],
+      "measuredFieldsAvailable": "per-render sha256, peak, rms, nanCount, clipCount, longestSilenceS, maxWindowRms, smoothness delta (rms/dB and their times), smoothnessViolations, windowedRmsDb array, overallRmsDb, maxInterSampleStep, subPeakHz, subPeakMag, sampleRate, wavBytes. Example: ab_cold-entry_A-hearth-close (ch9-hearth, intensity 0.28, 12s) overallRmsDb -22.404, peak 0.2886, clipCount 0, smoothnessViolations 0."
+    },
+    "dateAndSourceLimitations": [
+      "All rendered audio evidence in range is dated 2026-08-12 and belongs to the 2026-08-11 ch10 run. It is 25 days stale as of 2026-09-06.",
+      "It is score-only offline render analysis, not a combined music+SFX render. The later 2026-09-04 audio-10x run's evidence law (README.md) explicitly states 'Combined renders only. A score-only render cannot prove or disprove a mix complaint.' — so the ch10 baseline does not satisfy the current standard.",
+      "It covers ch10 beats only. There is no rendered evidence for ch4 arrival/audit/comply/defy, ch5–ch9, the station sidecar, or the return/install.",
+      "No human-listened evidence exists for any of it. The 2026-09-04 run's taste gate is an owner audition of A/B excerpts per stage over main/src/audio/soak/excerpts.ts; no record of that audition for this range was found."
+    ],
+    "audioReportsAreEmpty": [
+      ".codex/production-runs/2026-08-11-ch10-station-introduction/audio-report.md — 'Status: template incomplete', every field still {{PLACEHOLDER}}, 'Overall status: template_incomplete'.",
+      ".codex/production-runs/2026-09-05-after-the-hearth/audio-report.md — identical unfilled template."
+    ],
+    "engineDirtinessWarning": "The audio engine is under concurrent modification by the 2026-09-04 audio-10x run, which governs six locked stages (bed timbre/mastering, mix buses/limiter/duck matrix, composed sync, spatial SFX, phrase planner/sidechain, voice bus) touching main/src/audio/bedEngine.ts, scoreEngine.ts, musicDirector.ts, generative/*, soak/*. Its Stage 0 baselines were still pending at README time. Any 2026-08-12 render therefore predates an unknown amount of engine change, and NO current aural validation of this range is claimed or provable from what is on disk."
+  }
+}

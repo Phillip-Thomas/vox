@@ -132,7 +132,25 @@ const STORY_INTERACTION_POLICY = {
   'story-ch10-fabrication-attempt': { interactionClass: 'required', priority: 500 },
   'story-ch10-relay-query': { interactionClass: 'required', priority: 500 },
   'story-ch10-bearing-claim': { interactionClass: 'required', priority: 520 },
-  'story-ch12-install-bonded-cell': { interactionClass: 'required', priority: 560 }
+  'story-ch12-install-bonded-cell': { interactionClass: 'required', priority: 560 },
+  // Chapter 13. Ordinary required story actions, except the two that must win
+  // where they overlap: offering a held end outranks the revision prompt at the
+  // same moment (the reference is what is missing, and standing there is the
+  // repair being offered), and the final far-reference offer outranks both,
+  // because by then it is the only remaining act in the chapter.
+  'story-ch13-fault-review': { interactionClass: 'required', priority: 500 },
+  'story-ch13-choose-return': { interactionClass: 'required', priority: 500 },
+  'story-ch13-offer-route': { interactionClass: 'required', priority: 500 },
+  'story-ch13-survey-start': { interactionClass: 'required', priority: 500 },
+  'story-ch13-offer-span': { interactionClass: 'required', priority: 500 },
+  'story-ch13-revise-tail': { interactionClass: 'required', priority: 500 },
+  'story-ch13-hold-witness': { interactionClass: 'required', priority: 520 },
+  'story-ch13-offer-final-reference': { interactionClass: 'required', priority: 540 },
+  // The optional repeat is free attention, and outranks nothing.
+  'story-ch13-repeat-survey': { interactionClass: 'optional-observation', priority: 100 },
+  'story-ch14-record': { interactionClass: 'required', priority: 530 },
+  'story-ch14-scar': { interactionClass: 'required', priority: 530 },
+  'story-ch14-return': { interactionClass: 'required', priority: 530 }
 } as const satisfies Record<StoryInteractionId, InteractionPolicy>;
 
 const FALLBACK_POLICY: InteractionPolicy = {

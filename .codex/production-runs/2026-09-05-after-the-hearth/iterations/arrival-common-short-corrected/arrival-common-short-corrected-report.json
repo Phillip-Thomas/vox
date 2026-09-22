@@ -1,0 +1,623 @@
+{
+ "schema": "paravoxia.verifier.arrivalCommonShortCorrected.v1",
+ "role": "arrival-common-short-runtime",
+ "lane": "SHORT (corrected measurement frame)",
+ "writtenAt": "2026-09-06T19:48:23.888780+00:00",
+ "verdict": "CORRECTED-SHORT-PROBE-CHECKS-PASS-ON-3-OF-3-COLD-HEADED-TRIALS",
+ "verdictScope": "The two ROOT-AUTHORIZED measurement corrections were applied to this lane's OWN probe and three fresh cold headed hardware trials completed serially, each passing all 20 gates including the two previously-failing ones. This is a corrected PROBE-CHECK result for a LABELLED ch13-survey fixture. It is NOT an earned arrival, NOT COMMON, NOT a chapter or first-time-usability claim, and carries no UX, score, audibility, taste, continuity, variant, FPS or defect-closure claim.",
+ "trialsRequested": 3,
+ "trialsCompletedSuccessfully": 3,
+ "preflight": {
+  "activeRoleRequired": "arrival-common-short-runtime",
+  "activeRoleObserved": "arrival-common-short-runtime",
+  "controlAction": "continue",
+  "url": "http://127.0.0.1:34413/",
+  "servedIndexSha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207",
+  "servedBundlePath": "/assets/index-BiDWGouH.js",
+  "servedBundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "contractVersion": "scene-v3",
+  "sourceFilesIndependentlyRehashedBefore": 99,
+  "sourceFilesIndependentlyRehashedAfter": 99,
+  "sourceDrift": [],
+  "rootOwnershipCheckedBeforeEachCapture": true,
+  "checkedBeforeTrials": [
+   1,
+   2,
+   3
+  ],
+  "heavyLock": {
+   "path": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+   "fd": 9,
+   "mode": "EXCLUSIVE flock acquired by the invoking shell and INHERITED by node on fd 9",
+   "contentionProbed": true,
+   "contentionBefore": "no holder observed",
+   "heldAcrossAllThreeTrials": true,
+   "browsersConcurrent": 1,
+   "releasedAfter": true
+  }
+ },
+ "hardware": {
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "headed": true,
+  "swiftshader": false,
+  "gpuRescues": 0
+ },
+ "fixture": {
+  "entryUrl": "http://127.0.0.1:34413/?story=ch13-survey&journeyprobe=1&debug=1",
+  "beat": "ch13-survey",
+  "label": "LABELLED-FIXTURE",
+  "deepLinked": true,
+  "movieRail": false,
+  "manualLane": true,
+  "autopilot": false,
+  "input": "ordinary held WASD + one real canvas click for pointer lock + four authored [F] presses on shipped prompts"
+ },
+ "authorizedCorrections": [
+  {
+   "n": 1,
+   "title": "Foot-frame occupancy comparison",
+   "authorization": "root, arrival-common-short-corrected-commission",
+   "what": "occupancyRequirementVerdict now compares the runtime-PUBLISHED projected foot pose (diagnostic bodyPose) against the ground-frame witness pose, and requires standPointFrame === \"foot\". bodyCentre, up and groundOffsetUnits are retained separately as their own measurements.",
+   "sourceSemanticsRead": "main/src/story/commonGroundDirector.ts: body = player() = commonGroundPlayerPose() (= centre - up*CG_PLAYER_GROUND_OFFSET), and occupancy is nextOccupancy(body, pose); getCommonGroundProbeSnapshot publishes that same pose as bodyPose. main/src/story/commonGroundRoute.ts: withinOccupancyCylinder uses OCCUPANCY_RADIUS_UNITS / OCCUPANCY_VERTICAL_UNITS.",
+   "noConstantSubtracted": true,
+   "noFootInferred": true,
+   "unavailableFootBehaviour": "standPointFrame becomes \"unavailable\" and the gate FAILS as UNMEASURED; it is never backfilled from the centre",
+   "thresholdsChanged": false,
+   "thresholdsRadialVertical": [
+    1.25,
+    0.6
+   ]
+  },
+  {
+   "n": 2,
+   "title": "Accepted-vs-recorded sample count",
+   "authorization": "root, arrival-common-short-corrected-commission",
+   "what": "shortCompletionVerdict now compares acceptedSamples to the runtime free-recorder count captured at the offer/freeze instant (diagnostic survey.samples immediately after anc.cg.route-offered), instead of to this probe's walked waypoint-leg count. Both counts are recorded separately.",
+   "sourceSemanticsRead": "main/src/story/commonGroundDirector.ts getCommonGroundDiagnostic: samples = survey.working.samples.length; acceptedSamples = survey.accepted.samples.length",
+   "equalityStillExact": true,
+   "missingCountBehaviour": "a null / non-positive recorder count is UNMEASURED and FAILS; it is never assumed equal",
+   "thresholdsChanged": false
+  }
+ ],
+ "ownedFileChanges": [
+  {
+   "path": "verifier/probes/arrival-common-short/short-survey-probe.mjs",
+   "beforeSha256": "82a49ba5787bcc113bf6d066e538df1876b214c612792c9413fb21008b796747",
+   "beforeBytes": 39351,
+   "afterSha256": "5fb64456e52084173cef74ed65763b928040468b8d80494f8050e0c087c6b83c",
+   "afterBytes": 43237
+  },
+  {
+   "path": "verifier/probes/arrival-common-short/shortSurveyLogic.mjs",
+   "beforeSha256": "83981677b9ccf69629e90aaa1e03ce56c1d3a105385a15aa18c248790a4a99fb",
+   "beforeBytes": 27249,
+   "afterSha256": "7e6fb3626d3b3dca9aeb49e6ee27f6be7a45512eefa2c7aebe76a100d6878d5b",
+   "afterBytes": 33363
+  }
+ ],
+ "gameSourceEdited": false,
+ "contractEdited": false,
+ "buildRerun": false,
+ "fullSuiteRerun": false,
+ "sharedProbeLibEdited": false,
+ "pinnedProbeCopiesEdited": false,
+ "targetedTests": {
+  "shortSurveyLogic --self-test": {
+   "exit": 0,
+   "newCases": [
+    "OLD-MISMATCH: a body-CENTRE stand point is refused as an unmeasured frame, not silently scored",
+    "NEW-EQUIVALENT: the runtime-published FOOT pose for the same retained instant is inside the 1.25/0.6 cylinder",
+    "the 0.6 VERTICAL allowance is unchanged: a foot pose 0.74u high still fails",
+    "the 1.25 RADIAL allowance is unchanged: a 1.3u foot-frame stand-off still fails",
+    "an unavailable foot frame is UNMEASURED and fails; it is never inferred from the centre",
+    "OLD-MISMATCH/NEW-EQUIVALENT: 16 accepted vs 16 recorded passes even though only 8 waypoint legs were walked",
+    "a REAL accepted-vs-recorded disagreement (16 vs 15) still fails",
+    "an uncaptured recorder count is UNMEASURED and fails; it is never assumed equal",
+    "a zero recorder count cannot satisfy the accepted-vs-recorded clause"
+   ]
+  },
+  "selftest.mjs": {
+   "exit": 0
+  },
+  "node --check (both files)": {
+   "exit": 0
+  },
+  "unchangedFullSuite": "NOT rerun, per commission"
+ },
+ "trials": [
+  {
+   "id": "trial-1",
+   "dir": "verifier/captures/arrival-common-short-corrected/trial-1",
+   "nodeExit": 0,
+   "verdict": "SHORT-HELD-REFERENCE-PROVEN",
+   "elapsedMs": 52926,
+   "startedAt": "2026-09-06T19:43:15.992Z",
+   "finishedAt": "2026-09-06T19:44:08.918Z",
+   "entryUrl": "http://127.0.0.1:34413/?story=ch13-survey&journeyprobe=1&debug=1",
+   "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+   "headed": true,
+   "gatesTotal": 20,
+   "gatesFailed": [],
+   "summarySha256": "188d32805d895d2fdcf53f462d51a6e5b95899d097c509052d7e668b0707caf4",
+   "logSha256": "027a0123ee7b31aeb19f32862a08a5709fa7f733148579b4b792981533743f51",
+   "fPresses": [
+    {
+     "name": "offer-a-route",
+     "objectiveId": "ch13:survey:offer",
+     "prompt": "F | Offer to demonstrate a route",
+     "pressed": true
+    },
+    {
+     "name": "begin-recording",
+     "objectiveId": "ch13:survey:start",
+     "prompt": "F | Begin recording your route",
+     "pressed": true
+    },
+    {
+     "name": "offer-the-walked-span",
+     "objectiveId": "ch13:survey:offer-span",
+     "prompt": "F | Offer the walked span",
+     "pressed": true
+    },
+    {
+     "name": "offer-this-end",
+     "objectiveId": "ch13:survey:witness",
+     "prompt": "F | Offer this end",
+     "pressed": true
+    }
+   ],
+   "correction1_footFrameOccupancy": {
+    "witnessPoseGroundFrame": [
+     -34,
+     51.05,
+     10
+    ],
+    "witnessPoseSource": "CG_POSES.W quoted from frozen source",
+    "standPointFoot_publishedByRuntime": [
+     -34.51574315762099,
+     50.9899209003073,
+     9.852073658205754
+    ],
+    "standPointFrame": "foot",
+    "derivedByProbe": false,
+    "retainedSeparately": {
+     "bodyCentre": [
+      -34.51632308959961,
+      52.789920806884766,
+      9.852073669433594
+     ],
+     "up": [
+      -0.0003221844325681063,
+      0.9999999480985944,
+      6.237688540987868e-09
+     ],
+     "groundOffsetUnits": 1.8
+    },
+    "measuredFootRadialUnits": 0.5365381694059578,
+    "measuredFootVerticalUnits": 0.06007909969270031,
+    "thresholdRadialUnits": 1.25,
+    "thresholdVerticalUnits": 0.6,
+    "insideOccupancy": true,
+    "forComparisonOnly_bodyCentreRadialUnits": 0.5370956452332564,
+    "forComparisonOnly_bodyCentreVerticalUnits": 1.7399208068847685,
+    "occupiedThroughout": true,
+    "anyVacant": false,
+    "ok": true,
+    "problems": []
+   },
+   "correction2_recorderCounts": {
+    "recordedAtOfferFreeze": 16,
+    "acceptedAtCompletion": 16,
+    "equalityTested": "acceptedAtCompletion == recordedAtOfferFreeze",
+    "equalityHolds": true,
+    "recordedAtCompletion": 0,
+    "workingSlotClearedOnAcceptance": true,
+    "walkedWaypointLegs_reportedNotCompared": 8,
+    "commandedRouteVertices": 9,
+    "offerFreeze": {
+     "recordedSamples": 16,
+     "lengthUnits": 15.27895182300832,
+     "walkedUnits": 15.651240584884379,
+     "phase": "offered",
+     "at": "after-F-offer-span (anc.cg.route-offered)"
+    }
+   },
+   "routeGeometry": {
+    "issued": "SHORT",
+    "actualPathClass": "SHORT",
+    "agrees": true,
+    "nominalSignedLengthUnits": 16.0,
+    "actualRuntimeLengthUnitsAtOfferFreeze": 15.27895182300832,
+    "actualRuntimeWalkedUnitsAtOfferFreeze": 15.651240584884379,
+    "actualProbePolylineUnitsThroughMeasuredArrivals": 13.732893667789538,
+    "nominalMinusActualRuntimeLength": 0.7210481769916797,
+    "shortDeviationUnits": 0.5491142390247972,
+    "longDeviationUnits": 6.404050144861864,
+    "axis": "z=12 constant, x -26 -> -42",
+    "exactAnchors": [
+     "anc.cg.repeated-measure",
+     "anc.cg.demonstration-opened",
+     "anc.cg.survey-started",
+     "anc.cg.trace-drawn",
+     "anc.cg.route-offered",
+     "anc.cg.specific-hold",
+     "anc.cg.witness-held",
+     "anc.cg.revision-ready",
+     "anc.cg.route-tested",
+     "anc.cg.reciprocal-reference"
+    ],
+    "acceptedClass": "held-reference",
+    "finalPhase": "tested",
+    "testedPrefixAtCompletion": 0,
+    "tailRevision": 0,
+    "holdReasonAtFirstTest": "reference-occluded-survey-housing"
+   },
+   "cleanup": {
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "sessionStopped": true,
+    "cleanupError": null,
+    "cleanupReason": "probe-finally",
+    "stopsRootPreview": false,
+    "killsProcesses": false
+   },
+   "closingReceipt": {
+    "ok": true,
+    "problems": []
+   },
+   "stalls": 0
+  },
+  {
+   "id": "trial-2",
+   "dir": "verifier/captures/arrival-common-short-corrected/trial-2",
+   "nodeExit": 0,
+   "verdict": "SHORT-HELD-REFERENCE-PROVEN",
+   "elapsedMs": 51303,
+   "startedAt": "2026-09-06T19:44:09.276Z",
+   "finishedAt": "2026-09-06T19:45:00.579Z",
+   "entryUrl": "http://127.0.0.1:34413/?story=ch13-survey&journeyprobe=1&debug=1",
+   "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+   "headed": true,
+   "gatesTotal": 20,
+   "gatesFailed": [],
+   "summarySha256": "8417ef0c617ae7b049a035385a20c79d06ec17221c588d94f4e05c324adbcf14",
+   "logSha256": "aae6b283405745c55b368253aa79b46d78df52ff1f45168bdbda279ea229b31d",
+   "fPresses": [
+    {
+     "name": "offer-a-route",
+     "objectiveId": "ch13:survey:offer",
+     "prompt": "F | Offer to demonstrate a route",
+     "pressed": true
+    },
+    {
+     "name": "begin-recording",
+     "objectiveId": "ch13:survey:start",
+     "prompt": "F | Begin recording your route",
+     "pressed": true
+    },
+    {
+     "name": "offer-the-walked-span",
+     "objectiveId": "ch13:survey:offer-span",
+     "prompt": "F | Offer the walked span",
+     "pressed": true
+    },
+    {
+     "name": "offer-this-end",
+     "objectiveId": "ch13:survey:witness",
+     "prompt": "F | Offer this end",
+     "pressed": true
+    }
+   ],
+   "correction1_footFrameOccupancy": {
+    "witnessPoseGroundFrame": [
+     -34,
+     51.05,
+     10
+    ],
+    "witnessPoseSource": "CG_POSES.W quoted from frozen source",
+    "standPointFoot_publishedByRuntime": [
+     -34.44824750393833,
+     50.98945550188828,
+     9.871773708459692
+    ],
+    "standPointFrame": "foot",
+    "derivedByProbe": false,
+    "retainedSeparately": {
+     "bodyCentre": [
+      -34.44881057739258,
+      52.78945541381836,
+      9.871773719787598
+     ],
+     "up": [
+      -0.00031281858569064293,
+      0.999999951072265,
+      6.29328055553605e-09
+     ],
+     "groundOffsetUnits": 1.8
+    },
+    "measuredFootRadialUnits": 0.4662272049431758,
+    "measuredFootVerticalUnits": 0.06054449811171736,
+    "thresholdRadialUnits": 1.25,
+    "thresholdVerticalUnits": 0.6,
+    "insideOccupancy": true,
+    "forComparisonOnly_bodyCentreRadialUnits": 0.46676858647146435,
+    "forComparisonOnly_bodyCentreVerticalUnits": 1.7394554138183622,
+    "occupiedThroughout": true,
+    "anyVacant": false,
+    "ok": true,
+    "problems": []
+   },
+   "correction2_recorderCounts": {
+    "recordedAtOfferFreeze": 15,
+    "acceptedAtCompletion": 15,
+    "equalityTested": "acceptedAtCompletion == recordedAtOfferFreeze",
+    "equalityHolds": true,
+    "recordedAtCompletion": 0,
+    "workingSlotClearedOnAcceptance": true,
+    "walkedWaypointLegs_reportedNotCompared": 8,
+    "commandedRouteVertices": 9,
+    "offerFreeze": {
+     "recordedSamples": 15,
+     "lengthUnits": 14.29810234435034,
+     "walkedUnits": 15.648585836986518,
+     "phase": "offered",
+     "at": "after-F-offer-span (anc.cg.route-offered)"
+    }
+   },
+   "routeGeometry": {
+    "issued": "SHORT",
+    "actualPathClass": "SHORT",
+    "agrees": true,
+    "nominalSignedLengthUnits": 16.0,
+    "actualRuntimeLengthUnitsAtOfferFreeze": 14.29810234435034,
+    "actualRuntimeWalkedUnitsAtOfferFreeze": 15.648585836986518,
+    "actualProbePolylineUnitsThroughMeasuredArrivals": 13.733578211046932,
+    "nominalMinusActualRuntimeLength": 1.7018976556496597,
+    "shortDeviationUnits": 0.5239635519652176,
+    "longDeviationUnits": 6.3879751054424805,
+    "axis": "z=12 constant, x -26 -> -42",
+    "exactAnchors": [
+     "anc.cg.repeated-measure",
+     "anc.cg.demonstration-opened",
+     "anc.cg.survey-started",
+     "anc.cg.trace-drawn",
+     "anc.cg.route-offered",
+     "anc.cg.specific-hold",
+     "anc.cg.witness-held",
+     "anc.cg.revision-ready",
+     "anc.cg.route-tested"
+    ],
+    "acceptedClass": "held-reference",
+    "finalPhase": "tested",
+    "testedPrefixAtCompletion": 0,
+    "tailRevision": 0,
+    "holdReasonAtFirstTest": "reference-occluded-survey-housing"
+   },
+   "cleanup": {
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "sessionStopped": true,
+    "cleanupError": null,
+    "cleanupReason": "probe-finally",
+    "stopsRootPreview": false,
+    "killsProcesses": false
+   },
+   "closingReceipt": {
+    "ok": true,
+    "problems": []
+   },
+   "stalls": 0
+  },
+  {
+   "id": "trial-3",
+   "dir": "verifier/captures/arrival-common-short-corrected/trial-3",
+   "nodeExit": 0,
+   "verdict": "SHORT-HELD-REFERENCE-PROVEN",
+   "elapsedMs": 52961,
+   "startedAt": "2026-09-06T19:45:00.930Z",
+   "finishedAt": "2026-09-06T19:45:53.891Z",
+   "entryUrl": "http://127.0.0.1:34413/?story=ch13-survey&journeyprobe=1&debug=1",
+   "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+   "headed": true,
+   "gatesTotal": 20,
+   "gatesFailed": [],
+   "summarySha256": "3708c363154f2f9cfbeac3333f1b105c14b68bf74b293298c0b7f0f54ab566c3",
+   "logSha256": "d74035082004e1952f207949beb73cebd48311e9acca37f9ff9446a6e7d830f0",
+   "fPresses": [
+    {
+     "name": "offer-a-route",
+     "objectiveId": "ch13:survey:offer",
+     "prompt": "F | Offer to demonstrate a route",
+     "pressed": true
+    },
+    {
+     "name": "begin-recording",
+     "objectiveId": "ch13:survey:start",
+     "prompt": "F | Begin recording your route",
+     "pressed": true
+    },
+    {
+     "name": "offer-the-walked-span",
+     "objectiveId": "ch13:survey:offer-span",
+     "prompt": "F | Offer the walked span",
+     "pressed": true
+    },
+    {
+     "name": "offer-this-end",
+     "objectiveId": "ch13:survey:witness",
+     "prompt": "F | Offer this end",
+     "pressed": true
+    }
+   ],
+   "correction1_footFrameOccupancy": {
+    "witnessPoseGroundFrame": [
+     -34,
+     51.05,
+     10
+    ],
+    "witnessPoseSource": "CG_POSES.W quoted from frozen source",
+    "standPointFoot_publishedByRuntime": [
+     -33.881015461534886,
+     50.988085991035135,
+     10.526153549334362
+    ],
+    "standPointFrame": "foot",
+    "derivedByProbe": false,
+    "retainedSeparately": {
+     "bodyCentre": [
+      -33.88145446777344,
+      52.7880859375,
+      10.526153564453125
+     ],
+     "up": [
+      -0.00024389235474865114,
+      0.9999999702582592,
+      8.399312358439048e-09
+     ],
+     "groundOffsetUnits": 1.8
+    },
+    "measuredFootRadialUnits": 0.5394394107505521,
+    "measuredFootVerticalUnits": 0.06191400896486243,
+    "thresholdRadialUnits": 1.25,
+    "thresholdVerticalUnits": 0.6,
+    "insideOccupancy": true,
+    "forComparisonOnly_bodyCentreRadialUnits": 0.5393427635535752,
+    "forComparisonOnly_bodyCentreVerticalUnits": 1.7380859375000028,
+    "occupiedThroughout": true,
+    "anyVacant": false,
+    "ok": true,
+    "problems": []
+   },
+   "correction2_recorderCounts": {
+    "recordedAtOfferFreeze": 16,
+    "acceptedAtCompletion": 16,
+    "equalityTested": "acceptedAtCompletion == recordedAtOfferFreeze",
+    "equalityHolds": true,
+    "recordedAtCompletion": 0,
+    "workingSlotClearedOnAcceptance": true,
+    "walkedWaypointLegs_reportedNotCompared": 8,
+    "commandedRouteVertices": 9,
+    "offerFreeze": {
+     "recordedSamples": 16,
+     "lengthUnits": 15.367241449029562,
+     "walkedUnits": 15.731959293181141,
+     "phase": "offered",
+     "at": "after-F-offer-span (anc.cg.route-offered)"
+    }
+   },
+   "routeGeometry": {
+    "issued": "SHORT",
+    "actualPathClass": "SHORT",
+    "agrees": true,
+    "nominalSignedLengthUnits": 16.0,
+    "actualRuntimeLengthUnitsAtOfferFreeze": 15.367241449029562,
+    "actualRuntimeWalkedUnitsAtOfferFreeze": 15.731959293181141,
+    "actualProbePolylineUnitsThroughMeasuredArrivals": 13.896036992007987,
+    "nominalMinusActualRuntimeLength": 0.6327585509704381,
+    "shortDeviationUnits": 0.5413677392697634,
+    "longDeviationUnits": 6.387443111060552,
+    "axis": "z=12 constant, x -26 -> -42",
+    "exactAnchors": [
+     "anc.cg.repeated-measure",
+     "anc.cg.demonstration-opened",
+     "anc.cg.survey-started",
+     "anc.cg.trace-drawn",
+     "anc.cg.route-offered",
+     "anc.cg.specific-hold",
+     "anc.cg.witness-held",
+     "anc.cg.revision-ready",
+     "anc.cg.route-tested",
+     "anc.cg.reciprocal-reference"
+    ],
+    "acceptedClass": "held-reference",
+    "finalPhase": "tested",
+    "testedPrefixAtCompletion": 0,
+    "tailRevision": 0,
+    "holdReasonAtFirstTest": "reference-occluded-survey-housing"
+   },
+   "cleanup": {
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "sessionStopped": true,
+    "cleanupError": null,
+    "cleanupReason": "probe-finally",
+    "stopsRootPreview": false,
+    "killsProcesses": false
+   },
+   "closingReceipt": {
+    "ok": true,
+    "problems": []
+   },
+   "stalls": 0
+  }
+ ],
+ "priorLaneStatusRetained": {
+  "short-1": "RETAINED. STOPPED-PREREQUISITE, exit 2, published-diagnostic wait fix; not rewritten.",
+  "short-2": "RETAINED AS RECORDED. Measured game acceptance with an INCOMPLETE independent occupancy measurement and a SHORT-NOT-PROVEN probe verdict. It is NOT rewritten as a PASS by this report."
+ },
+ "blockade": "none \u2014 root resolved both measurement choices; no external approval blocker remains for this lane",
+ "claimsExplicitlyNotMade": [
+  "earned arrival",
+  "first-time usability / naive UX",
+  "COMMON",
+  "whole chapter",
+  "LONG anything",
+  "score/audibility",
+  "taste",
+  "continuity/variant/reset matrix",
+  "FPS",
+  "defect closure",
+  "publication"
+ ],
+ "crossTrialObservations": {
+  "allThreeVerdicts": [
+   "SHORT-HELD-REFERENCE-PROVEN",
+   "SHORT-HELD-REFERENCE-PROVEN",
+   "SHORT-HELD-REFERENCE-PROVEN"
+  ],
+  "elapsedMsPerTrial": [
+   52926,
+   51303,
+   52961
+  ],
+  "elapsedVarianceMs": 1658,
+  "recorderCountAtOfferFreezePerTrial": [
+   16,
+   15,
+   16
+  ],
+  "recorderCountVaries": true,
+  "acceptedEqualsRecordedInEveryTrial": true,
+  "walkedWaypointLegsConstant": 8,
+  "footVerticalResidualUnits": [
+   0.06007909969270031,
+   0.06054449811171736,
+   0.06191400896486243
+  ],
+  "footRadialUnits": [
+   0.5365381694059578,
+   0.4662272049431758,
+   0.5394394107505521
+  ],
+  "bodyCentreVerticalResidualUnits": [
+   1.7399208068847685,
+   1.7394554138183622,
+   1.7380859375000028
+  ],
+  "runtimeGroundOffsetUnitsPublished": 1.8,
+  "actualRuntimeLengthUnitsPerTrial": [
+   15.27895182300832,
+   14.29810234435034,
+   15.367241449029562
+  ],
+  "nominalSignedLengthUnits": 16.0,
+  "nominalIsNotTheMeasuredLength": true,
+  "anchorSetDiffersBetweenTrials": true,
+  "stallsTotal": 0,
+  "timeoutRescues": 0,
+  "gpuRescues": 0,
+  "sourceRescues": 0
+ }
+}

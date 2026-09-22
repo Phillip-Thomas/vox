@@ -1,0 +1,227 @@
+{
+  "changes": [
+    {
+      "file": "scene-contract.json",
+      "operations": [
+        {
+          "op": "test",
+          "path": "/story/events/21/playerAction",
+          "value": "Walk the traced common span while he holds the reference."
+        },
+        {
+          "op": "replace",
+          "path": "/story/events/21/playerAction",
+          "value": "Walk the common guide line while he holds the reference; the guide is a planned comparison, not evidence of prior passage."
+        },
+        {
+          "op": "test",
+          "path": "/story/agencyWindows/3/mandatoryPath",
+          "value": "After the worker physically moves E to separate H, walk the full eighteen-unit common E-to-C route using the reference he holds there; then walk to separate T, explicitly offer and occupy that far reference while he physically returns H to E and independently tests the complete E-to-C route. Both two-unit positioning legs earn no proof."
+        },
+        {
+          "op": "replace",
+          "path": "/story/agencyWindows/3/mandatoryPath",
+          "value": "After the worker physically moves E to separate H, follow the planned, unverified ground guide over the full eighteen-unit common E-to-C route using the reference he holds there; then walk to separate T, explicitly offer and occupy that far reference while he physically returns H to E and independently tests the complete E-to-C route. Both two-unit positioning legs earn no proof. The common guide adds no action, marker target, observation or completion credit; the earlier S-to-E survey remains player-drawn with no future-path preview."
+        },
+        {
+          "op": "test",
+          "path": "/guidance/objectives/13/workOrder",
+          "value": [
+            "W-7744 is holding the reference.",
+            "Walk the traced span to check your route from this end."
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/13/workOrder",
+          "value": [
+            "W-7744 is holding the reference.",
+            "Walk the guide line to check your route from this end."
+          ]
+        },
+        {
+          "op": "test",
+          "path": "/guidance/objectives/13/acceptanceCriterion",
+          "value": "The holding claim is never published before his actual arrival at H; the objective clears only on her full actual 18-unit E to C passage supported from H, never on retained footsteps, stored proof or elapsed time."
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/13/acceptanceCriterion",
+          "value": "The holding claim is never published before his actual arrival at H; the objective clears only on her full actual 18-unit E to C passage supported from H, never on retained footsteps, stored proof or elapsed time. At that readiness, an explicitly planned, unverified, depth-tested ground guide makes the complete existing E-to-C polyline discoverable; C remains the sole marker. Guide visibility grants no passage or reference credit. First-time manual traversal must succeed without private route knowledge, a rail, per-corner prompts or a future preview of the earlier S-to-E survey."
+        },
+        {
+          "op": "test",
+          "path": "/guidance/objectives/9/markerLabel",
+          "value": "W-7744 · test in progress"
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/9/markerLabel",
+          "value": "W-7744 · offered route"
+        },
+        {
+          "op": "test",
+          "path": "/guidance/objectives/9/variantIntent",
+          "value": "The same objective ID, exact marker label, standing work order and predicate are published on desktop and mobile, with touch glyph substitution for the F prompt, and are unchanged under reduced motion and at every quality tier including potato; no tier removes the marker, the work order or the physical target."
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/9/variantIntent",
+          "value": "State-conditional exact copy under this one objective ID and the fixed actual-worker target: from anc.cg.route-offered until actual arrival at the offered test start, including a body-clearance suspension, workOrder is [\"W-7744 is preparing to test the offered route.\", \"Keep his approach clear. Follow his progress, or return to the last tested point to revise.\"]. After the actual approach ends, workOrder is the signed base testing workOrder. Both states use the exact neutral markerLabel W-7744 · offered route. The transition replaces standing text silently within the same ID; it does not re-enter the objective, repeat its acknowledgement, imply tested progress or change score. Existing revision/hold transitions and silent restore remain. Desktop/mobile, reduced motion and all quality tiers use these same states and words, with existing input-glyph substitutions only."
+        },
+        {
+          "op": "test",
+          "path": "/guidance/objectives/9/feedback/intent",
+          "value": "One acknowledgement that his test is standing; his sampling is never chimed."
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/9/feedback/intent",
+          "value": "One acknowledgement on real offered-route entry; the subsequent preparing-to-testing text change is silent and grants no proof."
+        },
+        {
+          "op": "test",
+          "path": "/guidance/objectives/9/acceptanceCriterion",
+          "value": "Before his actual arrival at S the objective reports preparation or readiness rather than claiming testing; the standing work order always offers the concrete follow or revise action."
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/9/acceptanceCriterion",
+          "value": "The objective enters at route-offered with its exact preparing workOrder and neutral offered-route label while W-7744 approaches the real offered test start. Approach and body-clearance suspension grant no tested-prefix or reciprocal credit. The exact testing workOrder appears only after the actual approach ends. Both states provide follow/revise guidance; preparation additionally explains body clearance without a new input or destination. The actor remains the single marker target, and all current clear/hold/revision/reset rules remain."
+        },
+        {
+          "op": "test",
+          "path": "/guidance/objectives/13/enterAnchorRef",
+          "value": "anc.cg.reciprocal-reference"
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/13/enterAnchorRef",
+          "value": "anc.cg.route-tested"
+        },
+        {
+          "op": "test",
+          "path": "/guidance/objectives/13/variantIntent",
+          "value": "The same objective ID, exact marker label, standing work order and predicate are published on desktop and mobile, with touch glyph substitution for the F prompt, and are unchanged under reduced motion and at every quality tier including potato; no tier removes the marker, the work order or the physical target."
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/13/variantIntent",
+          "value": "State-conditional exact copy under this one objective ID and the fixed C destination: enter at anc.cg.route-tested in preparation while W-7744 physically positions E to H. Before actual H arrival, workOrder is [\"W-7744 is taking up the reference position.\", \"Give him room to reach it. When the guide appears, follow it from the survey end.\"]. Only at actual anc.cg.reciprocal-reference does the signed base holding/guide-line workOrder replace it and the common guide become visible. This readiness is an in-place state change, not a second objective entry, acknowledgement or new score event. The marker remains Far reference · check my route at C throughout; no clearance target, F action or guide is introduced during preparation. Existing reset and silent restore rules apply, with actual readiness revalidated before selecting copy. The same state-conditioned words and geometry apply on desktop/mobile, reduced motion and every quality tier."
+        },
+        {
+          "op": "test",
+          "path": "/guidance/objectives/13/feedback/intent",
+          "value": "One acknowledgement, published only once he is actually holding H."
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/13/feedback/intent",
+          "value": "One presentation-only preparation-entry acknowledgement at route-tested; actual H readiness silently replaces text and displays the guide without a second entry acknowledgement."
+        },
+        {
+          "op": "test",
+          "path": "/guidance/objectives/13/acceptanceCriterion",
+          "value": "The holding claim is never published before his actual arrival at H; the objective clears only on her full actual 18-unit E to C passage supported from H, never on retained footsteps, stored proof or elapsed time. At that readiness, an explicitly planned, unverified, depth-tested ground guide makes the complete existing E-to-C polyline discoverable; C remains the sole marker. Guide visibility grants no passage or reference credit. First-time manual traversal must succeed without private route knowledge, a rail, per-corner prompts or a future preview of the earlier S-to-E survey."
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/13/acceptanceCriterion",
+          "value": "The objective enters in preparation at route-tested with exact conditional copy, one C destination and no common guide. It explains how to clear an actual body obstruction without a new gameplay step. The holding claim, guide and comparison-credit eligibility appear only after actual H arrival at reciprocal-reference; this replaces text silently within the existing objective. The holding claim is never published before his actual arrival at H; the objective clears only on her full actual 18-unit E to C passage supported from H, never on retained footsteps, stored proof or elapsed time. At that readiness, an explicitly planned, unverified, depth-tested ground guide makes the complete existing E-to-C polyline discoverable; C remains the sole marker. Guide visibility grants no passage or reference credit. First-time manual traversal must succeed without private route knowledge, a rail, per-corner prompts or a future preview of the earlier S-to-E survey."
+        },
+        {
+          "op": "test",
+          "path": "/story/events/20/acceptanceCriterion",
+          "value": "The reciprocal work order publishes its holding claim only after his actual arrival at H; before that it reports preparation or readiness; the positioning leg earns no comparison or test credit and changes no score state."
+        },
+        {
+          "op": "replace",
+          "path": "/story/events/20/acceptanceCriterion",
+          "value": "At route-tested, the common objective publishes its exact preparing copy with C as eventual destination while W-7744 physically positions E to H. At actual reciprocal-reference arrival at H it silently switches to the exact holding/guide-line copy and displays the common guide. There is no holding claim, guide, comparison or test credit before actual H arrival. The positioning leg and copy transition add no score change, repeat acknowledgement, new action, marker target or anchor."
+        },
+        {
+          "op": "test",
+          "path": "/syncAnchors/20/acceptanceCriterion",
+          "value": "The reciprocal work order publishes its holding claim only after his actual arrival at H; before that it reports preparation or readiness; the positioning leg earns no comparison or test credit and changes no score state."
+        },
+        {
+          "op": "replace",
+          "path": "/syncAnchors/20/acceptanceCriterion",
+          "value": "At route-tested, the common objective publishes its exact preparing copy with C as eventual destination while W-7744 physically positions E to H. At actual reciprocal-reference arrival at H it silently switches to the exact holding/guide-line copy and displays the common guide. There is no holding claim, guide, comparison or test credit before actual H arrival. The positioning leg and copy transition add no score change, repeat acknowledgement, new action, marker target or anchor."
+        }
+      ]
+    },
+    {
+      "file": "scene-cinema-lane.json",
+      "operations": [
+        {
+          "op": "test",
+          "path": "/objectiveBindings/13/standingWorkOrder",
+          "value": "W-7744 is holding the reference. Walk the traced span to check your route from this end."
+        },
+        {
+          "op": "replace",
+          "path": "/objectiveBindings/13/standingWorkOrder",
+          "value": "W-7744 is holding the reference. Walk the guide line to check your route from this end."
+        },
+        {
+          "op": "test",
+          "path": "/objectiveBindings/9/markerLabel",
+          "value": "W-7744 · test in progress"
+        },
+        {
+          "op": "replace",
+          "path": "/objectiveBindings/9/markerLabel",
+          "value": "W-7744 · offered route"
+        },
+        {
+          "op": "test",
+          "path": "/objectiveBindings/9/realTransition",
+          "value": "Actual worker samples → hold/next span/reciprocal"
+        },
+        {
+          "op": "replace",
+          "path": "/objectiveBindings/9/realTransition",
+          "value": "State-conditional exact copy under this one objective ID and the fixed actual-worker target: from anc.cg.route-offered until actual arrival at the offered test start, including a body-clearance suspension, workOrder is [\"W-7744 is preparing to test the offered route.\", \"Keep his approach clear. Follow his progress, or return to the last tested point to revise.\"]. After the actual approach ends, workOrder is the signed base testing workOrder. Both states use the exact neutral markerLabel W-7744 · offered route. The transition replaces standing text silently within the same ID; it does not re-enter the objective, repeat its acknowledgement, imply tested progress or change score. Existing revision/hold transitions and silent restore remain. Desktop/mobile, reduced motion and all quality tiers use these same states and words, with existing input-glyph substitutions only. Actual worker samples then own hold/next-span/reciprocal transitions."
+        },
+        {
+          "op": "test",
+          "path": "/objectiveBindings/13/realTransition",
+          "value": "Ready only after physical E→H; actual full 18-unit passage E→C under H records Terra's comparison"
+        },
+        {
+          "op": "replace",
+          "path": "/objectiveBindings/13/realTransition",
+          "value": "State-conditional exact copy under this one objective ID and the fixed C destination: enter at anc.cg.route-tested in preparation while W-7744 physically positions E to H. Before actual H arrival, workOrder is [\"W-7744 is taking up the reference position.\", \"Give him room to reach it. When the guide appears, follow it from the survey end.\"]. Only at actual anc.cg.reciprocal-reference does the signed base holding/guide-line workOrder replace it and the common guide become visible. This readiness is an in-place state change, not a second objective entry, acknowledgement or new score event. The marker remains Far reference · check my route at C throughout; no clearance target, F action or guide is introduced during preparation. Existing reset and silent restore rules apply, with actual readiness revalidated before selecting copy. The same state-conditioned words and geometry apply on desktop/mobile, reduced motion and every quality tier. Only actual full 18-unit E-to-C passage supported from H records Terra's comparison."
+        }
+      ]
+    }
+  ],
+  "textChanges": [
+    {
+      "file": "story-intent.md",
+      "old": "Walk the traced span to check your route from this end.",
+      "new": "Walk the guide line to check your route from this end."
+    },
+    {
+      "file": "story-intent.md",
+      "old": "Proposed/tested trace differs by stable shape/value, remains depth-tested and depicts walked ground only.",
+      "new": "The S-to-E survey's proposed/tested trace differs by stable shape/value, remains depth-tested and depicts actual walked ground only, without a future-path preview. Only the separate common E-to-C comparison receives an explicitly planned, unverified, depth-tested guide after the worker actually holds H; its continuous thin shape differs from walked and tested evidence, and it grants no proof. C remains the sole marker, and all existing physical conditions still govern passage."
+    },
+    {
+      "file": "story-intent.md",
+      "old": "W-7744 · test in progress",
+      "new": "W-7744 · offered route"
+    },
+    {
+      "file": "story-intent.md",
+      "old": "Ready only after physical E→H; actual full 18-unit passage E→C under H records Terra's comparison",
+      "new": "Preparation enters at route-tested; holding/guide/comparison readiness only after physical E→H; actual full 18-unit passage E→C under H records Terra's comparison"
+    },
+    {
+      "file": "story-intent.md",
+      "old": "Draw targets the survey destination; offer-span replaces it with the actual trace end when that is the actionable target. Never change a marker behind an unchanged objective. Continuous walking retains one quiet work order: no sample/turn prompt, chime or congratulatory microstep. Witness vacancy publishes the appropriate survey or final reference-return objective; missing footing publishes revision because occupancy cannot repair ground. Alternative nearby actions use the same resolver without competing required markers.",
+      "new": "Draw targets the survey destination; offer-span replaces it with the actual trace end when that is the actionable target. Never change a marker behind an unchanged objective. Continuous walking retains one quiet work order: no sample/turn prompt, chime or congratulatory microstep. Witness vacancy publishes the appropriate survey or final reference-return objective; missing footing publishes revision because occupancy cannot repair ground. Alternative nearby actions use the same resolver without competing required markers.\n\nPreparation is an explicitly signed conditional state within the existing objective ID. `ch13:survey:test` enters at `anc.cg.route-offered`, keeps its one actual-worker target and the neutral label `W-7744 · offered route`, and before his actual arrival at the offered test start uses exactly: `W-7744 is preparing to test the offered route.` / `Keep his approach clear. Follow his progress, or return to the last tested point to revise.` At actual approach completion, replace this with the exact testing work order already in the table. `ch13:common:reciprocal` enters at `anc.cg.route-tested` with its one eventual C target and exact preparation copy: `W-7744 is taking up the reference position.` / `Give him room to reach it. When the guide appears, follow it from the survey end.` Only actual H arrival at `anc.cg.reciprocal-reference` enables the guide, the exact holding/guide-line work order and comparison-credit eligibility. These readiness transitions silently replace standing copy within the same ID: no second entry acknowledgement, target change, F, score event, new anchor or positioning-leg proof. A body-blocked approach safely holds and resumes when clear; preparation wording must remain true while stationary. Pause/restore revalidates actual readiness and republishes silently. Raw lifecycle evidence must show the exact preparing copy at entry and exact ready copy after real arrival, with one marker and one entry cue."
+    }
+  ]
+}

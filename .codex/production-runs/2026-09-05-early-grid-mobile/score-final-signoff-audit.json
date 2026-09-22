@@ -1,0 +1,19 @@
+{
+  "schema": "paravoxia.scoreFinalSignoffAudit.v1",
+  "checkedAt": "2026-09-05T21:14:25.985908+00:00",
+  "contractVersion": "draft-v1",
+  "contractSha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a",
+  "compiledLedgerSha256": "9ff5ab75ed51262fa3962a4c27954ec3c85bdfc420fca326c451d8e441314f0a",
+  "peerCompilationReceiptSha256": "f8dfffeb66e282c913c5c0388d418171530a500cd924e49589dc83232415e152",
+  "allSixOriginalNotesAndRecipientRepliesLossless": true,
+  "allCompilationSourceHashesMatch": true,
+  "scoreCues": 19,
+  "scoreAnchorRelations": 14,
+  "scoreResetExact": true,
+  "originalFirstBladesPreserved": true,
+  "signoffPath": "score-contract-signoff.json",
+  "signoffSha256": "c1c5422e8b4bb55940eb4a4a6da8dff60d9a446a00ebb25846696c8023480c9c",
+  "approvalScope": "bounded design contract only; all implementation,media and independent acceptance evidence still required",
+  "runtimeOrGpuWork": false,
+  "fullNativeGateRunByScore": false
+}

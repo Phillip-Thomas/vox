@@ -1,0 +1,134 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "b3c09da4612e74b2fe2b206fa140ca36215c54ae311c786cc9309c5b11ccb10a",
+  "kind": "continue",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": true,
+    "acceptedAction": 2,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": true,
+    "clickedContinue": true,
+    "ctaBeforeRuntimeReady": true,
+    "stateEqual": true,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true,
+    "videoDecodes": true,
+    "audioDecodes": true,
+    "audioIsolated": true,
+    "mediaCleanup": true,
+    "mediaCaptured": true
+  },
+  "missing": [
+    "newAcceptedAction"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/raw/cleanup.json",
+      "sha256": "d8111b6706898e1340b5db6df4a8f7c8d4e720c37aa957092676cbe2ec926c92"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/raw/frame-4.png",
+      "sha256": "a4042cd0cdf7fd63a0292697a99ff60029f5eaaac563aa8e2619c0bd4025b2c4"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/raw/frame-5.png",
+      "sha256": "707e24390f29f0f0d2448cff59f8d5945380672f45acce35d4ea2822798f3708"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/raw/media-proof.json",
+      "sha256": "eae4e894cdfb7640b18037cad946dc1a2f29fbd8fe53ccdd0be481cf8096fb4d"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/raw/observations.json",
+      "sha256": "322cca11b07db60152bd427285b30f09099b15f50490b70f854e131daf8fcb13"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/raw/provenance.json",
+      "sha256": "b1d69b34d212dd8eabed1e0ab50f70a00df6c4b445c8480551ee740f98c6685c"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/raw/trace.ndjson",
+      "sha256": "98b3beaa15cc4fe01965ffb4d5e4673014b40bae15a8e9ad986d9a3c0065cad6"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/raw/walk-calibration.ndjson",
+      "sha256": "70c7b32a90c6dfa646f8075c71d5fc513585d35c689411d87757aecc07223ccc"
+    }
+  ],
+  "media": [
+    {
+      "kind": "frame",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/frame.png",
+      "sha256": "a861262588a27696cbacbd79c87052e1b1125c6b244a6b9ccc9ca10a1c0c6c3a"
+    },
+    {
+      "kind": "video",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/video.webm",
+      "sha256": "16070e873d02025998fff84fd298f39039ed34949c7ebff046937932bfe0d3f9"
+    },
+    {
+      "kind": "audio",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/audio.wav",
+      "sha256": "89a178172db8e0ba1c447410dbe35b439af63c62376707d74519fdf999789044"
+    }
+  ],
+  "mediaTimeline": {
+    "clock": "host wall clock (Date.now)",
+    "alignment": "approximate; audio and video are separate unsynchronized recordings",
+    "uncertainty": "Offsets are host wall-clock differences between the recorder/context start and the observed gesture. The Playwright video timeline is frame-driven and the parec stream begins only after process spawn plus PulseAudio scheduling latency (unmeasured here). Audio and video are two independent recordings and are NOT muxed or sample-aligned: treat every offset as approximate guidance for seeking (order is reliable, absolute position is not), never as a synchronization claim.",
+    "audio": {
+      "startedAtWallMs": 1788916905992,
+      "stoppedAtWallMs": 1788917053907
+    },
+    "video": {
+      "startedAtWallMs": 1788916905547,
+      "stoppedAtWallMs": 1788917056200
+    },
+    "marks": [
+      {
+        "mark": "recording-started",
+        "note": null,
+        "wallMs": 1788916905993,
+        "audioOffsetSeconds": 0.001,
+        "videoOffsetSeconds": 0.446
+      },
+      {
+        "mark": "interruption",
+        "note": "ordinary page reload",
+        "wallMs": 1788917020053,
+        "audioOffsetSeconds": 114.061,
+        "videoOffsetSeconds": 114.506
+      },
+      {
+        "mark": "continue-cta",
+        "note": "click button:has-text(\"Continue\")",
+        "wallMs": 1788917023360,
+        "audioOffsetSeconds": 117.368,
+        "videoOffsetSeconds": 117.813
+      },
+      {
+        "mark": "new-action-start",
+        "note": null,
+        "wallMs": 1788917023787,
+        "audioOffsetSeconds": 117.795,
+        "videoOffsetSeconds": 118.24
+      }
+    ]
+  },
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "newActionSteps[0]: bounded wait on /unfinishedMap/ready was not satisfied"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "2192221f7bd3176542d4e192f925ce32744e562f26a2009d4e25d8c5678f8a4e",
+    "buildSha256": "322030545cb3b38a54040863b92cdff886eaa1513ed891480818bb85f97c3d7c",
+    "transportSha256": "1502a48a4e91769f3c563ecafe0daae97fccb5b3a5a340b120519c63acbb7eaa"
+  }
+}

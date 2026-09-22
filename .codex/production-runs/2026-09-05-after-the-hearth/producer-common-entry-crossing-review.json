@@ -1,0 +1,129 @@
+{
+  "schema": "paravoxia.producerEvidenceReview.v1",
+  "at": "2026-09-06T20:36:40.521710+00:00",
+  "role": "creative-producer",
+  "acceptedForBoundedRepair": true,
+  "chapterAccepted": false,
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "manifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "finishedInvocation": {
+    "role": "common-entry-crossing",
+    "requestedModel": "opus",
+    "startedAt": "2026-09-06T20:20:45.604757+00:00",
+    "commissionSha256": "1102fc5b4521d508add143f50ee77c8aa21f83f580d9e66ee5e0c2743bc83724",
+    "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sourceFilesRehashedBefore": 99,
+    "scope": "Correct actual E-entry and fullvertex geometric proof, observe earnedprefix then positivepostplane accounting; CPU preparation then serializedGPU; no game mutation",
+    "exitCode": 0,
+    "finishedAt": "2026-09-06T20:31:03.553474+00:00",
+    "model": "claude-opus-5",
+    "sessionId": "1e5753b7-f365-4a61-9fb6-091f8d1e7f36",
+    "isError": false,
+    "sourceDrift": [],
+    "sourceFilesRehashedAfter": 99
+  },
+  "observed": "Actual incoming E crossing, earned prefix then six-unit plateau through supported post-plane vertices within unchanged .35 radius; 179 callee and 179 caller records,146 positive displacements,0 dropped/paused.",
+  "qualifications": [
+    "Initial credit was .0806445765, not zero. Real subsequently observed incoming E crossing covers that prefix physically; no state reset was used.",
+    "Full18 was not completed; no naive UX or continuous-arrival claim from labelled ch13-survey fixture.",
+    "Callee entry proves its actual caller guard conjunction. bodiesClear is absent from this credit chain; do not invent it as sampled predicate.",
+    "Following call previousUnits is subsequent stored state, not direct interception of prior return. Frozen real-function replay is independently labelled.",
+    "Report plateau endpoint text is stale: later outgoing positive rows reach z18.1163; raw and summary retained.",
+    "Do not treat helper refusedByCeiling label as causality; exact candidate projection and args are recorded below."
+  ],
+  "exactCausalBoundary": {
+    "caller": {
+      "k": "guard",
+      "n": 297,
+      "t": 66174.79999995232,
+      "prevFoot": [
+        -44.274284163907716,
+        50.98912926551148,
+        16.130885899955892
+      ],
+      "curFoot": [
+        -44.274162965076364,
+        50.989121615150424,
+        16.294483000367848
+      ],
+      "delta": 0.1635971454851342,
+      "terra": 6
+    },
+    "callee": {
+      "k": "call",
+      "n": 298,
+      "t": 66175.10000002384,
+      "prev": 6,
+      "disp": 0.1635971454851342,
+      "foot": [
+        -44.274162965076364,
+        50.989121615150424,
+        16.294483000367848
+      ],
+      "corridor": 2.5,
+      "routeLen": 10
+    },
+    "followingCall": {
+      "k": "call",
+      "n": 300,
+      "t": 66191.29999995232,
+      "prev": 6,
+      "disp": 0.08179856861977866,
+      "foot": [
+        -44.27410309186772,
+        50.989121587196365,
+        16.376281547075248
+      ],
+      "corridor": 2.5,
+      "routeLen": 10
+    },
+    "pureReplay": {
+      "n": 298,
+      "prev": 6,
+      "disp": 0.1635971454851342,
+      "foot": [
+        -44.274162965076364,
+        50.989121615150424,
+        16.294483000367848
+      ],
+      "replayReturned": 6,
+      "err": null,
+      "gainOnReplay": 0,
+      "ceiling": 6.163597145485134
+    },
+    "currentLegProjectedUnits": 6.294483000367848,
+    "perUpdateCeiling": 6.163597145485134
+  },
+  "cleanup": {
+    "schema": "paravoxia.verifier.ownedSessionGuard.v1",
+    "probe": "common-entry-crossing-probe.mjs",
+    "writtenAt": "2026-09-06T20:29:25.391Z",
+    "phase": "post-finally",
+    "supersedesForCleanupState": "summary.json .cleanup (captured pre-finally; its sessionStopped is a pre-cleanup value, not the outcome)",
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "label": "arrival-common-short session",
+    "adopted": true,
+    "adoptedAtMs": 1788726499713,
+    "cleanupRequests": 1,
+    "sessionStopInvocations": 1,
+    "sessionStopped": true,
+    "cleanupError": null,
+    "cleanupReason": "probe-finally",
+    "stopsOnlyProbeOwnedSession": true,
+    "stopsRootPreview": false,
+    "killsProcesses": false,
+    "hidesFailureExitCode": false,
+    "note": "Recorded AFTER the finally block ran. This is the actual cleanup outcome of the browser session this probe owned. A stop-failed or never-requested state is reported honestly and does NOT alter the capture outcome, the retained evidence, or the process exit code. It says nothing about the game.",
+    "outcomeUnchanged": true
+  },
+  "evidenceHashes": {
+    "verifier/captures/common-entry-crossing/run1/summary.json": "1961bcd89c9dee0ef06d32c676ef66c3962ec3ef402922eb021a6f0388411762",
+    "verifier/captures/common-entry-crossing/run1/credit-records.raw.json": "4d23975c8103e18aafc2d1040d20825230f939cf0df006c13fbd8be658376b15",
+    "verifier/captures/common-entry-crossing/run1/credit-records.chained.json": "c27c84fad7c59de50d744a90541e05d4b683789289e20c49cf99ed16631c40e7",
+    "verifier/captures/common-entry-crossing/run1/credit-replay.json": "12fb6847f422319e4ff881c9dbdede6cfca017c6f8bf004445d048eb56397f56",
+    "common-entry-crossing-report.json": "6a92c8656c03ce273c9d7940865fdee93cf722fa81dcc9332ea308dd7d2b7583"
+  },
+  "requiredPreservation": "Exact early z15.82 before-plane refusal, physical return/retraversal, no endpoint/late-leg pumping, actual18 and reference/support/arrival unchanged.",
+  "directionRef": "chapter-manual-corner-interpretation.json"
+}

@@ -108,7 +108,7 @@ function countTreeVoxels(
 ): number {
   if (treeDensity <= 0) return 0;
   let n = 0;
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     const [x, y, z] = voxel.position;
     if (
       shouldPlaceTreeAtVoxel(voxel, x, y, z, treeDensity, terrainSeed, artDirection) &&
@@ -245,7 +245,7 @@ export default function TreeField({ planetSize, terrainSeed, planetProfile, pers
     const impostorDist = Math.max(maxDist * IMPOSTOR_FRAC, nearFloor);
     const impostorDistSq = impostorDist * impostorDist;
     const cap = trunks[0]!.instanceMatrix.count;
-    for (const voxel of voxelSystem.getAllVoxels().values()) {
+    for (const voxel of voxelSystem.voxelValues()) {
       const [x, y, z] = voxel.position;
       if (!shouldPlaceTreeAtVoxel(voxel, x, y, z, density, terrainSeed, artDirection)) continue;
       if (isTreeHarvested(x, y, z)) continue; // felled — don't re-place it

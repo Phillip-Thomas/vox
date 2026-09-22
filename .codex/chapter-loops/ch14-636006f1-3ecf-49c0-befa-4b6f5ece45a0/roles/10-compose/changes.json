@@ -1,0 +1,27 @@
+{
+  "changed": [
+    {
+      "path": "main/src/story/unfinishedMapScore.ts",
+      "sha256": "2a50ecbf98ae55aca6acbf95d03dd3f1ca148128b32379974bee925d831dca14"
+    },
+    {
+      "path": "main/src/story/unfinishedMapDirector.ts",
+      "sha256": "81ccf228d5cd58b7553e626a59c37e9d37a5a78ddc697c2856188e0e3e30f3bd"
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "sha256": "a89549a728780673d1b8f25f423275558726f852fd32bd63f6845eeb026f82ec"
+    }
+  ],
+  "validation": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/typecheck.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/focused-tests.txt",
+      "sha256": "cbbd975e7bef7c32f47ad5171df933034241fe2888ce379a85caad5c43a74adf"
+    }
+  ],
+  "scope": "Music-only envelope and bounded return presentation hold; no action, persistence, route or staging predicates changed."
+}

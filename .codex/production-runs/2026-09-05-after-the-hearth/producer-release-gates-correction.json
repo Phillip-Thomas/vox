@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-09-06T08:28:57.597206+00:00",
+  "reason": "Retain strict equality between the active production lock and protected machine release ladder; successor run uses exact existing gate names instead of relaxing validation. The three previous run milestones remain historical context, not substitutes for release gates.",
+  "previousRunMilestoneRefs": [
+    "three-director-contract-before-runtime",
+    "runtime-evidence-and-independent-review",
+    "public-release-separate"
+  ],
+  "openReleaseGates": [
+    "server-issued-embodied-story-receipts",
+    "three-rescue-free-cold-runs",
+    "quality-profile-matrix",
+    "reduced-motion-equivalence",
+    "supported-headed-input",
+    "headed-real-gpu-taste",
+    "origin-sibling-persistence-roundtrip",
+    "tidegarden-support-water-authority-disposition",
+    "human-release-decision"
+  ],
+  "requiredIntegrationCorrection": "Restore exact production.release-gates equality; protected EXPECTED_OPEN_RELEASE_GATES remains unchanged.",
+  "contractSha256Unchanged": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "publicationAuthorized": false
+}

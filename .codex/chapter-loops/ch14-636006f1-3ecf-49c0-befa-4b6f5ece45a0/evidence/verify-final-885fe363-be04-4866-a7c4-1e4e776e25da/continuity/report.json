@@ -1,0 +1,59 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "c6d76783257ab97cd0a544b3a77442fb72ef72ae8fae381d04c3be98fd13dc40",
+  "kind": "continuity",
+  "chapter": "ch14",
+  "proof": {
+    "earnedEntry": false,
+    "earnedExit": false,
+    "chapterWindowComplete": false,
+    "noFixtures": true,
+    "priorIndex": -1,
+    "entryIndex": -1,
+    "beatIndices": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "exitIndex": -1,
+    "sampleCount": 4664,
+    "hardware": true,
+    "cleanup": false,
+    "videoDecodes": false,
+    "audioDecodes": false,
+    "framesNonblank": false
+  },
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-885fe363-be04-4866-a7c4-1e4e776e25da/continuity/raw/cleanup.json",
+      "sha256": "8c0491ceb3b52e838d30d8180f7b04420d2a9b3deeae36fedaa0ed421d868c98"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-885fe363-be04-4866-a7c4-1e4e776e25da/continuity/raw/media-proof.json",
+      "sha256": "357ce97f5e28820a0dd35d3f766346d2ce4b62f05fcfe806254de6f1d41cfa1a"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-885fe363-be04-4866-a7c4-1e4e776e25da/continuity/raw/provenance.json",
+      "sha256": "4cc9ea1a791c9beadce313f6157ebbc8c1916caadfbe2697cae11e46b64ee199"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-885fe363-be04-4866-a7c4-1e4e776e25da/continuity/raw/trace.ndjson",
+      "sha256": "dc422559a2e2ba1e0ce96fe8337bd4a54250ebd70fedf06101a15cc620b70845"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "page.evaluate: Target page, context or browser has been closed",
+    "Chapter video: Chapter-ready video window was not observed"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "dc7ac365ff7f503d04c0ecb99dccf1f25e5a8d905de0a14127671506f28b8589",
+    "buildSha256": "0008b558fa389c02bc8c06efdda7cc218c5e15f4cdf65f871ae658cb8e3b3ac3",
+    "transportSha256": "eb547dcc7d73478b95545a09f2c01eaeb154c1b7ea47b8d73e6e70944e9868dc"
+  }
+}

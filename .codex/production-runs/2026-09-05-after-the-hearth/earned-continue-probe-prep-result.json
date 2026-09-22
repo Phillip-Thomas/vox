@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 812877,
+  "stop_reason": "end_turn",
+  "session_id": "7b9bcdbc-ce22-42fe-a7fe-bda9c98dd6b3",
+  "total_cost_usd": 6.681239,
+  "usage": {
+    "input_tokens": 130,
+    "cache_creation_input_tokens": 165538,
+    "cache_read_input_tokens": 6688200,
+    "output_tokens": 67164,
+    "output_tokens_details": {
+      "thinking_tokens": 9741
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 165538,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1169,
+        "cache_read_input_tokens": 168842,
+        "cache_creation_input_tokens": 763,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 763
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1934,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002009,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 130,
+      "outputTokens": 67164,
+      "cacheReadInputTokens": 6688200,
+      "cacheCreationInputTokens": 165538,
+      "webSearchRequests": 0,
+      "costUSD": 6.67923,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 9741,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 70,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Prep complete and within bounds.\n\n## What I prepared (owned paths only)\n\n**`verifier/probes/earned-continue/`** \u2014 a copy of `partial-continue-probe.mjs` (original untouched, `fb1d4e2f\u2026`) patched with targeted edits, plus:\n- `earnedContinueLogic.mjs` \u2014 owned pure helpers (source rehash, capture-dir refusal, named-AV reading/delta/replay, earned-origin gate, checkpoint purity, world/actor/prefix identity, overwrite, new-action gate, anchor eligibility, Continue-boot hygiene).\n- `pinned/commonPassageLogic.pinned.mjs` + `pin.json` \u2014 **byte-exact pin** of the manual COMMON role's helper (which that role edited at 16:25:52Z mid-window). Its live file, and all shared probes, were not edited.\n- `selftest.mjs` \u2014 69 CPU checks.\n- `logs/earned-continue-prep/` + `earned-continue-probe-prep-report.json/md`.\n\n## Lane encoded\nPreflight with **no browser** (root readiness/role, inherited exclusive flock on fd 9 \u2014 never opened here, **actual served index+bundle byte hashes**, dynamic 99-file source rehash, non-empty capture refusal) \u2192 `?story=ch13-return&movie=1` labelled prerequisite fixture with **no preseeded origin landing** \u2192 earned-origin gate (latched milestone, real `activePlanetId` handoff, surface/fps, grounded `supported`, live rAF FPS, **named** AV anchor history/sequence over time) \u2192 \u22654-sample partial drawing with prompt catch before route-tested \u2192 shipped `beforeunload` save with real per-world+global bytes copied before close \u2192 plain Continue boot (no deep link/movie, storage retained) \u2192 identity/overwrite/replay proofs \u2192 one NEW `[F]` offer, pressed only when the shipped prompt offers it. A failed prerequisite stops before every later phase. The parent's walk-to-W rescue and its forced-click Quit phase were removed.\n\n## Self-tests actually run (CPU, no GPU)\n- `selftest.mjs` \u2192 **exit 0**, 69/69 (`selftest.log` `4880bbea\u2026`)\n- probe `--self-test` \u2192 **exit 0** (`c53cf7ff\u2026`)\n- unbound invocation \u2192 **exit 1**, `PREFLIGHT-REFUSED` before any browser\n- bound invocation against the live root preview (HTTP only): served index `1f699b4a\u2026` and bundle `4f39f1ea\u2026` match root's published hashes; 99 files rehash intact to `dc63fbae\u2026dc36c`. Remaining refusals are exactly `activeRole=common-manual-focused` and the missing inherited lock fd. Prep capture folders were removed; receipts kept in logs.\n\n## Unresolved \u2014 nothing here is a result\n- **Blocking:** cannot run until root grants the active role and the inherited heavy lock.\n- **Unknown:** whether an earned save actually resumes in `ch13-survey`, and whether the shipped save keeps the earned samples on the Origin key after a real flight \u2014 run\u20115's failures were observed with the incomplete fixture and must not be assumed to transfer.\n- **Unverified by me:** the inherited span end `E = [-42, 51.05, 12]` was not re-derived from the current authored route.\n\nNo earned Continue has been tested; this preparation makes no readiness claim.",
+  "ttft_ms": 1897,
+  "type": "result",
+  "duration_ms": 814236,
+  "uuid": "06a2665c-1469-45ca-8c91-9c2d116c8649",
+  "ttft_stream_ms": 1328,
+  "time_to_request_ms": 27,
+  "first_content_frame_ms": 1331,
+  "queued_turn_count": 0
+}

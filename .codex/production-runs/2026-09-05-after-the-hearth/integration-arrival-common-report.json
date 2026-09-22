@@ -1,0 +1,941 @@
+{
+ "schema": "paravoxia.implementationReport.v1",
+ "role": "integration-engineer (arrival + common steering repair, iteration 7 — COMBINED report: original gameplay patch + exact metadata closure)",
+ "runId": "2026-09-05-after-the-hearth",
+ "writtenAt": "2026-09-06T17:38:00+00:00",
+ "isAcceptance": false,
+ "isChapterVerificationComplete": false,
+ "isIndependentVerification": false,
+ "publicationAuthorized": false,
+ "contract": {
+  "version": "scene-v3",
+  "sha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "contractGateRef": "contract-gate-pass.json",
+  "contractGateSha256": "fa788ed5e528005a8b52f9ac1b2927c2836c271291350ac8df597d7cc7e545e4",
+  "changedByMe": false,
+  "creativeDecisionsMade": "none. The three peer directors remain the only creative authority. No plot, copy wording, geometry, route, proof, score, camera or shot change was authored here: the arrival copy is the exact signed scene-v3 text, and the steering numbers are private controller devices the Chapter Director explicitly classified as implementation."
+ },
+ "direction": {
+  "ref": "arrival-common-repair-direction.json",
+  "defectIds": [
+   "CG-IMPL-010",
+   "CG-IMPL-014"
+  ],
+  "materialRepairIteration": 7,
+  "budgetRef": "producer-arrival-common-budget-decision.json",
+  "findingsReviewRef": "producer-arrival-common-findings-review.json",
+  "causalAuditRef": "common-terminal-source-audit.json",
+  "chapterInterpretationRefs": [
+   "chapter-common-terminal-interpretation.json",
+   "chapter-arrival-guidance-interpretation.json"
+  ],
+  "dispositionRef": "repair-contract-disposition.json"
+ },
+ "startingSource": {
+  "manifestRef": "implementation-source-manifest.json",
+  "filesRehashedBeforeMutation": 99,
+  "driftBeforeMutation": [],
+  "baselineNote": "The dirty working tree, NOT git HEAD, is the restoration baseline. The two game-source pre-hashes match the causal audit’s recorded values exactly (commonGroundDirector.ts acc0d9cf…, autopilot/primitives.ts a6da0551…).",
+  "taskPrivateBackups": ".codex/production-runs/2026-09-05-after-the-hearth/.private/arrival-common-repair-backups",
+  "worktreePreservation": {
+   "gitStatusEntriesBefore": 325,
+   "gitStatusEntriesAfter": 325,
+   "unrelatedDirtyFilesReverted": 0,
+   "gitCheckoutResetStashUsed": false
+  }
+ },
+ "testTotals": {
+  "preRepairBaseline": 3158,
+  "preRepairTestFiles": 351,
+  "finalTests": 3172,
+  "testFiles": 351,
+  "testsAdded": 14,
+  "testsRemoved": 0,
+  "testFilesAdded": 0,
+  "testsAddedByContinuation": 0,
+  "addedBreakdown": {
+   "main/src/story/commonGroundDirector.test.ts": 14
+  },
+  "testsModifiedInPlace": {
+   "main/src/story/autopilot/primitives.test.ts": 1
+  },
+  "source": "npm --prefix main run verify -> test step, 2026-09-06T17:35:27Z, 351 test files / 3172 tests passed.",
+  "modifiedNote": "One existing case in main/src/story/autopilot/primitives.test.ts ('holds a directional control instead of parking in the dead zone') had two literal assertions replaced. PRECISION: the published stop-radius ceiling is strictly TIGHTER (<= NAVIGATION_STEER_DEAD_ZONE, i.e. 0.15 against the old 0.35). The permitted target-standoff threshold was RECALCULATED for the smaller controller radius and the unchanged dead zone: the new expectation is > 0.2 where the old was > 0.35. That is NOT a numerically stronger bound and is not claimed as one — it is the same invariant re-expressed for the changed controller radius. It changes controller expectations only; the route, the ordered eighteen, the arrival predicate and every physical-progress safety assertion are untouched.",
+  "noTestRemovedOrWeakened": true
+ },
+ "changedPaths": [
+  {
+   "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+   "beforeSha256": "100580dbf52df04a7bd83378c8b992524ef774e005a6af28c12f1e7a1d1f547c",
+   "afterSha256": "eea51ae5c382c9da6e82141f0d95eba465331808c3f553c7021f10530de00ac4",
+   "created": false,
+   "inAllowedPaths": true,
+   "phase": "metadata-closure-continuation"
+  },
+  {
+   "path": "main/chapter-registry.json",
+   "beforeSha256": "6ae185a0944321e6b0c9b438e7df4b06bbee76da8463f9b72856a2196fd3bd98",
+   "afterSha256": "0e67cb8efbc790d49ffd483f319cd169893ee793640a0b1362fcc670fb5c5cc6",
+   "created": false,
+   "inAllowedPaths": true,
+   "phase": "metadata-closure-continuation"
+  },
+  {
+   "path": "main/src/story/autopilot/primitives.test.ts",
+   "beforeSha256": "158f5ac9451b00c37dc535ee9e1ef4c727b5b8f4f20364c7e85ee92428ad2f2d",
+   "afterSha256": "08069b5b6677ea35d80dc1c37695fbe7dd61dd2c4b5f2fb0b9233ab6a70a01cd",
+   "created": false,
+   "inAllowedPaths": true,
+   "phase": "original-gameplay-patch"
+  },
+  {
+   "path": "main/src/story/beats/objectivePrimitives.ts",
+   "beforeSha256": "8770c1ff28f070d60bcd44db1e84b4b1cb23b38538ba61fe3d0b6cd0ceb36076",
+   "afterSha256": "c4c555d4a1b0fb8a7bc63e3b3b67a022e87894370cdbe7279d613395f62bffef",
+   "created": false,
+   "inAllowedPaths": true,
+   "phase": "original-gameplay-patch"
+  },
+  {
+   "path": "main/src/story/commonGroundDirector.test.ts",
+   "beforeSha256": "1b8e76af7b94aa4c71f5da07a4e34c7114aeaffbc2c404c599632eb4cb11a97b",
+   "afterSha256": "54f9f76781e00325d63a3d187184827fcfaf9d444e4d98a8ec9a98356bd30023",
+   "created": false,
+   "inAllowedPaths": true,
+   "phase": "original-gameplay-patch"
+  },
+  {
+   "path": "main/src/story/commonGroundDirector.ts",
+   "beforeSha256": "acc0d9cf6331f13f77bd95d29b3bd311033a382fcdc3bff3d9ab977297166c46",
+   "afterSha256": "3b2b95ccd1701b863348e147a8181a704c2ed73258467ea98617e06f0f25aba3",
+   "created": false,
+   "inAllowedPaths": true,
+   "phase": "original-gameplay-patch"
+  },
+  {
+   "path": "main/src/story/generatedSceneAvRuntime.json",
+   "beforeSha256": "0433dc0a1032c6bc8ae2b301fd78b85002bda539b7447ccf7128a4b91229655b",
+   "afterSha256": "4da946273b23c00063e9994897fb0ab7055c25025b45c4d70807ff5c38d94203",
+   "created": false,
+   "inAllowedPaths": true,
+   "phase": "metadata-closure-continuation"
+  },
+  {
+   "path": "main/src/story/signedSceneAvRuntime.ts",
+   "beforeSha256": "681339e20ca341c01c08527a1b5519a40d7703abcf7d65fdf44661ebc8fb9764",
+   "afterSha256": "5ac8377fd5f810d20d32e589223367fb1ed03c0ba8e46690a127f07f6cdbd177",
+   "created": false,
+   "inAllowedPaths": true,
+   "phase": "metadata-closure-continuation"
+  },
+  {
+   "path": "main/story-authority.json",
+   "beforeSha256": "a302656509bfe430ab24f4ee9bb1a0531df253545cbc7b3b9df5b40e55c497ba",
+   "afterSha256": "7c4032554416900c7f39a08caff8cfd18b879979f83ee886293a8f76b5bbd1dc",
+   "created": false,
+   "inAllowedPaths": true,
+   "phase": "original-gameplay-patch (metadata, granted in initial ten)"
+  },
+  {
+   "path": "main/tools/creative-triad-gate.mjs",
+   "beforeSha256": "1a57c5ce722d545a0a48ce7e7d86839581af3041f0132f932a4e3e45f875a0b1",
+   "afterSha256": "7a0eacbbaf765a87504850c4104b0fa6eb969b2132313f25574ecdb4d4058699",
+   "created": false,
+   "inAllowedPaths": false,
+   "phase": "EXTERNAL — not mine"
+  },
+  {
+   "path": "main/tools/generate-scene-av-runtime.mjs",
+   "beforeSha256": "a0681f65079a6232a8bbe95692bcf304e086b5a41703f1c1006d65b576eedfc0",
+   "afterSha256": "d1cfbec167439824c1eb7306b5fbc02f9a2557aadde826906f80808637ae069a",
+   "created": false,
+   "inAllowedPaths": true,
+   "phase": "metadata-closure-continuation"
+  }
+ ],
+ "scope": {
+  "baselineRef": "iterations/arrival-common-findings/source",
+  "baselineFileCount": 99,
+  "manifestFilesChangedByMe": 10,
+  "manifestFilesChangedExternally": 1,
+  "manifestFilesUnchanged": 89,
+  "manifestFilesTotal": 99,
+  "newSourcePathsCreated": [],
+  "pathsInDirectionNotTouched": [
+   "main/src/story/autopilot/primitives.ts",
+   "main/src/story/signedSceneAvRuntime.test.ts"
+  ],
+  "pathsInDirectionThatDoNotExist": [
+   "main/src/story/beats/objectivePrimitives.test.ts"
+  ],
+  "sharedPrimitiveUnchanged": "main/src/story/autopilot/primitives.ts was NOT modified. The direction allowed it only if actual tests proved a need beyond chapter-local steering; they did not. The measured tangential residue at COMMON vertex 6 tracks the real tilted capsule occupancy one cell from the planet-face edge, so relaxing the footprint rule there would have made the very guard the audit says is working LESS conservative.",
+  "unexpectedDrift": [
+   "main/tools/creative-triad-gate.mjs — external, concurrent session, NOT mine, NOT reverted, NOT in my changedPaths; see externalChanges"
+  ],
+  "signedSceneAvRuntimeTestUnchanged": "main/src/story/signedSceneAvRuntime.test.ts needed no edit: it asserts identity through the exported SIGNED_SCENE_AV_* constants and the generated JSON, both of which now carry scene-v3. Its coverage is unchanged and it passes."
+ },
+ "independentGPUStatus": "not-run",
+ "independentVerificationRequired": true,
+ "gameplayAcceptance": false,
+ "checks": [
+  {
+   "name": "scene:av:check (final source)",
+   "command": "npm --prefix main run scene:av:check",
+   "cwd": "/home/thomasphillip/Projects/vox",
+   "startedAt": "2026-09-06T17:34:33Z",
+   "finishedAt": "2026-09-06T17:34:34Z",
+   "exitCode": 0,
+   "log": "logs/arrival-common-metadata-closure/scene-av-check.log",
+   "logSha256": "5a093e5629c166485aec490e591c5217149852333b4cc726478c2dfd5eb0a5f1",
+   "result": "PASS — scene-av runtime: 104 anchors from 3 signed contracts (3367b94f9f0f, 0336a4f28bfa, 5ef85a324f57) (current). This gate FAILED before this continuation.",
+   "phase": "metadata-closure-continuation",
+   "runner": "repository-installed (main/node_modules)"
+  },
+  {
+   "name": "chapter:registry:check (final source)",
+   "command": "npm --prefix main run chapter:registry:check",
+   "cwd": "/home/thomasphillip/Projects/vox",
+   "startedAt": "2026-09-06T17:34:34Z",
+   "finishedAt": "2026-09-06T17:34:35Z",
+   "exitCode": 0,
+   "log": "logs/arrival-common-metadata-closure/chapter-registry-check.log",
+   "logSha256": "63d2098e42a51ec027bd147b0869fcfe164c546b86e7526cab424065907ce4b5",
+   "result": "PASS — 4285 checks; beat declarations 47, registry and journey match. The two scene.contract-hash / scene.contract-identity failures are gone.",
+   "phase": "metadata-closure-continuation",
+   "runner": "repository-installed (main/node_modules)"
+  },
+  {
+   "name": "story:authority (final source)",
+   "command": "npm --prefix main run story:authority",
+   "cwd": "/home/thomasphillip/Projects/vox",
+   "startedAt": "2026-09-06T17:34:35Z",
+   "finishedAt": "2026-09-06T17:34:36Z",
+   "exitCode": 0,
+   "log": "logs/arrival-common-metadata-closure/story-authority.log",
+   "logSha256": "674a8248d269b8a863d77e818d72d74a874ab392ffee5afcbfbf64a93ef1a034",
+   "result": "PASS — 1039 checks. manifest.schema-const now satisfied by exact const equality on scene-v3.",
+   "phase": "metadata-closure-continuation",
+   "runner": "repository-installed (main/node_modules)"
+  },
+  {
+   "name": "catalog:check (final source)",
+   "command": "npm --prefix main run catalog:check",
+   "cwd": "/home/thomasphillip/Projects/vox",
+   "startedAt": "2026-09-06T17:34:36Z",
+   "finishedAt": "2026-09-06T17:34:36Z",
+   "exitCode": 0,
+   "log": "logs/arrival-common-metadata-closure/catalog-check.log",
+   "logSha256": "d4fa8765ef0712ca47020a9df56cfa743b49a33c857e2387d8d729f847d97a4a",
+   "result": "PASS — economy catalog current.",
+   "phase": "metadata-closure-continuation",
+   "runner": "repository-installed (main/node_modules)"
+  },
+  {
+   "name": "focused tests on final source",
+   "command": "npm --prefix main run test -- src/story/signedSceneAvRuntime.test.ts src/story/commonGroundDirector.test.ts src/story/autopilot/primitives.test.ts",
+   "cwd": "/home/thomasphillip/Projects/vox",
+   "startedAt": "2026-09-06T17:34:42Z",
+   "finishedAt": "2026-09-06T17:34:47Z",
+   "exitCode": 0,
+   "log": "logs/arrival-common-metadata-closure/focused-metadata-tests.log",
+   "logSha256": "9cdc6135b3072bf19158e1d20f5bfb30a066d65a0608262834730c438b03a522",
+   "result": "PASS — 3 test files / 187 tests. Includes the signed-runtime identity assertions and both repaired gameplay suites.",
+   "phase": "metadata-closure-continuation",
+   "runner": "repository-installed (main/node_modules)",
+   "note": "A fourth filter argument, src/story/beats/objectivePrimitives.test.ts, matched nothing: that file does not exist in this repository. No coverage was lost; objectivePrimitives is covered through commonGroundDirector.test.ts."
+  },
+  {
+   "name": "story:ux:check (final source)",
+   "command": "npm --prefix main run story:ux:check",
+   "cwd": "/home/thomasphillip/Projects/vox",
+   "startedAt": "2026-09-06T17:35:26Z",
+   "finishedAt": "2026-09-06T17:35:27Z",
+   "exitCode": 0,
+   "log": "logs/arrival-common-metadata-closure/story-ux-check.log",
+   "logSha256": "00fdda939ce993171ffbfd86c02a8f6f0735be30027125a92e041c1a489e369d",
+   "result": "PASS — 9 test files / 94 tests.",
+   "phase": "metadata-closure-continuation",
+   "runner": "repository-installed (main/node_modules)"
+  },
+  {
+   "name": "verify (composite, run ONCE on final repaired source)",
+   "command": "npm --prefix main run verify",
+   "cwd": "/home/thomasphillip/Projects/vox",
+   "startedAt": "2026-09-06T17:35:27Z",
+   "finishedAt": "2026-09-06T17:36:29Z",
+   "exitCode": 0,
+   "log": "logs/arrival-common-metadata-closure/verify.log",
+   "logSha256": "61ac5d146f212eafcc93e797ebcadd03c05747beca4b7c3624d977892d90f670",
+   "result": "PASS — all 14 composite steps executed in one run and all passed: catalog:check, scene:av:check, creative:workflow:check, chapter:registry:check, chapter:journey:check, typecheck, preview:check, audio:diagnostic-check, story:ladder:check, guidance:target-check, story:authority, test (351 files / 3172 tests), audio:check (wall 27.7s of 40s budget), build (vite 6.3.5, 1239 modules).",
+   "phase": "metadata-closure-continuation",
+   "runner": "repository-installed (main/node_modules)",
+   "stepsActuallyExecutedByThisCommand": [
+    "catalog:check",
+    "scene:av:check",
+    "creative:workflow:check",
+    "chapter:registry:check",
+    "chapter:journey:check",
+    "typecheck",
+    "preview:check",
+    "audio:diagnostic-check",
+    "story:ladder:check",
+    "guidance:target-check",
+    "story:authority",
+    "test",
+    "audio:check",
+    "build"
+   ],
+   "fullVerify": true
+  },
+  {
+   "name": "creative:workflow:check re-run after observed concurrent drift",
+   "command": "npm --prefix main run creative:workflow:check",
+   "cwd": "/home/thomasphillip/Projects/vox",
+   "startedAt": "2026-09-06T17:36:56Z",
+   "finishedAt": "2026-09-06T17:36:57Z",
+   "exitCode": 0,
+   "log": "logs/arrival-common-metadata-closure/creative-workflow-check-postdrift.log",
+   "logSha256": "c10c1eaf7983659984c10ae1b82a38e6d999989e1322a37b26ea90151d9314d3",
+   "result": "PASS — 185 checks, re-run after a NEW external modification of main/tools/creative-triad-gate.mjs was observed at 17:36:27Z. Recorded for provenance only; see externalChanges. This gate runs tools/creative-workflow-config-gate.mjs, not creative-triad-gate.mjs.",
+   "phase": "metadata-closure-continuation",
+   "runner": "repository-installed (main/node_modules)"
+  }
+ ],
+ "gateSummary": {
+  "finalSource": {
+   "gatesRun": 14,
+   "passed": 14,
+   "failed": 0,
+   "method": "One composite npm --prefix main run verify on the final repaired source, plus four targeted metadata gates run individually beforehand."
+  },
+  "originalInvocation": {
+   "gatesRunIndividually": 14,
+   "passed": 11,
+   "failed": 3,
+   "failed_detail": [
+    {
+     "gate": "scene:av:check",
+     "exitCode": 1,
+     "owner": "main/tools/generate-scene-av-runtime.mjs",
+     "message": "Frozen scene contract SHA drifted for .../2026-09-05-after-the-hearth/scene-contract.json: expected 4dbf722b… (scene-v2), got 5ef85a32… (scene-v3)."
+    },
+    {
+     "gate": "chapter:registry:check",
+     "exitCode": 1,
+     "owner": "main/chapter-registry.json",
+     "message": "2 failures across 4285 checks: scene.contract-hash and scene.contract-identity for common-ground@scene-v2."
+    },
+    {
+     "gate": "story:authority",
+     "exitCode": 1,
+     "owner": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+     "message": "1 failure of 1039: [manifest.schema-const] JSON Schema const for activeProduction must exactly match the live story-authority manifest."
+    }
+   ],
+   "statusNow": "ALL THREE ARE NOW FIXED AND PASSING on the final source. They are retained here as historical failure evidence only and are excluded from the positive checks array.",
+   "precision": "The original report labelled these three \"preExisting\". They were NOT unrelated pre-existing defects: they existed at the original engineer's start only because the producer promoted the signed scene-v3 contract bytes into the run directory at 2026-09-06T16:50:03.409989Z (contract release passed 16:52), and they are exactly the unfinished v3 identity bindings this authorized continuation was commissioned to complete. The pre-mutation proof log (logs/arrival-common-repair/pre-chapter-registry-check.log, 601d118e…) remains accurate about ordering; the \"pre-existing defect\" framing does not.",
+   "preExistingProof": {
+    "note": "chapter:registry:check already failed with these SAME two failures BEFORE any mutation by this task, because the producer promoted the scene-v3 contract bytes into the run directory at 2026-09-06T16:52Z. story:authority also already failed before mutation, then as [production.contract-identity].",
+    "log": "logs/arrival-common-repair/pre-chapter-registry-check.log",
+    "logSha256": "601d118e3d5001e3600eb05abbf6a4c0f47aa96fa69bba358acc28452d227dc2"
+   }
+  }
+ },
+ "counterfactual": {
+  "kind": "expected-failure; NOT part of the positive checks array",
+  "original": {
+   "kind": "expected-failure; NOT part of the positive checks array",
+   "method": "Task-private byte restore of the pre-repair source bytes from .private/arrival-common-repair-backups over the three changed non-test files, with the NEW tests left in place. No git checkout, reset, stash, clean or revert was used at any point.",
+   "restoredFiles": [
+    {
+     "path": "main/src/story/commonGroundDirector.ts",
+     "sha256": "acc0d9cf6331f13f77bd95d29b3bd311033a382fcdc3bff3d9ab977297166c46"
+    },
+    {
+     "path": "main/src/story/beats/objectivePrimitives.ts",
+     "sha256": "8770c1ff28f070d60bcd44db1e84b4b1cb23b38538ba61fe3d0b6cd0ceb36076"
+    },
+    {
+     "path": "main/story-authority.json",
+     "sha256": "a302656509bfe430ab24f4ee9bb1a0531df253545cbc7b3b9df5b40e55c497ba"
+    }
+   ],
+   "command": "npx vitest run --root main src/story/commonGroundDirector.test.ts src/story/autopilot/primitives.test.ts",
+   "cwd": "/home/thomasphillip/Projects/vox",
+   "exitCode": 1,
+   "log": "logs/arrival-common-repair/counterfactual.log",
+   "logSha256": "dfbe54d29c21fd7915ff8f6b574991e4b734bdedb1b28e959eed77848009345d",
+   "result": "10 failed | 149 passed (159). Every failure is by VALUE, not by a missing import.",
+   "failuresOnOldSource": [
+    {
+     "test": "walks the feet through every COMMON vertex plane, 6 and 9 included",
+     "defect": "CG-IMPL-010",
+     "assertion": "expected [ { vertex: 3 }, { vertex: 6 }, { vertex: 9 } ] to deeply equal []",
+     "meaning": "With the shipped 0.6 aim, the REAL terminalExactGoalHandoff refuses the exact goal at COMMON vertices 3, 6 and 9 on the REAL Origin terrain — exactly the three the causal audit predicted, two of which hardware never reached."
+    },
+    {
+     "test": "aims through every corner, and never past the footprint the planner certifies",
+     "defect": "CG-IMPL-010",
+     "assertion": "cursor 2 aim: expected 0.6000000000000014 to be less than or equal to 0.5"
+    },
+    {
+     "test": "publishes a stop radius the steering can actually reach",
+     "defect": "CG-IMPL-010",
+     "assertion": "cursor 1 stop radius: expected 0.35 to be less than or equal to 0.2"
+    },
+    {
+     "test": "holds a directional control instead of parking in the dead zone",
+     "defect": "CG-IMPL-010",
+     "assertion": "expected 0.35 to be less than or equal to 0.2",
+     "note": "pre-existing case, tightened in place"
+    },
+    {
+     "test": "REGRESSION: stepping out on Origin does not republish the boarding order",
+     "defect": "CG-IMPL-014",
+     "assertion": "expected 'board' not to be 'board'",
+     "meaning": "The measured 28.5-second defect, reproduced from real flight-store transitions."
+    },
+    {
+     "test": "asks for the disembark once the ship is actually down at Origin",
+     "defect": "CG-IMPL-014",
+     "assertion": "expected 'origin' to be 'origin-disembark'"
+    },
+    {
+     "test": "only the actual on-foot reach of W-7744 earns the arrival",
+     "defect": "CG-IMPL-014",
+     "assertion": "expected 'origin' to be 'origin-disembark'"
+    },
+    {
+     "test": "is one objective with one label through all three phases",
+     "defect": "CG-IMPL-014"
+    },
+    {
+     "test": "replaces the standing copy silently, with no second entry acknowledgement",
+     "defect": "CG-IMPL-014"
+    },
+    {
+     "test": "resolves an actionable standing work order for every state of every beat",
+     "defect": "CG-IMPL-014"
+    }
+   ],
+   "restoreProof": {
+    "method": "The fixed bytes were re-copied from a task-private stash and re-hashed; the post-restore digest list is byte-identical to the digest list taken before the counterfactual.",
+    "beforeCounterfactualDigestFile": "logs/arrival-common-repair/after-hashes.txt",
+    "afterRestoreDigestFile": "logs/arrival-common-repair/restore-proof.txt",
+    "digestFileSha256": "232ca05c6586139fae2156cdc47197ec99869b733a607b5ac9e823875970ffc4",
+    "identical": true,
+    "note": "Both digest files hash to the same value, so the restore is proven byte-exact rather than asserted. The full verify and story:ux:check above were run AFTER this restore."
+   },
+   "runner": "root npx — resolved Vitest 4.1.11, NOT the repository-installed runner",
+   "phase": "original"
+  },
+  "continuationRerun": {
+   "why": "The original counterfactual used a root npx that resolved a transient Vitest 4.1.11. It was re-run once with the repository-installed runner (Vitest 3.2.4, main/node_modules) to bind the behavioural evidence to the same toolchain as the final verify. No gameplay code and no test was modified to produce this result.",
+   "method": "Task-private byte restore of the two pre-repair non-test gameplay files from .private/arrival-common-repair-backups over the working tree, new tests left in place. The repaired bytes were copied to .private/arrival-common-metadata-closure/fixed/ first and copied back immediately after. No git checkout, reset or stash.",
+   "restoredOldFiles": [
+    {
+     "path": "main/src/story/commonGroundDirector.ts",
+     "sha256": "acc0d9cf6331f13f77bd95d29b3bd311033a382fcdc3bff3d9ab977297166c46"
+    },
+    {
+     "path": "main/src/story/beats/objectivePrimitives.ts",
+     "sha256": "8770c1ff28f070d60bcd44db1e84b4b1cb23b38538ba61fe3d0b6cd0ceb36076"
+    }
+   ],
+   "command": "npm --prefix main run test -- src/story/commonGroundDirector.test.ts src/story/autopilot/primitives.test.ts",
+   "cwd": "/home/thomasphillip/Projects/vox",
+   "startedAt": "2026-09-06T17:35:16Z",
+   "finishedAt": "2026-09-06T17:35:20Z",
+   "exitCode": 1,
+   "runner": "repository-installed Vitest 3.2.4",
+   "log": "logs/arrival-common-metadata-closure/counterfactual-repo-runner.log",
+   "logSha256": "d4a9238512acabc4910ed0e3d72cf68a28af6f49f162041a915df8ed04a6b785",
+   "result": "10 failed | 149 passed (159) — the SAME count and the same failing cases the original npx run produced. The behavioural counterfactual reproduces on the repository toolchain.",
+   "restoreProof": {
+    "method": "The repaired bytes were copied back from the task-private stash in the same shell and re-hashed immediately.",
+    "postRestoreHashes": {
+     "main/src/story/commonGroundDirector.ts": "3b2b95ccd1701b863348e147a8181a704c2ed73258467ea98617e06f0f25aba3",
+     "main/src/story/beats/objectivePrimitives.ts": "c4c555d4a1b0fb8a7bc63e3b3b67a022e87894370cdbe7279d613395f62bffef"
+    },
+    "matchesRepairedAfterSha256": true,
+    "orderingProof": "The restore completed at 2026-09-06T17:35:20Z; story:ux:check started 17:35:26Z and verify started 17:35:27Z. The final verify therefore ran on fully restored, fully repaired source."
+   }
+  },
+  "bytesIdentityCheck": "The gameplay bytes the original counterfactual was run against are the SAME bytes retained now: commonGroundDirector.ts 3b2b95cc…, objectivePrimitives.ts c4c555d4…, commonGroundDirector.test.ts 54f9f767…, autopilot/primitives.test.ts 08069b5b… all still match the original report's afterSha256 exactly, and autopilot/primitives.ts is still byte-unchanged at a6da0551….",
+  "failuresOnOldSource": [
+   {
+    "test": "walks the feet through every COMMON vertex plane, 6 and 9 included",
+    "defect": "CG-IMPL-010",
+    "assertion": "expected [ { vertex: 3 }, { vertex: 6 }, { vertex: 9 } ] to deeply equal []",
+    "meaning": "With the shipped 0.6 aim, the REAL terminalExactGoalHandoff refuses the exact goal at COMMON vertices 3, 6 and 9 on the REAL Origin terrain — exactly the three the causal audit predicted, two of which hardware never reached."
+   },
+   {
+    "test": "aims through every corner, and never past the footprint the planner certifies",
+    "defect": "CG-IMPL-010",
+    "assertion": "cursor 2 aim: expected 0.6000000000000014 to be less than or equal to 0.5"
+   },
+   {
+    "test": "publishes a stop radius the steering can actually reach",
+    "defect": "CG-IMPL-010",
+    "assertion": "cursor 1 stop radius: expected 0.35 to be less than or equal to 0.2"
+   },
+   {
+    "test": "holds a directional control instead of parking in the dead zone",
+    "defect": "CG-IMPL-010",
+    "assertion": "expected 0.35 to be less than or equal to 0.2",
+    "note": "pre-existing case, tightened in place"
+   },
+   {
+    "test": "REGRESSION: stepping out on Origin does not republish the boarding order",
+    "defect": "CG-IMPL-014",
+    "assertion": "expected 'board' not to be 'board'",
+    "meaning": "The measured 28.5-second defect, reproduced from real flight-store transitions."
+   },
+   {
+    "test": "asks for the disembark once the ship is actually down at Origin",
+    "defect": "CG-IMPL-014",
+    "assertion": "expected 'origin' to be 'origin-disembark'"
+   },
+   {
+    "test": "only the actual on-foot reach of W-7744 earns the arrival",
+    "defect": "CG-IMPL-014",
+    "assertion": "expected 'origin' to be 'origin-disembark'"
+   },
+   {
+    "test": "is one objective with one label through all three phases",
+    "defect": "CG-IMPL-014"
+   },
+   {
+    "test": "replaces the standing copy silently, with no second entry acknowledgement",
+    "defect": "CG-IMPL-014"
+   },
+   {
+    "test": "resolves an actionable standing work order for every state of every beat",
+    "defect": "CG-IMPL-014"
+   }
+  ]
+ },
+ "work": {
+  "CG-IMPL-010": {
+   "summary": "The COMMON traversal now aims 0.24 through each corner and hands the walker a 0.15 stop radius, instead of aiming 0.6 through it and handing the walker 0.35. The route, C, the ordered eighteen, the arrival predicate, the footprint certification and the dead zone are untouched.",
+   "cause": "Two walls meet on the western end of the polyline. FLOOR: the shared walker releases every control inside NAVIGATION_STEER_DEAD_ZONE (0.2) of the point it steers at, so an aim not further past the vertex than 0.2 lets the body park short and vertexReached — which demands an actual crossing at a turn — can never fire. CEILING: the exact-goal handoff only survives while the capsule footprint at the goal is certified by the same planner, which reaches VOXEL_SCALE/2 - PLAYER_CAPSULE_RADIUS = 0.5 from the cell centre; on a cube planet the local up is tilted, so projecting out the normal component of the 1.8-unit gap between an authored foot goal (y 51.05) and a clearance-carrying waypoint (y 52.85) leaves a real tangential residue of 1.8*|up.x|*up.y. At COMMON vertex 6, (-48, ., 18), one cell from the planet-face edge, that residue is ~0.256 by the time the feet are at the vertex plane. 0.2 + 0.256 = 0.456 against a 0.5 reach: the entire slack at that corner is ~0.044 of a unit. The shipped 0.6 spent it several times over, so the handoff was refused and the snapped cell centre stayed the steering target — the CG-IMPL-010 deadlock.",
+   "whyNotTheAuditsOtherOptions": "Aiming the overshoot along the OUTGOING leg (the audit’s stated observation) does NOT work: the residue at vertex 6 is on the incoming axis and is present at zero overshoot, and an outgoing-only aim leaves the goal exactly ON the incoming plane, so a body that settles anywhere inside the release radius is still short. Nothing about the terminal vertex required moving C either: with a 0.24 terminal aim, C’s own footprint certifies (its old failing column (-48, ., 10) is never requested).",
+   "whatDidNotChange": [
+    "CG_ROUTE_COMMON and every authored vertex",
+    "CG_POSES.C",
+    "CG_COMMON_ROUTE_UNITS = 18",
+    "CG_RAIL_ROUTE_ARRIVE = 0.35 (the cursor’s vertex tolerance)",
+    "vertexReached’s along >= 0 requirement at a turn",
+    "routeProgressUnits displacement-bounded credit",
+    "NAVIGATION_STEER_DEAD_ZONE = 0.2",
+    "exactGoalFootprintColumns / terminalExactGoalHandoff / certifyColumn (autopilot/primitives.ts is byte-unchanged)",
+    "the survey SHORT/LONG routes and their terminalOvershoot: 0"
+   ],
+   "forbiddenThingsNotDone": [
+    "no wider arrival radius (the walker radius was made SMALLER, 0.35 -> 0.15)",
+    "no endpoint credit",
+    "no relaxed prefix recovery",
+    "no disabled collider/water/cell check",
+    "no nudge, teleport or grant",
+    "no longer blind timeout",
+    "no route, C or path relocation",
+    "no new player action"
+   ]
+  },
+  "CG-IMPL-014": {
+   "summary": "commonGroundGuidanceFacts now asks the WORLD before the control mode. Grounded at Origin the rung is the arrival: still boarded -> [\"Disembark.\", \"Follow the audit-site marker on foot.\"], embodied -> [\"Follow the audit-site marker on foot.\"]. Airborne, in transit and descending keep the signed flight copy; off Origin, board and lift keep their own real readiness.",
+   "contractText": "Both new work orders are the exact strings of the signed scene-v3 amendment to /guidance/objectives/4 (and the matching scene-cinema-lane objectiveBindings/4 realTransition). No wording was authored here.",
+   "identity": "Same objective id ch13:return:origin, same marker label \"Origin · audit site\", same travel kind, same marker requirement. The existing same-id republish path in emergentStoryDirector (clear as \"replace\", re-activate) updates the standing copy with no second entry cue, because objectiveDirector only cues an id it has not entered before.",
+   "completion": "Untouched. tickReturn still requires the actual Origin world, phase surface, an embodied control mode and the physical reach of W-7744 before markMilestone(ch13OriginLanded) / anc.cg.origin-landed / advanceToBeat(ch13-survey).",
+   "notDone": [
+    "no F task invented",
+    "no auto-arrival",
+    "no second marker",
+    "no hatch or zero-coordinate target",
+    "no new key or input",
+    "no score cue, milestone or arrival credit added"
+   ]
+  }
+ },
+ "unmetRequirements": [],
+ "limits": [
+  "CPU ONLY. Every terrain, planner, handoff, steering and gait call in the new seam tests is the shipped function over the shipped generator, but no browser, GPU, preview or capture was run and none of this is a hardware pass, a rendering claim or a gameplay acceptance.",
+  "The seam tests reconstruct GENERATED terrain: voxelSystem is reset, so live persisted or player-edited voxels are not represented. A column certified here could in principle differ live at (-46, ., 16), (-50, ., 18) or (-48, ., 10). The audit named this same gap.",
+  "The seam body is a fixed-step integrator with no momentum. It is conservative (it can only stop earlier than a real coasting body), but it is not the Rapier capsule.",
+  "The measured slack at COMMON vertex 6 is about 0.044 of a unit between the release radius and the certified footprint reach. The repair sits inside it with roughly 0.04 on the floor side and 0.06 on the ceiling side, but this corner has NO engineering headroom: any future change to the standing offset, the clearance plane, the dead zone, the capsule radius or the terrain under (-48, ., 18) can reopen CG-IMPL-010. The two new bound tests are written to fail loudly if it does.",
+  "Manual/player COMMON traversal remains unmeasured, exactly as producer-arrival-common-findings-review.json records. A movie rail that now walks the corners is not proof that a player can, and this task ran no input, entry or Continue probe.",
+  "The CG-IMPL-014 copy assertions compare the resolver output to the signed scene-v3 strings written into the test. They are anchored to real world/flight state (the states are produced by enterShip / enterAtmosphere / notifyLanded / exitShip and read back through commonGroundGuidanceFacts) and to structural relations between the phases, but they do not parse the contract JSON at test time.",
+  "Earned Continue, full-story, variants/performance/AV and independent UX review all remain outstanding and mandatory. This report is not any of them.",
+  "This continuation ran NO gameplay, controller, objective, body, route or test-logic patch. It changed identity metadata only, plus one generator-produced file regenerated by the repository generator.",
+  "CPU only. No GPU, browser, preview or capture was run in the continuation; independent verification and gameplay acceptance both remain outstanding.",
+  "The final verify is a full 14-step composite pass, not an acceptance. A passing test count alone would not have been full verify; the composite chain is recorded step by step above."
+ ],
+ "preservedInvariants": [
+  "autopilot/primitives.ts byte-unchanged (a6da0551072c1a39eaa7ce1d91e1546122955b4a9682ec2ccffb1cdf3c7da4ae).",
+  "All four pre-existing refusal tests (goal-substituted-for-safety, water-leg, goal-outside-terminal-cell, footprint-height-mismatch) untouched and passing, plus a NEW positive control that a deliberately unsafe aim at COMMON vertex 3 is still refused and still keeps the safe cell.",
+  "The unfinished-corner recovery, the honest omitted-ground recovery and the pre-existing 15.82 / early-unfinished cases are untouched and passing inside the 3172.",
+  "Survey SHORT and LONG drawing, physical W movement, score/camera authority, fixed-light and resource budgets, and every earlier navigation/save/world/actor repair are untouched: 11 of 14 gates and all 351 test files pass.",
+  "No existing test was removed, skipped or weakened. One was tightened in place.",
+  "All four repaired gameplay files still carry the exact bytes the original invocation produced and the original counterfactual measured; verified by hash at continuation start and again at report time.",
+  "main/src/story/generatedSceneAvRuntime.json was regenerated, never hand-edited; only the common-ground source identity changed, every other scene is byte/semantically identical.",
+  "No schema generalisation: the story-authority activeProduction const remains a strict exact-equality object.",
+  "No test removed, skipped, weakened or added in this continuation; 351 files / 3172 tests, removed 0."
+ ],
+ "externalDrift": {
+  "observedAt": "2026-09-06T17:30:43Z",
+  "summary": "A CONCURRENT SESSION modified files in this worktree after this task had finished writing and finished every check. Not reverted, not investigated, not fixed — CLAUDE.md is explicit that a module another session is actively editing must not be touched.",
+  "files": [
+   {
+    "path": "main/tools/creative-triad-gate.mjs",
+    "mtime": "2026-09-06 13:28:33 -0400",
+    "frozenManifestSha256": "1a57c5ce722d545a0a48ce7e7d86839581af3041f0132f932a4e3e45f875a0b1",
+    "currentSha256": "d26ce9af3e993d45b433fc0cf5f758a8bc248827e1a8aba1cbac2c95a56e6a4d",
+    "inMyAllowedPaths": false,
+    "touchedByMe": false,
+    "note": "This file is in the frozen 99-file manifest, so a drift check run now shows 6 changed files rather than my 5. The sixth is this one."
+   },
+   {
+    "path": "main/package.json",
+    "mtime": "2026-09-06 13:29:21 -0400",
+    "inMyAllowedPaths": false,
+    "touchedByMe": false,
+    "note": "Its verify chain content still matches the 14-step chain this task executed, so the recorded check results remain the ones that chain produces."
+   },
+   {
+    "path": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-delta.run-profile.json",
+    "mtime": "2026-09-06 13:29:21 -0400",
+    "inMyAllowedPaths": false,
+    "touchedByMe": false
+   }
+  ],
+  "timing": "My last source write was 13:22 local (main/story-authority.json); my last check finished 2026-09-06T17:25:09Z (13:25 local). All three drifted files are stamped 13:28-13:29, after both.",
+  "consequence": "creative:workflow:check passed at 17:24:06Z against the PREVIOUS bytes of creative-triad-gate.mjs. Its result is therefore reported as measured, not as a claim about the current bytes. verify was run once, as directed, and was not re-run to chase this.",
+  "evidence": "logs/arrival-common-repair/external-drift.txt",
+  "evidenceSha256": "65aa4863aaa847dee81bc2587bd0af788189cb086bec132a65689e815165d4d7"
+ },
+ "artifacts": {
+  "report": "integration-arrival-common-report.json",
+  "reportMarkdown": "integration-arrival-common-report.md",
+  "progressOriginal": "iterations/arrival-common-before-metadata-closure/integration-arrival-common-progress.md",
+  "progressContinuation": "integration-arrival-common-metadata-progress.md",
+  "logsOriginal": "logs/arrival-common-repair/",
+  "logsContinuation": "logs/arrival-common-metadata-closure/",
+  "backupsOriginal": ".private/arrival-common-repair-backups/",
+  "backupsContinuation": ".private/arrival-common-metadata-closure/ (pre-edit byte copies of all 7 metadata paths, plus fixed/ stash used by the counterfactual rerun)",
+  "archivedFirstReport": "iterations/arrival-common-before-metadata-closure/"
+ },
+ "reportScope": {
+  "combinedSeventhMaterialRepair": true,
+  "newRepairLoop": false,
+  "newBaseline": false,
+  "eighthRepair": false,
+  "originalInvocation": {
+   "finishedAt": "2026-09-06T17:31:29.918107+00:00",
+   "reportSha256": "ff44d9685b0fa22f19be32c0e538d2b7f2ee64564cf6a83ece257b36a787ee02",
+   "archivedAt": "iterations/arrival-common-before-metadata-closure/",
+   "commandLogs": "logs/arrival-common-repair/"
+  },
+  "continuation": {
+   "startedAt": "2026-09-06T17:33:40Z",
+   "commandLogs": "logs/arrival-common-metadata-closure/",
+   "commissionRef": "integration-arrival-common-metadata-commission.txt",
+   "handoffRef": "producer-arrival-common-metadata-handoff.json",
+   "scopeDecisionRef": "producer-arrival-common-metadata-scope-decision.json",
+   "addendumRef": "integration-arrival-common-scope-addendum.txt"
+  },
+  "note": "Every command below carries its own phase field. Original-phase commands and their UTC/log SHAs are preserved verbatim from the archived first report; continuation commands are fresh and were run against the final repaired source with the repository-installed toolchain."
+ },
+ "sourceMetadata": {
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "exactV3Everywhere": true,
+  "residualSceneV2ReferencesInChangedFiles": 0,
+  "bindings": [
+   {
+    "path": "main/tools/generate-scene-av-runtime.mjs",
+    "change": "SIGNED_SOURCES[2].sha256 -> 5ef85a32… and .contractVersion -> 'scene-v3'. Two literals. No generator logic, no anchorCount, no validation change.",
+    "beforeSha256": "a0681f65079a6232a8bbe95692bcf304e086b5a41703f1c1006d65b576eedfc0",
+    "afterSha256": "d1cfbec167439824c1eb7306b5fbc02f9a2557aadde826906f80808637ae069a"
+   },
+   {
+    "path": "main/chapter-registry.json",
+    "change": "Common-ground catalog entry id -> common-ground@scene-v3, contractVersion -> scene-v3, sha256 -> 5ef85a32…, and all 16 matching scene reference IDs (reveal/anchor/score/camera/palette/evidence + the scenes list entry). All 19 scene-v2 tokens in the file were common-ground tokens; no other chapter, beat, reveal, cue, palette text or coversBeats list was touched.",
+    "beforeSha256": "6ae185a0944321e6b0c9b438e7df4b06bbee76da8463f9b72856a2196fd3bd98",
+    "afterSha256": "0e67cb8efbc790d49ffd483f319cd169893ee793640a0b1362fcc670fb5c5cc6",
+    "generatorOwnership": "main/tools/chapter-registry-generate owns declared beat lists only; catalog metadata is authored. chapter:registry:check re-derives the beat declarations (47) and reports registry and journey match, so the authored edit did not disturb generated territory. No second generator exists."
+   },
+   {
+    "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+    "change": "activeProduction.const.contractVersion scene-v2 -> scene-v3. ONE token. const stays a strict exact-equality object; runId, sceneId, productionLockPath, implementationStatus, releaseStatus and every other validator condition are byte-unchanged.",
+    "beforeSha256": "100580dbf52df04a7bd83378c8b992524ef774e005a6af28c12f1e7a1d1f547c",
+    "afterSha256": "eea51ae5c382c9da6e82141f0d95eba465331808c3f553c7021f10530de00ac4"
+   },
+   {
+    "path": "main/story-authority.json",
+    "change": "activeProduction.contractVersion already scene-v3 from the original invocation; NOT re-edited in the continuation.",
+    "beforeSha256": "a302656509bfe430ab24f4ee9bb1a0531df253545cbc7b3b9df5b40e55c497ba",
+    "afterSha256": "7c4032554416900c7f39a08caff8cfd18b879979f83ee886293a8f76b5bbd1dc",
+    "phase": "original"
+   },
+   {
+    "path": "main/src/story/signedSceneAvRuntime.ts",
+    "change": "CH13_SCENE_AV_SHA256 -> 5ef85a32…, CH13_SCENE_AV_REVISION -> 'scene-v3', and the two doc comments that name the signed revision. No AV, runtime, cue, anchor or export-shape change.",
+    "beforeSha256": "681339e20ca341c01c08527a1b5519a40d7703abcf7d65fdf44661ebc8fb9764",
+    "afterSha256": "5ac8377fd5f810d20d32e589223367fb1ed03c0ba8e46690a127f07f6cdbd177"
+   },
+   {
+    "path": "main/src/story/generatedSceneAvRuntime.json",
+    "change": "Regenerated by npm --prefix main run scene:av:generate. Never hand-edited.",
+    "beforeSha256": "0433dc0a1032c6bc8ae2b301fd78b85002bda539b7447ccf7128a4b91229655b",
+    "afterSha256": "4da946273b23c00063e9994897fb0ab7055c25025b45c4d70807ff5c38d94203",
+    "regenerationDiff": "Structural diff of the whole generated document against the pre-generation bytes shows EXACTLY two changed leaves: sources[2].sha256 and sources[2].contractVersion. No key added, removed or reordered; every other scene, anchor, cue and value is byte/semantically identical. The generated result also equals the v3-preview artifact the original invocation produced out-of-tree (4da94627…)."
+   }
+  ]
+ },
+ "originalPhaseChecks": {
+  "note": "Preserved verbatim from the archived first report for provenance. Only the passing ones on the FINAL source appear in checks[]; the three that failed are historical evidence under gateSummary.originalInvocation.",
+  "commands": [
+   {
+    "name": "story:ux:check",
+    "command": "npm --prefix main run story:ux:check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:23:48Z",
+    "finishedAt": "2026-09-06T17:23:50Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/story-ux-check.log",
+    "logSha256": "1f4792597729ce88e30080de843af70f27b341e95c745936ed430fd0aaa8d999",
+    "result": "9 test files / 94 tests passed"
+   },
+   {
+    "name": "verify (composite, run once on final source)",
+    "command": "npm --prefix main run verify",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:23:53Z",
+    "finishedAt": "2026-09-06T17:23:54Z",
+    "exitCode": 1,
+    "log": "logs/arrival-common-repair/verify.log",
+    "logSha256": "e45e343403ae740d712875277ed90e63a5d2ee699eb8cef91563beabc595cca8",
+    "stepsActuallyExecutedByThisCommand": [
+     "catalog:check",
+     "scene:av:check"
+    ],
+    "result": "ABORTED at step 2 of 14 on scene:av:check. This composite did NOT execute typecheck, test, audio:check or build; those appear below only because they were run as their own commands, and must not be credited to this one."
+   },
+   {
+    "name": "npm run catalog:check",
+    "command": "npm --prefix main run catalog:check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:05Z",
+    "finishedAt": "2026-09-06T17:24:05Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/catalog-check.log",
+    "logSha256": "d4fa8765ef0712ca47020a9df56cfa743b49a33c857e2387d8d729f847d97a4a"
+   },
+   {
+    "name": "npm run scene:av:check",
+    "command": "npm --prefix main run scene:av:check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:05Z",
+    "finishedAt": "2026-09-06T17:24:05Z",
+    "exitCode": 1,
+    "log": "logs/arrival-common-repair/gates/scene-av-check.log",
+    "logSha256": "75133a0c513329ccb306d347c3299d938346584bbd413faf8098d0f8ead49aa5"
+   },
+   {
+    "name": "npm run creative:workflow:check",
+    "command": "npm --prefix main run creative:workflow:check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:05Z",
+    "finishedAt": "2026-09-06T17:24:06Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/creative-workflow-check.log",
+    "logSha256": "c10c1eaf7983659984c10ae1b82a38e6d999989e1322a37b26ea90151d9314d3"
+   },
+   {
+    "name": "npm run chapter:registry:check",
+    "command": "npm --prefix main run chapter:registry:check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:06Z",
+    "finishedAt": "2026-09-06T17:24:07Z",
+    "exitCode": 1,
+    "log": "logs/arrival-common-repair/gates/chapter-registry-check.log",
+    "logSha256": "f482f643a0e3d88564413f83ef56da9fbf008f7c593215afa106249810506927"
+   },
+   {
+    "name": "npm run chapter:journey:check",
+    "command": "npm --prefix main run chapter:journey:check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:07Z",
+    "finishedAt": "2026-09-06T17:24:07Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/chapter-journey-check.log",
+    "logSha256": "720c32d0e5edc52899f812187f01eb4bcb341a48e6dd6d682049a44d0bcb6a1b"
+   },
+   {
+    "name": "npm run typecheck",
+    "command": "npm --prefix main run typecheck",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:07Z",
+    "finishedAt": "2026-09-06T17:24:15Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/typecheck.log",
+    "logSha256": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af"
+   },
+   {
+    "name": "npm run preview:check",
+    "command": "npm --prefix main run preview:check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:15Z",
+    "finishedAt": "2026-09-06T17:24:16Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/preview-check.log",
+    "logSha256": "74b541254a53c4812b34c35e06544e20da2e5d42b0d5a96af76533a542df82ab"
+   },
+   {
+    "name": "npm run audio:diagnostic-check",
+    "command": "npm --prefix main run audio:diagnostic-check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:16Z",
+    "finishedAt": "2026-09-06T17:24:16Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/audio-diagnostic-check.log",
+    "logSha256": "7223954ae86b9f87e00a74079320e53aff5084b76376511cd3fd2dec62abf72f"
+   },
+   {
+    "name": "npm run story:ladder:check",
+    "command": "npm --prefix main run story:ladder:check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:16Z",
+    "finishedAt": "2026-09-06T17:24:16Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/story-ladder-check.log",
+    "logSha256": "9acb8b1b1578947573d418dbdfa469780c8e5dfc22f18ecf05fab8b982b4cab8"
+   },
+   {
+    "name": "npm run guidance:target-check",
+    "command": "npm --prefix main run guidance:target-check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:16Z",
+    "finishedAt": "2026-09-06T17:24:16Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/guidance-target-check.log",
+    "logSha256": "71abe986fb792d4ee408ffd6d0007e5f0ff27dd18864617b326f687868a8c2b6"
+   },
+   {
+    "name": "npm run story:authority",
+    "command": "npm --prefix main run story:authority",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:16Z",
+    "finishedAt": "2026-09-06T17:24:17Z",
+    "exitCode": 1,
+    "log": "logs/arrival-common-repair/gates/story-authority.log",
+    "logSha256": "f422b16af6d29c7a361c853f4736d748b65b22b7224b89f8fe1e27905edf71a3"
+   },
+   {
+    "name": "npm run test",
+    "command": "npm --prefix main run test",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:17Z",
+    "finishedAt": "2026-09-06T17:24:34Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/test.log",
+    "logSha256": "4e0a70d3182694afbe15a3cd7f995527d42bfcacc6fb9720745d712b8a8c645c"
+   },
+   {
+    "name": "npm run audio:check",
+    "command": "npm --prefix main run audio:check",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:24:34Z",
+    "finishedAt": "2026-09-06T17:25:02Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/audio-check.log",
+    "logSha256": "53d8bded050caccd86ee18e7e8ea1c0d69fe06c10a51add6d23df82519b219d8"
+   },
+   {
+    "name": "npm run build",
+    "command": "npm --prefix main run build",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAt": "2026-09-06T17:25:02Z",
+    "finishedAt": "2026-09-06T17:25:09Z",
+    "exitCode": 0,
+    "log": "logs/arrival-common-repair/gates/build.log",
+    "logSha256": "f6e8cbe478c0330d15bd3f7e88a895834ffe0a4be211df4bbe06a72dcfdbc0a3"
+   }
+  ]
+ },
+ "externalChanges": {
+  "reviewRef": "producer-concurrent-validation-tooling-review.json",
+  "snapshotRef": "iterations/concurrent-validation-tooling",
+  "mine": false,
+  "editedByMe": false,
+  "revertedByMe": false,
+  "includedInMyChangedPaths": false,
+  "files": [
+   {
+    "path": "main/tools/creative-triad-gate.mjs",
+    "baselineSha256": "1a57c5ce722d545a0a48ce7e7d86839581af3041f0132f932a4e3e45f875a0b1",
+    "rootReviewedCurrentSha256": "d26ce9af3e993d45b433fc0cf5f758a8bc248827e1a8aba1cbac2c95a56e6a4d",
+    "observedAtMyStartSha256": "d26ce9af3e993d45b433fc0cf5f758a8bc248827e1a8aba1cbac2c95a56e6a4d",
+    "observedAtMyEndSha256": "2ee54e485dddb98b1a4dd593d500208f30cdfb832ce112b564d40e57ee616700",
+    "ADDITIONAL_DRIFT": true,
+    "driftMtime": "2026-09-06 13:36:27 -0400 (2026-09-06T17:36:27Z)",
+    "finding": "REPORTED, NOT ADOPTED. The bytes root reviewed (d26ce9af…) were present when this continuation started at 17:33 and throughout the metadata edits and the targeted gates. A concurrent session modified this file AGAIN at 17:36:27Z, two seconds before the final verify finished, to 2ee54e48…. This is drift BEYOND the root-reviewed override and is flagged as required rather than silently adopted.",
+    "impactOnMyResults": "None. This file is only invoked by the creative:gate / creative:smoke scripts; it is NOT in the 14-step verify chain. The chain step named creative:workflow:check runs tools/creative-workflow-config-gate.mjs. That gate was additionally re-run at 17:36:56Z against the post-drift tree and passed (185 checks). The signed scene-v3 contract/brief had already passed 1714 checks under the earlier, stricter gate, so nothing here depends on relaxed gate logic."
+   },
+   {
+    "path": "main/package.json",
+    "sha256AtFinalCommands": "5b06a5d53d6dc633de1d7bc61667ab762a04daf0fc65d88d1d6f79f1df9f7a3a",
+    "mtime": "2026-09-06 13:29:21 -0400",
+    "stable": true,
+    "note": "Matches the fingerprint in the root review. All fresh commands ran through these exact script bytes; the 14-step verify chain is unchanged."
+   },
+   {
+    "path": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-delta.run-profile.json",
+    "sha256AtFinalCommands": "a0b0ecdd0df08f1866af39fb74645bc8eea1c05b008cf1e8856de60edc1444c2",
+    "stable": true,
+    "note": "Matches the root review fingerprint; not used by this run."
+   }
+  ],
+  "originalPhaseObservation": {
+   "observedAt": "2026-09-06T17:30:43Z",
+   "summary": "A CONCURRENT SESSION modified files in this worktree after this task had finished writing and finished every check. Not reverted, not investigated, not fixed — CLAUDE.md is explicit that a module another session is actively editing must not be touched.",
+   "files": [
+    {
+     "path": "main/tools/creative-triad-gate.mjs",
+     "mtime": "2026-09-06 13:28:33 -0400",
+     "frozenManifestSha256": "1a57c5ce722d545a0a48ce7e7d86839581af3041f0132f932a4e3e45f875a0b1",
+     "currentSha256": "d26ce9af3e993d45b433fc0cf5f758a8bc248827e1a8aba1cbac2c95a56e6a4d",
+     "inMyAllowedPaths": false,
+     "touchedByMe": false,
+     "note": "This file is in the frozen 99-file manifest, so a drift check run now shows 6 changed files rather than my 5. The sixth is this one."
+    },
+    {
+     "path": "main/package.json",
+     "mtime": "2026-09-06 13:29:21 -0400",
+     "inMyAllowedPaths": false,
+     "touchedByMe": false,
+     "note": "Its verify chain content still matches the 14-step chain this task executed, so the recorded check results remain the ones that chain produces."
+    },
+    {
+     "path": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-delta.run-profile.json",
+     "mtime": "2026-09-06 13:29:21 -0400",
+     "inMyAllowedPaths": false,
+     "touchedByMe": false
+    }
+   ],
+   "timing": "My last source write was 13:22 local (main/story-authority.json); my last check finished 2026-09-06T17:25:09Z (13:25 local). All three drifted files are stamped 13:28-13:29, after both.",
+   "consequence": "creative:workflow:check passed at 17:24:06Z against the PREVIOUS bytes of creative-triad-gate.mjs. Its result is therefore reported as measured, not as a claim about the current bytes. verify was run once, as directed, and was not re-run to chase this.",
+   "evidence": "logs/arrival-common-repair/external-drift.txt",
+   "evidenceSha256": "65aa4863aaa847dee81bc2587bd0af788189cb086bec132a65689e815165d4d7"
+  }
+ },
+ "closedRequirements": [
+  {
+   "id": "C-signed-source-metadata",
+   "status": "CLOSED in this continuation",
+   "wasBlockedBy": "Three files carrying the duplicated ch13 binding sat outside the original ten-path commission.",
+   "closedBy": "Root granted those exact paths under standing delegation (producer-arrival-common-metadata-scope-decision.json, integration-arrival-common-scope-addendum.txt, canonical 13-path arrival-common-repair-direction.json). All were already inside production-lock and inside the frozen 99-file manifest.",
+   "evidence": "scene:av:check, chapter:registry:check and story:authority now pass individually and inside the single composite verify."
+  }
+ ]
+}

@@ -1414,7 +1414,7 @@ async function enterPlayablePage(page, scenario, timeoutMs) {
     // boot gap: scene readiness is the first boundary at which a frame-sampled
     // action can honestly exercise the mounted player/ship controller.
     if (app?.phase === 'playing' && app?.sceneReady === true) return;
-    const play = page.getByRole('button', { name: /Play Now/i }).first();
+    const play = page.getByRole('button', { name: /Free Play/i }).first();
     if (await play.isVisible().catch(() => false) && await play.isEnabled().catch(() => false)) {
       await clickTrusted(page, play);
       await page.waitForTimeout(100);

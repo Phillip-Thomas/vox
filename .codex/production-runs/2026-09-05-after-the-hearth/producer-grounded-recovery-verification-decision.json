@@ -1,0 +1,15 @@
+{
+  "at": "2026-09-07T00:05:32.238446+00:00",
+  "decidedBy": "delegate",
+  "authorityRef": {
+    "path": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+    "sha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338"
+  },
+  "decision": "One eight-minute private grounded-return verification correction; no new source repair.",
+  "cause": "Previous return loop declared XZ arrival at0.55 units while actual foot remained0.904 units above auditedplane and unsupported. Ground gate correctly stopped; currentCnegative itself passed.",
+  "privateScope": "Tighter ordinary return target and bounded settle/actualfoot support measurement, then existing fullretraversal/held80msF/Worker18. Preserve current compiled observer pins and all game predicates.",
+  "deadlineAt": "2026-09-07T00:13:32.238446+00:00",
+  "sourceMutationAuthorized": false,
+  "additionalSourceRepairPasses": 0,
+  "priorAllVerifiersFinishedAndCleanupConfirmed": true
+}

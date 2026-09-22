@@ -1,0 +1,1069 @@
+{
+  "schema": "paravoxia.scoreStage3NativeDelta.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "proposalVersion": "early-score-stage3-v1",
+  "authoredBy": "score-director",
+  "authoredAt": "2026-09-05T20:31:08.719232+00:00",
+  "status": "authentic-recipient-delta-ready-for-actual-candidate-compilation-unsigned",
+  "actualContractVersion": null,
+  "actualContractSha256": null,
+  "contractChangeRequired": true,
+  "preserveFirstBlades": true,
+  "inputBindings": [
+    {
+      "path": "score-treatment.md",
+      "sha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77"
+    },
+    {
+      "path": "score-treatment.json",
+      "sha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d"
+    },
+    {
+      "path": "score-preparatory-notes.jsonl",
+      "sha256": "c2bd20652736e4f288d7caad674c2d75457b67c185e6b28c64267b8f5c90fc03"
+    },
+    {
+      "path": "chapter-stage3-proposal.md",
+      "sha256": "8ab4385e6a08d60a657975fb67196b4d09058d04b92a84e48066c2e4ea2b5115"
+    },
+    {
+      "path": "chapter-stage3-proposal.json",
+      "sha256": "0402d9d566a729acb1c01eff4125c0f9b5d06ea1d45aa6f6ac08f8c0f23dd116"
+    },
+    {
+      "path": "chapter-native-contract-contribution.json",
+      "sha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9"
+    },
+    {
+      "path": "chapter-stage3-preparatory-notes.jsonl",
+      "sha256": "22597973617ec79700cdb7a3583c3e90a0fab896179939c2405d7e1565689a44"
+    },
+    {
+      "path": "cinematography-treatment.md",
+      "sha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8"
+    },
+    {
+      "path": "cinematography-treatment.json",
+      "sha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b"
+    },
+    {
+      "path": "cinematography-preparatory-notes.jsonl",
+      "sha256": "1df2ae871dd5c46775401875999468c5804eab4558ebb317fcee34f35bdb4710"
+    },
+    {
+      "path": "cinematography-stage3-reconciliation.jsonl",
+      "sha256": "06c84215ee9861406fceab86e731574d011581ec2351b02cf3ec7b869a35e3be"
+    },
+    {
+      "path": "cinematography-stage3-native-delta.json",
+      "sha256": "ad0912eea97a31acfc863ad5e7b3cdb320520ea0a808f03490a2de2df54a1a17"
+    }
+  ],
+  "baseTreatment": {
+    "path": "score-treatment.json",
+    "sha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d"
+  },
+  "baseReadingCopy": {
+    "path": "score-treatment.md",
+    "sha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77"
+  },
+  "recipientResponseRef": "score-stage3-reconciliation.jsonl",
+  "sourceCorrections": [
+    "These strings already exist in the static track work order. No previous dedicated track caption publisher or usable early journal history is established. Parenthetical was already refused by voice grammar. This is explicitly accepted new presentation timing,not a claim that old timing is preserved.",
+    "Preserving the original treatment does not preserve any contrary claim of an existing automatic caption timestamp or voiced parenthetical. This delta governs the new exact delivery."
+  ],
+  "nativeFieldOperations": [
+    {
+      "operation": "replace",
+      "path": "score",
+      "value": {
+        "treatmentRef": "score-stage3-native-delta.json",
+        "mood": "Preserve current storyScore.MOODS: fixed92,track72,raster100,depth96 BPM,prologue tonic chain,era gates,seeded grammar,original bed and authored bundles.",
+        "eraFidelity": "Bare dry restricted chip grammar and existing institutional SFX/voice; no new fidelity,layer,stem,loop,pitch or arrangement.",
+        "cues": [
+          {
+            "id": "cue.early.descent-impact",
+            "cueRef": "main/src/story/storyScore.ts#STORY_HIT_ANCHORS",
+            "type": "transition",
+            "anchorRef": "anc.descent.impact",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Preserve existing impact bundle exactly; reference its actual audible image-synchronized origin, not a new scheduling call.",
+            "barIntent": "Original authored transport only; receipt/visible-text timing never advances or retimes the music.",
+            "mixIntent": "Existing shipCrash and score impact only; no restored replay.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.fixed-bed",
+            "cueRef": "main/src/story/storyScore.ts#MOODS",
+            "type": "music",
+            "anchorRef": "early.fixed.ready",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Continue the existing ch1-fixed mood,92BPM prologue tonic/era authority; no entry restart of phrase or new layer.",
+            "barIntent": "Original authored transport only; receipt/visible-text timing never advances or retimes the music.",
+            "mixIntent": "Existing quiet chip bed and authored mix remain; no acquisition bloom.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.fixed-entry",
+            "cueRef": "main/src/story/ux/feedbackCues.ts#emitStoryUxFeedbackCue",
+            "type": "diegetic",
+            "anchorRef": "early.fixed.ready",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "At most one current objectiveEnter on actual fresh natural entry; existing voice-gap guard; no target/marker-acquired ping for survey.",
+            "barIntent": null,
+            "mixIntent": "Seed/Continue/preearned skip silent; one semantic entry for each actually entered normal-route objective.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.pickup-native",
+            "cueRef": "main/src/story/debrisSalvage.ts#collectDebris",
+            "type": "diegetic",
+            "anchorRef": "early.pickup.receipt",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Original terminalKey once after the actual debris0 transaction has committed every original loot stack.",
+            "barIntent": null,
+            "mixIntent": "Native physical confirmation, no seed/backfill or raw milestone acknowledgement.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.pickup-ack",
+            "cueRef": "main/src/story/ux/feedbackCues.ts#emitStoryUxFeedbackCue",
+            "type": "diegetic",
+            "anchorRef": "early.pickup.receipt",
+            "relation": "after",
+            "offsetMs": 120,
+            "phraseIntent": "One confirmed objectiveComplete, nominal120ms and admissible120..240ms after real receipt; next action immediate; correlation/due-time validity required.",
+            "barIntent": null,
+            "mixIntent": "No objectiveProgress or audible next-entry doublet; preserve native attack and original recipe.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.harvest-native",
+            "cueRef": "main/src/components/EfficientPlayer.tsx#commitMine",
+            "type": "diegetic",
+            "anchorRef": "early.harvest.receipt",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Preserve ordinary native mine activity and successful mine sound; only final local positive relevant drops certify semantic completion.",
+            "barIntent": null,
+            "mixIntent": "Mine charging is not receipt proof; rejected/no-yield actions earn no acknowledgement.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.harvest-ack",
+            "cueRef": "main/src/story/ux/objectiveCommandFeedback.ts#acknowledgeObjectiveCommand",
+            "type": "diegetic",
+            "anchorRef": "early.harvest.receipt",
+            "relation": "after",
+            "offsetMs": 120,
+            "phraseIntent": "One confirmed completion instead of progress at real positive fiber predicate edge;120..240ms after receipt; expected successor may be traverse.",
+            "barIntent": null,
+            "mixIntent": "No replay of preearned fiber; first actual post-Continue completion is audible when unpaused and audio ready.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.coverage-native",
+            "cueRef": "main/src/story/storyDirector.ts#storyDirectorTick",
+            "type": "diegetic",
+            "anchorRef": "early.coverage.transfer",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Exactly one existing storyGlitch on actual shared player-traversal transfer; never wait for musical grid.",
+            "barIntent": null,
+            "mixIntent": "No extra completion sound; initialization,resize,FOV/layout rebase,restore/retarget silent.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.track-bundle",
+            "cueRef": "main/src/story/storyScore.ts#STORY_HIT_ANCHORS",
+            "type": "transition",
+            "anchorRef": "anc.track.unbolt",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Existing bloom/storyAwaken bundle at actual fired origin,450ms grid cap,6500ms rig and7000ms envelope unchanged.",
+            "barIntent": "Original authored transport only; receipt/visible-text timing never advances or retimes the music.",
+            "mixIntent": "No optional pending receipt or track-entry/wait chirp intrudes; no new arrangement.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.track-system",
+            "cueRef": "main/src/story/StoryCaptions.tsx#StoryCaptions",
+            "type": "diegetic",
+            "anchorRef": "anc.track.unbolt",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Publish exact52-character first Regulation sentence once in system channel at fired origin,TTL2800ms; visible character range only via existing feed voice.",
+            "barIntent": null,
+            "mixIntent": "Same institutional timbre/era/mix. No hidden work-order delivery, HOLD utterance, middle-line dispatch or new voice layer.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.track-attention-silence",
+            "cueRef": null,
+            "type": "silence",
+            "anchorRef": "early.track.attention",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "At actual unbolt+3250ms show exact36-character parenthetical through caption channel for3200ms; no voiced event or stinger.",
+            "barIntent": null,
+            "mixIntent": "Selective notification/voice silence only; existing score quiet bed and unbolt continue. No journal or previous publisher claim.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.raster-bed",
+            "cueRef": "main/src/story/storyScore.ts#MOODS",
+            "type": "music",
+            "anchorRef": "early.raster.ready",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Existing ch1-raster100BPM mood follows actual handback; preserve tonic,phrasing,era and gain slews.",
+            "barIntent": "Original authored transport only; receipt/visible-text timing never advances or retimes the music.",
+            "mixIntent": "No new musical reward for releasing held input.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.raster-entry",
+            "cueRef": "main/src/story/ux/feedbackCues.ts#emitStoryUxFeedbackCue",
+            "type": "diegetic",
+            "anchorRef": "early.raster.ready",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "One entry only for the actual next mandatory action; existing voice-gap guard; silent restore and satisfied intermediate skips.",
+            "barIntent": null,
+            "mixIntent": "No seventh hold objective and no entry on target churn.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.raster-native",
+            "cueRef": "main/src/story/debrisSalvage.ts#collectDebris",
+            "type": "diegetic",
+            "anchorRef": "early.raster.receipt",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Original terminalKey for real debris and mine for actual extraction remain; partial required progress adds no extra chirp.",
+            "barIntent": null,
+            "mixIntent": "Optional pieces3..5 keep normal loot/native SFX only, outside mandatory receipt semantics.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.raster-completion",
+            "cueRef": "main/src/story/ux/feedbackCues.ts#emitStoryUxFeedbackCue",
+            "type": "diegetic",
+            "anchorRef": "early.raster.receipt",
+            "relation": "after",
+            "offsetMs": 120,
+            "phraseIntent": "One completion when this receipt terminates the actual active objective. Nominal120ms/admissible120..240ms. Salvage-complete and quota-complete are predicate aliases of this same receipt, not separate playback triggers.",
+            "barIntent": null,
+            "mixIntent": "Completion wins over progress; one audible completion maximum even when both predicates become true; null successor quota hold retains same intent; hold expiry never repeats.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.quota-hold-restraint",
+            "cueRef": null,
+            "type": "silence",
+            "anchorRef": "early.raster.quota-complete",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Same final receipt clears old target/order/objective within2presentedframes and enters unchanged completed hold, preserving its already pending one acknowledgement.",
+            "barIntent": null,
+            "mixIntent": "No added hold-entry cue,objective,chirp or score change; this restraint does not suppress the valid final receipt or original bed.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.depth-bed",
+            "cueRef": "main/src/story/storyScore.ts#MOODS",
+            "type": "music",
+            "anchorRef": "early.depth.handoff",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Existing ch1-depth96BPM mood and original pod objective/true marker semantics continue; no new reward or replay of quota.",
+            "barIntent": "Original authored transport only; receipt/visible-text timing never advances or retimes the music.",
+            "mixIntent": "Keep later native cues/voice behavior unchanged; depth transition is not another quota completion.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.depth-continuity",
+            "cueRef": "main/src/story/storyScore.ts#MOODS",
+            "type": "music",
+            "anchorRef": "early.depth.settled",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Continue existing depth music through original2.5s settling; declaration describes continuity, not another setScoreBeat or hit.",
+            "barIntent": "Original authored transport only; receipt/visible-text timing never advances or retimes the music.",
+            "mixIntent": "No new stinger at settled camera; all three actual pod receipts remain their current authorities.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          },
+          {
+            "id": "cue.early.restore-restraint",
+            "cueRef": null,
+            "type": "silence",
+            "anchorRef": "early.entry.restored",
+            "relation": "at",
+            "offsetMs": 0,
+            "phraseIntent": "Reconstruct actual earned objective/completed hold once and silently; invalidate old pending intents, retain future real action audibility.",
+            "barIntent": null,
+            "mixIntent": "No acquired receipt,impact,cut,entry,track line or unlock backlog; normal current mood remains.",
+            "silenceIntent": "Withhold only the redundant/forbidden notification or voice described here; never mute the original score bed.",
+            "resetRef": "reset.early.score-feedback",
+            "evidenceRefs": [
+              "score-stage3-native-delta.json",
+              "capture.early.score-receipts",
+              "capture.early.track-text"
+            ]
+          }
+        ],
+        "mixIntent": "Native real transaction first,one restrained terminal acknowledgement after120..240ms,coalesced next-entry/partial-progress. Existing track music and one visible institutional system sentence; later parenthetical silent. No new duck,mix recipe or audio-core edit.",
+        "performancePlan": "At most one unscheduled early receipt intent; bounded event work,no per-frame nodes,no new transport. Preserve audio-owner sources and sole-GPU lease. Source+contract-hashed AV/dispatch proof and focused existing regression checks before review.",
+        "evidenceRefs": [
+          "score-treatment.md",
+          "score-stage3-native-delta.json",
+          "capture.early.score-receipts",
+          "capture.early.track-text",
+          "capture.early.quota-clear-hold"
+        ]
+      }
+    },
+    {
+      "operation": "append",
+      "path": "reset.states",
+      "value": {
+        "id": "reset.early.score-feedback",
+        "domain": "score",
+        "stateRef": "main/src/story/ux/feedbackCues.ts pending-intent state; objectiveDirector run/restore/publication identity; storyDirector owned track once keys",
+        "resetValue": "Cancel obsolete unstarted notification and owned future track events. Preserve valid same-receipt expected successor, including quota-complete null hold; retain existing score state/fade authorities.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "No stale timer/voice/unlock replay. Completion-triggered same-receipt quota clear is an explicit retention case, not broad permission across another lifecycle; later action/unrelated replacement/exit/pause/restore cancels. True replay resets IDs; Continue reconstructs silently then permits real completion. Existing started short SFX may finish its envelope; no fake cancellation claim."
+      }
+    },
+    {
+      "operation": "append",
+      "path": "evidence.captures",
+      "value": {
+        "id": "capture.early.score-receipts",
+        "kind": "audio",
+        "anchorRefs": [
+          "anc.descent.impact",
+          "early.fixed.ready",
+          "early.pickup.receipt",
+          "early.harvest.receipt",
+          "early.coverage.transfer",
+          "anc.track.unbolt",
+          "early.track.attention",
+          "early.raster.ready",
+          "early.raster.receipt",
+          "early.raster.salvage-complete",
+          "early.raster.quota-complete",
+          "early.depth.handoff",
+          "early.depth.settled",
+          "early.entry.restored"
+        ],
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-potato"
+        ],
+        "pathOrPlanRef": "score-stage3-native-delta.json#acceptance",
+        "status": "planned",
+        "acceptanceCriterion": "Decoded continuous source+contract-hashed manual AV with exact transaction/semantic/native/audio outcome ledger: first real completion after Continue,120..240ms acknowledgements,terminal-null completed hold clear<=2frames,no double emission,fast optional action and pause/exit cancellation,visible system voice only and silent parenthetical. No movie-only or rolling-counter audibility claim."
+      }
+    }
+  ],
+  "nativeSyncAnchorScoreContributions": [
+    {
+      "id": "anc.descent.impact",
+      "score": [
+        {
+          "cueRef": "cue.early.descent-impact",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Preserve existing impact bundle exactly; reference its actual audible image-synchronized origin, not a new scheduling call."
+        }
+      ]
+    },
+    {
+      "id": "early.fixed.ready",
+      "score": [
+        {
+          "cueRef": "cue.early.fixed-bed",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Continue the existing ch1-fixed mood,92BPM prologue tonic/era authority; no entry restart of phrase or new layer."
+        },
+        {
+          "cueRef": "cue.early.fixed-entry",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "At most one current objectiveEnter on actual fresh natural entry; existing voice-gap guard; no target/marker-acquired ping for survey."
+        }
+      ]
+    },
+    {
+      "id": "early.pickup.receipt",
+      "score": [
+        {
+          "cueRef": "cue.early.pickup-native",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Original terminalKey once after the actual debris0 transaction has committed every original loot stack."
+        },
+        {
+          "cueRef": "cue.early.pickup-ack",
+          "relation": "after",
+          "offsetMs": 120,
+          "musicalIntent": "One confirmed objectiveComplete, nominal120ms and admissible120..240ms after real receipt; next action immediate; correlation/due-time validity required."
+        }
+      ]
+    },
+    {
+      "id": "early.harvest.receipt",
+      "score": [
+        {
+          "cueRef": "cue.early.harvest-native",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Preserve ordinary native mine activity and successful mine sound; only final local positive relevant drops certify semantic completion."
+        },
+        {
+          "cueRef": "cue.early.harvest-ack",
+          "relation": "after",
+          "offsetMs": 120,
+          "musicalIntent": "One confirmed completion instead of progress at real positive fiber predicate edge;120..240ms after receipt; expected successor may be traverse."
+        }
+      ]
+    },
+    {
+      "id": "early.coverage.transfer",
+      "score": [
+        {
+          "cueRef": "cue.early.coverage-native",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Exactly one existing storyGlitch on actual shared player-traversal transfer; never wait for musical grid."
+        }
+      ]
+    },
+    {
+      "id": "anc.track.unbolt",
+      "score": [
+        {
+          "cueRef": "cue.early.track-bundle",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Existing bloom/storyAwaken bundle at actual fired origin,450ms grid cap,6500ms rig and7000ms envelope unchanged."
+        },
+        {
+          "cueRef": "cue.early.track-system",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Publish exact52-character first Regulation sentence once in system channel at fired origin,TTL2800ms; visible character range only via existing feed voice."
+        }
+      ]
+    },
+    {
+      "id": "early.track.attention",
+      "score": [
+        {
+          "cueRef": "cue.early.track-attention-silence",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "At actual unbolt+3250ms show exact36-character parenthetical through caption channel for3200ms; no voiced event or stinger."
+        }
+      ]
+    },
+    {
+      "id": "early.raster.ready",
+      "score": [
+        {
+          "cueRef": "cue.early.raster-bed",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Existing ch1-raster100BPM mood follows actual handback; preserve tonic,phrasing,era and gain slews."
+        },
+        {
+          "cueRef": "cue.early.raster-entry",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "One entry only for the actual next mandatory action; existing voice-gap guard; silent restore and satisfied intermediate skips."
+        }
+      ]
+    },
+    {
+      "id": "early.raster.receipt",
+      "score": [
+        {
+          "cueRef": "cue.early.raster-native",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Original terminalKey for real debris and mine for actual extraction remain; partial required progress adds no extra chirp."
+        },
+        {
+          "cueRef": "cue.early.raster-completion",
+          "relation": "after",
+          "offsetMs": 120,
+          "musicalIntent": "One completion when this receipt terminates the actual active objective. Nominal120ms/admissible120..240ms. Salvage-complete and quota-complete are predicate aliases of this same receipt, not separate playback triggers."
+        }
+      ]
+    },
+    {
+      "id": "early.raster.salvage-complete",
+      "score": [
+        {
+          "cueRef": "cue.early.raster-completion",
+          "relation": "after",
+          "offsetMs": 120,
+          "musicalIntent": "One completion when this receipt terminates the actual active objective. Nominal120ms/admissible120..240ms. Salvage-complete and quota-complete are predicate aliases of this same receipt, not separate playback triggers."
+        }
+      ]
+    },
+    {
+      "id": "early.raster.quota-complete",
+      "score": [
+        {
+          "cueRef": "cue.early.raster-completion",
+          "relation": "after",
+          "offsetMs": 120,
+          "musicalIntent": "One completion when this receipt terminates the actual active objective. Nominal120ms/admissible120..240ms. Salvage-complete and quota-complete are predicate aliases of this same receipt, not separate playback triggers."
+        },
+        {
+          "cueRef": "cue.early.quota-hold-restraint",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Same final receipt clears old target/order/objective within2presentedframes and enters unchanged completed hold, preserving its already pending one acknowledgement."
+        }
+      ]
+    },
+    {
+      "id": "early.depth.handoff",
+      "score": [
+        {
+          "cueRef": "cue.early.depth-bed",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Existing ch1-depth96BPM mood and original pod objective/true marker semantics continue; no new reward or replay of quota."
+        }
+      ]
+    },
+    {
+      "id": "early.depth.settled",
+      "score": [
+        {
+          "cueRef": "cue.early.depth-continuity",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Continue existing depth music through original2.5s settling; declaration describes continuity, not another setScoreBeat or hit."
+        }
+      ]
+    },
+    {
+      "id": "early.entry.restored",
+      "score": [
+        {
+          "cueRef": "cue.early.restore-restraint",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "Reconstruct actual earned objective/completed hold once and silently; invalidate old pending intents, retain future real action audibility."
+        }
+      ]
+    }
+  ],
+  "nativeFieldOperationTarget": "Merge only Score-owned score field,score anchor arrays,and append uniquely identified score reset/evidence records. Do not replace complete combined anchors or any Chapter/Cinema field.",
+  "nullSuccessorAcknowledgement": {
+    "outgoingIds": [
+      "ch1:raster:recover-quota",
+      "ch1:raster:extract-fiber-quota"
+    ],
+    "nextObjectiveId": null,
+    "clearReason": "quota-complete",
+    "mustMatch": [
+      "runId",
+      "restoreEpoch",
+      "actualNativeReceiptId",
+      "outgoingObjectiveId",
+      "publicationLineage"
+    ],
+    "validContext": "same real accepted post-commit transaction establishes required0..2 && fiber6 && stone4,clears into current raster completed hold; no independent replacement or restore intervenes",
+    "retain": "The existing at-most-one acknowledgement remains valid despite activeObjective=null and may dispatch120..240ms after this same receipt. Do not delay <=2presented-frame clear.",
+    "semanticArity": "One actual receipt yields at most one active-objective completion and one audible acknowledgement; record coincident salvage/quota predicates without a second emission. Preearned fiber objective has no entry or fake completion.",
+    "cancelOn": [
+      "later actual action including optional salvage",
+      "unrelated replacement",
+      "beat exit",
+      "pause",
+      "focus/visibility loss",
+      "restore/Continue reconstruction",
+      "true new run",
+      "quit",
+      "sandbox"
+    ],
+    "audioVisualDifference": "900ms visual receipt may freeze/resume remaining lifetime; canceled unstarted audio never rearms. Optional pickup cannot replace mandatory visual receipt or create task progress, but its later actual action invalidates stale optional audio intent.",
+    "restore": "Derived already-complete state enters hold silently,never creates a live receipt token.",
+    "expiry": "Original6s minimum and2.5s hold remain; no seventh objective or hold-expiry acknowledgement."
+  },
+  "trackCaptionContract": {
+    "system": {
+      "anchorRef": "anc.track.unbolt",
+      "text": "CAMERA HAND-OFF: SUSPENDED. ONE VIEW STAYS WITH YOU.",
+      "channel": "system",
+      "offsetMs": 0,
+      "ttlMs": 2800,
+      "voiceOwner": "main/src/story/StoryCaptions.tsx::StoryCaptions -> voiceVisibleText(system:<shownAt>,shownText,revealed,feed)",
+      "voicePolicy": "Only actually revealed visible characters; existing institutional register/timbre/era/mix; no standalone hidden or full-line work-order utterance.",
+      "characterCount": 52,
+      "typewriterMsPerCharacter": 34,
+      "fullRevealOffsetMs": 1768,
+      "fadeStartOffsetMs": 2100,
+      "clearOffsetMs": 2800,
+      "minimumFullyRevealedOpaqueEvidenceMs": 300
+    },
+    "parenthetical": {
+      "anchorRef": "early.track.attention",
+      "text": "(simpler to keep watching this one.)",
+      "channel": "caption",
+      "relativeTo": "actual fired anc.track.unbolt",
+      "offsetMs": 3250,
+      "ttlMs": 3200,
+      "voiceOwner": null,
+      "silent": true,
+      "characterCount": 36,
+      "fullRevealOffsetMs": 4474,
+      "fadeStartOffsetMs": 5750,
+      "clearOffsetMs": 6450
+    },
+    "standingAction": {
+      "text": "HOLD POSITION.",
+      "visible": true,
+      "voiced": false
+    },
+    "retiredAutomaticDispatch": "REGULATION_VOICE.track middle3 lines; preserve original source/lineage,not hidden voice or nonexistent journal.",
+    "sourceCorrection": "These strings already exist in the static track work order. No previous dedicated track caption publisher or usable early journal history is established. Parenthetical was already refused by voice grammar. This is explicitly accepted new presentation timing,not a claim that old timing is preserved.",
+    "publisher": "storyDirector.tickTrackUnlock,once keys scoped to run+beat occurrence+actual fired anchor; story clock offsets,no wall-clock delivery timers.",
+    "clear": "At entry selectively clear outgoing predecessor caption/system that would mask new system via caption precedence. At owned expiry/exit compare-and-clear exact owned entry identity only; never erase next-owner text,workorder,audit or violation.",
+    "focusPauseExit": "Pause/focus freezes active text/event story timing and suppresses audio scheduling; resume current visible remainder without rereading already presented glyphs. Exit/restore/quit/new-run invalidates pending events; actual earned Continue never replays an earlier track occurrence.",
+    "bundleUnchanged": {
+      "gridCapMs": 450,
+      "rigBlendMs": 6500,
+      "letterboxAndHandbackMs": 7000,
+      "musicRecipeSourceChange": false
+    },
+    "nativeReceiptDuringTrack": "Preserve inherited jump/mining permissions and ordinary native SFX for real actions; no track task-progress/extra acknowledgement.",
+    "acceptance": "Caption ownership and per-visible-character voice admission trace must show no hidden/duplicate/late line or glyph; actual start/full reveal/fade/clear AV and source hashes required. Already-started bounded voice grain follows existing envelope/reset law,not retroactive erasure."
+  },
+  "guidanceAcceptance": {
+    "canonicalSource": {
+      "path": "chapter-native-contract-contribution.json",
+      "sha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9"
+    },
+    "rows": [
+      {
+        "id": "ch1:fixed:recover-first-debris",
+        "workOrder": [
+          "WALK OVER THE DEBRIS TO RECOVER IT."
+        ],
+        "kind": "interact",
+        "targetMode": "survey-bracket",
+        "requiresMarker": false,
+        "clearAnchorRef": "early.pickup.receipt",
+        "scoreDisposition": "Accept exact canonical row; one entry per actually entered normal-route stage,semantic-only coalescing/restore policy from Score; no markerAcquired for survey/none.",
+        "trackQualification": null
+      },
+      {
+        "id": "ch1:fixed:calibrate-extractor",
+        "workOrder": [
+          "HOLD [E] TO HARVEST BIOFIBER."
+        ],
+        "kind": "interact",
+        "targetMode": "survey-bracket",
+        "requiresMarker": false,
+        "clearAnchorRef": "early.harvest.receipt",
+        "scoreDisposition": "Accept exact canonical row; one entry per actually entered normal-route stage,semantic-only coalescing/restore policy from Score; no markerAcquired for survey/none.",
+        "trackQualification": null
+      },
+      {
+        "id": "ch1:fixed:cross-camera-cell",
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "kind": "travel",
+        "targetMode": "none",
+        "requiresMarker": false,
+        "clearAnchorRef": "early.coverage.transfer",
+        "scoreDisposition": "Accept exact canonical row; one entry per actually entered normal-route stage,semantic-only coalescing/restore policy from Score; no markerAcquired for survey/none.",
+        "trackQualification": null
+      },
+      {
+        "id": "ch1:track:tracking-transfer",
+        "workOrder": [
+          "HOLD POSITION."
+        ],
+        "kind": "wait",
+        "targetMode": "none",
+        "requiresMarker": false,
+        "clearAnchorRef": "early.raster.ready",
+        "scoreDisposition": "Accept exact canonical row; one entry per actually entered normal-route stage,semantic-only coalescing/restore policy from Score; no markerAcquired for survey/none.",
+        "trackQualification": "Authored bundle/timeline completion,not a resource receipt; no extra completion sound."
+      },
+      {
+        "id": "ch1:raster:recover-quota",
+        "workOrder": [
+          "WALK OVER THE DEBRIS TO RECOVER IT."
+        ],
+        "kind": "interact",
+        "targetMode": "survey-bracket",
+        "requiresMarker": false,
+        "clearAnchorRef": "early.raster.salvage-complete",
+        "scoreDisposition": "Accept exact canonical row; one entry per actually entered normal-route stage,semantic-only coalescing/restore policy from Score; no markerAcquired for survey/none.",
+        "trackQualification": null
+      },
+      {
+        "id": "ch1:raster:extract-fiber-quota",
+        "workOrder": [
+          "HOLD [E] AT BIOFIBER. MOVE TO THE NEXT PATCH."
+        ],
+        "kind": "interact",
+        "targetMode": "survey-bracket",
+        "requiresMarker": false,
+        "clearAnchorRef": "early.raster.quota-complete",
+        "scoreDisposition": "Accept exact canonical row; one entry per actually entered normal-route stage,semantic-only coalescing/restore policy from Score; no markerAcquired for survey/none.",
+        "trackQualification": null
+      }
+    ],
+    "count": 6,
+    "resourceSurveyRows": 4,
+    "noTargetRows": 2,
+    "completedHoldObjective": null,
+    "quotaClearWithinPresentedFrames": 2,
+    "schemaPosition": "Accept root strict survey-bracket/none branch and native colon IDs; requiresMarker:false proves no target by itself; no directional marker or acquired-marker sound in these6 rows. Depth true SUPPLY POD/canonical action remains current.",
+    "genericChapterFeedbackTextQualification": "Track wait finishes on its inherited fired bundle/timeline rather than an inventory receipt; all entry/completion audio uses exact Score policies. Four resource rows require real receipts, travel requires fresh shared movement transfer, and preearned skip records have zero fake entries."
+  },
+  "sourceBindings": [
+    {
+      "path": "main/src/story/StoryCaptions.tsx",
+      "sha256": "2588e150ff5c29ab5fcde36f299ccfce1568c8aad5e276ab689574a2bdf40849",
+      "symbols": [
+        "StoryCaptions",
+        "active=text.caption??text.system",
+        "34ms character reveal",
+        "700ms fade",
+        "visible system voiceVisibleText"
+      ],
+      "readOnly": true
+    },
+    {
+      "path": "main/src/story/storyText.ts",
+      "sha256": "19f6aec5803be5c10e3770ead676b42fa4e3cf5812f5ff71cfbfbb1e4234e806",
+      "symbols": [
+        "showSystemLine",
+        "showCaption",
+        "clearStoryText",
+        "proposed selective clearStoryTextChannel"
+      ],
+      "readOnly": true
+    },
+    {
+      "path": "main/src/story/feed/regulationVoice.ts",
+      "sha256": "8306b3ddc0b1bac1dd321cb6830db1c9cdc28380fe720c0db9d0368ab9e12182",
+      "symbols": [
+        "REGULATION_VOICE.track",
+        "presentRegulationObjective"
+      ],
+      "readOnly": true
+    },
+    {
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "sha256": "80188c72ea6603bfd03758c577a886c6b54d0b00fece4f51a782f297a929bbb0",
+      "symbols": [
+        "workOrder",
+        "voicedOrder",
+        "voiceVisibleText dispatch"
+      ],
+      "readOnly": true
+    },
+    {
+      "path": "main/src/audio/voice/voiceGrammar.ts",
+      "sha256": "f871a50466993e87a9b88c6b42cf8eeb9ac680f1fc7da887f16822b76081b37c",
+      "symbols": [
+        "classifyVoiceLine",
+        "parenthetical/lowercase refusal"
+      ],
+      "readOnly": true
+    },
+    {
+      "path": "main/src/audio/voice/voicePresentation.ts",
+      "sha256": "7871f27ee50c8a3b8912382fe1456224369382691660df9ddf190a022d3429dd",
+      "symbols": [
+        "voiceVisibleText",
+        "suspendVoicePresentation",
+        "voiceTypewriterGapMs"
+      ],
+      "readOnly": true
+    },
+    {
+      "path": "main/src/story/storyClock.ts",
+      "sha256": "fc362a24b2e093eae1f590d871001596b7a2ca711baab764032884f9acbc1461",
+      "symbols": [
+        "storyNow",
+        "setStoryPaused"
+      ],
+      "readOnly": true
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "sha256": "4cfeace8d1a8e3fbf90cd48fef8fced3718dc89b4aa57ff5bf63e3f669749806",
+      "symbols": [
+        "tickTrackUnlock",
+        "onBeatEntered",
+        "storyDirectorTick"
+      ],
+      "readOnly": true
+    },
+    {
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "sha256": "df0f070c7bced43d28dbb54709d9445e5f3329b6a4f9d548b361f5ee81751fb5",
+      "symbols": [
+        "emitStoryUxFeedbackCue"
+      ],
+      "readOnly": true
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "sha256": "0e9dc3058f1fb1d405b0e565767de319790ed794eb2dd597beaa82d48dc39b05",
+      "symbols": [
+        "acknowledgeGuidedStoryCompletion",
+        "clearGuidedStoryObjective"
+      ],
+      "readOnly": true
+    },
+    {
+      "path": "main/src/story/ux/objectiveCommandFeedback.ts",
+      "sha256": "15886ed4d3d3184824016faf75a2902ff176e9a5ea8b41a6b306f99893c43108",
+      "symbols": [
+        "acknowledgeObjectiveCommand"
+      ],
+      "readOnly": true
+    }
+  ],
+  "boundaryAdditions": [
+    {
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "symbols": [
+        "proposed early pending receipt predicate",
+        "proposed cancelPendingStoryUxFeedback"
+      ],
+      "scope": "Extend valid expected successor to matched terminal-null quota-complete lineage; preserve <=2frame clear; no future WebAudio cancel claim."
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "symbols": [
+        "acknowledgeGuidedStoryCompletion",
+        "clearGuidedStoryObjective"
+      ],
+      "scope": "Carry real receipt/publication context through terminal satisfied clear without generic null-state exemption or repeat completion."
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "symbols": [
+        "tickTrackUnlock",
+        "onBeatEntered",
+        "scoped track once keys",
+        "quota-complete clear"
+      ],
+      "scope": "Single actual fired-anchor publisher for exact two channels; conditional/selective lifecycle cancellation,completed hold unchanged."
+    },
+    {
+      "path": "main/src/story/storyText.ts",
+      "symbols": [
+        "showSystemLine",
+        "showCaption",
+        "clearStoryTextChannel (proposed selective helper)"
+      ],
+      "scope": "Compare-and-clear exact owned channel entry; no global clear or next-owner deletion."
+    },
+    {
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "symbols": [
+        "workOrder",
+        "voicedOrder",
+        "voiceVisibleText dispatch"
+      ],
+      "scope": "Canonical6-row workOrder; HOLD unvoiced; no retired lines hidden/voiced; actual system renderer owns first sentence."
+    },
+    {
+      "path": "main/src/story/feed/regulationVoice.ts",
+      "symbols": [
+        "presentRegulationObjective",
+        "REGULATION_VOICE.track / proposed exact-string constants"
+      ],
+      "scope": "Canonical fixed/track/raster/depth projection and source-preserved exact first/fifth text; no new journal."
+    }
+  ],
+  "acceptance": {
+    "nullSuccessorCases": [
+      "normal final fiber real receipt -> null active objective and no target/order<=2frames -> one120..240ms ack -> unchanged hold -> no repeated completion",
+      "final salvage with genuinely preearned fiber -> coincident salvage/quota edges -> one completion/ack; zero fiber-stage entry",
+      "restored complete state -> derived hold/counts,no receipt token,no ack",
+      "pause/hide/exit/unrelated replacement/new run within120ms -> no stale optional ack;visual900ms remainder independent",
+      "later optional actual pickup duringhold -> only its native sound; cancels prior pending ack,does not reset visual completed receipt or create task progress"
+    ],
+    "trackCases": [
+      "exact0..2800ms system first sentence with actual visible feed voice only; no caption precedence mask",
+      "exact3250..6450ms silent parenthetical; no voiced HOLD/middle/hidden lines",
+      "52/36 glyph full reveal at1768/4474ms; first>=300ms fully revealed beforefade; source34ms/700ms timing retained",
+      "owned expiry/exit compare-and-clear,no next-owner deletion; pause/focus/unavailable audio no backlog",
+      "existing bundle origin450ms cap/6500rig/7000handback and one presented destination fixed frame; no musical retime"
+    ],
+    "traceFields": [
+      "runId",
+      "restoreEpoch",
+      "actualNativeReceiptId",
+      "outgoingObjectiveId",
+      "publicationLineage",
+      "nextObjectiveId",
+      "clearReason",
+      "semanticType",
+      "semanticEmitted",
+      "nativeCueId",
+      "positiveCommittedDelta",
+      "audibleDisposition",
+      "dueAtMonotonicMs",
+      "actualDispatchAtMonotonicMs",
+      "actualOnsetOrAdmissionEvidence",
+      "presentedFrameId",
+      "activeTargetId",
+      "sharedTransferIdentity"
+    ],
+    "evidenceStatus": "requested only; no actual AV/audition/runtime acceptance by this response",
+    "review": "Fresh independent Score Continuity and Player Experience review after exact-source runtime evidence"
+  },
+  "pendingBeforeContractSignatures": [
+    "Root compiles exact Score records with Chapter6rows/Cinema14anchors9shots and strict native target proof schema.",
+    "Canonical two grouped first-wave notes per director and authentic recipient responses on actual same revision/hash.",
+    "No signature before the compiled final hash; implementation/evidence/independent review remain separate."
+  ],
+  "runtimeEdited": false,
+  "buildBrowserGpuOrAuditionPerformed": false,
+  "canonicalSignature": null,
+  "artifactValidationRef": "score-stage3-artifact-validation.json"
+}

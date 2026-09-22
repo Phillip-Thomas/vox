@@ -1,0 +1,136 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "compiledAt": "2026-09-06T09:17:54.199689+00:00",
+  "compiledBy": "creative-producer; pre-review implementation findings, pending independent verification and moderator compilation",
+  "sourceReports": [
+    {
+      "path": "chapter-common-trace-clarification.md",
+      "sha256": "e24fba612e04e474b74f15ecb13b5961eeb57d6361fec86bd117409ac2c1a532"
+    },
+    {
+      "path": "cinema-common-trace-clarification.md",
+      "sha256": "68f084b60176dfda9fba8da5ece157cdaf970fa05ed0f44bc04a126c26e6937e"
+    },
+    {
+      "path": "producer-movie-interaction-finding.json",
+      "sha256": "34402039e6a60283468efdbdc8848dff8e69f402c91bb66997bd4c7e5d352f2f"
+    },
+    {
+      "path": "producer-movie-waypoint-finding.json",
+      "sha256": "a97f7792af3755b67b81b2f7a59061b086899217b5e62f9e8c7741646601d36a"
+    }
+  ],
+  "requiresHumanTaste": false,
+  "defects": [
+    {
+      "id": "CG-IMPL-001",
+      "severity": "high",
+      "category": "player-experience/navigation",
+      "status": "open",
+      "owner": "chapter",
+      "anchor": "anc.cg.reciprocal-reference",
+      "statement": "The required common E-to-C path is unwalked and invisible, while the objective calls it traced and the signed presentation forbids its preview.",
+      "evidenceRefs": [
+        "chapter-common-trace-clarification.md",
+        "cinema-common-trace-clarification.md"
+      ],
+      "requestedRepair": "Explicitly authorize the common-only planned/unverified guide and honest guide-line copy. Preserve real traversal and one marker.",
+      "verificationRoute": "Independent raw manual/movie lifecycle and rendered variant evidence, then fresh UX/Cinema review. No implementation or acceptance inferred from this direction.",
+      "sourceReportRefs": [
+        "chapter-common-trace-clarification.md",
+        "cinema-common-trace-clarification.md"
+      ],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-002",
+      "severity": "medium",
+      "category": "cinematography",
+      "status": "open",
+      "owner": "cinematography",
+      "anchor": "anc.cg.route-offered",
+      "statement": "The first renderer uses identical squares instead of the signed proposed/tested/held-end shape grammar.",
+      "evidenceRefs": [
+        "cinema-common-trace-clarification.md"
+      ],
+      "requestedRepair": "Realize broken proposed bars, paired tested bars and open transverse stops within the existing512 pool.",
+      "verificationRoute": "Independent raw manual/movie lifecycle and rendered variant evidence, then fresh UX/Cinema review. No implementation or acceptance inferred from this direction.",
+      "sourceReportRefs": [
+        "cinema-common-trace-clarification.md"
+      ],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-003",
+      "severity": "medium",
+      "category": "player-experience/navigation",
+      "status": "open",
+      "owner": "chapter",
+      "anchor": "anc.cg.route-tested",
+      "statement": "Preparing work orders were introduced without binding their exact copy and ready transitions, and the survey marker prematurely claimed test in progress.",
+      "evidenceRefs": [
+        "chapter-common-trace-clarification.md"
+      ],
+      "requestedRepair": "Bind neutral offered-route label and exact preparing/ready copy under existing17 IDs with actual approach/H readiness and one entry cue.",
+      "verificationRoute": "Independent raw manual/movie lifecycle and rendered variant evidence, then fresh UX/Cinema review. No implementation or acceptance inferred from this direction.",
+      "sourceReportRefs": [
+        "chapter-common-trace-clarification.md"
+      ],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-004",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.fault-reviewed",
+      "statement": "applyCommonGroundRail interact branch calls ctx.noteScreeningAction before ctx.performStoryInteraction. The real performStoryInteraction immediately checks screeningActionReady and refuses the now-consumed cadence. All ch13 movie interact acts therefore starve while their ready prompts remain visible.",
+      "evidenceRefs": [
+        "verifier/captures/smoke-home/summary.json",
+        "verifier/captures/home-movie-1/0008-strip-ch13-home.png",
+        "main/src/story/commonGroundDirector.ts:1749",
+        "main/src/story/autopilot/primitives.ts:1641"
+      ],
+      "requestedRepair": "Let the shared performStoryInteraction own its existing cadence; remove premature consumption in chapter rail. Preserve real interaction resolver/input proof and no timeout rescue. Add a regression through applyCommonGroundRail with a cadence-aware shared performer rather than an always-success spy. Verify the actual home movie progression then the other ch13 interaction phases.",
+      "verificationRoute": "Producer observed source cause and 70-second hardware movie stagnation. Fresh independent verifier still running; not yet its final finding. Then independent real movie/lifecycle proof after the bounded fix.",
+      "sourceReportRefs": [
+        "producer-movie-interaction-finding.json"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-005",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.reciprocal-crossed",
+      "statement": "nextWaypoint scans the entire polyline on every tick and selects the FIRST point farther than 1.2 units from the current body. Once the body leaves the initial point by more than 1.2 units, that already visited start becomes the next target again. Both the long survey rail and common rail pass their complete unsliced route to this stateless scan.",
+      "evidenceRefs": [
+        "main/src/story/commonGroundDirector.ts:1597",
+        "main/src/story/commonGroundDirector.ts:1662",
+        "main/src/story/commonGroundDirector.ts:1692"
+      ],
+      "requestedRepair": "Track ordered controller traversal/reconstruct it from actual recorded progress and current body, without granting route proof. Never retarget already passed points during ordinary forward walking. Reset or reconstruct correctly for Continue/revision/beat changes; real world/route predicates remain the sole progress authority. Add a multi-tick rail regression that physically follows emitted move targets through all turns on both signed polylines and reaches the far end without shortcuts or toggling back to start. Then prove actual browser movie flow.",
+      "verificationRoute": "Source-observed; browser survey/common not yet reached because CG-IMPL-004 blocks home. Then independent real movie/lifecycle proof after the bounded fix.",
+      "sourceReportRefs": [
+        "producer-movie-waypoint-finding.json"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    }
+  ]
+}

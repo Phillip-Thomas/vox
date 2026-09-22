@@ -1,0 +1,13 @@
+--- 
++++ 
+@@ -95,7 +95,9 @@
+   "repairPolicy": {
+     "unchangedContract": {
+       "inheritSignedTreatmentsAndUnchangedEvidence": true,
+-      "newModelCalls": 3,
++      "defaultNewModelCalls": 3,
++      "additionalReviewersOnlyForAffectedDisciplines": true,
++      "respectRemainingExecutionBudget": true,
+       "roles": [
+         "integration-engineer",
+         "affected-independent-reviewer",

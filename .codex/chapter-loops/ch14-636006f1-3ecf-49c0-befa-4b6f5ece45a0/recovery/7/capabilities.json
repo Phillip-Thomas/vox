@@ -1,0 +1,23 @@
+{
+  "schema": "paravoxia.chapterToolingCapabilities.v1",
+  "phase": "before-authoring",
+  "chapter": "ch14",
+  "supported": true,
+  "sourceIdentity": true,
+  "sourceSha256": "75b57e0942457bbeaacd4d50dc19a7898b481b8293d57f89f761e588b27b273c",
+  "bindings": {
+    "manual": true,
+    "recovery": true,
+    "continue": true,
+    "continuity": true,
+    "av": true
+  },
+  "pending": [
+    "chapter control configuration",
+    "authored journey contract",
+    "candidate build",
+    "observed runtime and media"
+  ],
+  "acceptance": false,
+  "blockers": []
+}

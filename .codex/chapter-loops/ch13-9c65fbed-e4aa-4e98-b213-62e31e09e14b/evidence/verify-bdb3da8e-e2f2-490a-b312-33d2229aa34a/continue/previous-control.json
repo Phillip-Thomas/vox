@@ -1,0 +1,16 @@
+{
+  "updatedAt": "2026-09-07T13:24:16.840Z",
+  "action": "hold",
+  "activeRole": "finale-authority-seam-runtime",
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "instruction": "Chapter Loop capture finished; only the checked runner may release another case.",
+  "currentPreviewUrl": "http://127.0.0.1:34825/",
+  "previewOwnershipRef": "verifier/artifacts/preview-ownership.json",
+  "currentIndexSha256": "74025800f5312519a92b480a15b493c3b27f971f0cbcbe1ec2b571342d4f4c82",
+  "currentBuildHash": "580d08f712fc3d27ef004bc0307a5bdaa1707e8b736f68030816b5f4afd877ec",
+  "nonbindingAuxiliaryObservationRef": "producer-nonbinding-auxiliary-observation.json",
+  "currentBundlePath": "/assets/index-Ddqg7x9Y.js",
+  "currentBundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9",
+  "chapterLoopOutput": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-bdb3da8e-e2f2-490a-b312-33d2229aa34a/recovery",
+  "chapterLoopRun": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b"
+}

@@ -1,0 +1,711 @@
+{
+  "schema": "paravoxia.decisionBrief.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "authoredBy": "chapter-director",
+  "authoredAt": "2026-09-06T06:44:03.439559+00:00",
+  "sourceIntentRef": "story-intent.md#routed-decisions",
+  "items": [
+    {
+      "id": "CG-S1-creative",
+      "kind": "creative",
+      "question": "Which story direction, voice and reveal limits govern this production draft?",
+      "context": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json records the direct instruction 'yes continue, and please auto approve everything' at 2026-09-06T04:22:49.322379+00:00. This explicitly delegates necessary in-scope design, apparatus and future exact integration-subset decisions. The legacy field decidedBy=owner names the authority principal, not personal human review of later files, hashes or media. Council-v2 candidate 133d1dbe54a9f51e68d9fd67997042d1494059e30707a5da6c308d403cebc2fb and register 267ec0e8ecc8986c71b41a725e15467979704e8a6b4881bf3ab513730f391a4b have exact three-lane documentation signatures and separate delegated adoption in owner-story-decision.json at 2026-09-06T06:30:50.841372+00:00, without runtime authority. The final scene placement is measured in staged-geometry-qualification.json SHA-256 7cc0d63d843df60462a2fd55ba928bfd5656c20b4d20c31a581fec559532b7ff.",
+      "options": [
+        "Carry the signed council-v2 direction and qualified bounded scene bindings through the required scene gates under standing delegation"
+      ],
+      "recommended": "Carry the signed council-v2 direction and qualified bounded scene bindings through the required scene gates under standing delegation",
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "Carry all four ch13 beats, real station/movie/home restoration bridge, explicit voluntary Origin return, two complete survey route classes and persistent Origin repeat. W-7744 locally repeats his unresolved measurement; future protected recurrence stays unresolved. Terra needs his maintained reference for her own comparison, then explicitly F-offers and occupies a separate far reference for his independent test under the same range, solid sight, occupancy and clearance rule. Preserve the two new Terra lines, quiet continuous drawing, no old-copy rewrite, alive ceiling, protected mysteries, immediate handback and live-only maximum five-second final texture followed by the existing 4.5-second release, no coda/replay. This final Stage 1 packet binds the measured range, staged world placement and proof hash; no owner item or geometry selection is pending. Council-v2 documentation has exact signatures and delegated adoption; required independent council judgment and the separately signed scene contract govern opening the planning-only lock. This packet does not mutate runtime or sign that scene contract. Actual rendered body/core/apparatus, live interaction/hysteresis, edited-terrain, hardware, day/night and listening acceptance follow signed implementation.",
+      "decidedAt": "2026-09-06T04:22:49.322379+00:00"
+    },
+    {
+      "id": "CG-S1-physical-evidence",
+      "kind": "creative",
+      "question": "Which final measured apparatus, range and staged physical relations bind this scene?",
+      "context": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json records the direct instruction 'yes continue, and please auto approve everything' at 2026-09-06T04:22:49.322379+00:00. This explicitly delegates necessary in-scope design, apparatus and future exact integration-subset decisions. The legacy field decidedBy=owner names the authority principal, not personal human review of later files, hashes or media. Final geometry-arena.md/json establishes two actual dry banks and a +16-unit / 1.44-times detour, but zero qualifying reference-separating layouts in 20,000 combinations. Range 12 fully covered long routes coexist with at most two unsupported short units; short gaps of at least six leave long coverage at best 94.03%. Range 24 fully covered long routes leave zero short gap. Witness/common stages were not reached. Topology is not the failure. The three arena-instrument-repair documents accept one explicit opaque-backed reference for measurement. The 11-frame current baseline contains no W-7744 body and no built Tidegarden core; it grounds existing world context, not nonexistent new-state blocking. The selected backed-instrument result is now PASS in staged-geometry-qualification.md/json, including the connected cap and distinct H body pose. This resolves the bounded geometry obligations without changing the preserved failed-water or prior measurement provenance.",
+      "options": [
+        "Bind the passed constant range 12 and exact staged geometry, retaining live acceptance after implementation"
+      ],
+      "recommended": "Bind the passed constant range 12 and exact staged geometry, retaining live acceptance after implementation",
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "Under standing delegation, bind range 12, Origin world -1,-1, R=(-34,51.05,20), yaw 90 degrees; S=(-26,51.05,12), E=(-42,51.05,12), H=(-40,51.05,12), C=(-48,51.05,12), final Terra T=(-44,51.05,12), inspection/intermediate example W=(-34,51.05,10). Exact staged proof SHA-256 7cc0d63d843df60462a2fd55ba928bfd5656c20b4d20c31a581fec559532b7ff. Short 16 units/17 samples with 14 backing-unsupported units; long 36 units/61 samples fully covered (+20 units, ratio 2.25). Common E-to-C is the actual 18-unit/31-sample detour, all 73 dense points covered from H, max distance 10.01 under 12, two-unit body clearance; eight contiguous units need the held reference. Worker physically moves E-to-H before Terra starts and H-to-E after her explicit T offer, two units each, no proof credit. The final full E-to-C test remains covered from T, max distance 7.23 and two-unit clearance. Initial actor inspection at W uses one truthful start objective at S before recording; after the real span offer, grounded actor approach to S earns no proof and frees W for optional witnessing. The world AABBs in story-intent.md and staged JSON bind backing/stand/bracket/cap identically for mesh, collision and LOS. Cap touches stand top and fixed socket with zero gap; six general symmetric endpoint-contact tests pass. No solid exemption or epsilon; walking/body collision remains inclusive. Fixed/worker/player sockets 1.30/1.85/1.35; inner witness cylinder radius 1.25/vertical 0.6 and release 1.75/0.9 unchanged. Keep both 128-sample/120-unit caps, cost-free tail revision, honest start/end witness tests, freely offered valid intermediate positions, no worldgen change or invisible restrictions. This final Stage 1 packet binds the measured range, staged world placement and proof hash; no owner item or geometry selection is pending. Council-v2 documentation has exact signatures and delegated adoption; required independent council judgment and the separately signed scene contract govern opening the planning-only lock. This packet does not mutate runtime or sign that scene contract. Actual rendered body/core/apparatus, live interaction/hysteresis, edited-terrain, hardware, day/night and listening acceptance follow signed implementation.",
+      "decidedAt": "2026-09-06T06:39:43.730295+00:00"
+    },
+    {
+      "id": "CG-S1-boundary-state",
+      "kind": "boundary",
+      "question": "Which new chapter modules and state/resume dispatch seams must the later signed runtime packet cover?",
+      "context": "Exact future boundary inventory from integration-survey.md plus implementation-interface-plan.md and scene-contract-assembly-notes.md. ../../story-runs/2026-09-06-common-ground/owner-standing-authority.json records the direct instruction 'yes continue, and please auto approve everything' at 2026-09-06T04:22:49.322379+00:00. This explicitly delegates necessary in-scope design, apparatus and future exact integration-subset decisions. The legacy field decidedBy=owner names the authority principal, not personal human review of later files, hashes or media. New exports below are explicitly proposed interfaces, not claims that uncreated runtime symbols already exist. Each list authorizes preparation of the necessary subset; no obligation or current permission to touch every path.",
+      "options": [
+        "Use the smallest exact necessary subset after revised council and scene gates; preserve all unrelated dirty work"
+      ],
+      "recommended": "Use the smallest exact necessary subset after revised council and scene gates; preserve all unrelated dirty work",
+      "paths": [
+        {
+          "path": "main/src/story/commonGroundState.ts",
+          "symbol": "proposed COMMON_GROUND_SNAPSHOT_VERSION; TraceSample; TraceSlot; CommonGroundSnapshot; createEmptySnapshot; appendSample; reviseTail; invalidateTestedPrefix; clearUncommitted; serializeCommonGround; hydrateCommonGround; migrateCommonGround; named contract constants",
+          "why": "Bounded actor/world snapshot with separate accepted survey/awaiting-start/recording state, survey class, tested prefix, actual reciprocal proof, final offer and uncredited actor positioning phase."
+        },
+        {
+          "path": "main/src/story/commonGroundDirector.ts",
+          "symbol": "proposed chapter-local enter/tick dispatch; objective facts; commit events; marker target; interaction registration; tickCommonGroundEntry",
+          "why": "Own real predicates and receipt-backed Tidegarden home entry; no time-derived success."
+        },
+        {
+          "path": "main/src/story/beats/ch13/ch13-home.ts",
+          "symbol": "new defineBeat contract module scope",
+          "why": "Home review and explicit return choice."
+        },
+        {
+          "path": "main/src/story/beats/ch13/ch13-return.ts",
+          "symbol": "new defineBeat contract module scope",
+          "why": "Physical Origin transit and approach."
+        },
+        {
+          "path": "main/src/story/beats/ch13/ch13-survey.ts",
+          "symbol": "new defineBeat contract module scope",
+          "why": "Trace, offer, test, specific hold and revision."
+        },
+        {
+          "path": "main/src/story/beats/ch13/ch13-common.ts",
+          "symbol": "new defineBeat contract module scope",
+          "why": "Reciprocal proof, independent test and handback."
+        },
+        {
+          "path": "main/src/story/storyState.ts",
+          "symbol": "StoryChapter; StoryBeat; STORY_BEAT_ORDER; STORY_MILESTONES; storyEntryPoint; stageForStoryPoint; seedForBeat; initStoryFromSave; beginStory; restartStory; reactivateStoryAtBeat",
+          "why": "Four beat identities, alive on every path, resume before ch10 done, physical diagnostics and scoped reset."
+        },
+        {
+          "path": "main/src/story/emergentStoryDirector.ts",
+          "symbol": "enterEmergentStoryBeat; emergentStoryDirectorTick; syncEmergentObjectiveGuidance",
+          "why": "Small chapter-local dispatch connections, preserving existing entry and guidance ownership."
+        },
+        {
+          "path": "main/src/story/StoryDirectorDriver.tsx",
+          "symbol": "inactive branch beside tickChapter10FreePlayEntry and stationReturnObjective; new tickCommonGroundEntry call",
+          "why": "Reactivate ch13-home from done at actual restored Tidegarden core with receipts and on-foot world facts, via reactivateStoryAtBeat; preserve marker bridge."
+        },
+        {
+          "path": "main/src/game/systems/persistence.ts",
+          "symbol": "WorldSave.commonGround (new optional field); saveWorld; proposed restoreCommonGroundForWorld; proposed clearCommonGroundForWorld; clearWorldStateForWorld",
+          "why": "Copy world-scoped habitat lifecycle; no GlobalSave change or unrelated-world reset. Explicit restart clear remains scoped."
+        },
+        {
+          "path": "main/src/story/emergentStoryEvents.ts",
+          "symbol": "typed session event declarations and publisher module scope",
+          "why": "Confirmed semantic events; never use session history as persistent state."
+        },
+        {
+          "path": "main/src/story/commonGroundRoute.ts",
+          "symbol": "proposed pure injected terrain/solid route validator and walked-prefix/reference predicate; module scope",
+          "why": "Layer actual trunk/housing and body-clearance guards over unchanged planAgentSurfaceRoute; distinguish footing, range and solid occlusion, retain last-safe hold."
+        },
+        {
+          "path": "main/src/story/commonGroundActor.ts",
+          "symbol": "proposed sole ch13 pose writer and presence branch; module scope",
+          "why": "Only existing AuditWorker body; real inspection W, approach to S and E/H legs, no teleports/proof credit or overlap with a4-exhale."
+        }
+      ],
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "Standing delegation covers the listed necessary in-scope integration and the later exact signed subset without another owner permission question. Recheck source hashes/timestamps before edits; one integrator owns shared-file seams. Preserve live untracked refactors. This final Stage 1 packet binds the measured range, staged world placement and proof hash; no owner item or geometry selection is pending. Council-v2 documentation has exact signatures and delegated adoption; required independent council judgment and the separately signed scene contract govern opening the planning-only lock. This packet does not mutate runtime or sign that scene contract. Actual rendered body/core/apparatus, live interaction/hysteresis, edited-terrain, hardware, day/night and listening acceptance follow signed implementation. Keep WorldSave common-ground facts distinct: survey class/accepted trace, actual tested prefix, awaiting-start/recording state, reciprocal passage proof, final offered reference and actor positioning phase. Actor approach to S, E-to-H and H-to-E are grounded movement with zero comparison/test credit; reciprocal.held alone cannot represent these facts.",
+      "decidedAt": "2026-09-06T04:22:49.322379+00:00"
+    },
+    {
+      "id": "CG-S1-boundary-world-ux",
+      "kind": "boundary",
+      "question": "Which existing world, actor, interaction and objective seams need bounded connections?",
+      "context": "Exact future boundary inventory from integration-survey.md plus implementation-interface-plan.md and scene-contract-assembly-notes.md. ../../story-runs/2026-09-06-common-ground/owner-standing-authority.json records the direct instruction 'yes continue, and please auto approve everything' at 2026-09-06T04:22:49.322379+00:00. This explicitly delegates necessary in-scope design, apparatus and future exact integration-subset decisions. The legacy field decidedBy=owner names the authority principal, not personal human review of later files, hashes or media. New exports below are explicitly proposed interfaces, not claims that uncreated runtime symbols already exist. Each list authorizes preparation of the necessary subset; no obligation or current permission to touch every path.",
+      "options": [
+        "Use the smallest exact necessary subset after revised council and scene gates; preserve all unrelated dirty work"
+      ],
+      "recommended": "Use the smallest exact necessary subset after revised council and scene gates; preserve all unrelated dirty work",
+      "paths": [
+        {
+          "path": "main/src/story/world/CommonGroundWorld.tsx",
+          "symbol": "proposed CommonGroundWorld component; fixed backed field-instrument mesh/collider/solid-query data; trace rendering; registered world handles; save/restore/clear lifecycle",
+          "why": "Own the exact connected passive apparatus, mesh/collision/solid-query equality, walked trace and ready world handles; no spatial handle for control-only launch."
+        },
+        {
+          "path": "main/src/story/world/StoryWorldProps.tsx",
+          "symbol": "StoryWorldProps",
+          "why": "Mount chapter-local Origin world component with existing anchors."
+        },
+        {
+          "path": "main/src/story/auditWorkerPresence.ts",
+          "symbol": "shouldMountAuditWorker",
+          "why": "Explicit later Origin presence independent of the old A4 departure latch."
+        },
+        {
+          "path": "main/src/story/world/AuditWorker.tsx",
+          "symbol": "AuditWorker; getAuditWorkerPose consumer",
+          "why": "Reuse one body/pose authority; only signed presentation needs, no duplicate actor."
+        },
+        {
+          "path": "main/src/game/systems/interactionSystem.ts",
+          "symbol": "InteractionId",
+          "why": "Register new typed action IDs."
+        },
+        {
+          "path": "main/src/story/storyInteractions.ts",
+          "symbol": "registerStoryInteraction; exhaustive interaction policy",
+          "why": "One resolver, priority/owner/cleanup and existing F/build arbitration."
+        },
+        {
+          "path": "main/src/story/beats/objectivePrimitives.ts",
+          "symbol": "StoryObjectiveGuidanceFacts; DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS; ch13 fact defaults/normalization",
+          "why": "Compact chapter fact shape only."
+        },
+        {
+          "path": "main/src/story/storyObjectiveGuidance.ts",
+          "symbol": "generated-contract projection module scope",
+          "why": "Only required projection connection, not another objective owner."
+        },
+        {
+          "path": "main/src/story/beats/worldHandles.ts",
+          "symbol": "WorldMarkerHandle",
+          "why": "Exact new physical target handles."
+        },
+        {
+          "path": "main/src/story/storyWorldHandles.ts",
+          "symbol": "registerStoryMarkerWorld",
+          "why": "World readiness/cleanup for new handles."
+        },
+        {
+          "path": "main/src/story/beats/markerTargets.ts",
+          "symbol": "resolveMarkerTarget",
+          "why": "Same physical candidate for publication and display."
+        },
+        {
+          "path": "main/src/story/ux/feedbackCues.ts",
+          "symbol": "semantic feedback mapping module scope",
+          "why": "Reuse existing acknowledgement taxonomy for actual new commits."
+        },
+        {
+          "path": "main/src/story/ux/objectiveEventFeedback.ts",
+          "symbol": "confirmed-event feedback mapping module scope",
+          "why": "One-shot progress/completion/refusal; silent restore."
+        },
+        {
+          "path": "main/src/story/ux/objectiveCommandFeedback.ts",
+          "symbol": "command feedback mapping module scope",
+          "why": "Specific invalid input and cancellation without duplicate success."
+        },
+        {
+          "path": "main/src/story/world/TidegardenSettlementWorld.tsx",
+          "symbol": "TidegardenSettlementWorld; existing bonded-cell F resolver",
+          "why": "Preserve actual install F ownership and core readiness; live acknowledgement retires before invitation, restored saves stay steady and silent."
+        }
+      ],
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "Standing delegation covers the listed necessary in-scope integration and the later exact signed subset without another owner permission question. Recheck source hashes/timestamps before edits; one integrator owns shared-file seams. Preserve live untracked refactors. This final Stage 1 packet binds the measured range, staged world placement and proof hash; no owner item or geometry selection is pending. Council-v2 documentation has exact signatures and delegated adoption; required independent council judgment and the separately signed scene contract govern opening the planning-only lock. This packet does not mutate runtime or sign that scene contract. Actual rendered body/core/apparatus, live interaction/hysteresis, edited-terrain, hardware, day/night and listening acceptance follow signed implementation. Preserve every objective/marker/F/work-order mapping in story-intent.md, including explicit far-reference offer and truthful vacancy resume; camera gaze never enters the predicate. Build mode keeps F. Launch is interact/control-only after actual boarding: targetMode none, requiresMarker false, targetContract.maxVisibleTargets 0, exact Kestrel controls \u00b7 lift label and Hold [Space] to ignite and lift. copy. No zero-position marker or wait classification. Initial offer opens the survey; ch13:survey:start truthfully marks S with Survey start \u00b7 begin a route and Walk to the survey start. [F] Begin recording your route. Only actual F at S begins sampling, then quiet draw targets E. The existing readiness state reports actor approach/H positioning truthfully; no extra point prompts or new puzzle.",
+      "decidedAt": "2026-09-06T06:39:43.730295+00:00"
+    },
+    {
+      "id": "CG-S1-boundary-bridge",
+      "kind": "boundary",
+      "question": "Which station/movie transition owners must continue the real cell journey?",
+      "context": "Exact future boundary inventory from integration-survey.md plus implementation-interface-plan.md and scene-contract-assembly-notes.md. ../../story-runs/2026-09-06-common-ground/owner-standing-authority.json records the direct instruction 'yes continue, and please auto approve everything' at 2026-09-06T04:22:49.322379+00:00. This explicitly delegates necessary in-scope design, apparatus and future exact integration-subset decisions. The legacy field decidedBy=owner names the authority principal, not personal human review of later files, hashes or media. New exports below are explicitly proposed interfaces, not claims that uncreated runtime symbols already exist. Each list authorizes preparation of the necessary subset; no obligation or current permission to touch every path.",
+      "options": [
+        "Use the smallest exact necessary subset after revised council and scene gates; preserve all unrelated dirty work"
+      ],
+      "recommended": "Use the smallest exact necessary subset after revised council and scene gates; preserve all unrelated dirty work",
+      "paths": [
+        {
+          "path": "main/src/game/spaceStation/spaceStationStory.ts",
+          "symbol": "STATION_STORY_MILESTONES; bootstrapStationStorySession; deriveStationStoryStep; issueBondedCell; commitStationDeparted",
+          "why": "Preserve single issuance/departure owners and all durable receipt identities."
+        },
+        {
+          "path": "main/src/story/stationReturnStory.ts",
+          "symbol": "STATION_RETURN_MILESTONES; stationReturnPending; stationReturnObjective; stationReturnMarkerTarget; installTidegardenBondedCell; STATION_RETURN_INSTALL_REACH",
+          "why": "Exact return/install predicates and one live acknowledgement; restored saves never consume again."
+        },
+        {
+          "path": "main/src/components/spaceStation/StationScreeningDriver.tsx",
+          "symbol": "StationScreeningDriver",
+          "why": "Continue real screening from acquisition through actual departure."
+        },
+        {
+          "path": "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+          "symbol": "onSequenceComplete",
+          "why": "Persist real departure and screening intent across navigation."
+        },
+        {
+          "path": "main/src/game/spaceStation/spaceStationUndock.ts",
+          "symbol": "parseUndockFlag; requestedUndockAddress; searchAfterUndockConsumed; undockedShipPose",
+          "why": "Preserve one-shot undock/fly consumption while retaining intended screening continuity."
+        },
+        {
+          "path": "main/src/App.tsx",
+          "symbol": "enterSpaceStation; station-return route-guidance suppression",
+          "why": "Preserve removal of reseeding parameters and single guidance ownership."
+        },
+        {
+          "path": "main/src/story/autopilot/primitives.ts",
+          "symbol": "isMovieStationBridgeActive; autopilotTick; RailRuntime",
+          "why": "Bounded real-return bridge; stop obsolete docking branch after departure supersedes it."
+        },
+        {
+          "path": "main/src/story/autopilot/rail-ch13-home.ts",
+          "symbol": "new chapter-local rail module scope",
+          "why": "Use the actual home interactions."
+        },
+        {
+          "path": "main/src/story/autopilot/rail-ch13-return.ts",
+          "symbol": "new chapter-local rail module scope",
+          "why": "Use real flight/landing/approach controls."
+        },
+        {
+          "path": "main/src/story/autopilot/rail-ch13-survey.ts",
+          "symbol": "new chapter-local rail module scope",
+          "why": "Record body samples, offer and witness through normal interactions."
+        },
+        {
+          "path": "main/src/story/autopilot/rail-ch13-common.ts",
+          "symbol": "new chapter-local rail module scope",
+          "why": "Earn reciprocal proof and actual grounded completion; timeout never succeeds."
+        },
+        {
+          "path": "main/src/story/beats/railDiscipline.test.ts",
+          "symbol": "rail census and discipline assertions",
+          "why": "Update census honestly; retain grant/seed/advance/nudge exclusions."
+        },
+        {
+          "path": "main/src/story/autopilot/rails.ts",
+          "symbol": "BEAT_RAILS",
+          "why": "Register exact ch13 rails, move/look/act only; keep timeout as stuck, never grant/advance/seed."
+        }
+      ],
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "Standing delegation covers the listed necessary in-scope integration and the later exact signed subset without another owner permission question. Recheck source hashes/timestamps before edits; one integrator owns shared-file seams. Preserve live untracked refactors. This final Stage 1 packet binds the measured range, staged world placement and proof hash; no owner item or geometry selection is pending. Council-v2 documentation has exact signatures and delegated adoption; required independent council judgment and the separately signed scene contract govern opening the planning-only lock. This packet does not mutate runtime or sign that scene contract. Actual rendered body/core/apparatus, live interaction/hysteresis, edited-terrain, hardware, day/night and listening acceptance follow signed implementation. Continue station screening through real airlock departure, undock/fly reconstruction, Tidegarden flight/landing, actual one-cell installation, restored-core invitation and ch13. Carry screening intent without story= reseeding; yield the obsolete docking bridge once departure supersedes it. No double issuance or receipt renumbering. The two existing station-return/install objectives are shipped-baseline and prior station-continuation-contract continuity only, outside new ch13 scene guidance and beat registration. Fresh actual installation may notify/reactivate ch13-home at the real core and emit its one authored live hearth acknowledgement there; restored saves get steady entry, never a delayed/replayed transaction or acknowledgement.",
+      "decidedAt": "2026-09-06T04:22:49.322379+00:00"
+    },
+    {
+      "id": "CG-S1-boundary-registry",
+      "kind": "boundary",
+      "question": "Which generated views, external-transition contract and authority surfaces need later synchronization?",
+      "context": "Exact future boundary inventory from integration-survey.md plus implementation-interface-plan.md and scene-contract-assembly-notes.md. ../../story-runs/2026-09-06-common-ground/owner-standing-authority.json records the direct instruction 'yes continue, and please auto approve everything' at 2026-09-06T04:22:49.322379+00:00. This explicitly delegates necessary in-scope design, apparatus and future exact integration-subset decisions. The legacy field decidedBy=owner names the authority principal, not personal human review of later files, hashes or media. New exports below are explicitly proposed interfaces, not claims that uncreated runtime symbols already exist. Each list authorizes preparation of the necessary subset; no obligation or current permission to touch every path. Producer boundary completion under the already recorded standing delegation: exact tooling paths added for literal control/travel validation and truthful registry/authority generation, with meaningful associated tests. Original Chapter-authored brief is preserved at iterations/planning-freeze/decision-brief.json; see producer-boundary-amendment.json. This is not a new personal user review. Necessary implementation boundary completion for exhaustive debug labels and correct physical world ownership is recorded in producer-boundary-completion.json; no personal human review is asserted.",
+      "options": [
+        "Use the smallest exact necessary subset after revised council and scene gates; preserve all unrelated dirty work"
+      ],
+      "recommended": "Use the smallest exact necessary subset after revised council and scene gates; preserve all unrelated dirty work",
+      "paths": [
+        {
+          "path": "main/src/story/beats/index.ts",
+          "symbol": "chapter registration side-effect imports",
+          "why": "Add ch13 registration without circular imports."
+        },
+        {
+          "path": "main/src/story/beats/ch13/index.ts",
+          "symbol": "generated module scope",
+          "why": "Create expected file before generator first reads it."
+        },
+        {
+          "path": "main/src/story/beats/ch13/definitions.ts",
+          "symbol": "generated module scope",
+          "why": "Generated ch13 definitions; no hand-maintained copy divergence."
+        },
+        {
+          "path": "main/src/story/beats/metadata.generated.ts",
+          "symbol": "generated module scope",
+          "why": "Generate beat identity/metadata view."
+        },
+        {
+          "path": "main/chapter-registry.json",
+          "symbol": "chapters ch13 record order11; sceneContracts; proposed externalTransitions ch10->ch13-via-station",
+          "why": "Formal ch13 and separately evidenced ch11/ch12 transition, without false ch10 guarantees."
+        },
+        {
+          "path": "main/chapter-journey-contract.json",
+          "symbol": "chapter records and generated objective lists",
+          "why": "Truthful new checkpoint/transition and journey coverage."
+        },
+        {
+          "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-registry.schema.json",
+          "symbol": "new typed external-transition schema branch",
+          "why": "Explicit named transition support; preserve ordinary direct adjacency semantics."
+        },
+        {
+          "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-journey-contract.schema.json",
+          "symbol": "new external-transition journey schema branch",
+          "why": "Represent independently proved host boundaries if needed by the selected adapter."
+        },
+        {
+          "path": "main/tools/chapter-registry-gate.mjs",
+          "symbol": "validateAdjacency; SUPPORTED_STATE_REF_PATTERNS",
+          "why": "Add checked composed transition, never weaken direct equality checks."
+        },
+        {
+          "path": "main/src/story/storyBoundaryTelemetry.ts",
+          "symbol": "deriveStoryBoundaryState; readStoryBoundaryRuntime; publishStoryBoundaryTelemetry",
+          "why": "Produce every new allowed state reference before gate acceptance."
+        },
+        {
+          "path": "main/story-authority.json",
+          "symbol": "runtimeBeatOrder; runtimeEvidenceChain; activeProduction; openReleaseGates; protected w7744-return-cause family retained",
+          "why": "Advance only with real implementation; preserve release ceiling and protected families."
+        },
+        {
+          "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+          "symbol": "matching runtime/order/source-authority schema constraints",
+          "why": "Synchronize only the exact implemented authority; keep protected question family."
+        },
+        {
+          "path": "main/PARAVOXIA_STORY_BIBLE.md",
+          "symbol": "Current continuation authority addendum",
+          "why": "Later source/evidence status update only; signed canon remains governing."
+        },
+        {
+          "path": "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+          "symbol": "Current continuation packet",
+          "why": "Truthful implementation/checkpoint/acceptance status."
+        },
+        {
+          "path": "main/STORY.md",
+          "symbol": "current worktree and Common Ground status",
+          "why": "Document implemented versus verified status and existing public release boundary."
+        },
+        {
+          "path": "main/tools/creative-triad-gate.mjs",
+          "symbol": "actionableWorkOrder; runSelfTest",
+          "why": "Admit literal shipped DELIVER travel and registered Space input without changing lifecycle guards or copy."
+        },
+        {
+          "path": "main/tools/story-authority-gate.mjs",
+          "symbol": "activeProduction/current implemented identity assertions",
+          "why": "Synchronize strict authority assertions to actual ch13 implementation and signed production, preserving all protected question and release gates."
+        },
+        {
+          "path": "main/tools/chapter-registry-generate.mjs",
+          "symbol": "generated journey external transition view",
+          "why": "Preserve typed external transition evidence across regeneration if required."
+        },
+        {
+          "path": "main/src/App.test.tsx",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/components/spaceStation/SpaceStationSandbox.test.tsx",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/components/spaceStation/StationScreeningDriver.test.tsx",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/game/spaceStation/spaceStationStory.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/game/spaceStation/spaceStationUndock.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/game/systems/interactionSystem.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/game/systems/persistence.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/StoryDirectorDriver.test.tsx",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/auditWorkerPresence.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/autopilot/primitives.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/autopilot/rail-ch13-common.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/autopilot/rail-ch13-home.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/autopilot/rail-ch13-return.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/autopilot/rail-ch13-survey.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/autopilot/rails.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/beats/allContracts.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/beats/beatRegistry.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/beats/index.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/beats/markerTargets.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/beats/objectivePrimitives.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/beats/screeningParity.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/beats/worldHandles.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/commonGroundActor.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/commonGroundDirector.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/commonGroundRoute.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/commonGroundScore.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/commonGroundState.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/emergentScoreDirector.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/emergentStoryDirector.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/emergentStoryEvents.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/signedSceneAvRuntime.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/stationReturnStory.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/storyBoundaryTelemetry.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/storyDirector.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/storyInteractions.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/storyObjectiveGuidance.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/storyScore.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/storyState.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/storyWorldHandles.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/ux/feedbackCues.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/ux/objectiveCommandFeedback.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/ux/objectiveEventFeedback.test.ts",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/world/AuditWorker.test.tsx",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/world/CommonGroundWorld.test.tsx",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/world/StoryWorldProps.test.tsx",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/src/story/world/TidegardenSettlementWorld.test.tsx",
+          "symbol": "contract and state lifecycle regression assertions",
+          "why": "Meaningful tests for the authorized new progression, source identity, reference predicates and replay/persistence boundaries; do not rewrite unrelated test behavior."
+        },
+        {
+          "path": "main/tools/lib/guidanceTargets.mjs",
+          "symbol": "validateGuidanceTargetContract; validateGuidanceTargetEvidence",
+          "why": "Represent the signed target-free boarded control interaction and require fresh accepted input plus actual control-state transition evidence; retain survey, travel and wait evidence checks."
+        },
+        {
+          "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json",
+          "symbol": "guidanceObjective targetMode:none kind conditional",
+          "why": "Mirror the checked control-only interact branch alongside travel and wait, retaining zero-target count, explicit ownership/readiness and strict raw input evidence."
+        },
+        {
+          "path": "main/src/story/StoryDebugPanel.tsx",
+          "symbol": "BEAT_LABELS",
+          "why": "Complete the exhaustive StoryBeat label map with the four already signed ch13 beats."
+        },
+        {
+          "path": "main/src/story/tidegardenRoute.ts",
+          "symbol": "resolveStoryBootWorldId",
+          "why": "Keep ch13-survey and ch13-common physically owned by Origin, while home and return start on Tidegarden."
+        }
+      ],
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "Standing delegation covers the listed necessary in-scope integration and the later exact signed subset without another owner permission question. Recheck source hashes/timestamps before edits; one integrator owns shared-file seams. Preserve live untracked refactors. This final Stage 1 packet binds the measured range, staged world placement and proof hash; no owner item or geometry selection is pending. Council-v2 documentation has exact signatures and delegated adoption; required independent council judgment and the separately signed scene contract govern opening the planning-only lock. This packet does not mutate runtime or sign that scene contract. Actual rendered body/core/apparatus, live interaction/hysteresis, edited-terrain, hardware, day/night and listening acceptance follow signed implementation. Add four formal ch13 beats; keep durable ch11/ch12 sidecar identities. The named external transition independently proves real ch10 flight/docking exit and restored on-foot Tidegarden ch13-home entry; preserve ordinary exact adjacency. New state refs require real telemetry producers before allowlisting. Create ch13 index before invoking existing generators, then synchronize imports/views; do not open generator edits by default. Keep public release ch4-arrival and protected later W recurrence. Exactly four formal scene beats: ch13-home, ch13-return, ch13-survey, ch13-common. No invented second-hearth-restored beat and no receipt renumbering. Existing station/install objective IDs stay prior-contract continuity evidence.",
+      "decidedAt": "2026-09-06T04:22:49.322379+00:00"
+    },
+    {
+      "id": "CG-S1-boundary-score-av",
+      "kind": "boundary",
+      "question": "Which existing score/AV owners realize the signed dramatic anchors and bounded tail?",
+      "context": "Exact future boundary inventory from integration-survey.md plus implementation-interface-plan.md and scene-contract-assembly-notes.md. ../../story-runs/2026-09-06-common-ground/owner-standing-authority.json records the direct instruction 'yes continue, and please auto approve everything' at 2026-09-06T04:22:49.322379+00:00. This explicitly delegates necessary in-scope design, apparatus and future exact integration-subset decisions. The legacy field decidedBy=owner names the authority principal, not personal human review of later files, hashes or media. New exports below are explicitly proposed interfaces, not claims that uncreated runtime symbols already exist. Each list authorizes preparation of the necessary subset; no obligation or current permission to touch every path.",
+      "options": [
+        "Use the smallest exact necessary subset after revised council and scene gates; preserve all unrelated dirty work"
+      ],
+      "recommended": "Use the smallest exact necessary subset after revised council and scene gates; preserve all unrelated dirty work",
+      "paths": [
+        {
+          "path": "main/src/story/commonGroundScore.ts",
+          "symbol": "new chapter-local mood/variant resolver module scope",
+          "why": "Signed state-derived score data and live-only finite tail; no shared audio engine changes."
+        },
+        {
+          "path": "main/src/story/storyScore.ts",
+          "symbol": "setScoreBeat; getStoryScoreMood; setStoryScoreMoodOverride; unlockStoryScore; resetStoryScoreRuntime; setScoreIntensity; existing scoreHit facade; MOOD_TONIC_CHAINS; TONIC_CHAIN_POLICY",
+          "why": "New beat/variant connection and exact bounded handback through one score authority."
+        },
+        {
+          "path": "main/src/story/emergentScoreDirector.ts",
+          "symbol": "chapter dispatch module scope",
+          "why": "Reuse state-derived selection pattern without replaying completion."
+        },
+        {
+          "path": "main/src/story/signedSceneAvRuntime.ts",
+          "symbol": "SIGNED_SCENE_AV_SOURCES; activateSignedSceneSemanticEvent; activateSignedSceneAnchorById; enterSignedSceneAvBeat; tickSignedSceneAvRuntime; resetSignedSceneAvRuntime",
+          "why": "Exact signed contract inventory/anchor and lifecycle registration."
+        },
+        {
+          "path": "main/tools/generate-scene-av-runtime.mjs",
+          "symbol": "SIGNED_SOURCES",
+          "why": "Pin signed scene source hash/version/anchor census."
+        },
+        {
+          "path": "main/src/story/generatedSceneAvRuntime.json",
+          "symbol": "generated module scope",
+          "why": "Generate only from the exact signed scene contract."
+        },
+        {
+          "path": "main/src/story/storyDirector.ts",
+          "symbol": "existing score deactivation/handback call site",
+          "why": "Required explicit exception for finite live-only tail after controls/progression are free; no deferred completion."
+        }
+      ],
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "Standing delegation covers the listed necessary in-scope integration and the later exact signed subset without another owner permission question. Recheck source hashes/timestamps before edits; one integrator owns shared-file seams. Preserve live untracked refactors. This final Stage 1 packet binds the measured range, staged world placement and proof hash; no owner item or geometry selection is pending. Council-v2 documentation has exact signatures and delegated adoption; required independent council judgment and the separately signed scene contract govern opening the planning-only lock. This packet does not mutate runtime or sign that scene contract. Actual rendered body/core/apparatus, live interaction/hysteresis, edited-terrain, hardware, day/night and listening acceptance follow signed implementation. Correct the interface note's word coda to the accepted finite live-only final texture: at most five seconds then existing 4.5-second release, with controls/progression already free. Preserve cancellations and no replay/hydration/defer, no new hit anchor, proximity/range/backing cue or graph. Temporary witness vacancy keeps the texture; only actual arrival with reciprocal proof changes spacing.",
+      "decidedAt": "2026-09-06T04:22:49.322379+00:00"
+    },
+    {
+      "id": "CG-S1-release",
+      "kind": "release",
+      "question": "Does this continuation publish, redeploy, or change the public demo ceiling?",
+      "context": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json records the direct instruction 'yes continue, and please auto approve everything' at 2026-09-06T04:22:49.322379+00:00. This explicitly delegates necessary in-scope design, apparatus and future exact integration-subset decisions. The legacy field decidedBy=owner names the authority principal, not personal human review of later files, hashes or media. Publication was not requested; releaseCandidate=false and publishAllowed=false remain authoritative.",
+      "options": [
+        "Keep local development/verification only; no publication or release-ceiling change"
+      ],
+      "recommended": "Keep local development/verification only; no publication or release-ceiling change",
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "No publication, redeployment, domain/hosting mutation or public ceiling promotion is in scope. Build a reviewable local continuation after required gates, preserving ch4-arrival as the separate release limit. No release permission question is needed for this draft.",
+      "decidedAt": "2026-09-06T04:22:49.322379+00:00"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "at": "2026-09-06T15:50:37.624489+00:00",
+  "acceptedForGpuInvocation": false,
+  "sourceMutation": false,
+  "findings": [
+    {
+      "id": "lock-file-is-not-lock-ownership",
+      "file": "verifier/probes/common-manual-focused/common-passage-probe.mjs",
+      "line": 74,
+      "detail": "heavyLockHeld uses existsSync(lockPath). A file existing does not mean an exclusive lock is held. Recommended commands omit actual flock."
+    },
+    {
+      "id": "preview-byte-identity-unmeasured",
+      "detail": "identityVerdict receives indexSha:null; expected hash is optional and the helper only compares when both exist. No actual served index/bundle binding is proved."
+    },
+    {
+      "id": "long-survey-body-clearance-deadlock",
+      "detail": "After F offer at E, the new probe waits in place for W test unless witness objective appears. A legitimate fixed-reference long route has no witness hold, so Terra can block E indefinitely. Move to proven reachable clear ground using actual controls and measure actual-body clearance before waiting."
+    },
+    {
+      "id": "coarse-common-steering",
+      "detail": "walkTo uses minimum120ms key pulse, about0.6units at measured5.2u/s; common corner approach needs materially finer control. Fixed coarse taps may oscillate around small arrival radii while stallMs resets. Calibrate/adapt small pulses and stop an observed oscillation honestly."
+    },
+    {
+      "id": "weak-survey-action-guards",
+      "detail": "Some F calls use only any-prompt regex and no exact objective, and a-real-drawing gate result is ignored before later F. Enforce actual expected objective/prompt and every failed prerequisite."
+    }
+  ],
+  "next": "Fresh mechanical closure of the owned probe, no GPU or game edits; retain original prep report and files in this archive."
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "paravoxia.directorRepairDirection.v1",
+  "director": "chapter",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "defectIds": [
+    "CG-IMPL-001",
+    "CG-IMPL-003"
+  ],
+  "contractChangeRequired": true,
+  "boundedActions": [
+    "Implement the signed common-only planned/unverified guide on the existing qualified E-to-C polyline after actual H readiness, with exact guide-line work order and one C marker. Keep the initial S-to-E survey actual-walked-only and without preview; add no verb, objective, route geometry or saved route.",
+    "Implement the exact neutral offered-route label and state-conditioned preparing/ready work orders in v2 guidance objectives9 and13. Survey enters at route-offered; common preparation enters at route-tested; actual approach completion/H arrival exclusively authorize the respective ready copy and comparison eligibility. Keep actual-worker/C targets unchanged and one entry acknowledgement despite same-ID ready updates.",
+    "Make real actor approach/body-clearance suspensions truthfully recoverable by ordinary player movement. No new F, forced displacement, teleport, arrival cue, score change or approach/positioning proof is permitted. Preserve initial-only W-to-S and both uncredited E-to-H/H-to-E legs.",
+    "Keep planned common display separate from evidence through Terra passage and worker testing; only validated complete worker arrival plus earned reciprocal proof permits paired common evidence. Display and scalar progress seed no footsteps or proof. Preserve accepted survey evidence, trace caps, existing display allocation, real physical predicates and silent validated Continue/reset behavior.",
+    "Preserve all scene-v1 constraints not explicitly amended by v2, including reciprocal usefulness, no forced failure or route ranking, no late canon reveal, immediate handback, existing live completion audio allowance/cancellations and the real station-home bridge. Do not close CG-IMPL-001 or CG-IMPL-003 from contract approval alone."
+  ],
+  "evidenceRefs": [
+    "scene-contract.json",
+    "chapter-common-trace-clarification.md",
+    "chapter-common-trace-patch.json",
+    "cinema-common-trace-clarification.md",
+    "scene-v2-assembly-record.json",
+    "scene-cinema-lane.json#/commonGuide",
+    "staging/scene-v2/chapter-reconciliation.jsonl",
+    "defects.json"
+  ],
+  "verificationRoute": "After exact signed implementation, use independent raw manual and continuous movie lifecycle traces plus rendered variant evidence: a first-time player discovers and follows the full guide; endpoint-only arrival/display cannot grant proof; obstructed W-to-S/E-to-H approaches show exact preparing copy and recover without extra input; actual readiness silently changes to exact ready copy with one target and one entry cue. Test pause, Continue, world return and completed restore without invented footsteps, premature guide/holding claims, stale objectives or duplicated completion. Verify muted and lowest-tier shape distinction, actual full reciprocal/final traversals and preserved survey choice; then obtain fresh Chapter/player-experience/Cinema reviews and the existing full journey/verification gates. Actual guide, manual play, Continue and runtime acceptance remain unverified by this documentation signature.",
+  "authoredBy": "Codex chapter_intent — Chapter Director",
+  "authoredAt": "2026-09-06T08:21:18.083377+00:00"
+}

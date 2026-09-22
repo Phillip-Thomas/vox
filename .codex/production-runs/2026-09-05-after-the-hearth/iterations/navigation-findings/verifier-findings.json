@@ -1,0 +1,344 @@
+{
+  "schema": "paravoxia.verifierFindings.v2",
+  "runId": "2026-09-05-after-the-hearth",
+  "role": "independent story-verifier (fresh, post world/boot/Continue repair)",
+  "writtenAt": "2026-09-06T13:05:00+00:00",
+  "isAcceptance": false,
+  "isChapterVerificationComplete": false,
+  "measuredAgainst": {
+    "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+    "contractVersion": "scene-v2",
+    "sourceManifestFileSha256": "d9e36ae314ba547a292e55376d54eecbf0ff47dc3d6710c4f9b5ae3fee96caf2",
+    "canonicalOrderedSourceSetSha256": "8a1ef53d06dc50a9ab1b55badd3f19787eb422d5db9a7037c7b82b598c5fea31",
+    "canonicalVsFileShaNote": "These are DIFFERENT identities and are not interchangeable. The value carried by verifier-control/verification-ready/implementation-gate-pass is the manifest FILE-BYTES sha256. The harness sourceSnapshot.manifestSha256 is a third, unrelated canonical hash scoped to probe bytes.",
+    "sourceRehash": {
+      "files": 97,
+      "drift": [],
+      "rehashedAgainAfterBuild": true
+    },
+    "previewUrl": "http://127.0.0.1:40131/",
+    "previewIdentityVerifiedByMe": {
+      "title": "Paravoxia",
+      "indexSha256": "dd60733ce199319861c6e6a1a6a17836d082956ec930c06b32ccd0cca9fb6a8e",
+      "bundlePath": "/assets/index-D6fwfFv7.js",
+      "bundleSha256": "c35941dd34b59baabb5e6f1a5357d59c52d226843e64d43221d4dce023c1fbd9",
+      "byteComparedToLocalDist": true
+    },
+    "priorSourceForRetainedFailures": "51b25376aa6c87dc428249fcfd907811c592bc9dfdaf00d82c53112593ea02c3 (preview 45091, retired)"
+  },
+  "staticGate": {
+    "command": "npm --prefix main run verify",
+    "exitCode": 0,
+    "log": "verifier/logs/world-final/verify-world-final.log",
+    "testFiles": 349,
+    "tests": 3091,
+    "startedAt": "2026-09-06T12:22:06Z",
+    "endedAt": "2026-09-06T12:23:06Z",
+    "buildHashCanonical": "b308b2f0a23ce7b9d3c8cb154e0ced3bb6a512a585629b277e90029297c95284",
+    "limit": "Static gates prove nothing about gameplay, rendering, hearing, hardware budgets or creative acceptance."
+  },
+  "renderer": {
+    "string": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "class": "hardware",
+    "headed": true,
+    "tier": "hardware-high",
+    "softwareFallbackUsed": false
+  },
+  "findings": [
+    {
+      "id": "VF4-FOOTING-1-RETEST",
+      "title": "Prior blocker VF3-FOOTING-1 (unsupported footing at the survey site) is REPAIRED, measured on hardware",
+      "status": "resolved-on-this-source",
+      "priorState": "On 51b25376 the body at S bodyCentre [-26.303087,52.788975,12.015123] / grounded [-26.303072,50.988975,12.015123] reported worldBound:true but supported:FALSE; survey stayed at offer/start for >190 s with 200 real F attempts and ZERO samples.",
+      "measuredNow": {
+        "supported": true,
+        "worldBound": true,
+        "bodyCentre": [
+          -26.0374755859375,
+          52.78897476196289,
+          13.833585739135742
+        ],
+        "bodyPose": [
+          -26.037461675526043,
+          50.98897476201664,
+          13.833585674376183
+        ],
+        "groundOffsetUnits": 1.8,
+        "surveyPhase": "drawing",
+        "samples": 4,
+        "lengthUnits": 1.9581937676161714,
+        "walkedUnits": 2.091498642329963,
+        "anchorsFired": [
+          "anc.cg.repeated-measure",
+          "anc.cg.demonstration-opened",
+          "anc.cg.survey-started"
+        ],
+        "scoreMood": "unreconciled"
+      },
+      "evidence": [
+        "verifier/captures/world-final/survey-1/summary.json",
+        "verifier/captures/world-final/survey-1/trace.ndjson",
+        "verifier/captures/world-final/survey-2/summary.json"
+      ],
+      "limits": "Proven only for the approach and the survey start/first vertices actually walked in these two runs. The remaining signed route columns are NOT audited; boundary holes, placed blocks, water, lava and interior ceilings were not exercised here. This is not full-route physical proof."
+    },
+    {
+      "id": "VF4-SURVEY-STALL-1",
+      "title": "NEW BLOCKER: the survey demonstration walk freezes at rail vertex 1 with zero body displacement while the rail keeps publishing action=walk",
+      "status": "open-blocker",
+      "severity": "blocks-chapter-verification",
+      "reproduced": "2 of 2 runs, deterministic, same vertex",
+      "observed": {
+        "objectiveId": "ch13:survey:draw",
+        "markerLabel": "Survey end \u00b7 demonstrate a route",
+        "workOrder": [
+          "Walk your route to the survey end.",
+          "[F] Offer the recorded span."
+        ],
+        "anchor": "anc.cg.survey-started",
+        "railAction": "walk",
+        "railTarget": [
+          -26,
+          51.05,
+          14.6
+        ],
+        "railArriveRadius": 0.35,
+        "railCursor": 1,
+        "railReason": "walking the demonstrated route",
+        "holdReason": null,
+        "frozenBodyCentreRun1": [
+          -26.0374755859375,
+          52.78897476196289,
+          13.833585739135742
+        ],
+        "frozenBodyCentreRun2": [
+          -26.047880172729492,
+          52.78897476196289,
+          13.839042663574219
+        ],
+        "remainingDistanceToTargetUnits": 0.766,
+        "displacementDuringFreezeUnits": 0.0,
+        "freezeDurationRun1Ms": 131800,
+        "supported": true,
+        "worldBound": true,
+        "spaceFlight": {
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        "autopilotClockAdvanced": "16.3 s -> 145.2 s (the beat tick is alive)",
+        "autopilotStillTime": 0,
+        "surveyFrozenAt": {
+          "samples": 4,
+          "walkedUnits": 2.091498642329963
+        }
+      },
+      "stallPredicate": {
+        "optedIn": true,
+        "phases": [
+          "walk",
+          "interact",
+          "on-foot"
+        ],
+        "requiredWindowMs": 30000,
+        "firedAtMs": 30041,
+        "playerMovedUnitsInWindow": 0,
+        "actorMovedUnitsInWindow": 0,
+        "verdict": "FAIL-STALL",
+        "probeExitCode": 3,
+        "rescueAttempted": false
+      },
+      "precisionNotes": [
+        "This is NOT the retired centre-arrival/unsupported-footing defect: supported is true, worldBound is true and holdReason is null.",
+        "This is NOT the seated-capsule travel artefact: spaceFlight is surface/fps, the player is on foot, and no ship motion is involved.",
+        "The body coordinates are bit-identical across the whole freeze window, so this is a complete stop, not slow progress.",
+        "runtime autopilot.stillTime reports 0 throughout a window in which measured displacement is exactly 0. Whatever the runtime is measuring stillness against, it is not this body. Reported as an observation; the cause is NOT established."
+      ],
+      "causeEstablished": false,
+      "evidence": [
+        "verifier/captures/world-final/survey-1/",
+        "verifier/captures/world-final/survey-2/",
+        "verifier/captures/world-final/survey-1/0009-after-anchor-anc.cg.survey-started.png"
+      ],
+      "discriminator": {
+        "probe": "verifier/probes/scratch/stall-discriminator.mjs",
+        "artifact": "verifier/captures/world-final/stall-discriminator/discriminator.json",
+        "question": "physical collision vs the navigator issuing no controls",
+        "inputUsed": "ordinary shipped movement keys only (W/S/A/D), 1.2 s each; no teleport, grant, predicate change or progress setter",
+        "notCountedAsJourneyProgress": true,
+        "trials": [
+          {
+            "trial": "no-input-8s",
+            "displacementUnits": 0.0009307861328125,
+            "note": "confirms the freeze under the probe's own observation"
+          },
+          {
+            "trial": "KeyW-1.2s",
+            "displacementUnits": 4.339,
+            "railCursor": "1 -> 4",
+            "samples": "4 -> 11",
+            "walkedUnits": "2.336 -> 8.413"
+          },
+          {
+            "trial": "KeyS-1.2s",
+            "displacementUnits": 0.0049,
+            "railCursor": 4
+          },
+          {
+            "trial": "KeyA-1.2s",
+            "displacementUnits": 6.1973,
+            "railCursor": "4 -> 8",
+            "samples": "11 -> 20",
+            "walkedUnits": "8.413 -> 16.497"
+          },
+          {
+            "trial": "KeyD-1.2s",
+            "displacementUnits": 6.1513,
+            "railCursor": "8 -> 12",
+            "samples": "20 -> 28",
+            "walkedUnits": "16.497 -> 23.306"
+          },
+          {
+            "trial": "post-input-idle-10s",
+            "railCursor": "12 -> 13",
+            "walkedUnits": "23.388 -> 27.243",
+            "note": "AFTER input stopped the rail resumed autonomously and kept advancing with no further keys"
+          }
+        ],
+        "conclusion": "NOT a physical collision and NOT unsupported ground. The body moves freely, supported stays true and holdReason stays null. The navigator issues no controls in a specific terminal-cell condition; any ordinary nudge breaks the lock, after which the rail resumes on its own.",
+        "frozenGeometry": {
+          "frozenBodyXZ": [
+            -26.085248947143555,
+            13.87842082977295
+          ],
+          "distanceToSnappedVoxelCentre_-26_14": 0.1485,
+          "distanceToSignedRailTarget_-26_14p6": 0.7307,
+          "railArriveRadius": 0.35
+        },
+        "corroboratesRootSourceCandidate": {
+          "candidate": "shared primitives.ts nextNavigationStep keeps the final A* cell waypoint authoritative (~1320-1355) and steerFreeToward stops all directional controls when tangent squared distance < .04 (radius .2, ~1359)",
+          "fit": "Both observed freeze poses sit INSIDE the 0.2 deadzone of the snapped voxel centre (0.1706 in survey-1, 0.1485 here) while the signed rail target remains beyond arriveRadius 0.35. The measured behaviour matches that deadzone-vs-overshoot mismatch.",
+          "status": "measurement is consistent with the candidate; I did NOT read the navigator's resolved waypoint at runtime, so the exact snapped endpoint remains an inference, not an observed navWaypoint claim.",
+          "verifierPatched": false
+        }
+      },
+      "impact": [
+        "In movie lane the survey cannot self-complete, so ch13-common is unreachable without a rescue. The commissioned full-story movie with zero timeout rescues is therefore blocked at this beat."
+      ]
+    },
+    {
+      "id": "VF4-AVHOME-1-RETEST",
+      "title": "Prior blocker VF3-AVHOME-1 (home AV history empty) shows a favourable change, but is NOT closed",
+      "status": "partially-improved-not-closed",
+      "priorState": "On 51b25376 the AV anchorLedger held only hatch/lift; home anchors were null despite the CG director's local fired facts listing them.",
+      "measuredNow": {
+        "anchorLedgerOrdered": [
+          {
+            "anchorId": "anc.cg.home-steady",
+            "sequence": 1,
+            "elapsedMs": 1656
+          },
+          {
+            "anchorId": "anc.cg.fault-reviewed",
+            "sequence": 2,
+            "elapsedMs": 2240
+          },
+          {
+            "anchorId": "anc.cg.hatch-boarded",
+            "sequence": 4
+          },
+          {
+            "anchorId": "anc.cg.lift-committed",
+            "sequence": 5
+          }
+        ],
+        "cgDiagnosticAnchors": [
+          "anc.cg.home-steady",
+          "anc.cg.fault-reviewed",
+          "anc.cg.return-chosen",
+          "anc.cg.hatch-boarded",
+          "anc.cg.lift-committed"
+        ],
+        "installWatch": "unknown",
+        "pendingAnchors": [],
+        "scoreMoodAtCh13Return": null
+      },
+      "whyNotClosed": [
+        "Measured only in a ?story=ch13-home deep-link fixture in MOVIE lane that ran the whole beat in ~4.5 s. Scenario seeding establishes labelled prerequisites and never proves the earlier journey.",
+        "The real station-departure -> built/restored-home continuous journey was NOT run.",
+        "Live install ACK is not demonstrated: installWatch is 'unknown' and pendingAnchors is empty.",
+        "No manual-lane observation.",
+        "NOTHING was heard. score.mood is runtime state only. noteAnchor separately drives chapter music, so an AV-history observation alone is not a cue claim."
+      ],
+      "evidence": [
+        "verifier/captures/world-final/smoke-home/summary.json",
+        "verifier/captures/world-final/smoke-home-v2/summary.json"
+      ]
+    },
+    {
+      "id": "VF4-HARNESS-HOOK-1",
+      "title": "CORRECTED IN MY HARNESS: the CG diagnostic allow-list never called the shipped hook name, so every prior capture reported CG physical state as unavailable by harness defect",
+      "status": "corrected-by-verifier",
+      "detail": "StoryDirectorDriver.tsx:137 installs window.__paravoxiaCommonGround = { snapshot } under ?journeyprobe=1|chapterjourney=1|debug=1. CG_DIAGNOSTIC_HOOKS probed only .diagnostic() and .scoreDiagnostic(); a live read-only recheck proved diagnosticMember:false, scoreDiagnosticMember:false, snapshot present and answering the full schema.",
+      "consequenceForPriorEvidence": "Captures taken before this correction observed CG phase/rail/hold/supported/grounded pose as UNAVAILABLE unless an explicit --cg-diag-hook was passed. Those gaps are unmeasured-by-harness, NOT absent runtime state. No prior capture was altered.",
+      "correction": "snapshot() added as first allow-list candidate; progressSignature reads both bare and snapshot-nested levels and records which; score derived from snapshot().score; resolvedPoseSource/poseSourceAvailability recorded separately from the boot sample.",
+      "provenAfterCorrection": "1286/1287 samples carried the hook in survey-1; pose resolved at 392 ms; full-precision bodyCentre/bodyPose/up/supported observed.",
+      "evidence": [
+        "verifier/probes/scratch/hook-recheck.mjs",
+        "verifier/captures/world-final/smoke-home-v2/summary.json",
+        "verifier/captures/world-final/survey-1/summary.json"
+      ]
+    },
+    {
+      "id": "VF4-HARNESS-MARKER-1",
+      "title": "OPEN HARNESS GAP: markerCount samples 0 while the captured frame plainly renders the marker",
+      "status": "open-harness-gap-not-a-game-defect-claim",
+      "detail": "Throughout survey-1 the probe sampled markerCount 0 while markerLabel was correctly populated, and frame 0009-after-anchor-anc.cg.survey-started.png visibly renders the world marker reading 'survey end \u00b7 demonstrate a route - 15m'.",
+      "requirement": "Actual markers must be counted from current DOM/runtime fields. This is a sampler mismatch, exactly the class root warned about, and must NOT be reported as a missing marker. Marker parity for the 28 anchors is therefore UNMEASURED, not failed.",
+      "evidence": [
+        "verifier/captures/world-final/survey-1/0009-after-anchor-anc.cg.survey-started.png",
+        "verifier/captures/world-final/survey-1/trace.ndjson"
+      ]
+    },
+    {
+      "id": "VF4-HARNESS-CAPTURE-SAFETY-1",
+      "title": "Root-commissioned run-local capture-safety corrections implemented and offline-tested",
+      "status": "done",
+      "changes": [
+        "assertFreshOutputDir refuses ANY existing nonempty output folder (including legacy folders with no manifest) before mkdir/snapshot/trace writes; never deletes or edits what it refuses.",
+        "Post-finally cleanup-receipt.json records the ACTUAL cleanup outcome; summary.cleanup is now explicitly labelled phase:'pre-finally', isFinalCleanupOutcome:false."
+      ],
+      "offlineGate": {
+        "cg-harness-prep-selftest": "41/41 (was 26/26)",
+        "cg-harness-selftest": "25/25",
+        "probeSelfTests": "exit 0"
+      },
+      "nonVacuity": "permissive guard mutation -> C3/C5/C6/C7/C8 fail (36/41); receipt-always-stopped mutation -> D3 fails (40/41); both libraries restored byte-identical and gate returned to 41/41.",
+      "actualCleanupReceiptsObserved": "state 'stopped', sessionStopInvocations 1, cleanupError null, in every hardware capture taken.",
+      "archives": [
+        "verifier/artifacts/world-final-harness-archive/pre-edit-2026-09-06T1230Z.sha256",
+        "verifier/artifacts/world-final-harness-archive/v2-2026-09-06T1240Z.sha256",
+        "verifier/artifacts/world-final-harness-archive/v3-2026-09-06T1245Z.sha256"
+      ]
+    }
+  ],
+  "notMeasured": [
+    "EARLY TEST 3 (full fixed route S through all vertices, H setup, Terra 18 E->C, T/F/occupancy, W H->E2 + E->C 18) \u2014 blocked by VF4-SURVEY-STALL-1.",
+    "EARLY TEST 4 (valid partial Continue through real WorldSave/actor/world/lifecycle before routeTested) \u2014 not reached.",
+    "EARLY TEST 5 (manual corner: small natural early turn, retained progress, ordinary return-to-frontier recovery) \u2014 NOT reached; source unit proof is not manual usability acceptance.",
+    "Three cold focused chapters, station-departure->home-install->ch13->final with no reseed, and the full story movie from the beginning with zero timeout rescues.",
+    "All 17 new + 2 prior objective lifecycles and the 28 anchors including conditional cases; exact label parity, work orders, one-time feedback, targetless-launch named controls.",
+    "Two WorldSave slots <=128 samples / 120 walked units, reference range 12/LOS/occupancy entry 1.25h/.6v release 1.75h/.9v, gaze independence, vacancy hold/reentry, body-clearance hold.",
+    "Reset/variant matrix, desktop/mobile/reduced-motion/lowest-tier parity, cold high AND low hardware handback budgets (+8 draw/+6 materials/+6 setup programs/+2 MiB, 512 glyph pool).",
+    "ALL audio acceptance. Nothing was heard. No live cue-sync, completion 5 monotonic seconds, 4.5 release, or handback-same-frame claim is made."
+  ],
+  "limitations": [
+    "No creative, taste, scorecard or signature judgment is offered. Measurements only.",
+    "A black or near-black boot frame is never visual acceptance.",
+    "Movie-lane rail traversal is not manual usability.",
+    "Deep-link scenario seeding never proves an earlier journey."
+  ],
+  "nextBoundedRepairInput": {
+    "single": "VF4-SURVEY-STALL-1",
+    "note": "One bounded integration pass should reproduce the frozen walk at rail vertex 1 (target [-26,51.05,14.6], arriveRadius 0.35, cursor 1) with supported:true and holdReason:null BEFORE any fix. My discriminator establishes it is a controls/navigator deadzone, not collision and not ground: ordinary movement input frees it and the rail then resumes autonomously. Root's primitives.ts nextNavigationStep / steerFreeToward deadzone candidate fits both measured freeze poses. I did not patch it and did not widen any predicate or arrival radius."
+  }
+}

@@ -1,0 +1,1625 @@
+{
+  "probe": "common-ground geometry pass 2 (reference-aware)",
+  "generatedAt": "2026-09-06T05:16:46.022Z",
+  "supersedes": null,
+  "relationToPass1": "independent follow-up; pass-1 artifacts unmodified",
+  "derivation": "source-derived (pristine procedural terrain; no live voxel edits, no render, no GPU, no server)",
+  "world": {
+    "planetSize": 50,
+    "radiusCells": 25,
+    "storyCoordinate": {
+      "x": -1,
+      "y": -1
+    },
+    "storySeed": 3215739679,
+    "worldId": "-1,-1",
+    "voxelScale": 2,
+    "voxelCount": 115629
+  },
+  "workerRouteOptions": {
+    "face": "top",
+    "differentFaceFallback": "unreachable",
+    "clearanceCells": 2,
+    "maxSlopeCells": 1,
+    "edgeMarginCells": 1,
+    "maxVisitedCells": 8192,
+    "waypointClearanceWorld": 1.05,
+    "allowJetpackCrossing": false
+  },
+  "traceContract": {
+    "maxPoints": 128,
+    "maxLengthUnits": 120,
+    "sampleSpacing": 1,
+    "minSeparation": 0.25,
+    "capsRelaxed": false,
+    "cornersDecimated": false
+  },
+  "conventionAudit": {
+    "voxelFrame": {
+      "convention": "voxel coordinate maps to voxel CENTRE; occupancy AABB is centre +/- VOXEL_SCALE/2",
+      "sample": {
+        "coord": [
+          -13,
+          25,
+          11
+        ],
+        "world": {
+          "x": -26,
+          "y": 50,
+          "z": 22
+        },
+        "inverseRound": {
+          "x": -13,
+          "y": 25,
+          "z": 11
+        }
+      },
+      "inverseIsExact": true,
+      "groundedPoseOffsetAboveSupportCentre": 1.05,
+      "groundedPoseOffsetAboveSupportTopFace": 0.05
+    },
+    "socketHeightsAboveGroundedPose": {
+      "workerVisor": 1.85,
+      "workerChest": 1.3,
+      "workerHand": 1.25,
+      "playerEye": 1.35,
+      "pass1Assumed": 1.6,
+      "bootSoleLocalY": -0.05,
+      "chosenActorSocket": 1.85,
+      "chosenReferenceSocket": 1.85,
+      "referenceSocketCandidates": [
+        0.6,
+        1,
+        1.35,
+        1.85
+      ]
+    },
+    "columnTopCeiling": {
+      "columnsCompared": 1925,
+      "columnsWhereCeilingDiffers": 717,
+      "pass1ScanCeiling": 31,
+      "shippedScanCeiling": 25
+    },
+    "occluderSet": {
+      "terrain": "solid voxels with max(|x|,|y|,|z|) <= radiusCells (the planner's insideRenderedTerrain gate)",
+      "structure": "hero trunk CuboidCollider 1.1 x 1.1 x 8.17 (HeroAppleTree.tsx:190)",
+      "excluded": [
+        "canopy instances (no collider)",
+        "fauna/grass",
+        "player-built StructureField pieces (not procedural)",
+        "logical voxels outside the rendered cube"
+      ]
+    },
+    "rayCasting": {
+      "method": "Amanatides-Woo DDA over voxel AABBs (centre +/- 1.0)",
+      "pass1Method": "0.35-unit point sampling, round() to voxel, no rendered-cube gate"
+    },
+    "nearFieldHandling": {
+      "pass1": "blanket 3.0-unit horizontal exemption, counted separately",
+      "pass2": "exempt only the two endpoint support columns (support voxel and the voxel above it)"
+    }
+  },
+  "endpoints": {
+    "sharedByBothRouteClasses": true,
+    "startReferenceAtTree": {
+      "world": {
+        "x": -28,
+        "y": 51.05,
+        "z": 22
+      },
+      "supportVoxel": [
+        -14,
+        25,
+        11
+      ],
+      "distanceToTrunkAxis": 4
+    },
+    "endReferenceOnPondShore": {
+      "world": {
+        "x": 4,
+        "y": 51.05,
+        "z": -10
+      },
+      "supportVoxel": [
+        2,
+        25,
+        -5
+      ]
+    },
+    "approachReferenceNearRelay": {
+      "world": {
+        "x": -2,
+        "y": 51.05,
+        "z": -2
+      },
+      "supportVoxel": [
+        -1,
+        25,
+        -1
+      ]
+    },
+    "straightDistance": 45.25,
+    "heroTree": {
+      "position": {
+        "x": -24,
+        "y": 50.95,
+        "z": 22
+      },
+      "trunkHeight": 8.17,
+      "trunkColliderHalfExtentXZ": 0.55
+    },
+    "pondShore": {
+      "x": 4,
+      "y": 51.05,
+      "z": -10
+    }
+  },
+  "plannerTrunkBlindness": {
+    "finding": "planAgentSurfaceRoute knows terrain voxels only; the hero trunk CuboidCollider is invisible to it",
+    "trunkFootprintCellsInsideNodeField": [
+      {
+        "cell": [
+          -12,
+          11
+        ],
+        "supportVoxel": [
+          -12,
+          25,
+          11
+        ],
+        "world": {
+          "x": -24,
+          "y": 51.05,
+          "z": 22
+        }
+      }
+    ],
+    "unrestrictedShortestRouteWalksThroughTrunk": true,
+    "consequence": "without this guard the shorter route's only witness break is the actor standing INSIDE the trunk box, which no reference can see and which is not a legible occlusion",
+    "guardApplied": "cells whose grounded pose lies inside the trunk XZ box below the trunk top are banned from both route classes"
+  },
+  "nodeField": {
+    "boundsCells": {
+      "uLo": -28,
+      "uHi": 16,
+      "vLo": -19,
+      "vHi": 25
+    },
+    "walkableDryNodes": 1193,
+    "supportHeightHistogram": {
+      "25": 1193
+    },
+    "reliefNote": "a single dominant support height means the arena corridor is the flat cube-face plateau: no terrain relief is available to occlude a level sightline",
+    "connectivity": "4-neighbour, |dh| <= maxSlopeCells (matches agentSurfaceNavigation NEIGHBORS)"
+  },
+  "referenceCandidatesEvaluated": 96,
+  "referenceRejections": {
+    "startOrEndNotClearToReference": 10,
+    "noClearChain": 0,
+    "outerOverLength": 0,
+    "outerOverPoints": 4,
+    "outerNotLonger": 52,
+    "shorterNotOccluded": 0
+  },
+  "qualifyingSolutions": 30,
+  "solution": {
+    "fixedReference": {
+      "world": {
+        "x": -30,
+        "y": 51.05,
+        "z": 32
+      },
+      "supportVoxel": [
+        -15,
+        25,
+        16
+      ],
+      "socketHeight": 1.85,
+      "socketWorld": {
+        "x": -30,
+        "y": 52.9,
+        "z": 32
+      },
+      "distanceToTree": 11.66,
+      "referenceClearNodes": 1147
+    },
+    "outerRoute": {
+      "waypointCount": 35,
+      "walkedLength": 68,
+      "lengthWithinBudget": true,
+      "traceSampleCount": 96,
+      "pointsWithinBudget": true,
+      "witnessClearSamples": 96,
+      "witnessBlockedSamples": 0,
+      "blockedByTerrain": 0,
+      "blockedByTrunk": 0,
+      "selfColumnHits": 0,
+      "maxWitnessDistance": 54.04,
+      "firstBlockedSample": null,
+      "lastBlockedSample": null,
+      "occludedSampleIndices": [],
+      "occludedSampleCount": 0
+    },
+    "outerRouteWaypoints": [
+      {
+        "x": -28,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -26,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -26,
+        "y": 51.05,
+        "z": 24
+      },
+      {
+        "x": -24,
+        "y": 51.05,
+        "z": 24
+      },
+      {
+        "x": -22,
+        "y": 51.05,
+        "z": 24
+      },
+      {
+        "x": -20,
+        "y": 51.05,
+        "z": 24
+      },
+      {
+        "x": -18,
+        "y": 51.05,
+        "z": 24
+      },
+      {
+        "x": -16,
+        "y": 51.05,
+        "z": 24
+      },
+      {
+        "x": -14,
+        "y": 51.05,
+        "z": 24
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 24
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 18
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 16
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 14
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -10,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -8,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -8,
+        "y": 51.05,
+        "z": 10
+      },
+      {
+        "x": -6,
+        "y": 51.05,
+        "z": 10
+      },
+      {
+        "x": -6,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": -4,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": -2,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": 0,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": 2,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": 6
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": 4
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": 2
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": 0
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": -2
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": -4
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": -6
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": -8
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": -10
+      }
+    ],
+    "shorterRoute": {
+      "waypointCount": 33,
+      "walkedLength": 64,
+      "lengthWithinBudget": true,
+      "traceSampleCount": 92,
+      "pointsWithinBudget": true,
+      "witnessClearSamples": 90,
+      "witnessBlockedSamples": 2,
+      "blockedByTerrain": 0,
+      "blockedByTrunk": 2,
+      "selfColumnHits": 0,
+      "maxWitnessDistance": 54.04,
+      "firstBlockedSample": {
+        "index": 13,
+        "position": {
+          "x": -23,
+          "y": 51.05,
+          "z": 20
+        }
+      },
+      "lastBlockedSample": {
+        "index": 14,
+        "position": {
+          "x": -22,
+          "y": 51.05,
+          "z": 20
+        }
+      },
+      "occludedSampleIndices": [
+        13,
+        14
+      ],
+      "occludedSampleCount": 2
+    },
+    "shorterRouteWaypoints": [
+      {
+        "x": -28,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -26,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -26,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -24,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -22,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -20,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -18,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -16,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -14,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 18
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 16
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 14
+      },
+      {
+        "x": -12,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -10,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -8,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -8,
+        "y": 51.05,
+        "z": 10
+      },
+      {
+        "x": -6,
+        "y": 51.05,
+        "z": 10
+      },
+      {
+        "x": -6,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": -4,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": -2,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": 0,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": 2,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": 8
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": 6
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": 4
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": 2
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": 0
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": -2
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": -4
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": -6
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": -8
+      },
+      {
+        "x": 4,
+        "y": 51.05,
+        "z": -10
+      }
+    ],
+    "intermediateWitnessCandidates": {
+      "acceptedCount": 981,
+      "nearest": {
+        "position": {
+          "x": -22,
+          "y": 51.05,
+          "z": 20
+        },
+        "supportVoxel": [
+          -11,
+          25,
+          10
+        ],
+        "maxLineOfReferenceDistance": 1,
+        "minDistanceToOccludedSpan": 0,
+        "distanceToFixedReference": 14.42,
+        "walkedDistanceFromStartReference": 8,
+        "coversAllOccludedSamples": true
+      },
+      "median": {
+        "position": {
+          "x": 8,
+          "y": 51.05,
+          "z": 22
+        },
+        "supportVoxel": [
+          4,
+          25,
+          11
+        ],
+        "maxLineOfReferenceDistance": 31.06,
+        "minDistanceToOccludedSpan": 30.07,
+        "distanceToFixedReference": 39.29,
+        "walkedDistanceFromStartReference": 64,
+        "coversAllOccludedSamples": true
+      },
+      "farthest": {
+        "position": {
+          "x": 32,
+          "y": 51.05,
+          "z": -30
+        },
+        "supportVoxel": [
+          16,
+          25,
+          -15
+        ],
+        "maxLineOfReferenceDistance": 74.33,
+        "minDistanceToOccludedSpan": 73.59,
+        "distanceToFixedReference": 87.68,
+        "walkedDistanceFromStartReference": 112,
+        "coversAllOccludedSamples": true
+      },
+      "clearlyPositionedOffSpan": {
+        "position": {
+          "x": -28,
+          "y": 51.05,
+          "z": 22
+        },
+        "supportVoxel": [
+          -14,
+          25,
+          11
+        ],
+        "maxLineOfReferenceDistance": 6.32,
+        "minDistanceToOccludedSpan": 5.39,
+        "distanceToFixedReference": 10.2,
+        "walkedDistanceFromStartReference": 0,
+        "coversAllOccludedSamples": true
+      },
+      "firstN": [
+        {
+          "position": {
+            "x": -22,
+            "y": 51.05,
+            "z": 20
+          },
+          "supportVoxel": [
+            -11,
+            25,
+            10
+          ],
+          "maxLineOfReferenceDistance": 1,
+          "minDistanceToOccludedSpan": 0,
+          "distanceToFixedReference": 14.42,
+          "walkedDistanceFromStartReference": 8,
+          "coversAllOccludedSamples": true
+        },
+        {
+          "position": {
+            "x": -24,
+            "y": 51.05,
+            "z": 20
+          },
+          "supportVoxel": [
+            -12,
+            25,
+            10
+          ],
+          "maxLineOfReferenceDistance": 2,
+          "minDistanceToOccludedSpan": 1,
+          "distanceToFixedReference": 13.42,
+          "walkedDistanceFromStartReference": 6,
+          "coversAllOccludedSamples": true
+        },
+        {
+          "position": {
+            "x": -22,
+            "y": 51.05,
+            "z": 18
+          },
+          "supportVoxel": [
+            -11,
+            25,
+            9
+          ],
+          "maxLineOfReferenceDistance": 2.24,
+          "minDistanceToOccludedSpan": 2,
+          "distanceToFixedReference": 16.12,
+          "walkedDistanceFromStartReference": 10,
+          "coversAllOccludedSamples": true
+        }
+      ]
+    },
+    "savedWitnessRequirementIsDistinct": true
+  },
+  "solutionTable": [
+    {
+      "fixedReference": {
+        "x": -30,
+        "y": 51.05,
+        "z": 32
+      },
+      "supportVoxel": [
+        -15,
+        25,
+        16
+      ],
+      "distanceToTree": 11.66,
+      "referenceClearNodes": 1147,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 2,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 2,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -28,
+        "y": 51.05,
+        "z": 28
+      },
+      "supportVoxel": [
+        -14,
+        25,
+        14
+      ],
+      "distanceToTree": 7.21,
+      "referenceClearNodes": 1116,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 2,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 2,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -28,
+        "y": 51.05,
+        "z": 30
+      },
+      "supportVoxel": [
+        -14,
+        25,
+        15
+      ],
+      "distanceToTree": 8.94,
+      "referenceClearNodes": 1148,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 2,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 2,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -28,
+        "y": 51.05,
+        "z": 32
+      },
+      "supportVoxel": [
+        -14,
+        25,
+        16
+      ],
+      "distanceToTree": 10.77,
+      "referenceClearNodes": 1156,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 2,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 2,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -26,
+        "y": 51.05,
+        "z": 26
+      },
+      "supportVoxel": [
+        -13,
+        25,
+        13
+      ],
+      "distanceToTree": 4.47,
+      "referenceClearNodes": 1110,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 3,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 3,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -26,
+        "y": 51.05,
+        "z": 28
+      },
+      "supportVoxel": [
+        -13,
+        25,
+        14
+      ],
+      "distanceToTree": 6.33,
+      "referenceClearNodes": 1133,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 2,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 2,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -26,
+        "y": 51.05,
+        "z": 30
+      },
+      "supportVoxel": [
+        -13,
+        25,
+        15
+      ],
+      "distanceToTree": 8.25,
+      "referenceClearNodes": 1135,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 3,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 3,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -26,
+        "y": 51.05,
+        "z": 32
+      },
+      "supportVoxel": [
+        -13,
+        25,
+        16
+      ],
+      "distanceToTree": 10.2,
+      "referenceClearNodes": 1135,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 3,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 3,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -24,
+        "y": 51.05,
+        "z": 26
+      },
+      "supportVoxel": [
+        -12,
+        25,
+        13
+      ],
+      "distanceToTree": 4,
+      "referenceClearNodes": 1095,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 4,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 4,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -24,
+        "y": 51.05,
+        "z": 28
+      },
+      "supportVoxel": [
+        -12,
+        25,
+        14
+      ],
+      "distanceToTree": 6,
+      "referenceClearNodes": 1124,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 4,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 4,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -24,
+        "y": 51.05,
+        "z": 30
+      },
+      "supportVoxel": [
+        -12,
+        25,
+        15
+      ],
+      "distanceToTree": 8,
+      "referenceClearNodes": 1139,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 3,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 3,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -24,
+        "y": 51.05,
+        "z": 32
+      },
+      "supportVoxel": [
+        -12,
+        25,
+        16
+      ],
+      "distanceToTree": 10,
+      "referenceClearNodes": 1154,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 3,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 3,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -22,
+        "y": 51.05,
+        "z": 26
+      },
+      "supportVoxel": [
+        -11,
+        25,
+        13
+      ],
+      "distanceToTree": 4.47,
+      "referenceClearNodes": 1164,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 8,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 8,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -22,
+        "y": 51.05,
+        "z": 28
+      },
+      "supportVoxel": [
+        -11,
+        25,
+        14
+      ],
+      "distanceToTree": 6.33,
+      "referenceClearNodes": 1162,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 5,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 5,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -22,
+        "y": 51.05,
+        "z": 30
+      },
+      "supportVoxel": [
+        -11,
+        25,
+        15
+      ],
+      "distanceToTree": 8.25,
+      "referenceClearNodes": 1158,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 5,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 5,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -22,
+        "y": 51.05,
+        "z": 32
+      },
+      "supportVoxel": [
+        -11,
+        25,
+        16
+      ],
+      "distanceToTree": 10.2,
+      "referenceClearNodes": 1157,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 5,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 5,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -20,
+        "y": 51.05,
+        "z": 24
+      },
+      "supportVoxel": [
+        -10,
+        25,
+        12
+      ],
+      "distanceToTree": 4.47,
+      "referenceClearNodes": 1163,
+      "outerLength": 68,
+      "outerSamples": 93,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 6,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 6,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -20,
+        "y": 51.05,
+        "z": 26
+      },
+      "supportVoxel": [
+        -10,
+        25,
+        13
+      ],
+      "distanceToTree": 5.66,
+      "referenceClearNodes": 1169,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 7,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 7,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -20,
+        "y": 51.05,
+        "z": 28
+      },
+      "supportVoxel": [
+        -10,
+        25,
+        14
+      ],
+      "distanceToTree": 7.21,
+      "referenceClearNodes": 1172,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 8,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 8,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -20,
+        "y": 51.05,
+        "z": 30
+      },
+      "supportVoxel": [
+        -10,
+        25,
+        15
+      ],
+      "distanceToTree": 8.94,
+      "referenceClearNodes": 1175,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 5,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 5,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -20,
+        "y": 51.05,
+        "z": 32
+      },
+      "supportVoxel": [
+        -10,
+        25,
+        16
+      ],
+      "distanceToTree": 10.77,
+      "referenceClearNodes": 1175,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 5,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 5,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -18,
+        "y": 51.05,
+        "z": 24
+      },
+      "supportVoxel": [
+        -9,
+        25,
+        12
+      ],
+      "distanceToTree": 6.33,
+      "referenceClearNodes": 1168,
+      "outerLength": 68,
+      "outerSamples": 93,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 5,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 5,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -18,
+        "y": 51.05,
+        "z": 26
+      },
+      "supportVoxel": [
+        -9,
+        25,
+        13
+      ],
+      "distanceToTree": 7.21,
+      "referenceClearNodes": 1171,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 5,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 5,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -18,
+        "y": 51.05,
+        "z": 28
+      },
+      "supportVoxel": [
+        -9,
+        25,
+        14
+      ],
+      "distanceToTree": 8.49,
+      "referenceClearNodes": 1173,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 7,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 7,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -18,
+        "y": 51.05,
+        "z": 30
+      },
+      "supportVoxel": [
+        -9,
+        25,
+        15
+      ],
+      "distanceToTree": 10,
+      "referenceClearNodes": 1176,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 7,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 7,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -16,
+        "y": 51.05,
+        "z": 24
+      },
+      "supportVoxel": [
+        -8,
+        25,
+        12
+      ],
+      "distanceToTree": 8.25,
+      "referenceClearNodes": 1172,
+      "outerLength": 68,
+      "outerSamples": 93,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 4,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 4,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -16,
+        "y": 51.05,
+        "z": 26
+      },
+      "supportVoxel": [
+        -8,
+        25,
+        13
+      ],
+      "distanceToTree": 8.94,
+      "referenceClearNodes": 1174,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 5,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 5,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -16,
+        "y": 51.05,
+        "z": 28
+      },
+      "supportVoxel": [
+        -8,
+        25,
+        14
+      ],
+      "distanceToTree": 10,
+      "referenceClearNodes": 1176,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 5,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 5,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -16,
+        "y": 51.05,
+        "z": 30
+      },
+      "supportVoxel": [
+        -8,
+        25,
+        15
+      ],
+      "distanceToTree": 11.31,
+      "referenceClearNodes": 1175,
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 7,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 7,
+      "detourExtraUnits": 4
+    },
+    {
+      "fixedReference": {
+        "x": -14,
+        "y": 51.05,
+        "z": 26
+      },
+      "supportVoxel": [
+        -7,
+        25,
+        13
+      ],
+      "distanceToTree": 10.77,
+      "referenceClearNodes": 1174,
+      "outerLength": 68,
+      "outerSamples": 93,
+      "outerBlocked": 0,
+      "shorterLength": 64,
+      "shorterSamples": 92,
+      "shorterBlocked": 5,
+      "shorterBlockedByTerrain": 0,
+      "shorterBlockedByTrunk": 5,
+      "detourExtraUnits": 4
+    }
+  ],
+  "terrainOccludedSolution": null,
+  "witnessSearchRejections": {
+    "tooCloseToFixedReference": 9,
+    "cannotSeeOccludedSpan": 108,
+    "unreachable": 95,
+    "accepted": 981
+  },
+  "renderedCeilingCheck": {
+    "note": "generator.shouldVoxelExist is not clipped to the rendered cube; agentSurfaceNavigation gates it with insideRenderedTerrain, pass 1's ray did not",
+    "columnsWithLogicalVoxelsAboveCube": 717,
+    "examples": [
+      {
+        "cell": [
+          -26,
+          4
+        ],
+        "pass1Top": 26,
+        "shippedTop": 19,
+        "solidAt26": true,
+        "solidAt27": false
+      },
+      {
+        "cell": [
+          -26,
+          5
+        ],
+        "pass1Top": 26,
+        "shippedTop": 19,
+        "solidAt26": true,
+        "solidAt27": false
+      },
+      {
+        "cell": [
+          -25,
+          6
+        ],
+        "pass1Top": 26,
+        "shippedTop": 25,
+        "solidAt26": true,
+        "solidAt27": false
+      },
+      {
+        "cell": [
+          -25,
+          7
+        ],
+        "pass1Top": 26,
+        "shippedTop": 25,
+        "solidAt26": true,
+        "solidAt27": false
+      },
+      {
+        "cell": [
+          -25,
+          8
+        ],
+        "pass1Top": 26,
+        "shippedTop": 25,
+        "solidAt26": true,
+        "solidAt27": false
+      }
+    ]
+  },
+  "alternateSolutions": [
+    {
+      "fixedReference": {
+        "x": -28,
+        "y": 51.05,
+        "z": 28
+      },
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterBlocked": 2
+    },
+    {
+      "fixedReference": {
+        "x": -28,
+        "y": 51.05,
+        "z": 30
+      },
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterBlocked": 2
+    },
+    {
+      "fixedReference": {
+        "x": -28,
+        "y": 51.05,
+        "z": 32
+      },
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterBlocked": 2
+    },
+    {
+      "fixedReference": {
+        "x": -26,
+        "y": 51.05,
+        "z": 26
+      },
+      "outerLength": 68,
+      "outerSamples": 96,
+      "outerBlocked": 0,
+      "shorterBlocked": 3
+    }
+  ],
+  "socketSensitivity": [
+    {
+      "referenceSocketHeight": 0.6,
+      "actorSocketHeight": 1.85,
+      "outerFullyClear": true,
+      "outerBlockedSamples": 0,
+      "shorterBlockedSamples": 2,
+      "distinctionHolds": true
+    },
+    {
+      "referenceSocketHeight": 1,
+      "actorSocketHeight": 1.85,
+      "outerFullyClear": true,
+      "outerBlockedSamples": 0,
+      "shorterBlockedSamples": 2,
+      "distinctionHolds": true
+    },
+    {
+      "referenceSocketHeight": 1.35,
+      "actorSocketHeight": 1.85,
+      "outerFullyClear": true,
+      "outerBlockedSamples": 0,
+      "shorterBlockedSamples": 2,
+      "distinctionHolds": true
+    },
+    {
+      "referenceSocketHeight": 1.85,
+      "actorSocketHeight": 1.85,
+      "outerFullyClear": true,
+      "outerBlockedSamples": 0,
+      "shorterBlockedSamples": 2,
+      "distinctionHolds": true
+    }
+  ],
+  "plannerCrossValidation": {
+    "outerRouteEdges": {
+      "edges": 34,
+      "plannerAccepted": 34,
+      "failures": []
+    },
+    "outerRouteCornerLegs": {
+      "legs": 10,
+      "plannerAgreedStraight": 10,
+      "failures": []
+    },
+    "shorterRouteEdges": {
+      "edges": 32,
+      "plannerAccepted": 32,
+      "failures": []
+    },
+    "shorterRouteCornerLegs": {
+      "legs": 10,
+      "plannerAgreedStraight": 10,
+      "failures": []
+    },
+    "rejectedCellSample": {
+      "checked": 26,
+      "agreed": 26,
+      "disagreements": []
+    }
+  },
+  "conventionDeltaVsPass1": {
+    "comparedLines": 48,
+    "ddaBlocked": 0,
+    "pass1PointSampledBlocked": 48,
+    "disagreements": 48,
+    "blockersOutsideRenderedCube": 0,
+    "linesHittingOwnSupportColumn": 0
+  },
+  "budgetBoundReached": {
+    "outerWalkedLength": 68,
+    "outerTraceSamples": 96,
+    "lengthHeadroomUnits": 52,
+    "pointHeadroomSamples": 32,
+    "bindingBound": "points"
+  },
+  "cpuSeconds": 1.19
+}

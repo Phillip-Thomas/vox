@@ -1,0 +1,22 @@
+{
+  "exitCode": 1,
+  "signal": null,
+  "reason": null,
+  "bytes": 3984,
+  "pid": 610129,
+  "usage": {
+    "roleLaunches": 0,
+    "modelTurns": 1,
+    "inputTokens": 0,
+    "cacheReadTokens": 0,
+    "outputTokens": 0
+  },
+  "session": "58896aca-7a52-4eb7-964d-1ce3e2ad8bac",
+  "resolved": "claude-opus-5",
+  "completed": false,
+  "failed": true,
+  "final": "Failed to authenticate: OAuth session expired and could not be refreshed",
+  "contextTokens": 0,
+  "reported": true,
+  "accounting": "Live per-message usage, reconciled to cumulative terminal usage."
+}

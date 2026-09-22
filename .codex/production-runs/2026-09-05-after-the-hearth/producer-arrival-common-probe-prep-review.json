@@ -1,0 +1,34 @@
+{
+  "schema": "paravoxia.producerProbePreparationReview.v1",
+  "author": "creative-producer",
+  "at": "2026-09-06T17:05:42.903330+00:00",
+  "reportRef": "arrival-common-probe-prep-report.json",
+  "reportSha256": "648d8ee31767b51c73ea152678441635fcec7c98ab8170de3d967709a28249f4",
+  "invocationRef": "arrival-common-probe-prep-invocation.json",
+  "preparedFileHashesVerified": 17,
+  "logHashesVerified": 9,
+  "originalFilesRehashedUnchanged": 8,
+  "acceptedForDedicatedRuntime": true,
+  "captureAuthorizedNow": false,
+  "preparedRoles": [
+    "arrival-common-manual",
+    "arrival-common-earned"
+  ],
+  "checks": {
+    "manual": 112,
+    "earned": 108,
+    "actualRuntime": false
+  },
+  "accepted": [
+    "Exact signed Origin -1,-1 and actual origin-landed in both named AV and chapter history required at real landing gate.",
+    "Passive robust Window/Document/Element observer uses tested function source for browser injection; original ordinary clicks, precision-plane/F gates, lock ownership and HTTP identity remain.",
+    "Dedicated probe copies and pinned helpers preserve previous files, avoiding source/probe write races."
+  ],
+  "qualifications": [
+    "No gameplay, real GPU input, Continue or final chapter acceptance follows from CPU preparation.",
+    "15FPS remains operational threshold; inherited error prose saying lowerFPS is not really rendering is inaccurate and must not be used as a causal/no-render conclusion.",
+    "Report calls future helper re-pin an explicit owner decision. Under existing standing delegation this is a routine bounded instrumentation decision for the producer, not a required user question; current bytes need no re-pin.",
+    "Use current source/readiness/role/rootURL and absolute capture outputs at release. Prep occurred during active source integration and does not claim whole game source freeze."
+  ],
+  "next": "Finish source integration and fresh independent build/preview; run each dedicated runtime role serially after correct root role release."
+}

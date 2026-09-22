@@ -1,0 +1,16 @@
+{
+  "schema": "paravoxia.chapterLoopResumeAuthority.v1",
+  "chapter": "ch13",
+  "instruction": "now continue using this new workflow",
+  "source": "Direct owner message in the current Codex conversation",
+  "recordedAt": "2026-09-07T00:59:06.483752+00:00",
+  "resume": true,
+  "newBoundedAllowance": true,
+  "allowanceBasis": "Use the installed Chapter Loop defaults for this explicitly renewed continuation; retain the original run accounting separately. No automatic reset or replacement run after a terminal verdict.",
+  "legacyRun": ".codex/production-runs/2026-09-05-after-the-hearth",
+  "supersedesStop": {
+    "path": ".codex/production-runs/2026-09-05-after-the-hearth/owner-stop-audit-checkpoint.json",
+    "sha256": "9b4d0bbf1923e8c1f73427b8c3fb03e85c67d6e094ab7a46c03f55b0dd42e223"
+  },
+  "publishingAuthorized": false
+}

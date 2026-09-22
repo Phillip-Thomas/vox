@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "phase": "contract",
+  "contractSha256": "ecce3e98270a9041b071e3c627090b228cfaab8a34e6c847296bd775baac3a74",
+  "checkedAt": "2026-09-06T07:12:57.772Z",
+  "checkCount": 1712,
+  "gateReportSha256": "df28d0a3817b150c03c85b1415923caf01ccb1c721ed76022e1c7a9bb8a677d1",
+  "publicationAuthorized": false
+}

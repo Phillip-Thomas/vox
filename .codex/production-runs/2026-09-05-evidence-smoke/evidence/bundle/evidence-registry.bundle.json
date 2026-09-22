@@ -1,0 +1,406 @@
+{
+  "schema": "paravoxia.evidenceRegistry.bundle.v1",
+  "generatedAt": "2026-09-05T13:36:21.653Z",
+  "entries": [
+    {
+      "ref": "percept:bundle",
+      "path": "evidence/bundle/bundle.json",
+      "sha256": "33d40b3e1dc4a56b01d174216a5eb6efa859ec360db077073ac548114d342eb9",
+      "kind": "artifact",
+      "description": "percept capture-bundle-v1 manifest (hash-bound frames, bursts, sheet, digest)",
+      "bytes": 17547
+    },
+    {
+      "ref": "capture:contact-sheet",
+      "path": "evidence/bundle/sheet.png",
+      "sha256": "8f591f98be0b5e9cd2a0c1598ddf1b138146bebc4edd2103ee6de4ce16215a00",
+      "kind": "frame",
+      "description": "chronological contact sheet; red numbers are frame indices",
+      "bytes": 699224
+    },
+    {
+      "ref": "percept:digest",
+      "path": "evidence/bundle/digest.md",
+      "sha256": "13a75d4490570699f327a861c82f68cf0b188310ce96ef6edf865997ea1e0b9c",
+      "kind": "document",
+      "description": "temporal digest: beat/objective/caption/anchor timeline and burst scalars",
+      "bytes": 3234
+    },
+    {
+      "ref": "capture:frames-f0000-t4-80s-opening-2-0s-png",
+      "path": "evidence/bundle/frames/f0000_t4.80s_opening-2.0s.png",
+      "sha256": "718d4119dbcfcedcbefb9cf3c6b02f2b656463e2ecfc11787aa27cc3a2a096d5",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 0 (opening-2.0s, ch10-ask)",
+      "bytes": 761584
+    },
+    {
+      "ref": "capture:frames-f0001-t5-20s-burst-entry-png",
+      "path": "evidence/bundle/frames/f0001_t5.20s_burst-entry.png",
+      "sha256": "715844200606306738af2d700afcebebb37ee44ab74c228b10ec5503cf01ac74",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 1 (burst-entry, ch10-ask)",
+      "bytes": 757091
+    },
+    {
+      "ref": "capture:frames-f0002-t9-40s-strip-png",
+      "path": "evidence/bundle/frames/f0002_t9.40s_strip.png",
+      "sha256": "a6eeda118decf044bc705d02295d4b77d829b88317b1ca5e4a624f27840b5a07",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 2 (temporal, ch10-ask)",
+      "bytes": 762837
+    },
+    {
+      "ref": "capture:frames-f0003-t13-40s-strip-png",
+      "path": "evidence/bundle/frames/f0003_t13.40s_strip.png",
+      "sha256": "fc1f14cf7f4faa8a7ff6b611348f0c15905b2f10a12a730831088f110543ed3e",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 3 (temporal, ch10-ask)",
+      "bytes": 717324
+    },
+    {
+      "ref": "capture:frames-f0004-t14-40s-objective-change-png",
+      "path": "evidence/bundle/frames/f0004_t14.40s_objective-change.png",
+      "sha256": "8780f7b51cc1a5ea34e9f853b365c49f943c27405b69829f76058c6e16547572",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 4 (objective-change, ch10-ask)",
+      "bytes": 730904
+    },
+    {
+      "ref": "capture:frames-f0005-t17-60s-strip-png",
+      "path": "evidence/bundle/frames/f0005_t17.60s_strip.png",
+      "sha256": "b9d83af6ff52d0106b1bcc85f75679092e6dc23104a3dfed7b5d96249ad1cb20",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 5 (temporal, ch10-ask)",
+      "bytes": 798486
+    },
+    {
+      "ref": "capture:frames-f0006-t21-70s-strip-png",
+      "path": "evidence/bundle/frames/f0006_t21.70s_strip.png",
+      "sha256": "994acf9209d2d2e7047c9847ee66a7239aba014328342087d2bde695881654b9",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 6 (temporal, ch10-ask)",
+      "bytes": 719231
+    },
+    {
+      "ref": "capture:frames-f0007-t25-80s-caption-first-png",
+      "path": "evidence/bundle/frames/f0007_t25.80s_caption-first.png",
+      "sha256": "ca50c871e63e97d720368764aea3eb2598547816c22b9dc28a525b9291d9053c",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 7 (caption-first, ch10-ask)",
+      "bytes": 1134974
+    },
+    {
+      "ref": "capture:frames-f0008-t26-20s-strip-png",
+      "path": "evidence/bundle/frames/f0008_t26.20s_strip.png",
+      "sha256": "ac058a9768a32ed5b28184b0181e59c1b28e9a77f844ba3cf0ce08d6290d4400",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 8 (temporal, ch10-ask)",
+      "bytes": 1138974
+    },
+    {
+      "ref": "capture:frames-f0009-t30-20s-strip-png",
+      "path": "evidence/bundle/frames/f0009_t30.20s_strip.png",
+      "sha256": "22b9671a06daa7f16941d9a0cfd4f1ae838e53ff6915a9cb59510555bdc9bc17",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 9 (temporal, ch10-transit)",
+      "bytes": 556652
+    },
+    {
+      "ref": "capture:frames-f0010-t30-60s-burst-entry-png",
+      "path": "evidence/bundle/frames/f0010_t30.60s_burst-entry.png",
+      "sha256": "b1089d4cb9101013efbac871606fd8b5601b8bf63c2097b6cc4b1c70eb2150d2",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 10 (burst-entry, ch10-transit)",
+      "bytes": 554086
+    },
+    {
+      "ref": "capture:frames-f0011-t30-90s-burst-entry-png",
+      "path": "evidence/bundle/frames/f0011_t30.90s_burst-entry.png",
+      "sha256": "961f2468fbd2c78725b748d314af73029325cc0d5f60737b3921223fc657dd2a",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 11 (burst-entry, ch10-transit)",
+      "bytes": 553060
+    },
+    {
+      "ref": "capture:frames-f0012-t31-40s-burst-entry-png",
+      "path": "evidence/bundle/frames/f0012_t31.40s_burst-entry.png",
+      "sha256": "a9b1ae47cd42a88ac5be216fd027ba66bbbed2925c9e6902b588513d6eaae73c",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 12 (burst-entry, ch10-transit)",
+      "bytes": 553456
+    },
+    {
+      "ref": "capture:frames-f0013-t31-80s-burst-entry-png",
+      "path": "evidence/bundle/frames/f0013_t31.80s_burst-entry.png",
+      "sha256": "d7da2a687e34625f69edd6a2802362d8b2e32c9807721d517cadb70c938ee3ee",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 13 (burst-entry, ch10-transit)",
+      "bytes": 554660
+    },
+    {
+      "ref": "capture:frames-f0014-t32-20s-burst-entry-png",
+      "path": "evidence/bundle/frames/f0014_t32.20s_burst-entry.png",
+      "sha256": "7bdee297d650dac6ebdcf62c7a2bbaee07360536bf0136a2f01a7845b8e7f068",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 14 (burst-entry, ch10-transit)",
+      "bytes": 555606
+    },
+    {
+      "ref": "capture:frames-f0015-t32-60s-burst-entry-png",
+      "path": "evidence/bundle/frames/f0015_t32.60s_burst-entry.png",
+      "sha256": "8c9f48ef8657e40e57065c15712af76fd358ac220801a358e3f6d497b03c5b26",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 15 (burst-entry, ch10-transit)",
+      "bytes": 554231
+    },
+    {
+      "ref": "capture:frames-f0016-t36-70s-strip-png",
+      "path": "evidence/bundle/frames/f0016_t36.70s_strip.png",
+      "sha256": "6710577508bc95a9bd2ffbcc5185fbe683ce5af38c6966b92db33780351bdc86",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 16 (temporal, ch10-transit)",
+      "bytes": 720654
+    },
+    {
+      "ref": "capture:frames-f0017-t40-80s-strip-png",
+      "path": "evidence/bundle/frames/f0017_t40.80s_strip.png",
+      "sha256": "62d252ded5157c7b9fecd79ba70b318aff3c749230d03f32ab64b96516bc375f",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 17 (temporal, ch10-transit)",
+      "bytes": 719642
+    },
+    {
+      "ref": "capture:frames-f0018-t44-80s-strip-png",
+      "path": "evidence/bundle/frames/f0018_t44.80s_strip.png",
+      "sha256": "059db0b126e29ca37793b27f74a56185deacf2fd88bf2cdd2db387696ae5c5f2",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 18 (temporal, ch10-transit)",
+      "bytes": 723378
+    },
+    {
+      "ref": "capture:frames-f0019-t48-90s-strip-png",
+      "path": "evidence/bundle/frames/f0019_t48.90s_strip.png",
+      "sha256": "1e2293df8e50bbd7eb1b81bb2fd8411ea4213fe82fd6c470a6c5a3cfab91f7a8",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 19 (temporal, ch10-transit)",
+      "bytes": 723503
+    },
+    {
+      "ref": "capture:frames-f0020-t52-90s-strip-png",
+      "path": "evidence/bundle/frames/f0020_t52.90s_strip.png",
+      "sha256": "72539994abb1961fef0ca80bdde8c7a46a98acda4e884966ba5a22406cfce489",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 20 (temporal, ch10-transit)",
+      "bytes": 724552
+    },
+    {
+      "ref": "capture:frames-f0021-t57-00s-strip-png",
+      "path": "evidence/bundle/frames/f0021_t57.00s_strip.png",
+      "sha256": "730783f0f1a7788f528e689420711857221a5c79e214e89460f578ee7fd74267",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 21 (temporal, ch10-transit)",
+      "bytes": 721105
+    },
+    {
+      "ref": "capture:frames-f0022-t61-10s-strip-png",
+      "path": "evidence/bundle/frames/f0022_t61.10s_strip.png",
+      "sha256": "7cc7ca1177713ec9fafaffa5bf75b4b57a8b029aa92cf27177db256c7c8d16ae",
+      "kind": "frame",
+      "description": "HUD-suppressed frame of record 22 (temporal, ch10-transit)",
+      "bytes": 726784
+    },
+    {
+      "ref": "capture:hud-f0000-t4-80s-opening-2-0s-png",
+      "path": "evidence/bundle/hud/f0000_t4.80s_opening-2.0s.png",
+      "sha256": "a3b4a12ef0509b9ae1f8bd20b17e451777cc6bf0fb10026b7b0b9a2ef5df14d1",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 0",
+      "bytes": 792956
+    },
+    {
+      "ref": "capture:hud-f0001-t5-20s-burst-entry-png",
+      "path": "evidence/bundle/hud/f0001_t5.20s_burst-entry.png",
+      "sha256": "5b598ebb6a69e1d1bdfd16d821bed2ca559a6cd6c0861abde1d9319bbca42e16",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 1",
+      "bytes": 784017
+    },
+    {
+      "ref": "capture:hud-f0002-t9-40s-strip-png",
+      "path": "evidence/bundle/hud/f0002_t9.40s_strip.png",
+      "sha256": "1a6d9a1a0f29a048069c752570913d485166bc7edb56c7c48247ba447004bf2e",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 2",
+      "bytes": 784158
+    },
+    {
+      "ref": "capture:hud-f0003-t13-40s-strip-png",
+      "path": "evidence/bundle/hud/f0003_t13.40s_strip.png",
+      "sha256": "b1badc4f05c748adace73133eddc1200a551c633d07223ab9a7ce4381f7eb1fa",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 3",
+      "bytes": 759939
+    },
+    {
+      "ref": "capture:hud-f0004-t14-40s-objective-change-png",
+      "path": "evidence/bundle/hud/f0004_t14.40s_objective-change.png",
+      "sha256": "66f4c2d9fd019e2609d43daa1120970147a239f5173e043b3ebece8a5ce0f603",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 4",
+      "bytes": 590555
+    },
+    {
+      "ref": "capture:hud-f0005-t17-60s-strip-png",
+      "path": "evidence/bundle/hud/f0005_t17.60s_strip.png",
+      "sha256": "06584d76889103f27e3df427944f09f7e7302f719ee04689eed4cbee4e0644ef",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 5",
+      "bytes": 794338
+    },
+    {
+      "ref": "capture:hud-f0006-t21-70s-strip-png",
+      "path": "evidence/bundle/hud/f0006_t21.70s_strip.png",
+      "sha256": "df7f9c5ba5392d7ecdfe2e652f976230f462bd0ad0326d3f956f0dd93589ec17",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 6",
+      "bytes": 764640
+    },
+    {
+      "ref": "capture:hud-f0007-t25-80s-caption-first-png",
+      "path": "evidence/bundle/hud/f0007_t25.80s_caption-first.png",
+      "sha256": "45974e2788108ea89a18b1c273f981bbe02c3078d2c077580081ceddf2944fa9",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 7",
+      "bytes": 1155173
+    },
+    {
+      "ref": "capture:hud-f0008-t26-20s-strip-png",
+      "path": "evidence/bundle/hud/f0008_t26.20s_strip.png",
+      "sha256": "46095181aada8c2befe38cc52dea80effe885e693b0ffb7ed827e1a6e0d4cd3e",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 8",
+      "bytes": 1163897
+    },
+    {
+      "ref": "capture:hud-f0009-t30-20s-strip-png",
+      "path": "evidence/bundle/hud/f0009_t30.20s_strip.png",
+      "sha256": "9d87eaaae472b789b6decf02646318d169358c27feeaaf62b58eb2e2172a8854",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 9",
+      "bytes": 597580
+    },
+    {
+      "ref": "capture:hud-f0010-t30-60s-burst-entry-png",
+      "path": "evidence/bundle/hud/f0010_t30.60s_burst-entry.png",
+      "sha256": "d6bbce3edc3225a368503ec8a66c39d3212cdf39c30c4a77431bcd10f89b6d84",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 10",
+      "bytes": 595709
+    },
+    {
+      "ref": "capture:hud-f0011-t30-90s-burst-entry-png",
+      "path": "evidence/bundle/hud/f0011_t30.90s_burst-entry.png",
+      "sha256": "8976fe61386d214ca75ae52a437be6b4b1f5c35bfd232554849bbd4e710b12b0",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 11",
+      "bytes": 586278
+    },
+    {
+      "ref": "capture:hud-f0012-t31-40s-burst-entry-png",
+      "path": "evidence/bundle/hud/f0012_t31.40s_burst-entry.png",
+      "sha256": "e8a17847935dd6d79a71b125cacff00b0513ba2817b9d0e886bacd9f1883e8db",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 12",
+      "bytes": 586033
+    },
+    {
+      "ref": "capture:hud-f0013-t31-80s-burst-entry-png",
+      "path": "evidence/bundle/hud/f0013_t31.80s_burst-entry.png",
+      "sha256": "dc09d0d3e8744515f3f8050e44e75d3df168c8a4bf6db74acb55e270435260ae",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 13",
+      "bytes": 588173
+    },
+    {
+      "ref": "capture:hud-f0014-t32-20s-burst-entry-png",
+      "path": "evidence/bundle/hud/f0014_t32.20s_burst-entry.png",
+      "sha256": "8a61b80ac9c9074d211cb8345827da651264f4288140127188d9f91121e695db",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 14",
+      "bytes": 585397
+    },
+    {
+      "ref": "capture:hud-f0015-t32-60s-burst-entry-png",
+      "path": "evidence/bundle/hud/f0015_t32.60s_burst-entry.png",
+      "sha256": "316f5b04feb7a4d15ed4d6e00abff9df8a24c63318980816172b3e4c41894bdd",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 15",
+      "bytes": 586915
+    },
+    {
+      "ref": "capture:hud-f0016-t36-70s-strip-png",
+      "path": "evidence/bundle/hud/f0016_t36.70s_strip.png",
+      "sha256": "baf1d0ce4af91c997712a41c549bfcff7e6d9f43444acd6164ee1afc9c55898e",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 16",
+      "bytes": 747540
+    },
+    {
+      "ref": "capture:hud-f0017-t40-80s-strip-png",
+      "path": "evidence/bundle/hud/f0017_t40.80s_strip.png",
+      "sha256": "5a8674c29fecda52a54be990426f1f895837a102637696c95b1de513ff8bdf06",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 17",
+      "bytes": 748574
+    },
+    {
+      "ref": "capture:hud-f0018-t44-80s-strip-png",
+      "path": "evidence/bundle/hud/f0018_t44.80s_strip.png",
+      "sha256": "7972a2f0a574b1fa49d906d01c652d11a048a2b7acefe1de2aab130701b4851e",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 18",
+      "bytes": 749592
+    },
+    {
+      "ref": "capture:hud-f0019-t48-90s-strip-png",
+      "path": "evidence/bundle/hud/f0019_t48.90s_strip.png",
+      "sha256": "1a7dfd0ef74a83c266429cee04df1752581a70ec97fe75eb4fd9140f16e3a460",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 19",
+      "bytes": 751519
+    },
+    {
+      "ref": "capture:hud-f0020-t52-90s-strip-png",
+      "path": "evidence/bundle/hud/f0020_t52.90s_strip.png",
+      "sha256": "667440cf4ce160683df9a73b3bee252b76f24dcb39b58908e29f68739fc8e92d",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 20",
+      "bytes": 744537
+    },
+    {
+      "ref": "capture:hud-f0021-t57-00s-strip-png",
+      "path": "evidence/bundle/hud/f0021_t57.00s_strip.png",
+      "sha256": "d8c644625aa9170c949d24cda50489511c2945d784f0d0b97003f5a594afee72",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 21",
+      "bytes": 747051
+    },
+    {
+      "ref": "capture:hud-f0022-t61-10s-strip-png",
+      "path": "evidence/bundle/hud/f0022_t61.10s_strip.png",
+      "sha256": "aa32cc338c0fdee4951d0c55e6de5c3f373808fdc853f48c3ecfe41626b20927",
+      "kind": "frame",
+      "description": "HUD composite (audit only) frame 22",
+      "bytes": 750361
+    },
+    {
+      "ref": "capture:video-page-4ecbd5974a7d4a319ede0f9127defbdc-webm",
+      "path": "evidence/bundle/video/page@4ecbd5974a7d4a319ede0f9127defbdc.webm",
+      "sha256": "ac876a7a5aa2951fa31084aafc1801fddabf76a47bea0e038e8779e64861ee83",
+      "kind": "trace",
+      "description": "continuous movie-lane video, beat ch10-cold",
+      "bytes": 12668330
+    }
+  ]
+}

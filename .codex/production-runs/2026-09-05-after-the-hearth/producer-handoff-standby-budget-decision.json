@@ -1,0 +1,59 @@
+{
+  "schema": "paravoxia.producerDelegatedBudgetDecision.v1",
+  "author": "creative-producer",
+  "decidedAt": "2026-09-06T15:27:18.793786+00:00",
+  "authority": "Direct user instruction to continue the story and auto approve everything; necessary in-scope implementation and verification decisions delegated.",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "directUserInstruction": "yes continue, and please auto approve everything",
+  "briefItemRef": "CG-S1-boundary-state",
+  "personallyReviewedByUser": false,
+  "productionRunUnchanged": true,
+  "baseRunProfileRef": "paravoxia-creative-chapter@v1",
+  "baseProfilePath": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-chapter.run-profile.json",
+  "baseProfileSha256": "f6ce3f3cea205b307fb0f19beb5c0390947c5d854b8090254c7b8f5c28ae1654",
+  "baseProfileEdited": false,
+  "completedMaterialRepairLoops": 5,
+  "runLocalBudgetOverride": {
+    "field": "executionBudget.maxPatchLoops",
+    "baseValue": 4,
+    "previousValueForThisRun": 5,
+    "valueForThisRun": 6,
+    "additionalMaterialRepairsAuthorized": 1
+  },
+  "decision": "Authorize one further bounded material implementation repair in this same run for CG-IMPL-012 actual standby/body-clearance stall and CG-IMPL-013 measured Origin handoff/reset. Source mutation remains pending current manual verifier completion and exact causal source diagnosis/direction. This is a concrete extension from five to six repairs under standing user delegation, not an unlimited repair authorization or acceptance exception.",
+  "stallClassification": {
+    "kind": "Successive physically demonstrated integration boundaries; retain measured fixes and diagnose exact next defect before further mutation",
+    "evidence": [
+      "Current exact-goal repair physically completes initial movie survey drawing42samples35.308units; later requested standby at(-42,51.05,9) stalls nearz12.156 while W waits for body clearance.",
+      "Actual partial Origin WorldSave retains1305 identical bytes through Continue; properly earned return and subsequent Continue remain blocked upstream by flight.",
+      "One new90s actual celestial capture twice flies inside Origin activation envelope then resets to departurepad with epoch advancing twice. This is a distinct handoff ownership/reset bug, not a flight timeout or parked readiness shell.",
+      "Fresh manual ordinary keys/F successfully record and offer route, then authored witness F/occupancy lets W test it and advances into COMMON. Root earlier commission mistook survey deviation for signed COMMON corner recovery; that scope error is corrected and does not justify an implementation change.",
+      "There are no current weighted creative scores; this is not a measured flat taste iteration and authorizes no creative expansion."
+    ],
+    "sourceRefs": [
+      "producer-focused-evidence-review.json",
+      "flight-discriminator-report.json",
+      "verifier/captures/manual-focused/witness-2/summary.json",
+      "producer-navigation-evidence-review.json"
+    ]
+  },
+  "conditions": [
+    "Complete active manual-focused role and read-only handoff-standby-source-audit before source mutation. Preserve their captured immutable source and reports.",
+    "Compile exact causal defects and symbols in new handoff-standby-repair-direction.json and current repair-contract-disposition.json. Existing scene-v2 signatures stay unchanged for purely faithful integration corrections.",
+    "One source integration engineer, task-private byte preservation, meaningful actual-runtime-seam regression and counterfactuals, final full verification, then fresh independent physical capture.",
+    "Preserve signed geometry, ordered18-unit proof, actual body/world/save transitions, terrain safety, and current score/camera/control eligibility. No grants, teleport arrivals, relaxed proof, endpoint pumping or new mandatory player actions.",
+    "Do not alter profile/global workflow/gate code or waiver requirements. No publication. Keep all prior evidence and unrelated dirty files.",
+    "After this repair, use concrete new independent findings to decide next action; this override does not authorize a seventh material repair."
+  ],
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "contractChangeRequired": false,
+  "acceptedDefectExceptions": [],
+  "publicationAuthorized": false,
+  "sourceMutationAuthorizedNow": true,
+  "sourceMutationPending": null,
+  "previousBoundedOverrideRef": "producer-navigation-budget-decision.json",
+  "previousBoundedOverrideSha256": "bd3294ab20b6ac177fa509f0d510489e0cdd6127fbb363e5e46f72dd406e2e93",
+  "sourceHandoffAt": "2026-09-06T15:34:50.527502+00:00",
+  "finalDirectionRef": "handoff-standby-repair-direction.json"
+}

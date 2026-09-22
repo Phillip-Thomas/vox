@@ -1,3 +1,4 @@
+import { STATION_FRAME_PRIORITY } from './stationFrameOrder.ts';
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
@@ -26,16 +27,25 @@ import { createStationMaterial, createStationTrimMaterial } from './stationMater
  * Structural tones. Desaturated so the lamps carry all the colour, but not dark —
  * a near-black albedo reflects almost nothing no matter how well a room is lit, and
  * reading "the scene is too dim" as a lighting problem when it is a paint problem
- * costs a lot of pointless light tuning.
+ * costs a lot of pointless light tuning. The floor is the single largest lever in
+ * the station: it is the surface that proves a room has extent. The ceiling stays
+ * the darkest tone so the eye is never pulled up, but it recedes rather than
+ * vanishes — the warm room may not have a black lid.
+ *
+ * On the ceiling value: a down-facing surface receives only ambient plus the
+ * hemisphere's *ground* colour, and ACES at exposure 0.94 has a hard toe — a lid
+ * at 0x3a4048 under the concourse's own fill displays at 4–7/255, indistinguishable
+ * from a void. 0x666d76 (linear 0.135) is the darkest value that still reads as a
+ * surface there, and it stays below the desks (0x737b84, linear 0.18).
  */
 const SURFACE_TONES = [
-  0x585f67, // 0 floor
-  0x1c1f23, // 1 ceiling — stays dark, it is meant to vanish upward
-  0x666d76, // 2 walls and columns
+  0x7d848c, // 0 floor — deck, the lit plain
+  0x666d76, // 1 ceiling — still the darkest tone; a lid, not a void (see note below)
+  0x8a9199, // 2 walls and columns — the backdrop that puts the crowd into silhouette
   0x8a7c64, // 3 trim, frames, rails, racking
   0x9c8757, // 4 crates
-  0x5c646d, // 5 desks and counters
-  0x717881, // 6 partitions, booth backs, kiosks
+  0x737b84, // 5 desks and counters
+  0x878e97, // 6 partitions, booth backs, kiosks
   // Awnings, banners and sign boards. The only saturated surfaces in the station,
   // and they belong to the traders — the administration paints nothing.
   0x9a5f4a, // 7 rust
@@ -85,10 +95,10 @@ export function currentVisibleCells(): ReadonlySet<CellId> {
 export interface SpaceStationInteriorProps {
   descriptor: SpaceStationDescriptor;
   /** Cell the viewer currently stands in, from the locomotion state. */
-  occupiedCellId: CellId | null;
+  occupiedCell: Readonly<{ current: CellId | null }>;
 }
 
-export function SpaceStationInterior({ descriptor, occupiedCellId }: SpaceStationInteriorProps) {
+export function SpaceStationInterior({ descriptor, occupiedCell }: SpaceStationInteriorProps) {
   const surfaceRef = useRef<THREE.InstancedMesh>(null);
   const lampRef = useRef<THREE.InstancedMesh>(null);
   const graph = descriptor.graph;
@@ -148,12 +158,13 @@ export function SpaceStationInterior({ descriptor, occupiedCellId }: SpaceStatio
       matrix: new THREE.Matrix4(),
       position: new THREE.Vector3(),
       quaternion: new THREE.Quaternion(),
-      scale: new THREE.Vector3()
+      scale: new THREE.Vector3(),
+      color: new THREE.Color()
     }),
     []
   );
 
-  const lastOccupied = useRef<CellId | null>(occupiedCellId);
+  const lastOccupied = useRef<CellId | null>(occupiedCell.current);
 
   useEffect(() => () => {
     latestDiagnostics = null;
@@ -164,7 +175,7 @@ export function SpaceStationInterior({ descriptor, occupiedCellId }: SpaceStatio
     const lampMesh = lampRef.current;
     if (!surfaceMesh || !lampMesh) return;
 
-    const occupied = occupiedCellId ?? lastOccupied.current;
+    const occupied = occupiedCell.current ?? lastOccupied.current;
     lastOccupied.current = occupied;
 
     let visible: Set<CellId>;
@@ -192,7 +203,9 @@ export function SpaceStationInterior({ descriptor, occupiedCellId }: SpaceStatio
           scratch.scale.set(box.size[0], box.size[1], box.size[2]);
           scratch.matrix.compose(scratch.position, scratch.quaternion, scratch.scale);
           mesh.setMatrixAt(index, scratch.matrix);
-          mesh.setColorAt(index, palette[box.tone % palette.length]);
+          scratch.color.copy(palette[box.tone % palette.length]);
+          if (box.kind === 'lamp') scratch.color.multiplyScalar(box.emissionScale ?? 1);
+          mesh.setColorAt(index, scratch.color);
           index++;
         }
       }
@@ -222,7 +235,7 @@ export function SpaceStationInterior({ descriptor, occupiedCellId }: SpaceStatio
       meshes: 2,
       programs: gl.info.programs?.length ?? 0
     };
-  });
+  }, STATION_FRAME_PRIORITY.interior);
 
   return (
     <>

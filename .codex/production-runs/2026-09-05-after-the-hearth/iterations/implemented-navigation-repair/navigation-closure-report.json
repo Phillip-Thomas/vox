@@ -1,0 +1,298 @@
+{
+ "schema": "paravoxia.integrationClosureReport.v1",
+ "role": "integration-navigation-closure",
+ "runId": "2026-09-05-after-the-hearth",
+ "author": "integration engineer (Claude Opus 5 agent) under standing owner delegation via producer-navigation-budget-decision.json",
+ "startedAt": "2026-09-06T13:52:24+00:00",
+ "writtenAt": "2026-09-06T13:58:44.986823+00:00",
+ "isAcceptance": false,
+ "isChapterVerificationComplete": false,
+ "isChapterComplete": false,
+ "hardwareSuccessClaimed": false,
+ "publicationAuthorized": false,
+ "supersedesOriginalEngineerReport": false,
+ "inputs": {
+  "producerReviewRef": "producer-navigation-preclosure-review.json",
+  "producerReviewSha256": "df1b6736f53714c9d1b367610a2683777aae71bc297ec284d8bdc2b82a37638e",
+  "inputReportRef": "integration-navigation-repair-report.json",
+  "inputReportSha256": "6118437e0c04f0a2b6c6e7ab5335fada264b7eb75e65c6730d32f533940ba8c0",
+  "directionRef": "navigation-repair-direction.json",
+  "budgetRef": "producer-navigation-budget-decision.json",
+  "inboxEntriesRead": [
+   "2026-09-06T13:41:38.613436+00:00",
+   "2026-09-06T13:44:44.787023+00:00",
+   "2026-09-06T13:47:57.750211+00:00"
+  ],
+  "inboxRereadBeforeFinalChecksAndReport": true,
+  "inboxUnchangedSince": "2026-09-06T13:47:57.750211+00:00"
+ },
+ "contract": {
+  "version": "scene-v2",
+  "sha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "changedByMe": false,
+  "contractChangeRequired": false,
+  "creativeDecisionsMade": "none; the three peer directors remain the only creative authority"
+ },
+ "scope": {
+  "closes": "the single open producer review finding CG-IMPL-011 restore-ownership lifetime (SAVE-ENTRY, 13:47:57)",
+  "sameMaterialRepair": true,
+  "newMaterialRepairLoop": false,
+  "newBrowserTriggeredPatch": false,
+  "budgetEscape": false,
+  "milestoneGranted": false,
+  "replayOrAckForced": false,
+  "globalProgressionFieldAdded": false,
+  "classification": "state-lifetime correction, not a feature"
+ },
+ "startingSource": {
+  "archiveRef": "iterations/navigation-preclosure/source",
+  "filesRehashedBeforeMutation": 98,
+  "archiveVsProducerReviewMismatches": 0,
+  "liveDriftBeforeMutation": 0,
+  "rehashScript": "tmp/navigation-closure/rehash-preclosure.py",
+  "rehashLog": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/rehash-preclosure.log",
+  "rehashLogSha256": "d6e98c058658f0fce4c810900c81249b04c1611cd861abd57ef26da4c0997c0a"
+ },
+ "testTotals": {
+  "preclosureBaselineTests": 3137,
+  "preclosureBaselineTestFiles": 350,
+  "finalTests": 3139,
+  "finalTestFiles": 350,
+  "testsAdded": 2,
+  "testsRemoved": 0,
+  "testsChanged": 0,
+  "testFilesAdded": 0,
+  "addedBreakdown": {
+   "main/src/story/commonGroundDirector.test.ts": 2
+  }
+ },
+ "changedPaths": [
+  {
+   "path": "main/src/story/commonGroundDirector.test.ts",
+   "preclosureBeforeSha256": "8584dc5c44320252f206776371c7bba53ed62c2910fd2b3181ca4720999087ac",
+   "finalAfterSha256": "3dc70095f2aefcfb526b4cf289659bb625cbcc81f0a7742cc7d05c11e10f67ec",
+   "archiveSha256": "8584dc5c44320252f206776371c7bba53ed62c2910fd2b3181ca4720999087ac",
+   "created": false,
+   "inAllowedPaths": true,
+   "lockLine": 166
+  },
+  {
+   "path": "main/src/story/commonGroundState.ts",
+   "preclosureBeforeSha256": "681846b7e66a9577596fe07639212a32640baac3bd44c7f14fc994251f1e87a6",
+   "finalAfterSha256": "900da8a2a52a93cfce206748fb7a0a4ee6763db3c4a513deb85a8bc732b35784",
+   "archiveSha256": "681846b7e66a9577596fe07639212a32640baac3bd44c7f14fc994251f1e87a6",
+   "created": false,
+   "inAllowedPaths": true,
+   "lockLine": 173
+  }
+ ],
+ "preservation": {
+  "otherSourceFilesPreservedByteIdentical": 96,
+  "totalTrackedSourceFiles": 98,
+  "navigationRepairCodeUntouched": true,
+  "gitDestructiveCommandsUsed": false,
+  "rootOwnedArtifactsNotEdited": [
+   "integration-navigation-repair-report.json/.md",
+   "integration-report.json/.md",
+   "implementation-source-manifest.json",
+   "check-results.json",
+   "verification-ready.json",
+   "iteration-ledger.jsonl",
+   "story-authority.json",
+   "production-lock.json",
+   "defects.json",
+   "navigation-repair-open-review-items.json"
+  ],
+  "temporaryFilesInMainSrc": "none; no ad-hoc test file was created under main/src",
+  "temporaryWorkLocations": [
+   "tmp/navigation-closure",
+   "logs/navigation-closure"
+  ]
+ },
+ "cause": {
+  "id": "CG-IMPL-011-restore-ownership-lifetime",
+  "detail": "restoreCommonGroundForWorld on a world with NO CommonGround payload calls settleCommonGroundIfNothingStaged, adding the world to restoreSettledWorlds; an empty live snapshot may then lawfully save. Later, in the SAME session, a PRESENT payload is read and staged for that world. stageCommonGroundWorldPayload set pendingByWorld but did NOT invalidate the older settled membership. If commonGroundSnapshot then rejects the payload (foreign actor, wrong world, malformed), it consumes the pending bytes and leaves an empty local snapshot. isPristineCommonGround now sees no pending, sees the stale settled bit and answers false, so saveWorld serializes idle over the raw payload just read off disk. The pre-existing cold foreign-payload test never had an earlier empty restore in-session, so it could not see this."
+ },
+ "fix": {
+  "path": "main/src/story/commonGroundState.ts",
+  "function": "stageCommonGroundWorldPayload",
+  "change": "A non-null (PRESENT) staged payload now also deletes the world from restoreSettledWorlds. A newer present read cannot borrow ownership from an older ABSENT answer; ownership must be re-earned either by real validation (markCommonGroundRestoreSettled on hydration) or by a later read that genuinely finds nothing (settleCommonGroundIfNothingStaged). raw == null keeps the existing behaviour exactly: pending is cleared and nothing is invalidated.",
+  "linesChanged": "one behavioural line plus explanatory comment",
+  "onlyStaleOwnershipKnowledgeInvalidated": true
+ },
+ "preservedInvariants": [
+  "genuine newer live work still wins (hasNoCommonGroundProgress is independent of the flag)",
+  "successful silent hydration still settles the world and does not replay AV",
+  "actual actor/world identity validation is unchanged",
+  "pending-before-hydration protection (13:41 window) is unchanged",
+  "explicit scoped clear still removes live, pending, settled and the stored chapter field",
+  "legacy absent/empty reads still make emptiness a saveable fact",
+  "signed AV eligibility and no-replay conditions untouched; no milestone, no F/ACK replay, no global progression field"
+ ],
+ "negativeCases": [
+  {
+   "case": "present foreign payload read AFTER an in-session empty restore, then rejected, then immediate and repeated saves",
+   "test": "an EARLIER empty restore never licenses erasing a payload read later",
+   "route": "real persistence: restoreCommonGroundForWorld / saveWorld / actual stored localStorage bytes; no hand-staging",
+   "prefixResult": "FAIL",
+   "postfixResult": "PASS"
+  },
+  {
+   "case": "present MALFORMED payload read after an in-session empty restore, rejected, then saved; then real new play still saves",
+   "test": "keeps a MALFORMED payload read after an empty one, and still plays on",
+   "prefixResult": "FAIL at the stored bytes: {survey:'not-a-record',common:7} was replaced on disk by this actor's idle serialization",
+   "postfixResult": "PASS"
+  },
+  {
+   "case": "a completed restore that finds nothing still makes emptiness a fact (pre-existing)",
+   "postfixResult": "PASS"
+  },
+  {
+   "case": "a late payload never overwrites genuinely newer live work (pre-existing)",
+   "postfixResult": "PASS"
+  },
+  {
+   "case": "autosave in the staging/hydration window (pre-existing 13:41 case)",
+   "postfixResult": "PASS"
+  },
+  {
+   "case": "explicit scoped clear removes the record for good (pre-existing)",
+   "postfixResult": "PASS"
+  }
+ ],
+ "reproductionHonesty": {
+  "failureRecordedBeforeAnySourceEdit": true,
+  "beforeFixLogs": [
+   {
+    "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/before-fix-foreign-after-empty.log",
+    "sha256": "6634198aaa9e9d473c7ba92ba52f43d193d69123bde5c1d19335c7f716b25ed7",
+    "exitCode": 1,
+    "note": "foreign case, pre-fix; failed at isPristineCommonGround === false on the post-rejection empty snapshot"
+   },
+   {
+    "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/before-fix-malformed-after-empty.log",
+    "sha256": "6b8de0ac764425837bce8c329927bda7845817a5ade5ac2693cabe649587fbf1",
+    "exitCode": 1,
+    "note": "malformed case, pre-fix; failed at the ACTUAL stored bytes being overwritten"
+   }
+  ],
+  "testAmendmentAfterFirstRun": "The malformed case's LAST assertion originally expected survey phase 'idle' after further real play; the real chapter advances to 'awaiting-start', so that final assertion was corrected to the observed lawful behaviour. The retention assertion that demonstrates the defect was not weakened, and the counterfactual below re-runs the FINAL test bytes against the pre-closure state source."
+ },
+ "counterfactuals": [
+  {
+   "what": "final test bytes against the PRE-CLOSURE main/src/story/commonGroundState.ts",
+   "script": "tmp/navigation-closure/counterfactual.py",
+   "method": "task-private backup + Python try/finally byte restoration on an already-allowed file; no git checkout/reset/restore/stash/clean",
+   "preclosureStateSha256": "681846b7e66a9577596fe07639212a32640baac3bd44c7f14fc994251f1e87a6",
+   "finalStateSha256": "900da8a2a52a93cfce206748fb7a0a4ee6763db3c4a513deb85a8bc732b35784",
+   "restoredExactly": true,
+   "startedAt": "2026-09-06T13:56:08.960460+00:00",
+   "finishedAt": "2026-09-06T13:56:12.382864+00:00",
+   "exitCode": 1,
+   "result": "both new cases FAIL on pre-closure source (2 failed | 105 skipped); every other selected case still passed",
+   "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/counterfactual-prefix-state.log",
+   "logSha256": "5826f5e9703cba16630aca1e2b08db317b3c986b6d10196055403d14a78a7383",
+   "summary": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/counterfactual-summary.json",
+   "summarySha256": "cc9031eabc30fd76ce43cccf15ef29c8aab21da5c7ba657ab312a25c23a97d1e"
+  }
+ ],
+ "checks": [
+  {
+   "command": "npx vitest run src/story/commonGroundDirector.test.ts src/story/commonGroundState.test.ts src/game/systems/persistence.test.ts src/story/world/CommonGroundWorld.test.tsx src/story/storyState.test.ts",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "purpose": "focused regression on the affected lifetime",
+   "startedAt": "2026-09-06T13:55:42+00:00",
+   "finishedAt": "2026-09-06T13:55:45+00:00",
+   "exitCode": 0,
+   "testFiles": 5,
+   "tests": 217,
+   "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/after-fix-focused.log",
+   "logSha256": "e8e85f71908b4650b2d5e74731f8d95fc42f1126d69ea6a4860eefc8e9db375e"
+  },
+  {
+   "command": "npm run verify",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "purpose": "composite gate; run ONCE after the final source edit",
+   "startedAt": "2026-09-06T13:56:19+00:00",
+   "finishedAt": "2026-09-06T13:57:22+00:00",
+   "exitCode": 0,
+   "testFiles": 350,
+   "tests": 3139,
+   "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/verify-navigation-closure.log",
+   "logSha256": "50328eae96e3b0eea16ed042b962dde646e493c9900e68d477a9d931d6322ce7",
+   "covers": [
+    "catalog:check",
+    "scene:av:check",
+    "creative:workflow:check",
+    "chapter:registry:check",
+    "chapter:journey:check",
+    "typecheck",
+    "preview:check",
+    "audio:diagnostic-check",
+    "story:ladder:check",
+    "guidance:target-check",
+    "story:authority",
+    "test",
+    "audio:check",
+    "build"
+   ],
+   "redundantStandaloneRerunsPerformed": false
+  },
+  {
+   "command": "npm run story:ux:check",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "purpose": "story UX check required by the current boundary",
+   "startedAt": "2026-09-06T13:57:25+00:00",
+   "finishedAt": "2026-09-06T13:57:27+00:00",
+   "exitCode": 0,
+   "testFiles": 9,
+   "tests": 94,
+   "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure/story-ux-check.log",
+   "logSha256": "602a0d7ad371fe3ad9f300f8ca37c96ecf5e74a46d6f3f2d48fe49ab4c848dec"
+  }
+ ],
+ "fullPassIsAfterLastSourceEdit": true,
+ "verificationBroadenedBeyondChangedSource": false,
+ "limits": {
+  "sourceVsBrowser": "All evidence here is SOURCE-level: real module wiring, the real persistence route and actual stored bytes under the test storage. No browser, GPU, preview or hardware run was performed or claimed. Whether a real Continue on hardware exercises this exact ordering is for independent verification, not this report.",
+  "notVerified": [
+   "no independent verifier ran against this closure",
+   "no runtime/visual/audio capture was taken"
+  ],
+  "reviewItemsOwnedElsewhere": "the four other navigation review items were closed by the original engineer's report; this closure neither re-certifies nor withdraws them"
+ },
+ "unresolvedFindings": [
+  {
+   "id": "HABITAT-CARRY-SYMMETRY",
+   "severity": "observation, carried forward unchanged",
+   "detail": "saveWorld's habitat field keeps the same shape the old commonGround one had; not demonstrated by any capture and deliberately out of this closure's scope. Still flagged for routing."
+  },
+  {
+   "id": "FOREIGN-PAYLOAD-WORLD-STAYS-UNSETTLED",
+   "severity": "documented consequence, now broader",
+   "detail": "A world holding an unreadable or foreign payload does not settle, so this actor cannot write empty chapter state there \u2014 including after an earlier empty read in the same session. Real new play still saves normally (covered by the malformed test); the explicit scoped clear remains the way to reclaim such a record."
+  },
+  {
+   "id": "VF4-HARNESS-MARKER-1",
+   "severity": "pre-existing, not mine",
+   "detail": "verifier harness markerCount sampling gap; untouched."
+  }
+ ],
+ "logs": {
+  "dir": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-closure",
+  "sha256": {
+   "after-fix-focused.log": "e8e85f71908b4650b2d5e74731f8d95fc42f1126d69ea6a4860eefc8e9db375e",
+   "before-fix-foreign-after-empty.log": "6634198aaa9e9d473c7ba92ba52f43d193d69123bde5c1d19335c7f716b25ed7",
+   "before-fix-malformed-after-empty.log": "6b8de0ac764425837bce8c329927bda7845817a5ade5ac2693cabe649587fbf1",
+   "counterfactual-prefix-state.log": "5826f5e9703cba16630aca1e2b08db317b3c986b6d10196055403d14a78a7383",
+   "counterfactual-summary.json": "cc9031eabc30fd76ce43cccf15ef29c8aab21da5c7ba657ab312a25c23a97d1e",
+   "rehash-preclosure.log": "d6e98c058658f0fce4c810900c81249b04c1611cd861abd57ef26da4c0997c0a",
+   "story-ux-check.log": "602a0d7ad371fe3ad9f300f8ca37c96ecf5e74a46d6f3f2d48fe49ab4c848dec",
+   "verify-navigation-closure.log": "50328eae96e3b0eea16ed042b962dde646e493c9900e68d477a9d931d6322ce7"
+  }
+ },
+ "cleanState": {
+  "runningChildTestProcesses": 0,
+  "temporaryBackupsRemoved": true
+ }
+}

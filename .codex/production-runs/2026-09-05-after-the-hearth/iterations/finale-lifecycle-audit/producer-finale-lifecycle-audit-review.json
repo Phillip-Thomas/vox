@@ -1,0 +1,18 @@
+{
+  "schema": "paravoxia.producer.evidenceReview.v1",
+  "reviewedAt": "2026-09-06T18:16:14.981967+00:00",
+  "reportRef": "finale-lifecycle-audit.json",
+  "reportSha256": "45e5c70391c5aa303da5a4595c31e6050c0b48c2f54e48ab1ee78fef0417b048",
+  "invocationRef": "finale-lifecycle-audit-invocation.json",
+  "isAcceptance": false,
+  "gameRepairAuthorized": false,
+  "sourceHypothesis": "Normal completion makes story.active false; next negative-priority frame treats it as presentation suspension and cancels retained final texture. Specific caller not yet observed.",
+  "qualifications": [
+    "Use actual invocation18:00:50.766588->18:09:25.101295, not authored future18:20.",
+    "Every other route excluded overstates alternatives A1/A2; contemporaneous audio availability and paused state absent.",
+    "Director-read retained prefix exacthash6dac3177c0cf0e0987bfa18a4edf392c3536090fbd93f92ee142def8cc243172; MD alternate prefix not accepted.",
+    "2s before+8s after is too short for5s eligibility+4.5s release. Require through11s after completion.",
+    "Atomic co-located reads improve evidence; missing pause/context/caller hooks stay unavailable. No audible claim from state alone."
+  ],
+  "next": "One bounded source-frozen instrumented observation and isolated actual audio capture if supported, under serialized GPU. No repeat story design or suite."
+}

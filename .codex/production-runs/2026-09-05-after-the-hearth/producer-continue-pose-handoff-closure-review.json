@@ -1,0 +1,302 @@
+{
+  "schema": "paravoxia.producer.continueSpawnCausalReview.v1",
+  "at": "2026-09-06T23:05:57.243276+00:00",
+  "disposition": "Causal spawn-precedence defect established for bounded CG-IMPL-011 fidelity correction, pending finished current verifier/source handoff and explicit narrow boundary decision.",
+  "acceptedForBoundedRepair": true,
+  "sourceMutationAuthorizedNow": false,
+  "captureRef": "verifier/captures/continue-pose-handoff/attempt2-closure-2026-09-06T2301Z",
+  "hashes": {
+    "summary.json": "be9081621db11e6bd2968ad1ab1224c887aab42dc0258782935ed157b20f7314",
+    "continue-raf-telemetry.json": "1d33907590e9b0b166f4a199e0d68f0a38af10a7859dd631fdf03f121db9ec0b",
+    "worldsave-pvx.v1.world.-1_-1.json": "b9c4fb644c087875036e7d8419d1c3b0d9159fce716a2d1c1674c62fc1842fbc",
+    "worldsave-after-continue-pvx.v1.world.-1_-1.json": "ee068211ec27aff57aebcdff3694acec9d9ad4712c6ee8cced4e4a75edb78e16",
+    "cleanup-receipt.json": "7c71a47ac85be4a99f5070a1738a3d2c482f5377ffda4c28aa609180c204cb76"
+  },
+  "actualSavedFullPoints": 16,
+  "actualRestoredFullPoints": 17,
+  "allSavedFullPointObjectsEqualRestoredPrefix": true,
+  "frames": 363,
+  "postClickFrames": 361,
+  "jumps": [
+    {
+      "distanceUnits": 102.07778112331658,
+      "before": {
+        "ms": 771,
+        "beat": "ch13-survey",
+        "beatPublished": true,
+        "journeyProbePublished": true,
+        "systemFlightPublished": true,
+        "activePlanetId": "-1,-1",
+        "locationMode": "surface",
+        "renderOrigin": [
+          0,
+          0,
+          0
+        ],
+        "renderOriginSource": "journeyProbe.state.systemFlight.renderOrigin",
+        "cgPublished": true,
+        "worldBound": true,
+        "cgFoot": [
+          -32.29167360829349,
+          51.01894853536674,
+          21.64748998557803
+        ],
+        "capsule": [
+          -32.02875900268555,
+          52.788692474365234,
+          21.45030403137207
+        ],
+        "up": [
+          0.14606366978219276,
+          0.9831910772213851,
+          -0.10954775233664457
+        ],
+        "surveyPhase": "idle",
+        "anchorCount": 0,
+        "terrainSeed": 3215739679,
+        "playerRequested": [
+          8,
+          53.85,
+          -6
+        ],
+        "voxelDebugPublished": true,
+        "error": null,
+        "msSinceClick": 687
+      },
+      "after": {
+        "ms": 886,
+        "beat": "ch13-survey",
+        "beatPublished": true,
+        "journeyProbePublished": true,
+        "systemFlightPublished": true,
+        "activePlanetId": "-1,-1",
+        "locationMode": "surface",
+        "renderOrigin": [
+          0,
+          0,
+          0
+        ],
+        "renderOriginSource": "journeyProbe.state.systemFlight.renderOrigin",
+        "cgPublished": true,
+        "worldBound": true,
+        "cgFoot": [
+          53.58708386851315,
+          19.730256061001505,
+          -23.80281404579404
+        ],
+        "capsule": [
+          53.849998474121094,
+          21.5,
+          -24
+        ],
+        "up": [
+          0.14606366978219276,
+          0.9831910772213851,
+          -0.10954775233664457
+        ],
+        "surveyPhase": "drawing",
+        "anchorCount": 0,
+        "terrainSeed": 3215739679,
+        "playerRequested": [
+          8,
+          53.85,
+          -6
+        ],
+        "voxelDebugPublished": true,
+        "error": null,
+        "msSinceClick": 802
+      }
+    }
+  ],
+  "clickMonotonicMs": 7353.100000023842,
+  "eventCount": 41,
+  "drops": 0,
+  "errors": 0,
+  "postClickSelectedSpawnEvents": [
+    {
+      "seq": 34,
+      "site": "EfficientScene.landedPlayerSpawn.postAssign",
+      "monotonicMs": 7399.800000071526,
+      "epochMs": 1788735814595,
+      "fields": {
+        "chosenSpawn_GA": [
+          53.85,
+          21.5,
+          -24
+        ],
+        "initialPlayerPosition_H": [
+          -32.02875900268555,
+          52.788692474365234,
+          21.45030403137207
+        ],
+        "landedShipPos_iA": [
+          53.5,
+          24,
+          -24
+        ],
+        "landedPlayerEgress_FA": [
+          53.85,
+          21.5,
+          -24
+        ],
+        "shipBranchTaken": true,
+        "validatedPersistedParked": {
+          "unmeasured": true,
+          "reason": "local not identified in exact bundle"
+        }
+      }
+    },
+    {
+      "seq": 36,
+      "site": "EfficientScene.landedPlayerSpawn.postAssign",
+      "monotonicMs": 8042,
+      "epochMs": 1788735815237,
+      "fields": {
+        "chosenSpawn_GA": [
+          53.85,
+          21.5,
+          -24
+        ],
+        "initialPlayerPosition_H": [
+          -32.02875900268555,
+          52.788692474365234,
+          21.45030403137207
+        ],
+        "landedShipPos_iA": [
+          53.5,
+          24,
+          -24
+        ],
+        "landedPlayerEgress_FA": [
+          53.85,
+          21.5,
+          -24
+        ],
+        "shipBranchTaken": true,
+        "validatedPersistedParked": {
+          "unmeasured": true,
+          "reason": "local not identified in exact bundle"
+        }
+      }
+    },
+    {
+      "seq": 39,
+      "site": "EfficientScene.landedPlayerSpawn.postAssign",
+      "monotonicMs": 8131.800000071526,
+      "epochMs": 1788735815327,
+      "fields": {
+        "chosenSpawn_GA": [
+          53.85,
+          21.5,
+          -24
+        ],
+        "initialPlayerPosition_H": [
+          -32.02875900268555,
+          52.788692474365234,
+          21.45030403137207
+        ],
+        "landedShipPos_iA": [
+          53.5,
+          24,
+          -24
+        ],
+        "landedPlayerEgress_FA": [
+          53.85,
+          21.5,
+          -24
+        ],
+        "shipBranchTaken": true,
+        "validatedPersistedParked": {
+          "unmeasured": true,
+          "reason": "local not identified in exact bundle"
+        }
+      }
+    }
+  ],
+  "postClickPlayerMountInputs": [
+    {
+      "seq": 37,
+      "site": "EfficientPlayer.mount.initialPosition",
+      "monotonicMs": 8115.100000023842,
+      "epochMs": 1788735815310,
+      "fields": {
+        "initialPosition_g": [
+          53.85,
+          21.5,
+          -24
+        ],
+        "planetSize_t": 50,
+        "terrainSeed_i": 3215739679,
+        "actorId": "local"
+      }
+    },
+    {
+      "seq": 40,
+      "site": "EfficientPlayer.mount.initialPosition",
+      "monotonicMs": 8134.300000071526,
+      "epochMs": 1788735815330,
+      "fields": {
+        "initialPosition_g": [
+          53.85,
+          21.5,
+          -24
+        ],
+        "planetSize_t": 50,
+        "terrainSeed_i": 3215739679,
+        "actorId": "local"
+      }
+    }
+  ],
+  "causalChain": "Same Origin/local context loads matching saved on-foot H; actual postassignment GA chooses nonnull parked-ship egress FA; actual post-Continue EfficientPlayer receives that value as initialPosition g; observed physics centre then equals that egress within float precision. Correct on-foot saved pose is discarded before controller initialization.",
+  "qualification": [
+    "Direct Rapier constructor/setTranslation API call was not recorded. Actual controller initialPosition input and resulting physics position were recorded, together with live selector output. This is sufficient to locate spawn-precedence fidelity correction; do not describe it as an observed Rapier API call.",
+    "ValidatedPersistedParked local and derivedface remain unmeasured. Correct saved pose is known from serialized bytes and loaded H. Engineer must preserve actual existing safety validation; no generic safe-spawn bypass.",
+    "A parked ship on +X is legitimate. No forced top-face egress or geometry/arrival/route predicate change.",
+    "363 frames include2 pre-click frames,361 post-click;16 serialized point objects equal restored prefix of17.",
+    "CLI closure ended at original deadline with transportTimeout124 after successful actual capture and report written. It is not a game runtime timeout or restore failure.",
+    "Actual Continue/new accepted F remains unverified by pose-only design; no automatic closure.",
+    "Earlier preflight absolute-path refusal remains probe setup failure; preserve stderr/attempt evidence, no game classification."
+  ],
+  "sourceHashes": {
+    "main/src/components/EfficientScene.tsx": "ab95dfe4d2dbb59bbaa22e4fdf60faf8f4fa4f9fd959040bfe17fdb4a776f995",
+    "main/src/components/EfficientPlayer.tsx": "c46bfd6771dd4dd29d779210183ba64a4e78cb1b60769f3a513e5c30294f0660"
+  },
+  "cleanup": {
+    "schema": "paravoxia.verifier.ownedSessionGuard.v1",
+    "probe": "earned-continue-3d-probe.mjs",
+    "writtenAt": "2026-09-06T23:03:43.884Z",
+    "phase": "post-finally",
+    "supersedesForCleanupState": "summary.json .cleanup (captured pre-finally; its sessionStopped is a pre-cleanup value, not the outcome)",
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "label": "earned-continue-3d",
+    "adopted": true,
+    "adoptedAtMs": 1788735727097,
+    "cleanupRequests": 1,
+    "sessionStopInvocations": 1,
+    "sessionStopped": true,
+    "cleanupError": null,
+    "cleanupReason": "finally",
+    "stopsOnlyProbeOwnedSession": true,
+    "stopsRootPreview": false,
+    "killsProcesses": false,
+    "hidesFailureExitCode": false,
+    "note": "Recorded AFTER the finally block ran. This is the actual cleanup outcome of the browser session this probe owned. A stop-failed or never-requested state is reported honestly and does NOT alter the capture outcome, the retained evidence, or the process exit code. It says nothing about the game.",
+    "outcomeUnchanged": true,
+    "stopCall": {
+      "stopped": true,
+      "invoked": true,
+      "reason": "finally",
+      "requests": 1,
+      "error": null
+    },
+    "rootPreviewUntouched": true,
+    "rootPreviewUrl": "http://127.0.0.1:37395/",
+    "heavyLockOpenedByThisProbe": false,
+    "heavyLockInheritedFd": 9,
+    "sourceStableAcrossCapture": true
+  },
+  "noScoreRepairFromThisEvidence": true,
+  "defectClosure": false,
+  "chapterAcceptance": false
+}

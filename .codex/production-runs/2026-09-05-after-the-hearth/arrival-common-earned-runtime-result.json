@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 660515,
+  "stop_reason": "end_turn",
+  "session_id": "ab105347-9211-474e-8e86-cca907f193d7",
+  "total_cost_usd": 4.044221500000002,
+  "usage": {
+    "input_tokens": 102,
+    "cache_creation_input_tokens": 128651,
+    "cache_read_input_tokens": 3111849,
+    "output_tokens": 47958,
+    "output_tokens_details": {
+      "thinking_tokens": 9675
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 128651,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1633,
+        "cache_read_input_tokens": 134297,
+        "cache_creation_input_tokens": 545,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 545
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2242,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002327,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 102,
+      "outputTokens": 47958,
+      "cacheReadInputTokens": 3111849,
+      "cacheCreationInputTokens": 128651,
+      "webSearchRequests": 0,
+      "costUSD": 4.0418945000000015,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 9675,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 60,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: PARTIAL** \u2014 the earned Origin landing and the ordinary Continue lane were measured and passed every gate; the final new-action step is a measured prerequisite failure. Stopped there, no rescue, no game patch.\n\n**Measurements**\n\n| Phase | Result |\n|---|---|\n| 0 earned Origin landing | **PASS** \u2014 73 763 ms; planet `-1,-1` **exactly**; `anc.cg.origin-landed` in **both** named AV history and chapter fired-anchors; `supported true`; pose finite; **fps 60.3**; fixture verified not to preseed it (boot = `-1,-1:p1`, empty AV) |\n| 1 partial drawing | **PASS** \u2014 `checkpointPurity` pure, **18 working samples** with real coords/`walkedAt` in the save, pre-offer/pre-route-test (`acceptedSamples 0` by design, no credit claimed from it), fps 57.7 |\n| 2 real `beforeunload` save | **PASS** \u2014 `pvx.v1.world.-1,-1` **582 \u2192 2753 B** (`4d1bdd7a\u2026`), commonGround `05b6efb3\u2026`, global 3500 B `ac87e22d\u2026` / 91 milestones, `originLanded` in save, `routeTested` false, no key dropped |\n| 3 ordinary Continue | **PASS** \u2014 no deep link/movie/reseed/forced quit; world actor `pvx.v1.world.-1,-1` / `local`; prefix retained **18 \u2192 19 on disk, none lost**; `overwriteVerdict.ok`; `noReplay` by name; fps 59.3 |\n| 4 new action | **FAIL (prerequisite)** \u2014 144 bursts / 90 387 ms, final distance **94.79 units** to E, no `[F]` offer |\n\n**Phase-4 causes, measured only:** Continue resumed at the stored ship parked pose `[53.5,20,\u221220]` (shipped marker reads **\"survey end \u00b7 104m\"**); `supported === false` for **all 148** post-Continue entries \u2014 an objective anomaly, cause unknown, no source read or patched; local up is +X after Continue vs +Y at the survey; and a **demonstrated harness limitation** \u2014 `walkTowards` is XZ-planar, so `KeyA`/`KeyD` really moved the body **2.231 units in Y** but were scored 0.0004 and dropped, leaving only \u00b1Z. I deliberately did **not** make the mover up-aware: new capability, not a correction, and it would not fix the never-grounded state.\n\n**Guards:** role matched; **99/99** source hashes intact before *and* after (`stableAcrossCapture`); live identity verified before launch (`34413`, `<title>Paravoxia</title>`, index `6c8c378b\u2026`, bundle `efc87feb\u2026`); `flock -w60 -x 9` inherited fd owned per `/proc/locks`; headed **ANGLE / NVIDIA GB10**, no SwiftShader; root preview untouched and still 200; post-finally cleanup `stopped`, no abandoned browser, no foreign process stopped. The one auxiliary mismatch is exactly the permitted unused delta-profile drift \u2014 reported separately, no full-verify rerun.\n\n**Instrumentation (not game repair):** `cgContract.pinned.mjs` still pinned scene-**v2**; bounded exact update to scene-v3 in my own dependency (`5f447ebd\u2026` \u2192 `5f3dbc2e\u2026`, before-copy kept, `pin.json` divergence recorded, shared original re-hashed unchanged), zero runtime effect since the probe never calls `loadContract()`; CPU suites rerun **108/108** + `--self-test` OK. Both named entry defects were looked for and are **absent** here \u2014 no keyword patching. Game patches: 0.\n\n**Objective visual defects: none.** Frames render; the only occlusion is the `debug=1` fixture panel.\n\n**Artifacts:** `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/` \u2192 `verifier/captures/arrival-common-earned/earned-1/`, `logs/arrival-common-earned-runtime/`, `arrival-common-earned-runtime-report.{json,md}`, `arrival-common-earned-runtime-progress.md`.\n\n**Unknowns:** whether a player who can turn could reach E (unmeasured \u2014 this probe never turns); the `supported=false` cause; whether resuming 104 m from the marker is intended; the `-1,-1:p1` 568\u2192126 B change; three `[shader-warmup]` timeouts; the 18\u219219 sample increase. No chapter, manual COMMON, full-story, variant or taste acceptance is implied, and nothing here rests on the historical run-4/run-5 overwrite narrative.",
+  "ttft_ms": 1132,
+  "type": "result",
+  "duration_ms": 848629,
+  "uuid": "97f9850b-a092-47c4-bc94-d1f6ec8d443b",
+  "ttft_stream_ms": 730,
+  "time_to_request_ms": 19,
+  "first_content_frame_ms": 730,
+  "queued_turn_count": 0
+}

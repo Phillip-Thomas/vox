@@ -1,0 +1,86 @@
+{
+  "schema": "paravoxia.chapterLoopRole.v1",
+  "summary": "Cinematography direction for The Unfinished Map: a persistent composition of working repair, surviving scar and unanswered question, followed by a player-controlled return. Source-only direction from the supplied packet; visual references were not inspected, and runtime acceptance remains open.",
+  "verdict": "PASS",
+  "direction": {
+    "title": "The Unfinished Map",
+    "visualArgument": "Let the player see that a useful account can leave something unresolved. Preserve the physical places around the record so that reading remains part of visiting.",
+    "spatialReadability": {
+      "survey": "Begin only after actual ch13 completion and handback. Place the quiet record invitation at the retained passage interaction, preserving the chosen route geometry and its limits. Keep the occupied ground and route legible; W-7744 is neither the destination nor a new conversational prompt.",
+      "hull": "Use the existing scar as the observation target. Locate the reachable interaction where the scar and adjoining repaired surface can be seen together under current terrain conditions. Preserve existing collision and construction; do not substitute an immaculate hull or reposition the player.",
+      "return": "Use the ordinary objective marker only after explicit destination selection. Identify the retained survey destination consistently in the record and the world. Arrival requires physical reach and F; marker visibility, camera gaze and elapsed travel never count as arrival."
+    },
+    "blockingAndFraming": {
+      "view": "Retain embodied movement and player-owned look throughout. No cuts, automatic turns, zooms or borrowed perception.",
+      "actors": "Do not move W-7744 to frame the chapter. His existing local activity may remain visible without acknowledgment, accompaniment or a new reply.",
+      "record": "Use a compact side panel with an open world view beside it. Separate the two place entries through spacing and explicit attribution. Render Terra's owned words in lowercase and W-7744's existing procedural record in capitals. Never give the panel a comprehensive map silhouette or fill unvisited ground.",
+      "legibility": "Give text a quiet opaque backing and stable contrast. Keep the selected destination, committed heading and next action readable without relying on color. Keep essential content and controls within the available viewport."
+    },
+    "signatureMoment": {
+      "name": "The scar beside the question",
+      "composition": "At the hull, the existing repair and its scar occupy the world view while the record holds their present observation beside the chosen unanswered question. Below, the separate survey entry offers Return to this place. The world supplies the unresolved subject; the panel supplies a useful but limited account.",
+      "emotionalReveal": "On retention, leave the observation and question visible together as Terra says, 'i can keep the question with the thing.' Selecting the survey then changes the record from something read into something used. Closing it exposes the full world and the route back.",
+      "ordinaryPlay": "Build the opportunity through a reachable observation position and compact panel, not a precise camera angle. Observation eligibility remains physical rather than gaze-dependent. Looking away never blocks progress. The committed observation and question remain reviewable, and the scar remains available to revisit, so the moment does not depend on catching a transient animation.",
+      "restraint": "No scar glow, revelation flash, explanatory overlay or new visible property. The functioning repair and surviving mark carry the composition."
+    },
+    "paletteLightAndMotion": {
+      "palette": "Retain Origin's established living palette and existing hull materials. Use restrained neutral panel surfaces; give both heading choices equal visual weight.",
+      "light": "Use existing environmental illumination. Do not change time of day, relight the scar as a supernatural object or introduce an awakening treatment. Keep interface contrast reliable when the surrounding world is dark.",
+      "motion": "Travel supplies the principal motion. Entries appear locally without a full-screen transition. Retention settles into a stable layout; destination selection uses the existing marker treatment. No camera easing, victory burst or motion that must finish before input resumes."
+    },
+    "anchorTreatment": [
+      {
+        "anchor": "anc.um.record-opened",
+        "treatment": "After explicit survey interaction, open the compact record on the earned passage entry. Preserve the existing view direction and show the route's retained limits with its attributed local result."
+      },
+      {
+        "anchor": "anc.um.scar-observed",
+        "treatment": "Actual attendance and observation add the present hull entry. Keep the scar's surrounding repaired surface visible when the player faces it; do not replay earlier repair stages."
+      },
+      {
+        "anchor": "anc.um.question-retained",
+        "treatment": "Keep the chosen question adjacent to the hull observation and both places distinct. Display Terra's owned line without covering the world subject. Neither choice receives a brighter treatment or stronger flourish."
+      },
+      {
+        "anchor": "anc.um.return-selected",
+        "treatment": "Clearly identify the survey as the selected destination and expose ordinary guidance. Let the player close the panel immediately and choose their own path."
+      },
+      {
+        "anchor": "anc.um.return-recorded",
+        "treatment": "At real arrival and explicit interaction, add a restrained return-visit receipt to the survey entry. The familiar ground is the final image; no new tableau or acknowledgment from W-7744 is required."
+      },
+      {
+        "anchor": "anc.um.handback",
+        "treatment": "Retire mandatory guidance immediately with completion. Preserve movement, look, optional survey and record access. No end card or timed coda."
+      }
+    ],
+    "interruptionAndHandback": {
+      "panel": "Release pointer capture only while the panel is open. Closing restores the established gameplay input flow without changing position or view direction. Never hold input for a caption or transition.",
+      "pause": "Pause and focus loss freeze progression. Visible Resume restores the current objective and presentation state without earning an observation.",
+      "continue": "Restore committed entries, heading and selected destination directly into their steady presentation. Do not replay the retention reveal or completion treatment. Revalidate world, actor and reach for the next action.",
+      "exploration": "Allow departure, detours and repeated inspection. Retain the pending destination without escalating reminders. Returning to the relevant world restores applicable guidance.",
+      "scoreBoundary": "Provide anchor events to Score without prescribing a new motif. Visual timing and audio completion never gate progression."
+    },
+    "acceptanceFocus": [
+      "Inspect the hull composition from ordinary standing views, including a player looking away, and confirm the panel remains readable without forced framing.",
+      "Verify that current terrain permits both required visits and that a closed panel returns movement and look immediately.",
+      "Check interrupted travel, Resume and Continue for stable committed content without replayed reveals or invented receipts.",
+      "Judge ch14 using its own playable and media evidence; ch13 narrative authority does not establish either chapter's runtime acceptance."
+    ]
+  },
+  "anchors": [
+    "anc.um.record-opened",
+    "anc.um.scar-observed",
+    "anc.um.question-retained",
+    "anc.um.return-selected",
+    "anc.um.return-recorded",
+    "anc.um.handback"
+  ],
+  "evidence": [],
+  "findings": [],
+  "keep": [
+    "The working repair and surviving scar share one ordinary, revisitable composition.",
+    "The record's usefulness is demonstrated by a real return journey.",
+    "W-7744's attributed account and the player's embodied view remain independent."
+  ]
+}

@@ -1,0 +1,536 @@
+{
+  "schema": "paravoxia.verifier.harnessPrepReport.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "role": "bounded mechanical verifier harness preparer",
+  "producedAt": "2026-09-06T11:05:32.215114+00:00",
+  "isChapterVerification": false,
+  "isAcceptance": false,
+  "claimsAboutCurrentSource": null,
+  "statement": "This is RUN-LOCAL HARNESS PREPARATION ONLY, performed while the integration-lifecycle-repair engineer was actively editing game source. No game source was edited, no game test/build/verify was run, no browser or preview was opened, no GPU was acquired, and NOTHING here verifies, accepts or measures the current source. No visual-taste, audibility or chapter-acceptance assertion is made.",
+  "boundary": {
+    "gameSourceEdited": false,
+    "gameTestsRun": false,
+    "gameBuildRun": false,
+    "npmVerifyRun": false,
+    "browserOpened": false,
+    "previewLaunched": false,
+    "gpuAcquired": false,
+    "heavyLockTaken": false,
+    "networkUsed": false,
+    "externalDependencyAdded": false,
+    "protectedToolChanged": false,
+    "rootOwnedFilesWritten": [],
+    "rootOwnedFilesRead": [
+      "verifier-inbox.md",
+      "verifier-control.json",
+      "integration-inbox.md",
+      "scene-contract.json",
+      "verification-lifecycle-interim-report.json",
+      "verification-lifecycle-interim-report.md",
+      "harness-prep-commission.txt"
+    ],
+    "destructiveGitCommands": false,
+    "gitCheckoutResetRestoreUsed": false,
+    "priorCapturesPreserved": true,
+    "priorCapturesTouched": [],
+    "scratchDir": ".codex/production-runs/2026-09-05-after-the-hearth/tmp/harness-prep (task-specific)"
+  },
+  "contract": {
+    "sceneContractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+    "readOnly": true,
+    "unchanged": true
+  },
+  "changedPaths": [
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/cg-journey-probe.mjs",
+      "role": "modified \u2014 reused in place, not replaced",
+      "beforeSha256": "faa94f1df6ab62808ae41c1d8cabb7522347ec4d5362c4aec5b3c822fb8404bb",
+      "afterSha256": "de99c4a8803fd53a3d3fca62309a025e06f58e7bc1ccad1c39f766039db2462b",
+      "beforeState": "existed"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/lib/captureProvenance.mjs",
+      "role": "new \u2014 pure per-frame capture provenance classifier",
+      "beforeSha256": null,
+      "afterSha256": "22492552cb7b05b685ae6576d76bc3a0be434033a8874fe3ed279e255400c968",
+      "beforeState": "did-not-exist"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/lib/physicalPose.mjs",
+      "role": "new \u2014 pure pose-source selection, foot frames, diagnostic feature-detection allow-list",
+      "beforeSha256": null,
+      "afterSha256": "0892bf76437b398f4694254b7b483b6bf3788760424ce6edfb0c30ac3f8bb5c6",
+      "beforeState": "did-not-exist"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/lib/stallWatch.mjs",
+      "role": "new \u2014 pure opt-in bounded stall FAIL predicate",
+      "beforeSha256": null,
+      "afterSha256": "681fd58b39ba6bf438912f0e2c2567a8431cdf1674b67ec757888d1a83591d3f",
+      "beforeState": "did-not-exist"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/cg-harness-selftest.mjs",
+      "role": "new \u2014 offline behavioural self-test runner (no browser/GPU/build/network)",
+      "beforeSha256": null,
+      "afterSha256": "9f957f0de10c5a9e85ba5670e51da5b71c17953d4ffcc7783ec97c720256d2ff",
+      "beforeState": "did-not-exist"
+    }
+  ],
+  "unchangedHarnessPaths": [
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/cg-lifecycle-probe.mjs",
+      "sha256": "acc022f20c305f8fb0e38c9002b124e3bb4586922196c2631bc8ea5df3921b0a"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/cg-manual-input-probe.mjs",
+      "sha256": "cc803a2d5402cb2141caf45cd37d54203fbe2933facbea17c2e56106d5ea516a"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/cg-preservation-diff.mjs",
+      "sha256": "e8b8472ca68688929164d2a7149e7f913ef73858459aaa5da4befb8401157279"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/cg-preview-daemon.mjs",
+      "sha256": "90596e81232b82c6274cae4982be28d85173e96f0e1e5e0cdaba370f72476fdb"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/cg-reset-matrix-probe.mjs",
+      "sha256": "e6470950b614947f34c6bb92cf3cebb013c88138c65116be186ef3c7c0038510"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/lib/cgContract.mjs",
+      "sha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551"
+    }
+  ],
+  "logs": [
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/logs/harness-prep/mutation-check.json",
+      "sha256": "71a70f79013367565522d0220a8ce4e91299377ec262fb3c6c22c9551ed0d30f"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/logs/harness-prep/probe-selftest.log",
+      "sha256": "d482d74a3da8a66f80356128b43eb2af5ad1bb9814511b8cf74e9ce46e4f5733"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/logs/harness-prep/selftest.json",
+      "sha256": "1a56ee010f642a3587fb7715aae3f6ad345b0141636fd7a812f498b8ee7c7ec0"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/logs/harness-prep/selftest.log",
+      "sha256": "72bafbbe8fc36a0dfb5b4dcf863ebe9e61afc74d92838fd1fd1abb574c334e1e"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/logs/harness-prep/syntax-check.log",
+      "sha256": "c571d3ce42957e6beeb567f6ba80f517435a8dbf7d7c9f9087ecc9c7b3450682"
+    }
+  ],
+  "commands": [
+    {
+      "cmd": "node verifier/probes/cg-harness-selftest.mjs --json verifier/logs/harness-prep/selftest.json",
+      "cwd": ".codex/production-runs/2026-09-05-after-the-hearth",
+      "exitCode": 0,
+      "log": "verifier/logs/harness-prep/selftest.log",
+      "result": "23/23 passed"
+    },
+    {
+      "cmd": "node verifier/probes/cg-journey-probe.mjs --self-test",
+      "cwd": ".codex/production-runs/2026-09-05-after-the-hearth",
+      "exitCode": 0,
+      "log": "verifier/logs/harness-prep/probe-selftest.log",
+      "result": "legacy checkpoint/traversal checks OK + 23/23 behavioural checks"
+    },
+    {
+      "cmd": "node --check verifier/probes/cg-journey-probe.mjs",
+      "cwd": ".codex/production-runs/2026-09-05-after-the-hearth",
+      "exitCode": 0,
+      "log": "verifier/logs/harness-prep/syntax-check.log",
+      "result": "parses"
+    },
+    {
+      "cmd": "mutation check: 5 deliberate defects reintroduced into COPIES under tmp/harness-prep/mut1,mut2",
+      "cwd": ".codex/production-runs/2026-09-05-after-the-hearth",
+      "exitCode": 1,
+      "log": "verifier/logs/harness-prep/mutation-check.json",
+      "result": "both batches exit 1; the real harness is untouched"
+    }
+  ],
+  "selfTest": {
+    "schema": "paravoxia.verifier.harnessSelfTest.v1",
+    "runId": "2026-09-05-after-the-hearth",
+    "ranAt": "2026-09-06T11:02:59.699Z",
+    "offline": true,
+    "usedBrowser": false,
+    "usedPreview": false,
+    "usedGpu": false,
+    "usedGameBuildOrTests": false,
+    "usedNetwork": false,
+    "total": 23,
+    "passed": 23,
+    "failed": 0,
+    "results": [
+      {
+        "name": "A1 stable capture window is claimable at-state",
+        "ok": true
+      },
+      {
+        "name": "A2 REGRESSION: a beat+objective change during one screenshot is not collapsed to a single state",
+        "ok": true
+      },
+      {
+        "name": "A3 REGRESSION: raw and HUD-suppressed partners ~1s apart are never called simultaneous",
+        "ok": true
+      },
+      {
+        "name": "A4 a near-black boot frame is progression evidence, never visual acceptance",
+        "ok": true
+      },
+      {
+        "name": "B1 with no snapshot pose the rounded autopilot pose is used and labelled as such",
+        "ok": true
+      },
+      {
+        "name": "B2 a future full-precision snapshot pose is preferred, with the rounded pose retained",
+        "ok": true
+      },
+      {
+        "name": "B3 REGRESSION: the journey snapshot entities Record is read (it is not an array)",
+        "ok": true
+      },
+      {
+        "name": "B4 foot frames are derived from the capsule centre with both semantics",
+        "ok": true
+      },
+      {
+        "name": "B5 an unexposed CommonGround diagnostic is recorded unavailable, never as a pass",
+        "ok": true
+      },
+      {
+        "name": "C0 the predicate is OFF unless explicitly opted in",
+        "ok": true
+      },
+      {
+        "name": "C1 real stagnation on an on-foot walk phase FAILs at the window",
+        "ok": true
+      },
+      {
+        "name": "C2 FALSE-POSITIVE GUARD: slow but real walking never fails",
+        "ok": true
+      },
+      {
+        "name": "C3 FALSE-POSITIVE GUARD: story progress with a stationary body never fails",
+        "ok": true
+      },
+      {
+        "name": "C4 FALSE-POSITIVE GUARD: ongoing actor motion while the player waits never fails",
+        "ok": true
+      },
+      {
+        "name": "C5 FALSE-POSITIVE GUARD: active flight never fails \u2014 but a PARKED ship in flight mode still does",
+        "ok": true
+      },
+      {
+        "name": "C6 FALSE-POSITIVE GUARD: an intentional cue hold delays a FAIL but cannot cancel it",
+        "ok": true
+      },
+      {
+        "name": "C7 FALSE-POSITIVE GUARD: a declared deliberate manual wait never fails",
+        "ok": true
+      },
+      {
+        "name": "C8 FALSE-POSITIVE GUARD: an out-of-scope phase is not judged",
+        "ok": true
+      },
+      {
+        "name": "C9 a runtime-declared holdReason widens the window but does not disable it",
+        "ok": true
+      },
+      {
+        "name": "C10 physical progress from the diagnostic resets the window even with a frozen body",
+        "ok": true
+      },
+      {
+        "name": "C11 the described predicate carries its own limits and never a success verdict",
+        "ok": true
+      },
+      {
+        "name": "D1 the journey probe calls no mutating runtime routine",
+        "ok": true
+      },
+      {
+        "name": "D2 the harness declares no acceptance vocabulary",
+        "ok": true
+      }
+    ]
+  },
+  "mutationCheck": {
+    "batches": [
+      {
+        "batch": "mut1",
+        "exit": 1,
+        "mutations": [
+          {
+            "file": "lib/stallWatch.mjs",
+            "from": "this.suppressions.push({ atMs: now, ageMs: age, reason:",
+            "to": "this.reset(now, 'MUTANT');\n      this.suppressions.push({ atMs: now, ageMs: age,"
+          },
+          {
+            "file": "lib/captureProvenance.mjs",
+            "from": "simultaneous: false,",
+            "to": "simultaneous: true,"
+          }
+        ],
+        "stdout": "[cg-harness-selftest] 21/23 passed, 2 failed"
+      },
+      {
+        "batch": "mut2",
+        "exit": 1,
+        "mutations": [
+          {
+            "file": "lib/stallWatch.mjs",
+            "from": "if (obs.controlMode === 'flight' && this.shipAccum >= this.cfg.shipUnits) {",
+            "to": "if (obs.controlMode === 'flight') {"
+          },
+          {
+            "file": "lib/captureProvenance.mjs",
+            "from": "if (!eq(pre?.[field], post?.[field])) {",
+            "to": "if (false) {"
+          },
+          {
+            "file": "lib/physicalPose.mjs",
+            "from": "if (entities && typeof entities === 'object') return Object.values(entities).map",
+            "to": ""
+          }
+        ],
+        "stdout": "[cg-harness-selftest] 20/23 passed, 3 failed"
+      }
+    ],
+    "purpose": "Proves the self-tests detect BEHAVIOUR (shared-state capture collapse, pair-simultaneity, cue-hold clock reset, blanket flight exemption, entities-Record regression) rather than mirroring implementation strings."
+  },
+  "improvements": [
+    {
+      "id": "HP-1",
+      "title": "Per-frame capture provenance",
+      "problem": "post/home-movie-2 attributed ONE shared gameplay state to a raw frame and its HUD-suppressed partner captured up to ~1 s apart while gameplay advanced; root flagged this in verifier-inbox.md at 10:02 UTC.",
+      "change": "shoot() now delegates to shootOne(), which brackets EVERY screenshot with its own cheap pre-shot and post-shot observation (sampleProvenance: one small read-only evaluate). Each frame records its own window {startMs,endMs,durationMs}, its own image sha256/bytes/stats, its own raw-vs-percept role, and a crossings list. classifyCaptureProvenance() sets atStateClaimable=false whenever beat/objectiveId/markerLabel/workOrder/anchorId/activationSequence/milestones changed mid-capture; the frame is then reported as lying INSIDE a window, never pinned to a fabricated exact anchor instant. pairProvenance() records simultaneous:false plus the REAL pairOffsetMs and any state that crossed between the two partners.",
+      "preserved": [
+        "original pixels written once, hashed, never re-encoded/cropped/filtered",
+        "intentional HUD hiding via the shipped evidence.mjs vox-hide-ui stylesheet, restored in a finally block",
+        "legacy per-frame atMs/beat/objectiveId/anchor keys retained (now the frame's OWN post-shot values) so v1 readers still parse"
+      ],
+      "bootBlackFrame": "classifyLuma() flags a blank/near-black frame as bootBlackFrameCandidate and sets visualAcceptance:false on EVERY frame without exception. A boot black frame is progression evidence only."
+    },
+    {
+      "id": "HP-2",
+      "title": "Physical diagnostics \u2014 honest pose sourcing and feature-detected CommonGround diagnostics",
+      "sourceSurveyReadOnly": {
+        "JourneyRuntimeProbeBridge.tsx#buildSnapshot": "HAS NO PLAYER POSE FIELD. getPlayerWorldPosition is imported but used only in prepareScenario's gaze receipt. Therefore FULL-PRECISION LIVE PLAYER POSE IS NOT AVAILABLE TODAY.",
+        "snapshot.entities": "a Record<string,JourneyEntityState>, NOT an array. The previous probe used Array.isArray(s.entities) and so recorded null for every entity in every sample. Fixed by normalizeEntities().",
+        "journeyRuntime.roundedPosition": "entity positions quantised to 1e-2",
+        "autopilot/primitives.ts:2097": "window.__autopilot.pos = getPlayerWorldPosition() rounded to 1e-2, MOVIE LANE ONLY",
+        "world/AuditWorker.tsx:143": "window.__auditWorker.pos rounded to 1e-1 (coarser than the entity record for the same actor)",
+        "state/playerFrame.ts": "getPlayerWorldPosition returns what EfficientPlayer publishes from body.translation() = the RAPIER CAPSULE CENTRE",
+        "cubeGravityConstants.ts": "PLAYER_CAPSULE_HALF_HEIGHT 1.3, PLAYER_CAPSULE_RADIUS 0.5; EfficientPlayer.tsx:1525 derives feetWorld = centre - up*1.3, the sole is a further 0.5 below"
+      },
+      "change": "selectPlayerPose() prefers a full-precision journey-snapshot pose across six candidate paths and falls back to the rounded __autopilot.pos, ALWAYS retaining the rounded value as secondary and recording source/sourceClass/declaredPrecisionUnits/observedQuantumUnits/fullPrecisionAvailable/frame. selectWorkerPose() prefers the 1e-2 entities['actor:w7744'] record over the 1e-1 __auditWorker global. deriveFootFrames() emits capsuleCentre, cylinderBottom (centre-1.3) and sole (centre-1.8) with upAssumed flagged. CommonGround diagnostics are FEATURE-DETECTED from an allow-list of candidate hook names (plus an optional --cg-diag-hook / --cg-score-diag-hook operator override) and recorded as unavailable with the exact list of names probed when nothing answers.",
+      "notAssumed": [
+        "no hook name is assumed",
+        "JourneyRuntimeProbeBridge.tsx was NOT edited",
+        "no mutating route planner, preparation grant or progress setter is ever called (enforced by self-test D1)"
+      ],
+      "metricSemantics": "Every traversal figure carries PATH_METRIC_SEMANTICS: metricClass 'measurement-lower-bound', isRuntimeProof false, with the chording, quantisation, capsule-centre-vs-feet and 'walked distance is not credited progress' caveats inline."
+    },
+    {
+      "id": "HP-3",
+      "title": "Opt-in bounded stall FAIL predicate for ch13 on-foot walk/interact",
+      "default": "DISABLED. Only --stall-fail-ms <n> turns it on.",
+      "predicate": "FAIL when, for a continuous window >= windowMs (multiplied by holdMultiplier while the runtime reports its own non-null holdReason), NONE of the following changed: (a) story state \u2014 beat, objectiveId, markerLabel, workOrder, anchorId, signed-AV activationSequence, localActor milestones; (b) the CommonGround diagnostic physical-progress signature, WHEN that diagnostic is actually exposed; (c) player capsule-centre displacement accumulated to >= playerUnits; (d) worker pose displacement accumulated to >= actorUnits; (e) the ship pose accumulated to >= shipUnits while controlMode is 'flight'. The phase must be in --stall-fail-phases and no deliberate manual wait may be declared.",
+      "falseFailureGuards": [
+        "deliberate manual wait: --manual-hold-ms makes the predicate inert for that many ms from start (and resets the window while active)",
+        "active flight: a ship that is genuinely moving in flight controlMode resets the window. Flight mode ALONE does not exempt \u2014 the parked-ship VF-DEEPLINK-1 shape must still FAIL",
+        "ongoing actor motion: W-7744 walking his own leg resets the window",
+        "intentional cue holds: a caption on screen or an explicit cue-hold window SUPPRESSES firing without resetting the clock, so a cue that never ends still fails, just later; every suppression is recorded in the FAIL",
+        "out-of-scope phases (cutscene, flight lane, etc.) are not judged at all",
+        "a runtime-declared holdReason widens the required window rather than disabling the predicate"
+      ],
+      "onFire": [
+        "append a stall-fail trace event",
+        "capture the frozen moment (raw + percept when --percept)",
+        "fall through to the ORDINARY graceful finalization: trace, frames, complete summary.json, session.stop()",
+        "exit 3",
+        "NO rescue, nudge, teleport, key press or progress grant of any kind"
+      ],
+      "neverSuccess": "summary.outcome is one of FAIL-STALL | CHECKPOINTED-INCONCLUSIVE | REACHED-STOP-PREDICATE | BUDGET-EXHAUSTED-INCONCLUSIVE, with outcomeIsAcceptance:false. No value in that vocabulary is a pass; a timeout, stall or checkpoint can never be read as success. Self-test D2 asserts the harness never sets isSuccess/visualAcceptance/outcomeIsAcceptance true.",
+      "rootControlIntact": "pollControl still re-reads verifier-control.json every --control-ms (default 10000, <= 10 s) and a checkpoint still exits 0 with checkpointed:true after a complete summary.",
+      "limits": [
+        "sample-rate/quantisation bound: motion under the pose quantum between samples is invisible and can read as stagnation",
+        "without the CommonGround diagnostic, internal route/cursor progress is unobservable; the FAIL then covers only what could be observed and says so in physicalProgressCaveat",
+        "a legitimately very slow approach moving under playerUnits per window would be a false FAIL \u2014 widen --stall-fail-ms rather than relaxing --stall-units",
+        "the phase label comes from the shipped autopilot routeAction / prompt presence, not from the chapter; a mislabelled phase can put the predicate out of scope and hide a real stall",
+        "it cannot distinguish 'wedged' from 'waiting for an input the probe was never asked to send'; manual lanes must declare --manual-hold-ms or leave the predicate off"
+      ]
+    }
+  ],
+  "supportedFlags": {
+    "preExisting": [
+      "--beat",
+      "--lane",
+      "--seconds",
+      "--variant",
+      "--tier",
+      "--out",
+      "--sample-ms",
+      "--strip-s",
+      "--query",
+      "--no-shots",
+      "--percept",
+      "--control-ms",
+      "--stall-units",
+      "--until-beat",
+      "--until-anchor",
+      "--until-objective",
+      "--until-objective-clear",
+      "--until-milestone",
+      "--hold-after-ms",
+      "--prereq-exit-ship",
+      "--self-test"
+    ],
+    "added": [
+      {
+        "flag": "--stall-fail-ms <n>",
+        "default": "0 (OFF)",
+        "meaning": "opt-in stall FAIL window in ms"
+      },
+      {
+        "flag": "--stall-fail-phases <csv>",
+        "default": "walk,interact,on-foot",
+        "meaning": "phases the predicate may judge"
+      },
+      {
+        "flag": "--stall-actor-units <n>",
+        "default": "0.5",
+        "meaning": "worker displacement that counts as ongoing actor motion"
+      },
+      {
+        "flag": "--stall-ship-units <n>",
+        "default": "1.0",
+        "meaning": "ship displacement that counts as active flight"
+      },
+      {
+        "flag": "--stall-hold-multiplier <n>",
+        "default": "2",
+        "meaning": "window widening while the runtime declares its own holdReason"
+      },
+      {
+        "flag": "--stall-cue-grace-ms <n>",
+        "default": "12000",
+        "meaning": "cue-hold suppression grace"
+      },
+      {
+        "flag": "--manual-hold-ms <n>",
+        "default": "0",
+        "meaning": "declared deliberate manual wait; predicate inert for this long from start"
+      },
+      {
+        "flag": "--cg-diag-hook <name>",
+        "default": "none",
+        "meaning": "operator-supplied read-only CommonGround diagnostic hook, prepended to the allow-list"
+      },
+      {
+        "flag": "--cg-score-diag-hook <name>",
+        "default": "none",
+        "meaning": "same for the score diagnostic"
+      }
+    ],
+    "note": "--stall-units keeps its existing meaning and is now shared by the observational stall report and the opt-in FAIL predicate."
+  },
+  "summarySchemaChanges": {
+    "schema": "paravoxia.verifier.cgJourneyProbe.v2 (supersedes v1)",
+    "added": [
+      "outcome",
+      "outcomeIsAcceptance",
+      "outcomeNote",
+      "capturePolicy",
+      "poseSource",
+      "physicalDiagnostics",
+      "stallObservational",
+      "stallPredicate",
+      "traversal.semantics",
+      "frames[].provenance",
+      "frames[].role",
+      "frames[].hudSuppressed",
+      "frames[].luma",
+      "frames[].pair"
+    ],
+    "compatibility": [
+      "frames[].atMs/beat/objectiveId/anchor retained (now the frame's OWN post-shot values)",
+      "summary.stall retained as an alias of summary.stallObservational"
+    ]
+  },
+  "integrationRequirements": [
+    {
+      "id": "IR-1",
+      "priority": "high",
+      "owner": "integration engineer (root to authorise)",
+      "request": "Expose getCommonGroundDiagnostic() and getCommonGroundScoreDiagnostic() through a query-gated, READ-ONLY, deep-copying surface. Preferred shape (needs no harness change): extra methods on the existing __paravoxiaJourneyProbe bridge behind the same ?journeyprobe=1 gate.",
+      "constraints": [
+        "no setters",
+        "no mutable references returned",
+        "no normal-play global",
+        "no new preparation grants"
+      ],
+      "harnessBehaviourIfDeclined": "Recorded as unavailable with the exact list of names probed; stall clause (b) is skipped and the FAIL says so. No fabricated value, no implied pass.",
+      "alternateNamesAccepted": "any \u2014 pass --cg-diag-hook; no harness edit required",
+      "statusAsOfThisReport": "NOT PUBLISHED. integration-inbox.md contains root's request for such a surface; no hook name has been decided. A repo-wide grep of main/src and main/tools finds both functions ONLY at their definitions (commonGroundDirector.ts:1633, commonGroundScore.ts:280) with no window assignment."
+    },
+    {
+      "id": "IR-2",
+      "priority": "high",
+      "owner": "integration engineer (root to authorise)",
+      "request": "Add a full-precision player pose to JourneyRuntimeProbeBridge.tsx#buildSnapshot \u2014 unrounded body.translation() plus the live getPlayerUp() axis.",
+      "why": "There is currently NO player pose in the snapshot. The only readable pose is window.__autopilot.pos (1e-2, movie lane only), so a manual lane has no player pose at all, path lengths are quantisation-bound lower bounds, and the VF-RAIL-2 centre-vs-feet reconciliation depends on an unverified +Y up-axis assumption on a cube-gravity world.",
+      "harnessBehaviourIfDeclined": "Records fullPrecisionAvailable:false, the exact candidate paths probed, the declared and observed quantum, and keeps every metric labelled a lower bound.",
+      "candidatePathsAlreadyProbed": [
+        "player.position",
+        "player.pos",
+        "state.player.position",
+        "state.player.pose.position",
+        "physical.player.position",
+        "physical.player.capsuleCentre"
+      ]
+    },
+    {
+      "id": "IR-3",
+      "priority": "medium",
+      "owner": "next independent verifier",
+      "request": "Before any long capture, run one short throwaway probe after root's source gate and confirm poseSource, capturePolicy, physicalDiagnostics and stallPredicate appear in summary.json.",
+      "why": "The browser wiring of the new code is UNEXERCISED offline; only the pure classifiers and a safety scan are covered."
+    }
+  ],
+  "honestLimits": [
+    "Nothing here measures, verifies or accepts the current game source. The engineer was mid-edit throughout.",
+    "The Playwright wiring (shootOne, sampleProvenance, the second read-only evaluate, the stall observation assembly) has NOT been executed against a browser. Offline tests cover the pure modules and a static safety scan only.",
+    "Full-precision live player pose does not exist today; every path metric is a quantisation- and sample-rate-bound LOWER BOUND, measured on the capsule CENTRE, and is not runtime proof of credited progress.",
+    "The local planet up-axis is not exposed to any probe global. Foot-frame derivations assume +Y and are invalid on a non-top cube face; this is flagged in every record rather than silently used.",
+    "CommonGround phase/cursor/hold/foot-frame state remains UNOBSERVABLE until IR-1 lands. A stall FAIL taken without it is a measured stagnation of everything observable, not a proof that no internal counter moved.",
+    "The stall predicate's phase label is the probe's inference from the shipped autopilot routeAction and prompt presence, not a chapter-authored phase.",
+    "The harness makes NO chapter-acceptance, visual-taste, visible-content or audibility assertion. visualAcceptance is hard-false on every frame; SFX counts remain queue observations, not hearing.",
+    "No creative interpretation was made and no threshold or proof predicate was relaxed. cgContract.mjs and its signed-contract hash gate are unchanged.",
+    "This report claims no publication, no readiness and no gate."
+  ],
+  "preservation": {
+    "priorCaptureDirs": [
+      "control-ch10-cold",
+      "home-movie-1",
+      "manual-home-software",
+      "post/common-diag-1",
+      "post/home-movie-2",
+      "post/survey-diag-1",
+      "post/survey-movie-1",
+      "smoke-home"
+    ],
+    "allUntouched": true,
+    "olderProbesUntouched": true
+  },
+  "nextVerifierGate": "node verifier/probes/cg-journey-probe.mjs --self-test  (expect exit 0) \u2014 run AFTER root's exact source gate, before any browser work."
+}

@@ -1,0 +1,1314 @@
+{
+  "schema": "paravoxia.verification.handoffStandby.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "role": "handoff-standby-verifier",
+  "writtenAt": "2026-09-06T16:21:08.623681+00:00",
+  "isChapterAcceptance": false,
+  "isDefectClosure": false,
+  "publicationAuthorized": false,
+  "verdict": "MIXED \u2014 return-flight lane PASS; movie survey lane PASS to ch13-common with a standby-occupancy qualification; COMMON reciprocal lane FAIL (reproducible physical stall, mechanism unproved)",
+  "authority": {
+    "control": {
+      "updatedAt": "2026-09-06T16:02:52.741302+00:00",
+      "action": "continue",
+      "activeRole": "handoff-standby-verifier",
+      "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c"
+    },
+    "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e"
+  },
+  "sourceIntegrity": {
+    "manifestRef": "implementation-source-manifest.json",
+    "manifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "before": {
+      "atUtc": "2026-09-06T16:00:09.590710+00:00",
+      "filesChecked": 99,
+      "mismatches": 0,
+      "missing": 0,
+      "receipt": "logs/handoff-standby-verifier/source-rehash-before.json"
+    },
+    "after": {
+      "atUtc": "2026-09-06T16:01:26.470748+00:00",
+      "filesChecked": 99,
+      "mismatches": 0,
+      "missing": 0,
+      "receipt": "logs/handoff-standby-verifier/source-rehash-after.json"
+    },
+    "driftDuringVerify": false,
+    "tool": "verifier/probes/handoff-standby-verifier/rehash-source.py",
+    "toolSha256": "fed0c17a9337d36d56e6ab9e3240519a1e02bf4787c5be55833e8e0f16340f4b"
+  },
+  "phase1_independentVerify": {
+    "command": "npm --prefix main run verify",
+    "cwd": "/home/thomasphillip/Projects/vox",
+    "startedAtUtc": "2026-09-06T16:00:15.207720141Z",
+    "finishedAtUtc": "2026-09-06T16:01:16.752129209Z",
+    "exitCode": 0,
+    "log": "logs/handoff-standby-verifier/verify.log",
+    "logBytes": 39182,
+    "logSha256": "d029ad5f1883d5887e5b14bcee35af9acc51adf9f80b9cfaebe7ae468031a619",
+    "testFiles": 351,
+    "tests": 3158,
+    "testFailures": 0,
+    "gatesObserved": {
+      "creativeWorkflowUx": 185,
+      "chapterRegistry": 4285,
+      "storyAuthority": 1039,
+      "others": [
+        "catalog:check",
+        "scene:av:check",
+        "chapter:journey:check",
+        "typecheck",
+        "preview:check",
+        "audio:diagnostic-check",
+        "story:ladder:check",
+        "guidance:target-check",
+        "audio:check",
+        "build"
+      ]
+    },
+    "buildOk": true,
+    "note": "This is my own independent receipt; it does not re-use or overwrite the integration engineer's logs/handoff-standby-repair/verify.log (54a473d4...5d7fa0)."
+  },
+  "buildReady": {
+    "distFiles": 11,
+    "shippedJsonFileMapBuildHash": "9dc37db5ff5ff2612a010cc1da1781fdc0f7243869199012374b02385b65d542",
+    "shippedAlgorithm": "previewBuildManifest().sha256 = sha256(JSON.stringify(sorted path->sha256 map)); recomputed with main/tools/lib/previewSnapshot.mjs",
+    "auxiliaryVerifierBuildHash": "c7b6395a472a27407389493e995aeeb5f611015b87197f6d1791b6db9479da03",
+    "auxiliaryAlgorithm": "SHA256 over codepoint-sorted `path` NUL `sha256` newline records \u2014 a DIFFERENT algorithm; not the shipped buildHash",
+    "fileMapRef": "logs/handoff-standby-verifier/built-file-map.txt"
+  },
+  "previewIdentity": {
+    "ownedBy": "root-production-preview",
+    "url": "http://127.0.0.1:38007/",
+    "port": 38007,
+    "daemonPid": 1538444,
+    "startedByThisRole": false,
+    "stoppedByThisRole": false,
+    "ownershipSourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "ownershipBuildHash": "9dc37db5ff5ff2612a010cc1da1781fdc0f7243869199012374b02385b65d542",
+    "independentHttpChecks": {
+      "httpStatus": 200,
+      "title": "<title>Paravoxia</title>",
+      "indexBytes": 1568,
+      "indexSha256": "1f699b4ab3edd8c792de8516920309f9a69c0e77152ec4d21041f4e561430260",
+      "bundlePath": "/assets/index-BJql9v5k.js",
+      "bundleBytes": 5666976,
+      "bundleSha256": "4f39f1ea60795e31e681c55c1b339af4a05590ec315e5cc0d712aab7a43b0ec4",
+      "cssSha256": "398c81b6c1d41236a180d4deb0e2d085f63c962fbf4ec723ca31cd325f46c190",
+      "workerSha256": "5c34b2579d4869bbb97ca0d692cf14c2ed050c8983dce442c1ffcca1676bd0de",
+      "sandboxChunkSha256": "6f7d378056016950d2c547eba6bc0cae623984886f3b48977c53db0596d3109d",
+      "allMatchMyBuiltFileMap": true,
+      "receipt": "logs/handoff-standby-verifier/preview-identity-38007.txt"
+    },
+    "ownershipRecordInconsistency": "At my 16:03:0x read, preview-ownership.json still carried the PRIOR record's bundlePath=/assets/index-CbB2rmHN.js, bundleSha256=2a5d6b2f..., verifierBuildHash=9c7d99d7..., fullVerifyLog=logs/verifier-navigation/verify.log and identityRecheckedAt=2026-09-06T14:14:33 alongside the new manifest/url/buildHash/indexSha256. Root states it replaced these before the capture release. I did not edit the root-owned file; my measurements use my own HTTP byte checks, which all match the CURRENT build.",
+    "priorBuildRefused": "http://127.0.0.1:38803/ (manifest 1a50c19f..., bundle index-CbB2rmHN.js) was never opened by this role; it was already stopped by root and is absent from the listening ports.",
+    "probeRefusal": "Both owned probes throw PREVIEW-MANIFEST-MISMATCH unless preview-ownership.sourceManifestSha256 == verifier-control.sourceManifestSha256."
+  },
+  "hardware": {
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "rendererClass": "hardware",
+    "headed": true,
+    "softwareRendererRefused": true,
+    "assertHardwareGl": "via main/tools/lib/previewServer.mjs assertHardwareGl, called by openParavoxia in every session",
+    "heavyLock": {
+      "path": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+      "mode": "flock exclusive fd9, -w 600",
+      "acquisitions": 4,
+      "contended": false,
+      "bypassed": false
+    },
+    "browsersOwned": 4,
+    "browsersConcurrent": 1,
+    "audioClaim": "none \u2014 no audibility or hearing claim is made anywhere in this report"
+  },
+  "lanes": {
+    "flight_ch13_return": {
+      "status": "PASS",
+      "question": "Does the committed Origin crossing stay active with no departure reset, actually land, and hand off to the survey?",
+      "probe": "verifier/probes/handoff-standby-verifier/flight-return-probe.mjs",
+      "probeSha256": "f1747b8a4773798f43d9763f41cbea42727ecc5ebe492b21ce2236230ef70878",
+      "probeOrigin": "COPY of verifier/probes/flight-discriminator/flight-discriminator-probe.mjs (15e65e89fd09e75c65e9ebce54e9a66b066cc0ea6f87d72d1a2097d51a8a4049); shared original untouched",
+      "ownedInstrumentationFixes": [
+        "postcapture logger-order error fixed: say() was called in finally AFTER lg.end(), causing ERR_STREAM_WRITE_AFTER_END and probe exit 1 after a completed capture. say() is now write-guarded and streams close last, after run.json and the cleanup receipt. This role's probe exit code is 0.",
+        "preview URL read from root-owned preview-ownership.json with a hard manifest-binding refusal",
+        "capture/log output moved to owned dirs; non-empty capture dir refused"
+      ],
+      "entryUrl": "http://127.0.0.1:38007/?story=ch13-return&journeyprobe=1&debug=1&movie=1",
+      "fixtureNote": "?story=ch13-return is a prerequisite DEEP LINK, and movie=1 is a scripted-input rail. This is NOT continuous earned history and is not a zero-rescue full-story claim.",
+      "boundedWindowMs": 120000,
+      "sampleIntervalMs": 250,
+      "samples": 276,
+      "captureMs": 73791,
+      "stopReason": "origin-landed-milestone-latched (before the 120 s bound)",
+      "probeExitCode": 0,
+      "measurements": {
+        "celestialPoseTrack": [
+          {
+            "atMs": 135,
+            "activePlanetId": "-1,-1:p1",
+            "lastActivePlanetId": "-1,-1:p1",
+            "activationEpoch": 2,
+            "locationMode": "surface",
+            "originCentreDistance": 2727.22,
+            "position": [
+              2180,
+              -110,
+              -1635
+            ]
+          },
+          {
+            "atMs": 7919,
+            "activePlanetId": "-1,-1:p1",
+            "activationEpoch": 2,
+            "locationMode": "local_space",
+            "originCentreDistance": 2510.89
+          },
+          {
+            "atMs": 8399,
+            "activePlanetId": "-1,-1:p1",
+            "activationEpoch": 3,
+            "locationMode": "local_space",
+            "originCentreDistance": 2470.1,
+            "target": {
+              "kind": "system_body",
+              "address": {
+                "system": {
+                  "x": -1,
+                  "y": -1
+                },
+                "slot": 0
+              },
+              "worldId": "-1,-1"
+            }
+          },
+          {
+            "atMs": 40535,
+            "event": "ORIGIN ACTIVATION ENVELOPE ENTERED",
+            "originCentreDistance": 180.08,
+            "activePlanetId": "-1,-1:p1",
+            "activationEpoch": 3
+          },
+          {
+            "atMs": 41081,
+            "event": "HANDOFF",
+            "activePlanetId": "-1,-1",
+            "lastActivePlanetId": "-1,-1",
+            "activationEpoch": 4,
+            "locationMode": "atmosphere",
+            "originCentreDistance": 166.79,
+            "phase": "deep_space -> descent"
+          },
+          {
+            "atMs": 44980,
+            "event": "LANDED",
+            "activePlanetId": "-1,-1",
+            "activationEpoch": 4,
+            "locationMode": "surface",
+            "phase": "surface",
+            "controlMode": "fps",
+            "originCentreDistance": 58.09,
+            "position": [
+              53.5,
+              16,
+              -16
+            ],
+            "velocity": [
+              0,
+              0,
+              0
+            ],
+            "renderOrigin": [
+              0,
+              0,
+              0
+            ],
+            "target": null
+          },
+          {
+            "atMs": 73791,
+            "event": "BEAT HANDOFF",
+            "beat": "ch13-return -> ch13-survey",
+            "objectiveId": "ch13:return:board -> ch13:survey:start"
+          }
+        ],
+        "originCentreDistanceMinimum": 58.09,
+        "postEnvelopeMaximumOriginCentreDistance": 180.08,
+        "departureResetObserved": false,
+        "departureResetThresholdUsed": "any post-envelope originCentreDistance > 1000 (prior failure reclaimed 2736.67)",
+        "activationEpochsObserved": [
+          2,
+          3,
+          4
+        ],
+        "priorFailureEpochJumps": [
+          [
+            3,
+            5
+          ],
+          [
+            6,
+            8
+          ]
+        ],
+        "priorFailureEpochJumpsReproduced": false,
+        "activePlanetIdsObserved": [
+          "-1,-1:p1",
+          "-1,-1"
+        ],
+        "committedOriginStayedActive": true,
+        "originLandedMilestone": "story:ch13-origin-landed LATCHED",
+        "ch13Milestones": [
+          "story:ch13-fault-reviewed",
+          "story:ch13-origin-landed"
+        ],
+        "surveyTransition": {
+          "beat": "ch13-survey",
+          "objectiveId": "ch13:survey:start",
+          "markerLabel": "Survey start \u00b7 begin a route",
+          "health": "ready"
+        },
+        "hudAtLanding": {
+          "flightMode": "surface / fps",
+          "shipState": "landed",
+          "coordinate": "-1,-1",
+          "seed": "3215739679",
+          "markerDistanceM": 8
+        },
+        "autopilotRescues": {
+          "nudges": 0,
+          "teleportNudgesTotal": 0,
+          "backstops": 0,
+          "stuck": 0,
+          "routeAction": "idle"
+        }
+      },
+      "requirementsMatrix": [
+        {
+          "requirement": "committed Origin stays active, no departure reset",
+          "result": "PASS",
+          "evidence": "post-envelope max originCentreDistance 180.08; activePlanetId -1,-1 held from 41081 ms to end; epochs 2->3->4 only"
+        },
+        {
+          "requirement": "actual landing (ship celestial position, not the seated capsule)",
+          "result": "PASS",
+          "evidence": "systemFlight.pose.position [53.5,16,-16], velocity [0,0,0], renderOrigin [0,0,0], locationMode surface, spaceFlight.phase surface, HUD Ship: landed"
+        },
+        {
+          "requirement": "story:ch13-origin-landed",
+          "result": "PASS",
+          "evidence": "localActor.milestones contains story:ch13-origin-landed at 73791 ms"
+        },
+        {
+          "requirement": "anc.cg.origin-landed AV anchor",
+          "result": "NOT MEASURED BY THIS PROBE",
+          "evidence": "the flight probe reads only the count of signedSceneAv keys (7); it does not read avFull.anchorId. This is an instrumentation gap, not a negative finding."
+        },
+        {
+          "requirement": "subsequent survey transition",
+          "result": "PASS",
+          "evidence": "beat ch13-return -> ch13-survey with objective ch13:survey:start at 73791 ms"
+        }
+      ],
+      "artifacts": {
+        "captureDir": "verifier/captures/handoff-standby/flight-1",
+        "runJson": "verifier/captures/handoff-standby/flight-1/run.json",
+        "runJsonSha256": "74465b140d256735746f112f8fbd9ef7e355dd92c89e9f6d35ca31c3ee5cd947",
+        "telemetry": "logs/handoff-standby-verifier/flight-1/telemetry.jsonl",
+        "telemetrySha256": "c48ca4e83c63b09f2b146456e21fc58fe43cc3e4eeaaa967e43e5d4971a5330b",
+        "console": "logs/handoff-standby-verifier/flight-1-console.log",
+        "frames": [
+          "000-boot.png",
+          "0006-objectiveId.png",
+          "0012-phase.png",
+          "0026-phase.png",
+          "0027-systemTarget.png",
+          "0155-phase.png",
+          "0155-activePlanetId.png",
+          "0155-systemTarget.png",
+          "0167-phase.png",
+          "0167-objectiveId.png",
+          "999-final.png"
+        ]
+      },
+      "framesRead": [
+        {
+          "file": "verifier/captures/handoff-standby/flight-1/999-final.png",
+          "beat": "ch13-survey",
+          "objectiveObservation": "grounded first-person view on Origin surface; HUD Ship: landed, Coordinate -1,-1; world marker 'survey start \u00b7 begin a route \u00b7 8m' present and matching the HUD objective 'Survey start \u00b7 begin a route'. No blank frame, no black frame, no wrong-era glimpse, no missing HUD element."
+        }
+      ],
+      "cleanup": {
+        "stopped": true,
+        "invoked": true,
+        "reason": "probe-end",
+        "requests": 1,
+        "error": null,
+        "stoppedRootPreview": false
+      }
+    },
+    "movie_survey_long_route": {
+      "status": "PASS to ch13-common with a QUALIFICATION: drawing, offer, W's physical test and route-tested are all proven, but Terra's actual occupied body never reached the shipped standby (-40,51.05,8) and her minimum actual occupied clearance from the authored offered span was 0.927 units.",
+      "probe": "verifier/probes/handoff-standby-verifier/journey-probe.mjs",
+      "probeSha256": "c3fbc90bf2a4722be54655705498d6ec82f9c7915017fa8a482e942c15511fba",
+      "probeOrigin": "COPY of the run-local harness verifier/probes/cg-journey-probe.mjs (af35801e5e7a231ece902fc1d28f78ca8cde380a192bec329606362d70572c41); shared original untouched. Owned edits: relative lib paths for the new folder and an added PREVIEW-MANIFEST-MISMATCH refusal. No logic change.",
+      "harnessSelfTests": {
+        "cgJourney": "OK",
+        "cgHarnessSelftest": "25/25 passed",
+        "cgHarnessPrepSelftest": "41/41 passed"
+      },
+      "entryUrl": "http://127.0.0.1:38007/?story=ch13-survey&journeyprobe=1&debug=1&movie=1",
+      "fixtureNote": "?story=ch13-survey is a prerequisite DEEP LINK and movie=1 is a scripted-input rail. Not continuous earned history.",
+      "route": "LONG (the shipped movie rail drives CG_ROUTE_LONG via commonGroundDirector railWaypoint survey-long)",
+      "outcome": "REACHED-STOP-PREDICATE",
+      "stopReason": "reached-beat:ch13-common",
+      "stopElapsedMs": 42890,
+      "probeExitCode": 0,
+      "stallPredicate": {
+        "armed": true,
+        "windowMs": 20000,
+        "phases": [
+          "walk",
+          "interact",
+          "on-foot"
+        ],
+        "fired": null
+      },
+      "rescues": {
+        "teleportNudgesTotal": 0,
+        "nudges": 0,
+        "forcedClicks": 0,
+        "progressionGrants": 0
+      },
+      "anchorChain": [
+        {
+          "anchorId": "anc.cg.repeated-measure",
+          "elapsedMs": 4323,
+          "playerPos": [
+            6.836,
+            53.009,
+            -6
+          ],
+          "workerPos": [
+            -34,
+            51.05,
+            10
+          ]
+        },
+        {
+          "anchorId": "anc.cg.demonstration-opened",
+          "elapsedMs": 14616,
+          "workerPos": [
+            -34,
+            51.05,
+            10
+          ]
+        },
+        {
+          "anchorId": "anc.cg.survey-started",
+          "elapsedMs": 17450
+        },
+        {
+          "anchorId": "anc.cg.trace-drawn",
+          "elapsedMs": 25040
+        },
+        {
+          "anchorId": "anc.cg.route-offered",
+          "elapsedMs": 25713
+        },
+        {
+          "anchorId": "anc.cg.route-tested",
+          "elapsedMs": "present in the end-of-run activation history and cg diagnostic anchors list"
+        },
+        {
+          "anchorId": "anc.cg.reciprocal-reference",
+          "elapsedMs": "present in the end-of-run cg diagnostic anchors list"
+        }
+      ],
+      "realDrawingAndOffer": {
+        "drawn": true,
+        "drawnBetweenAnchors": [
+          "anc.cg.survey-started",
+          "anc.cg.trace-drawn"
+        ],
+        "drawnWallMs": 7590,
+        "offered": true,
+        "offerAnchor": "anc.cg.route-offered",
+        "offerInteraction": {
+          "interactionId": "story-ch13-offer-route",
+          "verb": "Offer to demonstrate a route",
+          "owner": "ch13-common-ground",
+          "source": "resolver-perform",
+          "performOutcome": "returned",
+          "promptOutcome": "cleared",
+          "clearingLatencyMs": 0
+        }
+      },
+      "wPhysicallyTestedTheSpan": {
+        "result": true,
+        "evidence": "survey.phase='tested', survey.acceptedSamples=42, survey.acceptedClass='fixed-reference', anc.cg.route-tested present; audit-worker walked 104.909 units over the run",
+        "workerWalkedPathUnits": 104.909
+      },
+      "routeTested": true,
+      "subsequentCommonProof": {
+        "beatReached": "ch13-common",
+        "objectiveEntered": "ch13:common:reciprocal",
+        "markerLabel": "Far reference \u00b7 check my route",
+        "health": "ready",
+        "commonProofCommitted": false,
+        "note": "Entering ch13-common is a transition observation only. The COMMON reciprocal proof itself is NOT proven \u2014 see the failing lane below."
+      },
+      "traversal": {
+        "playerWalkedPathUnits": 150.37,
+        "playerHorizontalUnits": 105.319,
+        "netDisplacementUnits": 68.164,
+        "largestSingleSampleJumpUnits": 54.771,
+        "largestJumpNote": "occurs at the first pose resolution after boot (pose source becomes available), not a teleport during play",
+        "auditWorkerWalkedPathUnits": 104.909
+      },
+      "standbyMeasurement": {
+        "shippedStandby": {
+          "desiredTarget": [
+            -40,
+            51.05,
+            8
+          ],
+          "arriveRadius": 0.6,
+          "railAction": "walk",
+          "reasonAtRouteOffered": "standing clear of the span he is testing",
+          "reasonAtCommonEntry": "standing clear while he takes the reference",
+          "issuedAtMs": {
+            "journey-survey-1": 25713,
+            "journey-common-1": 26009
+          },
+          "reissuedAtMs": {
+            "journey-common-1": 43196
+          },
+          "supersededByHoldAtMs": {
+            "journey-survey-1": 26451,
+            "journey-common-1": 26765,
+            "holdReason": "following his test"
+          }
+        },
+        "notTheStandby": {
+          "point": [
+            -42,
+            51.05,
+            12
+          ],
+          "whatItActuallyIs": "W-7744's E position and the ch13-common route goal (cursor 0 of the common span). It is the last waypoint of the demonstrated route, NOT Terra's standby. My 16:16Z draft misnamed it; corrected per root 16:18:15."
+        },
+        "supportedGroundBody": {
+          "supported": true,
+          "worldBound": true,
+          "groundOffsetUnits": 1.8,
+          "bodyCentreAtCommonEntry": [
+            -41.361,
+            52.789,
+            12.202
+          ],
+          "bodyPose": [
+            -41.349,
+            50.989,
+            12.202
+          ]
+        },
+        "controls": {
+          "spaceFlight.controlMode": "fps",
+          "spaceFlight.phase": "surface",
+          "autopilot.routeAction": "walk",
+          "input.keys": null,
+          "input.mode": null,
+          "note": "movie rail drives virtual controls; raw key state is not published on window in this build"
+        },
+        "navigationAction": "walk, then hold ('following his test'), then walk again at common entry",
+        "actualRoute": {
+          "authoredOfferedPolyline": {
+            "waypoints": [
+              [
+                -26,
+                51.05,
+                12.35
+              ],
+              [
+                -26,
+                51.05,
+                14.6
+              ],
+              [
+                -28.6,
+                51.05,
+                14
+              ],
+              [
+                -28,
+                51.05,
+                16.6
+              ],
+              [
+                -30.6,
+                51.05,
+                16
+              ],
+              [
+                -30,
+                51.05,
+                18.6
+              ],
+              [
+                -32.6,
+                51.05,
+                18
+              ],
+              [
+                -32,
+                51.05,
+                20
+              ],
+              [
+                -32,
+                51.05,
+                22.6
+              ],
+              [
+                -34,
+                51.05,
+                22
+              ],
+              [
+                -36,
+                51.05,
+                22
+              ],
+              [
+                -38,
+                51.05,
+                22
+              ],
+              [
+                -40,
+                51.05,
+                22
+              ],
+              [
+                -42.6,
+                51.05,
+                22
+              ],
+              [
+                -42,
+                51.05,
+                20
+              ],
+              [
+                -42,
+                51.05,
+                18
+              ],
+              [
+                -42,
+                51.05,
+                16
+              ],
+              [
+                -42,
+                51.05,
+                14
+              ],
+              [
+                -42,
+                51.05,
+                12
+              ]
+            ],
+            "waypointCount": 19,
+            "lengthUnits": 41.056,
+            "source": "the rail targets actually issued while reason='walking the demonstrated route', cursors 1..18, read from my own live trace"
+          }
+        },
+        "wPoseHold": {
+          "positionDuringTest": [
+            -42,
+            51.05,
+            12
+          ],
+          "atReciprocalReference": [
+            -40,
+            51.05,
+            12
+          ],
+          "leg": "position-to-h then holding-h",
+          "legLength": 2,
+          "routeTested": true
+        },
+        "clearanceMeasurements": {
+          "desiredTargetClearance": {
+            "value": 4.472,
+            "units": "horizontal",
+            "point": [
+              -40,
+              51.05,
+              8
+            ],
+            "against": "the authored offered polyline (19 waypoints)",
+            "status": "DESIRED-TARGET clearance only \u2014 explicitly NOT the commissioned occupied-body clearance"
+          },
+          "actualOccupiedBodyClearance": {
+            "window": "anc.cg.route-offered (26009 ms) -> anc.cg.reciprocal-reference (44242 ms), 61 samples, journey-common-1",
+            "minHorizontalUnits": 0.927,
+            "maxHorizontalUnits": 3.219,
+            "minAtMs": 26009,
+            "minAtBody": [
+              -41.073,
+              52.789,
+              11.987
+            ],
+            "minWhileRailReason": "standing clear of the span he is testing",
+            "against": "the authored offered polyline (19 waypoints)",
+            "status": "THIS is the commissioned actual occupied-body clearance figure",
+            "caveat": "centre-to-polyline horizontal distance from the live bodyCentre. The body radius/footprint is not published on the diagnostic, so this is not a body-surface clearance."
+          },
+          "standbyOccupancy": {
+            "everOccupied": false,
+            "closestApproachToStandbyTargetUnits": 1.482,
+            "closestApproachAtMs": 44242,
+            "closestApproachBody": [
+              -39.995,
+              52.79,
+              9.482
+            ],
+            "closestApproachNote": "and only after the next rail leg had already retargeted her to the common span",
+            "distanceDuringTheActualTestWindow": "4.107-4.129 units from (-40,51.05,8) for the whole 26009-43196 ms test window, body parked at ~(-41.07, 11.97)",
+            "arriveRadius": 0.6,
+            "finding": "Terra's ACTUAL OCCUPIED body never reached the shipped standby in either observed run. At t=26765 the rail superseded the walk with action='hold' (reason 'following his test') before arrival. Whether that supersession is authored is a SOURCE question this role did not and cannot settle; root reports a source audit underway."
+          },
+          "withdrawnDraftFigure": {
+            "value": 1.754,
+            "whyWithdrawn": "measured for (-42,51.05,12) \u2014 which is W's E position, not the standby \u2014 against a 250 ms-sampled draw that ended at anc.cg.trace-drawn and therefore excluded the last drawn/offer approach. It is neither the standby nor an occupied-body clearance."
+          },
+          "rejectedCandidatesAgainstTheAuthoredOfferedPolyline": [
+            {
+              "point": [
+                -42,
+                51.05,
+                20
+              ],
+              "minHorizontalUnits": 0.0,
+              "note": "lies exactly ON an authored offered waypoint"
+            },
+            {
+              "point": [
+                -42,
+                51.05,
+                22
+              ],
+              "minHorizontalUnits": 0.0,
+              "note": "lies exactly ON the authored offered span"
+            }
+          ],
+          "rejectedCandidateFinding": "Corroborated and now measured against the authored offered polyline rather than a sampled reconstruction: both producer-rejected candidates sit exactly ON the offered survey span (0.0 units), so choosing either would have blocked the span W tests."
+        }
+      },
+      "objectiveLifecycle": [
+        {
+          "objectiveId": "ch13:survey:offer",
+          "markerLabel": "W-7744 \u00b7 offer a route",
+          "health": "ready",
+          "workOrder": [
+            "Approach W-7744.",
+            "[F] Offer to demonstrate a route."
+          ],
+          "actionableVerbOrInput": "[F]",
+          "clearedWithAnchor": "anc.cg.demonstration-opened"
+        },
+        {
+          "objectiveId": "ch13:survey:start",
+          "markerLabel": "Survey start \u00b7 begin a route",
+          "health": "ready",
+          "workOrder": [
+            "Walk to the survey start.",
+            "[F] Begin recording your route."
+          ],
+          "actionableVerbOrInput": "[F]",
+          "clearedWithAnchor": "anc.cg.survey-started"
+        },
+        {
+          "objectiveId": "ch13:survey:draw",
+          "markerLabel": "Survey end \u00b7 demonstrate a route",
+          "health": "ready",
+          "workOrder": [
+            "Walk your route to the survey end.",
+            "[F] Offer the recorded span."
+          ],
+          "actionableVerbOrInput": "[F]",
+          "clearedWithAnchor": "anc.cg.trace-drawn"
+        },
+        {
+          "objectiveId": "ch13:survey:offer-span",
+          "markerLabel": "Trace end \u00b7 offer this span",
+          "health": "ready",
+          "workOrder": [
+            "[F] Offer the walked span for W-7744 to test."
+          ],
+          "actionableVerbOrInput": "[F]",
+          "clearedWithAnchor": "anc.cg.route-offered"
+        },
+        {
+          "objectiveId": "ch13:survey:test",
+          "markerLabel": "W-7744 \u00b7 offered route",
+          "health": "ready",
+          "workOrder": [
+            "W-7744 is preparing to test the offered route.",
+            "Keep his approach clear. Follow his progress, or return to the last tested point to revise."
+          ],
+          "actionableVerbOrInput": "keep clear / follow / return to revise",
+          "textChangedInPlaceTo": [
+            "W-7744 is testing the offered route.",
+            "Follow his progress, or return to the last tested point to revise."
+          ],
+          "clearedAtBeat": "ch13-common"
+        },
+        {
+          "objectiveId": "ch13:common:reciprocal",
+          "markerLabel": "Far reference \u00b7 check my route",
+          "health": "ready",
+          "workOrder": [
+            "W-7744 is taking up the reference position.",
+            "Give him room to reach it. When the guide appears, follow it from the survey end."
+          ],
+          "actionableVerbOrInput": "give room / follow the guide",
+          "clearedWithAnchor": null
+        }
+      ],
+      "entryFeedback": {
+        "objectiveEnterSfx": 5,
+        "markerAcquiredSfx": 5,
+        "distinctObjectivesEntered": 5,
+        "oneShotPerObjectiveId": true,
+        "note": "counts read from the shipped sfxTriggerCounts telemetry; this is a trigger-count observation and is NOT an audibility claim"
+      },
+      "pageErrors": [],
+      "artifacts": {
+        "captureDir": "verifier/captures/handoff-standby/journey-survey-1",
+        "summary": "verifier/captures/handoff-standby/journey-survey-1/summary.json",
+        "summarySha256": "70e862dfc70d7c91701a17b63fd97214a3f61fd8b75525103b3a60c01a1f32c7",
+        "trace": "verifier/captures/handoff-standby/journey-survey-1/trace.ndjson",
+        "traceSha256": "4dfd268928dbe205417efabfd382bf01e94d7047f20a6e5aebfae9d3cda1e823",
+        "console": "logs/handoff-standby-verifier/journey-survey-1-console.log",
+        "frames": 22
+      },
+      "cleanup": {
+        "sessionStopped": true,
+        "cleanupRequests": 1,
+        "sessionStopInvocations": 1,
+        "cleanupError": null,
+        "stopsRootPreview": false,
+        "killsProcesses": false
+      }
+    },
+    "movie_common_reciprocal": {
+      "status": "FAIL \u2014 reproducible physical navigation stall; COMMON reciprocal proof NOT reached",
+      "probe": "verifier/probes/handoff-standby-verifier/journey-probe.mjs",
+      "probeSha256": "c3fbc90bf2a4722be54655705498d6ec82f9c7915017fa8a482e942c15511fba",
+      "entryUrl": "http://127.0.0.1:38007/?story=ch13-survey&journeyprobe=1&debug=1&movie=1",
+      "continuityNote": "Both runs start at ch13-survey and walk INTO ch13-common in the same session \u2014 the COMMON leg was NOT deep-linked. The ch13-survey entry itself is still a prerequisite deep link, so this is not continuous earned full-story history.",
+      "stopPredicateRequested": "--until-anchor anc.cg.handback",
+      "runs": [
+        {
+          "id": "journey-common-1",
+          "probeExitCode": 3,
+          "outcome": "FAIL-STALL",
+          "stopReason": "stall-fail",
+          "stopElapsedMs": 66531,
+          "seconds": 330,
+          "anchorLedger": [
+            [
+              "anc.cg.repeated-measure",
+              4417
+            ],
+            [
+              "anc.cg.demonstration-opened",
+              14748
+            ],
+            [
+              "anc.cg.survey-started",
+              17617
+            ],
+            [
+              "anc.cg.trace-drawn",
+              25293
+            ],
+            [
+              "anc.cg.route-offered",
+              26009
+            ],
+            [
+              "anc.cg.revision-ready",
+              42686
+            ],
+            [
+              null,
+              43196
+            ],
+            [
+              "anc.cg.reciprocal-reference",
+              44242
+            ]
+          ],
+          "stallWindow": {
+            "windowMs": 20005,
+            "requiredWindowMs": 20000,
+            "phase": "walk",
+            "playerMovedUnitsInWindow": 0,
+            "actorMovedUnitsInWindow": 0,
+            "shipMovedUnitsInWindow": 0,
+            "windowOpenedBecause": "physical-progress-change",
+            "thresholds": {
+              "playerUnits": 0.75,
+              "actorUnits": 0.5,
+              "shipUnits": 1
+            }
+          },
+          "lastBodyMovementAtMs": 46794,
+          "frozenForMs": 19737,
+          "requestedGoal": {
+            "action": "walk",
+            "target": [
+              -44.6,
+              51.05,
+              16
+            ],
+            "arriveRadius": 0.35,
+            "railCursor": 3,
+            "reason": "walking the common span"
+          },
+          "actualBodyCentre": [
+            -43.8296,
+            52.7887,
+            15.9904
+          ],
+          "horizontalShortfallUnits": 0.7704,
+          "threeDShortfallUnits": 1.9018,
+          "supported": true,
+          "worldBound": true,
+          "groundOffsetUnits": 1.8,
+          "terraUnitsOfRequired18": 5.794761881748521,
+          "workerPoseHold": {
+            "position": [
+              -40,
+              51.05,
+              12
+            ],
+            "leg": "holding-h",
+            "held": false,
+            "travelled": 0,
+            "workerUnits": 0
+          },
+          "commonState": {
+            "stage": "holding-h",
+            "comparisonProved": false,
+            "finalReferenceOffered": false,
+            "finalReferenceOccupied": false,
+            "committed": false
+          },
+          "surveyState": {
+            "phase": "tested",
+            "acceptedSamples": 41,
+            "acceptedClass": "fixed-reference",
+            "witnessOffered": false,
+            "witnessOccupied": false
+          },
+          "holdReason": null,
+          "prompts": [],
+          "markerCount": 0,
+          "autopilot": {
+            "routeAction": "walk",
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          },
+          "objectiveHeld": {
+            "objectiveId": "ch13:common:reciprocal",
+            "markerLabel": "Far reference \u00b7 check my route",
+            "health": "ready",
+            "workOrder": [
+              "W-7744 is holding the reference.",
+              "Walk the guide line to check your route from this end."
+            ]
+          },
+          "railWaypointProgression": [
+            {
+              "atMs": 43196,
+              "cursor": 18,
+              "target": [
+                -40,
+                51.05,
+                8
+              ],
+              "arriveRadius": 0.6,
+              "body": [
+                -40.831,
+                52.789,
+                11.765
+              ]
+            },
+            {
+              "atMs": 44242,
+              "cursor": 0,
+              "target": [
+                -42,
+                51.05,
+                12
+              ],
+              "arriveRadius": 0.35,
+              "body": [
+                -39.995,
+                52.79,
+                9.482
+              ]
+            },
+            {
+              "atMs": 44969,
+              "cursor": 1,
+              "target": [
+                -42,
+                51.05,
+                14
+              ],
+              "arriveRadius": 0.35,
+              "body": [
+                -41.758,
+                52.789,
+                11.909
+              ]
+            },
+            {
+              "atMs": 45503,
+              "cursor": 2,
+              "target": [
+                -42,
+                51.05,
+                16.6
+              ],
+              "arriveRadius": 0.35,
+              "body": [
+                -41.666,
+                52.79,
+                14.404
+              ]
+            },
+            {
+              "atMs": 45989,
+              "cursor": 3,
+              "target": [
+                -44.6,
+                51.05,
+                16
+              ],
+              "arriveRadius": 0.35,
+              "body": [
+                -42.619,
+                52.789,
+                16.219
+              ],
+              "note": "cursor 3 is the last waypoint ever issued; it is never arrived at"
+            }
+          ],
+          "approachToBlockedWaypoint": [
+            [
+              45989,
+              1.9934
+            ],
+            [
+              46259,
+              0.7736
+            ],
+            [
+              48102,
+              0.7704
+            ],
+            [
+              52051,
+              0.7704
+            ],
+            [
+              60242,
+              0.7704
+            ],
+            [
+              66264,
+              0.7704
+            ]
+          ],
+          "artifacts": {
+            "captureDir": "verifier/captures/handoff-standby/journey-common-1",
+            "summarySha256": "6cb1916bb93b6e1a8c988a28ea0e505cf6c131232ead9e440344660740a8ab36",
+            "traceSha256": "3a3d536da5f7f0d5f43b89279e7937a45d0a6ab7b3a9a66a9a643e32808e5e11",
+            "console": "logs/handoff-standby-verifier/journey-common-1-console.log",
+            "frames": 27,
+            "stallFrame": "verifier/captures/handoff-standby/journey-common-1/0026-stall-fail.png"
+          },
+          "cleanup": {
+            "sessionStopped": true,
+            "cleanupRequests": 1,
+            "cleanupError": null,
+            "stopsRootPreview": false
+          }
+        },
+        {
+          "id": "journey-common-2",
+          "probeExitCode": 3,
+          "outcome": "FAIL-STALL",
+          "stopReason": "stall-fail",
+          "stopElapsedMs": 66964,
+          "seconds": 120,
+          "anchorLedger": [
+            [
+              "anc.cg.repeated-measure",
+              4839
+            ],
+            [
+              "anc.cg.demonstration-opened",
+              15330
+            ],
+            [
+              "anc.cg.survey-started",
+              17868
+            ],
+            [
+              "anc.cg.trace-drawn",
+              25752
+            ],
+            [
+              "anc.cg.route-offered",
+              26456
+            ],
+            [
+              null,
+              43471
+            ],
+            [
+              "anc.cg.reciprocal-reference",
+              44502
+            ]
+          ],
+          "stallWindow": {
+            "windowMs": 20206,
+            "requiredWindowMs": 20000,
+            "phase": "walk",
+            "playerMovedUnitsInWindow": 0.001
+          },
+          "requestedGoal": {
+            "action": "walk",
+            "target": [
+              -44.6,
+              51.05,
+              16
+            ],
+            "arriveRadius": 0.35,
+            "railCursor": 3,
+            "reason": "walking the common span"
+          },
+          "actualBodyCentre": [
+            -43.881,
+            52.7887,
+            15.9374
+          ],
+          "horizontalShortfallUnits": 0.7217,
+          "supported": true,
+          "worldBound": true,
+          "terraUnitsOfRequired18": 5.845336820616744,
+          "workerPoseHold": {
+            "position": [
+              -40,
+              51.05,
+              12
+            ],
+            "leg": "holding-h",
+            "held": false,
+            "workerUnits": 0
+          },
+          "commonState": {
+            "stage": "holding-h",
+            "comparisonProved": false,
+            "finalReferenceOffered": false,
+            "finalReferenceOccupied": false,
+            "committed": false
+          },
+          "holdReason": null,
+          "prompts": [],
+          "markerCount": 0,
+          "autopilot": {
+            "routeAction": "walk",
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          },
+          "artifacts": {
+            "captureDir": "verifier/captures/handoff-standby/journey-common-2",
+            "summarySha256": "a61e57b409eb7248ae5429e317644e9e8105197450e4f24e40b09c2eaf8975f6",
+            "traceSha256": "7c326076d6bd564aecd949e3f29753e474b1bd60d8fd4fd65f3a301925071e76",
+            "console": "logs/handoff-standby-verifier/journey-common-2-console.log",
+            "frames": 25
+          },
+          "cleanup": {
+            "sessionStopped": true,
+            "cleanupRequests": 1,
+            "cleanupError": null,
+            "stopsRootPreview": false
+          }
+        }
+      ],
+      "reproducibility": "2 of 2 runs. Same objective, same anchor (anc.cg.reciprocal-reference), same rail cursor 3, same requested goal (-44.6,51.05,16), body pinned at x=-43.83 / -43.88 (shortfall 0.7704 / 0.7217 against arriveRadius 0.35), Terra frozen for 19.7 / 20.2 s with zero nudges.",
+      "failureBoundary": {
+        "notAnAuthoredHold": "holdReason=null, prompts=[], markerCount=0, and the standing work order is an active instruction ('Walk the guide line to check your route from this end.'), not a wait. This is therefore counted as a physical stall, not the excluded 'actionable required reference hold'.",
+        "notShipTravel": "spaceFlight.phase=surface, controlMode=fps; the excluded moving-ship-travel case does not apply.",
+        "notARescueMasked": "teleportNudgesTotal=0 and nudges=0 in both runs; nothing rescued the stall, and the probe attempted no rescue.",
+        "unambiguousCause": "Measured, mechanism NOT proved: the COMMON rail's waypoint 3, requested goal (-44.6, 51.05, 16) with arriveRadius 0.35, is never arrived at \u2014 Terra's body stops hard at x~-43.83/-43.88 and never closes the remaining ~0.72-0.77 horizontal units, so the rail cursor never advances past 3. This role did not establish the collision/footing mechanism behind that stop.",
+        "visualCorroboration": "verifier/captures/handoff-standby/journey-common-1/0026-stall-fail.png shows the orange common guide line and a raised green terrain step immediately in front of the frozen viewpoint. This is a VISUAL INFERENCE only; no collision mechanism is proved by this role (root correction 2026-09-06T16:18:15)."
+      },
+      "assertionsRequestedByCommission": [
+        {
+          "assertion": "Terra's ordered 18-unit E-to-C common passage",
+          "result": "FAIL",
+          "measured": "common.terraUnits froze at 5.795 (run 1) / 5.845 (run 2) of the required 18; anc.cg.reciprocal-crossed never fired"
+        },
+        {
+          "assertion": "actual T F / occupancy at the far reference T (-44,51.05,12)",
+          "result": "NOT REACHED",
+          "measured": "finalReferenceOffered=false, finalReferenceOccupied=false, anc.cg.final-reference-offered never fired. No later F was pressed after the failed prerequisite."
+        },
+        {
+          "assertion": "W's full 18-unit reciprocal passage",
+          "result": "NOT REACHED",
+          "measured": "worker leg='holding-h', workerUnits=0, anc.cg.independent-test never fired"
+        },
+        {
+          "assertion": "final commit / anchors",
+          "result": "NOT REACHED",
+          "measured": "common.committed=false, comparisonProved=false; anc.cg.complete and anc.cg.handback never fired"
+        },
+        {
+          "assertion": "objective clear when reached",
+          "result": "NOT REACHED",
+          "measured": "ch13:common:reciprocal stayed health=ready and never cleared"
+        }
+      ],
+      "shortReferenceRoute": {
+        "attempted": false,
+        "status": "NOT EXERCISED (neither passed nor failed, and not shown to be unreachable)",
+        "reason": "The fixed shipped movie harness selected the LONG route in all three journey runs (witnessOffered=false, witnessOccupied=false), so the authored short-reference route was never exercised in this scope.",
+        "correction": "My 16:16Z draft said the short lane had 'no valid prerequisite' because COMMON is blocked. Per root 2026-09-06T16:18:15 that is wrong: the COMMON stall is DOWNSTREAM of the short survey and does not invalidate the short survey's prerequisites. The short route is simply unexercised here."
+      }
+    }
+  },
+  "limitations": [
+    "This report is NOT chapter acceptance, NOT defect closure and NOT publication authorization.",
+    "Every lane entered through a ?story= deep link plus a movie=1 scripted-input rail. No lane is continuous earned history and no zero-rescue FULL-STORY claim is made.",
+    "anc.cg.origin-landed was not read by the flight probe (instrumentation gap); only the story:ch13-origin-landed milestone and the beat transition are proven for the landing.",
+    "Occupied-body clearance is centre-to-polyline horizontal distance; the body radius/footprint is not published, so it is not a body-surface clearance.",
+    "Why the standby walk was superseded by a hold before arrival is a SOURCE question this role did not settle.",
+    "The collision/footing mechanism behind the COMMON waypoint-3 stop is NOT proved by this role; the raised terrain step is a visual inference.",
+    "No audibility or hearing claim is made; sfx figures are trigger counts from shipped telemetry.",
+    "No FPS measurement was taken in this scope.",
+    "Single desktop variant only; no mobile, reduced-motion or low-tier capture.",
+    "Only two COMMON runs and one flight run; this is not the three-cold-run requirement.",
+    "The short-reference route is unexercised \u2014 not failed and not shown unreachable.",
+    "My frame-level 'no visual defect' observation does not contradict or close root's CG-014 arrival guidance finding.",
+    "I make no generalization about earlier manual attempts; the producer reviews qualify those older reports."
+  ],
+  "remainingGates": [
+    "Manual COMMON corner recovery / CG-IMPL-009 signed ordered 18-unit E-to-C passage \u2014 still unmeasured by any role I ran.",
+    "Primary earned Continue.",
+    "Full-story and space-station continuity.",
+    "Three cold runs per beat.",
+    "Variant (mobile / reduced motion / lowest in-scope tier) and performance evidence.",
+    "Raw audiovisual evidence and independent creative reviews (story-canon, cinematography-continuity, score-continuity, player-experience, naive reader/viewer).",
+    "anc.cg.origin-landed AV-anchor confirmation for the landing.",
+    "The authored short-reference survey route."
+  ],
+  "visualDefects": [
+    {
+      "frame": "verifier/captures/handoff-standby/journey-common-1/0026-stall-fail.png",
+      "beat": "ch13-common",
+      "defect": "Player viewpoint frozen against a raised terrain step while the standing objective instructs 'Walk the guide line to check your route from this end.' \u2014 the guide line continues past the obstruction the body cannot pass. This is the visual face of the measured stall, not a separate rendering defect.",
+      "class": "stall (objective)"
+    },
+    {
+      "frame": "all captured frames across all four sessions",
+      "beat": "ch13-return/ch13-survey/ch13-common",
+      "defect": "none \u2014 no blank/black frame, no bootBlackFrameCandidate, no blankByStats, no wrong-era glimpse, no missing HUD element referenced by copy. pageErrors empty in all three journey runs.",
+      "class": "none"
+    }
+  ],
+  "exitCodes": {
+    "role": "see the invocation record; this role reports its own lane results separately from probe exits",
+    "probes": [
+      {
+        "probe": "flight-return-probe.mjs",
+        "run": "flight-1",
+        "exitCode": 0,
+        "meaning": "clean capture and clean cleanup; the inherited ERR_STREAM_WRITE_AFTER_END exit-1 defect is fixed in this copy"
+      },
+      {
+        "probe": "journey-probe.mjs",
+        "run": "journey-survey-1",
+        "exitCode": 0,
+        "meaning": "reached the requested stop predicate"
+      },
+      {
+        "probe": "journey-probe.mjs",
+        "run": "journey-common-1",
+        "exitCode": 3,
+        "meaning": "FAIL-STALL \u2014 a MEASURED GAME FAILURE, not a probe error"
+      },
+      {
+        "probe": "journey-probe.mjs",
+        "run": "journey-common-2",
+        "exitCode": 3,
+        "meaning": "FAIL-STALL \u2014 a MEASURED GAME FAILURE, not a probe error"
+      }
+    ],
+    "verifyCommandExitCode": 0
+  },
+  "cleanupReceipt": {
+    "browsersOpened": 4,
+    "browsersStopped": 4,
+    "abandonedBrowsers": 0,
+    "abandonedProbes": 0,
+    "receipts": [
+      "verifier/captures/handoff-standby/flight-1/run.json (cleanup)",
+      "verifier/captures/handoff-standby/journey-survey-1/cleanup-receipt.json",
+      "verifier/captures/handoff-standby/journey-common-1/cleanup-receipt.json",
+      "verifier/captures/handoff-standby/journey-common-2/cleanup-receipt.json"
+    ],
+    "postFinallyCheck": "pgrep for ms-playwright chrome after all runs found only shared crashpad handlers belonging to other sessions; no probe-owned browser survived.",
+    "serversStartedByThisRole": 0,
+    "serversStoppedByThisRole": 0,
+    "rootPreviewStillRunning": "http://127.0.0.1:38007/ (pid 1538455 listening) \u2014 untouched",
+    "heavyLockReleased": true,
+    "gameSourceEdits": 0,
+    "contractEdits": 0,
+    "gateEdits": 0,
+    "manifestEdits": 0,
+    "defectEdits": 0,
+    "sharedProbeEdits": 0,
+    "priorEvidenceOverwritten": 0
+  },
+  "correctionReceipt": {
+    "correctionRead": "verifier-inbox.md 2026-09-06T16:18:15.191139+00:00 \u2014 root report precision review",
+    "readAt": "2026-09-06T16:21:08.623681+00:00",
+    "appliedBeforeFinal": true,
+    "changes": [
+      "Draft standbyMeasurement wrongly named W's E position / the common route goal (-42,51.05,12) as Terra's survey standby. The shipped standby is the desired target (-40,51.05,8), arriveRadius 0.6, reason 'standing clear of the span he is testing'. Corrected.",
+      "Draft clearance 1.754 was E measured against a sampled draw ending at trace-drawn, excluding the last drawn/offer approach. It is withdrawn as the commissioned occupied-body clearance and replaced with an actual occupied-body measurement.",
+      "Short-reference route reworded: the fixed movie harness selected LONG so it was not exercised \u2014 NOT 'no valid prerequisite' and not impossible.",
+      "Raised terrain obstruction downgraded from an unambiguous cause to a visual inference; no collision mechanism is proved by this role.",
+      "Recorded that root's new CG-014 arrival guidance finding stands despite my generic 'no HUD defect' frame observation."
+    ],
+    "priorDraftNotPublished": "The superseded draft values existed only in the JSON/MD written at 16:16Z in this same role's own files; no other role's report was altered."
+  },
+  "externalFindingsNotContradicted": [
+    {
+      "finding": "Root's new CG-014 arrival guidance finding",
+      "note": "My frame observations record no blank/black/pop/missing-HUD defect. That is a generic screenshot-level statement about the frames I captured and it does NOT contradict or close CG-014, which stands."
+    }
+  ]
+}

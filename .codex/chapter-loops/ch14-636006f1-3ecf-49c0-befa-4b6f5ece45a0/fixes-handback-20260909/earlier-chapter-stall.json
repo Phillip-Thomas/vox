@@ -1,0 +1,31 @@
+{
+  "beat": "ch1-fixed",
+  "objective": "ch1:fixed:cross-camera-cell",
+  "samples": 1381,
+  "observedWallMs": 359990,
+  "first": 1788921073827,
+  "last": 1788921433817,
+  "finalAutopilot": {
+    "beat": "ch1-fixed",
+    "clock": 348.5,
+    "backstops": 0,
+    "teleportNudgesTotal": 0,
+    "pos": [
+      37,
+      54.74,
+      -6
+    ],
+    "controls": {
+      "forward": false,
+      "backward": false,
+      "left": false,
+      "right": true,
+      "jump": true,
+      "descend": false,
+      "sprint": false,
+      "delete": false,
+      "interact": false
+    },
+    "routeAction": "idle"
+  }
+}

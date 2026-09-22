@@ -21,6 +21,12 @@ const SIGNED_SOURCES = [
     sha256: '0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1',
     contractVersion: 'draft-v9',
     anchorCount: 10
+  },
+  {
+    contractPath: '../.codex/production-runs/2026-09-05-after-the-hearth/scene-contract.json',
+    sha256: '5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54',
+    contractVersion: 'scene-v3',
+    anchorCount: 28
   }
 ];
 const EXPECTED_ANCHOR_COUNT = SIGNED_SOURCES.reduce((total, entry) => total + entry.anchorCount, 0);

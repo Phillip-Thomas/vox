@@ -1,0 +1,1121 @@
+{
+  "generatedAt": "2026-09-05T10:55:45.354Z",
+  "rows": [
+    {
+      "name": "bed-sandbox-day",
+      "seconds": 210,
+      "before": {
+        "I": -20.48,
+        "Smax": -18.12,
+        "SmaxAtS": 131.1,
+        "TP": -9.37,
+        "LRA": 3.59,
+        "corr": 0.936,
+        "smooth": 0
+      },
+      "after": {
+        "I": -20.36,
+        "Smax": -17.9,
+        "SmaxAtS": 131.1,
+        "TP": -9.02,
+        "LRA": 3.71,
+        "corr": 0.936,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0.13,
+        "Smax": 0.21,
+        "TP": 0.35
+      }
+    },
+    {
+      "name": "bed-sandbox-night",
+      "seconds": 210,
+      "before": {
+        "I": -20.51,
+        "Smax": -18.25,
+        "SmaxAtS": 123.7,
+        "TP": -8.43,
+        "LRA": 3.26,
+        "corr": 0.943,
+        "smooth": 0
+      },
+      "after": {
+        "I": -20.39,
+        "Smax": -18.04,
+        "SmaxAtS": 123.7,
+        "TP": -8.03,
+        "LRA": 3.36,
+        "corr": 0.943,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0.12,
+        "Smax": 0.22,
+        "TP": 0.4
+      }
+    },
+    {
+      "name": "bed-contrast-A",
+      "seconds": 210,
+      "before": {
+        "I": -20.53,
+        "Smax": -16.88,
+        "SmaxAtS": 45,
+        "TP": -8.65,
+        "LRA": 3.67,
+        "corr": 0.929,
+        "smooth": 0
+      },
+      "after": {
+        "I": -20.39,
+        "Smax": -16.59,
+        "SmaxAtS": 45,
+        "TP": -8.22,
+        "LRA": 3.77,
+        "corr": 0.929,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0.14,
+        "Smax": 0.29,
+        "TP": 0.42
+      }
+    },
+    {
+      "name": "bed-contrast-B",
+      "seconds": 210,
+      "before": {
+        "I": -21.07,
+        "Smax": -18.94,
+        "SmaxAtS": 169.6,
+        "TP": -9.47,
+        "LRA": 5.13,
+        "corr": 0.944,
+        "smooth": 0
+      },
+      "after": {
+        "I": -20.96,
+        "Smax": -18.79,
+        "SmaxAtS": 169.7,
+        "TP": -9.13,
+        "LRA": 5.27,
+        "corr": 0.944,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0.11,
+        "Smax": 0.15,
+        "TP": 0.34
+      }
+    },
+    {
+      "name": "story-beat",
+      "seconds": 90,
+      "before": {
+        "I": -20.18,
+        "Smax": -18.28,
+        "SmaxAtS": 53.6,
+        "TP": -9.64,
+        "LRA": 2.4,
+        "corr": 0.875,
+        "smooth": 0
+      },
+      "after": {
+        "I": -20.09,
+        "Smax": -18.12,
+        "SmaxAtS": 53.6,
+        "TP": -9.31,
+        "LRA": 2.49,
+        "corr": 0.875,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0.08,
+        "Smax": 0.16,
+        "TP": 0.32
+      }
+    },
+    {
+      "name": "era-transition",
+      "seconds": 120,
+      "before": {
+        "I": -22.58,
+        "Smax": -18.94,
+        "SmaxAtS": 117,
+        "TP": -9.03,
+        "LRA": 15.18,
+        "corr": 0.958,
+        "smooth": 12
+      },
+      "after": {
+        "I": -22.45,
+        "Smax": -18.78,
+        "SmaxAtS": 117,
+        "TP": -8.66,
+        "LRA": 15.35,
+        "corr": 0.958,
+        "smooth": 11
+      },
+      "delta": {
+        "I": 0.13,
+        "Smax": 0.16,
+        "TP": 0.37
+      }
+    },
+    {
+      "name": "bare-bed",
+      "seconds": 48,
+      "before": {
+        "I": -34.53,
+        "Smax": -34.17,
+        "SmaxAtS": 7.1,
+        "TP": -25.17,
+        "LRA": 0.46,
+        "corr": 1,
+        "smooth": 54
+      },
+      "after": {
+        "I": -34.54,
+        "Smax": -34.18,
+        "SmaxAtS": 7.1,
+        "TP": -25.17,
+        "LRA": 0.45,
+        "corr": 1,
+        "smooth": 54
+      },
+      "delta": {
+        "I": -0.01,
+        "Smax": -0.01,
+        "TP": -0.01
+      }
+    },
+    {
+      "name": "bare-story-ch1-fixed",
+      "seconds": 60,
+      "before": {
+        "I": -35.95,
+        "Smax": -34.17,
+        "SmaxAtS": 7.1,
+        "TP": -25.3,
+        "LRA": 16.57,
+        "corr": 1,
+        "smooth": 54
+      },
+      "after": {
+        "I": -35.93,
+        "Smax": -34.18,
+        "SmaxAtS": 7.1,
+        "TP": -25.31,
+        "LRA": 16.57,
+        "corr": 1,
+        "smooth": 56
+      },
+      "delta": {
+        "I": 0.02,
+        "Smax": -0.01,
+        "TP": -0.01
+      }
+    },
+    {
+      "name": "color-bed",
+      "seconds": 48,
+      "before": {
+        "I": -27.28,
+        "Smax": -26.58,
+        "SmaxAtS": 7.2,
+        "TP": -19.21,
+        "LRA": 1.44,
+        "corr": 1,
+        "smooth": 0
+      },
+      "after": {
+        "I": -27.28,
+        "Smax": -26.59,
+        "SmaxAtS": 7.2,
+        "TP": -19.22,
+        "LRA": 1.43,
+        "corr": 1,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0,
+        "Smax": -0.01,
+        "TP": -0.01
+      }
+    },
+    {
+      "name": "bed-check",
+      "seconds": 90,
+      "before": {
+        "I": -20.41,
+        "Smax": -18.75,
+        "SmaxAtS": 16,
+        "TP": -9.15,
+        "LRA": 3.26,
+        "corr": 0.922,
+        "smooth": 0
+      },
+      "after": {
+        "I": -20.29,
+        "Smax": -18.59,
+        "SmaxAtS": 16,
+        "TP": -8.79,
+        "LRA": 3.32,
+        "corr": 0.922,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0.12,
+        "Smax": 0.16,
+        "TP": 0.36
+      }
+    },
+    {
+      "name": "combined-check",
+      "seconds": 90,
+      "before": {
+        "I": -20.4,
+        "Smax": -18.75,
+        "SmaxAtS": 16,
+        "TP": -9.15,
+        "LRA": 3.26,
+        "corr": 0.922,
+        "smooth": 0
+      },
+      "after": {
+        "I": -20.37,
+        "Smax": -18.58,
+        "SmaxAtS": 16,
+        "TP": -8.79,
+        "LRA": 3.44,
+        "corr": 0.922,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0.03,
+        "Smax": 0.16,
+        "TP": 0.36
+      }
+    },
+    {
+      "name": "stress-shipcrash-bloom",
+      "seconds": 210,
+      "before": {
+        "I": -20.48,
+        "Smax": -18.11,
+        "SmaxAtS": 131.1,
+        "TP": -9.37,
+        "LRA": 3.59,
+        "corr": 0.936,
+        "smooth": 0
+      },
+      "after": {
+        "I": -20.39,
+        "Smax": -18.08,
+        "SmaxAtS": 145,
+        "TP": -9.02,
+        "LRA": 3.64,
+        "corr": 0.936,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0.1,
+        "Smax": 0.03,
+        "TP": 0.35
+      }
+    },
+    {
+      "name": "stress-mining-burst",
+      "seconds": 60,
+      "before": {
+        "I": -20.57,
+        "Smax": -19,
+        "SmaxAtS": 7.2,
+        "TP": -4.86,
+        "LRA": 3.31,
+        "corr": 0.935,
+        "smooth": 2
+      },
+      "after": {
+        "I": -20.45,
+        "Smax": -18.85,
+        "SmaxAtS": 7.3,
+        "TP": -4.92,
+        "LRA": 3.39,
+        "corr": 0.935,
+        "smooth": 2
+      },
+      "delta": {
+        "I": 0.11,
+        "Smax": 0.15,
+        "TP": -0.06
+      }
+    },
+    {
+      "name": "stress-oxygen-dive",
+      "seconds": 60,
+      "before": {
+        "I": -21.45,
+        "Smax": -19.05,
+        "SmaxAtS": 6.7,
+        "TP": -9.23,
+        "LRA": 2.84,
+        "corr": 0.86,
+        "smooth": 9
+      },
+      "after": {
+        "I": -21.69,
+        "Smax": -18.92,
+        "SmaxAtS": 6.8,
+        "TP": -8.86,
+        "LRA": 4.52,
+        "corr": 0.863,
+        "smooth": 10
+      },
+      "delta": {
+        "I": -0.24,
+        "Smax": 0.14,
+        "TP": 0.38
+      }
+    },
+    {
+      "name": "stress-terminal-storylead",
+      "seconds": 60,
+      "before": {
+        "I": -20.39,
+        "Smax": -19.01,
+        "SmaxAtS": 7.1,
+        "TP": -9.81,
+        "LRA": 2.49,
+        "corr": 0.899,
+        "smooth": 0
+      },
+      "after": {
+        "I": -20.38,
+        "Smax": -18.87,
+        "SmaxAtS": 7.2,
+        "TP": -9.49,
+        "LRA": 2.5,
+        "corr": 0.899,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0,
+        "Smax": 0.14,
+        "TP": 0.32
+      }
+    },
+    {
+      "name": "stress-jetpack-splash",
+      "seconds": 60,
+      "before": {
+        "I": -20.74,
+        "Smax": -18.99,
+        "SmaxAtS": 7.2,
+        "TP": -9.8,
+        "LRA": 3.05,
+        "corr": 0.924,
+        "smooth": 1
+      },
+      "after": {
+        "I": -20.67,
+        "Smax": -18.84,
+        "SmaxAtS": 7.3,
+        "TP": -9.53,
+        "LRA": 3.16,
+        "corr": 0.925,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0.07,
+        "Smax": 0.15,
+        "TP": 0.28
+      }
+    },
+    {
+      "name": "floor-ch4-defy",
+      "seconds": 60,
+      "before": {
+        "I": -33.1,
+        "Smax": -32.88,
+        "SmaxAtS": 37.9,
+        "TP": -24.01,
+        "LRA": 0.18,
+        "corr": 0.975,
+        "smooth": 0
+      },
+      "after": {
+        "I": -33.11,
+        "Smax": -32.88,
+        "SmaxAtS": 37.9,
+        "TP": -24.02,
+        "LRA": 0.18,
+        "corr": 0.975,
+        "smooth": 0
+      },
+      "delta": {
+        "I": -0.01,
+        "Smax": 0,
+        "TP": -0.01
+      }
+    },
+    {
+      "name": "floor-refused",
+      "seconds": 60,
+      "before": {
+        "I": -26.93,
+        "Smax": -26.69,
+        "SmaxAtS": 7.1,
+        "TP": -14.97,
+        "LRA": 0.2,
+        "corr": 0.893,
+        "smooth": 0
+      },
+      "after": {
+        "I": -26.94,
+        "Smax": -26.71,
+        "SmaxAtS": 7.1,
+        "TP": -14.94,
+        "LRA": 0.2,
+        "corr": 0.893,
+        "smooth": 0
+      },
+      "delta": {
+        "I": -0.01,
+        "Smax": -0.01,
+        "TP": 0.02
+      }
+    },
+    {
+      "name": "floor-seam-ebb",
+      "seconds": 60,
+      "before": {
+        "I": -23.2,
+        "Smax": -22.88,
+        "SmaxAtS": 53.6,
+        "TP": -12.49,
+        "LRA": 0.31,
+        "corr": 0.906,
+        "smooth": 0
+      },
+      "after": {
+        "I": -23.19,
+        "Smax": -22.87,
+        "SmaxAtS": 53.6,
+        "TP": -12.38,
+        "LRA": 0.32,
+        "corr": 0.906,
+        "smooth": 0
+      },
+      "delta": {
+        "I": 0.01,
+        "Smax": 0.01,
+        "TP": 0.11
+      }
+    }
+  ],
+  "preTail": {
+    "bare-bed": {
+      "fingerprintIdentical": true,
+      "identicalBytes": false,
+      "maxInt16Delta": 1,
+      "maxDeltaDbfs": -90.31,
+      "differingSamples": 4,
+      "lengthMismatch": false
+    },
+    "bare-story-ch1-fixed": {
+      "fingerprintIdentical": true,
+      "identicalBytes": false,
+      "maxInt16Delta": 1,
+      "maxDeltaDbfs": -90.31,
+      "differingSamples": 4,
+      "lengthMismatch": false
+    },
+    "color-bed": {
+      "fingerprintIdentical": true,
+      "identicalBytes": false,
+      "maxInt16Delta": 1,
+      "maxDeltaDbfs": -90.31,
+      "differingSamples": 122,
+      "lengthMismatch": false
+    },
+    "floor-ch4-defy": {
+      "fingerprintIdentical": true,
+      "identicalBytes": false,
+      "maxInt16Delta": 1,
+      "maxDeltaDbfs": -90.31,
+      "differingSamples": 384,
+      "lengthMismatch": false
+    },
+    "floor-refused": {
+      "fingerprintIdentical": true,
+      "identicalBytes": false,
+      "maxInt16Delta": 1,
+      "maxDeltaDbfs": -90.31,
+      "differingSamples": 567,
+      "lengthMismatch": false
+    },
+    "floor-seam-ebb": {
+      "fingerprintIdentical": true,
+      "identicalBytes": false,
+      "maxInt16Delta": 1,
+      "maxDeltaDbfs": -90.31,
+      "differingSamples": 1270,
+      "lengthMismatch": false
+    }
+  },
+  "throughTail": {
+    "bare-bed": {
+      "deltaI": -0.008,
+      "deltaTp": -0.007,
+      "maxShortTermDeltaLu": 0.05,
+      "maxShortTermDeltaAtS": 28,
+      "windows": 46
+    },
+    "bare-story-ch1-fixed": {
+      "deltaI": 0.016,
+      "deltaTp": -0.007,
+      "maxShortTermDeltaLu": 0.09,
+      "maxShortTermDeltaAtS": 26,
+      "windows": 58
+    },
+    "color-bed": {
+      "deltaI": 0,
+      "deltaTp": -0.007,
+      "maxShortTermDeltaLu": 0.04,
+      "maxShortTermDeltaAtS": 0,
+      "windows": 46
+    }
+  },
+  "ducks": {
+    "shipCrash": {
+      "source": "shipImpact",
+      "expectedDb": -6,
+      "minDb": -6,
+      "minAtS": 0.05,
+      "minAtOnsetRelS": 0.04,
+      "dbAtAttack": -4.15,
+      "reachedAtS": 0.045,
+      "reachedAtOnsetRelS": 0.035,
+      "recoveredAtS": 0.85,
+      "recoveredAtOnsetRelS": 0.84,
+      "postJoinLatencyS": 0.010340136054421769
+    },
+    "terminalCorrupt": {
+      "source": "terminalAlarm",
+      "expectedDb": -4,
+      "minDb": -4,
+      "minAtS": 0.045,
+      "minAtOnsetRelS": 0.035,
+      "dbAtAttack": -2.71,
+      "reachedAtS": 0.035,
+      "reachedAtOnsetRelS": 0.025,
+      "recoveredAtS": 0.68,
+      "recoveredAtOnsetRelS": 0.67,
+      "postJoinLatencyS": 0.010340136054421769
+    },
+    "shipLand": {
+      "source": "shipImpact",
+      "expectedDb": -6,
+      "minDb": -6,
+      "minAtS": 0.05,
+      "minAtOnsetRelS": 0.04,
+      "dbAtAttack": -4.15,
+      "reachedAtS": 0.045,
+      "reachedAtOnsetRelS": 0.035,
+      "recoveredAtS": 0.85,
+      "recoveredAtOnsetRelS": 0.84,
+      "postJoinLatencyS": 0.010340136054421769
+    },
+    "terminalAlarm": {
+      "source": "terminalAlarm",
+      "expectedDb": -4,
+      "minDb": -4,
+      "minAtS": 0.045,
+      "minAtOnsetRelS": 0.035,
+      "dbAtAttack": -2.71,
+      "reachedAtS": 0.035,
+      "reachedAtOnsetRelS": 0.025,
+      "recoveredAtS": 0.68,
+      "recoveredAtOnsetRelS": 0.67,
+      "postJoinLatencyS": 0.010340136054421769
+    },
+    "shipCrash@story-lead": {
+      "source": "shipImpact",
+      "expectedDb": -3,
+      "minDb": -3,
+      "minAtS": 0.05,
+      "minAtOnsetRelS": 0.04,
+      "dbAtAttack": -2.29,
+      "reachedAtS": 0.04,
+      "reachedAtOnsetRelS": 0.03,
+      "recoveredAtS": 0.71,
+      "recoveredAtOnsetRelS": 0.7,
+      "postJoinLatencyS": 0.010340136054421769
+    },
+    "terminalCorrupt@story-lead": {
+      "source": "terminalAlarm",
+      "expectedDb": -3,
+      "minDb": -3,
+      "minAtS": 0.04,
+      "minAtOnsetRelS": 0.03,
+      "dbAtAttack": -2.07,
+      "reachedAtS": 0.03,
+      "reachedAtOnsetRelS": 0.02,
+      "recoveredAtS": 0.63,
+      "recoveredAtOnsetRelS": 0.62,
+      "postJoinLatencyS": 0.010340136054421769
+    }
+  },
+  "tailStageGains": {
+    "legacySafety": {
+      "stage": "legacySafety",
+      "bakedGainDb": 1.9929344313197435,
+      "trimmedGainDb": 0.002934431319743469,
+      "detail": "pre-Stage-2 tail vs pre-tail tap (glue is unity); trimmed = minus TAIL_REFERENCE_GAIN_DB (must be ~0)"
+    },
+    "safety": {
+      "stage": "safety",
+      "bakedGainDb": 2.905442424846792,
+      "trimmedGainDb": -0.004557566125307447,
+      "detail": "safety compressor alone vs bypassed; trimmed = with SAFETY_MAKEUP_COMP_DB (reference gain bypassed)"
+    },
+    "limiter": {
+      "stage": "limiter",
+      "bakedGainDb": 0.5698759868432013,
+      "trimmedGainDb": -0.00012451082147719417,
+      "detail": "limiter compressor alone vs bypassed (SFX path); trimmed incl. ceiling; trim-only -0.0001 dB"
+    },
+    "tail": {
+      "stage": "tail",
+      "bakedGainDb": 1.9855321514183024,
+      "trimmedGainDb": -0.007402279901439886,
+      "detail": "whole shipped tail vs pre-tail tap (bakedGainDb = TAIL_REFERENCE_GAIN_DB expected); trimmed = shipped vs pre-Stage-2 tail (must be within 0.1 dB)"
+    }
+  },
+  "tailLatency": {
+    "music": {
+      "latencyS": 0.025215419501133787,
+      "latencySamples": 1112,
+      "peak": 0.03908189386129379,
+      "sampleRate": 44100
+    },
+    "sfx": {
+      "latencyS": 0.010340136054421769,
+      "latencySamples": 456,
+      "peak": 0.04959714412689209,
+      "sampleRate": 44100
+    }
+  },
+  "ceiling": {
+    "0": {
+      "inputDbfs": 0,
+      "truePeakDbtp": -1.8715284795159182,
+      "samplePeakDbfs": -1.878430402034565
+    },
+    "6": {
+      "inputDbfs": 6,
+      "truePeakDbtp": -1.6151486082152309,
+      "samplePeakDbfs": -1.620478256249507
+    },
+    "12": {
+      "inputDbfs": 12,
+      "truePeakDbtp": -1.5806838766799256,
+      "samplePeakDbfs": -1.5834188710886699
+    },
+    "-6": {
+      "inputDbfs": -6,
+      "truePeakDbtp": -6.031682032666553,
+      "samplePeakDbfs": -6.031682032666553
+    }
+  },
+  "terms": [
+    {
+      "id": "stress.tp.stress-shipcrash-bloom",
+      "name": "stress-shipcrash-bloom true peak",
+      "pass": true,
+      "measured": "-9.02 dBTP",
+      "required": "<= -1 dBTP"
+    },
+    {
+      "id": "stress.lufs.stress-shipcrash-bloom",
+      "name": "stress-shipcrash-bloom integrated",
+      "pass": false,
+      "measured": "-20.39 LUFS",
+      "required": "-18 ±1.5 LU (see README deviation: bed alone is contracted at -20.5)"
+    },
+    {
+      "id": "stress.tp.stress-mining-burst",
+      "name": "stress-mining-burst true peak",
+      "pass": true,
+      "measured": "-4.92 dBTP",
+      "required": "<= -1 dBTP"
+    },
+    {
+      "id": "stress.lufs.stress-mining-burst",
+      "name": "stress-mining-burst integrated",
+      "pass": false,
+      "measured": "-20.45 LUFS",
+      "required": "-18 ±1.5 LU (see README deviation: bed alone is contracted at -20.5)"
+    },
+    {
+      "id": "stress.tp.stress-oxygen-dive",
+      "name": "stress-oxygen-dive true peak",
+      "pass": true,
+      "measured": "-8.86 dBTP",
+      "required": "<= -1 dBTP"
+    },
+    {
+      "id": "stress.lufs.stress-oxygen-dive",
+      "name": "stress-oxygen-dive integrated",
+      "pass": false,
+      "measured": "-21.69 LUFS",
+      "required": "-18 ±1.5 LU (see README deviation: bed alone is contracted at -20.5)"
+    },
+    {
+      "id": "stress.tp.stress-terminal-storylead",
+      "name": "stress-terminal-storylead true peak",
+      "pass": true,
+      "measured": "-9.49 dBTP",
+      "required": "<= -1 dBTP"
+    },
+    {
+      "id": "stress.lufs.stress-terminal-storylead",
+      "name": "stress-terminal-storylead integrated",
+      "pass": false,
+      "measured": "-20.38 LUFS",
+      "required": "-18 ±1.5 LU (see README deviation: bed alone is contracted at -20.5)"
+    },
+    {
+      "id": "stress.tp.stress-jetpack-splash",
+      "name": "stress-jetpack-splash true peak",
+      "pass": true,
+      "measured": "-9.53 dBTP",
+      "required": "<= -1 dBTP"
+    },
+    {
+      "id": "stress.lufs.stress-jetpack-splash",
+      "name": "stress-jetpack-splash integrated",
+      "pass": false,
+      "measured": "-20.67 LUFS",
+      "required": "-18 ±1.5 LU (see README deviation: bed alone is contracted at -20.5)"
+    },
+    {
+      "id": "bloom.smax.bed-sandbox-day",
+      "name": "bed-sandbox-day BLOOM short-term max",
+      "pass": false,
+      "measured": "-17.9 LUFS at 131.1s",
+      "required": "-14 ±1 LU"
+    },
+    {
+      "id": "bloom.smax.stress-shipcrash-bloom",
+      "name": "stress-shipcrash-bloom BLOOM short-term max",
+      "pass": false,
+      "measured": "-18.08 LUFS at 145s",
+      "required": "-14 ±1 LU"
+    },
+    {
+      "id": "bed.alive.bed-sandbox-day",
+      "name": "bed-sandbox-day bed alone integrated",
+      "pass": true,
+      "measured": "-20.36 LUFS",
+      "required": "-20.5 ±1 LU"
+    },
+    {
+      "id": "bed.alive.bed-sandbox-night",
+      "name": "bed-sandbox-night bed alone integrated",
+      "pass": true,
+      "measured": "-20.39 LUFS",
+      "required": "-20.5 ±1 LU"
+    },
+    {
+      "id": "bed.alive.bed-contrast-A",
+      "name": "bed-contrast-A bed alone integrated",
+      "pass": true,
+      "measured": "-20.39 LUFS",
+      "required": "-20.5 ±1 LU"
+    },
+    {
+      "id": "bed.alive.bed-contrast-B",
+      "name": "bed-contrast-B bed alone integrated",
+      "pass": true,
+      "measured": "-20.96 LUFS",
+      "required": "-20.5 ±1 LU"
+    },
+    {
+      "id": "rebaseline.pretail.bare-bed",
+      "name": "bare-bed pre-tail tap identical",
+      "pass": true,
+      "measured": "fingerprint identical, max |Δ| 1 LSB (-90.31 dBFS)",
+      "required": "fingerprint identical and <= 2 LSB"
+    },
+    {
+      "id": "rebaseline.pretail.bare-story-ch1-fixed",
+      "name": "bare-story-ch1-fixed pre-tail tap identical",
+      "pass": true,
+      "measured": "fingerprint identical, max |Δ| 1 LSB (-90.31 dBFS)",
+      "required": "fingerprint identical and <= 2 LSB"
+    },
+    {
+      "id": "rebaseline.pretail.color-bed",
+      "name": "color-bed pre-tail tap identical",
+      "pass": true,
+      "measured": "fingerprint identical, max |Δ| 1 LSB (-90.31 dBFS)",
+      "required": "fingerprint identical and <= 2 LSB"
+    },
+    {
+      "id": "rebaseline.tail.I.bare-bed",
+      "name": "bare-bed through-tail integrated",
+      "pass": true,
+      "measured": "Δ -0.008 LU",
+      "required": "within 0.3 LU"
+    },
+    {
+      "id": "rebaseline.tail.S.bare-bed",
+      "name": "bare-bed through-tail short-term (every 3 s window)",
+      "pass": true,
+      "measured": "max Δ 0.05 LU at 28s over 46 windows",
+      "required": "within 1 LU"
+    },
+    {
+      "id": "rebaseline.tail.TP.bare-bed",
+      "name": "bare-bed through-tail true peak",
+      "pass": true,
+      "measured": "Δ -0.007 dB",
+      "required": "within 0.5 dB"
+    },
+    {
+      "id": "rebaseline.tail.I.bare-story-ch1-fixed",
+      "name": "bare-story-ch1-fixed through-tail integrated",
+      "pass": true,
+      "measured": "Δ 0.016 LU",
+      "required": "within 0.3 LU"
+    },
+    {
+      "id": "rebaseline.tail.S.bare-story-ch1-fixed",
+      "name": "bare-story-ch1-fixed through-tail short-term (every 3 s window)",
+      "pass": true,
+      "measured": "max Δ 0.09 LU at 26s over 58 windows",
+      "required": "within 1 LU"
+    },
+    {
+      "id": "rebaseline.tail.TP.bare-story-ch1-fixed",
+      "name": "bare-story-ch1-fixed through-tail true peak",
+      "pass": true,
+      "measured": "Δ -0.007 dB",
+      "required": "within 0.5 dB"
+    },
+    {
+      "id": "rebaseline.tail.I.color-bed",
+      "name": "color-bed through-tail integrated",
+      "pass": true,
+      "measured": "Δ 0 LU",
+      "required": "within 0.3 LU"
+    },
+    {
+      "id": "rebaseline.tail.S.color-bed",
+      "name": "color-bed through-tail short-term (every 3 s window)",
+      "pass": true,
+      "measured": "max Δ 0.04 LU at 0s over 46 windows",
+      "required": "within 1 LU"
+    },
+    {
+      "id": "rebaseline.tail.TP.color-bed",
+      "name": "color-bed through-tail true peak",
+      "pass": true,
+      "measured": "Δ -0.007 dB",
+      "required": "within 0.5 dB"
+    },
+    {
+      "id": "floor.I.floor-ch4-defy",
+      "name": "floor-ch4-defy integrated old vs new tail",
+      "pass": true,
+      "measured": "Δ -0.008 LU (-33.1 → -33.11)",
+      "required": "within 0.25 LU"
+    },
+    {
+      "id": "floor.S.floor-ch4-defy",
+      "name": "floor-ch4-defy short-term after <= before + 0.5",
+      "pass": true,
+      "measured": "-32.88 → -32.88",
+      "required": "after <= before + 0.5 LU"
+    },
+    {
+      "id": "floor.I.floor-refused",
+      "name": "floor-refused integrated old vs new tail",
+      "pass": true,
+      "measured": "Δ -0.008 LU (-26.93 → -26.94)",
+      "required": "within 0.25 LU"
+    },
+    {
+      "id": "floor.S.floor-refused",
+      "name": "floor-refused short-term after <= before + 0.5",
+      "pass": true,
+      "measured": "-26.69 → -26.71",
+      "required": "after <= before + 0.5 LU"
+    },
+    {
+      "id": "floor.I.floor-seam-ebb",
+      "name": "floor-seam-ebb integrated old vs new tail",
+      "pass": true,
+      "measured": "Δ 0.01 LU (-23.2 → -23.19)",
+      "required": "within 0.25 LU"
+    },
+    {
+      "id": "floor.S.floor-seam-ebb",
+      "name": "floor-seam-ebb short-term after <= before + 0.5",
+      "pass": true,
+      "measured": "-22.88 → -22.87",
+      "required": "after <= before + 0.5 LU"
+    },
+    {
+      "id": "duck.depth.shipCrash",
+      "name": "shipCrash music duck depth",
+      "pass": true,
+      "measured": "-6 dB (min at +0.04s after the audible onset; +0.05s raw)",
+      "required": "-6 ±1 dB"
+    },
+    {
+      "id": "duck.attack.shipCrash",
+      "name": "shipCrash music duck reaches depth",
+      "pass": true,
+      "measured": "within 1 dB of depth at +0.035s after onset (raw +0.045s)",
+      "required": "<= 0.04 s"
+    },
+    {
+      "id": "duck.depth.terminalCorrupt",
+      "name": "terminalCorrupt music duck depth",
+      "pass": true,
+      "measured": "-4 dB (min at +0.035s after the audible onset; +0.045s raw)",
+      "required": "-4 ±1 dB"
+    },
+    {
+      "id": "duck.attack.terminalCorrupt",
+      "name": "terminalCorrupt music duck reaches depth",
+      "pass": true,
+      "measured": "within 1 dB of depth at +0.025s after onset (raw +0.035s)",
+      "required": "<= 0.03 s"
+    },
+    {
+      "id": "duck.depth.shipLand",
+      "name": "shipLand music duck depth",
+      "pass": true,
+      "measured": "-6 dB (min at +0.04s after the audible onset; +0.05s raw)",
+      "required": "-6 ±1 dB"
+    },
+    {
+      "id": "duck.attack.shipLand",
+      "name": "shipLand music duck reaches depth",
+      "pass": true,
+      "measured": "within 1 dB of depth at +0.035s after onset (raw +0.045s)",
+      "required": "<= 0.04 s"
+    },
+    {
+      "id": "duck.depth.terminalAlarm",
+      "name": "terminalAlarm music duck depth",
+      "pass": true,
+      "measured": "-4 dB (min at +0.035s after the audible onset; +0.045s raw)",
+      "required": "-4 ±1 dB"
+    },
+    {
+      "id": "duck.attack.terminalAlarm",
+      "name": "terminalAlarm music duck reaches depth",
+      "pass": true,
+      "measured": "within 1 dB of depth at +0.025s after onset (raw +0.035s)",
+      "required": "<= 0.03 s"
+    },
+    {
+      "id": "duck.depth.shipCrash@story-lead",
+      "name": "shipCrash@story-lead music duck depth",
+      "pass": true,
+      "measured": "-3 dB (min at +0.04s after the audible onset; +0.05s raw)",
+      "required": "-3 ±1 dB (story-lead cap)"
+    },
+    {
+      "id": "duck.attack.shipCrash@story-lead",
+      "name": "shipCrash@story-lead music duck reaches depth",
+      "pass": true,
+      "measured": "within 1 dB of depth at +0.03s after onset (raw +0.04s)",
+      "required": "<= 0.04 s"
+    },
+    {
+      "id": "duck.cap.shipCrash@story-lead",
+      "name": "shipCrash@story-lead music column capped under story lead",
+      "pass": true,
+      "measured": "-3 dB (cap -3)",
+      "required": "DUCK_STORY_LEAD_CAP_DB -3, measured >= -4 dB"
+    },
+    {
+      "id": "duck.depth.terminalCorrupt@story-lead",
+      "name": "terminalCorrupt@story-lead music duck depth",
+      "pass": true,
+      "measured": "-3 dB (min at +0.03s after the audible onset; +0.04s raw)",
+      "required": "-3 ±1 dB (story-lead cap)"
+    },
+    {
+      "id": "duck.attack.terminalCorrupt@story-lead",
+      "name": "terminalCorrupt@story-lead music duck reaches depth",
+      "pass": true,
+      "measured": "within 1 dB of depth at +0.02s after onset (raw +0.03s)",
+      "required": "<= 0.03 s"
+    },
+    {
+      "id": "duck.cap.terminalCorrupt@story-lead",
+      "name": "terminalCorrupt@story-lead music column capped under story lead",
+      "pass": true,
+      "measured": "-3 dB (cap -3)",
+      "required": "DUCK_STORY_LEAD_CAP_DB -3, measured >= -4 dB"
+    },
+    {
+      "id": "gain.safety",
+      "name": "safety stage static gain after SAFETY_MAKEUP_COMP_DB",
+      "pass": true,
+      "measured": "-0.005 dB (baked 2.905)",
+      "required": "|gain| <= 0.05 dB"
+    },
+    {
+      "id": "gain.limiter",
+      "name": "limiter stage static gain after LIM_MAKEUP_COMP_DB",
+      "pass": true,
+      "measured": "0 dB (baked 0.57)",
+      "required": "|gain| <= 0.05 dB"
+    },
+    {
+      "id": "gain.tail",
+      "name": "shipped tail vs pre-Stage-2 tail static gain at -30 dBFS",
+      "pass": true,
+      "measured": "-0.007 dB (tail carries 1.986 dB = TAIL_REFERENCE_GAIN_DB)",
+      "required": "within 0.1 dB"
+    },
+    {
+      "id": "latency",
+      "name": "LATENCY_COMP_MUSIC_PATH_S measured after the limiter",
+      "pass": true,
+      "measured": "music 25.215 ms, sfx 10.34 ms (before: music 14.875 ms, sfx 0)",
+      "required": "published as a named constant"
+    },
+    {
+      "id": "ceiling",
+      "name": "ceiling true peak on -6…+12 dBFS bursts (4× oversampled)",
+      "pass": true,
+      "measured": "-1.581 dBTP worst",
+      "required": "<= -1 dBTP"
+    },
+    {
+      "id": "smoothness",
+      "name": "smoothness battery",
+      "pass": true,
+      "measured": "sandbox 0, eraBuild 0, storyHandoff 0",
+      "required": "0 violations"
+    },
+    {
+      "id": "tp.all",
+      "name": "true peak on every after render",
+      "pass": true,
+      "measured": "worst -4.92 dBTP",
+      "required": "<= -1 dBTP"
+    }
+  ],
+  "pass": false
+}

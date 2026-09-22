@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 285334,
+  "stop_reason": "end_turn",
+  "session_id": "b545c100-4808-438d-871d-41c5e16976ea",
+  "total_cost_usd": 1.6510255,
+  "usage": {
+    "input_tokens": 54,
+    "cache_creation_input_tokens": 66089,
+    "cache_read_input_tokens": 952805,
+    "output_tokens": 20451,
+    "output_tokens_details": {
+      "thinking_tokens": 6040
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 66089,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2044,
+        "cache_read_input_tokens": 71899,
+        "cache_creation_input_tokens": 496,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 496
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2118,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0021880000000000003,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 54,
+      "outputTokens": 20451,
+      "cacheReadInputTokens": 952805,
+      "cacheCreationInputTokens": 66089,
+      "webSearchRequests": 0,
+      "costUSD": 1.6488375,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 6040,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 38,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Attempt-2 complete and checkpointed at 22:32:33Z, ~546s inside the original deadline. Browser cleaned, code stable, zero source drift.\n\n**VERDICT: MIXED \u2014 Continue restore + full saved-point prefix equality PASS on actual hardware; the new authorized [F] was NOT performed (INCONCLUSIVE, probe-side).** Equality alone is explicitly not treated as closure.\n\n## Measurements (attempt-2, headed GB10, role `continue-candidate-closure`)\n\n| Gate | Result | Measurement |\n|---|---|---|\n| Preflight (role/lock/served/source) | PASS | launch=true, refusals=[]; control activeRole `continue-candidate-closure`; fd9 inherited, probe opened no lock; index `a9b88038\u2026`, bundle `68c8be84\u2026`; source 100/100 rehash, drift [] before **and** after |\n| Renderer | PASS | `ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)`, headed=true |\n| Earned Origin landing | PASS | **74 269 ms** vs 180 000 ms bound (untrimmed); originLanded=true, gate.ok=true, 57.7 fps; ladder `hatch-boarded \u2192 lift-committed \u2192 origin-landed \u2192 demonstration-opened \u2192 repeated-measure \u2192 survey-started` |\n| Partial survey save | PASS | shipped `beforeunload \u2192 doSave(true) \u2192 saveWorld`; `pvx.v1.world.-1,-1` 3050 B `e53b5111\u2026`, CG `d1d74411\u2026`, 19 samples, phase `drawing` |\n| Real landing Continue | PASS | waited for CTA `\u25b6 Continue` before runtime; no deep link; 361 rAF frames retained, completeness=complete, 0 frame errors; firstValidRuntime 1645 ms + 5000 ms hold; beat `ch13-survey`, menu down, **60.3 fps** |\n| **Full saved-point prefix equality** | **PASS** | `/commonGround/survey/working/samples`: all **19/19 saved point OBJECTS byte-identical** (x,y,z,corner,walkedAt), +1 legitimately appended post-resume. worldIdentity ok, lostMilestones [], anchors added/dropped [], no replay, overwrite gate ok |\n| **New authorized [F] offer-span** | **NOT PERFORMED \u2014 INCONCLUSIVE** | authorization.ok=false, F not pressed, `anc.cg.route-offered` absent. Finding `EC3D-NOT-GROUNDED-AT-E`: foot 85.695u from target vs 1.2u radius; shipped prompt not offering [F] |\n\nTwo proximate causes, kept separate and honest:\n\n1. `SPAWN-94.5U-FROM-SAVED-POSE` \u2014 raw measurement, branch unobserved. Saved pose `[-30.32, 52.79, 12.00]`, observed after Continue `[50.99, 13.50, -16.00]`, distance **94.549u** vs 0.75u tolerance \u2192 `resumed-at-neither (unexplained spawn)`. Corroborated on-screen: HUD marker reads `survey end \u00b7 demonstrate a route \u00b7 104m`. `EfficientScene.tsx` publishes no marker distinguishing `resumeIsSafe`/`findValidSpawnSite`/`arrivalPose`, so the branch is not observable from outside \u2014 I propose no source change.\n2. `PROBE-STEERING-MULTI-FACE-GAP` \u2014 probe controller limitation, **not** a game fault. Walk stopped at **22 498 ms of its full 90 000 ms budget** with `no-usable-key (no-key-scores-above-threshold)` after cube face `+X \u2192 +Y`; only KeyW/S/A were re-measured at that recalibration and none projected above `minScore=0.15`. Distance had closed 99.38u \u2192 85.71u. I did not touch the steering threshold or any footing/reference/route predicate \u2014 that is controller logic, not the concrete binding/API fault my remit allows fixing, and a same-budget retry would face the identical 94.5u multi-face traverse.\n\nNo rescue, no forced acceptance, no localStorage/pose/world/milestone setter, no `--role` gate relaxation. Foot (bodyPose) with real published up was used throughout; no body-centre or world-up substitute.\n\n**Visual defects:** none. `0003-after-continue.png` renders the restored world correctly (seed 3215739679, coord -1,-1, HUD objective `Survey end \u00b7 demonstrate a route` / `[F] Offer the recorded span.`).\n\n**Artifacts**\n- Capture: `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/continue-candidate/attempt-2/` (5 frames, `trace.ndjson`, `summary.json`, `continue-raf-telemetry.json`, `domstorage-events.json`, pre/post WorldSave + pose blobs)\n- Report: `\u2026/continue-candidate-closure-report.json`\n- Logs: `\u2026/logs/continue-candidate-closure/attempt-2-probe.log`, `code-snapshot-prelaunch.sha256` (probe `46496492\u2026`), `code-snapshot-postcapture.sha256` \u2014 CODE-STABLE across the capture\n- Preserved: `attempt-1` untouched; the prior 3.4s SIGINT-killed partial renamed intact to `attempt-2-root-sigint-partial` (bytes unmodified) so the fresh-dir refusal would not consume it\n\n**Cleanup:** probe-owned session stopped (`cleanupCompleted=true`, error null); root preview 37395 untouched; foreign Chromium (port 9333 / :5173) untouched; no processes killed. No fps standalone, no broad audit, no suite rerun (root 352/3192 retained), no game/producer/control writes.",
+  "ttft_ms": 1518,
+  "type": "result",
+  "duration_ms": 400033,
+  "uuid": "29e7a0ac-8ebd-4fce-a533-a60ecdfca68d",
+  "ttft_stream_ms": 772,
+  "time_to_request_ms": 25,
+  "first_content_frame_ms": 773,
+  "queued_turn_count": 0
+}

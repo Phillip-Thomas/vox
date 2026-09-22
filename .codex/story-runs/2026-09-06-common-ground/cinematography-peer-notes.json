@@ -1,0 +1,61 @@
+{
+  "notes": [
+    {
+      "id": "CG-CIN-CH-01",
+      "from": "cinematography",
+      "to": "chapter",
+      "beat": "ch13-survey / ch13-common",
+      "anchor": "CG-03-route-offered / CG-05-other-end / CG-06-his-test",
+      "kind": "proposal",
+      "severity": "medium",
+      "statement": "Choose Chapter's continuous walked trace and exchanged witness as the single mechanic. It makes bodily demonstration and the other's maintained position useful before the climax, answering the blind reader more strongly than my manufactured-stake proposal. I withdraw three placeable stakes and the independent marker relocation as required cinema direction. Retain my player-owned 75-degree view, actual grounded action, specific refusal and persistent aftermath. Accept Chapter's bounded repeatable W-7744 presence at Origin rather than adding my suggested departure sequence.",
+      "evidence": [
+        "chapter-story-treatment.md#the-playable-mechanism-a-trace-that-can-be-answered",
+        "chapter-story-treatment.md#w-7744-must-supply-something",
+        "cinematography-story-treatment.md#two-materially-different-directions",
+        "naive-reader-report.md#3-coherence-problems"
+      ],
+      "requestedAction": "Confirm the walked trace/exchanged witness as the reconciled mechanic, preserve both route classes and W-7744's necessary reciprocal contribution, and exclude a second marker-placement puzzle. Keep the original treatments unchanged as authored alternatives; record this selection in the candidate and later cinema reconciliation.",
+      "status": "open"
+    },
+    {
+      "id": "CG-CIN-CH-02",
+      "from": "cinematography",
+      "to": "chapter",
+      "beat": "ch13-survey / ch13-common",
+      "anchor": "CG-04-specific-hold / CG-05-other-end",
+      "kind": "constraint",
+      "severity": "high",
+      "statement": "Witness continuity must be a legible world relation, not a camera-reticle or hidden dwell test. Use actor/reference positions, actual stable terrain or persistent trunk geometry, and an explicit offered/occupied reference state. Optional grass/canopy density cannot decide success. The held worker, last tested trace end and relevant bend must be inspectable together without a forced camera; HUD-free frames must distinguish proposed and mutually tested spans by stable shape/value. The trace records only walked ground and must not reveal a correct route beyond an unvisited corner. A watcher looking elsewhere must not silently invalidate proof merely because the render camera turned.",
+      "evidence": [
+        "chapter-story-treatment.md#arena-and-the-initial-contradiction",
+        "chapter-story-treatment.md#two-solutions-with-different-persistence",
+        "chapter-story-treatment.md#proposed-bounded-trace-contract",
+        "cinematography-story-treatment.md#device-motion-and-tier-equivalence",
+        "implementation-acceptance.md:4-8",
+        "main/src/config/graphicsSettings.ts:80-159"
+      ],
+      "requestedAction": "Specify the witness predicate and specific hold/recovery semantics in the candidate with these constraints. Require both actual route classes and the worker/reference/bend composition to be demonstrated before the scene contract signs exact geometry; qualified software frames may ground geometry only, with final headed hardware/tier proof unchanged. If current Origin geometry cannot support both routes, reopen the bounded arena decision rather than manufacture an invisible obstacle or an automatic solution.",
+      "status": "open"
+    },
+    {
+      "id": "CG-CIN-SC-01",
+      "from": "cinematography",
+      "to": "score",
+      "beat": "ch13-survey / ch13-common",
+      "anchor": "CG-04-specific-hold / CG-05-other-end / CG-06-his-test / CG-07-model-incomplete",
+      "kind": "constraint",
+      "severity": "medium",
+      "statement": "Support The Unrepeated Order and its unchanged square/tension after the independent action. With the selected walked trace, distinguish an invalid physical leg, a temporary witness-position hold, and W-7744's final independent test. Releasing/retaking a witness position may happen repeatedly inside one good route; it must not repeatedly stage a dramatic musical refusal. At the role exchange, let visible feet, instrument orientation and the newly useful reference establish causality. The changed phrase spacing belongs after the independently committed test, not at Terra's final trace sample or at the moment W-7744 offers to hold the other end.",
+      "evidence": [
+        "score-story-treatment.md#proposed-form-and-semantic-anchors",
+        "score-story-treatment.md#harmonic-and-rhythmic-realization",
+        "score-story-treatment.md#agency-indefinite-duration-and-lifecycle",
+        "chapter-story-treatment.md#w-7744-must-supply-something",
+        "chapter-story-treatment.md#candidate-shared-semantic-anchors"
+      ],
+      "requestedAction": "Confirm an explicit mapping for physical refusal versus transient witness hold/resume and for reciprocal reference versus final independent-test completion. Preserve event-driven state changes, quiet repeated holds, audible space for action, and no phrase timing that delays the player's movement. Harmony and exact realization remain Score's authority; no second musical motif or extra cue is requested.",
+      "status": "open"
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "at": "2026-09-06T23:51:07.792268+00:00",
+  "acceptedForAffectedRuntime": true,
+  "sourceRepairIteration": 9,
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "captureRef": "verifier/captures/continue-spawn-key-edge/20260906T234656Z",
+  "captureSummarySha256": "792c263c50cf912a4c4133ac30ef1b25bf2326678812a17d554b569b163b43f0",
+  "repairCheckReportRef": "verifier/logs/continue-spawn-key-edge-verifier/20260906T234656Z/checks.json",
+  "repairCheckReportSha256": "8ba4b03de666e29284f093e415277e300195fa2a000fccef2a816af0b0cc0f16",
+  "runtimeMs": 107016,
+  "fullSuite": {
+    "testFiles": 353,
+    "tests": 3207,
+    "durationMs": 61577,
+    "exitCode": 0,
+    "logRef": "verifier/logs/continue-spawn-key-edge-verifier/20260906T234656Z/final-0.log",
+    "logSha256": "ad4b3f902910a15c6026ec5a4e476416e5b574700baa9879fd81cdcb07aebaf4",
+    "runnerFinishedAt": "2026-09-06T23:49:45.599Z",
+    "runsOnThisCandidate": 1
+  },
+  "pointPrefixEquality": {
+    "method": "serialized full point-object prefix equality (saved LATE beforeunload bytes vs after-Continue bytes)",
+    "ok": true,
+    "savedKey": "pvx.v1.world.-1,-1",
+    "savedFile": "worldsave-pvx.v1.world.-1_-1.json",
+    "afterFile": "worldsave-after-continue-pvx.v1.world.-1_-1.json",
+    "savedSampleCount": 15,
+    "afterSampleCount": 16,
+    "savedWorldId": "-1,-1",
+    "afterWorldId": "-1,-1",
+    "savedSeed": 3215739679,
+    "afterSeed": 3215739679,
+    "mismatchCount": 0,
+    "firstMismatches": [],
+    "appendedAfterPrefix": 1
+  },
+  "poseRetention": {
+    "method": "scoped saved pose (savedPrimary.key + \".player\") CENTRE vs restored CENTRE (telemetry frames[].capsule) in the complete Continue telemetry",
+    "ok": true,
+    "scopedKey": "pvx.v1.world.-1,-1.player",
+    "savedSource": "menuBeforeContinueClick",
+    "telemetryComplete": true,
+    "savedCentre": [
+      -32.0521240234375,
+      52.78703689575195,
+      19.512453079223633
+    ],
+    "telemetryFrameCount": 364,
+    "validPostClickFrameCount": 362,
+    "firstValidMsSinceClick": 406,
+    "lastValidMsSinceClick": 6694,
+    "first": {
+      "msSinceClick": 406,
+      "centre": [
+        -32.0521240234375,
+        52.78703689575195,
+        19.512453079223633
+      ],
+      "horizontalUnits": 0,
+      "verticalUnits": 0,
+      "total3dUnits": 0,
+      "activePlanetId": "-1,-1",
+      "terrainSeed": 3215739679
+    },
+    "last": {
+      "msSinceClick": 6694,
+      "centre": [
+        -32.0521240234375,
+        52.78897476196289,
+        19.512453079223633
+      ],
+      "horizontalUnits": 0,
+      "verticalUnits": 0.0019378662109375,
+      "total3dUnits": 0.0019378662109375,
+      "activePlanetId": "-1,-1",
+      "terrainSeed": 3215739679
+    },
+    "maxHorizontal": {
+      "msSinceClick": 406,
+      "centre": [
+        -32.0521240234375,
+        52.78703689575195,
+        19.512453079223633
+      ],
+      "horizontalUnits": 0,
+      "verticalUnits": 0,
+      "total3dUnits": 0,
+      "activePlanetId": "-1,-1",
+      "terrainSeed": 3215739679
+    },
+    "maxTotal3d": {
+      "msSinceClick": 990,
+      "centre": [
+        -32.0521240234375,
+        52.78897476196289,
+        19.512453079223633
+      ],
+      "horizontalUnits": 0,
+      "verticalUnits": 0.0019378662109375,
+      "total3dUnits": 0.0019378662109375,
+      "activePlanetId": "-1,-1",
+      "terrainSeed": 3215739679
+    },
+    "identityMismatches": [],
+    "validTailCoverageMs": 6288
+  },
+  "actualInput": {
+    "holdMs": 80,
+    "method": "keyboard.down/sleep/keyboard.up (held)",
+    "envBefore": {
+      "label": "before-hold",
+      "nowMs": 23651.899999976158,
+      "pointerLockElement": "CANVAS",
+      "hasFocus": true,
+      "activeElement": "BODY",
+      "visibility": "visible",
+      "rafTicks": 0,
+      "player": {
+        "grounded": true,
+        "face": "top",
+        "position": [
+          -41.54400634765625,
+          52.78983688354492,
+          12.76168441772461
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "downAt": "2026-09-06T23:48:41.874Z",
+    "envDuringHold": {
+      "label": "during-hold",
+      "nowMs": 23735.100000023842,
+      "pointerLockElement": "CANVAS",
+      "hasFocus": true,
+      "activeElement": "BODY",
+      "visibility": "visible",
+      "rafTicks": 5,
+      "player": {
+        "grounded": true,
+        "face": "top",
+        "position": [
+          -41.54400634765625,
+          52.78976058959961,
+          12.76168441772461
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "upAt": "2026-09-06T23:48:41.957Z",
+    "envAfter": {
+      "label": "after-hold",
+      "nowMs": 23744.299999952316,
+      "pointerLockElement": "CANVAS",
+      "hasFocus": true,
+      "activeElement": "BODY",
+      "visibility": "visible",
+      "rafTicks": 6,
+      "player": {
+        "grounded": true,
+        "face": "top",
+        "position": [
+          -41.54400634765625,
+          52.78976058959961,
+          12.76168441772461
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "domEvents": {
+      "keys": [
+        {
+          "type": "keydown",
+          "code": "KeyF",
+          "isTrusted": true,
+          "repeat": false,
+          "timeStamp": 23652.5,
+          "nowMs": 23652.699999928474,
+          "rafTicksAt": 0
+        },
+        {
+          "type": "keyup",
+          "code": "KeyF",
+          "isTrusted": true,
+          "repeat": false,
+          "timeStamp": 23736.100000023842,
+          "nowMs": 23736.299999952316,
+          "rafTicksAt": 5
+        }
+      ],
+      "rafTicksTotal": 6
+    },
+    "rafTicksDuringHold": 5,
+    "deliveredTrustedDown": true,
+    "deliveredTrustedUp": true
+  },
+  "actualNewAction": {
+    "phaseBefore": "drawing",
+    "phaseAfter": "offered",
+    "newAnchor": "anc.cg.route-offered",
+    "newAvActivation": true,
+    "avSequenceBefore": 1,
+    "avSequenceAfter": 2,
+    "priorAvHistoryPreserved": true
+  },
+  "rootVisualReview": {
+    "viewed": "verifier/captures/continue-spawn-key-edge/20260906T234656Z/0005-after-offer.png",
+    "sha256": "5f683a8ba06b76aabee24596c3ef77934d890ca4494ac06ecaec842b51a13a26",
+    "observation": "Rendered nonblank Origin scene; offered-route marker and work order replace trace-end F prompt. W-7744 is preparing to test the offered route. Debug panels present; not a beauty or HUD-suppressed capture."
+  },
+  "cleanupComplete": true,
+  "sourceIntactAfterCaptureAndSuite": true,
+  "qualification": [
+    "Held80ms F was delivered trusted across5RAF and succeeded with source unchanged; earlier instantaneouspress failure is retained, not a proven gamecallback rejection.",
+    "Actual grounded true is published in __voxelDebug.player; inherited helper claims no groundedflag were too broad.",
+    "This proves affected saved walking bootstrap plus a real new action. Full continuous chapter, cancellation/route negatives/variants and affected independent review still required.",
+    "No director or final judge acceptance inferred from repair-check passed true; its accepted remains false."
+  ],
+  "defectClosure": false,
+  "chapterAcceptance": false,
+  "publicationAuthorized": false
+}

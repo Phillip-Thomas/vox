@@ -1,0 +1,12 @@
+{
+  "schema": "paravoxia.producerRisk.v1",
+  "recordedAt": "2026-09-06T09:46:01.153368+00:00",
+  "classification": "manual usability risk; browser confirmation pending",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "source": "main/src/story/commonGroundRoute.ts#routeProgressUnits",
+  "observedEvidence": "The integration-movie-repair stream includes a real-displacement director test: body turns at z15.82 before corner z16; terraUnits then stalls at4 despite continuing along later route segments. The controller now passes the corner before turning and its full18 test passes.",
+  "evidenceRef": "integration-movie-repair-stream.jsonl",
+  "sourceMechanism": "Only an arc projection <= previousUnits + this frame displacement is accepted. An early turn can put later projections ahead of that frame ceiling; movement farther along the route can then remain uncredited until the body returns to the frontier.",
+  "unverified": "No fresh manual browser observation or completed UX audit yet. This is not a claim of an independently observed manual failure.",
+  "requestedInterpretation": "Confirm whether signed intent permits ordinary small corner deviations and honest recovery, and whether a bounded implementation correction can preserve full actual18 units, ordered traversal, all reference/support/body checks and physical final arrival without changing the contract. No code changes authorized by this risk note alone."
+}

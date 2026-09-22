@@ -1,0 +1,21 @@
+
+> voxel-game@0.1.0 story:authority
+> node tools/story-authority-gate.mjs
+
+Story authority gate failed: 16 of 1066 checks
+- [manifest.schema-const] JSON Schema const for status must exactly match the live story-authority manifest
+- [manifest.schema-const] JSON Schema const for sources must exactly match the live story-authority manifest
+- [manifest.schema-const] JSON Schema const for runtimeBeatOrder must exactly match the live story-authority manifest
+- [manifest.schema-const] JSON Schema const for runtimeEvidenceChain must exactly match the live story-authority manifest
+- [runtime.checkpoint-map] ch14-record checkpoint key must resolve to story:ch14:survey-indexed
+- [runtime.resume-clause] ch14SurveyIndexed must resume at ch14-scar
+- [runtime.evidence-transition] ch14-record must commit ch14SurveyIndexed before advancing to ch14-scar
+- [runtime.checkpoint-map] ch14-scar checkpoint key must resolve to story:ch14:scar-observed
+- [runtime.resume-clause] ch14ScarObserved must resume at ch14-question
+- [runtime.evidence-transition] ch14-scar must commit ch14ScarObserved before advancing to ch14-question
+- [runtime.checkpoint-map] ch14-question checkpoint key must resolve to story:ch14:question-retained
+- [runtime.resume-clause] ch14QuestionRetained must resume at ch14-return
+- [runtime.evidence-transition] ch14-question must commit ch14QuestionRetained before advancing to ch14-return
+- [runtime.checkpoint-map] ch14-return checkpoint key must resolve to story:ch14:complete
+- [runtime.resume-clause] ch14Complete must resume at done
+- [runtime.final-transition] ch14-return must commit its final checkpoint through completeStory

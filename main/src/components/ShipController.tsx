@@ -15,7 +15,7 @@ import {
   vectorToRapier,
   shipImpactOutcome
 } from '../utils/surfaceControls';
-import { isTouchActive } from '../utils/mobileInput';
+import { allowsMousePointerLock, isTouchActive } from '../utils/mobileInput';
 import type { WorldArrivalPose } from '../utils/worldArrival';
 import {
   beginAtmosphereWarp,
@@ -589,7 +589,7 @@ export default function ShipController({
     const element = gl.domElement;
 
     const handleClick = async (event: MouseEvent) => {
-      if (event.target !== element || document.pointerLockElement) return;
+      if (event.target !== element || document.pointerLockElement || !allowsMousePointerLock(event)) return;
       try {
         await element.requestPointerLock();
       } catch (error) {

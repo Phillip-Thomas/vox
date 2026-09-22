@@ -1,0 +1,2361 @@
+--- before/main/src/components/CameraControls.tsx
++++ after/main/src/components/CameraControls.tsx
+@@ -13,7 +13,7 @@
+ import { getCameraSubmergence } from '../state/playerSubmersion';
+ import { getStoryInputPolicy, SANDBOX_FOV, SANDBOX_POLICY } from '../story/storyInputPolicy.ts';
+ import { createFeedLookState, feedAccumulateLook } from '../story/feedCamera.ts';
+-import { applyActiveRigTransform, applyLiftCameraTransform, applyOverheadCameraTransform, getLensRig, getSideLens, rigMoveBasis } from '../story/sideLens.ts';
++import { clearSideCameraViewOffset, applyActiveRigTransform, applyLiftCameraTransform, applyOverheadCameraTransform, getLensRig, getSideLens, rigMoveBasis } from '../story/sideLens.ts';
+ import { isMapViewOpen, syncChartScreenUp, MAP_VIEW_HEIGHT } from '../game/mapView.ts';
+ import {
+   applyCinematicCameraPose,
+@@ -245,6 +245,7 @@
+       cameraRef.current.updateProjectionMatrix();
+     }
+     const sideLens = storyPolicy.lookMode === 'side' ? getSideLens() : null;
++    if (!sideLens || storyPolicy.sideBlend > 0.001) clearSideCameraViewOffset(cameraRef.current);
+     if (sideLens) {
+       if (storyPolicy.sideBlend <= 0.001) {
+         rigMoveBasis(sideLens, getLensRig(), _sideForward, _sideRight);
+--- before/main/src/components/EfficientPlayer.tsx
++++ after/main/src/components/EfficientPlayer.tsx
+@@ -136,7 +136,8 @@
+ import { setPlayerPose } from '../game/systems/playerPoseSystem.ts';
+ import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
+ import { resolveStoryInteraction } from '../story/storyInteractions.ts';
+-import { axisBandVelocityDelta, getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing, sideHarvestProbePointsOffRow } from '../story/sideLens.ts';
++import { pickSideHarvestVoxel } from '../story/feed/surveyBrackets.ts';
++import { axisBandVelocityDelta, getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing } from '../story/sideLens.ts';
+ import { BLOCKS, type BlockId } from '../game/data/blocks.ts';
+ import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts';
+ import { commitMawHarmlessTestFromAcceptedMine } from '../story/emergentMawRepair.ts';
+@@ -371,17 +372,6 @@
+   const rotationAnimation = useRef<RotationAnimation | null>(null);
+   const lastPlanarForward = useRef(new THREE.Vector3(0, 0, -1));
+   const controlsActive = useRef(false);
+-  // Raster side-scroller: reusable probe points for the adjacency harvest scan.
+-  const sideProbePoints = useMemo(
+-    () => Array.from({ length: 6 }, () => new THREE.Vector3()),
+-    []
+-  );
+-  // The screening's own scratch buffer for the same off-row probe set (the
+-  // two actors can tick in the same frame, so they never share one array).
+-  const sideMovieProbePoints = useMemo(
+-    () => Array.from({ length: 6 }, () => new THREE.Vector3()),
+-    []
+-  );
+   // Hold-to-mine accumulator: the voxel being mined (coord key), elapsed/needed
+   // time, and when the last chip sound played. Reset when the key is released,
+   // the crosshair leaves the voxel, or the block breaks.
+@@ -819,37 +809,14 @@
+     // let a stationary HOLD [E] — the exact input ch1-fixed orders — bury the
+     // player in a self-dug shaft. See sideHarvestProbePointsOffRow.
+     const screening = isAutopilotDriving();
+-    const probes = sideHarvestProbePointsOffRow(
+-      position,
+-      lens,
+-      getSideFacing(),
+-      screening ? sideMovieProbePoints : sideProbePoints
+-    );
+-    // Prefer a block that actually PAYS the quota, then fall back to any
+-    // harvestable one. In the 1-bit era grass and dirt are the same grey slab
+-    // and dirt drops nothing, so a probe order that happened to find dirt
+-    // first made HOLD [E] look broken while the player stood beside grass.
+-    // The screening keeps the hard filter (it must never spend its budget on
+-    // a non-yielding block); the player keeps the fallback so the verb always
+-    // does something and the world still deforms where they aimed it.
+-    let fallback: HarvestTarget | null = null;
+-    for (let p = 0; p < probes.length; p++) {
+-      const point = probes[p];
+-      const vx = Math.round(point.x / VOXEL_SCALE);
+-      const vy = Math.round(point.y / VOXEL_SCALE);
+-      const vz = Math.round(point.z / VOXEL_SCALE);
+-      const voxel = voxelSystem.getVoxel(vx, vy, vz);
+-      if (!voxel) continue;
+-      // Skip blocks the current tool can't break (the era's hand can't chew
+-      // stone) — the next probe usually has grass/dirt, so extraction keeps
+-      // flowing instead of chirping "blocked" at a wall.
+-      if (!canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: getEquippedToolTier() })) continue;
+-      const target: HarvestTarget = { kind: 'voxel', coord: { x: vx, y: vy, z: vz }, voxel };
+-      if (BLOCKS[voxel.blockId]?.drops.includes('biofiber')) return target;
+-      if (screening) continue;
+-      if (!fallback) fallback = target;
+-    }
+-    return fallback;
++    const coord = pickSideHarvestVoxel(position, lens, getSideFacing(), (x, y, z) => {
++      const voxel = voxelSystem.getVoxel(x, y, z);
++      if (!voxel || !canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: getEquippedToolTier() })) return null;
++      return { yields: BLOCKS[voxel.blockId]?.drops.includes('biofiber') ?? false };
++    }, screening);
++    if (!coord) return null;
++    const voxel = voxelSystem.getVoxel(coord.x, coord.y, coord.z);
++    return voxel ? { kind: 'voxel', coord, voxel } : null;
+   }, []);
+ 
+   const pickHarvestTarget = useCallback((camera: THREE.Camera | null): HarvestTarget | null => {
+--- before/main/src/story/StoryCaptions.tsx
++++ after/main/src/story/StoryCaptions.tsx
+@@ -3,11 +3,13 @@
+ import { theme } from '../ui/theme.ts';
+ import { isTouchDevice } from '../utils/mobileInput.ts';
+ import { getStoryText, getStoryTextVersion, subscribeStoryText } from './storyText.ts';
++import { getStoryStateSnapshot } from './storyState.ts';
+ import { storyNow } from './storyClock.ts';
+ import { getActiveGuidedStoryObjective } from './ux/objectiveDirector.ts';
+ import { presentInputGlyphs } from './ux/inputGlyphs.ts';
+ import {
+   getMeasuredStoryObjectiveCardHeight,
++  readEarlyFeedReservations,
+   readStoryHudSafeAreaInsets,
+   readTouchControlClearance,
+   solveStoryHudLayout
+@@ -65,7 +67,7 @@
+         viewportWidth,
+         viewportHeight,
+         touch: isTouchDevice(),
+-        objectivePresent: getActiveGuidedStoryObjective() !== null,
++        objectivePresent: getActiveGuidedStoryObjective() !== null && !/^ch1-(fixed|track|raster)$/.test(getStoryStateSnapshot().beat ?? ''),
+         objectiveHeight: getMeasuredStoryObjectiveCardHeight(),
+         touchControlTopFromBottom: controlClearance,
+         safeAreaInsets
+@@ -74,9 +76,22 @@
+       root.style.bottom = `${layout.caption.bottom}px`;
+       root.style.maxWidth = `${layout.caption.maxWidth}px`;
+       root.dataset.captionPlacement = layout.caption.placement;
++      if (isTouchDevice() && viewportWidth > viewportHeight && /^ch1-(fixed|track|raster)$/.test(getStoryStateSnapshot().beat ?? '')) {
++        const controls = readEarlyFeedReservations().filter(rect => rect.id?.startsWith('touch-'));
++        const left = Math.max(safeAreaInsets.left + 18, ...controls.filter(rect => rect.left < viewportWidth / 2).map(rect => rect.right + 14));
++        const right = Math.min(viewportWidth - safeAreaInsets.right - 18, ...controls.filter(rect => rect.left >= viewportWidth / 2).map(rect => rect.left - 14));
++        if (right - left >= 320) {
++          root.style.left = `${(left + right) / 2}px`;
++          root.style.maxWidth = `${right - left}px`;
++          root.style.bottom = `${safeAreaInsets.bottom + 18}px`;
++          root.dataset.captionPlacement = 'between-measured-controls';
++        }
++      }
++
+       const elapsed = storyNow() - active.shownAt;
+       const revealed = Math.min(shownText.length, Math.floor(elapsed / 34));
+       el.textContent = shownText.slice(0, revealed);
++      root.style.visibility = elapsed >= active.ttlMs ? 'hidden' : 'visible';
+       if (isSystem) voiceVisibleText(`system:${active.shownAt}`, shownText, revealed, 'feed');
+       const fadeStart = active.ttlMs - 700;
+       el.style.opacity = elapsed > fadeStart
+@@ -104,7 +119,7 @@
+     viewportWidth: typeof window === 'undefined' ? 1280 : window.innerWidth,
+     viewportHeight: typeof window === 'undefined' ? 720 : window.innerHeight,
+     touch: isTouchDevice(),
+-    objectivePresent: getActiveGuidedStoryObjective() !== null,
++    objectivePresent: getActiveGuidedStoryObjective() !== null && !/^ch1-(fixed|track|raster)$/.test(getStoryStateSnapshot().beat ?? ''),
+     objectiveHeight: getMeasuredStoryObjectiveCardHeight()
+   });
+ 
+@@ -136,7 +151,8 @@
+         textAlign: 'center'
+       }}
+     >
+-      <div ref={captionRef} />
++      <div aria-hidden style={{ visibility: 'hidden' }}>{presentInputGlyphs(active.text, isTouchDevice())}</div>
++      <div ref={captionRef} style={{ position: 'absolute', inset: 0, paddingInline: 8 }} />
+     </div>
+   );
+ };
+--- before/main/src/story/StoryDirectorDriver.tsx
++++ after/main/src/story/StoryDirectorDriver.tsx
+@@ -1,7 +1,12 @@
++import { readGuidedObjectiveRestore } from './ux/objectiveRestore.ts';
++import { setSideCoverageViewport, sampleFixedScreenCoverage, noteFixedScreenCoveragePresented } from './sideLens.ts';
++import { readEarlyFeedReservations, readStoryHudSafeAreaInsets } from './ux/storyHudLayout.ts';
++import { cancelPendingStoryUxFeedback } from './ux/feedbackCues.ts';
++import { isTouchDevice } from '../utils/mobileInput.ts';
+ import { resolveMarkerTarget, registerStoryMarkerWorld } from './beats/markerTargets.ts';
+ import { storyWorldHandles } from './storyWorldHandles.ts';
+ import { useEffect, useRef } from 'react';
+-import { useFrame, useThree } from '@react-three/fiber';
++import { addAfterEffect, useFrame, useThree } from '@react-three/fiber';
+ import * as THREE from 'three';
+ import { storyDirectorTick, type StoryMarkerTarget } from './storyDirector.ts';
+ import { advanceToBeat, getStoryStateSnapshot, type StoryBeat } from './storyState.ts';
+@@ -91,13 +96,36 @@
+ 
+   // A mounted world is the readiness boundary for every chapter's candidate.
+   useEffect(() => registerStoryMarkerWorld(storyWorldHandles), []);
++  useEffect(() => addAfterEffect(() => noteFixedScreenCoveragePresented()), []);
+   const appliedDpr = useRef<number | null>(null);
++  const coverageFrame = useRef(0);
+   const authoredClock = useRef(createAuthoredForegroundClock());
+ 
+   useEffect(() => {
+     setSignedSceneAvPaused(paused);
+     return () => setSignedSceneAvPaused(true);
+   }, [paused]);
++
++  const earlyTicked = useRef(false);
++  useFrame((state, rawDt) => {
++    const story = getStoryStateSnapshot();
++    const camera = state.camera as THREE.PerspectiveCamera;
++    const foreground = story.active && !paused && getAppStateSnapshot().phase === 'playing' && !documentIsHidden();
++    earlyTicked.current = false;
++    if (!foreground) cancelPendingStoryUxFeedback('foreground-loss');
++    if (!camera.isPerspectiveCamera || !/^ch1-(fixed|track|raster)$/.test(story.beat ?? '')) return;
++    const target = getFeedRuntime().brackets.find(bracket => bracket.visible);
++    const offset = camera.view?.enabled ? camera.view.offsetY : 0;
++    setSideCoverageViewport({ width: size.width, height: size.height, fov: camera.fov, aspect: camera.aspect,
++      touch: isTouchDevice(), safe: readStoryHudSafeAreaInsets(), reservations: readEarlyFeedReservations(),
++      restoreIdentity: `${story.runId}:${readGuidedObjectiveRestore().version}`,
++      targetVertical: target ? { top: target.y - target.size / 2 + offset, bottom: target.y + target.size / 2 + offset } : undefined });
++    sampleFixedScreenCoverage(getPlayerWorldPosition(), ++coverageFrame.current, foreground);
++    if (foreground) {
++      storyDirectorTick(Math.min(rawDt, 0.1), camera, state.clock.elapsedTime);
++      earlyTicked.current = true;
++    }
++  }, -1);
+ 
+   useFrame((state, rawDt) => {
+     const story = getStoryStateSnapshot();
+@@ -167,7 +195,7 @@
+     // receipts into a rendered-frame-count deadlock. Player/agent controls keep
+     // the conservative 100ms input step and never inherit that catch-up budget.
+     if (story.active) {
+-      storyDirectorTick(directorDt, camera.isPerspectiveCamera ? camera : null, state.clock.elapsedTime);
++      if (!earlyTicked.current && !(/^ch1-(fixed|track|raster)$/.test(story.beat ?? '') && documentIsHidden())) storyDirectorTick(directorDt, camera.isPerspectiveCamera ? camera : null, state.clock.elapsedTime);
+       if (isMovieMode()) autopilotTick(inputDt);
+       publishStoryBoundaryTelemetry(camera.isPerspectiveCamera ? camera : null);
+     }
+--- before/main/src/story/beats/ch1/ch1-fixed.ts
++++ after/main/src/story/beats/ch1/ch1-fixed.ts
+@@ -9,24 +9,11 @@
+   chapter: "ch1",
+   disposition: "objective",
+   entry: "sequence",
+-  objective: facts => facts.ch1FixedState === 'traverse'
+-    ? objective(
+-        // The quota is filled; the only remaining condition is the one the
+-        // beat never used to name. The camera does not follow — walking out of
+-        // frame is the ACTION, so the order says so in the era's own voice.
+-        'ch1:fixed:cross-camera-cell',
+-        'travel',
+-        'CAMERA HAND-OFF · LEAVE THIS FRAME',
+-        ['EXTRACTOR CALIBRATED. COVERAGE CHECK OUTSTANDING.', 'WALK [A]/[D] UNTIL THE CAMERA CUTS.'],
+-        false
+-      )
+-    : objective(
+-        'ch1:fixed:calibrate-extractor',
+-        'interact',
+-        'BIOFIBER · CALIBRATE EXTRACTOR',
+-        ['HARVEST BIOFIBER FROM THE BRACKETED GROUND.', 'HOLD [E] TO EXTRACT.'],
+-        false
+-      ),
++  objective: facts => facts.ch1FixedState === 'salvage'
++    ? objective('ch1:fixed:recover-first-debris', 'interact', 'DEBRIS', ['WALK OVER THE DEBRIS.'], false)
++    : facts.ch1FixedState === 'traverse'
++      ? objective('ch1:fixed:cross-camera-cell', 'travel', 'NEXT CAMERA', ['WALK [A]/[D] TO THE NEXT CAMERA.'], false)
++      : objective('ch1:fixed:calibrate-extractor', 'interact', 'BIOFIBER', ['HOLD [E] TO HARVEST BIOFIBER.'], false),
+   input: input.rasterPolicy(),
+   hud: {
+   "feedEffects": true,
+--- before/main/src/story/beats/ch1/ch1-raster.ts
++++ after/main/src/story/beats/ch1/ch1-raster.ts
+@@ -10,31 +10,8 @@
+   disposition: "objective",
+   entry: "sequence",
+   objective: facts => facts.ch1RasterState === 'quota'
+-    ? objective(
+-        'ch1:raster:extract-fiber-quota',
+-        'interact',
+-        'SITE QUOTA · BIOFIBER OUTSTANDING',
+-        [
+-          'HULL DEBRIS RECOVERED. BIOFIBER QUOTA OUTSTANDING.',
+-          // The line the chapter was missing. A standing extract exhausts the
+-          // ground within reach and then reports nothing at all.
+-          'A CELL YIELDS ONCE. HOLD [E] AND WALK [A]/[D] ALONG THE STRIP.'
+-        ],
+-        false
+-      )
+-    : objective(
+-        'ch1:raster:recover-quota',
+-        'interact',
+-        'SITE QUOTA · RECOVER MATERIALS',
+-        [
+-          // The beat will not advance until EVERY scattered piece is recovered,
+-          // so the copy has to say the bracketed debris is the gate, not scenery.
+-          'RECOVER EVERY BRACKETED PIECE OF HULL DEBRIS.',
+-          // Debris is walk-over collection, NOT an extract verb.
+-          'WALK OVER EACH PIECE TO RECOVER IT.'
+-        ],
+-        false
+-      ),
++    ? objective('ch1:raster:extract-fiber-quota', 'interact', 'BIOFIBER', ['HOLD [E] AT BIOFIBER. MOVE TO THE NEXT PATCH.'], false)
++    : objective('ch1:raster:recover-quota', 'interact', 'DEBRIS', ['WALK OVER THE DEBRIS.'], false),
+   input: input.rasterPolicy(),
+   hud: {
+   "feedEffects": true,
+--- before/main/src/story/beats/ch1/ch1-track.ts
++++ after/main/src/story/beats/ch1/ch1-track.ts
+@@ -11,8 +11,8 @@
+   objective: () => objective(
+     'ch1:track:tracking-transfer',
+     'wait',
+-    'TRACKING VIEW · CALIBRATING',
+-    ['TRACKING VIEW IS REASSIGNING.', 'HOLD POSITION.'],
++    'TRACKING VIEW',
++    ['HOLD POSITION.'],
+     false
+   ),
+   input: { ...input.rasterPolicy(), moveSpeedScale: 0 },
+--- before/main/src/story/beats/ch1/rail-ch1-fixed.ts
++++ after/main/src/story/beats/ch1/rail-ch1-fixed.ts
+@@ -1,21 +1,17 @@
+ import type { RailRuntime } from '../../autopilot.ts';
++import { getDebrisPositions, isDebrisCollected } from '../../debrisSalvage.ts';
+ 
+-/** ch1-fixed: player inputs and registered world transactions only. */
++/** Native pickup, positive extraction, then a real movement transfer. */
+ export function tick(ctx: RailRuntime): void {
+-{
+-    // Tutorial order: chew fiber first (stand-and-extract with drift legs),
+-    // then MARCH down the strip until the bolted frame flips a screen edge.
+-    const fiberDone = ctx.getItemCount('biofiber') >= ctx.CH1_FIXED_TUTORIAL.biofiber;
+-    if (!fiberDone) {
+-        ctx.extractRhythm(ctx.sweepGoal(20, 8));
+-    }
+-    else {
+-        ctx.controls.delete = false;
+-        const lens = ctx.getSideLens();
+-        if (lens) {
+-            ctx.walkTowardTaskRow(ctx._goalScratch.copy(ctx.getPlayerWorldPosition()).addScaledVector(lens.travelAxis, 30), 1);
+-        }
+-    }
+-    return;
++  if (!isDebrisCollected(0)) {
++    ctx.controls.delete = false;
++    const target = getDebrisPositions()[0];
++    if (target) ctx.walkTowardTaskRow(target, 0.9);
++  } else if (ctx.getItemCount('biofiber') < ctx.CH1_FIXED_TUTORIAL.biofiber) {
++    ctx.extractRhythm(ctx.sweepGoal(20, 8));
++  } else {
++    ctx.controls.delete = false;
++    const lens = ctx.getSideLens();
++    if (lens) ctx.walkTowardTaskRow(ctx._goalScratch.copy(ctx.getPlayerWorldPosition()).addScaledVector(lens.travelAxis, 30), 1);
++  }
+ }
+-}
+--- before/main/src/story/beats/ch1/rail-ch1-raster.ts
++++ after/main/src/story/beats/ch1/rail-ch1-raster.ts
+@@ -1,26 +1,20 @@
+ import type { RailRuntime } from '../../autopilot.ts';
++import { getDebrisPositions, isDebrisCollected } from '../../debrisSalvage.ts';
+ 
+-/** ch1-raster: player inputs and registered world transactions only. */
++let requiredTarget = -1;
++/** One committed required salvage piece, then ordinary yielding extraction. */
+ export function tick(ctx: RailRuntime): void {
+-{
+-    // Fiber unmet: stand-and-extract, with travel legs steering at the
+-    // COMMITTED salvage piece (walk-over collects it; loose stones come by
+-    // proximity en route). Fiber met: pure salvage runs until the strip is
+-    // clear. Deferral keeps one snagged piece from stalling the act.
+-    const fiberDone = ctx.getItemCount('biofiber') >= ctx.CH1_QUOTA.biofiber;
+-    const debrisIdx = ctx.committedDebrisTarget();
+-    const debrisGoal = debrisIdx >= 0 ? ctx.getDebrisPositions()[debrisIdx] : null;
+-    if (!fiberDone) {
+-        ctx.extractRhythm(debrisGoal ?? ctx.sweepGoal());
+-    }
+-    else if (debrisGoal) {
+-        ctx.controls.delete = false;
+-        ctx.walkTowardTaskRow(debrisGoal, 0.9);
+-    }
+-    else {
+-        // Stone stragglers: keep drifting — proximity pickup needs motion.
+-        ctx.extractRhythm(ctx.sweepGoal());
+-    }
+-    return;
++  const positions = getDebrisPositions();
++  if (requiredTarget < 0 || isDebrisCollected(requiredTarget)) {
++    requiredTarget = [0, 1, 2].filter(index => !isDebrisCollected(index) && positions[index])
++      .sort((a, b) => positions[a].distanceTo(ctx.getPlayerWorldPosition()) - positions[b].distanceTo(ctx.getPlayerWorldPosition()))[0] ?? -1;
++  }
++  if (requiredTarget >= 0) {
++    ctx.controls.delete = false;
++    ctx.walkTowardTaskRow(positions[requiredTarget], 0.9);
++  } else if (ctx.getItemCount('biofiber') < ctx.CH1_QUOTA.biofiber) {
++    ctx.extractRhythm(ctx.sweepGoal());
++  } else {
++    ctx.controls.delete = false;
++  }
+ }
+-}
+--- before/main/src/story/beats/objectivePrimitives.ts
++++ after/main/src/story/beats/objectivePrimitives.ts
+@@ -28,7 +28,7 @@
+  * Splitting the rung is what guardrail 1 in `ux/README.md` already required:
+  * the id changes when the required player ACTION changes.
+  */
+-export type Ch1FixedObjectiveState = 'harvest' | 'traverse';
++export type Ch1FixedObjectiveState = 'salvage' | 'harvest' | 'traverse';
+ 
+ /**
+  * `ch1-raster` advances on a THREE-way conjunction (`quotaCollected().met`:
+@@ -121,7 +121,7 @@
+     boarding: { phase: 'idle' as const, inputMode: 'keyboard' as const },
+     settlement: { scanned: false, attended: false, coreCarried: false, foundationPlaced: false, night: false, chosen: false, habitat: null },
+     secondHearthComplete: false,
+-    ch1FixedState: 'harvest',
++    ch1FixedState: 'salvage',
+     ch1RasterState: 'salvage',
+     anomalyDesignated: false,
+     navWaypointIndex: 0,
+--- before/main/src/story/debrisSalvage.ts
++++ after/main/src/story/debrisSalvage.ts
+@@ -84,6 +84,18 @@
+   return collectedDebrisCount() >= getDebrisScattered();
+ }
+ 
++/** Required quota receipts; optional physical debris retains its original lifecycle. */
++export function requiredDebrisSalvageComplete(): boolean {
++  return [0, 1, 2].every(isDebrisCollected);
++}
++
++export interface DebrisCollectionReceipt { index: number; receiptId: string }
++const receiptListeners = new Set<(receipt: DebrisCollectionReceipt) => void>();
++export function subscribeDebrisCollectionReceipt(listener: (receipt: DebrisCollectionReceipt) => void): () => void {
++  receiptListeners.add(listener);
++  return () => { receiptListeners.delete(listener); };
++}
++
+ /** Walk-over collection: grants the piece's loot exactly once. */
+ export function collectDebris(index: number): void {
+   if (isDebrisCollected(index)) return;
+@@ -92,6 +104,7 @@
+     addItem(loot.id, loot.qty);
+   }
+   playSfx('terminalKey');
++  for (const listener of receiptListeners) listener({ index, receiptId: `debris:${index}` });
+ }
+ 
+ // Live piece positions (registered by DebrisField for the autopilot's sweep).
+--- before/main/src/story/feed/RegulationFeedHud.tsx
++++ after/main/src/story/feed/RegulationFeedHud.tsx
+@@ -13,7 +13,7 @@
+ import { getMawChargeFraction, subscribeMaw } from '../../game/systems/mawSystem.ts';
+ import { subscribeProgression } from '../../game/systems/progressionSystem.ts';
+ import { isTouchDevice } from '../../utils/mobileInput.ts';
+-import { collectedDebrisCount, getDebrisScattered } from '../debrisSalvage.ts';
++import { isDebrisCollected } from '../debrisSalvage.ts';
+ import { collectedPodCount, SUPPLY_POD_COUNT } from '../supplyPods.ts';
+ import { NAV_WAYPOINT_COUNT, reachedNavWaypointCount } from '../navWaypoints.ts';
+ import { cameraChromeVisualState, getFeedRuntime } from '../feedRuntime.ts';
+@@ -21,15 +21,18 @@
+ import { getStoryText, getStoryTextVersion, subscribeStoryText } from '../storyText.ts';
+ import { useStoryState } from '../storyState.ts';
+ import { CH1_FIXED_TUTORIAL, CH1_QUOTA } from '../storyScript.ts';
+-import { fixedTutorialProgress } from '../storyDirector.ts';
++import { storyNow } from '../storyClock.ts';
+ import {
+   getActiveGuidedStoryObjective,
++  getEarlyObjectiveReceipt,
+   getGuidedStoryObjectiveHealth,
+   getGuidedStoryObjectiveVersion,
+   subscribeGuidedStoryObjective
+ } from '../ux/objectiveDirector.ts';
+ import {
+   readStoryHudSafeAreaInsets,
++  readEarlyFeedReservations,
++  solveEarlyFeedLayout,
+   solveStoryEdgeLabelPresentation,
+   solveStoryFeedLedgerPlacement,
+   solveStoryHudLayout
+@@ -104,9 +107,11 @@
+     getGuidedStoryObjectiveVersion,
+     getGuidedStoryObjectiveVersion
+   );
++  const early = /^ch1-(fixed|track|raster)$/.test(story.beat ?? '');
++  const earlyRef = useRef(early); earlyRef.current = early;
+   const text = getStoryText();
+   const objective = getActiveGuidedStoryObjective();
+-  const workOrder = objective ? presentRegulationObjective(objective, getRegulationEchoLines()) : text.workorder;
++  const workOrder = objective ? presentRegulationObjective(objective, getRegulationEchoLines()) : early ? [] : text.workorder;
+   const voicedOrder = useRef({ id: objective?.id ?? '', lines: workOrder });
+   voicedOrder.current = { id: objective?.id ?? '', lines: workOrder };
+   const objectiveHealth = getGuidedStoryObjectiveHealth();
+@@ -116,6 +121,9 @@
+   const mawFraction = useSyncExternalStore(subscribeMaw, getMawChargeFraction, getMawChargeFraction);
+   useSyncExternalStore(subscribeProgression, progressionVersion, progressionVersion);
+ 
++  const orderRef = useRef<HTMLElement>(null);
++  const earlyLedgerRef = useRef<HTMLDivElement>(null);
++  const earlyCountsRef = useRef('');
+   const counterRef = useRef<HTMLDivElement>(null);
+   const camRef = useRef<HTMLDivElement>(null);
+   const cameraFrameRef = useRef<HTMLDivElement>(null);
+@@ -154,7 +162,7 @@
+     const tick = () => {
+       raf = requestAnimationFrame(tick);
+       const r = getFeedRuntime();
+-      if (!embodiedGuidanceActive && r.treatment > 0.05) {
++      if (!embodiedGuidanceActive && r.treatment > 0.05 && voicedOrder.current.id !== 'ch1:track:tracking-transfer') {
+         voicedOrder.current.lines.forEach((line, index) => voiceVisibleText(`order:${voicedOrder.current.id}:${index}`, line, line.length, 'feed'));
+       }
+       const cameraChrome = cameraChromeVisualState(r);
+@@ -174,6 +182,21 @@
+       if (counter) {
+         const stamp = `FRM ${String(r.frame).padStart(7, '0')}`;
+         counter.textContent = garbleText(stamp, r.garble);
++      }
++      if (earlyRef.current) {
++        const ownOrder = orderRef.current?.getBoundingClientRect();
++        const ownLedger = earlyLedgerRef.current?.getBoundingClientRect();
++        const reservations = readEarlyFeedReservations().filter(rect =>
++          !(ownOrder && rect.left === ownOrder.left && rect.top === ownOrder.top && rect.width === ownOrder.width)
++          && !(ownLedger && rect.left === ownLedger.left && rect.top === ownLedger.top && rect.width === ownLedger.width));
++        const layout = solveEarlyFeedLayout({ width: window.innerWidth, height: window.innerHeight,
++          safe: readStoryHudSafeAreaInsets(), reservations });
++        if (orderRef.current) Object.assign(orderRef.current.style, { left: `${layout.order.left}px`, top: `${layout.order.top}px`, width: `${layout.order.width}px` });
++        if (earlyLedgerRef.current) {
++          Object.assign(earlyLedgerRef.current.style, { left: `${layout.ledger.left}px`, bottom: `${layout.ledger.bottom}px`, width: `${layout.ledger.width}px` });
++          const receipt = getEarlyObjectiveReceipt();
++          earlyLedgerRef.current.textContent = receipt && storyNow() - receipt.shownAt < 900 ? receipt.text : earlyCountsRef.current;
++        }
+       }
+       // SITE CAM tag (ch1-fixed only): the id follows the cell the worker
+       // stands in — each screen flip reads as a coverage hand-off.
+@@ -274,7 +297,9 @@
+   const isoVisible = story.beat === 'ch1-iso';
+   const fiber = Math.min(getItemCount('biofiber'), CH1_QUOTA.biofiber);
+   const stone = Math.min(getItemCount('stone'), CH1_QUOTA.stone);
+-  const fixedProgress = fixedVisible ? fixedTutorialProgress() : null;
++  earlyCountsRef.current = fixedVisible
++    ? `DEBRIS ${isDebrisCollected(0) ? 1 : 0}/1 · FIBER ${Math.min(getItemCount('biofiber'), CH1_FIXED_TUTORIAL.biofiber)}/${CH1_FIXED_TUTORIAL.biofiber}`
++    : `FIBER ${fiber}/${CH1_QUOTA.biofiber} · STONE ${stone}/${CH1_QUOTA.stone}`;
+   // Feed-era prompts name the d-pad arrows / EXTRACT / JUMP controls on touch;
+   // on desktop the authored keyboard tokens pass through unchanged. The survey
+   // chart is not openable during the feed era (the [M] on the ch1-nav retained-
+@@ -290,6 +315,7 @@
+     <>
+       {!embodiedGuidanceActive && workOrder.length > 0 && (
+         <aside
++          ref={orderRef}
+           aria-live="polite"
+           aria-atomic="true"
+           aria-label="Current story objective"
+@@ -328,12 +354,13 @@
+             // the second one caused by fixing the first.)
+             maxHeight: `calc(100vh - 26px - ${ledgerPlacement.bottom + FEED_LEDGER_HEIGHT_ALLOWANCE_PX}px`
+               + ' - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))',
+-            overflow: 'hidden'
++            overflow: 'hidden',
++            ...(early ? { left: 18, width: 'calc(100vw - 36px)', maxWidth: 680, maxHeight: 'none', overflow: 'visible', fontSize: 14, lineHeight: '20px', letterSpacing: '0.06em' } : {})
+           }}
+         >
+-          <div style={{ color: FEED_INK_DIM, marginBottom: 6 }}>
++          {!early && <div style={{ color: FEED_INK_DIM, marginBottom: 6 }}>
+             CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEED
+-          </div>
++          </div>}
+           {workOrder.map((line, i) => (
+             <div key={`${i}-${line}`}>{feedLine(line)}</div>
+           ))}
+@@ -368,7 +395,7 @@
+         style={{
+           position: 'fixed',
+           top: 'calc(26px + env(safe-area-inset-top, 0px))',
+-          right: 'calc(56px + env(safe-area-inset-right, 0px))',
++          right: `calc(${early ? 18 : 56}px + env(safe-area-inset-right, 0px))`,
+           textAlign: 'right', fontSize: 11, lineHeight: 1.8, display: 'none', opacity: 0,
+           maxWidth: FEED_STATUS_WIDTH_PX
+         }}
+@@ -381,12 +408,12 @@
+           }} />
+           REC
+         </div>
+-        <div ref={counterRef}>FRM 0000000</div>
++        {!early && <div ref={counterRef}>FRM 0000000</div>}
+         {/* camera-switch chrome: live cam id while coverage is cellular; the
+             same camera, impossibly HOLDING, while the hand-off is suspended */}
+         {fixedVisible && <div ref={camRef}>{siteCamLabel(getFeedRuntime().camCell)}</div>}
+         {trackVisible && <div>{siteCamLabel(getFeedRuntime().camCell)} · HOLDING</div>}
+-        <div style={{ color: FEED_INK_DIM }}>SITE 7C-θ · LIVE</div>
++        {!early && <div style={{ color: FEED_INK_DIM }}>SITE 7C-θ · LIVE</div>}
+       </div>
+ 
+       {/* violation flood (A2 opening) */}
+@@ -403,16 +430,10 @@
+         </div>
+       )}
+ 
+-      {/* fixed-screen calibration ledger */}
+-      {fixedProgress && (
+-        <div {...hudSurface('feed-ledger', 'informational')} style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: 1.9 }}>
+-          <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>CALIBRATION</div>
+-          <div>
+-            FIBER {fixedProgress.fiber}/{CH1_FIXED_TUTORIAL.biofiber} · SCREENS {fixedProgress.screens}/{CH1_FIXED_TUTORIAL.screens}
+-          </div>
+-          <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>
+-            HARVESTER CELL {Math.round(mawFraction * 100)}% · TRICKLE FEED
+-          </div>
++      {early && !trackVisible && (
++        <div ref={earlyLedgerRef} {...hudSurface('feed-ledger', 'informational')}
++          style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: '20px', whiteSpace: 'nowrap' }}>
++          {earlyCountsRef.current}
+         </div>
+       )}
+ 
+@@ -465,11 +486,11 @@
+       )}
+ 
+       {/* quota ledger */}
+-      {quotaVisible && (
++      {quotaVisible && !early && (
+         <div {...hudSurface('feed-ledger', 'informational')} style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: 1.9 }}>
+           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>QUOTA</div>
+           <div>
+-            FIBER {fiber}/{CH1_QUOTA.biofiber} · STONE {stone}/{CH1_QUOTA.stone} · DEBRIS {collectedDebrisCount()}/{getDebrisScattered()}
++            FIBER {fiber}/{CH1_QUOTA.biofiber} · STONE {stone}/{CH1_QUOTA.stone}
+           </div>
+           <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>
+             HARVESTER CELL {Math.round(mawFraction * 100)}% · TRICKLE FEED
+--- before/main/src/story/feed/SurveyBracketDriver.tsx
++++ after/main/src/story/feed/SurveyBracketDriver.tsx
+@@ -2,21 +2,23 @@
+ import * as THREE from 'three';
+ import { useFrame, useThree } from '@react-three/fiber';
+ import { getFeedRuntime, FEED_BRACKET_SLOTS } from '../feedRuntime.ts';
+-import { getSideLens } from '../sideLens.ts';
++import { getSideFacing, getSideLens } from '../sideLens.ts';
+ import { getStoryStateSnapshot } from '../storyState.ts';
+ import { getAppStateSnapshot } from '../../state/appState.ts';
+ import { getPlayerWorldPosition } from '../../state/playerFrame.ts';
+-import { getDebrisPositions, isDebrisCollected } from '../debrisSalvage.ts';
++import { getDebrisPositions, isDebrisCollected, requiredDebrisSalvageComplete } from '../debrisSalvage.ts';
+ import { voxelSystem } from '../../utils/efficientVoxelSystem.ts';
+ import { BLOCKS } from '../../game/data/blocks.ts';
+ import { getVoxelRealityStage } from '../../game/systems/realityRenderSystem.ts';
+ import { getItemCount } from '../../game/systems/inventorySystem.ts';
+-import { debrisSalvageComplete } from '../debrisSalvage.ts';
++import { canHarvestVoxel } from '../../game/systems/harvestingSystem.ts';
++import { getEquippedToolTier } from '../../game/systems/loadoutSystem.ts';
++import { getActiveGuidedStoryObjective } from '../ux/objectiveDirector.ts';
++import { VOXEL_SCALE } from '../../utils/cubeGravityConstants.ts';
+ import { CH1_FIXED_TUTORIAL, CH1_QUOTA } from '../storyScript.ts';
+-import { isAutopilotDriving } from '../autopilot.ts';
+ import {
+-  SURVEY_BRACKET_LIMIT,
+-  SURVEY_BRACKET_SALVAGE_SHARE,
++  pickSideHarvestVoxel,
++  setDesignatedSurveyTargetKey,
+   collectHarvestBracketTargets,
+   collectSalvageBracketTargets,
+   solveSurveyBracketRect,
+@@ -53,11 +55,12 @@
+   const size = useThree(state => state.size);
+   const targets = useRef<SurveyBracketTarget[]>([]);
+   const sinceSelect = useRef(Infinity);
++  const objectiveId = useRef('');
+   // Reused so the per-frame path allocates nothing.
+   const probe = useMemo(
+     () => (x: number, y: number, z: number) => {
+       const voxel = voxelSystem.getVoxel(x, y, z);
+-      if (!voxel) return null;
++      if (!voxel || !canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: getEquippedToolTier() })) return null;
+       return { yields: BLOCKS[voxel.blockId]?.drops.includes('biofiber') ?? false };
+     },
+     []
+@@ -74,41 +77,59 @@
+     const monochrome = getVoxelRealityStage() === 'bare';
+     // The screening is not a player and does not need a prosthesis; brackets in
+     // a capture would read as shipped chrome in every cinematography frame.
+-    if (!mode || !playing || paused || isAutopilotDriving()
++    if (!mode || !playing || paused
+       || !story.active || !monochrome || r.externalCameraMix < 0.5) {
+       for (const bracket of r.brackets) bracket.visible = false;
++      setDesignatedSurveyTargetKey(null);
+       targets.current = [];
+       sinceSelect.current = Infinity;
+       return;
+     }
+ 
++    const objective = getActiveGuidedStoryObjective();
++    if (objectiveId.current !== objective?.id) {
++      objectiveId.current = objective?.id ?? ''; targets.current = []; sinceSelect.current = Infinity;
++    }
++    const target = targets.current[0];
++    if (target?.key.startsWith('d:') && isDebrisCollected(Number(target.key.slice(2)))) sinceSelect.current = Infinity;
++    if (target?.key.startsWith('v:')) {
++      const [x, y, z] = target.key.slice(2).split(',').map(Number);
++      if (!probe(x, y, z)?.yields) sinceSelect.current = Infinity;
++    }
++    const lensNow = getSideLens();
++    const native = lensNow && target?.label === 'BIOFIBER' ? pickSideHarvestVoxel(getPlayerWorldPosition(), lensNow, getSideFacing(), probe, true) : null;
++    if (native && target?.key !== `v:${native.x},${native.y},${native.z}`) sinceSelect.current = Infinity;
+     const dt = Math.min(0.25, Math.max(0, rawDt));
+     sinceSelect.current += dt;
+     const playerPosition = getPlayerWorldPosition();
+     if (sinceSelect.current >= SELECT_INTERVAL_SECONDS) {
+       sinceSelect.current = 0;
+-      // Designate what is OUTSTANDING, not what the beat is nominally about.
+-      const fiberQuota = mode === 'harvest' ? CH1_FIXED_TUTORIAL.biofiber : CH1_QUOTA.biofiber;
++      const fiberQuota = story.beat === 'ch1-fixed' ? CH1_FIXED_TUTORIAL.biofiber : CH1_QUOTA.biofiber;
+       const demand = surveyBracketDemand(story.beat, {
+         fiber: getItemCount('biofiber') < fiberQuota,
+-        debris: !debrisSalvageComplete()
++        debris: story.beat === 'ch1-fixed' ? !isDebrisCollected(0) : !requiredDebrisSalvageComplete()
+       });
+-      const salvage = demand.salvage
+-        ? collectSalvageBracketTargets(
+-            playerPosition,
+-            getDebrisPositions(),
+-            isDebrisCollected,
+-            // Debris never crowds out the fiber the player cannot see.
+-            demand.harvest ? SURVEY_BRACKET_SALVAGE_SHARE : SURVEY_BRACKET_LIMIT
+-          )
+-        : [];
+       const lens = getSideLens();
+-      const harvest = demand.harvest && lens
+-        ? collectHarvestBracketTargets(playerPosition, lens, probe, SURVEY_BRACKET_LIMIT - salvage.length)
+-        : [];
+-      targets.current = [...salvage, ...harvest];
++      const salvage = demand.salvage ? collectSalvageBracketTargets(playerPosition, getDebrisPositions(),
++        index => isDebrisCollected(index) || (story.beat === 'ch1-fixed' && index !== 0), 3) : [];
++      const actual = demand.harvest && lens ? pickSideHarvestVoxel(playerPosition, lens, getSideFacing(), probe, true) : null;
++      const harvest = demand.harvest && lens ? collectHarvestBracketTargets(playerPosition, lens, probe, 28, position => {
++        const support = position.clone().addScaledVector(lens.up, -1.8);
++        const voxel = voxelSystem.getVoxel(Math.round(support.x / VOXEL_SCALE), Math.round(support.y / VOXEL_SCALE), Math.round(support.z / VOXEL_SCALE));
++        return !!voxel && !BLOCKS[voxel.blockId]?.tags.includes('liquid');
++      }) : [];
++      if (actual) harvest.unshift({ key: `v:${actual.x},${actual.y},${actual.z}`, position: new THREE.Vector3(actual.x, actual.y, actual.z).multiplyScalar(VOXEL_SCALE), label: 'BIOFIBER' });
++      const candidates = [...salvage, ...harvest].filter(candidate => {
++        _ndc.copy(candidate.position).project(state.camera);
++        return _ndc.z >= -1 && _ndc.z <= 1 && Math.abs(_ndc.x) < 1 - BRACKET_SIZE / size.width
++          && Math.abs(_ndc.y) < 1 - BRACKET_SIZE / size.height;
++      });
++      const retained = candidates.find(candidate => candidate.key === targets.current[0]?.key);
++      targets.current = candidates.length ? [actual ? candidates[0] : retained ?? candidates[0]] : [];
++
+     }
+ 
++    setDesignatedSurveyTargetKey(targets.current[0]?.key ?? null);
+     const camera = state.camera;
+     for (let i = 0; i < FEED_BRACKET_SLOTS; i++) {
+       const bracket = r.brackets[i];
+@@ -120,7 +141,7 @@
+       _ndc.copy(target.position).project(camera);
+       // Behind the camera, or far enough outside the frame that a clamped box
+       // would designate empty ground rather than the target.
+-      if (_ndc.z > 1 || Math.abs(_ndc.x) > 1.15 || Math.abs(_ndc.y) > 1.15) {
++      if (!Number.isFinite(_ndc.x) || !Number.isFinite(_ndc.y) || _ndc.z < -1 || _ndc.z > 1 || Math.abs(_ndc.x) > 1 - BRACKET_SIZE / size.width || Math.abs(_ndc.y) > 1 - BRACKET_SIZE / size.height) {
+         bracket.visible = false;
+         continue;
+       }
+--- before/main/src/story/feed/SurveyBracketOverlay.tsx
++++ after/main/src/story/feed/SurveyBracketOverlay.tsx
+@@ -1,6 +1,7 @@
+ import { useEffect, useRef } from 'react';
+ import { getFeedRuntime, FEED_BRACKET_SLOTS } from '../feedRuntime.ts';
+ import { theme } from '../../ui/theme.ts';
++import { readEarlyFeedReservations, readStoryHudSafeAreaInsets } from '../ux/storyHudLayout.ts';
+ import { hudSurface } from '../../ui/hudSurfaces.ts';
+ 
+ // --- The survey bracket overlay -----------------------------------------------------
+@@ -32,6 +33,7 @@
+ 
+ export default function SurveyBracketOverlay(): React.ReactElement {
+   const boxRefs = useRef<(HTMLDivElement | null)[]>([]);
++  const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
+   const labelRefs = useRef<(HTMLDivElement | null)[]>([]);
+ 
+   useEffect(() => {
+@@ -42,7 +44,8 @@
+       for (let i = 0; i < FEED_BRACKET_SLOTS; i++) {
+         const box = boxRefs.current[i];
+         const label = labelRefs.current[i];
+-        if (!box || !label) continue;
++        const frame = frameRefs.current[i];
++        if (!box || !label || !frame) continue;
+         const b = r.brackets[i];
+         // The brackets belong to the camera treatment: when the feed fades, so
+         // do they. Same condition the survey marker uses.
+@@ -55,9 +58,29 @@
+         box.style.height = `${b.size}px`;
+         box.style.transform = `translate(${b.x}px, ${b.y}px) translate(-50%, -50%)`;
+         label.textContent = b.label;
+-        // Keep the label inside the frame without moving the designation.
+-        label.style.left = b.labelFlipped ? 'auto' : `${b.size + 6}px`;
+-        label.style.right = b.labelFlipped ? `${b.size + 6}px` : 'auto';
++        const safe = readStoryHudSafeAreaInsets();
++        const width = label.getBoundingClientRect().width;
++        const height = label.getBoundingClientRect().height;
++        const half = b.size / 2;
++        const options = [
++          { x: b.x + half + 6, y: b.y - height / 2 },
++          { x: b.x - half - 6 - width, y: b.y - height / 2 },
++          { x: b.x - width / 2, y: b.y - half - 6 - height }
++        ];
++        const occupied = readEarlyFeedReservations();
++        const placement = options.find(p => p.x >= safe.left + 18 && p.x + width <= window.innerWidth - safe.right - 18
++          && p.y >= safe.top + 18 && p.y + height <= window.innerHeight - safe.bottom - 18
++          && occupied.every(r => p.x + width + 14 <= r.left || p.x >= r.right + 14 || p.y + height + 14 <= r.top || p.y >= r.bottom + 14));
++        if (!placement) { box.style.display = 'none'; continue; }
++        // Registry rectangle includes the entire label as well as the 46px designation.
++        const left = Math.min(b.x - half, placement.x), top = Math.min(b.y - half, placement.y);
++        const right = Math.max(b.x + half, placement.x + width), bottom = Math.max(b.y + half, placement.y + height);
++        Object.assign(box.style, { left: `${left}px`, top: `${top}px`, width: `${right - left}px`, height: `${bottom - top}px`, transform: 'none' });
++        Object.assign(frame.style, { left: `${b.x - half - left}px`, top: `${b.y - half - top}px`, width: `${b.size}px`, height: `${b.size}px` });
++        label.style.left = `${placement.x - left}px`;
++        label.style.top = `${placement.y - top}px`;
++        label.style.right = 'auto';
++        label.style.transform = 'none';
+       }
+     };
+     raf = requestAnimationFrame(tick);
+@@ -91,21 +114,23 @@
+             top: 0,
+             left: 0,
+             display: 'none',
+-            willChange: 'transform',
+-            animation: 'pvSurveyBracket 2.2s steps(2, jump-none) infinite'
++            willChange: 'transform'
+           }}
+         >
+-          {CORNERS.map((corner, c) => (
+-            <div key={c} style={{ position: 'absolute', width: ARM, height: ARM, ...corner }} />
+-          ))}
++          <div ref={el => { frameRefs.current[i] = el; }} data-survey-designation="true" style={{ position: 'absolute' }}>
++            {CORNERS.map((corner, c) => (
++              <div key={c} style={{ position: 'absolute', width: ARM, height: ARM, ...corner }} />
++            ))}
++          </div>
+           <div
+             ref={el => { labelRefs.current[i] = el; }}
+             style={{
+               position: 'absolute',
+               top: '50%',
+               transform: 'translateY(-50%)',
+-              fontSize: 9,
+-              letterSpacing: '0.16em',
++              fontSize: 12,
++              lineHeight: '18px',
++              letterSpacing: '0.08em',
+               whiteSpace: 'nowrap',
+               color: FEED_INK,
+               background: 'rgba(2,4,3,0.66)',
+@@ -114,12 +139,7 @@
+           />
+         </div>
+       ))}
+-      <style>{`
+-        @keyframes pvSurveyBracket { 0%, 82% { opacity: 1 } 83%, 100% { opacity: 0.45 } }
+-        @media (prefers-reduced-motion: reduce) {
+-          .pv-survey-bracket { animation: none !important; }
+-        }
+-      `}</style>
++
+     </div>
+   );
+ }
+--- before/main/src/story/feed/regulationVoice.ts
++++ after/main/src/story/feed/regulationVoice.ts
+@@ -66,27 +66,16 @@
+   ]
+ };
+ 
+-const CH1_FIXED_TRAVERSE_ORDER: readonly string[] = [
+-  'DIRECTIVE 2: EXTRACTOR CALIBRATED. QUOTA LOGGED.',
+-  'OUTSTANDING: COVERAGE CHECK. THIS CAMERA CANNOT COMPLETE IT.',
+-  'WALK [A]/[D] UNTIL THE FRAME HANDS YOU TO THE NEXT CAMERA.',
+-  'COVERAGE IS CELLULAR. CAMERAS DO NOT MOVE. WORKERS DO.'
+-];
+-
+-const CH1_RASTER_QUOTA_ORDER: readonly string[] = [
+-  'DEBRIS RECOVERED. HULL PROPERTY RESTORED TO INVENTORY.',
+-  'OUTSTANDING: BIOFIBER. THE STRIP IS LONG AND THE GROUND IS NOT.',
+-  'A CELL YIELDS ONCE. HOLD [E] AND WALK [A]/[D] AS YOU EXTRACT.',
+-  'DEBRIS IS AUTHORITY PROPERTY. YOU ARE AUTHORITY PROPERTY.'
+-];
++/** Exact original track lineage. The middle three lines are retired from automatic presentation. */
++export const TRACK_SYSTEM_LINE = REGULATION_VOICE.track[0];
++export const TRACK_WATCHER_LINE = REGULATION_VOICE.track[4];
++export const RETIRED_TRACK_LINES = REGULATION_VOICE.track.slice(1, 4);
+ 
+ /** Era voice is a presentation of the active objective, never another stored order. */
+ export function presentRegulationObjective(objective: Readonly<GuidedStoryObjective>, echoes: readonly string[] = []): readonly string[] {
+   const id = objective.id;
+-  if (id.startsWith('ch1:fixed:')) return [...(id === 'ch1:fixed:cross-camera-cell' ? CH1_FIXED_TRAVERSE_ORDER : REGULATION_VOICE.fixed), ...echoes];
+-  if (id.startsWith('ch1:raster:')) return [...(id === 'ch1:raster:extract-fiber-quota' ? CH1_RASTER_QUOTA_ORDER : REGULATION_VOICE.raster), ...echoes];
+-  if (id.startsWith('ch1:track:')) return REGULATION_VOICE.track;
+-  if (id.startsWith('ch1:depth:')) return REGULATION_VOICE.depth;
++  if (['ch1:fixed:', 'ch1:raster:', 'ch1:track:', 'ch1:depth:'].some(prefix => id.startsWith(prefix))) return objective.workOrder;
++  void echoes;
+   if (id.startsWith('ch1:nav:')) return REGULATION_VOICE.nav;
+   if (id.startsWith('ch1:iso:')) return REGULATION_VOICE.iso;
+   if (id.startsWith('ch1:lift:')) return ['PAN-TILT SURVEY: CALIBRATING…', 'HOLD POSITION. PERSPECTIVE IS BEING ISSUED.'];
+--- before/main/src/story/feed/surveyBrackets.test.ts
++++ after/main/src/story/feed/surveyBrackets.test.ts
+@@ -67,15 +67,15 @@
+     expect(distances).toEqual([...distances].sort((a, b) => a - b));
+   });
+ 
+-  it('only scans rows off the walked plane — the ones extraction can reach', () => {
++  it('shares ordinary off-row ground probes and only above-ground on-row probes', () => {
+     // Mirrors sideHarvestProbePointsOffRow: ground-level candidates sit one
+     // voxel either side of the walked row, never in it.
+-    const probed: number[] = [];
+-    collectHarvestBracketTargets(player, lens, (_x, _y, z) => {
+-      probed.push(z);
++    const probed: { y: number; z: number }[] = [];
++    collectHarvestBracketTargets(player, lens, (_x, y, z) => {
++      probed.push({ y, z });
+       return null;
+     });
+-    expect(probed.every(z => Math.abs(z) === 1)).toBe(true);
++    expect(probed.every(({ y, z }) => Math.abs(z) === 1 || (z === 0 && y >= 25))).toBe(true);
+   });
+ 
+   it('gives every target a key stable across frames', () => {
+@@ -97,7 +97,7 @@
+     // ch1-raster will not advance until every piece is recovered, so a
+     // collected piece must stop being designated the moment it is taken.
+     const targets = collectSalvageBracketTargets(player, positions, i => i === 1);
+-    expect(targets.map(t => t.key)).toEqual(['d:2', 'd:0']);
++    expect(targets.map(t => t.key)).toEqual(['d:2']);
+     expect(targets.every(t => t.label === 'DEBRIS')).toBe(true);
+   });
+ 
+@@ -108,10 +108,10 @@
+ });
+ 
+ describe('bracket rect', () => {
+-  it('keeps the box fully inside the viewport', () => {
++  it('never moves a real offscreen target onto empty on-screen ground', () => {
+     const rect = solveSurveyBracketRect(-40, 900, 46, 800, 600);
+-    expect(rect.x).toBe(23);
+-    expect(rect.y).toBe(600 - 23);
++    expect(rect.x).toBe(-40);
++    expect(rect.y).toBe(900);
+   });
+ 
+   it('flips the label inboard when it would leave the frame', () => {
+@@ -136,22 +136,22 @@
+       .toEqual({ harvest: true, salvage: false });
+   });
+ 
+-  it('designates both when both are outstanding', () => {
++  it('designates required salvage alone before outstanding fiber', () => {
+     expect(surveyBracketDemand('ch1-raster', { fiber: true, debris: true }))
+-      .toEqual({ harvest: true, salvage: true });
++      .toEqual({ harvest: false, salvage: true });
+   });
+ 
+   it('goes dark when the beat has nothing outstanding', () => {
+     expect(surveyBracketDemand('ch1-raster', { fiber: false, debris: false }))
+       .toEqual({ harvest: false, salvage: false });
+     // ch1-fixed's quota met means the rung has moved on to the camera hand-off.
+-    expect(surveyBracketDemand('ch1-fixed', { fiber: false, debris: true }))
++    expect(surveyBracketDemand('ch1-fixed', { fiber: false, debris: false }))
+       .toEqual({ harvest: false, salvage: false });
+   });
+ 
+-  it('never designates debris on the beat that has none to give', () => {
++  it('opens fixed on actual debris0 before extraction', () => {
+     expect(surveyBracketDemand('ch1-fixed', { fiber: true, debris: true }))
+-      .toEqual({ harvest: true, salvage: false });
++      .toEqual({ harvest: false, salvage: true });
+   });
+ 
+   it('designates nothing outside the bracket beats', () => {
+--- before/main/src/story/feed/surveyBrackets.ts
++++ after/main/src/story/feed/surveyBrackets.ts
+@@ -1,6 +1,6 @@
+ import * as THREE from 'three';
+ import type { StoryBeat } from '../storyState.ts';
+-import type { SideLens } from '../sideLens.ts';
++import { sideHarvestProbePointsOffRow, type SideLens } from '../sideLens.ts';
+ import { VOXEL_SCALE } from '../../utils/cubeGravityConstants.ts';
+ 
+ // --- The survey brackets ------------------------------------------------------------
+@@ -35,13 +35,11 @@
+   label: string;
+ }
+ 
+-/**
+- * Four is the ceiling on purpose. The bracket answers "which shape pays?", and
+- * one answer plus the next place to walk is the whole lesson; a screen of
+- * brackets would be the clutter the ladder is trying to avoid, and would read
+- * as decoration rather than designation.
+- */
+-export const SURVEY_BRACKET_LIMIT = 4;
++/** Exactly one phase-matched actionable designation. */
++export const SURVEY_BRACKET_LIMIT = 1;
++let designatedTargetKey: string | null = null;
++export function getDesignatedSurveyTargetKey(): string | null { return designatedTargetKey; }
++export function setDesignatedSurveyTargetKey(key: string | null): void { designatedTargetKey = key; }
+ 
+ /** Half-width of the row scan, in voxels either side of the player. */
+ const SCAN_VOXELS = 7;
+@@ -87,11 +85,7 @@
+ ): SurveyBracketDemand {
+   const mode = surveyBracketMode(beat);
+   if (!mode) return { harvest: false, salvage: false };
+-  return {
+-    harvest: outstanding.fiber,
+-    // Only the salvage beat has debris to designate.
+-    salvage: mode === 'salvage' && outstanding.debris
+-  };
++  return { harvest: !outstanding.debris && outstanding.fiber, salvage: outstanding.debris };
+ }
+ 
+ /**
+@@ -99,7 +93,7 @@
+  * findable target and is capped so it can never crowd the fiber brackets off
+  * the screen the way it did before — the fiber is what the player cannot see.
+  */
+-export const SURVEY_BRACKET_SALVAGE_SHARE = 2;
++export const SURVEY_BRACKET_SALVAGE_SHARE = 1;
+ 
+ /** A block the extractor will actually pay out for, by drop table. */
+ export type VoxelYieldProbe = (
+@@ -127,44 +121,30 @@
+   playerPosition: THREE.Vector3,
+   lens: SideLens,
+   probe: VoxelYieldProbe,
+-  limit = SURVEY_BRACKET_LIMIT
++  limit = SURVEY_BRACKET_LIMIT,
++  canApproach: (position: THREE.Vector3) => boolean = () => true
+ ): SurveyBracketTarget[] {
+-  const found: { target: SurveyBracketTarget; distance: number }[] = [];
+-  const rows = [VOXEL_SCALE, -VOXEL_SCALE];
+-  for (let step = -SCAN_VOXELS; step <= SCAN_VOXELS; step++) {
+-    for (const row of rows) {
+-      _scan.copy(playerPosition)
+-        .addScaledVector(lens.travelAxis, step * VOXEL_SCALE)
+-        .addScaledVector(lens.up, -1.8)
+-        .addScaledVector(lens.depthAxis, row);
+-      const vx = Math.round(_scan.x / VOXEL_SCALE);
+-      const vy = Math.round(_scan.y / VOXEL_SCALE);
+-      const vz = Math.round(_scan.z / VOXEL_SCALE);
+-      const voxel = probe(vx, vy, vz);
+-      if (!voxel?.yields) continue;
+-      found.push({
+-        target: {
+-          key: `v:${vx},${vy},${vz}`,
+-          position: new THREE.Vector3(vx * VOXEL_SCALE, vy * VOXEL_SCALE, vz * VOXEL_SCALE),
+-          label: 'BIOFIBER'
+-        },
+-        distance: Math.abs(step)
+-      });
++  const found: SurveyBracketTarget[] = [];
++  const seen = new Set<string>();
++  const approaches = [0, ...Array.from({ length: SCAN_VOXELS }, (_, i) => [i + 1, -(i + 1)]).flat()];
++  for (const step of approaches) {
++    _scan.copy(playerPosition).addScaledVector(lens.travelAxis, step * VOXEL_SCALE);
++    const along = _scan.clone().sub(lens.origin).dot(lens.travelAxis);
++    if (Math.abs(along) > 29 || !canApproach(_scan)) continue;
++    for (const facing of [1, -1] as const) {
++      const selected = pickSideHarvestVoxel(_scan, lens, facing, probe, true);
++      if (!selected) continue;
++      const key = `v:${selected.x},${selected.y},${selected.z}`;
++      if (seen.has(key)) continue;
++      seen.add(key);
++      found.push({ key, position: new THREE.Vector3(selected.x, selected.y, selected.z).multiplyScalar(VOXEL_SCALE), label: 'BIOFIBER' });
++      if (found.length >= limit) return found;
+     }
+   }
+-  found.sort((a, b) => a.distance - b.distance);
+-  return found.slice(0, limit).map(entry => entry.target);
+-}
+-
+-/**
+- * Uncollected hull debris, nearest first.
+- *
+- * `ch1-raster` will not advance until every scattered piece is recovered
+- * (`debrisSalvageComplete()`), and the pieces are unmarked grey boxes spread
+- * across a ±28 m strip. The signed journey contract already asserts that
+- * "missed targets remain explicitly marked" for this rung; this is the
+- * implementation of that clause.
+- */
++  return found;
++}
++
++/** Remaining required indices 0..2, nearest first; optional pieces stay collectible and unmarked. */
+ export function collectSalvageBracketTargets(
+   playerPosition: THREE.Vector3,
+   positions: readonly THREE.Vector3[],
+@@ -173,7 +153,7 @@
+ ): SurveyBracketTarget[] {
+   const found: { target: SurveyBracketTarget; distance: number }[] = [];
+   positions.forEach((position, index) => {
+-    if (collected(index)) return;
++    if (index > 2 || collected(index)) return;
+     found.push({
+       target: { key: `d:${index}`, position, label: 'DEBRIS' },
+       distance: playerPosition.distanceTo(position)
+@@ -184,8 +164,8 @@
+ }
+ 
+ /**
+- * Screen-space bracket box for a projected anchor, clamped so the label never
+- * escapes the viewport. `size` is the full box edge in px.
++ * Screen-space bracket box at its actual projected anchor. Full label placement
++ * is measured by the DOM overlay without moving this anchor. `size` is the full box edge in px.
+  *
+  * The box does not scale with range: a designator that shrinks with distance
+  * stops reading as a designator and starts reading as an object, and at 1-bit
+@@ -209,8 +189,9 @@
+   labelWidth = 74
+ ): SurveyBracketRect {
+   const half = size / 2;
+-  const x = clamp(anchorX, half, Math.max(half, viewportWidth - half));
+-  const y = clamp(anchorY, half, Math.max(half, viewportHeight - half));
++  const x = Number.isFinite(anchorX) ? anchorX : 0;
++  const y = Number.isFinite(anchorY) ? anchorY : 0;
++  void viewportHeight;
+   return {
+     x,
+     y,
+@@ -219,7 +200,19 @@
+   };
+ }
+ 
+-function clamp(value: number, min: number, max: number): number {
+-  if (!Number.isFinite(value)) return min;
+-  return Math.min(max, Math.max(min, value));
+-}
++/** Shared ordinary-picker priority; read-only probes retain tool admission and fallback semantics. */
++const _harvestPoints = Array.from({ length: 6 }, () => new THREE.Vector3());
++export function pickSideHarvestVoxel(
++  position: THREE.Vector3, lens: SideLens, facing: 1 | -1, probe: VoxelYieldProbe, yieldingOnly = false
++): { x: number; y: number; z: number } | null {
++  const points = sideHarvestProbePointsOffRow(position, lens, facing, _harvestPoints);
++  let fallback: { x: number; y: number; z: number } | null = null;
++  for (const point of points) {
++    const coord = { x: Math.round(point.x / VOXEL_SCALE), y: Math.round(point.y / VOXEL_SCALE), z: Math.round(point.z / VOXEL_SCALE) };
++    const voxel = probe(coord.x, coord.y, coord.z);
++    if (!voxel) continue;
++    if (voxel.yields) return coord;
++    if (!yieldingOnly && !fallback) fallback = coord;
++  }
++  return fallback;
++}
+--- before/main/src/story/sideLens.ts
++++ after/main/src/story/sideLens.ts
+@@ -60,6 +60,124 @@
+ export function fixedScreenCellIndex(along: number, cellWidth: number): number {
+   if (!Number.isFinite(along) || !Number.isFinite(cellWidth) || cellWidth <= 0) return 0;
+   return Math.floor((along + cellWidth / 2) / cellWidth);
++}
++
++export interface SideCoverageViewport {
++  width: number; height: number; fov: number; aspect: number; touch: boolean;
++  safe: { left: number; right: number; top: number; bottom: number };
++  restoreIdentity?: string;
++  targetVertical?: { top: number; bottom: number };
++  reservations: readonly { id?: string; left: number; right: number; top: number; bottom: number }[];
++}
++export interface FixedScreenCoverageGeometry {
++  projectionSignature: string; cellWidth: number; offsetY: number; valid: boolean;
++}
++export interface FixedScreenTransfer {
++  reason: 'player-traversal'; fromCell: number; toCell: number; direction: number; playerMovementDelta: number;
++}
++export interface FixedScreenCoverageSample {
++  valid: boolean; geometryEpoch: number; projectionSignature: string; playerSampleId: number;
++  along: number; previousAlong: number; cellId: number; anchorCenter: number;
++  intervalMin: number; intervalMax: number; transferSequence: number;
++  transfer: FixedScreenTransfer | null; presentedTransferSequence: number;
++}
++let coverageViewport: SideCoverageViewport | null = null;
++let coverage: FixedScreenCoverageSample | null = null;
++let coverageGeometry: FixedScreenCoverageGeometry | null = null;
++let geometrySignature = '';
++let geometryStableSamples = 0;
++let geometryEpoch = 0;
++let geometryBaseCenter = 0;
++let geometryBaseCell = 0;
++let geometryRebase = true;
++let appliedCoverageSampleId = -1;
++export function setSideCoverageViewport(viewport: SideCoverageViewport): void { coverageViewport = viewport; }
++export function resetFixedScreenCoverage(): void {
++  coverage = null; coverageGeometry = null; geometrySignature = ''; geometryStableSamples = 0; geometryRebase = true; appliedCoverageSampleId = -1;
++}
++export function getFixedScreenCoverage(): FixedScreenCoverageSample | null { return coverage; }
++/** R3F after-render boundary; applying a camera alone does not count as a presented frame. */
++export function noteFixedScreenCoveragePresented(): void {
++  if (coverage?.playerSampleId === appliedCoverageSampleId) coverage.presentedTransferSequence = coverage.transferSequence;
++}
++/** Exact projection of the corrected conservative worker envelope in the active side rig. */
++export function resolveFixedScreenCoverageGeometry(viewport: SideCoverageViewport, rig: LensRig): FixedScreenCoverageGeometry {
++  const { width: w, height: h } = viewport;
++  const vertical = rig.lift - rig.focusLift;
++  const depth = Math.hypot(rig.distance, vertical);
++  const cos = rig.distance / depth, sin = vertical / depth;
++  const tan = Math.tan(THREE.MathUtils.degToRad(viewport.fov) / 2);
++  let near = Infinity, bodyTop = Infinity, bodyBottom = -Infinity;
++  // Root -.83, sole -.96, head top .97; both facing endpoints use .72.
++  for (const up of [-1.79, 0.14]) for (const z of [-0.72, 0.72]) {
++    const d = (rig.distance - z) * cos + (rig.lift - up) * sin;
++    near = Math.min(near, d);
++    const screenUp = (up - rig.focusLift) * cos - z * sin;
++    const y = h * (1 - screenUp / (d * tan)) / 2;
++    bodyTop = Math.min(bodyTop, y); bodyBottom = Math.max(bodyBottom, y);
++  }
++  const left = viewport.safe.left + 18, right = w - viewport.safe.right - 18;
++  let top = viewport.safe.top + 18, bottom = h - viewport.safe.bottom - 18;
++  for (const rect of viewport.reservations) {
++    if (rect.id === 'feed-work-order' || rect.id === 'feed-camera-status' || rect.id === 'story-journal-trigger' || (!rect.id && rect.bottom <= h / 2)) top = Math.max(top, rect.bottom + 14);
++    else if (rect.id || rect.top >= h / 2) bottom = Math.min(bottom, rect.top - 14);
++  }
++  if (viewport.targetVertical) {
++    bodyTop = Math.min(bodyTop, viewport.targetVertical.top);
++    bodyBottom = Math.max(bodyBottom, viewport.targetVertical.bottom);
++  }
++  let offsetY = 0;
++  if (viewport.touch && w > h) {
++    const minimum = bodyBottom - bottom;
++    const maximum = bodyTop - top;
++    if (minimum <= maximum) offsetY = THREE.MathUtils.clamp(0, minimum, maximum);
++  }
++  const horizontalDepth = near * tan * viewport.aspect;
++  const halfSpan = Math.min((1 - 2 * left / w) * horizontalDepth, (2 * right / w - 1) * horizontalDepth) - 0.72 - 0.25;
++  const projectionSignature = JSON.stringify([w, h, viewport.fov, viewport.aspect, left, right, top, bottom, offsetY,
++    rig.distance, rig.lift, rig.focusLift, rig.elevation, rig.azimuth, viewport.restoreIdentity]);
++  return { projectionSignature, cellWidth: Math.max(0.001, 2 * halfSpan), offsetY,
++    valid: halfSpan > 0 && bodyTop - offsetY >= top && bodyBottom - offsetY <= bottom };
++}
++/** One caller samples once per frame; renderer and progression consume this same identity. */
++export function sampleFixedScreenCoverage(position: THREE.Vector3, playerSampleId: number, foreground = true): FixedScreenCoverageSample | null {
++  if (!active || !coverageViewport || rigTo.followQuant <= 0) return coverage;
++  if (coverage?.playerSampleId === playerSampleId) return coverage;
++  const geometry = resolveFixedScreenCoverageGeometry(coverageViewport, rigTo);
++  geometry.projectionSignature += JSON.stringify([active.origin.toArray(), active.up.toArray(), active.travelAxis.toArray(), active.depthAxis.toArray()]);
++  const along = position.clone().sub(active.origin).dot(active.travelAxis);
++  if (geometry.projectionSignature !== geometrySignature || !foreground) {
++    geometrySignature = geometry.projectionSignature; geometryStableSamples = 1; geometryRebase = true;
++  } else geometryStableSamples += 1;
++  coverageGeometry = geometry;
++  const previous = coverage;
++  const valid = geometry.valid && geometryStableSamples >= 2 && foreground;
++  let cellId = previous?.cellId ?? 0;
++  let center = previous?.anchorCenter ?? 0;
++  let transfer: FixedScreenTransfer | null = null;
++  let sequence = previous?.transferSequence ?? 0;
++  if (valid && geometryRebase) {
++    geometryEpoch += 1; geometryRebase = false;
++    geometryBaseCenter = center; geometryBaseCell = cellId;
++  } else if (valid && previous?.valid) {
++    cellId = geometryBaseCell + fixedScreenCellIndex(along - geometryBaseCenter, geometry.cellWidth);
++    center = geometryBaseCenter + (cellId - geometryBaseCell) * geometry.cellWidth;
++    const movement = along - previous.along;
++    if (cellId !== previous.cellId && Math.abs(movement) > 1e-5) {
++      sequence += 1;
++      transfer = { reason: 'player-traversal', fromCell: previous.cellId, toCell: cellId, direction: Math.sign(movement), playerMovementDelta: movement };
++    }
++  }
++  coverage = { valid, geometryEpoch, projectionSignature: geometrySignature, playerSampleId, along, previousAlong: previous?.along ?? along,
++    cellId, anchorCenter: center, intervalMin: center - geometry.cellWidth / 2, intervalMax: center + geometry.cellWidth / 2,
++    transferSequence: sequence, transfer, presentedTransferSequence: previous?.presentedTransferSequence ?? 0 };
++  return coverage;
++}
++export function clearSideCameraViewOffset(camera: THREE.Camera): void {
++  const perspective = camera as THREE.PerspectiveCamera;
++  if (perspective.isPerspectiveCamera && perspective.userData.earlySideViewOffset) {
++    perspective.clearViewOffset(); delete perspective.userData.earlySideViewOffset;
++  }
+ }
+ 
+ // --- The lens rig ---------------------------------------------------------------
+@@ -122,6 +240,7 @@
+ }
+ 
+ export function resetLensRig(): void {
++  resetFixedScreenCoverage();
+   setLensRig(SIDE_RIG, 0);
+ }
+ 
+@@ -198,7 +317,7 @@
+     // the lens origin so the shot never bobs with terrain.
+     _rigRel.copy(anchor).sub(lens.origin);
+     const along = _rigRel.dot(lens.travelAxis);
+-    const cell = fixedScreenCellIndex(along, rig.followQuant) * rig.followQuant;
++    const cell = coverage?.anchorCenter ?? (rig.followQuant === 1 ? 0 : fixedScreenCellIndex(along, rig.followQuant) * rig.followQuant);
+     const depth = _rigRel.dot(lens.depthAxis);
+     _rigAnchor.copy(lens.origin)
+       .addScaledVector(lens.travelAxis, cell)
+@@ -327,6 +446,14 @@
+     _frameUp.lerpVectors(_upFrom, _frameUp, k).normalize();
+   }
+   applyFrame(camera, _worldEye, _worldTarget, _frameUp);
++  const perspective = camera as THREE.PerspectiveCamera;
++  const geometry = coverageViewport ? resolveFixedScreenCoverageGeometry(coverageViewport, rigTo) : coverageGeometry;
++  if (perspective.isPerspectiveCamera && geometry?.offsetY && rigTo.elevation === 0 && rigTo.distance === 16) {
++    perspective.setViewOffset(coverageViewport!.width, coverageViewport!.height, 0, geometry.offsetY, coverageViewport!.width, coverageViewport!.height);
++    perspective.userData.earlySideViewOffset = true;
++  } else clearSideCameraViewOffset(camera);
++  // The after-render callback acknowledges this exact sample only after the scene render.
++  if (coverage && rigTo.followQuant > 0) appliedCoverageSampleId = coverage.playerSampleId;
+ }
+ 
+ const _overheadFwd = new THREE.Vector3();
+--- before/main/src/story/storyDirector.test.ts
++++ after/main/src/story/storyDirector.test.ts
+@@ -20,7 +20,7 @@
+ import { consumeMawCharge, getMawCharge, MAX_MAW_CHARGE } from '../game/systems/mawSystem.ts';
+ import { setMiningProgress } from '../game/systems/miningProgress.ts';
+ import { drink, feed, getVitals, setVitals } from '../game/systems/survivalVitals.ts';
+-import { getPlayerWorldPosition } from '../state/playerFrame.ts';
++import { getPlayerWorldPosition, setPlayerWorldPosition } from '../state/playerFrame.ts';
+ import { wreckRelayHandle } from './world/WreckRelay.tsx';
+ import { getStoryForcedDayPhase } from './storyDayPhase.ts';
+ import {
+@@ -28,7 +28,7 @@
+   getCinematicLookTarget,
+   getCinematicLookWeight
+ } from './cinematicLook.ts';
+-import { seedDebrisCollected, setDebrisScattered } from './debrisSalvage.ts';
++import { collectDebris, seedDebrisCollected, setDebrisScattered } from './debrisSalvage.ts';
+ import { seedSupplyPodsCollected } from './supplyPods.ts';
+ import { ARRIVAL, CH3_CAPTIONS, DUSK, FIRST_DAY, SIGNAL, VIGIL } from './storyScript.ts';
+ import {
+@@ -61,7 +61,7 @@
+ import { storyWorldHandles } from './storyWorldHandles.ts';
+ import { CH1_2D_TRAVEL_BAND, storyFreeMarkerTargetFor } from './storyDirector.ts';
+ import { resetStoryClock, setStoryPaused } from './storyClock.ts';
+-import { getLensRig } from './sideLens.ts';
++import { getLensRig, setSideLens, clearSideLens, setSideCoverageViewport, sampleFixedScreenCoverage, getFixedScreenCoverage, applyActiveRigTransform, noteFixedScreenCoveragePresented } from './sideLens.ts';
+ import { getAuditWorkerPath, storyAnchors, STORY_SEED } from './world/storyWorld.ts';
+ 
+ const STORY_PLANET_SIZE = 50;
+@@ -291,9 +291,10 @@
+     addItem('biofiber', CH1_QUOTA.biofiber);
+     addItem('stone', CH1_QUOTA.stone);
+     storyDirectorTick(CH1_COLLECTION_TIMING.rasterMinimumSeconds, null);
+-    // Debris is already recovered here, so the live rung is the fiber one.
++    // Signed quota edge clears before the unchanged hold; no seventh objective.
+     const previousId = 'ch1:raster:extract-fiber-quota';
+-    expect(getActiveGuidedStoryObjective()?.id).toBe(previousId);
++    expect(getActiveGuidedStoryObjective()).toBeNull();
++    expect(getStoryText().workorder).toEqual([]);
+     const entered: string[] = [];
+     const unsubscribe = subscribeStoryUxFeedback(cue => entered.push(cue.objectiveId));
+ 
+@@ -513,9 +514,10 @@
+     recordStoryChoice('dispenser', 'hold');
+     recordStoryChoice('anomaly', 'ack');
+     advanceToBeat('ch1-fixed');
+-    const order = renderedWorkOrder().join('\n');
+-    expect(order).toContain('THE SCHEDULE WAS KEPT');
+-    expect(order).not.toContain('TRANSIT RECORD INCOMPLETE');
++    const record = getRegulationEchoLines().join('\n');
++    expect(record).toContain('THE SCHEDULE WAS KEPT');
++    expect(record).not.toContain('TRANSIT RECORD INCOMPLETE');
++    expect(renderedWorkOrder()).toEqual(['WALK OVER THE DEBRIS.']);
+   });
+ 
+   it('arrival breathes, restores the physical lens, and hands directly into audit', () => {
+@@ -615,8 +617,7 @@
+     // the movement the quota cannot be met without.
+     expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:raster:extract-fiber-quota');
+     const order = renderedWorkOrder().join('\n');
+-    expect(order).toContain('OUTSTANDING: BIOFIBER');
+-    expect(order).toContain('HOLD [E] AND WALK [A]/[D] AS YOU EXTRACT.');
++    expect(order).toBe('HOLD [E] AT BIOFIBER. MOVE TO THE NEXT PATCH.');
+     expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
+   });
+ 
+@@ -626,6 +627,9 @@
+     // instruction against a `SCREENS 1/2` ledger, with no marker and no
+     // fallback — a permanent stall on the first playable beat of the game.
+     advanceToBeat('ch1-fixed');
++    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:recover-first-debris');
++    expect(renderedWorkOrder()).toEqual(['WALK OVER THE DEBRIS.']);
++    collectDebris(0);
+     expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:calibrate-extractor');
+     expect(renderedWorkOrder().join('\n')).toContain('HARVEST BIOFIBER');
+ 
+@@ -635,17 +639,47 @@
+     // The remaining condition is now the only one, and it is stated outright.
+     expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:cross-camera-cell');
+     const order = renderedWorkOrder().join('\n');
+-    expect(order).toContain('WALK [A]/[D] UNTIL THE FRAME HANDS YOU TO THE NEXT CAMERA.');
+-    // The prologue echoes are the record answering back, not work-order copy:
+-    // they must survive the directive swap.
+-    expect(order).toContain('TRANSIT RECORD INCOMPLETE');
++    expect(order).toBe('WALK [A]/[D] TO THE NEXT CAMERA.');
++    // Echo lineage stays available without bloating the signed imperative.
++    expect(getRegulationEchoLines().join('\n')).toContain('TRANSIT RECORD INCOMPLETE');
+     // Still on the beat — the rung changed, progression did not.
+     expect(getStoryStateSnapshot().beat).toBe('ch1-fixed');
+   });
+ 
++  it('requires a post-arm movement crossing and a destination paint before the exact track channels', () => {
++    const lens = { origin: new THREE.Vector3(), travelAxis: new THREE.Vector3(1, 0, 0), depthAxis: new THREE.Vector3(0, 0, 1), up: new THREE.Vector3(0, 1, 0) };
++    const viewport = (width: number) => ({ width, height: 844, fov: 75, aspect: width / 844, touch: true, safe: { left: 0, right: 0, top: 0, bottom: 0 }, reservations: [] });
++    const oldPosition = getPlayerWorldPosition();
++    setSideLens(lens); advanceToBeat('ch1-fixed'); setSideCoverageViewport(viewport(390));
++    let frame = 0;
++    const sample = (x: number) => { setPlayerWorldPosition(new THREE.Vector3(x, 0, 0)); sampleFixedScreenCoverage(getPlayerWorldPosition(), ++frame); storyDirectorTick(1 / 60, null); };
++    sample(0); sample(0); sample(5); // A camera change before pickup/harvest cannot complete traversal.
++    expect(getStoryStateSnapshot().beat).toBe('ch1-fixed');
++    collectDebris(0); addItem('biofiber', 1); sample(5);
++    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:cross-camera-cell');
++    setSideCoverageViewport(viewport(400)); sample(5); sample(5);
++    expect(getStoryStateSnapshot().beat).toBe('ch1-fixed');
++    const boundary = getFixedScreenCoverage()!.intervalMax;
++    sample(boundary + 0.1);
++    expect(getStoryStateSnapshot().beat).toBe('ch1-fixed'); // Destination has not been painted.
++    const camera = new THREE.PerspectiveCamera(75, 400 / 844); const parent = new THREE.Group(); parent.position.copy(getPlayerWorldPosition()); parent.add(camera); parent.updateMatrixWorld(true);
++    applyActiveRigTransform(camera, lens, 1 / 60); noteFixedScreenCoveragePresented(); sample(boundary + 0.1);
++    expect(getStoryStateSnapshot().beat).toBe('ch1-track');
++    tickSeconds(0.1);
++    expect(getStoryText().system).toMatchObject({ text: 'CAMERA HAND-OFF: SUSPENDED. ONE VIEW STAYS WITH YOU.', ttlMs: 2800 });
++    tickSeconds(3.3);
++    expect(getStoryText().caption).toMatchObject({ text: '(simpler to keep watching this one.)', ttlMs: 3200 });
++    expect(getStoryText().system).toBeNull();
++    tickSeconds(4);
++    expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
++    expect(getStoryText().caption).toBeNull();
++    clearSideLens(); setPlayerWorldPosition(oldPosition);
++  });
++
+   it('a genuinely choice-less record (skipped prologue) still assumes compliance', () => {
+     advanceToBeat('ch1-fixed');
+-    expect(renderedWorkOrder().join('\n')).toContain('TRANSIT RECORD INCOMPLETE');
++    expect(getRegulationEchoLines().join('\n')).toContain('TRANSIT RECORD INCOMPLETE');
++    expect(renderedWorkOrder()).toEqual(['WALK OVER THE DEBRIS.']);
+   });
+ 
+   it('the harvester arrives charged and trickle-recharges while idle (not while mining)', () => {
+@@ -739,7 +773,7 @@
+     registerStoryMarkerWorld({ ...storyWorldHandles, target: () => null });
+     advanceToBeat('ch1-fixed');
+     tickSeconds(0.1);
+-    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:calibrate-extractor');
++    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:recover-first-debris');
+   });
+ 
+   it('withholds a mandatory marker until the real world is available on boot', () => {
+--- before/main/src/story/storyDirector.ts
++++ after/main/src/story/storyDirector.ts
+@@ -42,7 +42,8 @@
+   SANDBOX_FOV
+ } from './storyInputPolicy.ts';
+ import {
+-  fixedScreenCellIndex,
++  getFixedScreenCoverage,
++  resetFixedScreenCoverage,
+   getSideFacing,
+   getSideLens,
+   setLensRig,
+@@ -64,7 +65,7 @@
+ import { hifiWreckHandle } from './world/hifiWreck.ts';
+ import { isSpawnSettled } from '../game/spawnSettle.ts';
+ import { clearLifeReveal, setLifeReveal } from '../game/lifeReveal.ts';
+-import { backfillLegacyDebrisStone, debrisSalvageComplete } from './debrisSalvage.ts';
++import { backfillLegacyDebrisStone, isDebrisCollected, requiredDebrisSalvageComplete, subscribeDebrisCollectionReceipt } from './debrisSalvage.ts';
+ import { supplyPodsComplete } from './supplyPods.ts';
+ import {
+   currentNavWaypointIndex,
+@@ -106,7 +107,7 @@
+ } from '../utils/groundedSurfaceMotion.ts';
+ import { STORY_TASK_ROW_DEPTH_BAND } from './taskRowNavigation.ts';
+ import { setStoryForcedDayPhase } from './storyDayPhase.ts';
+-import { isStoryPaused } from './storyClock.ts';
++import { isStoryPaused, storyNow } from './storyClock.ts';
+ import {
+   clearCinematicCameraPose,
+   setCinematicCameraPose,
+@@ -127,6 +128,8 @@
+ } from './duskCinematography.ts';
+ import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
+ import {
++  clearStoryTextChannel,
++  getStoryText,
+   clearViolations,
+   pushViolation,
+   setWorkOrder,
+@@ -180,11 +183,15 @@
+   storyHitAnchorTempo,
+   type StoryHitAnchorId
+ } from './storyScore.ts';
++import { cancelPendingStoryUxFeedback } from './ux/feedbackCues.ts';
++import { TRACK_SYSTEM_LINE, TRACK_WATCHER_LINE } from './feed/regulationVoice.ts';
+ import { emergentStoryDirectorTick, enterEmergentStoryBeat } from './emergentStoryDirector.ts';
+ import {
+   activateGuidedStoryObjective,
+   acknowledgeGuidedStoryCompletion,
+-  getActiveGuidedStoryObjective
++  getActiveGuidedStoryObjective,
++  clearGuidedStoryObjective,
++  publishEarlyObjectiveReceipt
+ } from './ux/objectiveDirector.ts';
+ import {
+   resolveStoryObjectiveGuidance,
+@@ -405,7 +412,31 @@
+   }
+ }
+ 
+-const _fixedRel = new THREE.Vector3();
++let fixedArm: { epoch: number; sequence: number } | null = null;
++let fixedTransferAwaitingPaint = 0;
++let trackLiveEntry = false;
++let ownedTrackSystem: ReturnType<typeof getStoryText>['system'] = null;
++let ownedTrackCaption: ReturnType<typeof getStoryText>['caption'] = null;
++let fixedOwnedCaption: ReturnType<typeof getStoryText>['caption'] = null;
++
++subscribeDebrisCollectionReceipt(receipt => {
++  const beat = getStoryStateSnapshot().beat;
++  if (beat !== 'ch1-fixed' && beat !== 'ch1-raster') return;
++  cancelPendingStoryUxFeedback('later-action');
++  const objective = getActiveGuidedStoryObjective();
++  const first = objective?.id === 'ch1:fixed:recover-first-debris' && receipt.index === 0;
++  const final = objective?.id === 'ch1:raster:recover-quota' && receipt.index < 3 && requiredDebrisSalvageComplete();
++  if (objective && (first || final)) {
++    const successor = first
++      ? (getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber ? 'ch1:fixed:cross-camera-cell' : 'ch1:fixed:calibrate-extractor')
++      : (quotaCollected().met ? null : 'ch1:raster:extract-fiber-quota');
++    acknowledgeGuidedStoryCompletion(objective.id, true, { receiptId: receipt.receiptId, expectedSuccessor: successor });
++  }
++  if ((beat === 'ch1-fixed' && receipt.index === 0) || (beat === 'ch1-raster' && receipt.index < 3)) {
++    publishEarlyObjectiveReceipt(receipt.receiptId, 'DEBRIS RECOVERED.', storyNow());
++  }
++  syncFoundationalStoryObjective(beat);
++});
+ 
+ /** ch1-fixed tutorial progress (HUD ledger line). */
+ export function fixedTutorialProgress(): { fiber: number; screens: number } {
+@@ -423,7 +454,7 @@
+     stone,
+     total: fiber + stone,
+     // The raster act completes on quota AND the descent's debris recovered.
+-    met: fiber >= CH1_QUOTA.biofiber && stone >= CH1_QUOTA.stone && debrisSalvageComplete()
++    met: fiber >= CH1_QUOTA.biofiber && stone >= CH1_QUOTA.stone && requiredDebrisSalvageComplete()
+   };
+ }
+ 
+@@ -452,7 +483,8 @@
+ // --- beat entry ----------------------------------------------------------------
+ 
+ /** Width (world units) of one fixed-screen cell — the era where the frame is bolted. */
+-const FIXED_SCREEN_CELL = 24;
++// Positive followQuant selects shared viewport coverage; it is no longer an independent world width.
++const FIXED_SCREEN_COVERAGE = 1;
+ 
+ /**
+  * Collection acts remain on screen long enough to read as authored phases,
+@@ -515,7 +547,7 @@
+  */
+ const ERA_RIGS: Partial<Record<StoryBeat, { rig: LensRig; seconds: number }>> = {
+   'descent': { rig: { ...SIDE_RIG }, seconds: 0 },
+-  'ch1-fixed': { rig: { ...SIDE_RIG, followQuant: FIXED_SCREEN_CELL, travelBand: CH1_2D_TRAVEL_BAND.gather }, seconds: 0 },
++  'ch1-fixed': { rig: { ...SIDE_RIG, followQuant: FIXED_SCREEN_COVERAGE, travelBand: CH1_2D_TRAVEL_BAND.gather }, seconds: 0 },
+   'ch1-track': { rig: { ...SIDE_RIG }, seconds: 6.5 }, // the unbolt IS the cutscene
+   'ch1-raster': { rig: { ...SIDE_RIG, travelBand: CH1_2D_TRAVEL_BAND.gather }, seconds: 0 },
+   // The profile view has one real traversable task row. The camera can breathe
+@@ -624,6 +656,7 @@
+  * deep link or reload reconstructs the same rung (ux README guardrail 5).
+  */
+ function currentCh1FixedObjectiveState(): Ch1FixedObjectiveState {
++  if (!isDebrisCollected(0)) return 'salvage';
+   return getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber ? 'traverse' : 'harvest';
+ }
+ 
+@@ -634,7 +667,7 @@
+  * case, and it needs its own rung and its own instruction.
+  */
+ function currentCh1RasterObjectiveState(): Ch1RasterObjectiveState {
+-  return debrisSalvageComplete() ? 'quota' : 'salvage';
++  return requiredDebrisSalvageComplete() ? 'quota' : 'salvage';
+ }
+ 
+ function currentRestObjectivePhase(): RestObjectivePhase {
+@@ -656,6 +689,12 @@
+  */
+ function syncFoundationalStoryObjective(beat: StoryBeat | null): void {
+   if (!beat) return;
++  if (beat === 'ch1-raster' && quotaCollected().met) {
++    clearGuidedStoryObjective('satisfied');
++    if (getStoryText().workorder.length) setWorkOrder([]);
++    for (const bracket of getFeedRuntime().brackets) bracket.visible = false;
++    return;
++  }
+   const guidance = (() => {
+     switch (beat) {
+       case 'ch1-fixed':
+@@ -795,6 +834,15 @@
+ const LIFT_SNAP_AT = 1.2 + 4.5 * 0.5;
+ 
+ function onBeatEntered(beat: StoryBeat | null): void {
++  const previousBeat = d.beat;
++  trackLiveEntry = beat === 'ch1-track' && previousBeat === 'ch1-fixed' && fixedTransferAwaitingPaint > 0;
++  if (beat !== 'ch1-fixed') clearStoryTextChannel('caption', fixedOwnedCaption);
++  if (beat !== 'ch1-track') {
++    clearStoryTextChannel('system', ownedTrackSystem);
++    clearStoryTextChannel('caption', ownedTrackCaption);
++    ownedTrackSystem = null; ownedTrackCaption = null;
++  }
++  if (previousBeat && previousBeat !== beat && beat !== 'ch1-fixed' && beat !== 'ch1-raster') cancelPendingStoryUxFeedback('beat-exit');
+   d.beat = beat;
+   d.beatClock = 0;
+   d.bundles = {};
+@@ -866,11 +914,14 @@
+       // minus recalibrations/forgettings; commendations topped it up). It
+       // degrades to the broken/refuel loop when the survival act begins (ch3).
+       setMawCharge(getArrivalCellCharge());
++      resetFixedScreenCoverage();
++      fixedArm = null; fixedTransferAwaitingPaint = 0; fixedOwnedCaption = null;
+       d.fixedCells.clear();
+       d.fixedCamCell = null; // first tick assigns the opening camera, cut-free
+ 
+       break;
+     case 'ch1-track':
++      d.captionsFired.delete('early-track-watcher');
+       // The mini-awakening: the frame unbolts and learns to follow the worker.
+       // anc.track.unbolt: the bloom is armed on the grid here; the unbolt (rig
+       // transfer, letterbox origin) and storyAwaken chase it as one bundle in
+@@ -1449,11 +1500,21 @@
+   if (bundleFires('anc.track.unbolt')) {
+     const rig = ERA_RIGS['ch1-track'];
+     if (rig) setLensRig(rig.rig, rig.seconds);
++    if (trackLiveEntry) {
++      showSystemLine(TRACK_SYSTEM_LINE, 2800);
++      ownedTrackSystem = getStoryText().system;
++    }
+   }
+   const t = d.beatClock - bundleTargetAt('anc.track.unbolt', 0);
+   if (t < 0) return;
+   const r = getFeedRuntime();
+   r.cinematic = envelope(t, 0, 0.8, TRACK_SECONDS - 1.4, TRACK_SECONDS);
++  if (trackLiveEntry && t >= 3.25 && !d.captionsFired.has('early-track-watcher')) {
++    d.captionsFired.add('early-track-watcher');
++    clearStoryTextChannel('system', ownedTrackSystem);
++    showCaption(TRACK_WATCHER_LINE, 3200);
++    ownedTrackCaption = getStoryText().caption;
++  }
+   if (t >= TRACK_SECONDS) {
+     markMilestone(STORY_MILESTONES.ch1Track);
+     advanceToBeat('ch1-raster');
+@@ -2258,7 +2319,7 @@
+   // after an entry subscriber ran. No non-descent tick can renew or retain that
+   // ephemeral hold. Natural impact and decay stay in tickDescent.
+   if (!s.active || s.beat !== 'descent') getFeedRuntime().flash = 0;
+-  if (!s.active || isStoryPaused()) return;
++  if (!s.active || isStoryPaused()) { cancelPendingStoryUxFeedback('inactive'); return; }
+   d.beatClock += dt;
+   d.elapsedSeconds += dt;
+   d.worldElapsedSeconds = worldElapsedSeconds;
+@@ -2291,26 +2352,24 @@
+       break;
+     case 'ch1-fixed': {
+       tickCh1Flashes(dt);
+-      // The first tutorial: extract fiber (hold-to-mine) and cross a screen
+-      // edge — feeling the coverage hand off between fixed site cameras is the
+-      // whole point. Every cell flip is a camera CUT: the HUD's SITE CAM tag
+-      // changes and a small static blip marks the switch.
+-      const lens = getSideLens();
+-      if (lens) {
+-        const along = _fixedRel.copy(getPlayerWorldPosition()).sub(lens.origin).dot(lens.travelAxis);
+-        const cell = fixedScreenCellIndex(along, FIXED_SCREEN_CELL);
+-        r.camCell = cell;
+-        if (d.fixedCamCell === null) {
+-          d.fixedCamCell = cell; // the opening camera — no cut on entry
+-        } else if (cell !== d.fixedCamCell) {
+-          d.fixedCamCell = cell;
+-          d.glitchDecay = Math.max(d.glitchDecay, 0.4); // brief static, decays fast
+-          playSfx('storyGlitch');
+-        }
+-        if (!d.fixedCells.has(cell)) {
+-          d.fixedCells.add(cell);
+-          if (d.fixedCells.size === CH1_FIXED_TUTORIAL.screens) {
++      const coverage = getFixedScreenCoverage();
++      if (coverage?.valid) {
++        r.camCell = coverage.cellId;
++        d.fixedCamCell = coverage.cellId;
++        if (currentCh1FixedObjectiveState() === 'traverse') {
++          if (!fixedArm || fixedArm.epoch !== coverage.geometryEpoch) {
++            fixedArm = { epoch: coverage.geometryEpoch, sequence: coverage.transferSequence };
++            fixedTransferAwaitingPaint = 0;
++            d.fixedCells.clear(); d.fixedCells.add(coverage.cellId);
++          } else if (coverage.transfer?.reason === 'player-traversal' && coverage.transferSequence > fixedArm.sequence) {
++            fixedArm.sequence = coverage.transferSequence;
++            d.fixedCells.add(coverage.cellId);
++            fixedTransferAwaitingPaint = coverage.transferSequence;
++            d.glitchDecay = Math.max(d.glitchDecay, 0.4);
++            playSfx('storyGlitch');
+             fireCaptionOnce('fixed-cut', CH1_FIXED_CUT_CAPTION);
++            fixedOwnedCaption = getStoryText().caption;
++            completeFoundationalObjective('ch1:fixed:cross-camera-cell', true);
+           }
+         }
+       }
+@@ -2319,13 +2378,15 @@
+       CH1_FIXED_CAPTIONS.forEach((caption, i) => {
+         if (d.beatClock >= caption.atSeconds && d.elapsedSeconds - d.lastCaptionAt >= 6) {
+           fireCaptionOnce(`fixed-obs-${i}`, caption.text);
++          fixedOwnedCaption = getStoryText().caption;
+         }
+       });
+       if (
+-        getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber
++        isDebrisCollected(0) && getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber
+         && d.fixedCells.size >= CH1_FIXED_TUTORIAL.screens
++        && coverage?.presentedTransferSequence === fixedTransferAwaitingPaint
++        && fixedTransferAwaitingPaint > 0
+       ) {
+-        completeFoundationalObjective('ch1:fixed:');
+         advanceToBeat('ch1-track');
+       }
+       break;
+@@ -2344,7 +2405,6 @@
+           && d.beatClock >= d.rasterCompleteAt + CH1_COLLECTION_TIMING.completionHoldSeconds
+         ) {
+           markMilestone(STORY_MILESTONES.ch1Quota);
+-          completeFoundationalObjective('ch1:raster:');
+           advanceToBeat('ch1-depth');
+         }
+       }
+--- before/main/src/story/storyScript.ts
++++ after/main/src/story/storyScript.ts
+@@ -374,7 +374,7 @@
+ 
+ /** The fixed-screen tutorial: first fiber, and feel the frame refuse to follow. */
+ export const CH1_FIXED_TUTORIAL = {
+-  biofiber: 3,
++  biofiber: 1,
+   screens: 2
+ } as const;
+ 
+--- before/main/src/story/storyState.ts
++++ after/main/src/story/storyState.ts
+@@ -773,6 +773,7 @@
+  * progression and every non-Story world, but resets the carried loadout and the
+  * pinned Story site so the opening cannot inherit completed-run advantages. */
+ export function restartStory(): void {
++  beginGuidedObjectiveRestore('seed', true);
+   const storyWorld = createWorldIdentity(STORY_COORDINATE);
+   removeMilestonesByPrefix('story:');
+   removeMilestone('maw_repaired');
+--- before/main/src/story/storyText.test.ts
++++ after/main/src/story/storyText.test.ts
+@@ -3,6 +3,9 @@
+ import { fileURLToPath } from 'node:url';
+ import { beforeEach, describe, expect, it } from 'vitest';
+ import {
++  clearStoryTextChannel,
++  setWorkOrder,
++  showSystemLine,
+   clearAuditLine,
+   clearStoryText,
+   getStoryText,
+@@ -135,3 +138,16 @@
+     expect(getStoryTextVersion()).toBeGreaterThan(before);
+   });
+ });
++
++describe('owned track channel clearing', () => {
++  it('clears only the exact outgoing identity and leaves the next owner and objective intact', () => {
++    showCaption('outgoing'); const old = getStoryText().caption;
++    showCaption('incoming'); setWorkOrder(['HOLD POSITION.']); showSystemLine('system');
++    expect(clearStoryTextChannel('caption', old)).toBe(false);
++    expect(getStoryText().caption?.text).toBe('incoming');
++    const own = getStoryText().system;
++    expect(clearStoryTextChannel('system', own)).toBe(true);
++    expect(getStoryText().caption?.text).toBe('incoming');
++    expect(getStoryText().workorder).toEqual(['HOLD POSITION.']);
++  });
++});
+--- before/main/src/story/storyText.ts
++++ after/main/src/story/storyText.ts
+@@ -85,6 +85,12 @@
+   emit();
+ }
+ 
++/** Compare-and-clear an owned entry; an incoming caption or objective is untouched. */
++export function clearStoryTextChannel(channel: 'caption' | 'system', owned: StoryTextState['caption']): boolean {
++  if (!owned || state[channel] !== owned) return false;
++  state[channel] = null; emit(); return true;
++}
++
+ /** The AUDIT band (ch3-signal onward): the network / the auditor's suit. */
+ export function showAuditLine(text: string, header?: string, ttlMs = 6500, voice?: AuditVoiceCue): void {
+   state.audit = { text, header, shownAt: storyNow(), ttlMs, ...(voice ? { voice } : {}) };
+--- before/main/src/story/ux/feedbackCues.test.ts
++++ after/main/src/story/ux/feedbackCues.test.ts
+@@ -0,0 +1,58 @@
++import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
++import { playSfx } from '../../audio/sfxEngine.ts';
++import { peekAudioContext } from '../../audio/audioCore.ts';
++import { voiceTypewriterGapMs } from '../../audio/voice/voicePresentation.ts';
++import { cancelPendingStoryUxFeedback, emitStoryUxFeedbackCue, subscribeStoryUxFeedback, earlyFeedbackTrace } from './feedbackCues.ts';
++import { activateGuidedStoryObjective, acknowledgeGuidedStoryCompletion, beginGuidedObjectiveRestore, clearGuidedStoryObjective, resetGuidedObjectiveFeedbackForTests } from './objectiveDirector.ts';
++vi.mock('../../audio/sfxEngine.ts', () => ({ playSfx: vi.fn() }));
++vi.mock('../../audio/audioCore.ts', () => ({ peekAudioContext: vi.fn(() => ({ state: 'running', currentTime: 10 })) }));
++vi.mock('../../audio/voice/voicePresentation.ts', () => ({ voiceTypewriterGapMs: vi.fn(() => 0) }));
++const id = 'ch1:fixed:recover-first-debris';
++const successor = 'ch1:fixed:calibrate-extractor';
++const objective = (id: string) => ({ id, kind: 'interact' as const, markerLabel: 'DEBRIS', workOrder: ['WALK OVER THE DEBRIS.'], requiresMarker: false });
++beforeEach(() => { vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'performance'] }); resetGuidedObjectiveFeedbackForTests(); earlyFeedbackTrace.length = 0; vi.clearAllMocks(); });
++afterEach(() => { cancelPendingStoryUxFeedback(); resetGuidedObjectiveFeedbackForTests(); vi.useRealTimers(); });
++describe('early receipt audio arbitration', () => {
++  it('delivers semantics immediately and one ordinary unscheduled sound at 120 ms', () => {
++    const seen: string[] = []; const stop = subscribeStoryUxFeedback(cue => seen.push(cue.type));
++    emitStoryUxFeedbackCue({ type: 'objective-complete', objectiveId: id }, { receiptId: 'native-1', expectedSuccessor: successor, valid: () => true });
++    expect(seen).toEqual(['objective-complete']); expect(playSfx).not.toHaveBeenCalled();
++    vi.advanceTimersByTime(119); expect(playSfx).not.toHaveBeenCalled();
++    vi.advanceTimersByTime(1); expect(playSfx).toHaveBeenCalledExactlyOnceWith('objectiveComplete'); stop();
++  });
++  it('retains the expected successor and coalesces its audible entry', () => {
++    activateGuidedStoryObjective(objective(id)); vi.mocked(playSfx).mockClear();
++    acknowledgeGuidedStoryCompletion(id, true, { receiptId: 'native-2', expectedSuccessor: successor });
++    activateGuidedStoryObjective(objective(successor)); vi.advanceTimersByTime(120);
++    expect(playSfx).toHaveBeenCalledExactlyOnceWith('objectiveComplete');
++  });
++  it('retains only matched terminal-null quota completion through repeated satisfied clear', () => {
++    const quota = 'ch1:raster:extract-fiber-quota'; activateGuidedStoryObjective(objective(quota)); vi.mocked(playSfx).mockClear();
++    acknowledgeGuidedStoryCompletion(quota, true, { receiptId: 'native-3', expectedSuccessor: null });
++    clearGuidedStoryObjective('satisfied'); clearGuidedStoryObjective('satisfied'); vi.advanceTimersByTime(120);
++    expect(playSfx).toHaveBeenCalledExactlyOnceWith('objectiveComplete');
++  });
++  it.each(['replacement', 'pause', 'restore'] as const)('cancels %s without any late callback', mode => {
++    activateGuidedStoryObjective(objective(id)); acknowledgeGuidedStoryCompletion(id, true, { receiptId: 'native-4', expectedSuccessor: successor });
++    if (mode === 'replacement') activateGuidedStoryObjective(objective('unrelated'));
++    else if (mode === 'restore') beginGuidedObjectiveRestore('resume');
++    else cancelPendingStoryUxFeedback('pause');
++    vi.mocked(playSfx).mockClear(); vi.advanceTimersByTime(500); expect(playSfx).not.toHaveBeenCalled();
++  });
++  it('expires instead of scheduling across a voice gap beyond 240 ms', () => {
++    vi.mocked(voiceTypewriterGapMs).mockReturnValueOnce(200);
++    emitStoryUxFeedbackCue({ type: 'objective-complete', objectiveId: id }, { receiptId: 'native-5', expectedSuccessor: successor, valid: () => true });
++    vi.advanceTimersByTime(500); expect(playSfx).not.toHaveBeenCalled(); expect(earlyFeedbackTrace[earlyFeedbackTrace.length - 1]?.outcome).toBe('expired');
++  });
++  it('drops locked audio without unlock backlog', () => {
++    vi.mocked(peekAudioContext).mockReturnValueOnce(null);
++    emitStoryUxFeedbackCue({ type: 'objective-complete', objectiveId: id }, { receiptId: 'native-6', expectedSuccessor: successor, valid: () => true });
++    vi.advanceTimersByTime(500); expect(playSfx).not.toHaveBeenCalled(); expect(earlyFeedbackTrace[earlyFeedbackTrace.length - 1]?.outcome).toBe('audio-unavailable');
++  });
++  it('Continue is silent but a first real completion remains audible', () => {
++    beginGuidedObjectiveRestore('resume'); activateGuidedStoryObjective(objective(id)); expect(playSfx).not.toHaveBeenCalled();
++    expect(acknowledgeGuidedStoryCompletion(id)).toBe(false);
++    expect(acknowledgeGuidedStoryCompletion(id, true, { receiptId: 'earned', expectedSuccessor: successor })).toBe(true);
++    activateGuidedStoryObjective(objective(successor)); vi.advanceTimersByTime(120); expect(playSfx).toHaveBeenCalledExactlyOnceWith('objectiveComplete');
++  });
++});
+--- before/main/src/story/ux/feedbackCues.ts
++++ after/main/src/story/ux/feedbackCues.ts
+@@ -13,22 +13,77 @@
+ type StoryUxFeedbackListener = (cue: StoryUxFeedbackCue) => void;
+ const listeners = new Set<StoryUxFeedbackListener>();
+ 
+-/**
+- * Semantic, presentation-only feedback. Score and cinema may subscribe, but
+- * this module deliberately cannot write milestones or advance story state.
+- */
+-export function emitStoryUxFeedbackCue(cue: StoryUxFeedbackCue): void {
++export const EARLY_RECEIPT_ACK_MIN_MS = 120;
++export const EARLY_RECEIPT_ACK_MAX_MS = 240;
++export interface StoryUxPresentationContext {
++  receiptId: string;
++  expectedSuccessor: string | null;
++  valid?: () => boolean;
++}
++interface PendingReceipt { cue: StoryUxFeedbackCue; context: StoryUxPresentationContext; at: number; timer: ReturnType<typeof setTimeout> }
++let pending: PendingReceipt | null = null;
++export const earlyFeedbackTrace: { objectiveId: string; receiptId?: string; at: number; outcome: string }[] = [];
++const nowMs = () => typeof performance === 'undefined' ? Date.now() : performance.now();
++function trace(cue: StoryUxFeedbackCue, outcome: string, context?: StoryUxPresentationContext): void {
++  earlyFeedbackTrace.push({ objectiveId: cue.objectiveId, receiptId: context?.receiptId, at: nowMs(), outcome });
++  if (earlyFeedbackTrace.length > 128) earlyFeedbackTrace.shift();
++}
++export function cancelPendingStoryUxFeedback(reason = 'canceled'): void {
++  if (!pending) return;
++  clearTimeout(pending.timer);
++  trace(pending.cue, reason, pending.context);
++  pending = null;
++}
++/** Semantic delivery is immediate; early audio stays an unscheduled cancellable intent. */
++export function emitStoryUxFeedbackCue(cue: StoryUxFeedbackCue, context?: StoryUxPresentationContext): void {
++  for (const listener of listeners) listener(cue);
+   const events = {
+     'objective-enter': 'objectiveEnter', 'objective-progress': 'objectiveProgress',
+     'objective-complete': 'objectiveComplete', 'objective-fail': 'objectiveFail', 'marker-acquired': 'markerAcquired'
+   } as const;
+-  const context = peekAudioContext();
+-  const gapMs = voiceTypewriterGapMs(typeof performance === 'undefined' ? 0 : performance.now());
+-  if (context && gapMs > 0) playSfx(events[cue.type], { atAudioTime: context.currentTime + gapMs / 1000 });
++  const early = /^ch1:(fixed|track|raster):/.test(cue.objectiveId);
++  if (early && (cue.type === 'objective-progress' || cue.objectiveId === 'ch1:fixed:cross-camera-cell'
++    || cue.objectiveId === 'ch1:track:tracking-transfer'
++    || (cue.type === 'objective-enter' && context))) {
++    trace(cue, 'coalesced-with-native', context);
++    return;
++  }
++  if (early && cue.type === 'objective-complete') {
++    if (!context) { trace(cue, 'unconfirmed-receipt'); return; }
++    cancelPendingStoryUxFeedback('superseded');
++    const audio = peekAudioContext();
++    if (!audio || audio.state !== 'running') { trace(cue, 'audio-unavailable', context); return; }
++    const at = nowMs();
++    const attempt = () => {
++      if (!pending || pending.context !== context) return;
++      const elapsed = nowMs() - at;
++      if (!context.valid?.() || (typeof document !== 'undefined' && document.hidden)) { cancelPendingStoryUxFeedback(); return; }
++      if (elapsed > EARLY_RECEIPT_ACK_MAX_MS) { cancelPendingStoryUxFeedback('expired'); return; }
++      const audioNow = peekAudioContext();
++      if (!audioNow || audioNow.state !== 'running') { cancelPendingStoryUxFeedback('audio-unavailable'); return; }
++      const gap = voiceTypewriterGapMs(nowMs());
++      if (gap > 0) {
++        if (elapsed + gap > EARLY_RECEIPT_ACK_MAX_MS) { cancelPendingStoryUxFeedback('expired'); return; }
++        pending.timer = setTimeout(attempt, Math.max(1, gap));
++        return;
++      }
++      pending = null;
++      playSfx('objectiveComplete');
++      trace(cue, 'played', context);
++    };
++    pending = { cue, context, at, timer: setTimeout(attempt, EARLY_RECEIPT_ACK_MIN_MS) };
++    return;
++  }
++  const audio = peekAudioContext();
++  const gapMs = voiceTypewriterGapMs(nowMs());
++  if (audio && gapMs > 0) playSfx(events[cue.type], { atAudioTime: audio.currentTime + gapMs / 1000 });
+   else playSfx(events[cue.type]);
+-  for (const listener of listeners) listener(cue);
+ }
+ 
++if (typeof window !== 'undefined') {
++  window.addEventListener('blur', () => cancelPendingStoryUxFeedback('focus-loss'));
++  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelPendingStoryUxFeedback('hidden'); });
++}
+ export function subscribeStoryUxFeedback(listener: StoryUxFeedbackListener): () => void {
+   listeners.add(listener);
+   return () => listeners.delete(listener);
+--- before/main/src/story/ux/objectiveCommandFeedback.test.ts
++++ after/main/src/story/ux/objectiveCommandFeedback.test.ts
+@@ -1,4 +1,7 @@
+ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
++import { addItem, getItemCount, resetInventory } from '../../game/systems/inventorySystem.ts';
++import { resetProgression } from '../../game/systems/progressionSystem.ts';
++import { collectDebris, requiredDebrisSalvageComplete, debrisSalvageComplete, setDebrisScattered, subscribeDebrisCollectionReceipt } from '../debrisSalvage.ts';
+ import { commandAccepted } from '../../game/commands.ts';
+ import { acknowledgeObjectiveCommand } from './objectiveCommandFeedback.ts';
+ import { activateGuidedStoryObjective, beginGuidedObjectiveRestore, resetGuidedObjectiveFeedbackForTests } from './objectiveDirector.ts';
+@@ -39,3 +42,34 @@
+     expect(cues.map(cue => cue.type)).toEqual(['objective-progress']);
+   });
+ });
++
++describe('early finalized local receipts', () => {
++  beforeEach(() => { resetInventory(); resetProgression(); beginGuidedObjectiveRestore('seed', true); });
++  it('emits after all native loot and requires only the first three physical receipts', () => {
++    setDebrisScattered(6); const observed: number[][] = [];
++    const stop = subscribeDebrisCollectionReceipt(receipt => observed.push([receipt.index, getItemCount('wood'), getItemCount('stone')]));
++    collectDebris(0); collectDebris(0); collectDebris(1); collectDebris(2); stop();
++    expect(observed).toEqual([[0, 2, 2], [1, 2, 3], [2, 3, 4]]);
++    expect(requiredDebrisSalvageComplete()).toBe(true); expect(debrisSalvageComplete()).toBe(false);
++  });
++  it('completes the first real positive harvest once, never adds a progress cue', () => {
++    collectDebris(0); activate('ch1:fixed:calibrate-extractor'); cues = []; addItem('biofiber', 1);
++    const result = transaction('voxel_mined', { drops: [{ id: 'biofiber', qty: 1 }] });
++    acknowledgeObjectiveCommand(result, 'local'); acknowledgeObjectiveCommand(result, 'local');
++    expect(cues.map(cue => cue.type)).toEqual(['objective-complete']);
++  });
++  it('rejects wrong phase, empty yield, and remote transactions', () => {
++    activate('ch1:fixed:recover-first-debris'); cues = [];
++    acknowledgeObjectiveCommand(transaction('voxel_mined', { drops: [{ id: 'biofiber', qty: 1 }] }), 'local');
++    expect(cues).toEqual([]);
++    activate('ch1:fixed:calibrate-extractor'); cues = [];
++    acknowledgeObjectiveCommand(transaction('voxel_mined', { drops: [] }), 'local');
++    acknowledgeObjectiveCommand(transaction('voxel_mined', { drops: [{ id: 'biofiber', qty: 1 }] }, 'remote'), 'local');
++    expect(cues).toEqual([]);
++  });
++  it('does not claim a new completion when the threshold was already earned', () => {
++    collectDebris(0); addItem('biofiber', 3); activate('ch1:fixed:calibrate-extractor'); cues = [];
++    addItem('biofiber', 1); acknowledgeObjectiveCommand(transaction('voxel_mined', { drops: [{ id: 'biofiber', qty: 1 }] }), 'local');
++    expect(cues).toEqual([]);
++  });
++});
+--- before/main/src/story/ux/objectiveCommandFeedback.ts
++++ after/main/src/story/ux/objectiveCommandFeedback.ts
+@@ -1,11 +1,15 @@
++import { getItemCount } from '../../game/systems/inventorySystem.ts';
++import { isDebrisCollected, requiredDebrisSalvageComplete } from '../debrisSalvage.ts';
++import { storyNow } from '../storyClock.ts';
++import { readGuidedObjectiveRestore } from './objectiveRestore.ts';
++import { cancelPendingStoryUxFeedback } from './feedbackCues.ts';
+ import type { CommandAccepted } from '../../game/commands.ts';
+-import { acknowledgeGuidedStoryCompletion, acknowledgeGuidedStoryProgress, getActiveGuidedStoryObjective } from './objectiveDirector.ts';
++import { acknowledgeGuidedStoryCompletion, acknowledgeGuidedStoryProgress, getActiveGuidedStoryObjective, publishEarlyObjectiveReceipt } from './objectiveDirector.ts';
+ 
+ // These are the counted resources already named by the corresponding authored
+ // objective. Irrelevant pickups cannot sound like progress on a different task.
+ const COUNTED_ITEMS: Readonly<Record<string, readonly string[]>> = {
+   'ch1:fixed:calibrate-extractor': ['biofiber'],
+-  'ch1:raster:recover-quota': ['biofiber', 'stone'],
+   'ch1:raster:extract-fiber-quota': ['biofiber'],
+   'ch3:gather:collect-materials': ['wood', 'biofiber', 'stone'],
+   'ch3:gather:recover-flint': ['flint'],
+@@ -19,6 +23,9 @@
+ interface Stack { id: string; qty: number }
+ const stacks = (value: unknown): Stack[] => Array.isArray(value) ? value.filter((row): row is Stack => !!row && typeof row.id === 'string' && Number.isFinite(row.qty) && row.qty > 0) : [];
+ 
++let receiptRestore = -1;
++const earlyEvents = new Set<string>();
++
+ /** Final local transactions only; seeding and optimistic transport never call this seam. */
+ export function acknowledgeObjectiveCommand(result: CommandAccepted, localActorId: string): void {
+   const objective = getActiveGuidedStoryObjective();
+@@ -28,6 +35,28 @@
+     const payload = event.payload as Record<string, unknown>;
+     const gained = event.type === 'voxel_mined' ? stacks(payload.drops)
+       : event.type === 'resource_taken' ? stacks([payload]) : [];
++    if (/^ch1:(fixed|raster):/.test(objective.id)) {
++      const restoreVersion = readGuidedObjectiveRestore().version;
++      if (receiptRestore !== restoreVersion) { receiptRestore = restoreVersion; earlyEvents.clear(); }
++      if (earlyEvents.has(event.eventId)) continue;
++      earlyEvents.add(event.eventId);
++      cancelPendingStoryUxFeedback('later-action');
++      const fiber = gained.filter(item => item.id === 'biofiber').reduce((sum, item) => sum + item.qty, 0);
++      const fixed = objective.id === 'ch1:fixed:calibrate-extractor';
++      const raster = objective.id === 'ch1:raster:extract-fiber-quota';
++      if (event.type === 'voxel_mined' && fiber > 0 && (fixed || raster)) {
++        const total = getItemCount('biofiber');
++        const threshold = fixed ? 1 : 6;
++        if (total - fiber >= threshold) continue;
++        if (total >= threshold && total - fiber < threshold && (fixed ? isDebrisCollected(0) : requiredDebrisSalvageComplete() && getItemCount('stone') >= 4)) {
++          acknowledgeGuidedStoryCompletion(objective.id, true, {
++            receiptId: event.eventId, expectedSuccessor: fixed ? 'ch1:fixed:cross-camera-cell' : null
++          });
++        } else acknowledgeGuidedStoryProgress(event.eventId);
++        publishEarlyObjectiveReceipt(event.eventId, 'BIOFIBER LOGGED.', storyNow());
++      }
++      continue;
++    }
+     if (gained.some(item => COUNTED_ITEMS[objective.id]?.includes(item.id))) acknowledgeGuidedStoryProgress(event.eventId);
+     const crafted = event.type === 'recipe_crafted' && stacks(payload.outputs).some(item => item.id === CRAFT_OUTPUT[objective.id]);
+     const campfire = event.type === 'campfire_placed' && objective.id === 'ch3:gather:craft-campfire';
+--- before/main/src/story/ux/objectiveDirector.test.ts
++++ after/main/src/story/ux/objectiveDirector.test.ts
+@@ -113,3 +113,48 @@
+     expect(playSfx).toHaveBeenCalledWith('markerAcquired');
+   });
+ });
++
++import * as THREE from 'three';
++import { SIDE_RIG, setSideLens, clearSideLens, setLensRig, setSideCoverageViewport, sampleFixedScreenCoverage, getFixedScreenCoverage, applyActiveRigTransform, noteFixedScreenCoveragePresented, resolveFixedScreenCoverageGeometry } from '../sideLens.ts';
++const lens = { origin: new THREE.Vector3(), travelAxis: new THREE.Vector3(1, 0, 0), depthAxis: new THREE.Vector3(0, 0, 1), up: new THREE.Vector3(0, 1, 0) };
++const viewport = (width: number, height: number) => ({ width, height, aspect: width / height, fov: 75, touch: width < 900, safe: { left: 0, right: 0, top: 0, bottom: 0 }, reservations: [] });
++describe('shared fixed coverage objective authority', () => {
++  it('has one movement event, shared renderer anchor, then a presented destination frame', () => {
++    setSideLens(lens); setLensRig({ ...SIDE_RIG, followQuant: 1 }); setSideCoverageViewport(viewport(390, 844));
++    const player = new THREE.Vector3();
++    expect(sampleFixedScreenCoverage(player, 1)?.valid).toBe(false);
++    expect(sampleFixedScreenCoverage(player, 2)?.valid).toBe(true);
++    const width = resolveFixedScreenCoverageGeometry(viewport(390, 844), SIDE_RIG).cellWidth;
++    player.x = width / 2 + 0.01;
++    const crossed = sampleFixedScreenCoverage(player, 3)!;
++    expect(crossed.transfer).toMatchObject({ reason: 'player-traversal', fromCell: 0, toCell: 1 });
++    expect(sampleFixedScreenCoverage(player, 3)).toBe(crossed);
++    expect(crossed.presentedTransferSequence).toBe(0);
++    const camera = new THREE.PerspectiveCamera(75, 390 / 844); const parent = new THREE.Group(); parent.position.copy(player); parent.add(camera); parent.updateMatrixWorld(true);
++    applyActiveRigTransform(camera, lens, 0.016);
++    expect(crossed.presentedTransferSequence).toBe(0);
++    noteFixedScreenCoveragePresented();
++    expect(camera.getWorldPosition(new THREE.Vector3()).x).toBeCloseTo(crossed.anchorCenter);
++    const next = sampleFixedScreenCoverage(player, 4)!;
++    expect(next.transfer).toBeNull(); expect(next.presentedTransferSequence).toBe(1); clearSideLens();
++  });
++  it('requires stable geometry and never turns resize or pause into a receipt', () => {
++    setSideLens(lens); setLensRig({ ...SIDE_RIG, followQuant: 1 }); setSideCoverageViewport(viewport(1280, 720));
++    const player = new THREE.Vector3(); sampleFixedScreenCoverage(player, 1); sampleFixedScreenCoverage(player, 2);
++    const epoch = getFixedScreenCoverage()!.geometryEpoch;
++    setSideCoverageViewport(viewport(390, 844));
++    expect(sampleFixedScreenCoverage(player, 3)?.valid).toBe(false);
++    const rebased = sampleFixedScreenCoverage(player, 4)!;
++    expect(rebased.geometryEpoch).toBeGreaterThan(epoch); expect(rebased.transferSequence).toBe(0); expect(rebased.transfer).toBeNull();
++    sampleFixedScreenCoverage(player, 5, false); sampleFixedScreenCoverage(player, 6, true);
++    expect(getFixedScreenCoverage()?.transferSequence).toBe(0); clearSideLens();
++  });
++  it('uses same-camera view offset only when short touch landscape needs clearance', () => {
++    const short = viewport(844, 390);
++    const measured = { ...short, reservations: [{ left: 18, right: 200, top: 250, bottom: 370 }] };
++    const geometry = resolveFixedScreenCoverageGeometry(measured, SIDE_RIG);
++    expect(geometry.offsetY).toBeGreaterThan(0); expect(geometry.valid).toBe(true);
++    expect(resolveFixedScreenCoverageGeometry(viewport(390, 844), SIDE_RIG).offsetY).toBe(0);
++    expect(resolveFixedScreenCoverageGeometry(viewport(1280, 720), SIDE_RIG).cellWidth).toBeGreaterThan(30);
++  });
++});
+--- before/main/src/story/ux/objectiveDirector.ts
++++ after/main/src/story/ux/objectiveDirector.ts
+@@ -1,6 +1,6 @@
+ import { setWorkOrder } from '../storyText.ts';
+-import { emitStoryUxFeedbackCue } from './feedbackCues.ts';
+-import { readGuidedObjectiveRestore } from './objectiveRestore.ts';
++import { cancelPendingStoryUxFeedback, emitStoryUxFeedbackCue, type StoryUxPresentationContext } from './feedbackCues.ts';
++import { readGuidedObjectiveRestore, subscribeGuidedObjectiveRestore } from './objectiveRestore.ts';
+ export { beginGuidedObjectiveRestore } from './objectiveRestore.ts';
+ 
+ /**
+@@ -44,6 +44,19 @@
+ let restoredObjectiveId: string | null = null;
+ let presentationSilent = false;
+ let restoreVersion = 0;
++let runVersion = readGuidedObjectiveRestore().runVersion;
++let receiptLineage: (StoryUxPresentationContext & { objectiveId: string; restoreVersion: number }) | null = null;
++export interface EarlyObjectiveReceipt { text: 'DEBRIS RECOVERED.' | 'BIOFIBER LOGGED.'; shownAt: number; receiptId: string }
++let earlyReceipt: EarlyObjectiveReceipt | null = null;
++export function getEarlyObjectiveReceipt(): EarlyObjectiveReceipt | null { return earlyReceipt; }
++export function publishEarlyObjectiveReceipt(receiptId: string, text: EarlyObjectiveReceipt['text'], shownAt: number): void {
++  earlyReceipt = { receiptId, text, shownAt }; emit();
++}
++subscribeGuidedObjectiveRestore(() => {
++  cancelPendingStoryUxFeedback('restore'); receiptLineage = null; earlyReceipt = null;
++  const nextRun = readGuidedObjectiveRestore().runVersion;
++  if (nextRun !== runVersion) { runVersion = nextRun; resetGuidedObjectiveFeedbackForRun(); }
++});
+ 
+ function emit(): void {
+   version += 1;
+@@ -96,6 +109,8 @@
+   if (restoring && restoredObjectiveId != null && restoredObjectiveId !== objective.id) restoring = false;
+   if (restoring && restoredObjectiveId == null) restoredObjectiveId = objective.id;
+   presentationSilent = restoring;
++  const successorContext = receiptLineage?.expectedSuccessor === objective.id ? receiptLineage : undefined;
++  if (!successorContext) { cancelPendingStoryUxFeedback('replacement'); receiptLineage = null; }
+   runtime.objective = Object.freeze({
+     ...objective,
+     workOrder: Object.freeze([...objective.workOrder]),
+@@ -106,7 +121,7 @@
+   progressAcknowledged.clear();
+   setWorkOrder(objective.workOrder);
+   if (!presentationSilent && !enteredIds.has(objective.id)) {
+-    emitStoryUxFeedbackCue({ type: 'objective-enter', objectiveId: objective.id, action: objective.kind });
++    emitStoryUxFeedbackCue({ type: 'objective-enter', objectiveId: objective.id, action: objective.kind }, successorContext);
+   }
+   enteredIds.add(objective.id);
+   acknowledgeVisibleMarker();
+@@ -117,17 +132,26 @@
+ /** Remove stale health state when leaving a guided chapter; HUD text is beat-owned. */
+ export type ObjectiveClearReason = 'satisfied' | 'replace' | 'transition' | 'seed' | 'inactive' | 'reset' | 'resume' | 'failed';
+ /** Receipt on the confirmed predicate edge; publication stays atomic until its successor is ready. */
+-export function acknowledgeGuidedStoryCompletion(objectiveId: string, confirmedAction = false): boolean {
++export function acknowledgeGuidedStoryCompletion(objectiveId: string, confirmedAction = false, context?: StoryUxPresentationContext): boolean {
+   // A seed transaction can notify a domain subscriber before the next objective
+   // publication has consumed the restore token. It is never a player receipt.
+   if (readGuidedObjectiveRestore().version !== restoreVersion) return false;
++  if (/^ch1:(fixed|track|raster):/.test(objectiveId) && !confirmedAction) return false;
+   if (runtime.objective?.id !== objectiveId || completedIds.has(objectiveId) || (presentationSilent && !confirmedAction)) return false;
+-  emitStoryUxFeedbackCue({ type: 'objective-complete', objectiveId });
++  if (context) receiptLineage = { ...context, objectiveId, restoreVersion };
++  const lineage = receiptLineage;
++  emitStoryUxFeedbackCue({ type: 'objective-complete', objectiveId }, context && {
++    ...context,
++    valid: () => receiptLineage === lineage && readGuidedObjectiveRestore().version === restoreVersion
++      && (runtime.objective?.id === objectiveId || runtime.objective?.id === context.expectedSuccessor
++        || (context.expectedSuccessor === null && runtime.objective === null))
++  });
+   completedIds.add(objectiveId);
+   if (confirmedAction) { restoring = false; presentationSilent = false; }
+   return true;
+ }
+ export function clearGuidedStoryObjective(reason: ObjectiveClearReason = 'transition'): void {
++  if (reason !== 'satisfied' || receiptLineage?.expectedSuccessor !== null) { cancelPendingStoryUxFeedback(reason); receiptLineage = null; }
+   if (!runtime.objective && !runtime.markerVisible) return;
+   if (runtime.objective && reason === 'satisfied') acknowledgeGuidedStoryCompletion(runtime.objective.id);
+   if (runtime.objective && !presentationSilent && !completedIds.has(runtime.objective.id) && reason === 'failed') {
+@@ -142,12 +166,15 @@
+   emit();
+ }
+ 
+-export function resetGuidedObjectiveFeedbackForTests(): void {
++export function resetGuidedObjectiveFeedbackForRun(): void {
+   clearGuidedStoryObjective('reset');
++  earlyReceipt = null;
+   enteredIds.clear(); completedIds.clear(); acquiredMarkerIds.clear();
+   restoring = false; restoredObjectiveId = null; presentationSilent = false;
+   restoreVersion = readGuidedObjectiveRestore().version;
+ }
++
++export function resetGuidedObjectiveFeedbackForTests(): void { resetGuidedObjectiveFeedbackForRun(); }
+ 
+ /** Called by the existing directional-marker driver after resolving its target. */
+ export function observeGuidedStoryMarker(markerLabel: string | null): void {
+--- before/main/src/story/ux/objectiveRestore.ts
++++ after/main/src/story/ux/objectiveRestore.ts
+@@ -1,6 +1,13 @@
+-/** Import-safe entry intent: storyState must not import the audio graph. */
++/** Import-safe entry intent, published before state reconstruction. */
+ export type ObjectiveRestoreReason = 'seed' | 'resume' | 'transition';
+ let version = 0;
++let runVersion = 0;
+ let reason: ObjectiveRestoreReason = 'seed';
+-export function beginGuidedObjectiveRestore(next: ObjectiveRestoreReason): void { reason = next; version += 1; }
+-export function readGuidedObjectiveRestore(): { version: number; reason: ObjectiveRestoreReason } { return { version, reason }; }
++const listeners = new Set<() => void>();
++export function beginGuidedObjectiveRestore(next: ObjectiveRestoreReason, newRun = false): void {
++  reason = next; version += 1;
++  if (newRun) runVersion += 1;
++  for (const listener of listeners) listener();
++}
++export function readGuidedObjectiveRestore(): { version: number; reason: ObjectiveRestoreReason; runVersion: number } { return { version, reason, runVersion }; }
++export function subscribeGuidedObjectiveRestore(listener: () => void): () => void { listeners.add(listener); return () => { listeners.delete(listener); }; }
+--- before/main/src/story/ux/storyHudLayout.ts
++++ after/main/src/story/ux/storyHudLayout.ts
+@@ -77,6 +77,7 @@
+ }
+ 
+ export interface StoryHudObservedRect {
++  id?: string;
+   left: number;
+   top: number;
+   right: number;
+@@ -728,3 +729,26 @@
+ export function getMeasuredStoryObjectiveCardHeight(): number {
+   return measuredObjectiveCardHeight;
+ }
++
++/** Mounted early surfaces, measured in the CSS viewport used by the active camera. */
++export function readEarlyFeedReservations(): StoryHudObservedRect[] {
++  if (typeof document === 'undefined') return [];
++  const ids = ['feed-work-order', 'feed-camera-status', 'feed-ledger', 'story-caption', 'touch-dpad', 'touch-dpad-actions', 'story-journal-trigger'];
++  return Array.from(document.querySelectorAll<HTMLElement>('[data-hud-surface]'))
++    .filter(node => ids.includes(node.dataset.hudSurface ?? '') && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden')
++    .map(node => { const rect = node.getBoundingClientRect(); return { id: node.dataset.hudSurface, left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height }; })
++    .filter(rect => rect.width > 0 && rect.height > 0);
++}
++export function solveEarlyFeedLayout(input: {
++  width: number; height: number; safe: StoryHudSafeAreaInsets; reservations: readonly StoryHudObservedRect[];
++}): { order: { left: number; top: number; width: number }; ledger: { left: number; bottom: number; width: number } } {
++  const left = input.safe.left + 18, right = input.width - input.safe.right - 18;
++  const upper = input.reservations.filter(rect => rect.id === 'feed-camera-status' || rect.id === 'story-journal-trigger' || (!rect.id && rect.top < input.height / 2));
++  const sideWidth = Math.min(680, ...upper.map(rect => rect.left - left - 14), right - left);
++  const top = input.safe.top + 26;
++  const orderTop = sideWidth >= 320 ? top : Math.max(top, ...upper.map(rect => rect.bottom + 14));
++  const lower = input.reservations.filter(rect => rect.id?.startsWith('touch-') || rect.id === 'story-caption' || (!rect.id && rect.top >= input.height / 2));
++  const ledgerBottom = Math.max(input.safe.bottom + 18, ...lower.map(rect => input.height - rect.top + 14));
++  return { order: { left, top: orderTop, width: sideWidth >= 320 ? sideWidth : right - left },
++    ledger: { left, bottom: ledgerBottom, width: right - left } };
++}
+--- before/main/src/story/world/DebrisField.tsx
++++ after/main/src/story/world/DebrisField.tsx
+@@ -2,6 +2,9 @@
+ import { useFrame } from '@react-three/fiber';
+ import * as THREE from 'three';
+ import { getPlayerWorldPosition } from '../../state/playerFrame.ts';
++import { isStoryPaused } from '../storyClock.ts';
++import { getAppStateSnapshot } from '../../state/appState.ts';
++import { getDesignatedSurveyTargetKey } from '../feed/surveyBrackets.ts';
+ import { useStoryState } from '../storyState.ts';
+ import {
+   collectDebris,
+@@ -36,7 +39,8 @@
+     [planetSize, terrainSeed]
+   );
+   const materials = useMemo(() => ({
+-    hull: new THREE.MeshStandardMaterial({ color: HULL, roughness: 0.8, emissive: HULL, emissiveIntensity: 0 }),
++    selected: new THREE.MeshStandardMaterial({ color: HULL, roughness: 0.8, emissive: HULL, emissiveIntensity: 0.25 }),
++    hull: new THREE.MeshStandardMaterial({ color: HULL, roughness: 0.8, emissive: HULL, emissiveIntensity: 0.08 }),
+     scorch: new THREE.MeshStandardMaterial({ color: SCORCH, roughness: 0.95 })
+   }), []);
+   const box = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
+@@ -47,22 +51,21 @@
+     return () => setDebrisPositions([]);
+   }, [poses]);
+ 
+-  const collectable = story.beat === 'ch1-raster';
++  const collectable = story.active && (story.beat === 'ch1-fixed' || story.beat === 'ch1-raster');
+ 
+-  useFrame(({ clock }) => {
++  useFrame(() => {
+     const group = groupRef.current;
+     if (!group) return;
+-    // Blink so debris reads against the dither (stronger while collectable).
+-    materials.hull.emissiveIntensity = collectable
+-      ? 0.25 + 0.35 * Math.abs(Math.sin(clock.elapsedTime * 2.4))
+-      : 0.08;
+-
++    const canCollect = collectable && !isStoryPaused() && getAppStateSnapshot().phase === 'playing';
++    const designated = getDesignatedSurveyTargetKey();
+     const player = getPlayerWorldPosition();
+     const scattered = getDebrisScattered();
+     group.children.forEach((piece, i) => {
+       const active = i < scattered && !isDebrisCollected(i);
+       piece.visible = active;
+-      if (!active || !collectable) return;
++      const hull = piece.children[0] as THREE.Mesh;
++      hull.material = designated === `d:${i}` ? materials.selected : materials.hull;
++      if (!active || !canCollect) return;
+       if (player.distanceTo(poses[i].position) <= PICKUP_RADIUS) {
+         collectDebris(i);
+       }
+--- before/main/src/story/world/SideWorkerAvatar.tsx
++++ after/main/src/story/world/SideWorkerAvatar.tsx
+@@ -5,6 +5,8 @@
+ import { getLocalActorId } from '../../game/playerActors.ts';
+ import { getStoryInputPolicy } from '../storyInputPolicy.ts';
+ import { getSideFacing, getSideLens } from '../sideLens.ts';
++import { getPlayerUp, getPlayerWorldPosition } from '../../state/playerFrame.ts';
++import { storyNow } from '../storyClock.ts';
+ import { getFeedRuntime } from '../feedRuntime.ts';
+ 
+ // --- The raster-era worker sprite ---------------------------------------------------
+@@ -22,7 +24,8 @@
+ const _pos = new THREE.Vector3();
+ const _quat = new THREE.Quaternion();
+ const _face = new THREE.Vector3();
+-const _FORWARD = new THREE.Vector3(0, 0, 1);
++const _right = new THREE.Vector3();
++const _basis = new THREE.Matrix4();
+ 
+ const SideWorkerAvatar: React.FC = () => {
+   const groupRef = useRef<THREE.Group>(null);
+@@ -34,7 +37,9 @@
+   }), []);
+   const box = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
+ 
+-  useFrame(({ clock }) => {
++  const reducedMotion = useMemo(() => typeof window === 'undefined' ? null : window.matchMedia('(prefers-reduced-motion: reduce)'), []);
++
++  useFrame(() => {
+     const group = groupRef.current;
+     if (!group) return;
+     const lens = getSideLens();
+@@ -56,19 +61,24 @@
+       group.visible = false;
+       return;
+     }
+-    _pos.set(pose.position[0], pose.position[1], pose.position[2]);
+-    group.position.copy(_pos);
++    _pos.copy(getPlayerWorldPosition());
++    const up = getPlayerUp();
++    group.position.copy(_pos).addScaledVector(up, -0.83);
+ 
+     // Face the last-moved direction along the travel axis.
+     _face.copy(lens.travelAxis).multiplyScalar(getSideFacing()).normalize();
+-    _quat.setFromUnitVectors(_FORWARD, _face);
++    _right.crossVectors(up, _face).normalize();
++    _basis.makeBasis(_right, up, _face);
++    _quat.setFromRotationMatrix(_basis);
+     group.quaternion.slerp(_quat, 0.25);
+ 
+     // Walk bob (the era's whole animation budget).
+-    const moving = pose.action === 'walk' || pose.action === 'sprint';
+-    const bob = moving ? Math.abs(Math.sin(clock.elapsedTime * 9)) * 0.14 : 0;
+-    group.children.forEach(child => {
+-      child.position.y = (child.userData.baseY as number) + bob;
++    const moving = !reducedMotion?.matches && (pose.action === 'walk' || pose.action === 'sprint');
++    const step = moving ? Math.sin(storyNow() * 0.009) : 0;
++    group.children.forEach((child, index) => {
++      // Alternate swing feet while one stance sole stays at the terrain plane.
++      const lift = index === 3 ? Math.max(0, step) * 0.04 : index === 4 ? Math.max(0, -step) * 0.04 : 0;
++      child.position.y = (child.userData.baseY as number) + lift;
+     });
+   });
+ 
+--- before/main/src/story/world/storyAnchorResolver.ts
++++ after/main/src/story/world/storyAnchorResolver.ts
+@@ -542,7 +542,7 @@
+ function getDebrisPoses(planetSize: number, terrainSeed: number): StoryPropPose[] {
+   const plane = getStorySidePlane(planetSize, terrainSeed);
+   const alongX = Math.abs(plane.travelAxis.x) > 0.5;
+-  const offsets = [-9, 6, -14, 11, -4, 14]; // interleaved, all inside the dry plateau
++  const offsets = [2, 6, -14, 11, -4, 14]; // interleaved, all inside the dry plateau
+   return offsets.slice(0, DEBRIS_MAX).map(offset =>
+     surfacePoseNear(
+       planetSize,

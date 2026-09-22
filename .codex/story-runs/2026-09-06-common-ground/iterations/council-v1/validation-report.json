@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "scope": "exact council signatures/delegation, bounded docs delta and authority drift rejection only",
+  "checkResultsRef": "check-results.json"
+}

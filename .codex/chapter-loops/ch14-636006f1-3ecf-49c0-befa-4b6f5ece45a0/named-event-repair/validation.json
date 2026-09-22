@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "handoffSha256": "9d665fc5fccc57cfe738b54e26f33df8199373ce350722320340704c5cee20f0",
+  "checks": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/named-event-repair/tests.log",
+      "sha256": "1aaf4d26d5697542080bce68f8512de9dc1babc6efd168f39c951a0bfbe70138"
+    }
+  ],
+  "meaning": "Event ids are projected to the contracted id array; original ordered id/event objects remain verbatim in anchorEvents and raw provider output. No model replay."
+}

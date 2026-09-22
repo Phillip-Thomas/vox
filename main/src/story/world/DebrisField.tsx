@@ -2,6 +2,9 @@ import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getPlayerWorldPosition } from '../../state/playerFrame.ts';
+import { isStoryPaused } from '../storyClock.ts';
+import { getAppStateSnapshot } from '../../state/appState.ts';
+import { getDesignatedSurveyTargetKey } from '../feed/surveyBrackets.ts';
 import { useStoryState } from '../storyState.ts';
 import {
   collectDebris,
@@ -36,7 +39,8 @@ const DebrisField: React.FC<DebrisFieldProps> = ({ planetSize, terrainSeed }) =>
     [planetSize, terrainSeed]
   );
   const materials = useMemo(() => ({
-    hull: new THREE.MeshStandardMaterial({ color: HULL, roughness: 0.8, emissive: HULL, emissiveIntensity: 0 }),
+    selected: new THREE.MeshStandardMaterial({ color: HULL, roughness: 0.8, emissive: HULL, emissiveIntensity: 0.25 }),
+    hull: new THREE.MeshStandardMaterial({ color: HULL, roughness: 0.8, emissive: HULL, emissiveIntensity: 0.08 }),
     scorch: new THREE.MeshStandardMaterial({ color: SCORCH, roughness: 0.95 })
   }), []);
   const box = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
@@ -47,22 +51,21 @@ const DebrisField: React.FC<DebrisFieldProps> = ({ planetSize, terrainSeed }) =>
     return () => setDebrisPositions([]);
   }, [poses]);
 
-  const collectable = story.beat === 'ch1-raster';
+  const collectable = story.active && (story.beat === 'ch1-fixed' || story.beat === 'ch1-raster');
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     const group = groupRef.current;
     if (!group) return;
-    // Blink so debris reads against the dither (stronger while collectable).
-    materials.hull.emissiveIntensity = collectable
-      ? 0.25 + 0.35 * Math.abs(Math.sin(clock.elapsedTime * 2.4))
-      : 0.08;
-
+    const canCollect = collectable && !isStoryPaused() && getAppStateSnapshot().phase === 'playing';
+    const designated = getDesignatedSurveyTargetKey();
     const player = getPlayerWorldPosition();
     const scattered = getDebrisScattered();
     group.children.forEach((piece, i) => {
       const active = i < scattered && !isDebrisCollected(i);
       piece.visible = active;
-      if (!active || !collectable) return;
+      const hull = piece.children[0] as THREE.Mesh;
+      hull.material = designated === `d:${i}` ? materials.selected : materials.hull;
+      if (!active || !canCollect) return;
       if (player.distanceTo(poses[i].position) <= PICKUP_RADIUS) {
         collectDebris(i);
       }

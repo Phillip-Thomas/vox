@@ -1,3 +1,4 @@
+import { precompile } from '../../components/effects/shaderWarmup.ts';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -66,6 +67,11 @@ const AuditWorker: React.FC = () => {
   const leftLegRef = useRef<THREE.Group>(null);
   const rightLegRef = useRef<THREE.Group>(null);
   const torsoRef = useRef<THREE.Group>(null);
+
+  useEffect(() => {
+    const root = groupRef.current;
+    if (root) return precompile(root);
+  }, []);
 
   const materials = useMemo(() => ({
     suit: new THREE.MeshStandardMaterial({ color: SUIT, roughness: 0.85 }),

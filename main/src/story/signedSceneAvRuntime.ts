@@ -1,5 +1,13 @@
 import generatedContract from './generatedSceneAvRuntime.json';
-import { scoreHit, setScoreIntensity, getStoryScoreMood } from './storyScore.ts';
+import {
+  armStoryHit,
+  bundlePresentationDue,
+  fireStoryHitFallback,
+  getStoryScoreMood,
+  noteStoryBundleFired,
+  noteStoryBundleState,
+  setScoreIntensity
+} from './storyScore.ts';
 import { SANDBOX_FOV, setStoryTargetFov } from './storyInputPolicy.ts';
 import {
   subscribeEmergentStoryEvents,
@@ -13,6 +21,8 @@ import {
   type SceneAvCueEasing
 } from './sceneAvCueRail.ts';
 import { getLocalActorId } from '../game/playerActors.ts';
+import { readCommonGroundLive } from './commonGroundState.ts';
+import { getSystemFlightSnapshot } from '../state/systemFlight.ts';
 import { hasMilestone } from '../game/systems/progressionSystem.ts';
 import {
   EMERGENT_AUDIT_MILESTONES,
@@ -38,6 +48,10 @@ export const SIGNED_SCENE_AV_REVISION = 'intent-v1';
 export const CH10_SCENE_AV_SHA256 =
   '0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1';
 export const CH10_SCENE_AV_REVISION = 'draft-v9';
+/** Common Ground, ch13. Signed 2026-09-06 by all three directors on scene-v3. */
+export const CH13_SCENE_AV_SHA256 =
+  '5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54';
+export const CH13_SCENE_AV_REVISION = 'scene-v3';
 export const SIGNED_SCENE_AV_SOURCES: readonly {
   readonly sceneId: string;
   readonly contractVersion: string;
@@ -52,10 +66,19 @@ export const SIGNED_SCENE_AV_SOURCES: readonly {
     sceneId: 'ch10-station-introduction',
     contractVersion: CH10_SCENE_AV_REVISION,
     sha256: CH10_SCENE_AV_SHA256
+  }),
+  Object.freeze({
+    sceneId: 'common-ground',
+    contractVersion: CH13_SCENE_AV_REVISION,
+    sha256: CH13_SCENE_AV_SHA256
   })
 ]);
-/** 66 anchors from the A4→ch9 contract, plus chapter 10's exactly ten. */
-const SIGNED_SCENE_AV_ANCHOR_COUNT = 76;
+/**
+ * 66 anchors from the A4→ch9 contract, chapter 10's exactly ten, and chapter
+ * 13's exactly twenty-eight. The census is asserted rather than derived: a
+ * regenerated runtime that quietly lost a chapter must fail to load, not run.
+ */
+const SIGNED_SCENE_AV_ANCHOR_COUNT = 104;
 
 interface SignedAnchor {
   id: string;
@@ -277,6 +300,14 @@ let lensElapsedMs = 0;
 let appliedFovDeg: number | null = null;
 let activeScoreIntensity: number | null = null;
 let activeScoreHit: 'bloom' | null = null;
+/**
+ * anc.maw.repair-answer (audio-10x Stage 3): the receipt and commit are
+ * immediate (the caller's arming tick); the Maw's ANSWER — the bloom, the
+ * intensity step and the anchor's entry post-effects — chases the returned grid
+ * time as one bundle. Beat-runtime clock; pause suspends it with the context.
+ */
+let pendingScoreAnswer: { anchorId: 'anc.maw.repair-answer'; intensity: number | null; dueMs: number; audibleAudioTime: number | null; fallback: boolean } | null = null;
+let runtimeClockMs = 0;
 let activationSource: SignedSceneAvDebugSnapshot['activationSource'] = null;
 let activationSequence = 0;
 let lastResetReason: SignedSceneAvResetReason | null = null;
@@ -306,8 +337,11 @@ function publish(): void {
 
 function currentPostEffects(): SignedPostEffect[] {
   if (!activeShot || pauseReasons.size > 0) return [];
+  // The repair answer's own entry effects are members of the answer bundle and
+  // wait for it; every other effect keeps its shipped activation tick.
+  const answerHeld = pendingScoreAnswer != null && activeAnchor?.id === 'anc.maw.repair-committed';
   return activeShot.effects.postEffects.filter(effect => (
-    effect.entryAnchorRef === activeAnchor?.id
+    (effect.entryAnchorRef === activeAnchor?.id && !answerHeld)
     || (effect.entryAnchorRef !== effect.exitAnchorRef && effect.entryAnchorRef === activeShot?.startAnchorRef)
   ));
 }
@@ -327,6 +361,7 @@ function resetScoreOverlay(): void {
   if (mood) setScoreIntensity(mood.baseline);
   activeScoreIntensity = mood?.baseline ?? null;
   activeScoreHit = null;
+  pendingScoreAnswer = null;
 }
 
 function resetTransientOwners(reason: SignedSceneAvResetReason): void {
@@ -417,6 +452,14 @@ function scoreIntensityFor(anchor: SignedAnchor): number | null {
   // anchors still own camera/PostFX evidence, but may not manufacture a second
   // time/index-based intensity progression over the gameplay-derived mix.
   if (anchor.beat === 'ch7-reconstruct' || anchor.beat === 'ch7-board') return null;
+  // Chapter 13 is the same case and for a sharper reason. Its texture is chosen
+  // by the chapter's own physical facts through the existing mood facade, and
+  // several of its anchors are deliberately SILENT — the guide appearing, the
+  // preparation copy becoming the ready copy, a body stepping out of a reference.
+  // An index-derived ladder would turn every one of those into a rise in
+  // intensity, which is precisely the acknowledgement the signed lane says those
+  // moments do not get.
+  if (anchor.beat.startsWith('ch13')) return null;
   const mood = activeBeat ? getStoryScoreMood(activeBeat) : null;
   if (!mood || anchor.scoreCueRefs.length === 0) return null;
   const beatAnchors = anchorsByBeat.get(activeBeat ?? anchor.beat) ?? [anchor];
@@ -439,10 +482,41 @@ function scoreHitFor(anchor: SignedAnchor): 'bloom' | null {
 
 function applyScore(anchor: SignedAnchor, allowHit: boolean): void {
   const intensity = scoreIntensityFor(anchor);
+  const hit = allowHit ? scoreHitFor(anchor) : null;
+  if (hit) {
+    // The commit and its receipt fired on this tick (the caller). Only the
+    // answer takes a breath: bloom + intensity step + entry effects at bundleAt.
+    const arm = armStoryHit('anc.maw.repair-answer', { beatClock: runtimeClockMs / 1000 });
+    noteStoryBundleState('anc.maw.repair-answer', runtimeClockMs / 1000);
+    pendingScoreAnswer = {
+      anchorId: 'anc.maw.repair-answer',
+      intensity,
+      dueMs: runtimeClockMs + arm.bundleDelayS * 1000,
+      audibleAudioTime: arm.audibleAudioTime,
+      fallback: arm.fallback
+    };
+    activeScoreHit = null;
+    return;
+  }
+  if (pendingScoreAnswer) return; // a resume re-apply must not pre-empt the pending answer
   activeScoreIntensity = intensity;
   if (intensity != null) setScoreIntensity(intensity);
-  activeScoreHit = allowHit ? scoreHitFor(anchor) : null;
-  if (activeScoreHit) scoreHit(activeScoreHit);
+  activeScoreHit = null;
+}
+
+/** The answer bundle fires on the first tick at or past its target (late on a hitch, never early). */
+function tickPendingScoreAnswer(): void {
+  if (!pendingScoreAnswer) return;
+  if (!bundlePresentationDue(runtimeClockMs / 1000, pendingScoreAnswer.dueMs / 1000, pendingScoreAnswer.audibleAudioTime)) return;
+  const answer = pendingScoreAnswer;
+  pendingScoreAnswer = null;
+  activeScoreIntensity = answer.intensity;
+  if (answer.intensity != null) setScoreIntensity(answer.intensity);
+  activeScoreHit = 'bloom';
+  if (answer.fallback) fireStoryHitFallback(answer.anchorId);
+  noteStoryBundleFired(answer.anchorId, runtimeClockMs / 1000);
+  refreshPostFxCueState();
+  publish();
 }
 
 function activateAnchor(
@@ -463,15 +537,12 @@ function activateAnchor(
   if (anchor.order < currentOrder && !isLateDirectReceipt) return false;
   const beatAnchors = anchorsByBeat.get(activeBeat) ?? [];
   const earlierRequiredAnchorPending = beatAnchors.some(candidate => (
-    candidate.order < anchor.order
-    && isPendingOrderedAnchor(candidate)
-    && !activatedAnchorIds.has(candidate.id)
+    candidate.order < anchor.order && stillWaitingOn(candidate, anchor)
   ));
   if (earlierRequiredAnchorPending) return false;
-  if (!isBeatEntry && !isOptionalAnchor(anchor) && !isDirectReceiptAnchor(anchor)) {
-    const nextRequiredAnchor = beatAnchors.find(candidate => (
-      isPendingOrderedAnchor(candidate) && !activatedAnchorIds.has(candidate.id)
-    ));
+  if (!isBeatEntry && !isOptionalAnchor(anchor) && !isDirectReceiptAnchor(anchor)
+    && !CONDITIONAL_ANCHORS.has(anchor.id)) {
+    const nextRequiredAnchor = beatAnchors.find(candidate => stillWaitingOn(candidate, anchor));
     if (nextRequiredAnchor?.id !== anchor.id) return false;
   }
   if (isLateDirectReceipt) {
@@ -511,6 +582,167 @@ function isOptionalAnchor(anchor: SignedAnchor): boolean {
     || RELOCATED_OPTIONAL_ANCHORS.has(anchor.id);
 }
 
+/**
+ * Signed anchors that MAY NOT HAPPEN, and therefore cannot be prerequisites.
+ *
+ * Ordering is the invariant that makes a physical transaction inspectable, and
+ * none of it is removed here: an anchor listed below still has its signed order,
+ * still cannot rewind an already newer shot, and still fires only from its real
+ * producer. What is corrected is a category error — treating an event the
+ * contract itself declares conditional as a gate every LATER event must wait
+ * behind. When the condition does not occur, the rest of the beat is refused
+ * forever, and the local producer spends its one-shot latch on the refusal.
+ *
+ * Each id is here because the signed scene-v3 contract says so, in these words:
+ *
+ *   `anc.cg.cell-installed` — "/syncAnchors/0" is "the actual live install
+ *     receipt from the prior station-continuation contract", and its acceptance
+ *     criterion states that "a hydrated entry is steady and silent and consumes
+ *     no second cell". A restored save or a valid deep link therefore CANNOT
+ *     produce it, while "/syncAnchors/1" (home-steady) must still "restore the
+ *     steady home variant on hydrated entry" and "/guidance/objectives/0" must
+ *     still reach the review objective "without replaying the transaction".
+ *     Measured (VF-ANCHOR-OBS-1): a hydrated ch13-home performed both real F
+ *     acts and set both milestones while no home anchor ever activated.
+ *
+ *   `anc.cg.revision-ready` and the eight anchors whose signed event text begins
+ *     "Contingent:" — "/syncAnchors/12" says "No refusal is required, no F has
+ *     committed yet ... A valid current route may remain unchanged";
+ *     "/syncAnchors/13" says "any supported route, including the measured long
+ *     route, may complete without this anchor. Do not force failure"; and
+ *     "/syncAnchors/19" says "first-try success is legal". A first-try legal
+ *     route would otherwise never reach route-tested, and a common span walked
+ *     without a reference lapse would never reach `anc.cg.complete`.
+ *
+ * `signedSceneAvRuntime.test.ts` asserts this set against the compiled contract
+ * so a future anchor cannot drift out of it silently.
+ */
+const CONDITIONAL_ANCHORS: ReadonlySet<string> = new Set([
+  'anc.cg.cell-installed',
+  'anc.cg.revision-ready',
+  'anc.cg.specific-hold',
+  'anc.cg.witness-held',
+  'anc.cg.witness-vacated',
+  'anc.cg.test-resumed',
+  'anc.cg.tail-reopened',
+  'anc.cg.route-revised',
+  'anc.cg.reference-vacated',
+  'anc.cg.reference-resumed'
+]);
+
+/** True when the contract declares this anchor conditional rather than required. */
+export function isConditionalSignedAnchor(anchorId: string): boolean {
+  return CONDITIONAL_ANCHORS.has(anchorId);
+}
+
+/**
+ * Durable receipts that make a REQUIRED anchor's event ALREADY TRUE.
+ *
+ * A beat entry clears `activatedAnchorIds`, which is right: this runtime's
+ * ledger is per-entry, and an anchor that did not happen in this session did not
+ * happen in this session. But "not in this ledger" is not the same as "has not
+ * happened", and conflating them makes a mid-beat Continue refuse the NEXT
+ * action: a save taken after the fault review and reloaded before the return
+ * choice has the review's receipt in the milestone ledger, must not replay it,
+ * and must still be able to publish the return choice the player actually makes.
+ *
+ * This map is consulted ONLY to answer "is that predecessor still pending?".
+ * It never activates anything, writes no activation history, replays no cue or
+ * shot, and manufactures no receipt: an anchor whose event is already true is
+ * simply not a thing later anchors are waiting for. The ids are the chapter's
+ * own committed milestones, the same strings its director marks.
+ */
+const RECEIPT_SATISFIED_ANCHORS: Readonly<Record<string, string>> = Object.freeze({
+  // Each anchor's own committed receipt.
+  'anc.cg.fault-reviewed': 'story:ch13-fault-reviewed',
+  'anc.cg.return-chosen': 'story:ch13-return-chosen',
+  'anc.cg.origin-landed': 'story:ch13-origin-landed',
+  'anc.cg.route-tested': 'story:ch13-route-tested',
+  'anc.cg.reciprocal-crossed': 'story:ch13-reciprocal-crossed',
+  'anc.cg.complete': 'story:ch13-complete',
+  // And the legal transaction chain each of those receipts IMPLIES, by the same
+  // doctrine `progressionAnchorsForBeat` already states: a later durable receipt
+  // implies every earlier physical receipt that had to precede it. These are
+  // implications of the chapter's own predicates, not conveniences:
+  //   the Origin landing cannot exist without the boarding and the lift;
+  'anc.cg.hatch-boarded': 'story:ch13-origin-landed',
+  'anc.cg.lift-committed': 'story:ch13-origin-landed',
+  //   an ACCEPTED, tested route cannot exist without the inspection that opened
+  //   it, the offer, the grounded start, the drawn trace and the offered span;
+  'anc.cg.repeated-measure': 'story:ch13-route-tested',
+  'anc.cg.demonstration-opened': 'story:ch13-route-tested',
+  'anc.cg.survey-started': 'story:ch13-route-tested',
+  'anc.cg.trace-drawn': 'story:ch13-route-tested',
+  'anc.cg.route-offered': 'story:ch13-route-tested',
+  //   her eighteen-unit crossing is only creditable while he MAINTAINS the
+  //   reference at H, so the crossing's receipt implies he reached it;
+  'anc.cg.reciprocal-reference': 'story:ch13-reciprocal-crossed',
+  //   and the completion implies her far-reference offer and his own test.
+  'anc.cg.final-reference-offered': 'story:ch13-complete',
+  'anc.cg.independent-test': 'story:ch13-complete'
+});
+
+/**
+ * The UNFINISHED half of the same doctrine: a validated saved survey.
+ *
+ * `RECEIPT_SATISFIED_ANCHORS` keys every survey predecessor on
+ * `story:ch13-route-tested`, and there are only six durable ch13 milestones, so
+ * a Continue taken in the MIDDLE of the survey can hold no receipt that excuses
+ * them. Measured as a source failure (CG-IMPL-008 / VF3-CG008-1): open the
+ * demonstration, start the recording, draw three real samples, save through
+ * `serializeCommonGround` -> WorldSave -> `hydrateCommonGround`, reload, walk to
+ * E and offer the span — and `anc.cg.route-offered` is refused, with an empty
+ * activation history, because repeated-measure, demonstration-opened and
+ * survey-started are unactivated in the fresh ledger and unexcused.
+ *
+ * What that save DOES hold is the chapter's own actor- and world-scoped state,
+ * and it only holds it if `hydrateCommonGround` validated it: the identity, the
+ * phase, the slot invariants and the impossible tuples are all rejected there.
+ * A recording that exists is proof of the acts that are the ONLY legal way to
+ * produce one — `commitCommonGroundSurveyStart` runs only from `awaiting-start`,
+ * which only `commitCommonGroundDemonstrationOffer` produces from `idle`, and
+ * `anc.cg.repeated-measure` is published on every tick of those two phases. That
+ * is exactly the transaction-chain argument the milestone map above already
+ * makes, applied to the one lane whose chain has no durable milestone yet.
+ *
+ * NOTHING IS MANUFACTURED. This is consulted only to answer "is that predecessor
+ * still pending?"; it activates nothing, writes no activation history, replays no
+ * cue or shot, marks no milestone and creates no new event id. It reads only a
+ * RESTORED snapshot (`hydrated`), so a live in-session survey still activates its
+ * anchors in the ordinary order, and it can never excuse the final proof: the
+ * completion, the route-tested receipt and the reciprocal crossing stay keyed to
+ * their durable milestones above.
+ */
+function surveyStateSatisfiedAnchors(): ReadonlySet<string> {
+  const worldId = getSystemFlightSnapshot().activePlanetId ?? '';
+  const state = worldId ? readCommonGroundLive(worldId) : null;
+  if (!state || !state.hydrated || state.actorId !== getLocalActorId()) return EMPTY_ANCHOR_SET;
+  const survey = state.survey;
+  const drawing = survey.working ?? survey.accepted;
+  if (!drawing) return EMPTY_ANCHOR_SET;
+  const satisfied = new Set<string>([
+    // A recording exists, so the inspection, the offer and the grounded start
+    // all happened in the session that produced it.
+    'anc.cg.repeated-measure',
+    'anc.cg.demonstration-opened',
+    'anc.cg.survey-started'
+  ]);
+  // A span was actually offered, so the trace it was offered from was drawn.
+  if (drawing.offeredEndIndex != null) {
+    satisfied.add('anc.cg.trace-drawn');
+    satisfied.add('anc.cg.route-offered');
+  }
+  return satisfied;
+}
+
+const EMPTY_ANCHOR_SET: ReadonlySet<string> = new Set<string>();
+
+function anchorReceiptAlreadyHeld(anchor: SignedAnchor): boolean {
+  const milestone = RECEIPT_SATISFIED_ANCHORS[anchor.id];
+  if (milestone != null && hasMilestone(milestone, getLocalActorId())) return true;
+  return surveyStateSatisfiedAnchors().has(anchor.id);
+}
+
 function progressionEntryForAnchor(anchor: SignedAnchor): ProgressionAnchor | undefined {
   if (!activeBeat) return undefined;
   return progressionAnchorsForBeat(activeBeat).find(entry => entry.anchorId === anchor.id);
@@ -527,7 +759,24 @@ function isMissingDirectReceiptAnchor(anchor: SignedAnchor): boolean {
 }
 
 function isPendingOrderedAnchor(anchor: SignedAnchor): boolean {
-  return !isOptionalAnchor(anchor) && !isMissingDirectReceiptAnchor(anchor);
+  return !isOptionalAnchor(anchor)
+    && !isMissingDirectReceiptAnchor(anchor)
+    && !CONDITIONAL_ANCHORS.has(anchor.id);
+}
+
+/**
+ * Is `candidate` something `activating` still has to wait for?
+ *
+ * An anchor is never a prerequisite for ITSELF: its own receipt is committed
+ * immediately before it is published, which is the correct order, and reading
+ * that as "already satisfied, therefore not the next required one" would refuse
+ * the very act that just happened.
+ */
+function stillWaitingOn(candidate: SignedAnchor, activating: SignedAnchor): boolean {
+  if (candidate.id === activating.id) return true;
+  if (!isPendingOrderedAnchor(candidate)) return false;
+  if (activatedAnchorIds.has(candidate.id)) return false;
+  return !anchorReceiptAlreadyHeld(candidate);
 }
 
 interface ProgressionAnchor {
@@ -805,6 +1054,8 @@ export function tickSignedSceneAvRuntime(dtSeconds: number): void {
   hydrateSignedAnchorsFromProgression();
   if (!activeBeat || !activeShot || pauseReasons.size > 0) return;
   const deltaMs = Math.max(0, Math.min(0.1, dtSeconds)) * 1000;
+  runtimeClockMs += deltaMs;
+  tickPendingScoreAnswer();
   const previousFov = appliedFovDeg;
   lensElapsedMs = Math.min(Math.max(0, activeShot.lens.durationMs), lensElapsedMs + deltaMs);
   applyLens();

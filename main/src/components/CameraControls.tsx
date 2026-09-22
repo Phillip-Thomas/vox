@@ -7,13 +7,13 @@ import {
   rotateCameraForwardYaw,
   transportCameraForward
 } from '../utils/gravityCamera';
-import { isTouchActive } from '../utils/mobileInput';
+import { allowsMousePointerLock, isTouchActive } from '../utils/mobileInput';
 import { PLAYER_EYE_HEIGHT } from '../utils/cubeGravityConstants';
 import { getPlayerLook, setPlayerLook } from '../state/playerFrame';
 import { getCameraSubmergence } from '../state/playerSubmersion';
 import { getStoryInputPolicy, SANDBOX_FOV, SANDBOX_POLICY } from '../story/storyInputPolicy.ts';
 import { createFeedLookState, feedAccumulateLook } from '../story/feedCamera.ts';
-import { applyActiveRigTransform, applyLiftCameraTransform, applyOverheadCameraTransform, getLensRig, getSideLens, rigMoveBasis } from '../story/sideLens.ts';
+import { clearSideCameraViewOffset, applyActiveRigTransform, applyLiftCameraTransform, applyOverheadCameraTransform, getLensRig, getSideLens, rigMoveBasis } from '../story/sideLens.ts';
 import { isMapViewOpen, syncChartScreenUp, MAP_VIEW_HEIGHT } from '../game/mapView.ts';
 import {
   applyCinematicCameraPose,
@@ -100,7 +100,7 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     const element = gl.domElement;
 
     const handleClick = async (event: MouseEvent) => {
-      if (event.target !== element || document.pointerLockElement) return;
+      if (event.target !== element || document.pointerLockElement || !allowsMousePointerLock(event)) return;
       try {
         await element.requestPointerLock();
       } catch (error) {
@@ -245,6 +245,7 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
       cameraRef.current.updateProjectionMatrix();
     }
     const sideLens = storyPolicy.lookMode === 'side' ? getSideLens() : null;
+    if (!sideLens || storyPolicy.sideBlend > 0.001) clearSideCameraViewOffset(cameraRef.current);
     if (sideLens) {
       if (storyPolicy.sideBlend <= 0.001) {
         rigMoveBasis(sideLens, getLensRig(), _sideForward, _sideRight);

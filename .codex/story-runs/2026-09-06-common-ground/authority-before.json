@@ -1,0 +1,35 @@
+{
+  "capturedAt": "2026-09-06T04:47:15.634929+00:00",
+  "files": [
+    {
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "snapshot": "authority-before/main/PARAVOXIA_STORY_BIBLE.md",
+      "sha256": "02fff0ace9d44e7f193008db15b68b01b69d2e8e9725bdc627345fb67584acff"
+    },
+    {
+      "path": "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+      "snapshot": "authority-before/main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+      "sha256": "26d386b0dcf0b67410ff1e4b4d9311cb76e3c2f1091583f9e789d9c9bba97cb9"
+    },
+    {
+      "path": "main/story-authority.json",
+      "snapshot": "authority-before/main/story-authority.json",
+      "sha256": "31fdc34b6e4c6d52e91b3d26bbd2d07d5ee3a655318908cba0ab1bd6abca501e"
+    },
+    {
+      "path": "main/STORY.md",
+      "snapshot": "authority-before/main/STORY.md",
+      "sha256": "54008a2becda56c9112a9a5c594751d57bd9ff6757b2f9b9c15dd7fe25b85ed6"
+    },
+    {
+      "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+      "snapshot": "authority-before/docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+      "sha256": "cff55ee62ee72348ff01f8b51b5f9475faad52b73e2854a71846a5e6e5978715"
+    },
+    {
+      "path": "main/tools/story-authority-gate.mjs",
+      "snapshot": "authority-before/main/tools/story-authority-gate.mjs",
+      "sha256": "e7caa35770b8f1283fcf8d6fb6b29c302869c3141ab05c2b22c562ee9cb2f434"
+    }
+  ]
+}

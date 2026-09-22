@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 315628,
+  "stop_reason": "end_turn",
+  "session_id": "1e5753b7-f365-4a61-9fb6-091f8d1e7f36",
+  "total_cost_usd": 1.615789,
+  "usage": {
+    "input_tokens": 56,
+    "cache_creation_input_tokens": 52373,
+    "cache_read_input_tokens": 962124,
+    "output_tokens": 24336,
+    "output_tokens_details": {
+      "thinking_tokens": 2753
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 52373,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1124,
+        "cache_read_input_tokens": 56906,
+        "cache_creation_input_tokens": 1838,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1838
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2252,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002317,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 56,
+      "outputTokens": 24336,
+      "cacheReadInputTokens": 962124,
+      "cacheCreationInputTokens": 52373,
+      "webSearchRequests": 0,
+      "costUSD": 1.6134719999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2753,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 37,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Complete at 20:30:48Z, inside the 20:40:45Z cap.\n\n**VERDICT: CORRECTED-ENTRY-AND-EARNED-PREFIX-OBSERVED \u2014 credit plateaus at exactly 6.000000; dependent passage claims halted.** Not acceptance.\n\n**The bounded discriminator is answered.** Run2's ambiguity was that it *started* 0.3488 beyond E and 0.6082 off route with credit all-zero, so a refused skipped prefix and post-corner debt were indistinguishable. This run supplies the actually walked prefix:\n\n| entry measure | run2 | this run |\n|---|---|---|\n| foot z vs E plane 12 | 12.3488 (0.3488 **past**) | 11.5453 (0.4547 **before**) |\n| lateral off route x \u221242 | 0.6082 | **0.0508** (bound 0.18) |\n| armed before crossing | no | **yes** |\n| callee records across crossing | n/a | 3 \u2192 37 |\n| credit | **all zero** | **0.080645 \u2192 6.000000, monotonic** |\n\nForward crossing 11.5453 \u2192 12.1402 across z=12, supported, ordinary WASD, \u226530ms pulses, no pose write/forced F/rail.\n\n**Vertices 1\u20134** with both gates enforced (along-leg *and* full horizontal, the defect that let 0.608 lateral pass): s = 0.3094/0.1309/0.2743/0.1163, full horizontal = 0.3134/0.1398/0.3039/0.2965, all positive, all \u22640.35, all supported.\n\n**Residual finding:** 179 records, 146 with nonzero displacement. Credit tracks real foot displacement, then freezes at exactly 6.000000 for the final 48 records while displacement continues (~0.0803/record, foot to z16.1309/x\u221244.1727). Because the prefix was genuinely walked, the plateau can no longer be explained as proper refusal of a skipped prefix. I continued the eligible following leg only far enough to establish the persistent plateau and did **not** call that a full passage. Retained pure replay (frozen copy, live growth 0, breakpoints off) stays separate from the next call's returned value, still unobserved; bodiesClear absent from the credit chain; no zero-gain ceiling causality asserted.\n\n**Two deviations from the copied driver, both required by my commission:** the inherited `run-gpu.sh` was a detached 15s waiting loop, so I removed it and replaced it with a run-once script, polling control inline instead (granted 20:28:13Z, poll 14). And `walkTo` steers on `bodyCentre`, which cannot meet a 0.18 lateral bound \u2014 I added a `refineFootTo` that steers on published `bodyPose`, with centre/up still recorded and never substituted.\n\nNot claimed: full 18-unit passage, COMMON success, chapter acceptance, full UX. Frozen original probe dir byte-identical (`99b1659\u2026`); no producer/contract/source/build/preview writes.\n\nArtifacts: `verifier/captures/common-entry-crossing/run1/`, `verifier/probes/common-entry-crossing/`, `logs/common-entry-crossing/`, `common-entry-crossing-ready.json`, `common-entry-crossing-report.json|md`.",
+  "ttft_ms": 1661,
+  "type": "result",
+  "duration_ms": 617224,
+  "uuid": "78697b2c-b97f-423f-9ecb-efbd42ecf370",
+  "ttft_stream_ms": 1092,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 1093,
+  "queued_turn_count": 0
+}

@@ -1,0 +1,53 @@
+[
+  {
+    "id": "OI-1",
+    "kind": "registration-gap",
+    "detail": "main/story-authority.json carries snapshotDate 2026-07-15 and activeProduction.runId 2026-07-13-distance-between-fires. It predates the ch10 chapter (run 2026-08-11), the station sidecar authorization (2026-08-14), the station-interior-light run (2026-09-04), the audio-10x run (2026-09-04), and the after-the-hearth run (2026-09-05). Its runtimeStoryCeiling of ch10-transit is nonetheless correct against storyState.ts. dynamicSources.ownerApprovedSceneContract.activePath is stale.",
+    "ambiguity": "Which scene contract is the currently owner-approved dynamic authority is not resolvable from the file."
+  },
+  {
+    "id": "OI-2",
+    "kind": "contract-vs-source-divergence",
+    "detail": "The station-continuation contract's Movement step 1 specifies three apron REGULATION lines ('THRUST COLD · CLAMPS ENGAGED.', 'PRESSURE EQUALIZING.', 'ENTRY REQUIRES A DESIGNATION RECORD · PROCEED TO COUNTER.'). A repo-wide grep for CLAMPS / EQUALIZ / 'ENTRY REQUIRES' under main/ returns zero matches. These lines are contracted but not shipped."
+  },
+  {
+    "id": "OI-3",
+    "kind": "authority-form-ambiguity",
+    "detail": "ch11/ch12 exist only as milestone namespaces. They have no StoryBeat entries, no BeatContract, no chapter-registry entry, no journey declaration, no rail, and no autopilot coverage. STORY_BEAT_ORDER terminates at 'done' and the station/return sit entirely outside it. Consequently ?story=<beat> deep links, movie mode, beat-flow timing, and the beat-contract test suites do not reach the station visit or the hearth restoration at all."
+  },
+  {
+    "id": "OI-4",
+    "kind": "feedback-gap",
+    "detail": "installTidegardenBondedCell marks story:ch12-bonded-cell-installed and story:ch12-hearth-restored but emits no caption, system line, or audit line. The interaction verb 'Install the Sealed Bonded Cell' and the marker clearing are the only player-visible acknowledgment of the hearth being restored. This is the terminal act of the R12 sidecar."
+  },
+  {
+    "id": "OI-5",
+    "kind": "audio-baseline-gap",
+    "detail": "No authored cue, mood, motif, or silence ownership exists for the station visit or the return/install. storyScore.ts moods cover beats only, and the station page is a separate Vite entry with no audio imports. SpaceStationLighting.tsx names a 'future station-audio packet' that does not exist."
+  },
+  {
+    "id": "OI-6",
+    "kind": "audio-evidence-staleness",
+    "detail": "The only rendered audio evidence in this range is dated 2026-08-12, is score-only rather than combined, covers ch10 beats only, and predates the in-flight audio-10x engine work. Both relevant audio-report.md files are unfilled templates ('template_incomplete'). There is no human-listened validation of any beat in this range on disk."
+  },
+  {
+    "id": "OI-7",
+    "kind": "corpus-completeness",
+    "detail": "Bell's opening line is not a fixed authored string — it resolves from vendor.persona.greeting in the procedural vendor table, with a hardcoded fallback only in StationStoryPanel.tsx. The one required-dialogue speaker in the station visit therefore has a non-deterministic first line."
+  },
+  {
+    "id": "OI-8",
+    "kind": "prior-run-state",
+    "detail": ".codex/production-runs/2026-09-05-after-the-hearth/ is routed to the story council before scene production. Its README records that no runtime or canon changes were made and that the candidate is being prepared elsewhere. Its story-side artifacts (scene-contract.json, director signoffs, verification-report.json, final-scorecard.json) were NOT opened in this role and their pass/fail state is unknown to this packet."
+  },
+  {
+    "id": "OI-9",
+    "kind": "timestamps",
+    "detail": "No filesystem mtimes were obtained (read-only tool set, no shell). Dates cited are authored dates inside artifacts only: story-authority.json snapshotDate 2026-07-15; ch10 run folder 2026-08-11 with score capture 2026-08-12T00:56:59.460Z; station contract owner authorization 2026-08-14; audio-10x and station-interior-light runs 2026-09-04; after-the-hearth run 2026-09-05. The orchestrator must hash sourceRefs to establish real file state."
+  },
+  {
+    "id": "OI-10",
+    "kind": "reserved",
+    "detail": "The station contract's protected unknowns remain unresolved in shipped source and are not touched by this packet: no station proper name; no credit-balance explanation; no W-7743 legal status; no W-7744 aboard or in station records; no Makers/greater-threat/Terra-origin/station-builder answer; no sealed-volume explanation; no vendor recognition of Terra; no statement that the queue reflex belongs to Worker 9; no definition of the bond beyond an issuance record the core accepts."
+  }
+]

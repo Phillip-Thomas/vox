@@ -1,0 +1,20 @@
+{
+  "schema": "paravoxia.verifier.earnedContinue.pin.v1",
+  "pinnedAtUtc": "2026-09-06T16:27:27.611075+00:00",
+  "why": "The manual COMMON role owns and may still edit its own instrumentation. This probe binds to the EXACT bytes pinned here, never to the live manual-role file.",
+  "pins": [
+    {
+      "pinned": "verifier/probes/earned-continue/pinned/commonPassageLogic.pinned.mjs",
+      "copiedFrom": "verifier/probes/common-manual-focused/commonPassageLogic.mjs",
+      "sourceSha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+      "pinnedSha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+      "sourceMtimeUtc": "2026-09-06T16:25:52.984267+00:00",
+      "byteIdentical": true
+    }
+  ],
+  "copiedProbeBase": {
+    "from": "verifier/probes/partial-continue/partial-continue-probe.mjs",
+    "baseSha256": "fb1d4e2f528845a2ba8a4695f4a3a7e24a83ad1151a408718a0f33899a7b4d8d",
+    "note": "earned-continue-probe.mjs began as a byte copy of this file and was then edited in place; the original is preserved untouched."
+  }
+}

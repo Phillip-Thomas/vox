@@ -1,0 +1,21 @@
+{
+  "schema": "paravoxia.verifier.previewOwnership.v0",
+  "runId": "2026-09-05-after-the-hearth",
+  "owner": "root-production-preview",
+  "state": "running",
+  "url": "http://127.0.0.1:43617/",
+  "port": 43617,
+  "daemonPid": 688426,
+  "built": false,
+  "buildHash": "1dbce6a7d39aba30cb26f27d94891f50190782a6fc61736d966b21a9957c63f3",
+  "snapshotDir": "/tmp/paravoxia-preview-iFXsFv/dist",
+  "indexSha256": "1f3272687745880e7800b5349795bc4b55eb1ea8ee12a08b340716bcf05b823a",
+  "startedAt": "2026-09-06T09:56:02.911Z",
+  "stoppedAt": null,
+  "note": "Root owns this immutable preview independently of reviewer CLI lifetime. Single canonical URL for probes and owner review; port is chosen free.",
+  "stopReason": null,
+  "sourceManifestSha256": "58f275f6130914f878942774fd4b4c6ce74327755c33ae257965a9dbeed40e70",
+  "rootExecSessionId": 9968,
+  "identityRecheckedAt": "2026-09-06T09:56:27.733355+00:00",
+  "fullVerifyLog": "verifier/logs/post-repair/verify-postrepair.log"
+}

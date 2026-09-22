@@ -1,0 +1,61 @@
+{
+  "before": "../.codex/production-runs/2026-09-04-audio-10x/evidence/stage-3/wav/floor",
+  "after": "../.codex/production-runs/2026-09-04-audio-10x/evidence/stage-3/wav/A-nodirty",
+  "moods": 5,
+  "identical": 0,
+  "changed": 5,
+  "maxAbsDeltaLsb": 1,
+  "worstResidualDbfs": -121.36995170548607,
+  "rows": [
+    {
+      "name": "a3-dawn",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0007832577475434618,
+      "firstDiffS": 0.08133786848072562,
+      "rmsDeltaDb": -4.502866171246379e-8,
+      "residualDbfs": -121.36995170548607,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__relay-answer",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0005470521541950114,
+      "firstDiffS": 0.2742176870748299,
+      "rmsDeltaDb": 2.371280272690225e-8,
+      "residualDbfs": -122.92871137371444,
+      "identical": false
+    },
+    {
+      "name": "ch4-comply",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.0004667422524565382,
+      "firstDiffS": 0.2764172335600907,
+      "rmsDeltaDb": 9.335451259035463e-8,
+      "residualDbfs": -123.61822752175235,
+      "identical": false
+    },
+    {
+      "name": "crawl",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00031084656084656086,
+      "firstDiffS": 0.36634920634920637,
+      "rmsDeltaDb": -1.7860681422068948e-7,
+      "residualDbfs": -125.38353803148907,
+      "identical": false
+    },
+    {
+      "name": "voyage",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 1,
+      "diffSampleFraction": 0.00046485260770975055,
+      "firstDiffS": 0.13782312925170068,
+      "rmsDeltaDb": 1.2826557725287286e-7,
+      "residualDbfs": -123.6358459833152,
+      "identical": false
+    }
+  ]
+}

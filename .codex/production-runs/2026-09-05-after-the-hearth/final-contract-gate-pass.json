@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "npm",
+    "--prefix",
+    "main",
+    "run",
+    "creative:gate",
+    "--",
+    "--run",
+    ".codex/production-runs/2026-09-05-after-the-hearth",
+    "--phase",
+    "contract"
+  ],
+  "cwd": "/home/thomasphillip/Projects/vox",
+  "startedAt": "2026-09-06T17:43:27.265906+00:00",
+  "gateToolSha256": "23b347b7d7f8ae67c87d3e0eff14baf80d6e9e80cb2255bff81bc91a555e66bf",
+  "packageSha256": "2bf78b0d7e14bf89fa31c93790fd77325839ff147e5d7761535a2a540aedd812",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "finishedAt": "2026-09-06T17:43:27.492643+00:00",
+  "exitCode": 0,
+  "logSha256": "299424804db22a1e31b69a1714e2d53884e8b78148ff7e9f625af2fac5d5e0d7",
+  "passed": true,
+  "phase": "contract",
+  "checkedAt": "2026-09-06T17:43:27.477Z",
+  "checkCount": 1714,
+  "gateReportSha256": "86ff691eb68c1cec1021f6f77989969df54c554536639351b4cc842ba6b2209b",
+  "gateReportRef": "iterations/final-v3-contract-validation/creative-run-quality-report.json"
+}

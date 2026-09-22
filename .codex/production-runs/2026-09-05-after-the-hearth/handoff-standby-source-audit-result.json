@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 499513,
+  "stop_reason": "end_turn",
+  "session_id": "06ec2502-1afa-4a76-bc0e-b9ff3f23ffa3",
+  "total_cost_usd": 2.733624,
+  "usage": {
+    "input_tokens": 66,
+    "cache_creation_input_tokens": 93931,
+    "cache_read_input_tokens": 1662542,
+    "output_tokens": 38425,
+    "output_tokens_details": {
+      "thinking_tokens": 11926
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 93931,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1530,
+        "cache_read_input_tokens": 96721,
+        "cache_creation_input_tokens": 1022,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1022
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1958,
+      "outputTokens": 26,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002088,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 66,
+      "outputTokens": 38425,
+      "cacheReadInputTokens": 1662542,
+      "cacheCreationInputTokens": 93931,
+      "webSearchRequests": 0,
+      "costUSD": 2.731536,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 11926,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 44,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Both diagnoses are complete. Source hashes for every inspected file are identical to when I started (the `git status` modifications in `main/` predate this audit and belong to other lanes \u2014 I only read).\n\n## TASK A \u2014 solved, with a proven mutator\n\n**The generic same-system handoff works. It commits to Origin. The chapter world binding reclaims the departure world one render later.**\n\nRoot cause is one absent table entry, `main/src/story/tidegardenRoute.ts:128-131` (`e7237efc\u2026`):\n\n```ts\nconst CROSSING_DESTINATION_WORLD_ID = {\n  'ch8-crossing': TIDEGARDEN_WORLD_ID,\n  'ch10-ask': STORY_PRIMARY_WORLD_ID   // 'ch13-return' missing\n};\n```\n\nThe module's own docstring describes this exact bug for ch10 (\"relaunched, crossed, was reclaimed\u2026 eighteen times over\"), and the boot resolver's comment says ch13-return behaves \"exactly as ch10-ask is\" \u2014 but only ch10-ask got the entry.\n\n**Executed reproduction** (CPU-only, shipped module bundled out-of-tree, no game change): with a *committed* crossing (`currentWorld=activePlanet=-1,-1`), `resolveStoryRuntimeWorldId` answers `-1,-1:p1` for ch13-return, while the identical ch10-ask control stays on Origin. That is executed, not traced.\n\n**Both epoch increments are now proved, not guessed**, from telemetry you already own:\n- ep3\u21924 = `commitSystemPlanetHandoff` \u2014 proved by `renderOrigin` becoming `[0,0,0]` (Origin) with `atmosphere` + `target:null`; this also closes the discriminator's open question: the transient `activePlanetId === '-1,-1'` **did** exist in the unsampled gap.\n- ep4\u21925 = `setActiveSystemPlanet('-1,-1:p1')` \u2014 proved because `renderOrigin` **stayed** `[0,0,0]`, which excludes both the handoff and the interstellar reset.\n- Call site is `ShipController.tsx:472-473`, not `EfficientScene.tsx:648` \u2014 the latter would have forced `locationMode:'surface'`, and it stayed `atmosphere`.\n\n**Smallest seam:** add `'ch13-return': STORY_PRIMARY_WORLD_ID`. One symbol. The guard already requires the handoff to have committed, so it grants no milestone, teleport, targetReady bypass, tolerance or speed. I explicitly reject the alternative of adding it to `originOwnedBeat`, which would boot Continue onto Origin without flying. No geometry/agency/copy/AV change.\n\n## TASK B \u2014 a new terrain-independent fact\n\nEvery authored pose and route vertex in ch13 sits on **even** x/z, i.e. exact voxel-cell centres (`VOXEL_SCALE 2`, `worldToGrid = round(c/2)`). `E.z-3 = 9` is the chapter's **only off-lattice target**, and 9 is the *boundary* of the z=10 cell \u2014 a full 3.0 units from the body's terminal cell centre. So the handoff is impossible by construction, independent of whether that cell is dry. The unmeasured question (why `(-42,\u00b7,10)` was rejected) is now separated from the structural one; note `W = (-34,51.05,10)` proves the z=10 row isn't globally unusable.\n\n**Yes, a standby can be derived from existing footprint:** `CG_ROUTE_LONG` already contains `(-42,51.05,18/20/22)` \u2014 walked in survey-movie-1, on-lattice, off the common route and off the E\u2192H leg by 2\u20136 units (vs. the 1-unit clearance rule). `(-42,51.05,20)` is preferred. Reusing a signed route vertex means no new geometry, no copy/agency/AV change, and no shared navigation edit.\n\nDelivered: `handoff-standby-source-audit.{json,md}`, plus `verifier/probes/handoff-standby-audit/resolver-repro.mjs` and `logs/handoff-standby-audit/resolver-repro.log`. No acceptance, no defect closure, no repair authorization, no mutation \u2014 stopping here as commissioned.",
+  "ttft_ms": 1492,
+  "type": "result",
+  "duration_ms": 499405,
+  "uuid": "06eb278e-68cf-4c1f-a0c6-9583178cec7d",
+  "ttft_stream_ms": 727,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 728,
+  "queued_turn_count": 0
+}

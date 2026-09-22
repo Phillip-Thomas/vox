@@ -1,0 +1,62 @@
+{
+ "shipCrash": {
+  "expectedDb": -6,
+  "expectedAttackS": 0.04,
+  "windowS": 0.005,
+  "measuredMinDb": -6,
+  "rawMinAtS": 0.05,
+  "rawWithin1dbAtS": 0.045,
+  "rawFullDepthAtS": 0.05,
+  "rawRecoveredAtS": 0.85,
+  "sfxPathLatencyS": 0.01034,
+  "onsetAdjWithin1dbS": 0.03466,
+  "onsetAdjFullDepthS": 0.03966,
+  "onsetAdjRecoveredS": 0.83966,
+  "maxTraceDeltaVsBuilderDb": 0.009999999999999787
+ },
+ "terminalCorrupt": {
+  "expectedDb": -4,
+  "expectedAttackS": 0.03,
+  "windowS": 0.005,
+  "measuredMinDb": -4,
+  "rawMinAtS": 0.045,
+  "rawWithin1dbAtS": 0.035,
+  "rawFullDepthAtS": 0.04,
+  "rawRecoveredAtS": 0.68,
+  "sfxPathLatencyS": 0.01034,
+  "onsetAdjWithin1dbS": 0.02466,
+  "onsetAdjFullDepthS": 0.02966,
+  "onsetAdjRecoveredS": 0.66966,
+  "maxTraceDeltaVsBuilderDb": 0
+ },
+ "shipLand": {
+  "expectedDb": -6,
+  "expectedAttackS": 0.04,
+  "windowS": 0.005,
+  "measuredMinDb": -6,
+  "rawMinAtS": 0.05,
+  "rawWithin1dbAtS": 0.045,
+  "rawFullDepthAtS": 0.05,
+  "rawRecoveredAtS": 0.85,
+  "sfxPathLatencyS": 0.01034,
+  "onsetAdjWithin1dbS": 0.03466,
+  "onsetAdjFullDepthS": 0.03966,
+  "onsetAdjRecoveredS": 0.83966,
+  "maxTraceDeltaVsBuilderDb": 0
+ },
+ "terminalAlarm": {
+  "expectedDb": -4,
+  "expectedAttackS": 0.03,
+  "windowS": 0.005,
+  "measuredMinDb": -4,
+  "rawMinAtS": 0.045,
+  "rawWithin1dbAtS": 0.035,
+  "rawFullDepthAtS": 0.04,
+  "rawRecoveredAtS": 0.68,
+  "sfxPathLatencyS": 0.01034,
+  "onsetAdjWithin1dbS": 0.02466,
+  "onsetAdjFullDepthS": 0.02966,
+  "onsetAdjRecoveredS": 0.66966,
+  "maxTraceDeltaVsBuilderDb": 0
+ }
+}

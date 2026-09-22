@@ -1,0 +1,9 @@
+{
+  "at": "2026-09-06T21:05:47.829616+00:00",
+  "runnerPid": 2099561,
+  "ownedClaudePid": 2099583,
+  "action": "SIGINT owned second draft",
+  "sameMaterialPass": 8,
+  "originalDeadline": "2026-09-06T21:27:26.895126+00:00",
+  "reason": "nextRouteCoverage unconditionally maxes onLeg projection, ignoring actual delta/frontier after entry or support/reference gaps. Exact initial-midleg and resumed-gap positive-step counterexamples identified before runtime."
+}

@@ -1,0 +1,34 @@
+{
+  "appliedAt": "2026-09-06T05:04:49.044551+00:00",
+  "candidateSha256": "790b2894a48d6eb2a24816dede8ff8d911448e217e18f394d25be35444cd87ae",
+  "runtimeMutated": false,
+  "files": [
+    {
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "beforeSha256": "02fff0ace9d44e7f193008db15b68b01b69d2e8e9725bdc627345fb67584acff",
+      "afterSha256": "d57555cf5d14bf84ea698b3817c4c5d8250f37e838199d11e23c36b47147a116"
+    },
+    {
+      "path": "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+      "beforeSha256": "26d386b0dcf0b67410ff1e4b4d9311cb76e3c2f1091583f9e789d9c9bba97cb9",
+      "afterSha256": "a584d1537973b69fbc6b9a0f837fa716336e1f6b6ebdc991f474fa5b77e9db3d"
+    },
+    {
+      "path": "main/STORY.md",
+      "beforeSha256": "54008a2becda56c9112a9a5c594751d57bd9ff6757b2f9b9c15dd7fe25b85ed6",
+      "afterSha256": "04cf377ceec97f12a5949555b5b301f31929c2f63fe6d7a64df641d2da1c3037"
+    },
+    {
+      "path": "main/story-authority.json",
+      "beforeSha256": "31fdc34b6e4c6d52e91b3d26bbd2d07d5ee3a655318908cba0ab1bd6abca501e",
+      "afterSha256": "a1d851d1dbc3591a3bc89ccf62964bd4a5baa71a0f5b9c39ab01318bc3006386"
+    },
+    {
+      "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+      "beforeSha256": "cff55ee62ee72348ff01f8b51b5f9475faad52b73e2854a71846a5e6e5978715",
+      "afterSha256": "c0b7b64608d8d661419194b1322b8a36e4cae8eb1f31cda7e8a86a29c659c59d"
+    }
+  ],
+  "iteration": 2,
+  "repairedAt": "2026-09-06T05:13:15.425777+00:00"
+}

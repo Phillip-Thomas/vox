@@ -1,0 +1,57 @@
+{
+  "mode": "adaptive",
+  "targets": {
+    "roleTurns": {
+      "used": 20,
+      "target": 60,
+      "remaining": 40,
+      "exceeded": false
+    },
+    "roleMs": {
+      "used": 204396,
+      "target": 2700000,
+      "remaining": 2495604,
+      "exceeded": false
+    },
+    "modelTurns": {
+      "used": 237,
+      "target": 400,
+      "remaining": 163,
+      "exceeded": false
+    },
+    "roleLaunches": {
+      "used": 9,
+      "target": 14,
+      "remaining": 5,
+      "exceeded": false
+    },
+    "activeMs": {
+      "used": 4617325,
+      "target": 28800000,
+      "remaining": 24182675,
+      "exceeded": false
+    },
+    "endToEndMs": {
+      "used": 5500608,
+      "target": 28800000,
+      "remaining": 23299392,
+      "exceeded": false
+    }
+  },
+  "nearing": [],
+  "action": "build-playable-first",
+  "instruction": "Prioritize a complete playable path. Batch bounded reads; avoid repeated broad inspection. Check this file every few tool calls and before starting optional work.",
+  "accountingGaps": [
+    {
+      "role": "7-build",
+      "transport": {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/transport.json",
+        "sha256": "3014b1a0c54dcaa3ec3c2e0495722df98e9274f5fd1c215d87dbc67f9d130769"
+      },
+      "session": "01a082c7-393c-7fe3-80f3-802a6754d95c",
+      "retainedWorkItems": 60,
+      "tokens": null,
+      "explanation": "Previous scheduling hard stop prevented terminal usage reporting. Reported totals exclude this unknown spend; this role is not replayed as a free call."
+    }
+  ]
+}

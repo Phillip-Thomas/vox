@@ -1,0 +1,453 @@
+{
+ "schema": "paravoxia.verifier.arrivalCommonProbePreparation.report.v1",
+ "role": "arrival-common-probe-prep (mechanical probe engineer)",
+ "activeRolesPrepared": [
+  "arrival-common-manual",
+  "arrival-common-earned"
+ ],
+ "at": "2026-09-06T17:04:00.419546+00:00",
+ "runtimeExecuted": false,
+ "browserOrGpuUsed": false,
+ "gameOrSharedSourceMutated": false,
+ "captureOrAcceptanceClaimed": false,
+ "commissionRefs": [
+  {
+   "ref": "producer-earned-continue-prep-review.json",
+   "sha256": "992357e97171d4cb450c99125a459aec06057410e5aede9735882bd2fd7f6eba"
+  },
+  {
+   "ref": "entry-discriminator-report.json",
+   "sha256": "8934d75496c0a7dc4d28ed70e33a0ebc4b2e504a59955e398c665ac011d036ff"
+  },
+  {
+   "ref": "producer-common-manual-runtime-review.json",
+   "sha256": "6ca918c2d813ef83ad8ed71e18db9121bd019507c0bb9b42189f0eb03e59d74b"
+  },
+  {
+   "ref": "producer-arrival-common-findings-review.json",
+   "sha256": "ffe32d736c29e0d99af2bd632ade67c8449b87c08fc730617eeb3856b7b366f7"
+  }
+ ],
+ "originalsPreservedByteExactly": {
+  "verified": true,
+  "method": "sha256 of every file under verifier/probes/common-manual-focused and verifier/probes/earned-continue taken BEFORE any work and again AFTER all edits; the two lists are identical (diff empty).",
+  "before": [
+   {
+    "path": "verifier/probes/common-manual-focused/common-passage-probe.mjs",
+    "sha256": "24b44fea96172769854d302996d47c86f4f0bc4f95a56842e0b7d9e2d3e46474"
+   },
+   {
+    "path": "verifier/probes/common-manual-focused/commonPassageLogic.mjs",
+    "sha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c"
+   },
+   {
+    "path": "verifier/probes/common-manual-focused/selftest.mjs",
+    "sha256": "b8948c0b4135389bc18ab04ee39885f01cf265d3fffc3179e84c69b352fbe7f9"
+   },
+   {
+    "path": "verifier/probes/earned-continue/earned-continue-probe.mjs",
+    "sha256": "9cf273eb8213f9e26ab83ae9ce5145df366fd487fb2bb53b804b69db641ffa69"
+   },
+   {
+    "path": "verifier/probes/earned-continue/earnedContinueLogic.mjs",
+    "sha256": "71973321e6229b720e8eff4370c0a6f21adce96a63324cb51a06a12c2ac696b7"
+   },
+   {
+    "path": "verifier/probes/earned-continue/pinned/commonPassageLogic.pinned.mjs",
+    "sha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c"
+   },
+   {
+    "path": "verifier/probes/earned-continue/pinned/pin.json",
+    "sha256": "9adaa45f63cf1de433956eba6b7f259c1acf23be3f027c6615b03c21e7d40577"
+   },
+   {
+    "path": "verifier/probes/earned-continue/selftest.mjs",
+    "sha256": "7522468a11598ce7c273749dd271795c89dd9d77e72eaefe3fcf9f05842e7514"
+   }
+  ],
+  "afterIdentical": true
+ },
+ "preparedFiles": [
+  {
+   "path": "verifier/probes/arrival-common-earned/cgContract.pinned.mjs",
+   "sha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+   "bytes": 3620
+  },
+  {
+   "path": "verifier/probes/arrival-common-earned/earned-continue-probe.mjs",
+   "sha256": "4bc46bbce48ad757246b4f1ee19f9d29e08b201480639c0883c608ea8d5126c8",
+   "bytes": 57420
+  },
+  {
+   "path": "verifier/probes/arrival-common-earned/earnedContinueLogic.mjs",
+   "sha256": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1",
+   "bytes": 21749
+  },
+  {
+   "path": "verifier/probes/arrival-common-earned/entryObservation.mjs",
+   "sha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+   "bytes": 15207
+  },
+  {
+   "path": "verifier/probes/arrival-common-earned/ownedSession.pinned.mjs",
+   "sha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+   "bytes": 8253
+  },
+  {
+   "path": "verifier/probes/arrival-common-earned/pinned/commonPassageLogic.pinned.mjs",
+   "sha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+   "bytes": 45333
+  },
+  {
+   "path": "verifier/probes/arrival-common-earned/pinned/pin.json",
+   "sha256": "45be04a4e5f28000c6829e081258b3c21a04af15ee1f04ee2a79a12df50cbcbd",
+   "bytes": 3233
+  },
+  {
+   "path": "verifier/probes/arrival-common-earned/selftest.mjs",
+   "sha256": "f48e843bcac75def449fb17b0c4fefcba70f346ba2fa51a504f54e067556d9c6",
+   "bytes": 26698
+  },
+  {
+   "path": "verifier/probes/arrival-common-earned/sourceSnapshot.pinned.mjs",
+   "sha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+   "bytes": 15542
+  },
+  {
+   "path": "verifier/probes/arrival-common-manual/cgContract.pinned.mjs",
+   "sha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+   "bytes": 3620
+  },
+  {
+   "path": "verifier/probes/arrival-common-manual/common-passage-probe.mjs",
+   "sha256": "3eafe3960d87a44caf1292be72b24ad06e878f81abe1e492875fad84b05f7cf9",
+   "bytes": 58762
+  },
+  {
+   "path": "verifier/probes/arrival-common-manual/commonPassageLogic.mjs",
+   "sha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+   "bytes": 45333
+  },
+  {
+   "path": "verifier/probes/arrival-common-manual/entryObservation.mjs",
+   "sha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+   "bytes": 15207
+  },
+  {
+   "path": "verifier/probes/arrival-common-manual/ownedSession.pinned.mjs",
+   "sha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+   "bytes": 8253
+  },
+  {
+   "path": "verifier/probes/arrival-common-manual/pin.json",
+   "sha256": "84c37bcb33ad8f5c527628f42f747f81f4be0fbe334bb27a833ccc4b232a8cdd",
+   "bytes": 2578
+  },
+  {
+   "path": "verifier/probes/arrival-common-manual/selftest.mjs",
+   "sha256": "11eba396e743b83910840dc2910871b4344ee3707014da397efe80d38c0f81ea",
+   "bytes": 44913
+  },
+  {
+   "path": "verifier/probes/arrival-common-manual/sourceSnapshot.pinned.mjs",
+   "sha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+   "bytes": 15542
+  }
+ ],
+ "pinnedDependencies": {
+  "why": "Concurrent roles may edit verifier/probes/lib/* and the manual COMMON helper while this lane is prepared; neither copied probe imports a mutable other-role helper.",
+  "pinnedIntoEachCopy": [
+   {
+    "copiedFrom": "verifier/probes/lib/cgContract.mjs",
+    "as": "<probe-folder>/cgContract.pinned.mjs",
+    "sha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551"
+   },
+   {
+    "copiedFrom": "verifier/probes/lib/ownedSession.mjs",
+    "as": "<probe-folder>/ownedSession.pinned.mjs",
+    "sha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b"
+   },
+   {
+    "copiedFrom": "verifier/probes/lib/sourceSnapshot.mjs",
+    "as": "<probe-folder>/sourceSnapshot.pinned.mjs",
+    "sha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20"
+   }
+  ],
+  "relativeRootPathsCorrect": "The pinned copies sit at the SAME directory depth as verifier/probes/lib/*, so cgContract's RUN_DIR = resolve(HERE,'..','..','..') and REPO_ROOT/CAPTURES resolve exactly as before. The probes' own '../../../../../../main/tools/lib/evidence.mjs' import is depth-identical to the originals because each copy is a sibling folder of the original.",
+  "unpinnedDependency": {
+   "path": "main/tools/lib/evidence.mjs",
+   "why": "NOT copied: it transitively imports sibling main tooling (previewServer.mjs, pixel-laws.mjs) whose relative paths a copy would break. Read-only shared tooling; its hash at preparation is recorded in each pin.json so drift is detectable.",
+   "sha256AtPrep": "1997cf2a3e9db88ae6e1e474b76232a2589c78a58fe69a579b493b44e5aa5328"
+  },
+  "pinManifests": [
+   "verifier/probes/arrival-common-manual/pin.json",
+   "verifier/probes/arrival-common-earned/pinned/pin.json"
+  ],
+  "pinsAssertedByCpuTests": true
+ },
+ "task1_earnedOriginGateTightening": {
+  "file": "verifier/probes/arrival-common-earned/earnedContinueLogic.mjs",
+  "constantsAdded": {
+   "SIGNED_ORIGIN_PLANET_ID": "-1,-1",
+   "ORIGIN_LANDED_ANCHOR_ID": "anc.cg.origin-landed"
+  },
+  "nowRequires": [
+   "landedActivePlanetId === '-1,-1' EXACTLY (the signed Origin), not merely != the departure body",
+   "anc.cg.origin-landed present in state.signedSceneAv.activationHistoryAnchorIds (NAMED history)",
+   "anc.cg.origin-landed present in the chapter fired-anchor history (commonGround diagnostic.anchors)",
+   "the chapter fired-anchor history must actually have been READ (null is refused as UNMEASURED)"
+  ],
+  "preserved": [
+   "story:ch13-origin-landed milestone must have latched from the real flown landing (no preseed)",
+   "locationMode 'surface', controlMode 'fps', supported === true, finite grounded bodyPose",
+   "a live MEASURED frame rate >= minFps (labelled an operational probe threshold, not performance acceptance)",
+   "non-empty NAMED history and the array-shape check on the chapter anchors read",
+   "the raw signedSceneAv key count is still carried as explicitly labelled NON-evidence"
+  ],
+  "rawTracesPreservedInMeasured": [
+   "namedAnchorHistory",
+   "firedAnchors",
+   "avAnchorId",
+   "avAnchorEvent",
+   "avBeat",
+   "avActivationSequence",
+   "avHistoryCount",
+   "avRawKeyCountIsNotEvidence",
+   "avHasOriginLanded",
+   "chapterHasOriginLanded"
+  ],
+  "discriminatingCpuChecks": [
+   {
+    "case": "different WRONG planet '3,7' (not the departure body)",
+    "result": "REFUSED, refusal names the signed-Origin requirement"
+   },
+   {
+    "case": "near-miss id '-1,-1:p2'",
+    "result": "REFUSED"
+   },
+   {
+    "case": "NON-EMPTY lift-only AV history ['anc.cg.origin-lift']",
+    "result": "REFUSED, raw history preserved in the refusal"
+   },
+   {
+    "case": "chapter-only origin history (chapter has it, AV does not)",
+    "result": "REFUSED, both per-side observations reported"
+   },
+   {
+    "case": "AV-only origin history (AV has it, chapter anchors do not)",
+    "result": "REFUSED"
+   },
+   {
+    "case": "chapter anchor history not read (null)",
+    "result": "REFUSED as UNMEASURED"
+   },
+   {
+    "case": "EXACT earned all-state: '-1,-1' + anc.cg.origin-landed in BOTH histories + grounded + fps",
+    "result": "PASSES; raw sequence/history traces preserved on the pass too"
+   },
+   {
+    "case": "tightened gate with an unavailable signed-AV bridge",
+    "result": "still REFUSED (pre-existing requirements survive the tightening)"
+   }
+  ],
+  "continueLaneUnchanged": [
+   "Continue still proves itself from the ACTUAL shipped save bytes (beforeunload -> doSave -> saveWorld)",
+   "no deep reseed on the Continue boot (continueBootDecision still refuses ?story= and movie=1)",
+   "a real NEW physical action with its own signed AV anchor, plus the explicit no-replay check by NAME",
+   "capture-folder non-empty refusal, preflight/role/lock/served-identity/manifest-rehash guards, checkpoint purity, world identity, overwrite verdict"
+  ],
+  "historyAttributionHandling": "The inherited 'why a copy exists' run-4/run-5 narrative is retained ONLY as clearly labelled inherited prose, with the producer's qualification stated inline. No new claim in this preparation rests on it."
+ },
+ "task2_passiveEntryObservation": {
+  "module": "entryObservation.mjs (identical byte copy in both probe folders)",
+  "observes": [
+   "pointerlockchange and pointerlockerror (document listeners, passive)",
+   "page console warn/error (all console messages, typed) and pageerror",
+   "click isTrusted, pointerType, pointerId, buttons, detail, sourceCapabilities.firesTouchEvents",
+   "click target and currentTarget, described safely",
+   "focus state: hasFocus, visibilityState, activeElement, pointerLockElement, navigator.userActivation",
+   "touch state: maxTouchPoints, ontouchstart, innerWidth, pointer coarse/fine, hover:none, mounted touch-control DOM",
+   "policy state: window.__storyInputPolicy moveSpeedScale/lookMode, permissions API presence"
+  ],
+  "describeHelper": {
+   "name": "describeEventTarget",
+   "handlesWithoutThrowing": [
+    "Window",
+    "Document",
+    "Element",
+    "element-like with non-string tagName",
+    "text node",
+    "other node types",
+    "plain object",
+    "function",
+    "primitive",
+    "null",
+    "undefined",
+    "objects whose getters throw"
+   ],
+   "defectAddressed": "entry-discriminator-report.json: BOTH read-only observer listeners threw TypeError \"Cannot read properties of undefined (reading 'toLowerCase')\" because describe() called tagName.toLowerCase() on a window/document currentTarget, losing all click metadata.",
+   "injectionIntegrity": "entryObserverSource() embeds describeEventTarget.toString(), so the page-side function is literally the CPU-tested source; a test asserts the embedding."
+  },
+  "explicitlyNotDone": [
+   "no requestPointerLock call",
+   "no forced/synthetic click or dispatchEvent",
+   "no game handler patched or wrapped",
+   "no key state injected",
+   "no focus or permission/policy edit",
+   "no preventDefault/stopPropagation (listeners are passive)",
+   "no new loop, no extra retry, no changed timeout \u2014 the prior 16:31 cause is UNKNOWN and nothing was tuned to it"
+  ],
+  "clickGateUnchanged": "The manual probe keeps its ordinary shipped-canvas click path (up to 3 REAL clicks, unchanged) and its pointer-lock/focus gate byte-unchanged; the observation records evidence and gates nothing.",
+  "boundedness": "Console/pageerror sinks are capped (max 400) and overflow is COUNTED, never silently dropped.",
+  "unmeasuredDiscipline": "Absent fields are reported as null/UNMEASURED; entryObservationVerdict enumerates what stayed unmeasured and states that no cause is claimed."
+ },
+ "manualLaneGuardsPreserved": [
+  "ordered-plane / frontier logic (orderedFrontierVerdict, planeCrossingVerdict, earlyTurnVerdict) unchanged",
+  "F prerequisite gates (promptOffersF, mayPressF, CG_F_CONTRACT) unchanged",
+  "calibrated pulse/coast policy measured from the four live calibration holds (planPulseMs, detectOscillation) unchanged",
+  "reference/deviation modes and the strict physical 18-unit COMMON route unchanged",
+  "identity verdict, heavy-lock ownership, preview binding and served-byte identity unchanged",
+  "non-empty output refusal (assertFreshOutputDir) and source snapshots before/after unchanged",
+  "owned-session cleanup guard unchanged"
+ ],
+ "roleAndReleaseBinding": {
+  "activeRoleHardcodedAs": {
+   "verifier/probes/arrival-common-manual/common-passage-probe.mjs": "arrival-common-manual (passed to preflightDecision; a different activeRole in verifier-control.json refuses launch)",
+   "verifier/probes/arrival-common-earned/earned-continue-probe.mjs": "arrival-common-earned (default for --role)"
+  },
+  "separateReleaseExpected": true,
+  "runtimeMustPass": [
+   "the CURRENT root-published URL",
+   "the CURRENT (NEW) source-manifest sha256",
+   "the CURRENT served index/bundle hashes"
+  ],
+  "noHardcodedExamples": "No old port 38007 and no old dc63fba\u2026 manifest is a default anywhere in the copied probes; both appear only inside clearly labelled UNEXECUTED CLI examples/comments as placeholders. The earned lane re-hashes EVERY path the CURRENT manifest lists at release; the historical '99 files' count was removed from the header as a stated expectation.",
+  "absoluteOutRequired": {
+   "arrival-common-manual": "--out must be ABSOLUTE (exit 64 otherwise)",
+   "arrival-common-earned": "--out must be an ABSOLUTE capture directory (throws otherwise); the CAPTURES root remains only a documented convention"
+  },
+  "futureSourceBinding": "Before any capture the runtime owner must re-hash the CURRENT readiness/verifier-control contract, the CURRENT implementation-source-manifest and the CURRENT served HTTP bytes; the preparation-time hashes in this report are provenance, not release values."
+ },
+ "cpuTestsRun": [
+  {
+   "command": "node verifier/probes/arrival-common-manual/selftest.mjs",
+   "exit": 0,
+   "checks": "112/112 passed",
+   "startedAt": "2026-09-06T17:01:54.731Z",
+   "finishedAt": "2026-09-06T17:01:55.227Z",
+   "durationMs": 493,
+   "log": "logs/arrival-common-probe-prep/manual-selftest.log",
+   "logSha256": "d52dd98cdd99546732e3cdd0d1e14d370ec09e5a43d88e8223d5d31b668fab09",
+   "includes": "pure route/plane/pulse/lock logic, a REAL private localhost HTTP fixture for served-identity binding and refusal, a REAL inherited-flock kernel lock-ownership test, pinned-bytes assertions, and 14 new entry-observation boundary tests"
+  },
+  {
+   "command": "node verifier/probes/arrival-common-earned/selftest.mjs",
+   "exit": 0,
+   "checks": "108/108 passed",
+   "startedAt": "2026-09-06T17:01:55.230Z",
+   "finishedAt": "2026-09-06T17:01:55.314Z",
+   "durationMs": 82,
+   "log": "logs/arrival-common-probe-prep/earned-selftest.log",
+   "logSha256": "8e9be774466b3ca00434724a89fefe37818303f7863d038ce2350ae04693c129",
+   "includes": "tightened earned-Origin gate discriminators, replay/world-identity/overwrite/new-action/continue-boot logic, pinned-bytes assertions, entry-observation boundary tests"
+  },
+  {
+   "command": "node verifier/probes/arrival-common-earned/earned-continue-probe.mjs --self-test",
+   "exit": 0,
+   "checks": "inline OK (no browser launched)",
+   "startedAt": "2026-09-06T17:01:55.318Z",
+   "finishedAt": "2026-09-06T17:01:55.587Z",
+   "durationMs": 267,
+   "log": "logs/arrival-common-probe-prep/earned-probe-inline-selftest.log",
+   "logSha256": "008f721f761fa98f946e93efb96e4c6d1f4865ded365ce6f24e32406755ab238"
+  },
+  {
+   "command": "node --check on all 6 copied/new .mjs entry and logic files",
+   "exit": 0,
+   "checks": "6/6 clean (empty output)",
+   "log": "logs/arrival-common-probe-prep/node-check-*.log",
+   "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+ ],
+ "testCountDelta": {
+  "arrival-common-manual": {
+   "inheritedApprox": 95,
+   "now": 112
+  },
+  "arrival-common-earned": {
+   "inheritedApprox": 69,
+   "now": 108
+  }
+ },
+ "logs": [
+  {
+   "path": "logs/arrival-common-probe-prep/earned-probe-inline-selftest.log",
+   "sha256": "008f721f761fa98f946e93efb96e4c6d1f4865ded365ce6f24e32406755ab238",
+   "bytes": 37
+  },
+  {
+   "path": "logs/arrival-common-probe-prep/earned-selftest.log",
+   "sha256": "8e9be774466b3ca00434724a89fefe37818303f7863d038ce2350ae04693c129",
+   "bytes": 6718
+  },
+  {
+   "path": "logs/arrival-common-probe-prep/manual-selftest.log",
+   "sha256": "d52dd98cdd99546732e3cdd0d1e14d370ec09e5a43d88e8223d5d31b668fab09",
+   "bytes": 50
+  },
+  {
+   "path": "logs/arrival-common-probe-prep/node-check-earned-entryobs.log",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "logs/arrival-common-probe-prep/node-check-earned-logic.log",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "logs/arrival-common-probe-prep/node-check-earned-probe.log",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "logs/arrival-common-probe-prep/node-check-manual-entryobs.log",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "logs/arrival-common-probe-prep/node-check-manual-logic.log",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "logs/arrival-common-probe-prep/node-check-manual-probe.log",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  }
+ ],
+ "immutableSourceRefs": [
+  {
+   "path": "iterations/arrival-common-findings/source/main/src/story/commonGroundState.ts",
+   "sha256": "7a3c03fb73cb715116ddbf1952fc2c312f52d1dac68b765b8097f4becdb0452e",
+   "matchesProducerReviewHash": true
+  },
+  {
+   "path": "iterations/arrival-common-findings/before-implementation-source-manifest.json",
+   "sha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+   "note": "the FROZEN preparation-time manifest of the immutable iteration snapshot; NOT a release value and NOT a hash of live main/, which the game integration engineer is editing concurrently"
+  }
+ ],
+ "notMeasuredNotClaimed": [
+  "No runtime was executed: no browser, no GPU, no preview, no capture, no screenshot, no npm test, no build.",
+  "Manual COMMON reference/deviation remain NOT MEASURED; this preparation does not change that.",
+  "The prior 16:31 entry failure cause remains UNPROVED. The added observation would RECORD a future refusal's own reason; it does not explain the past one and no retry/timeout was changed on its account.",
+  "The tightened earned-Origin gate is a REFUSAL rule, not evidence that a landing occurred; nothing here is a Continue, AV, chapter or performance acceptance.",
+  "Only the pinned dependency hashes were verified; live main/src bytes were deliberately not hashed as if frozen."
+ ],
+ "issuesRequiringOwnerDecision": [
+  "verifier/probes/arrival-common-earned/pinned/commonPassageLogic.pinned.mjs is a second-generation pin (a copy of the earned-continue pin, itself a byte pin of the manual helper). All three sets of bytes are currently identical (24d67c65\u2026); if the manual COMMON role edits its live helper, this lane will NOT follow it by design, and a re-pin is an explicit owner decision."
+ ],
+ "broadRefactorAvoided": "No broad refactor was needed or attempted. The changes are additive and local: one new module per copied folder, an argument-validated absolute --out, role-name substitution, pinned imports, and additive parameters on earnedOriginGate. No shared contract, signature or game path was touched.",
+ "independentRuntimeStatus": "PENDING \u2014 both lanes are prepared only, and each requires its own separate root release with the CURRENT URL/manifest before any capture."
+}

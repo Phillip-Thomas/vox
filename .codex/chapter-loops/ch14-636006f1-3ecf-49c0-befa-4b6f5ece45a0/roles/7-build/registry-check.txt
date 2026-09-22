@@ -1,0 +1,15 @@
+
+> voxel-game@0.1.0 chapter:registry:check
+> node tools/chapter-registry-generate.mjs --check && node tools/chapter-registry-gate.mjs
+
+Beat declarations: 51; registry and journey match.
+Chapter registry gate failed: 9 failure(s) across 4653 checks
+schema.chapter.reveal-refs: chapters[12].revealRefs must contain at least 1 item(s)
+checkpoint.milestone-source: ch14SurveyIndexed must exactly match STORY_MILESTONES
+checkpoint.resume-source: ch14SurveyIndexed must exactly match storyEntryPoint()
+checkpoint.milestone-source: ch14ScarObserved must exactly match STORY_MILESTONES
+checkpoint.resume-source: ch14ScarObserved must exactly match storyEntryPoint()
+checkpoint.milestone-source: ch14QuestionRetained must exactly match STORY_MILESTONES
+checkpoint.resume-source: ch14QuestionRetained must exactly match storyEntryPoint()
+checkpoint.milestone-source: ch14Complete must exactly match STORY_MILESTONES
+checkpoint.resume-source: ch14Complete must exactly match storyEntryPoint()

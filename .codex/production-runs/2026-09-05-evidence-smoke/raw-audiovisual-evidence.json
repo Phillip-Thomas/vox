@@ -1,0 +1,1008 @@
+{
+  "schema": "paravoxia.rawAudiovisualEvidence.v1",
+  "runId": ".codex/production-runs/2026-09-05-evidence-smoke",
+  "contractVersion": null,
+  "contractSha256": null,
+  "sourceRevision": "b631a52",
+  "workingTree": "b631a52",
+  "chapter": "ch10",
+  "lane": "movie",
+  "compiledAt": "2026-09-05T13:36:21.633Z",
+  "containsCreativeIntent": false,
+  "intentFreeInstructions": "Open only the files listed here, in this order, and read nothing else first. Rows marked \"hud-suppressed frame of record\" are the frames to judge; rows marked \"audit only\" are the same instants with the HUD layer shown and exist for auditors, not reviewers. sheet.png is the chronological contact sheet and its red numbers are the frameIndex values in this list. digest.md answers every timing, order and causality question; frames are for shape, colour, composition and light.",
+  "playbackMetadata": {
+    "frameSize": "1280x720",
+    "frameFormat": "png",
+    "audioFormat": null,
+    "colourManagement": "none",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "tier": "hardware-high",
+    "headed": true,
+    "clock": "autopilot-beat-clock",
+    "instructions": "View frames at 1280x720, one at a time, in list order; view the contact sheet whole; play the continuous video once before examining frames."
+  },
+  "continuousVideo": {
+    "path": "evidence/bundle/video/page@4ecbd5974a7d4a319ede0f9127defbdc.webm",
+    "bytes": 12668330,
+    "sha256": "ac876a7a5aa2951fa31084aafc1801fddabf76a47bea0e038e8779e64861ee83",
+    "probe": {
+      "formatName": "matroska,webm",
+      "durationSeconds": 73.24,
+      "video": {
+        "codec": "vp8",
+        "width": 1280,
+        "height": 720
+      },
+      "audio": null
+    },
+    "beat": "ch10-cold",
+    "container": "webm"
+  },
+  "additionalVideo": [],
+  "contactSheet": {
+    "path": "evidence/bundle/sheet.png",
+    "bytes": 699224,
+    "sha256": "8f591f98be0b5e9cd2a0c1598ddf1b138146bebc4edd2103ee6de4ce16215a00",
+    "probe": {
+      "formatName": "png_pipe",
+      "durationSeconds": 0,
+      "video": {
+        "codec": "png",
+        "width": 984,
+        "height": 598
+      },
+      "audio": null
+    },
+    "kind": "contact-sheet"
+  },
+  "digest": {
+    "path": "evidence/bundle/digest.md",
+    "sha256": "13a75d4490570699f327a861c82f68cf0b188310ce96ef6edf865997ea1e0b9c"
+  },
+  "frameStrips": [
+    {
+      "path": "evidence/bundle/frames/f0000_t4.80s_opening-2.0s.png",
+      "bytes": 761584,
+      "sha256": "718d4119dbcfcedcbefb9cf3c6b02f2b656463e2ecfc11787aa27cc3a2a096d5",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "opening-2.0s",
+      "beat": "ch10-ask",
+      "role": "keyframe",
+      "frameIndex": 0,
+      "storyClockS": 4.8,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0001_t5.20s_burst-entry.png",
+      "bytes": 757091,
+      "sha256": "715844200606306738af2d700afcebebb37ee44ab74c228b10ec5503cf01ac74",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry",
+      "beat": "ch10-ask",
+      "role": "burst",
+      "frameIndex": 1,
+      "storyClockS": 5.2,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0002_t9.40s_strip.png",
+      "bytes": 762837,
+      "sha256": "a6eeda118decf044bc705d02295d4b77d829b88317b1ca5e4a624f27840b5a07",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-ask",
+      "role": "temporal",
+      "frameIndex": 2,
+      "storyClockS": 9.4,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0003_t13.40s_strip.png",
+      "bytes": 717324,
+      "sha256": "fc1f14cf7f4faa8a7ff6b611348f0c15905b2f10a12a730831088f110543ed3e",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-ask",
+      "role": "temporal",
+      "frameIndex": 3,
+      "storyClockS": 13.4,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0004_t14.40s_objective-change.png",
+      "bytes": 730904,
+      "sha256": "8780f7b51cc1a5ea34e9f853b365c49f943c27405b69829f76058c6e16547572",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "objective-change",
+      "beat": "ch10-ask",
+      "role": "keyframe",
+      "frameIndex": 4,
+      "storyClockS": 14.4,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0005_t17.60s_strip.png",
+      "bytes": 798486,
+      "sha256": "b9d83af6ff52d0106b1bcc85f75679092e6dc23104a3dfed7b5d96249ad1cb20",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-ask",
+      "role": "temporal",
+      "frameIndex": 5,
+      "storyClockS": 17.6,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0006_t21.70s_strip.png",
+      "bytes": 719231,
+      "sha256": "994acf9209d2d2e7047c9847ee66a7239aba014328342087d2bde695881654b9",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-ask",
+      "role": "temporal",
+      "frameIndex": 6,
+      "storyClockS": 21.7,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0007_t25.80s_caption-first.png",
+      "bytes": 1134974,
+      "sha256": "ca50c871e63e97d720368764aea3eb2598547816c22b9dc28a525b9291d9053c",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "caption-first",
+      "beat": "ch10-ask",
+      "role": "keyframe",
+      "frameIndex": 7,
+      "storyClockS": 25.8,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0008_t26.20s_strip.png",
+      "bytes": 1138974,
+      "sha256": "ac058a9768a32ed5b28184b0181e59c1b28e9a77f844ba3cf0ce08d6290d4400",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-ask",
+      "role": "temporal",
+      "frameIndex": 8,
+      "storyClockS": 26.2,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0009_t30.20s_strip.png",
+      "bytes": 556652,
+      "sha256": "22b9671a06daa7f16941d9a0cfd4f1ae838e53ff6915a9cb59510555bdc9bc17",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-transit",
+      "role": "temporal",
+      "frameIndex": 9,
+      "storyClockS": 30.2,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0010_t30.60s_burst-entry.png",
+      "bytes": 554086,
+      "sha256": "b1089d4cb9101013efbac871606fd8b5601b8bf63c2097b6cc4b1c70eb2150d2",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry",
+      "beat": "ch10-transit",
+      "role": "burst",
+      "frameIndex": 10,
+      "storyClockS": 30.6,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0011_t30.90s_burst-entry.png",
+      "bytes": 553060,
+      "sha256": "961f2468fbd2c78725b748d314af73029325cc0d5f60737b3921223fc657dd2a",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry",
+      "beat": "ch10-transit",
+      "role": "burst",
+      "frameIndex": 11,
+      "storyClockS": 30.9,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0012_t31.40s_burst-entry.png",
+      "bytes": 553456,
+      "sha256": "a9b1ae47cd42a88ac5be216fd027ba66bbbed2925c9e6902b588513d6eaae73c",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry",
+      "beat": "ch10-transit",
+      "role": "burst",
+      "frameIndex": 12,
+      "storyClockS": 31.4,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0013_t31.80s_burst-entry.png",
+      "bytes": 554660,
+      "sha256": "d7da2a687e34625f69edd6a2802362d8b2e32c9807721d517cadb70c938ee3ee",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry",
+      "beat": "ch10-transit",
+      "role": "burst",
+      "frameIndex": 13,
+      "storyClockS": 31.8,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0014_t32.20s_burst-entry.png",
+      "bytes": 555606,
+      "sha256": "7bdee297d650dac6ebdcf62c7a2bbaee07360536bf0136a2f01a7845b8e7f068",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry",
+      "beat": "ch10-transit",
+      "role": "burst",
+      "frameIndex": 14,
+      "storyClockS": 32.2,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0015_t32.60s_burst-entry.png",
+      "bytes": 554231,
+      "sha256": "8c9f48ef8657e40e57065c15712af76fd358ac220801a358e3f6d497b03c5b26",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry",
+      "beat": "ch10-transit",
+      "role": "burst",
+      "frameIndex": 15,
+      "storyClockS": 32.6,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0016_t36.70s_strip.png",
+      "bytes": 720654,
+      "sha256": "6710577508bc95a9bd2ffbcc5185fbe683ce5af38c6966b92db33780351bdc86",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-transit",
+      "role": "temporal",
+      "frameIndex": 16,
+      "storyClockS": 36.7,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0017_t40.80s_strip.png",
+      "bytes": 719642,
+      "sha256": "62d252ded5157c7b9fecd79ba70b318aff3c749230d03f32ab64b96516bc375f",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-transit",
+      "role": "temporal",
+      "frameIndex": 17,
+      "storyClockS": 40.8,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0018_t44.80s_strip.png",
+      "bytes": 723378,
+      "sha256": "059db0b126e29ca37793b27f74a56185deacf2fd88bf2cdd2db387696ae5c5f2",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-transit",
+      "role": "temporal",
+      "frameIndex": 18,
+      "storyClockS": 44.8,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0019_t48.90s_strip.png",
+      "bytes": 723503,
+      "sha256": "1e2293df8e50bbd7eb1b81bb2fd8411ea4213fe82fd6c470a6c5a3cfab91f7a8",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-transit",
+      "role": "temporal",
+      "frameIndex": 19,
+      "storyClockS": 48.9,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0020_t52.90s_strip.png",
+      "bytes": 724552,
+      "sha256": "72539994abb1961fef0ca80bdde8c7a46a98acda4e884966ba5a22406cfce489",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-transit",
+      "role": "temporal",
+      "frameIndex": 20,
+      "storyClockS": 52.9,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0021_t57.00s_strip.png",
+      "bytes": 721105,
+      "sha256": "730783f0f1a7788f528e689420711857221a5c79e214e89460f578ee7fd74267",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-transit",
+      "role": "temporal",
+      "frameIndex": 21,
+      "storyClockS": 57,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0022_t61.10s_strip.png",
+      "bytes": 726784,
+      "sha256": "7cc7ca1177713ec9fafaffa5bf75b4b57a8b029aa92cf27177db256c7c8d16ae",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch10-transit",
+      "role": "temporal",
+      "frameIndex": 22,
+      "storyClockS": 61.1,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/hud/f0000_t4.80s_opening-2.0s.png",
+      "bytes": 792956,
+      "sha256": "a3b4a12ef0509b9ae1f8bd20b17e451777cc6bf0fb10026b7b0b9a2ef5df14d1",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "opening-2.0s-hud",
+      "beat": "ch10-ask",
+      "frameIndex": 0,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0001_t5.20s_burst-entry.png",
+      "bytes": 784017,
+      "sha256": "5b598ebb6a69e1d1bdfd16d821bed2ca559a6cd6c0861abde1d9319bbca42e16",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry-hud",
+      "beat": "ch10-ask",
+      "frameIndex": 1,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0002_t9.40s_strip.png",
+      "bytes": 784158,
+      "sha256": "1a6d9a1a0f29a048069c752570913d485166bc7edb56c7c48247ba447004bf2e",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-ask",
+      "frameIndex": 2,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0003_t13.40s_strip.png",
+      "bytes": 759939,
+      "sha256": "b1badc4f05c748adace73133eddc1200a551c633d07223ab9a7ce4381f7eb1fa",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-ask",
+      "frameIndex": 3,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0004_t14.40s_objective-change.png",
+      "bytes": 590555,
+      "sha256": "66f4c2d9fd019e2609d43daa1120970147a239f5173e043b3ebece8a5ce0f603",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "objective-change-hud",
+      "beat": "ch10-ask",
+      "frameIndex": 4,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0005_t17.60s_strip.png",
+      "bytes": 794338,
+      "sha256": "06584d76889103f27e3df427944f09f7e7302f719ee04689eed4cbee4e0644ef",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-ask",
+      "frameIndex": 5,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0006_t21.70s_strip.png",
+      "bytes": 764640,
+      "sha256": "df7f9c5ba5392d7ecdfe2e652f976230f462bd0ad0326d3f956f0dd93589ec17",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-ask",
+      "frameIndex": 6,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0007_t25.80s_caption-first.png",
+      "bytes": 1155173,
+      "sha256": "45974e2788108ea89a18b1c273f981bbe02c3078d2c077580081ceddf2944fa9",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "caption-first-hud",
+      "beat": "ch10-ask",
+      "frameIndex": 7,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0008_t26.20s_strip.png",
+      "bytes": 1163897,
+      "sha256": "46095181aada8c2befe38cc52dea80effe885e693b0ffb7ed827e1a6e0d4cd3e",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-ask",
+      "frameIndex": 8,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0009_t30.20s_strip.png",
+      "bytes": 597580,
+      "sha256": "9d87eaaae472b789b6decf02646318d169358c27feeaaf62b58eb2e2172a8854",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 9,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0010_t30.60s_burst-entry.png",
+      "bytes": 595709,
+      "sha256": "d6bbce3edc3225a368503ec8a66c39d3212cdf39c30c4a77431bcd10f89b6d84",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 10,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0011_t30.90s_burst-entry.png",
+      "bytes": 586278,
+      "sha256": "8976fe61386d214ca75ae52a437be6b4b1f5c35bfd232554849bbd4e710b12b0",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 11,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0012_t31.40s_burst-entry.png",
+      "bytes": 586033,
+      "sha256": "e8a17847935dd6d79a71b125cacff00b0513ba2817b9d0e886bacd9f1883e8db",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 12,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0013_t31.80s_burst-entry.png",
+      "bytes": 588173,
+      "sha256": "dc09d0d3e8744515f3f8050e44e75d3df168c8a4bf6db74acb55e270435260ae",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 13,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0014_t32.20s_burst-entry.png",
+      "bytes": 585397,
+      "sha256": "8a61b80ac9c9074d211cb8345827da651264f4288140127188d9f91121e695db",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 14,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0015_t32.60s_burst-entry.png",
+      "bytes": 586915,
+      "sha256": "316f5b04feb7a4d15ed4d6e00abff9df8a24c63318980816172b3e4c41894bdd",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "burst-entry-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 15,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0016_t36.70s_strip.png",
+      "bytes": 747540,
+      "sha256": "baf1d0ce4af91c997712a41c549bfcff7e6d9f43444acd6164ee1afc9c55898e",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 16,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0017_t40.80s_strip.png",
+      "bytes": 748574,
+      "sha256": "5a8674c29fecda52a54be990426f1f895837a102637696c95b1de513ff8bdf06",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 17,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0018_t44.80s_strip.png",
+      "bytes": 749592,
+      "sha256": "7972a2f0a574b1fa49d906d01c652d11a048a2b7acefe1de2aab130701b4851e",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 18,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0019_t48.90s_strip.png",
+      "bytes": 751519,
+      "sha256": "1a7dfd0ef74a83c266429cee04df1752581a70ec97fe75eb4fd9140f16e3a460",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 19,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0020_t52.90s_strip.png",
+      "bytes": 744537,
+      "sha256": "667440cf4ce160683df9a73b3bee252b76f24dcb39b58908e29f68739fc8e92d",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 20,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0021_t57.00s_strip.png",
+      "bytes": 747051,
+      "sha256": "d8c644625aa9170c949d24cda50489511c2945d784f0d0b97003f5a594afee72",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 21,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0022_t61.10s_strip.png",
+      "bytes": 750361,
+      "sha256": "aa32cc338c0fdee4951d0c55e6de5c3f373808fdc853f48c3ecfe41626b20927",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch10-transit",
+      "frameIndex": 22,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    }
+  ],
+  "audio": [],
+  "bursts": [
+    {
+      "t0": 30.6,
+      "frameStart": 10,
+      "frameEnd": 15,
+      "frames": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "dtMs": 526.8,
+      "meanAdjDelta": 0.00228,
+      "netDeltaPerFrame": 0.00087,
+      "flickerRatio": 2.63,
+      "signFlipRatio": 0.748,
+      "changedRatio": 0.015,
+      "pops": 0,
+      "beat": "ch10-transit"
+    }
+  ]
+}

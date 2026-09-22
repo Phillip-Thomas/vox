@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 1585050,
+  "stop_reason": "end_turn",
+  "session_id": "d18085bf-c41c-474e-ab5d-e51e28998636",
+  "total_cost_usd": 26.573710500000004,
+  "usage": {
+    "input_tokens": 408,
+    "cache_creation_input_tokens": 314768,
+    "cache_read_input_tokens": 40470621,
+    "output_tokens": 127457,
+    "output_tokens_details": {
+      "thinking_tokens": 30642
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 314768,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1287,
+        "cache_read_input_tokens": 318480,
+        "cache_creation_input_tokens": 408,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 408
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2175,
+      "outputTokens": 16,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002255,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 408,
+      "outputTokens": 127457,
+      "cacheReadInputTokens": 40470621,
+      "cacheCreationInputTokens": 314768,
+      "webSearchRequests": 0,
+      "costUSD": 26.571455500000006,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 30642,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 217,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done. All four bounded items are implemented, tested and bound to the signed contract.\n\n## Verification before any edit\n`sha256sum scene-contract.json` = `4dbf722b\u2026fddff88e`, matching `contract-gate-pass.json` (passed, 1668 checks) and all three signatures on the same revision. The archived v1 source re-hashed to **96 files, 0 drift** \u2014 nothing was rebuilt.\n\n## What I implemented\n\n**1 \u2014 guide + glyph grammar.** `commonGroundCommonDisplay` gates on `stage === 'holding-h'` **and** a real pose within a quarter unit of H, so a stage label whose body is elsewhere shows nothing. The guide stays planned through Terra's passage and his test; only `committed` promotes it. Trace shape now carries state: one bar / parallel pair / open transverse stop that *replaces* the pair. Two instances per sample makes 2\u00d7128\u00d72 = exactly 512; the common display uses the released working allocation so a repeat reclaims it without losing accepted facts. Whole pool preallocated at mount; layout recomputed only on real change; guide truncated at the first genuinely unsupported segment.\n\n**2 \u2014 objective lifecycle.** Exact v2 copy, neutral `W-7744 \u00b7 offered route` in both survey states, common objective entering at `route-tested` and switching silently in place at actual H arrival. A clearance suspension *during the approach* now keeps the preparing copy \u2014 \"is walking\" would have been false there.\n\n**3 \u2014 score.** `setScoreBeat(null)` before clearing; hatch/lift/landing are no-ops; retention set for readiness/reopen/suspension/reentry; ch13 removed from the generic intensity ladder; monotonic 5s deadline that keeps ticking on `done` frames and cancels mid-flight when output goes away.\n\n**4 \u2014 bindings.** Repinned to v2 via the normal generators; `production.release-gates` restored to strict equality exactly as it read at HEAD, with `EXPECTED_OPEN_RELEASE_GATES` untouched.\n\n## Results\ntypecheck clean \u00b7 `npm run test` 348 files / **3018** tests \u00b7 build pass \u00b7 every registry/journey/scene-av/authority/creative gate green. Exact commands, exit codes and log paths are in the report; logs in `evidence/integration-v2/`. The pre-v2 2972 are explicitly *not* presented as new proof.\n\n27 new regressions, each mutation-checked \u2014 breaking the republish seam, retention set, release order, handback guard, availability check or accepted-slot preservation each fails exactly the intended test. Every mutated file was restored byte-identical.\n\n## Two things worth flagging\n- **My own tests caught two of my errors** during development: `sampleRouteEvenly` chord-cuts corners (17.69 \u2260 18 walked units \u2014 the assertion was wrong, not the code), and my first shape-distinction test compared only length and heading, which cannot tell one bar from a pair. Both were rewritten to test the real distinguishing property.\n- **The v1 erratum is carried forward, not quietly dropped:** the archived report's claim that `StoryDebugPanel.tsx` and `tidegardenRoute.ts` were reported before editing is stated as incorrect in the final report. No approval is claimed retroactively.\n\n20 files changed, all inside `allowedPaths`, none protected, **no new missing path needed**. No reset/stash/checkout/commit/push; 322 dirty entries preserved; no root artifact touched.\n\n**Not accepted, and the report says so plainly:** nothing here was rendered, measured, heard, played or run on hardware. No GPU or browser was started. The guide has never been drawn and no player has ever tried to follow it \u2014 which is precisely the acceptance Chapter reserved. CG-IMPL-001/002/003 remain open for the independent story-verifier.",
+  "ttft_ms": 1450,
+  "type": "result",
+  "duration_ms": 1830304,
+  "uuid": "550e3066-bbb4-4778-9070-d32eb1c6c159",
+  "ttft_stream_ms": 703,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 703,
+  "queued_turn_count": 0
+}

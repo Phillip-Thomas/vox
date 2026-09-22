@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 406329,
+  "stop_reason": "end_turn",
+  "session_id": "155032ee-6b5c-4753-a9a9-48344f07b0d6",
+  "total_cost_usd": 3.5776925000000004,
+  "usage": {
+    "input_tokens": 72,
+    "cache_creation_input_tokens": 118341,
+    "cache_read_input_tokens": 3055995,
+    "output_tokens": 34580,
+    "output_tokens_details": {
+      "thinking_tokens": 8050
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 118341,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2089,
+        "cache_read_input_tokens": 127319,
+        "cache_creation_input_tokens": 1027,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1027
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1350,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001425,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 72,
+      "outputTokens": 34580,
+      "cacheReadInputTokens": 3055995,
+      "cacheCreationInputTokens": 118341,
+      "webSearchRequests": 0,
+      "costUSD": 3.5762675000000006,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 8050,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 36,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done. Summary:\n\n**Changed files (all inside my ownership boundary)**\n\n- `main/tools/chapter-loop/control-media.mjs` (new) \u2014 owned-media transport helpers: `openOwnedSink`/`closeOwnedSink` (unique `paravoxia_control_<pid>_<id>` null sink, reads but never writes the system default), `readOwnership` (delegates to `runtime-capture.mjs`'s exported `sinkOwnership` \u2014 reused, not restated), `startAudioRecorder` (same `parec -d <sink>.monitor --rate=48000 --channels=2 --format=s16le --file-format=wav` invocation), `stopChild` (SIGINT-then-SIGKILL so the WAV header flushes), `decodeControlMedia` (ffprobe + full `-xerror` decode pass + PCM rms/peak), `controlMediaProof`/`mediaProblems`, `mediaTimeline` (wall-clock marks with per-recording offsets and an explicit uncertainty statement), `audibleLaunchArgs`/`audibleLaunchEnv` (drops `--mute-audio`, keeps `--enable-gpu --use-angle=gl`, sets `PULSE_SINK`), constants `MIN_AUDIO_SECONDS=8`, `PAUSED_HOLD_MS=3000`, `FINAL_TAIL_MS=8000`.\n- `main/tools/chapter-loop/control-capture.mjs` \u2014 recovery/continue now record real audio+video: sink opened before launch, headed hardware browser unmuted onto that sink only, Playwright `recordVideo` on the context, `parec` started right after `goto` (before Escape / before reload), per-second isolation sampling inside `observe()` that fails closed on a foreign stream or a dead recorder, a ~3 s hold on the paused state (recovery) / landing CTA (continue) with no input delivered, marks for interruption / CTA / new-action start+end, an ~8 s retained tail after the proved new action, then ordered teardown (recorder \u2192 page/context \u2192 `video.saveAs` \u2192 browser/server \u2192 unload module \u2192 default-sink comparison). Media obligations `videoDecodes|audioDecodes|audioIsolated|mediaCleanup` are added to `verdict`/`obligationsFor` only when media is enabled; `proof.cleanup` now also requires recorder stopped, module removed, default sink unchanged. Report gains `media` entries (`video.webm`, `audio.wav`, `frame.png`, each hashed via `reference`), `mediaTimeline`, and `raw/media-proof.json`. `describeControlCapabilities` preflights `pactl/parec/ffmpeg/ffprobe` and publishes the media files it will produce. No game setters, no new page scripts \u2014 still only the fixed read-only snapshot reader; no control predicate weakened.\n- `main/tools/chapter-loop/control-media.test.mjs` (new) + `control-capture.test.mjs` (extended).\n\n**Tests** (no GPU, no browser, injected `run`/`spawn`): `control-media.test.mjs` + `control-capture.test.mjs` \u2192 17/17 pass. Regression: `capture-case.test.mjs`, `permissions.test.mjs`, `loop.test.mjs` \u2192 55/55 pass.\n\n**Binding update you must make (I did not touch runner/config):** `evidence.mjs:inspectReport` binds media from the *verification config's* `cases[].media`, not from the probe report. In the ch14 run state (`/brief/verification/cases`), the `recovery` and `continue` cases have `media: []`, so the new recordings will not reach the AV bundle. Add to each of those two cases:\n`\"media\": [{\"kind\":\"video\",\"path\":\"video.webm\"},{\"kind\":\"audio\",\"path\":\"audio.wav\"},{\"kind\":\"frame\",\"path\":\"frame.png\"}]`\n(`validateVerification` only *requires* the video/audio/frame triple for `av`, so this is additive and safe.) Optionally add the same media obligations as assertions (`/proof/audioDecodes`, `/proof/videoDecodes`, `/proof/audioIsolated`, `/proof/mediaCleanup`, all `equals: true`).\n\n**Known issues / limits**\n- Audio/video are two independent recordings; offsets are host wall-clock, \u00b1ballpark hundreds of ms (parec spawn + PulseAudio latency, frame-driven video clock). This is stated verbatim in `CLOCK_NOTE`, in `raw/media-proof.json` and in the report's `mediaTimeline`; no sample-accurate sync is claimed anywhere.\n- A media failure (silent WAV, undecodable video, shared/absent sink stream, unproved cleanup) makes the capture **inconclusive** with an explicit reason \u2014 never a pass and never framed as a game defect.\n- Not exercised end-to-end here: no GPU/headed run was performed per your constraint, so the live PulseAudio + Chromium path is unit-proved and preflighted but unmeasured. First real recovery run should be watched for whether the game's first trusted gesture arrives early enough to open an audio stream (isolation requires the browser stream to appear and then persist).\n- `MIN_AUDIO_SECONDS = 8` is calibrated to the retained tail alone; if a real run's decoded duration lands near that, tell me and I'll rebase it on measured coverage rather than loosen the level thresholds.",
+  "ttft_ms": 1621,
+  "type": "result",
+  "duration_ms": 442681,
+  "uuid": "0eb3e969-15bb-440c-824b-ec106be09cb5",
+  "ttft_stream_ms": 873,
+  "time_to_request_ms": 35,
+  "first_content_frame_ms": 873,
+  "queued_turn_count": 0
+}

@@ -17,7 +17,14 @@ under `docs/architecture/workflow-orchestration/`.
 
 ## Route the commission before creating a scene run
 
-Use this scene-production workflow for a bounded cut, scene, chapter packet,
+For a **new chapter creation** request, route directly to `docs/chapter-loop.md`
+and `npm --prefix main run chapter:loop`. Use its fixed commissions and checked
+adapter. Do not continue through this skill's legacy setup, treatment,
+reconciliation, signature or review stages as additional creation stages.
+Existing chapter runs retain their archived instructions and cumulative budget;
+the owner-stopped Chapter13 run remains stopped. Release certification is separate.
+
+Use the remaining scene-production workflow for a bounded cut, scene, legacy chapter packet,
 awakening, recut, or audiovisual implementation. If the request is instead to
 correct the existing plot, reconcile canon, choose new story direction, update
 the Story Bible/Execution Plan, or design the whole-story character and
@@ -124,6 +131,20 @@ include:
 
 Gate: the intent must be implementable without inventing missing canon or
 violating production authority.
+
+### Resolve actual owner decisions once
+
+The chapter director writes `decision-brief.json` only with actual decisions.
+An empty `items` list is valid; do not invent “none needed” questions for empty
+creative, boundary, or release sections. Resolve existing standing authorization
+first. A delegated in-scope decision records `decidedBy: "delegate"`, the exact
+`authorityRef: {path, sha256}` listed in the production lock, and a concrete
+`delegationRationale`. It must not pretend the owner personally reviewed a hash.
+Publishing remains a separate owner decision.
+
+Ask once for genuinely unresolved taste, scope or authority. Pending items still
+block signature; already-authorized work continues. A later newly discovered
+question is recorded as a lesson, not a retrospective defect in shipped art.
 
 ## Stage 2: independent treatments
 
@@ -290,6 +311,31 @@ notes, and dissent. It may approve, route repair, block, or declare
 ready-for-human-taste. It cannot patch, expand scope, accept an exception for
 the owner, or publish.
 
+## Repair execution: prove the affected action first
+
+For a correction under an unchanged signed contract, reuse the existing run,
+three signatures, treatments, and unaffected reviews. Do not recreate the full
+production template. Record the defect and bounded implementation direction in
+the existing disposition; involve a director only when creative meaning changes.
+An integration engineer owns the correction; affected independent reviewers
+verify it, and the existing cohesion judge retains final authority.
+
+Run `npm --prefix main run creative:repair:check -- --plan PLAN.json --out DIR`
+using `paravoxia.repairChecks.v1`: optional `prepare` argv arrays, required
+`runtime` arrays for the actual affected player actions, focused `checks`, and
+optional additional `final` commands. The runtime proof runs before broad checks.
+Use `--final` once the candidate works, retaining the full verification suite.
+The runner reuses only successful static logs for identical source, command,
+plan and environment. It always reruns runtime probes and rejects source drift.
+It emits verification evidence, never creative acceptance.
+
+Use an existing probe that actually reproduces the defect. For navigation, test
+the failing corner/terminal with the real controller; for Continue, exercise an
+actual save and reload. Build the candidate when necessary before probing.
+Do not commission the full review network while a known required action fails.
+After the same failure recurs twice, inspect the causal boundary before another
+patch; new paperwork and a larger retry allowance are not a diagnosis.
+
 ## Stage 8: repair loop
 
 Convert all material findings to defects with severity, category, evidence,
@@ -322,10 +368,16 @@ new revision; the old signatures never carry forward.
 
 ## Final gates
 
-Normal scene approval requires:
+Normal scene approval requires (the numbers live in ONE place — the run
+profile's `approval` block, which the gate reads; these are its current values):
 
 - weighted score >= 4.75/5;
 - every category >= 4.30;
+- the perceptual verdict: `npm run chapter:evidence` produced the headed
+  real-GPU bundle under `evidence/bundle/`, the percept judge lane commissioned
+  it (`paravoxia-chapter-v1` rubric, ≤9 HUD-suppressed frames + the contact
+  sheet), judged it pairwise against the previous accepted chapter, and the
+  cohesion judge cites `percept:*` refs under composition and palette/light;
 - no critical/high defects;
 - no unaccepted medium narrative/audiovisual alignment, player-agency,
   player-experience/navigation, cinematography, score, accessibility, or
@@ -334,9 +386,14 @@ Normal scene approval requires:
 - director signoffs and closed blocking dissent;
 - current production authority.
 
-Flagship requires >= 4.80, every category >= 4.50, headed real-GPU review, and
-an explicit owner taste decision. Final release also requires the separate
-publish decision.
+Flagship reads its bar from `paravoxia-creative-flagship.run-profile.json`
+(4.80 / 4.50 today) and adds headed real-GPU review and an explicit owner taste
+decision. Final release also requires the separate publish decision.
+
+The headed evidence the final gate demands (continuous video with audio,
+headed journeys, hardware-high captures) is produced by
+`npm run chapter:evidence -- --chapter <id> --run <runDir> --video --audio <score.wav>`
+on this machine's real GPU; it is not a headless-CI artifact and never was.
 
 Run deterministic artifact quality again:
 

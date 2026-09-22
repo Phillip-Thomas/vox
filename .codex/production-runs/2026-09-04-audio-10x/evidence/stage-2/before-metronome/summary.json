@@ -1,0 +1,403 @@
+{
+  "beat": "ch1-fixed",
+  "anyLoopGuardEngaged": false,
+  "anyLoopGuardTextEver": false,
+  "maxAdmitRatePerSec": 1.33,
+  "maxSuppressedPer3s": 5,
+  "totalPageErrors": 0,
+  "totalConsoleErrors": 0,
+  "stances": [
+    {
+      "name": "spawn",
+      "spawnPos": [
+        8,
+        52.79,
+        -6
+      ],
+      "preHoldPos": [
+        8,
+        52.79,
+        -6
+      ],
+      "offsetXZ": 0,
+      "pointerLock": true,
+      "activeMiningSecs": 0,
+      "invDelta": 7,
+      "completionCycles": 0,
+      "peakMineOkPer3s": 3,
+      "peakMineSupPer3s": 5,
+      "peakAdmitRatePerSec": 1,
+      "loopGuardText": null,
+      "loopGuardEngaged": false,
+      "yRange": [
+        52.79,
+        52.79
+      ],
+      "endSfx": "sfx-rate: quiet (last 3s)",
+      "endAudio": "game: direct (running)",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "trace": [
+        {
+          "t": 0.4,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 3,
+          "sup3s": 5,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 5.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 10,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 15.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 20.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 25.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 30,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 35,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        }
+      ]
+    },
+    {
+      "name": "offA1",
+      "spawnPos": [
+        8,
+        52.79,
+        -6
+      ],
+      "preHoldPos": [
+        7.59,
+        52.79,
+        -6
+      ],
+      "offsetXZ": 0.41,
+      "pointerLock": true,
+      "activeMiningSecs": 0,
+      "invDelta": 4,
+      "completionCycles": 0,
+      "peakMineOkPer3s": 3,
+      "peakMineSupPer3s": 3,
+      "peakAdmitRatePerSec": 1,
+      "loopGuardText": null,
+      "loopGuardEngaged": false,
+      "yRange": [
+        52.79,
+        52.79
+      ],
+      "endSfx": "sfx-rate: quiet (last 3s)",
+      "endAudio": "game: direct (running)",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "trace": [
+        {
+          "t": 0,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 5.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 10.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 15,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 20,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 25,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        }
+      ]
+    },
+    {
+      "name": "offD2",
+      "spawnPos": [
+        8,
+        52.79,
+        -6
+      ],
+      "preHoldPos": [
+        8.82,
+        52.79,
+        -6
+      ],
+      "offsetXZ": 0.82,
+      "pointerLock": true,
+      "activeMiningSecs": 0,
+      "invDelta": 7,
+      "completionCycles": 0,
+      "peakMineOkPer3s": 4,
+      "peakMineSupPer3s": 4,
+      "peakAdmitRatePerSec": 1.33,
+      "loopGuardText": null,
+      "loopGuardEngaged": false,
+      "yRange": [
+        52.79,
+        52.79
+      ],
+      "endSfx": "sfx-rate: quiet (last 3s)",
+      "endAudio": "game: direct (running)",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "trace": [
+        {
+          "t": 0,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 5.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 10.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 15.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 20.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 25,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        }
+      ]
+    },
+    {
+      "name": "offA3",
+      "spawnPos": [
+        8,
+        52.79,
+        -6
+      ],
+      "preHoldPos": [
+        6.73,
+        52.79,
+        -6
+      ],
+      "offsetXZ": 1.27,
+      "pointerLock": true,
+      "activeMiningSecs": 0,
+      "invDelta": 2,
+      "completionCycles": 0,
+      "peakMineOkPer3s": 1,
+      "peakMineSupPer3s": 1,
+      "peakAdmitRatePerSec": 0.33,
+      "loopGuardText": null,
+      "loopGuardEngaged": false,
+      "yRange": [
+        52.79,
+        52.79
+      ],
+      "endSfx": "sfx-rate: quiet (last 3s)",
+      "endAudio": "game: direct (running)",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "trace": [
+        {
+          "t": 0,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 5.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 10,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 15,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 20,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        },
+        {
+          "t": 25.1,
+          "beat": "ch1-fixed",
+          "y": 52.79,
+          "ok3s": 0,
+          "sup3s": 0,
+          "active": false,
+          "pct": 0,
+          "lg": null
+        }
+      ]
+    }
+  ]
+}

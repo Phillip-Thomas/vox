@@ -1,15 +1,36 @@
-# Paravoxia — Story Mode (Prologue → Chapter 4's arrival)
+# Paravoxia — Story Mode and current production boundary
 
-**What this is.** The playable first act of the fidelity-ladder narrative
-(design: `../PARAVOXIA_PROGRESSION.md`; chapter-4 contract:
-`../PARAVOXIA_CH4_PLAN.md`). Rendering fidelity IS the story: the game opens as
-a 1-bit terminal, becomes a monochrome CCTV "Regulation Feed," gains color at
-A1, depth/freedom at A2, texture + time at A3 — then plays THE FIRST DAY ALIVE
-(thirst → forage → the klaxon → the scheduled sleep) and ends, for now, on
-chapter 4's arrival: the other worker, W-7744. TEMPORARY TERMINAL: the arrival
-completes the story (sandbox at `material`). `ch4-audit` remains the contracted
-continuation, but it is not the active production lane (see the marked hand-off
-in `storyDirector.ts`).
+**Current worktree — 2026-09-06.** The formal story registry runs from the
+terminal prologue through `ch10-transit`, then `done`. Beyond that threshold,
+the separate space-station application issues the bonded cell and the world
+return sidecar installs it at Tidegarden's second hearth. Their durable
+ch11/ch12 receipts remain distinct from formal chapter registration. Source
+owners are `src/game/spaceStation/spaceStationStory.ts` and
+`src/story/stationReturnStory.ts`. This source inventory is not a fresh
+continuous movie or audiovisual acceptance claim.
+
+**Approved next direction: Common Ground (ch13).** From a reliable restored
+home, Terra may review the stored audit fault and choose to revisit Origin.
+W-7744 repeats his own unresolved local measurement. The player demonstrates
+and revises a walked route around one finite-range backed survey instrument.
+Both the longer independently repeatable route and the shorter witnessed route
+are complete choices. Terra must rely on his held reference to finish her own
+comparison, then explicitly hold the far end for his independent final test.
+The retained local result admits an incomplete model.
+This direction is approved through the exact three-director council and the
+user's standing delegation in
+`../.codex/story-runs/2026-09-06-common-ground/`. It is not yet implemented by
+this documentation patch. The current station movie still stops inside;
+authentic departure, return, installation and new-chapter continuity are part
+of the next signed production packet. No route choice spends A5 or grants an
+alliance, and the repaired home is preserved.
+
+**Public release boundary.** The release surface remains Prologue → Chapter
+4's arrival (`ch4-arrival`). Later worktree implementation is authorized by the
+owner's July 28 gate lift and separately contracted production; publication
+remains a separate decision. The first-act guide below retains its historical
+release scope, while current beat IDs and resume behavior come from
+`src/story/storyState.ts` and the generated beat contracts.
 
 **Canon and future delivery.** The portable, current canon—including wonder,
 Terra/Worker 9's emergent third consciousness, communion, W-7744's recurring
@@ -17,14 +38,15 @@ arc, and the deliberately unresolved Makers—lives in
 `PARAVOXIA_STORY_BIBLE.md`. The audited gap register, system architecture,
 owner/proposal coverage ledger, dependency gates, and sole future-story resume
 point live in `PARAVOXIA_STORY_EXECUTION_PLAN.md`. The current release authority
-remains `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`; no post-arrival runtime work is
-authorized while that demo lock is active.
+remains `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`; the unchanged demo release
+ceiling does not revoke the July 28 authorization to build later story through
+its Creative-Triad and registry gates.
 
 ## Playing it
 
 - **Menu → "◈ Story"** (next to Play; label becomes "Continue Story" mid-run).
 - Dev deep links: `?story=1` (full run from the terminal prologue) and
-  `?story=<beat>` for EVERY beat (`crawl|manifest|voyage|deflect|crash|descent|
+  `?story=<beat>` for the historical first-act entries listed here (`crawl|manifest|voyage|deflect|crash|descent|
   ch1-fixed|ch1-track|ch1-raster|ch1-depth|ch1-nav|ch1-iso|ch1-lift|
   ch1-anomaly|a1-ramp|ch2-color|ch2-approach|a2-awakening|ch3-gather|ch3-dusk|
   ch3-await-rest|a3-dawn|ch3-thirst|ch3-forage|ch3-signal|ch4-vigil|
@@ -154,11 +176,11 @@ ordered `[F] Rest`) → **ch4-arrival** (~45s: dawn 2, the letterbox returns
 WITH the system's agent — W-7744 walks the work strip past the player to the
 wreck relay, "WORKER W-7743. YOU ARE FOUND.", one 2-frame BARE-BLINK of his
 seeing, and his closing band line "AUDIT IN PROGRESS. RESUME NOTHING.") →
-story completes (TEMPORARY — `ch4-audit` is the first contracted continuation,
-not the active build), sandbox continues — and W-7744
-STAYS, standing at the relay ("he stays to look"): the auditor, the wreck, the
-relay (lamp live — the carrier is up), the mesa, the stone, and the tree all
-persist into the `done` world.
+historically ended the public-demo slice in sandbox with W-7744 at the relay.
+Current worktree source instead records the arrival checkpoint and advances
+`ch4-arrival → ch4-audit`; arrival is no longer the runtime terminal. The
+formal worktree continues through `ch10-transit`, then `done`, as recorded in
+the current production boundary above.
 AMBIENT MUSINGS: during lulls of the first-day stretch (45–75s of caption
 silence), one-shot-per-save epiphany captions fire from a curated pool
 (`story:musing:*` milestones) — aimlessness rendered as purpose forming.
@@ -331,11 +353,12 @@ foundation, not automatic S6 implementation.
   lift froze them there) — the feed era is the first-person LOOK, then touch.
   Direct jumps to ch1-anomaly spawn at the strip and must climb the mesa stairs
   (feed policy has no jump; step-assist handles the 1-block treads).
-- **Chapter 4 is TEMPORARILY terminal at the arrival** — `tickArrival` ends in
-  `completeStory()` behind a marked `// TEMPORARY` comment (the auditor is NOT
-  hidden: he keeps standing at the relay into `done`); `ch4-audit` and the
-  rest of the chapter (compliance, defiance, the A4 exhale, meat/dive/repair/
-  flight) are contracted in `../PARAVOXIA_CH4_PLAN.md` §2 S6–S13.
+- **Historical terminal superseded:** arrival once ended the first-act demo
+  in sandbox. Current `storyDirector.ts::tickArrival` records `ch4Arrived` and
+  calls `advanceToBeat('ch4-audit')`; there is no current `completeStory()` or
+  TEMPORARY terminal branch there. Audit/compliance/refusal/A4 and subsequent
+  worktree chapters are implemented; `../PARAVOXIA_CH4_PLAN.md` preserves their
+  earlier contracted rationale. Public release remains separately gated.
 - The pinned world's pond↔wreck run is short (~15u), so the klaxon sprint names
   STAMINA early in the run rather than emptying the bar (`SIGNAL.staminaCueBelow
   78`); the exhausted line still exists for longer runs.

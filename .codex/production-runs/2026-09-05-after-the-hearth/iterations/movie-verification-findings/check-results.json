@@ -1,0 +1,192 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "compiledAt": "2026-09-06T09:01:09.896685+00:00",
+  "productionScope": {
+    "status": "passed",
+    "evidenceRefs": [
+      "implementation.diff",
+      "implementation-source-manifest.json",
+      "production-lock.json",
+      "producer-boundary-completion.json"
+    ]
+  },
+  "creativeContract": {
+    "status": "passed",
+    "evidenceRefs": [
+      "contract-gate-pass.json",
+      "scene-v2-contract-gate.log",
+      "director-signoffs.json"
+    ]
+  },
+  "typecheck": {
+    "status": "passed",
+    "evidenceRefs": [
+      "evidence/integration-v2/typecheck.log",
+      "integration-report.json"
+    ]
+  },
+  "tests": {
+    "status": "passed",
+    "evidenceRefs": [
+      "evidence/integration-v2/test.log",
+      "evidence/integration-v2/focused-tests.log"
+    ]
+  },
+  "build": {
+    "status": "passed",
+    "evidenceRefs": [
+      "evidence/integration-v2/build.log"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npx tsc --noEmit -p tsconfig.json",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/typecheck.log",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "detail": "clean"
+    },
+    {
+      "command": "npm run test",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/test.log",
+      "evidenceSha256": "d45ab037c359dcd500dd6f922c2facd3a5b0e86c37cd10d52b44ef8fbaefd9e6",
+      "detail": "348 files / 3018 tests pass"
+    },
+    {
+      "command": "npm run build",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/build.log",
+      "evidenceSha256": "d35e1c57159bf90e3a438853ce7194ee6c6f06ad2aa241658aebea2afaf067d3",
+      "detail": "built in 5.83s"
+    },
+    {
+      "command": "npm run chapter:registry:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/chapter-registry-check.log",
+      "evidenceSha256": "63d2098e42a51ec027bd147b0869fcfe164c546b86e7526cab424065907ce4b5",
+      "detail": "registry and journey match; gate passed 4285 checks"
+    },
+    {
+      "command": "npm run chapter:registry:smoke",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/chapter-registry-smoke.log",
+      "evidenceSha256": "ead30f3938cdc8499f151f35e0959f0e46b9e677c10a04b47f609aba1b10e826",
+      "detail": "live 4285 checks; 25 invalid cases rejected"
+    },
+    {
+      "command": "npm run chapter:journey:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/chapter-journey-check.log",
+      "evidenceSha256": "720c32d0e5edc52899f812187f01eb4bcb341a48e6dd6d682049a44d0bcb6a1b",
+      "detail": "0 issues"
+    },
+    {
+      "command": "npm run scene:av:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/scene-av-check.log",
+      "evidenceSha256": "0ebbe1c5b18705236588fc5a372b568b04e1ca8262eca5c0371006083793d543",
+      "detail": "104 anchors from 3 signed contracts (3367b94f9f0f, 0336a4f28bfa, 4dbf722b308b) \u2014 current"
+    },
+    {
+      "command": "npm run story:authority",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/story-authority.log",
+      "evidenceSha256": "674a8248d269b8a863d77e818d72d74a874ab392ffee5afcbfbf64a93ef1a034",
+      "detail": "1039 checks pass"
+    },
+    {
+      "command": "npm run story:authority:smoke",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/story-authority-smoke.log",
+      "evidenceSha256": "9dc7d4ef950be0c35e6f5791fae04c84f867c64b727cb4e00e44596d09bb7164",
+      "detail": "1039 live checks plus release-gate drift rejection"
+    },
+    {
+      "command": "npm run creative:smoke",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/creative-smoke.log",
+      "evidenceSha256": "495b778cba958ca83dbef315bc3609479c977e0cb4c188515c9225ed07b1278d",
+      "detail": "1727 final checks"
+    },
+    {
+      "command": "npm run creative:workflow:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/creative-workflow-check.log",
+      "evidenceSha256": "c10c1eaf7983659984c10ae1b82a38e6d999989e1322a37b26ea90151d9314d3",
+      "detail": "185 checks"
+    },
+    {
+      "command": "npm run guidance:target-check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/guidance-target-check.log",
+      "evidenceSha256": "b8e6be79eb371647773db49e4e3f47b44708d021e77b45b2893e706aaa60e8a8",
+      "detail": "pass"
+    },
+    {
+      "command": "npm run story:ladder:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/story-ladder-check.log",
+      "evidenceSha256": "e3a042973ee9553db573a80bfca5dc22a3d450db1e73f36f8acf635c079103b2",
+      "detail": "pass"
+    },
+    {
+      "command": "npm run preview:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/preview-check.log",
+      "evidenceSha256": "d0243403c4a4c8f9e5f613a151ec68717e067c0bcaee15a1933cf765cab7521c",
+      "detail": "pass"
+    },
+    {
+      "command": "npm run catalog:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/catalog-check.log",
+      "evidenceSha256": "d4fa8765ef0712ca47020a9df56cfa743b49a33c857e2387d8d729f847d97a4a",
+      "detail": "pass"
+    },
+    {
+      "command": "npx vitest run src/story/commonGround src/story/emergentStoryDirector.test.ts src/story/beats src/story/storyState.test.ts src/game/systems/persistence.test.ts src/story/world",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-v2/focused-tests.log",
+      "evidenceSha256": "7a9a1244977dc6307693af84670bb2f532307af1192ca6a7a5da1fda9b95eedc",
+      "detail": "19 files / 344 tests pass"
+    }
+  ],
+  "scope": "Implementation engineer checks; independent full verify, gameplay, rendered/audio/hardware evidence and acceptance remain pending."
+}

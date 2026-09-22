@@ -1,0 +1,98 @@
+{
+  "schema": "paravoxia.audit.continueActualHandoff.v1",
+  "role": "continue-actual-handoff-audit",
+  "startedAtUtc": "2026-09-06T22:32:05Z",
+  "endedAtUtc": "2026-09-06T22:34:30Z",
+  "budgetMinutes": 5,
+  "mode": "CPU-only read-only source audit; no GPU, no browser, no build, no test, no source edit",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "verdict": "CAUSE NARROWED TO ONE SOURCE PATH, ACTIVATION UNPROVED. Category is parked-ship egress re-resolution on a mis-derived cube face at Continue remount; it is NOT pose-validation reject, NOT default spawn, NOT storyAnchoredSpawn, NOT surface-flight restore.",
+
+  "causalDelta": {
+    "newNumericFingerprint": {
+      "statement": "Both post-jump positions have the form [<a surface-altitude magnitude>, 13.5, -16]; the X slot carries a magnitude that on the top face is a Y magnitude.",
+      "instances": [
+        {"what": "capsule centre at +711ms", "value": [53.849998474121094, 13.5, -16], "xSlotMatches": "arrivalPose.playerSurfacePosition.y (voxelDebug playerRequested [8,53.85,-6] at +426ms)"},
+        {"what": "base key pvx.v1.world.-1,-1.player after Continue", "value": [52.78897476196289, 13.5, -16], "xSlotMatches": "EXACT 16-digit match to saved exit pose Y 52.78897476196289 from playerpose-after-beforeunload-menu-boot.json"}
+      ],
+      "shipTie": "recorded ship/system pos [54,16,-16]: z identical (-16), y 16-2.5=13.5 player egress clearance, x 54 ~ 53.85. The pair is ship-adjacent along the +X axis, not along +Y."
+    },
+    "sourceFact": {
+      "primary": "main/src/components/EfficientScene.tsx:512-522 computes landedPlayerEgress via resolveShipPlayerEgressPosition(spawnTerrain, planetSize, landedShipPos) with THREE arguments - the 4th `face` argument is OMITTED.",
+      "contrast": "The arrival path at EfficientScene.tsx:258-263 passes resolved.face explicitly.",
+      "signature": "main/src/utils/spawnValidation.ts:461-474 resolveShipPlayerEgressPosition(terrain, planetSize, shipPosition, face?: CubeFace); face is optional and forwarded to findValidSpawnSite.",
+      "faceDerivation": "When face is undefined findValidSpawnSite falls back to dominantFaceForPosition(position). For landedShipPos [54,16,-16] the dominant component is |x|=54, so the derived face is the +X face, not 'top'.",
+      "whyTopIsCorrect": "main/src/utils/worldArrival.ts:80-84 documents that findTopFaceSurfaceVoxel is explicitly a TOP-face query and up stays FACE_NORMALS.top (+Y) across the whole face. The earned survey pose and the arrival pose are both top-face; the egress recomputed on +X is therefore off-face.",
+      "overrideChain": "EfficientScene.tsx:523-524 landedPlayerSpawn = landedShipPos ? (landedPlayerEgress ?? arrivalPose.playerSurfacePosition) : initialPlayerPosition; :759 initialPosition={landedPlayerSpawn}; :760 resetPosition. When landedShipPos is non-null this bypasses initialPlayerPosition entirely, so the correctly-loaded saved pose in the useState initializer (:318-383) is never used by the controller.",
+      "hydrationPredicate": "EfficientScene.tsx:494-496 const [landedShipPos] = useState(() => validatedPersistedParked?.position.clone() ?? null). Continue boot re-hydrates a PERSISTED PARKED SHIP; that single non-null makes the predicate at :523 true."
+    },
+    "distinguishedFrom": {
+      "actualPoseValidationReject": "FALSIFIED. Prior continue-pose-source-audit.json bool replay: isDryClearResumePosition = true / SAFE at planetSize 50 for the exit pose, so findValidSpawnSite(r=12) rescue never runs. Consistent with the observed handoff: the saved pose is not rejected, it is bypassed downstream.",
+      "defaultSpawn": "EXCLUDED for the capsule value. Default spawn would yield arrivalPose.playerSurfacePosition = [8,53.85,-6] (top face, the +426ms voxelDebug playerRequested). Observed [53.85,13.5,-16] is not that value.",
+      "surfaceFlightRestore": "EXCLUDED as the transform. systemPoseToPlanetLocalPose (main/src/state/systemFlight.ts:345-354) is a pure subtractVectors with no axis remap, so it cannot produce an X slot carrying a Y magnitude. The branch at :321-329 additionally requires controlMode==='flight' && locationMode!=='surface'; unmeasured, but it cannot explain the numeric fingerprint.",
+      "storyAnchoredSpawn": "FALSIFIED by prior audit source read (storyState.ts:1132-1137): true only for prologue/ch1<=ch1-lift; beat is ch13-survey.",
+      "colliderRemount": "This IS the remount family, but the displacement originates in the egress VALUE (off-face resolution), not in the EfficientPlayer.tsx settle/nudge setTranslation callers (:1412, :1424), which only re-apply the target they are given."
+    },
+    "timingConsistency": "Discontinuity +688ms -> +711ms (one frame boundary) postdates the +426ms arrival-pose useEffect that republished voxelDebug.spawn, consistent with the EfficientPlayer remount consuming landedPlayerSpawn after parked-ship hydration rather than with any first-frame spawn choice.",
+    "invariantsPreserved": "Explains why activePlanetId -1,-1, terrainSeed 3215739679, worldBound true and beat ch13-survey are unchanged across all 359 actual post-click frames: no world/planet transition is involved, only an in-world off-face egress placement. This supersedes the earlier Origin->Tidegarden->Origin excursion inference, which remains unproved and is NOT claimed here.",
+    "siblingKeyNote": "pvx.v1.world.-1,-1:p1.player after Continue holds [-32.12171936035156,52.797115325927734,19.285409927368164], byte-identical (sha256 4c011952848786ef4574aa0e0dfb4674f34680351dbc46a148a32cc3e8391925) to the base key at menu-before-continue: the earned pose was COPIED to planet slot 1 scope, then the base key was rewritten by the off-face placement. :p1 is planet slot 1, not an actor alias."
+  },
+
+  "unproved": [
+    "That validatedPersistedParked was non-null at this Continue boot (landedShipPos hydration actually fired). Not measured; no parked-ship record was captured in attempt-2.",
+    "That dominantFaceForPosition(landedShipPos) actually returned the +X face at runtime.",
+    "That landedPlayerEgress was non-null (if null, :524 falls back to arrivalPose.playerSurfacePosition = [8,53.85,-6], which does NOT match the observation - so a non-null off-face egress is required by the data but not directly observed).",
+    "The exact provenance of the 52.78897476196289 X slot (older saved-pose Y) versus 53.849998474121094 (arrival Y): both are [.,13.5,-16] egress-shaped, but the writer of the later base-key rewrite is not identified."
+  ],
+
+  "minimalPassiveRuntimeMeasurement": {
+    "goal": "Disambiguate off-face parked-ship egress from every remaining candidate without a hypothesis unit test and without GPU work by this role.",
+    "fields": [
+      "EfficientScene landedShipPos at Continue boot (null vs vector) and the persistedParked record it came from",
+      "landedPlayerEgress return value and null-ness",
+      "the CubeFace argument actually resolved inside findValidSpawnSite for the egress call (i.face ?? dominantFaceForPosition(t))",
+      "controlMode and getSystemFlightSnapshot().locationMode at mount, to close the flight-restore branch",
+      "the caller stack of the EfficientPlayer body.setTranslation that first publishes [53.849998474121094,13.5,-16]"
+    ],
+    "cdpPins": {
+      "bundle": "main/dist/assets/index-C1X65dZp.js (frozen)",
+      "pin1": {
+        "anchor": "function aZ(e,A,t,i){const g=Dn(e,A,t,{kind:\"ship\",face:i,maxSearchRadius:0});return!g||g.position.distanceTo(t)>.15?null:wAA(e,A,g)}",
+        "symbol": "aZ = resolveShipPlayerEgressPosition",
+        "capture": "arguments t (shipPosition) and i (face). i===undefined at the Continue call proves the omitted-face source fact is live; the return value is the placed egress.",
+        "note": "9 occurrences of requirePlayerEgress in the bundle; aZ is uniquely identified by the .15 distance guard."
+      },
+      "pin2": {
+        "anchor": "const g=i.face??Vt(t);",
+        "symbols": "Vt = dominantFaceForPosition; g = effective CubeFace",
+        "capture": "g at the egress call. g !== 'top' with t = [54,16,-16] confirms +X-face resolution."
+      },
+      "method": "Passive conditional logpoints only (no pause, no code edit). Not executed by this role - no GPU/browser authorized here."
+    }
+  },
+
+  "authorizations": {
+    "sourceRepairProposed": false,
+    "designOrProgressEdits": false,
+    "filesWritten": [
+      "continue-actual-handoff-audit.json",
+      "logs/continue-actual-handoff-audit/"
+    ],
+    "reusedPriorAudits": [
+      "continue-pose-source-audit.json",
+      "continue-pose-scope-audit.json",
+      "producer-continue-candidate-observation-review.json"
+    ],
+    "noBroadCorpusReread": true,
+    "noNewHypothesisUnitTest": true
+  },
+
+  "sourceLocationsAndHashes": {
+    "main/src/components/EfficientScene.tsx": {"sha256": "ab95dfe4d2dbb59bbaa22e4fdf60faf8f4fa4f9fd959040bfe17fdb4a776f995", "lines": [258, 261, 268, 317, 321, 323, 378, 494, 512, 515, 523, 524, 759, 760]},
+    "main/src/utils/spawnValidation.ts": {"sha256": "26e6cefa8efdf187db0de2efbdef9a98ee27e59d5c7862c26886e88bc473d9a7", "lines": [461, 465, 467, 472, 473]},
+    "main/src/utils/worldArrival.ts": {"sha256": "7c6e315c3b24d5106b40cae3b4d46b31043f3203775c544daec113fa4f68d3a2", "lines": [80, 84, 87]},
+    "main/src/state/systemFlight.ts": {"sha256": "9ca9c8580cbf83886814b820bbdcbba01320fbeb5fe0a37bfc275b59137ae77d", "lines": [345, 354]}
+  },
+
+  "publicationAuthorized": false
+}

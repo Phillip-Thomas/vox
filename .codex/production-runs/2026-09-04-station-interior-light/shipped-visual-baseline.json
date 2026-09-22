@@ -1,0 +1,424 @@
+{
+  "schema": "paravoxia.shippedVisualBaseline.v1",
+  "runId": "2026-09-04-station-interior-light",
+  "sceneId": "station-interior-light",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "capturedAt": "2026-09-04T21:52-04:00",
+  "headedStatus": "pending",
+  "headedStatusNote": "All baseline frames are headless SwiftShader at dpr 1. Headed real-GPU exposure and colour remain an open owner gate (openGateRefs: headed-real-gpu-exposure-taste).",
+  "url": "http://127.0.0.1:4321/?spacestation=1&hud=0&t=17.5&dock=0",
+  "identityCheck": "The served page reports the Paravoxia title tag before every measurement; port 4321 only.",
+  "harness": "main/tools/spaceStation-shots.mjs",
+  "renderer": "headless chromium SwiftShader, dpr 1",
+  "viewport": "1600x900",
+  "qualityTier": "station canvas single tier; PostFX mounted (grade, Sobel, N8AO, ACES exposure 0.94)",
+  "captures": [
+    {
+      "id": "01-dock",
+      "anchor": "airlock-threshold",
+      "kind": "still-frame",
+      "path": "evidence/baseline/01-dock.png",
+      "sha256": "55affba1862b19bdbc131aa0dd7da48b07130bec92836a318d290bdf5f5d7a27",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1600,
+          "height": 900
+        },
+        "audio": null
+      },
+      "metrics": {
+        "meanLuma": 20.2,
+        "pctBelow16": 51.8,
+        "width": 1600,
+        "height": 900
+      },
+      "notes": "Pre-change current-cut still at 1600x900, dpr 1, SwiftShader headless chromium; mean luma 20.2, 51.8% of pixels under 16/255."
+    },
+    {
+      "id": "02-dock-mid",
+      "anchor": "apron-cross",
+      "kind": "still-frame",
+      "path": "evidence/baseline/02-dock-mid.png",
+      "sha256": "f80c83a7eb5633f761884bb4a95e950a947c3fde17bf202236f288a29224bad2",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1600,
+          "height": 900
+        },
+        "audio": null
+      },
+      "metrics": {
+        "meanLuma": 17.5,
+        "pctBelow16": 54.9,
+        "width": 1600,
+        "height": 900
+      },
+      "notes": "Pre-change current-cut still at 1600x900, dpr 1, SwiftShader headless chromium; mean luma 17.5, 54.9% of pixels under 16/255."
+    },
+    {
+      "id": "03-registry",
+      "anchor": "registry-desk",
+      "kind": "still-frame",
+      "path": "evidence/baseline/03-registry.png",
+      "sha256": "4ffc953c39c6c097ab4b91262e15d00a272bb7e285a91542053bdd9c7d056d00",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1600,
+          "height": 900
+        },
+        "audio": null
+      },
+      "metrics": {
+        "meanLuma": 41,
+        "pctBelow16": 16.5,
+        "width": 1600,
+        "height": 900
+      },
+      "notes": "Pre-change current-cut still at 1600x900, dpr 1, SwiftShader headless chromium; mean luma 41, 16.5% of pixels under 16/255."
+    },
+    {
+      "id": "04-concourse-entry",
+      "anchor": "concourse-open",
+      "kind": "still-frame",
+      "path": "evidence/baseline/04-concourse-entry.png",
+      "sha256": "80253524e7c6f00cec9f1f90f378a19ed76737c6c027b7f44d94b549f84194ef",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1600,
+          "height": 900
+        },
+        "audio": null
+      },
+      "metrics": {
+        "meanLuma": 28.7,
+        "pctBelow16": 34.3,
+        "width": 1600,
+        "height": 900
+      },
+      "notes": "Pre-change current-cut still at 1600x900, dpr 1, SwiftShader headless chromium; mean luma 28.7, 34.3% of pixels under 16/255."
+    },
+    {
+      "id": "05-concourse-mid",
+      "anchor": "concourse-open",
+      "kind": "still-frame",
+      "path": "evidence/baseline/05-concourse-mid.png",
+      "sha256": "af6fc5ab56b1b7e81348c570ebe92fb447e80f0dcad8458d87ac13ccbc16e2ca",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1600,
+          "height": 900
+        },
+        "audio": null
+      },
+      "metrics": {
+        "meanLuma": 29.7,
+        "pctBelow16": 30.5,
+        "width": 1600,
+        "height": 900
+      },
+      "notes": "Pre-change current-cut still at 1600x900, dpr 1, SwiftShader headless chromium; mean luma 29.7, 30.5% of pixels under 16/255."
+    },
+    {
+      "id": "06-concourse-look",
+      "anchor": "issuer-stall",
+      "kind": "still-frame",
+      "path": "evidence/baseline/06-concourse-look.png",
+      "sha256": "a0908f32d3290fbb7b0f40695e662ba39fd7ac63c4595c1d7d3437b5d5b75c3f",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1600,
+          "height": 900
+        },
+        "audio": null
+      },
+      "metrics": {
+        "meanLuma": 30.2,
+        "pctBelow16": 33.2,
+        "width": 1600,
+        "height": 900
+      },
+      "notes": "Pre-change current-cut still at 1600x900, dpr 1, SwiftShader headless chromium; mean luma 30.2, 33.2% of pixels under 16/255."
+    },
+    {
+      "id": "06b-concourse-up",
+      "anchor": "concourse-open",
+      "kind": "still-frame",
+      "path": "evidence/baseline/06b-concourse-up.png",
+      "sha256": "c02db4911409d4d925ed89cdd0fc1ed761f3007d58f16b547c5e346326168c50",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1600,
+          "height": 900
+        },
+        "audio": null
+      },
+      "metrics": {
+        "meanLuma": 19.4,
+        "pctBelow16": 54.9,
+        "width": 1600,
+        "height": 900
+      },
+      "notes": "Pre-change current-cut still at 1600x900, dpr 1, SwiftShader headless chromium; mean luma 19.4, 54.9% of pixels under 16/255."
+    },
+    {
+      "id": "07-bureau",
+      "anchor": "hall-plain",
+      "kind": "still-frame",
+      "path": "evidence/baseline/07-bureau.png",
+      "sha256": "e1ae2383ce8693c0b78cb4c9b7d5e6f018a066a39fe613b9909129cf69b636b9",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1600,
+          "height": 900
+        },
+        "audio": null
+      },
+      "metrics": {
+        "meanLuma": 1.1,
+        "pctBelow16": 100,
+        "width": 1600,
+        "height": 900
+      },
+      "notes": "Pre-change current-cut still at 1600x900, dpr 1, SwiftShader headless chromium; mean luma 1.1, 100% of pixels under 16/255."
+    },
+    {
+      "id": "08-bureau-deep",
+      "anchor": "hall-plain",
+      "kind": "still-frame",
+      "path": "evidence/baseline/08-bureau-deep.png",
+      "sha256": "5a48515223187797e18b011d01025bdb271d9d62330b4f4a200cb2e5bf4b8acd",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1600,
+          "height": 900
+        },
+        "audio": null
+      },
+      "metrics": {
+        "meanLuma": 6.6,
+        "pctBelow16": 91.9,
+        "width": 1600,
+        "height": 900
+      },
+      "notes": "Pre-change current-cut still at 1600x900, dpr 1, SwiftShader headless chromium; mean luma 6.6, 91.9% of pixels under 16/255."
+    },
+    {
+      "id": "09-warehouse",
+      "anchor": "racking-aisle",
+      "kind": "still-frame",
+      "path": "evidence/baseline/09-warehouse.png",
+      "sha256": "a4c8e545de16c39ee881b9944e6198a3f03cc563af1e62cf9e5cba555283a5e4",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1600,
+          "height": 900
+        },
+        "audio": null
+      },
+      "metrics": {
+        "meanLuma": 19.8,
+        "pctBelow16": 44.4,
+        "width": 1600,
+        "height": 900
+      },
+      "notes": "Pre-change current-cut still at 1600x900, dpr 1, SwiftShader headless chromium; mean luma 19.8, 44.4% of pixels under 16/255."
+    }
+  ],
+  "cameraStates": [
+    {
+      "anchor": "airlock-threshold",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "nearPlane": 0.08,
+      "farPlane": 4000,
+      "notes": "Free first-person walk; no camera authority is taken anywhere in the interior branch."
+    },
+    {
+      "anchor": "apron-cross",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "nearPlane": 0.08,
+      "farPlane": 4000,
+      "notes": "Free first-person walk; no camera authority is taken anywhere in the interior branch."
+    },
+    {
+      "anchor": "registry-desk",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "nearPlane": 0.08,
+      "farPlane": 4000,
+      "notes": "Free first-person walk; no camera authority is taken anywhere in the interior branch."
+    },
+    {
+      "anchor": "concourse-open",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "nearPlane": 0.08,
+      "farPlane": 4000,
+      "notes": "Free first-person walk; no camera authority is taken anywhere in the interior branch."
+    },
+    {
+      "anchor": "issuer-stall",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "nearPlane": 0.08,
+      "farPlane": 4000,
+      "notes": "Free first-person walk; no camera authority is taken anywhere in the interior branch."
+    },
+    {
+      "anchor": "hall-plain",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "nearPlane": 0.08,
+      "farPlane": 4000,
+      "notes": "Free first-person walk; no camera authority is taken anywhere in the interior branch."
+    },
+    {
+      "anchor": "racking-aisle",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "nearPlane": 0.08,
+      "farPlane": 4000,
+      "notes": "Free first-person walk; no camera authority is taken anywhere in the interior branch."
+    }
+  ],
+  "paletteStates": [
+    {
+      "anchor": "airlock-threshold",
+      "family": "apron cold",
+      "sourceRefs": [
+        "main/src/components/spaceStation/SpaceStationLighting.tsx",
+        "main/src/components/spaceStation/stationMaterial.ts",
+        "main/src/game/spaceStation/spaceStationDressing.ts"
+      ],
+      "fog": "FogExp2 #0a0f16 density 0.0016",
+      "background": "#05070a",
+      "districtFill": "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL",
+      "pointLightPool": 7,
+      "illuminanceAtReach": 0.6
+    },
+    {
+      "anchor": "apron-cross",
+      "family": "apron cold",
+      "sourceRefs": [
+        "main/src/components/spaceStation/SpaceStationLighting.tsx",
+        "main/src/components/spaceStation/stationMaterial.ts",
+        "main/src/game/spaceStation/spaceStationDressing.ts"
+      ],
+      "fog": "FogExp2 #0a0f16 density 0.0016",
+      "background": "#05070a",
+      "districtFill": "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL",
+      "pointLightPool": 7,
+      "illuminanceAtReach": 0.6
+    },
+    {
+      "anchor": "registry-desk",
+      "family": "counter clinical",
+      "sourceRefs": [
+        "main/src/components/spaceStation/SpaceStationLighting.tsx",
+        "main/src/components/spaceStation/stationMaterial.ts",
+        "main/src/game/spaceStation/spaceStationDressing.ts"
+      ],
+      "fog": "FogExp2 #0a0f16 density 0.0016",
+      "background": "#05070a",
+      "districtFill": "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL",
+      "pointLightPool": 7,
+      "illuminanceAtReach": 0.6
+    },
+    {
+      "anchor": "concourse-open",
+      "family": "concourse warm",
+      "sourceRefs": [
+        "main/src/components/spaceStation/SpaceStationLighting.tsx",
+        "main/src/components/spaceStation/stationMaterial.ts",
+        "main/src/game/spaceStation/spaceStationDressing.ts"
+      ],
+      "fog": "FogExp2 #0a0f16 density 0.0016",
+      "background": "#05070a",
+      "districtFill": "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL",
+      "pointLightPool": 7,
+      "illuminanceAtReach": 0.6
+    },
+    {
+      "anchor": "issuer-stall",
+      "family": "concourse warm",
+      "sourceRefs": [
+        "main/src/components/spaceStation/SpaceStationLighting.tsx",
+        "main/src/components/spaceStation/stationMaterial.ts",
+        "main/src/game/spaceStation/spaceStationDressing.ts"
+      ],
+      "fog": "FogExp2 #0a0f16 density 0.0016",
+      "background": "#05070a",
+      "districtFill": "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL",
+      "pointLightPool": 7,
+      "illuminanceAtReach": 0.6
+    },
+    {
+      "anchor": "hall-plain",
+      "family": "bureau hall coldest",
+      "sourceRefs": [
+        "main/src/components/spaceStation/SpaceStationLighting.tsx",
+        "main/src/components/spaceStation/stationMaterial.ts",
+        "main/src/game/spaceStation/spaceStationDressing.ts"
+      ],
+      "fog": "FogExp2 #0a0f16 density 0.0016",
+      "background": "#05070a",
+      "districtFill": "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL",
+      "pointLightPool": 7,
+      "illuminanceAtReach": 0.6
+    },
+    {
+      "anchor": "racking-aisle",
+      "family": "warehouse sodium",
+      "sourceRefs": [
+        "main/src/components/spaceStation/SpaceStationLighting.tsx",
+        "main/src/components/spaceStation/stationMaterial.ts",
+        "main/src/game/spaceStation/spaceStationDressing.ts"
+      ],
+      "fog": "FogExp2 #0a0f16 density 0.0016",
+      "background": "#05070a",
+      "districtFill": "main/src/components/spaceStation/SpaceStationLighting.tsx DISTRICT_FILL",
+      "pointLightPool": 7,
+      "illuminanceAtReach": 0.6
+    }
+  ],
+  "sourceHashes": {
+    "main/src/components/spaceStation/SpaceStationLighting.tsx": "c44829c29250710722a5c7871fad1d090a5b10006699989997f3235a8822ec34",
+    "main/src/components/spaceStation/SpaceStationInterior.tsx": "4865728388f0adafda3b756df157a89e7c676e64588d13afc39f02a081888d7b",
+    "main/src/components/spaceStation/stationMaterial.ts": "dc76cf5d144ba01e17783b23f16104f06decba26c7097ff10f83d407942653f8",
+    "main/src/components/spaceStation/SpaceStationSandbox.tsx": "e9161f07bddf2974add6c0462289e994a07cbc741c4413be6e78e8156d0e26a9",
+    "main/src/game/spaceStation/spaceStationDressing.ts": "16582db7e216b0d042b7e36c4b7b9878507423277bb33169ef586dcc730157f2",
+    "main/src/game/spaceStation/spaceStationShell.ts": "38bd2fae1cd5dcdb0a0a5c4bbaf3c9818643dad1ed13242a64ed5ff1de584977"
+  },
+  "orchestratorReading": "Not a taste verdict. Mean luma: bureau hall 1.1 and 6.6 (effectively black), dock 17-20, warehouse 20, concourse 29-30, registry 41. The concourse district fill is 3x every other district's; the bureau ('floor') gets 0.6 ambient with column lamps of reach 34 that the 7-light pool cannot serve at 180m scale."
+}

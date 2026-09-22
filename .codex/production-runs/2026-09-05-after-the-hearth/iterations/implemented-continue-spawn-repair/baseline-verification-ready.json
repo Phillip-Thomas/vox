@@ -1,0 +1,35 @@
+{
+  "schema": "paravoxia.verificationReadiness.v1",
+  "ready": false,
+  "readyAt": "2026-09-06T21:21:33.629680+00:00",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "integrationInvocationRef": "integration-manual-credit-finale-frontier-invocation.json",
+  "integrationFinishedAt": "2026-09-06T21:14:29.270627+00:00",
+  "sourceManifestRef": "implementation-source-manifest.json",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "implementationGateRef": "implementation-gate-pass.json",
+  "implementationGateChecks": 1756,
+  "checkResultsRef": "check-results.json",
+  "instructions": "Source mutation by sole integration-continue-spawn engineer. Prior source100 preview is immutable baseline only; no new captures until fresh candidate snapshot/build and readiness.",
+  "publicationAuthorized": false,
+  "limitations": [
+    "Runtime and affected independent acceptance remain pending; readiness is permission to measure, not chapter acceptance.",
+    "Continue private preparation is not actual equality plus newly accepted action.",
+    "No publishing authorized."
+  ],
+  "invalidatedAt": "2026-09-06T23:15:21.182511+00:00",
+  "updatedAt": "2026-09-06T22:17:13.879993+00:00",
+  "fullVerification": {
+    "status": "pass",
+    "testFiles": 352,
+    "tests": 3192,
+    "startedAt": "2026-09-06T21:29:55Z",
+    "finishedAt": "2026-09-06T21:30:57Z",
+    "logRef": "logs/manual-credit-finale-verifier/verify.log",
+    "timingRef": "logs/manual-credit-finale-verifier/phaseA-timing.txt",
+    "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+    "qualification": "Run occurred early relative to requested action-first ordering; exact successful source receipt reused, no duplicate full suite for private probe edits."
+  }
+}

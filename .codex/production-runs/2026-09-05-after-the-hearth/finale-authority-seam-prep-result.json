@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 192311,
+  "stop_reason": "end_turn",
+  "session_id": "5481a74e-7e2e-4d37-a496-97a21476ce8b",
+  "total_cost_usd": 0.9026945,
+  "usage": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 37573,
+    "cache_read_input_tokens": 324263,
+    "output_tokens": 14509,
+    "output_tokens_details": {
+      "thinking_tokens": 2345
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 37573,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1580,
+        "cache_read_input_tokens": 41623,
+        "cache_creation_input_tokens": 2256,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2256
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1883,
+      "outputTokens": 19,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0019779999999999997,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 26,
+      "outputTokens": 14509,
+      "cacheReadInputTokens": 324263,
+      "cacheCreationInputTokens": 37573,
+      "webSearchRequests": 0,
+      "costUSD": 0.9007165000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2345,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 19,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: prep complete \u2014 instrumentation prepared and CPU-validated; **chain partially unresolved** ($Z/atTime + bed automation not pinnable offline). No capture run, no source touched.\n\nWall: started 22:19:41Z, finished 22:22:30Z (~3 min of 8).\n\n## Prepared (owned new paths)\n- `verifier/probes/manual-credit-finale/finale-authority-seam/` \u2014 exact sibling depth of `finale-window-fr/`; 5 files copied **once**, unmodified; `../../../../../../../main/tools/lib/*` and `../../lib/ownedSession.mjs` both verified to resolve from the new location. Original + all captures untouched.\n- `verifier/logs/finale-authority-seam-prep/prepared-files.sha256`, `finale-authority-seam-prep-report.json` (`eface23e4868293e0a5108b20afa6123cd1af4b52921c4e507f3ed144382fa19`).\n\n## Source locations (offline, bundle `index-C1X65dZp.js` sha verified `68c8be\u2026328b`, all line 7840)\n| pin | col | minified meaning |\n|---|---|---|\n| CAP_CONST | 189584 | `Bwe=5`, `EI={beat,mood,finalTexture}` |\n| ELAPSED_vKA | 189746 | `(perf.now()-startedAtMs)/1e3` |\n| BEGIN_Qwe | 190086 | creation \u2192 `EI.finalTexture={beat,startedAtMs:KKA()}` |\n| DEADLINE_hwe | 190301 | `age<Bwe ? false : LKA()` |\n| RELEASE_LKA | 190388 | clear token \u2192 `E4(null)`, `B4(beat)`, null beat/mood |\n| CANCEL_ngA | 190499 | cancel \u2192 `LKA()`; **reason arg discarded** |\n| DIAG_dwe | 190614 | `finalTextureSeconds` getter |\n| SETBEAT_l4 / CLEARBEAT_B4 / AUTHORITY_E4 | 160327 / 160410 / 160539 | set / clear score beat, leadership `c4` |\n\nAll 10 `resolved-unique`. Method: passive CDP conditional breakpoints, every condition terminating in `,!1` (never pauses gameplay), reading only game state and appending to isolated `globalThis.__seamProbe`. No assignment, no monkeypatch, no AudioParam wrap, no forced story/action/pose. Perturbation limits recorded (deopt cost, upper-bound timestamps, 4000-event cap with silent-drop disclosure).\n\n## Unresolved \u2014 stated, not aliased\n- `scheduleStoryAuthority(false, atTime)`: `$Z()` is called with **no arguments** at `E4(null)`; `atTime` and the 4.5 s endpoints are internal. No literal `4.5` adjacent to `currentTime`/gain/ramp exists in the bundle. **Not pinned.**\n- Complementary bed automation start/end \u2014 same cause. `context.running`/`currentTime` not in scope at any pin. `built` graph availability unobservable (only `c4` leading beat). No token id published \u2192 identity = captured `startedAtMs`. Cancel reason recorded as `reasonArgObservable:false`.\n\nConsequence: the minimum demanded chain is covered creation \u2192 deadline \u2192 release \u2192 `setScoreBeat(null)`/`setScoreMood(null)` \u2192 leadership transition (with no-op discrimination), and **stops there**. A release pass or an audible cap violation remains unconcludable; CG-IMPL-016 stays open. Signed 5 s cap and existing 4.5 s release left exactly as-is; no tolerance, minimum, or game-value change.\n\n## Proposed runtime command (refuses today; verified exit 70)\n```\nbash -c 'exec 9>\u2026/verifier/artifacts/heavy.lock; flock -w 60 -x 9 || exit 75; \\\n  SEAM_ACTIVE_ROLE=finale-authority-seam-runtime SEAM_ACTION=continue \\\n  SEAM_SCENARIO=normal-expiry node \u2026/finale-authority-seam/run-seam.mjs'\n```\nGates: activeRole, action=continue, inherited exclusive fd 9, bundle sha, pin uniqueness, non-pausing conditions, unique capture dir, per-attempt code snapshot. No new preview. Scenarios prepared but **not run**: `normal-expiry` and one real Escape pause cancel at a live post-complete age (ordinary input only). `node --check` passes on all 6 modules.",
+  "ttft_ms": 1335,
+  "type": "result",
+  "duration_ms": 192325,
+  "uuid": "ca660035-7cb6-459a-967a-5f1cf2eed6cb",
+  "ttft_stream_ms": 828,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 829,
+  "queued_turn_count": 0
+}

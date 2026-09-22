@@ -1,0 +1,364 @@
+{
+  "schema": "paravoxia.verifier.flightDiscriminator.report.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "role": "flight-discriminator",
+  "recordedAt": "2026-09-06T15:19:00Z",
+  "isAcceptance": false,
+  "isChapterVerification": false,
+  "isDefectFinding": false,
+  "isRepairAuthorization": false,
+  "question": "What does live ch13-return systemFlight / approach-assist telemetry actually do across one ~38 s cycle?",
+  "authority": "flight-discriminator-control.json (activeRole=flight-discriminator, action=continue)",
+  "provenance": {
+    "preview": {
+      "url": "http://127.0.0.1:38803/",
+      "ownedBy": "root-production-preview",
+      "daemonPid": 1290230,
+      "indexSha256Rechecked": "ca7b448b72cc17407fc843afffe4808df7fc12ea5203a47b77ceece1c6dedc71",
+      "indexRecheckedBefore": "2026-09-06T15:13:26Z",
+      "indexRecheckedAfter": "2026-09-06T15:18:30Z",
+      "startedByThisRole": false,
+      "stoppedByThisRole": false
+    },
+    "sourceManifest": {
+      "expectedSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+      "files": 98,
+      "matchedBefore": 98,
+      "matchedAfter": 98,
+      "aggregateBefore": "a2f8a69148306c9d55f33e157322a956938258f8744127d3dc3e58bfe04ce7f6",
+      "aggregateAfter": "a2f8a69148306c9d55f33e157322a956938258f8744127d3dc3e58bfe04ce7f6",
+      "beforeEqualsAfter": true,
+      "before": "2026-09-06T15:14:00.818Z",
+      "after": "2026-09-06T15:18:30.772Z"
+    },
+    "heavyLock": {
+      "path": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+      "mode": "flock exclusive, -w 600",
+      "acquiredAt": "2026-09-06T15:15:20.017Z",
+      "releasedAt": "2026-09-06T15:16:52.510Z",
+      "contended": false,
+      "bypassed": false
+    },
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "headed": true,
+    "softwareRendererRefused": true,
+    "browserSessions": 1,
+    "cleanup": {
+      "stopped": true,
+      "invoked": true,
+      "reason": "probe-end",
+      "requests": 1,
+      "error": null
+    },
+    "commandExit": {
+      "code": 1,
+      "cause": "PROBE-LIMITATION: this probe's own log WriteStream was ended before the final say() in finally (ERR_STREAM_WRITE_AFTER_END). It fired AFTER the capture completed, after run.json was written and after the owned browser was stopped. It is not a game failure and did not truncate telemetry."
+    }
+  },
+  "capture": {
+    "entryUrl": "http://127.0.0.1:38803/?story=ch13-return&journeyprobe=1&debug=1&movie=1",
+    "fixtures": [
+      {
+        "what": "story deep link ?story=ch13-return",
+        "effect": "seeds ch13-return entry milestones; does NOT seed story:ch13-origin-landed",
+        "label": "prerequisite-fixture"
+      },
+      {
+        "what": "movie=1 rail",
+        "effect": "shipped ch13 rail drives the same virtual controls a player presses; scripted input, NEVER a zero-rescue movie claim",
+        "label": "scripted-input-journey"
+      },
+      {
+        "what": "journeyprobe=1&debug=1",
+        "effect": "enables the shipped read-only journey bridge and the debug HUD readout; identical to the earned-1/earned-2 lanes",
+        "label": "read-only-telemetry-fixture"
+      }
+    ],
+    "sampleIntervalMs": 250,
+    "samples": 340,
+    "captureMs": 90126,
+    "stopReason": "BOUNDED-WINDOW-ELAPSED (probe stop, NOT a game failure)",
+    "streamedLive": true,
+    "telemetry": "logs/flight-discriminator/telemetry.jsonl",
+    "capturesTaken": 1,
+    "capturesAuthorized": 2,
+    "noTeleports": true,
+    "noNudges": true,
+    "noProgressionGrants": true,
+    "noForcedLanding": true,
+    "noCameraOverride": true,
+    "gameSourceEdits": 0,
+    "contractEdits": 0,
+    "buildsRun": 0,
+    "serversStarted": 0
+  },
+  "bootQualification": {
+    "at": "2026-09-06T15:15:21.948Z",
+    "msFromOpen": 22,
+    "beat": "ch13-return",
+    "lane": "movie",
+    "urlStory": "ch13-return",
+    "objectiveId": null,
+    "markerLabel": null,
+    "system": {
+      "activePlanetId": "-1,-1:p1",
+      "locationMode": "surface",
+      "pos": [
+        2180,
+        -110,
+        -1635
+      ],
+      "speed": 0
+    },
+    "spaceFlight": {
+      "phase": "surface",
+      "controlMode": "fps"
+    },
+    "journeyBridge": true,
+    "shipBridge": false
+  },
+  "measuredFields": {
+    "available": [
+      "systemFlight.pose.position",
+      "systemFlight.pose.velocity",
+      "systemFlight.pose.quaternion",
+      "systemFlight.activePlanetId",
+      "systemFlight.lastActivePlanetId",
+      "systemFlight.locationMode",
+      "systemFlight.activationEpoch",
+      "systemFlight.target",
+      "systemFlight.renderOrigin",
+      "spaceFlight.phase",
+      "spaceFlight.controlMode",
+      "spaceFlight.target",
+      "localActor.milestones",
+      "objectiveId/markerLabel/health (HUD DOM)",
+      "autopilot controls/routeAction/clock/stillTime/nudges",
+      "HUD coordinate/seed/flightMode/shipState/markerDistanceM",
+      "document.visibilityState",
+      "document.hasFocus"
+    ],
+    "unavailable": [
+      {
+        "field": "getSystemTravelAssistTarget().ready",
+        "reason": "systemTravelAssist store is not published on window in this build; no game code was injected to expose it",
+        "substitute": "derived from the exact speed clamp fit, see readyAssistDerivation"
+      },
+      {
+        "field": "__paravoxiaShipProbe.getFeedback().approachLimited",
+        "reason": "__paravoxiaShipProbe bridge was absent for 338/340 samples in this lane",
+        "substitute": "same derivation"
+      },
+      {
+        "field": "SystemTravelDriver targetReady / 6-degree aim-cone state",
+        "reason": "not exposed on any window bridge"
+      },
+      {
+        "field": "getAutopilotFlightDirective() targetWorldId/bearing",
+        "reason": "not exposed on window; __autopilot carries on-foot navigation fields only"
+      },
+      {
+        "field": "subscribeSystemPlanetHandoffCommits receipts",
+        "reason": "not exposed on window; the intermediate activationEpoch state is therefore unsampled"
+      }
+    ]
+  },
+  "observed": {
+    "cycleCount": 2,
+    "cyclePeriodMs": 37210,
+    "cycles": [
+      {
+        "index": 1,
+        "startAtMs": 4123,
+        "minCentreDistance": 181.23,
+        "minAtMs": 39840,
+        "resetAtMs": 40130,
+        "epoch": "3 -> 5"
+      },
+      {
+        "index": 2,
+        "startAtMs": 41090,
+        "minCentreDistance": 169.09,
+        "minAtMs": 77081,
+        "resetAtMs": 77340,
+        "epoch": "6 -> 8"
+      }
+    ],
+    "crossingIsReal": {
+      "startCentreDistance": 2736.83,
+      "deepestCentreDistance": 169.09,
+      "peakSpeed": 102.84,
+      "peakClosingSpeed": 102.84,
+      "note": "Origin (slot 0) centre is [0,0,0]; centre distance = |systemFlight.pose.position|. The ship closes ~2568 units of the ~2737-unit crossing under continuous inward velocity."
+    },
+    "resetBoundary": {
+      "before": {
+        "atMs": 77081,
+        "at": "2026-09-06T15:16:39.032Z",
+        "centreDistance": 169.09,
+        "speed": 55.0,
+        "locationMode": "local_space",
+        "phase": "deep_space",
+        "activationEpoch": 6,
+        "activePlanetId": "-1,-1:p1",
+        "systemTargetWorldId": "-1,-1"
+      },
+      "after": {
+        "atMs": 77340,
+        "at": "2026-09-06T15:16:39.291Z",
+        "centreDistance": 2736.67,
+        "speed": 4.04,
+        "locationMode": "atmosphere",
+        "phase": "descent",
+        "activationEpoch": 8,
+        "activePlanetId": "-1,-1:p1",
+        "systemTargetWorldId": null
+      },
+      "elapsedMs": 259,
+      "poseAfter": [
+        2187.81,
+        -58.5,
+        -1642.99
+      ],
+      "poseAtBoot": [
+        2180,
+        -110,
+        -1635
+      ],
+      "note": "The canonical ship pose is replaced, in one sub-260 ms step, by the hearth boarding pad pose in the -1,-1:p1 frame. activationEpoch advances by TWO, locationMode becomes 'atmosphere', systemFlight.target becomes null."
+    },
+    "activePlanetIdNeverChanged": {
+      "samples": 340,
+      "values": [
+        "-1,-1:p1"
+      ],
+      "originValueNeverSeen": "-1,-1"
+    },
+    "originLandedMilestone": false,
+    "objectiveLifecycle": {
+      "board": "ch13:return:board @1813ms (marker 'Kestrel hatch \u00b7 board')",
+      "launch": "ch13:return:launch @2647ms (marker 'Kestrel controls \u00b7 lift')",
+      "origin": "ch13:return:origin @4123ms (marker 'Origin \u00b7 audit site'), health 'ready' for all 335 subsequent samples, never replaced, never cleared, never missing-marker"
+    },
+    "worldIdentity": {
+      "hudCoordinate": "-1,-1:p1",
+      "hudSeed": "1600321158",
+      "stable": true
+    },
+    "pageState": {
+      "visibility": "visible (340/340)",
+      "focus": "true (340/340)"
+    },
+    "autopilot": {
+      "routeAction": "walk for every in-flight sample",
+      "teleportNudgesTotal": 0,
+      "controlsForwardAsserted": true,
+      "note": "the seated capsule body is still BY DESIGN and is not used as evidence of anything here"
+    }
+  },
+  "readyAssistDerivation": {
+    "law": "systemTravelAssist.systemApproachSpeedLimit (frozen source): unready -> clamp((d-300)*0.65,0,320); ready -> 55 + 265*clamp((d-185)/530,0,1)",
+    "measurements": [
+      {
+        "atMs": 74548,
+        "d": 310.3,
+        "speed": 102.64,
+        "unreadyLimit": 6.7,
+        "readyLimit": 117.5
+      },
+      {
+        "atMs": 76575,
+        "d": 197.19,
+        "speed": 61.59,
+        "unreadyLimit": 0.0,
+        "readyLimit": 61.09
+      },
+      {
+        "atMs": 76828,
+        "d": 182.77,
+        "speed": 55.0,
+        "unreadyLimit": 0.0,
+        "readyLimit": 55.0
+      },
+      {
+        "atMs": 77081,
+        "d": 169.09,
+        "speed": 55.0,
+        "unreadyLimit": 0.0,
+        "readyLimit": 55.0
+      }
+    ],
+    "conclusion": "The ship rides the READY corridor exactly (55.00 at and below the 185 activation shell, 61.59 against a 61.09 limit at d=197). Under the unready law it could not have gone below 300 at all. Approach assist was published with ready:true and the ship reached INSIDE the 185-unit activation envelope on both cycles.",
+    "evidenceClass": "derived (exact arithmetic on captured pose/velocity against frozen source constants), not a live read of the ready flag"
+  },
+  "candidateDisposition": [
+    {
+      "candidate": "A \u2014 ship parks on the unready approach shell at ~300 units and can never reach 185",
+      "verdict": "REFUTED",
+      "because": "measured centre distance reached 181.23 and 169.09; measured speeds match the READY corridor law exactly and violate the unready law by construction"
+    },
+    {
+      "candidate": "B \u2014 aim-cone flicker cancels preparation so targetReady never latches (same observable as A)",
+      "verdict": "REFUTED as the operative cause",
+      "because": "same evidence: the ready corridor was in force and the activation envelope was entered. systemFlight.target does flap -1,-1 -> null, but the flap happens AT the reset, as part of it, not before it"
+    },
+    {
+      "candidate": "C \u2014 the ship never moved at all / thrust never applied",
+      "verdict": "REFUTED",
+      "because": "continuous inward velocity, peak speed 102.84, 2568 of 2737 units closed per cycle"
+    },
+    {
+      "candidate": "D \u2014 the source auditor's 'unready 300 hold' 300-unit-shell reading and the earlier marker-first/last CLOSING heuristic",
+      "verdict": "REFUTED / superseded",
+      "because": "the DOM marker oscillation was an artifact of the reset cycle; the celestial-frame centre distance is monotone inward within each cycle"
+    },
+    {
+      "candidate": "E \u2014 the same-system planet handoff",
+      "verdict": "IMPLICATED by measurement, not proven in detail",
+      "because": "at the 185 envelope the boundary emits exactly the commitSystemPlanetHandoff signature (locationMode 'atmosphere', target null, activationEpoch advanced) yet activePlanetId ends unchanged at '-1,-1:p1' and the canonical pose is replaced by the departure boarding pad. The net effect is the crossing being undone and restarted every 37.21 s."
+    }
+  ],
+  "sourceHandoffImplicated": {
+    "chokePoint": "commonGroundDirector.ts:804-806 onOrigin() === (getSystemFlightSnapshot().activePlanetId === '-1,-1'); it never becomes true, so the ch13 rail can never leave 'fly' (commonGroundDirector.ts:2270) and tickReturn's landing/milestone/advance block (862-869) is never reached.",
+    "measuredCause": "activePlanetId is never rewritten to '-1,-1'. The activation attempt at the 185 envelope terminates in a two-epoch boundary step that restores the -1,-1:p1 world and the departure pose.",
+    "handoffLane": "the same-system planet handoff commit driven from components/SystemTravelDriver.tsx:108-260 into state/systemFlight.ts commitSystemPlanetHandoff / setActiveSystemPlanet",
+    "notAsserted": "this report does NOT assert which of the two epoch increments is which, nor which module issues the second one. No repair is authorized or proposed."
+  },
+  "remainingUnknown": [
+    "The intermediate activationEpoch (4 and 7) was never sampled: at 250 ms the whole two-step boundary fits inside one gap (259 ms and 290 ms). A transient activePlanetId === '-1,-1' inside that gap cannot be excluded.",
+    "Whether the second epoch increment is setActiveSystemPlanet('-1,-1:p1'), commitSystemBodyTarget, clearSystemTarget, or resetSystemFlightForInterstellarArrival is UNDETERMINED from window-exposed state. The smallest next read is the already-shipped subscribeSystemPlanetHandoffCommits receipt channel, which is not on window today.",
+    "getSystemTravelAssistTarget().ready and SystemTravelDriver.targetReady were never read directly; ready:true is derived arithmetically, not observed."
+  ],
+  "artifacts": {
+    "probe": "verifier/probes/flight-discriminator/flight-discriminator-probe.mjs",
+    "rehashTool": "verifier/probes/flight-discriminator/rehash.py",
+    "telemetry": "logs/flight-discriminator/telemetry.jsonl",
+    "probeLog": "logs/flight-discriminator/probe.log",
+    "consoleLog": "logs/flight-discriminator/run-console.log",
+    "rehashBefore": "logs/flight-discriminator/source-rehash-before.json",
+    "rehashAfter": "logs/flight-discriminator/source-rehash-after.json",
+    "runRecord": "verifier/captures/flight-discriminator/run.json",
+    "frames": [
+      "verifier/captures/flight-discriminator/000-boot.png",
+      "verifier/captures/flight-discriminator/0006-objectiveId.png",
+      "verifier/captures/flight-discriminator/0007-objectiveId.png",
+      "verifier/captures/flight-discriminator/0010-phase.png",
+      "verifier/captures/flight-discriminator/0011-objectiveId.png",
+      "verifier/captures/flight-discriminator/0024-phase.png",
+      "verifier/captures/flight-discriminator/0025-systemTarget.png",
+      "verifier/captures/flight-discriminator/0150-phase.png",
+      "verifier/captures/flight-discriminator/0150-systemTarget.png",
+      "verifier/captures/flight-discriminator/0164-phase.png",
+      "verifier/captures/flight-discriminator/0165-systemTarget.png",
+      "verifier/captures/flight-discriminator/999-final.png"
+    ]
+  },
+  "notMeasuredByCommission": [
+    "chapter acceptance",
+    "full ch13 chapter run",
+    "the final flight or any Continue attempt",
+    "manual-input lanes (owned by the concurrent manual-focused role)",
+    "creative acceptance",
+    "any budget extension"
+  ]
+}

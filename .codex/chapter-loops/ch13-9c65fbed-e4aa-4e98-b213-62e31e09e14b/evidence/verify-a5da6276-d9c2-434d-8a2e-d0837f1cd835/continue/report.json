@@ -1,0 +1,117 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "9d8fdc9b209155769d28b3ab22dff2fe54dd31fd8b14e26522c566ae460ec4ee",
+  "kind": "continue",
+  "proof": {
+    "hardware": true,
+    "cleanup": true,
+    "clickedContinue": true,
+    "stateEqual": true,
+    "newAcceptedAction": 0
+  },
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/0000-movie-rail-state.png",
+      "sha256": "6cf821f12307ede6cd186cc3ff68c221a52d609e54ad4aa80460534fec14c6a1"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/0000a-origin-landed.png",
+      "sha256": "a1e91e65458dc0695bd310680f3fb3508920c63be8d77cc6374f8a31bdb6a1f4"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/0001-earned-partial-drawing.png",
+      "sha256": "faeb3b79a728bf330ade8f6b8bfef430ac678f7f79ccd99e2f7b21a0ad46db6d"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/0002-landing-menu-continue.png",
+      "sha256": "115ce2c232f74b343b3af7b0b071567ab0c78a716265124f1d9021dc586beae0"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/0003-after-continue.png",
+      "sha256": "613ae40519e6efd16bfb0e5294440d45a20cd7eae61cc456d685c8b09d97a01e"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/0004-at-survey-end.png",
+      "sha256": "32a01e0116e5dfb8d533765e61b1b2e3ca292229bbbaf2d7dc86b3000a740d5f"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/0005-after-offer.png",
+      "sha256": "7d3c0ce971144b77aaf649e7075e823317f8a5e1673307c0813c7642faebac81"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/cleanup-receipt.json",
+      "sha256": "e06473c06f196060109c4d89040750ff1930990b7a08378b8e68244050b84457"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/continue-raf-telemetry.json",
+      "sha256": "287cba4152b56e4326cc677f09c5f33e0e592ee0b738babb40e198dbabfc252f"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/domstorage-events.json",
+      "sha256": "01d76067c89539e129c085cd468fc4f1a8292759b3638b0119ad514dc4ba2d36"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/globalsave.json",
+      "sha256": "f3c31ea413817999728255b560f21df70e465f1145517efdd6bb5b3d368593c7"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/playerpose-after-beforeunload-menu-boot.json",
+      "sha256": "a31ea50335bef805a59dee356c8ba2246f1644a88fe6b100c4ffcb5d5e6a019d"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/playerpose-after-continue.json",
+      "sha256": "79c08eb389521b0b72bb58da3ea06fc463300a770a803c780917b1c5b3a7b424"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/playerpose-before-navigation.json",
+      "sha256": "a03668fd16298ca18e0b1975e280034781a92e250ff2ad2a2cb90fcb08bbce64"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/playerpose-menu-before-continue.json",
+      "sha256": "e891b49a857dd4004f69d85f6ef365c1bae4a2a8a8628ff55de85451d700aed3"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/preflight.json",
+      "sha256": "f5d509d6b9d5172fd3c031ac327bce3ae49ad0bb33dc34244e85bd2915dfa1ba"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/source-rehash.json",
+      "sha256": "f00b45996de2fc5853b34e83044866ff4896a371ba3d92846d009225fa6a9aa5"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/summary.json",
+      "sha256": "3dfcd537e50010832590a626eca5d45916db7e43d787a2218f799135d6dbd73c"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/trace.ndjson",
+      "sha256": "d2d7b0a2a5ff6c84e49e0a52d4c4fd682a6cba964307a8e3c31f47abdee72baa"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/worldsave-after-continue-pvx.v1.world.-1_-1.json",
+      "sha256": "d780f6efb14d4ba948640f2921a83307ca5b6f9b2730a44ff7a08db54f17f3ed"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/worldsave-after-continue-pvx.v1.world.-1_-1_p1.json",
+      "sha256": "7e69f585718fc788d8ac9f2d93e53955ead95098cf0f30236f1fb9669f856c8f"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/worldsave-presave-pvx.v1.world.-1_-1.json",
+      "sha256": "9e54c27342683f9c58e46b8e32015ba528e94a563021de9d401b1dd3f3ecca47"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/worldsave-presave-pvx.v1.world.-1_-1_p1.json",
+      "sha256": "267863465c490f400eda84627736ff07ef31ad5e44f0f51e0efcc625bdb3a3c9"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/worldsave-pvx.v1.world.-1_-1.json",
+      "sha256": "d780f6efb14d4ba948640f2921a83307ca5b6f9b2730a44ff7a08db54f17f3ed"
+    },
+    {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/continue/capture/worldsave-pvx.v1.world.-1_-1_p1.json",
+      "sha256": "267863465c490f400eda84627736ff07ef31ad5e44f0f51e0efcc625bdb3a3c9"
+    }
+  ],
+  "media": [],
+  "exitCode": 0,
+  "reused": false
+}

@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 397777,
+  "stop_reason": "end_turn",
+  "session_id": "4ed37728-9866-4d2e-903a-5ce084186bf2",
+  "total_cost_usd": 2.2086689999999995,
+  "usage": {
+    "input_tokens": 34,
+    "cache_creation_input_tokens": 82889,
+    "cache_read_input_tokens": 821274,
+    "output_tokens": 38696,
+    "output_tokens_details": {
+      "thinking_tokens": 5920
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 82889,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2091,
+        "cache_read_input_tokens": 88133,
+        "cache_creation_input_tokens": 752,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 752
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1497,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001572,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 34,
+      "outputTokens": 38696,
+      "cacheReadInputTokens": 821274,
+      "cacheCreationInputTokens": 82889,
+      "webSearchRequests": 0,
+      "costUSD": 2.2070969999999996,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 5920,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 18,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: pass \u2014 all requested properties qualify for the single measured candidate; two caveats reported, no winner claim.\n\n**Reproducible check** (CPU 0.74 s, budget 60 s; rerun byte-identical apart from timestamp)\n```\ncd /home/thomasphillip/Projects/vox/main && TM=$PWD/node_modules/three\n./node_modules/.bin/esbuild ../.codex/story-runs/2026-09-06-common-ground/selected-geometry-qualification.mts \\\n  --bundle --platform=node --format=esm --outfile=/tmp/cg-selected.mjs \\\n  \"--alias:three=$TM/build/three.module.js\" \\\n  \"--alias:three/examples/jsm/utils/BufferGeometryUtils.js=$TM/examples/jsm/utils/BufferGeometryUtils.js\"\nnode /tmp/cg-selected.mjs > ../.codex/story-runs/2026-09-06-common-ground/selected-geometry-qualification.json\n```\n`verdict: \"PASS\"`, `failures: []`.\n\n**Measurements** (one candidate: R grounded \u221234,51.05,20; yaw 90; range 12)\n\n| property | measured | required | result |\n|---|---|---|---|\n| grounding R/S/E/C/W/T | all y=51.05, voxel tops 25, body disc fully supported, max neighbour step 0.00 | grounded, disc supported | pass |\n| apparatus footing | 1 column, uniform height, dry | uniform | pass |\n| fixed-valid S/E vs 1.30 plate | 11.33 each, margin 0.67, unblocked | \u226412, clear | pass |\n| short route | 16.00 u, 17 samples, no solid/trunk hit | \u2264120 u / \u2264128 pts | pass |\n| short blind span | 14.00 u, 15 samples, reasons = `[\"backing\"]` only | \u22656 u, backing-caused | pass |\n| endpoint insufficiency | S 11/15, E 11/15 covered; first failure out-of-range | neither covers span | pass |\n| long route fixed-clear | 36.00 u, +20.00, ratio 2.25; 61 samples + 145 dense (0.25) all supported; min margin 0.67 | +12 u, \u00d71.25, all supported | pass |\n| E\u2192C from held E socket 1.85 | 18.00 u; 31/31 samples and 73/73 dense points in range and unobstructed; max 8.50, margin 3.50 | every point \u226412, clear | pass |\n| reciprocal necessity | contiguous 8.00 u (0.444 of passage) | nonzero | pass |\n| worker final traversal from Terra (\u221244,12) socket 1.35 | 73/73 dense points in range and unobstructed; max 7.23, margin 4.77 | every point \u226412, clear | pass |\n| Terra witness | lateral 4.00, body clearance 2.00, release margin +0.25, \u0394y 0, reachable, not at C | \u22652.0 lateral, \u22651.0 body | pass |\n| shifted W(\u221234,51.05,10) | covers 15/15 span samples, max 7.30, margin 4.70, body clearance 2.00, occupancy +0.75, release +0.25, reachable, outside all footprints | full coverage, \u22651.0 | pass (valid \u2014 not invalid) |\n| socket disambiguation | fixed plate 1.30 \u2192 52.35 used by every predicate; `poses.R` 1.85 \u2192 52.90 is generic per-pose metadata read by nothing; \u03940.55; counterfactual differs (S 11.31) | distinguished | pass |\n| solids below cap | stand/bracket tops 52.25 = grounded+1.20 < plate 52.35 < eye 52.40 < visor 52.90 | below all ray sockets | pass |\n| solids vs bodies/paths/rays | 0 capsule intersections (min planar gap 9.04); 0 path hits; 323 rays, stand 0 / bracket 0 hits, backing 15 (short-route only, intended) | none but backing occlusion | pass |\n\n**Literal solids (world bounds, all in mask/segment/ray predicates, no exemption)**\n- backing (\u221234.80, 51.35, 19.04)\u2013(\u221233.20, 53.35, 19.16) \u00b7 1.60\u00d72.00\u00d70.12\n- stand (\u221234.20, 51.05, 19.80)\u2013(\u221233.80, 52.25, 20.20) \u00b7 0.40\u00d71.20\u00d70.40\n- bracket (\u221234.20, 51.85, 19.04)\u2013(\u221233.80, 52.25, 19.90) \u00b7 0.40\u00d70.40\u00d70.86\n- connectivity: bracket\u2229backing 0.40\u00d70.40\u00d70.12, bracket\u2229stand 0.40\u00d70.40\u00d70.10 (nonzero volumes)\n\n**Caveats (reported, not fabricated)**\n1. Head connection: cap grounded+1.20 (52.25) is 0.10 below the fixed plate (52.35); the post ends directly beneath the socket column with a 0.10 gap. No solid can touch the head under the commissioned cap.\n2. Route identity deviation: the stand blocks the apparatus's own base column, which the broad probe's long route crossed. Long route is 36.00 u, not the broad 32.00 u. Short (16.00) and common (18.00) are unchanged; all bounds still met.\n\n**Source hashes** \u2014 originals byte-identical before/after:\n`geometry-instrument-probe.mts feb5f51a\u2026`, `geometry-instrument.json 2186b509\u2026`, `geometry-instrument.md 13ed9789\u2026`, `arena-instrument-repair-cinema.md ad1a3e80\u2026`.\nNew: `.mts 963e3519\u2026`, `.json 521e78f5\u2026`, `.md 54a06dec\u2026` (435 words).\n\n**Artifacts**\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/selected-geometry-qualification.mts`\n- `\u2026/selected-geometry-qualification.json`\n- `\u2026/selected-geometry-qualification.md`\n- bundle `/tmp/cg-selected.mjs`",
+  "ttft_ms": 1528,
+  "type": "result",
+  "duration_ms": 398915,
+  "uuid": "aa174075-02fb-4eee-8b8c-68cb0b61c323",
+  "ttft_stream_ms": 1158,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 1158,
+  "queued_turn_count": 0
+}

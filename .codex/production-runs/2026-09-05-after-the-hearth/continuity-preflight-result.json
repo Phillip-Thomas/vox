@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 99884,
+  "stop_reason": "end_turn",
+  "session_id": "002bbf4c-267d-4661-81ac-879546a49637",
+  "total_cost_usd": 0.5354165,
+  "usage": {
+    "input_tokens": 20,
+    "cache_creation_input_tokens": 27189,
+    "cache_read_input_tokens": 171777,
+    "output_tokens": 7039,
+    "output_tokens_details": {
+      "thinking_tokens": 878
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 27189,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 711,
+        "cache_read_input_tokens": 30375,
+        "cache_creation_input_tokens": 3120,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3120
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1473,
+      "outputTokens": 18,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001563,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 20,
+      "outputTokens": 7039,
+      "cacheReadInputTokens": 171777,
+      "cacheCreationInputTokens": 27189,
+      "webSearchRequests": 0,
+      "costUSD": 0.5338535,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 878,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 17,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: preflight complete \u2014 neither requested journey has existing evidence in this run; report written.\n\n**Report**: `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/continuity-preflight-report.md` (~870 words)\n\nKey findings:\n- **Probes located**: canonical `main/tools/chapter-journey-probe.mjs` (node-builtin imports only, L17\u201322; lanes/CLI L209\u2013244; direct-entry explicitly stamped as non-continuity, L261) and the run-local sibling at `verifier/probes/common-movie-candidate/journey-probe.mjs`, labelled with its **source100** provenance (`cgJourneyProbe.v2`, sha256 `bab7c633\u20263a36`) \u2014 not relabelled.\n- **Fixture vs earned**: `main/src/story/storyState.ts` L613\u2013650 seeds the entire ch11/ch12 boundary for any `ch13-home`-or-later entry and deletes carried `bonded_cell` (L649\u2013650). So the deep link is a diagnostic fixture and `ch12-bonded-cell-installed` there is a seeded save. The earned path is `stationReturnStory.ts` L38\u201343 / L106\u2013134 (reach 4.2, `removeItem` then two milestones).\n- **No new ch11/ch12 beat claimed**: contract declares ch10 `after:[\"ch13\"]` (L2001\u20132008) and ch13 `before:[\"ch10\"]` (L2196\u20132203); ch11/ch12 exist only as milestone namespaces.\n- **Measured** (3 cold headed hardware runs, ch13-common\u2192done): 36348 / 36425 / 36262 ms, 163 ms variance. Everything longer is flagged as guessed maxima.\n- **Unresolved**: no continuous station-exit traversal, no observed cell 1\u21920 transition, no `?story=1&movie=1` summary in this run, five of six required lanes absent for ch13.\n\nRead-only throughout; no browser, server, build, tests, game source, probe or root-verifier artifacts touched.",
+  "ttft_ms": 1433,
+  "type": "result",
+  "duration_ms": 98979,
+  "uuid": "d0c94c59-f5f8-4c46-bcde-2728f6507ac3",
+  "ttft_stream_ms": 1105,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 1105,
+  "queued_turn_count": 0
+}

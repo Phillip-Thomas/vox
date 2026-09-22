@@ -1,0 +1,116 @@
+{
+  "traceOriginWallMs": 1788906276528,
+  "events": [
+    {
+      "sample": 237,
+      "sessionSeconds": 62.623,
+      "earned": [
+        "story:ch14:record-opened"
+      ],
+      "objective": {
+        "id": "objective:ch14:ch14-record:pending:origin:scar",
+        "kind": "travel",
+        "markerLabel": "repaired hull \u00b7 surviving scar",
+        "requiresMarker": true,
+        "workOrder": [
+          "the unfinished map",
+          "read the passage entry. choose \u201cVisit the repaired hull\u201d in your record."
+        ],
+        "health": "missing-marker",
+        "revision": 15
+      }
+    },
+    {
+      "sample": 239,
+      "sessionSeconds": 63.699,
+      "earned": [
+        "story:ch14:survey-indexed"
+      ],
+      "objective": {
+        "id": "objective:ch14:ch14-scar:pending:origin:scar",
+        "kind": "travel",
+        "markerLabel": "repaired hull \u00b7 surviving scar",
+        "requiresMarker": true,
+        "workOrder": [
+          "the unfinished map",
+          "walk to the repaired hull. [F] observe the surviving scar."
+        ],
+        "health": "ready",
+        "revision": 18
+      }
+    },
+    {
+      "sample": 280,
+      "sessionSeconds": 75.619,
+      "earned": [
+        "story:ch14:scar-observed"
+      ],
+      "objective": {
+        "id": "objective:ch14:ch14-question:pending:origin:record",
+        "kind": "interact",
+        "markerLabel": "retained common passage",
+        "requiresMarker": false,
+        "workOrder": [
+          "the unfinished map",
+          "open your field record. choose a question, then retain both entries."
+        ],
+        "health": "ready",
+        "revision": 20
+      }
+    },
+    {
+      "sample": 283,
+      "sessionSeconds": 76.406,
+      "earned": [
+        "story:ch14:question-retained",
+        "story:ch14:question-survived"
+      ],
+      "objective": {
+        "id": "objective:ch14:ch14-return:pending:origin:record",
+        "kind": "interact",
+        "markerLabel": "retained common passage",
+        "requiresMarker": false,
+        "workOrder": [
+          "the unfinished map",
+          "select the common passage entry. choose \u201cReturn to this place\u201d."
+        ],
+        "health": "ready",
+        "revision": 22
+      }
+    },
+    {
+      "sample": 289,
+      "sessionSeconds": 78.27,
+      "earned": [
+        "story:ch14:return-selected"
+      ],
+      "objective": {
+        "id": "objective:ch14:ch14-return:selected:origin:survey",
+        "kind": "travel",
+        "markerLabel": "retained common passage",
+        "requiresMarker": true,
+        "workOrder": [
+          "the unfinished map",
+          "walk back to the retained common passage. [F] record the return visit."
+        ],
+        "health": "ready",
+        "revision": 24
+      }
+    },
+    {
+      "sample": 332,
+      "sessionSeconds": 90.882,
+      "earned": [
+        "story:ch14:complete",
+        "story:ch14:return-recorded"
+      ],
+      "objective": {
+        "id": null,
+        "health": "idle",
+        "revision": 25
+      }
+    }
+  ],
+  "traceEndSessionSeconds": 94.095,
+  "note": "Session trace times, not trimmed media offsets. AV uses diagnostic predecessor entry; full continuity and interruptions are separate."
+}

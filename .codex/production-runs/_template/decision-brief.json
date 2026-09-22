@@ -1,0 +1,53 @@
+{
+  "schema": "paravoxia.decisionBrief.v1",
+  "runId": "{{RUN_ID}}",
+  "authoredBy": "chapter-director",
+  "authoredAt": "{{ISO_TIMESTAMP}}",
+  "sourceIntentRef": "story-intent.md#routed-decisions",
+  "items": [
+    {
+      "id": "{{creative-item-id}}",
+      "kind": "creative",
+      "question": "{{An owner taste or canon question the intent cannot decide}}",
+      "context": "{{why it is the owner's}}",
+      "options": [
+        "{{option A}}",
+        "{{option B}}"
+      ],
+      "recommended": "{{option A}}",
+      "decidedBy": "owner",
+      "status": "pending"
+    },
+    {
+      "id": "{{boundary-item-id}}",
+      "kind": "boundary",
+      "question": "{{A file or symbol outside allowedPaths the intent will need}}",
+      "options": [
+        "open the path",
+        "stop at the boundary and route"
+      ],
+      "recommended": "open the path",
+      "paths": [
+        {
+          "path": "{{main/src/...}}",
+          "symbol": "{{exported symbol}}",
+          "why": "{{what the intent needs from it}}"
+        }
+      ],
+      "decidedBy": "owner",
+      "status": "pending"
+    },
+    {
+      "id": "release-surface",
+      "kind": "release",
+      "question": "Where does this chapter surface on release, and does the shipped ceiling move?",
+      "options": [
+        "keep the player-facing ceiling where it is",
+        "promote"
+      ],
+      "recommended": "{{recommendation}}",
+      "decidedBy": "owner",
+      "status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,341 @@
+{
+  "schema": "paravoxia.implementationReport.v1",
+  "role": "integration-engineer (handoff/standby repair)",
+  "runId": "2026-09-05-after-the-hearth",
+  "writtenAt": "2026-09-06T15:53:10+00:00",
+  "isAcceptance": false,
+  "isChapterVerificationComplete": false,
+  "publicationAuthorized": false,
+  "contract": {
+    "version": "scene-v2",
+    "sha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+    "contractChangeRequired": false,
+    "changedByMe": false,
+    "creativeDecisionsMade": "none; the three peer directors remain the only creative authority. No plot, copy, geometry, proof, score or camera change."
+  },
+  "direction": {
+    "ref": "handoff-standby-repair-direction.json",
+    "defectIds": ["CG-IMPL-012", "CG-IMPL-013"],
+    "budgetRef": "producer-handoff-standby-budget-decision.json",
+    "auditReviewRef": "producer-handoff-standby-audit-review.json",
+    "causalAuditRef": "handoff-standby-source-audit.json",
+    "evidenceReviewRef": "producer-focused-evidence-review.json",
+    "flightEvidenceRef": "flight-discriminator-report.json",
+    "inboxReadThrough": "2026-09-06T15:45:02.298857+00:00"
+  },
+  "startingSource": {
+    "manifestRef": "implementation-source-manifest.json",
+    "manifestFileSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+    "filesRehashedBeforeMutation": 98,
+    "driftBeforeMutation": [],
+    "baselineNote": "The dirty working tree, NOT git HEAD, is the restoration baseline. The two game-source pre-hashes match the read-only causal audit's recorded values exactly.",
+    "taskPrivateBackups": ".codex/production-runs/2026-09-05-after-the-hearth/.private/handoff-standby-repair-backups (exact bytes, outside main/)"
+  },
+  "testTotals": {
+    "preRepairV2Baseline": 3139,
+    "preRepairTestFiles": 350,
+    "postRepairTests": 3158,
+    "postRepairTestFiles": 351,
+    "testsAdded": 19,
+    "testsRemoved": 0,
+    "testsChanged": 0,
+    "testFilesAdded": 1,
+    "addedBreakdown": {
+      "main/src/App.test.tsx": 10,
+      "main/src/story/commonGroundDirector.test.ts": 9
+    },
+    "changedNote": "No existing test was modified, weakened or deleted. Both new blocks are additive."
+  },
+  "changedPaths": [
+    {
+      "path": "main/src/story/tidegardenRoute.ts",
+      "beforeSha256": "e7237efcf339efb599222a171a22b0c4b118712025f3f777030c08482b7e103e",
+      "afterSha256": "f35f6b160b812438f7439a9ecacccdd0d6cf9151ead370e4eb876b1e44e504bf",
+      "created": false,
+      "inAllowedPaths": true
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.ts",
+      "beforeSha256": "980590b0add81f8e0ce6bdc182cb834940af336454435ff4d304a64e47ad11b5",
+      "afterSha256": "acc0d9cf6331f13f77bd95d29b3bd311033a382fcdc3bff3d9ab977297166c46",
+      "created": false,
+      "inAllowedPaths": true
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.test.ts",
+      "beforeSha256": "8379b552bd076c4311ba333182e7f0399e0b82a60093a16feddcdc0ed1fb8492",
+      "afterSha256": "1b8e76af7b94aa4c71f5da07a4e34c7114aeaffbc2c404c599632eb4cb11a97b",
+      "created": false,
+      "inAllowedPaths": true
+    },
+    {
+      "path": "main/src/App.test.tsx",
+      "beforeSha256": null,
+      "afterSha256": "f19a1e4a116be4c8b7849f3da4074abafb04584e2302aa415e68e55cbe7bd271",
+      "created": true,
+      "inAllowedPaths": true,
+      "nullReason": "genuinely absent on disk before this pass; the direction listed it as an allowed path assuming it existed"
+    }
+  ],
+  "scope": {
+    "manifestFilesChanged": 3,
+    "manifestFilesUnchanged": 95,
+    "manifestFilesTotal": 98,
+    "unexpectedDrift": [],
+    "postRepairAggregateSha256": "2d1ab0d209fa0c9bb4fbfa7bd2a096168021ba20a1a031f95d2ee9ff1199d8cb",
+    "newPathsCreated": ["main/src/App.test.tsx"],
+    "newPathJustification": "Explicitly named in handoff-standby-repair-direction.json allowedMutationPaths. It did not exist, so beforeSha256 is null. No unlisted path was edited and no routing request was needed.",
+    "readOnlyImportsOutsideAllowedPaths": [
+      "main/src/story/world/CommonGroundWorld.tsx (createFooting)",
+      "main/src/utils/agentSurfaceNavigation.ts (planAgentSurfaceRoute)",
+      "main/src/utils/agentSurfaceNavigationRuntime.ts (createLiveAgentSurfaceTerrain)",
+      "main/src/utils/efficientVoxelSystem.ts (voxelSystem)",
+      "main/src/story/autopilotSteering.ts (surfaceFaceFromUp)",
+      "main/src/state/systemFlight.ts (real store mutators)"
+    ],
+    "readOnlyImportsNote": "Imported INTO allowed test files so the regressions run the real footing, planner and flight store. Zero bytes changed in any of them; the post-repair rehash proves it.",
+    "protectedPathsTouched": [],
+    "sharedOrGlobalWorkflowFilesTouched": [],
+    "otherSourceFilesModifiedSinceSessionStart": 0,
+    "preExistingDirtyFilesPreserved": 321,
+    "worktreeEntriesAfter": 325,
+    "destructiveGitUsed": false,
+    "gitCheckoutResetRestoreStashClean": "never invoked at any point in this pass",
+    "scratchInsideMainSrc": "none created; run-private scratch only, under verifier/probes/handoff-standby-repair and logs/handoff-standby-repair"
+  },
+  "defects": [
+    {
+      "id": "CG-IMPL-013",
+      "finding": "measured Origin handoff reset (flight-discriminator, 90 s headed ANGLE GB10, 340 samples)",
+      "cause": "CROSSING_DESTINATION_WORLD_ID in main/src/story/tidegardenRoute.ts listed 'ch8-crossing' and 'ch10-ask' but not 'ch13-return'. After the generic same-system handoff had already committed (activePlanetId and renderOrigin the origin's, locationMode 'atmosphere', target null), resolveStoryRuntimeWorldId still answered the departure world, App's storyWorldSwapPending went true, the story-world swap effect reset the scene back to the hearth and ShipController re-seated the ship on the boarding pad. activationEpoch advanced twice per attempt (3->5, 6->8), centre distance reached 181.23 then 169.09 inside the 185 activation envelope, and the ship never landed.",
+      "fix": "One entry restored in the existing runtime crossing table: 'ch13-return': STORY_PRIMARY_WORLD_ID, with the measurement recorded in the comment.",
+      "whatWasNotDone": [
+        "resolveStoryBootWorldId untouched: a reload mid-crossing still restarts from the world the ship launched from, so arrival stays earned by actual flight",
+        "boot world NOT changed to the origin",
+        "no SystemTravelDriver, ShipController, EfficientScene or systemFlight change",
+        "no planet teleport, no targetReady bypass, no arrival radius or speed change, no milestone grant",
+        "ch8, ch10, ch12 and the station chapter beats unchanged"
+      ],
+      "safetyArgument": "resolveStoryRuntimeWorldId honours the table only when routeOnline && currentWorldId === destination && activePlanetId === destination — i.e. strictly after the shipped generic handoff has committed. Every other state falls through to the untouched boot resolver."
+    },
+    {
+      "id": "CG-IMPL-012",
+      "finding": "measured standby stall: standby requested at (-42,51.05,9) after a successful 42-sample / 35.308-unit long survey offer; body remained at ground [-41.965326,50.988996,12.155896], routeAction 'direct', stillTime 0, nudges 0, W-7744 holding for body clearance",
+      "cause": "REPRODUCED, not inferred. On the actual world identity (seed 3215739679, world -1,-1, planetSize 50, VOXEL_SCALE 2) the requested standby is OVER WATER: cell (-21,25,5) has no solid column and isWaterVoxel is true, and so is the lattice-aligned (-42,·,10). The shipped planner therefore returned requestedGoalWasWet true and substituted the nearest dry cell — the one her body already occupied — giving reason 'already-at-resolved-goal' with a single waypoint. The rail kept publishing a walk to a place that is not ground.",
+      "auditClaimCorrected": "The causal audit's B1 (off-lattice by construction) is NOT the operative cause: the on-lattice neighbour is under the same water. Root's qualification that the odd coordinate alone proves nothing is confirmed by measurement.",
+      "fix": "commonGroundDirector.ts only. The single arithmetic constant CG_STANDBY_CLEAR_OF_E is replaced by a chapter-local selection: the nearest candidate waiting place that (a) the LIVE footing supports and (b) clears, by 2*BODY_BODY_CLEARANCE_UNITS + CG_RAIL_POSE_ARRIVE = 2.6, the SEGMENTS of every span he still has to walk — his current leg from where he actually stands through the untested remainder of the RECORDED samples, his positioning leg E->H, the common route (which is also his independent test and the span she walks afterwards) and his live body. If nothing qualifies, walkTo(null) publishes a hold: the refusal is surfaced, never hidden.",
+      "candidates": "Voxel cell centres on the site's dry shelf: (-40,8), (-38,8), (-36,6), (-36,16), (-30,8), (-46,22), (-48,22), all at the authored ground plane y 51.05. Each is confirmed supported by the shipped footing over the real generator and reachable from S, E, W and C by the shipped planner with reason 'dry-surface-path' and a resolved goal identical to the request — not a cell substitution labelled 'arrived'.",
+      "rejectedCandidates": [
+        {
+          "point": "(-42,51.05,20) / (-42,51.05,22)",
+          "source": "handoff-standby-source-audit recommendation",
+          "reason": "supported ground and clear of COMMON, but 0.00 from the LONG survey polyline and 0.30 / 0.46 from her ACTUAL recorded offered route. They are ON the span he is about to test. Producer rejection reproduced numerically; NOT implemented."
+        },
+        {
+          "point": "CG_POSES.W (-34,51.05,10)",
+          "reason": "checked, not presumed. It is HIS inspection pose and he is mounted there when the standby is needed, and it is only 2.00 from the short survey — inside the required clearance. Also the chapter's witness/reference occupancy point, which a standby must not silently occupy."
+        },
+        {
+          "point": "CG_POSES.T (-44,51.05,12)",
+          "reason": "his far reference for the independent test, and 2.00 from LONG, SHORT, COMMON and E->H alike."
+        },
+        {
+          "point": "(-42,51.05,8) / (-42,51.05,6) / (-44,51.05,8) / (-46,51.05,10) / (-48,51.05,8)",
+          "reason": "measured wet: the planner substitutes a dry approach cell, so they would repeat the stall."
+        }
+      ],
+      "whatWasNotDone": [
+        "CG_POSES, CG_ROUTE_SHORT/LONG/COMMON, CG_LEG_E_TO_H/H_TO_E/INDEPENDENT_TEST unchanged",
+        "capsule/body clearance 1 unit unchanged; 0.6 standby arrival radius unchanged; 0.35 route arrival unchanged",
+        "dry/cross-face/obstacle navigation safety, agentSurfaceNavigation, autopilot/primitives, the exact-goal handoff and every shared util untouched",
+        "no bound widened, no body pose forced, no progress granted, no rescue or timeout escalation enabled, no endpoint distance pumping",
+        "no new F, objective, marker or target added for the player; the standby is a place to wait, reached by ordinary movement",
+        "the required reference occupancy (W witness) is untouched, and the standby is deliberately never W",
+        "the ordered full 18-unit common proof, the real H reference/support/LOS/clearance and physical arrival are all untouched",
+        "manual input handling untouched; the reference-occluded-survey-housing hold is treated as authored behaviour, not a bug",
+        "CG-IMPL-009 (the fixed COMMON 18-unit passage corner recovery) is NOT touched and no corner algorithm was added"
+      ]
+    }
+  ],
+  "negativeCases": [
+    "pre-repair standby is NOT supported by the real footing, and neither is its on-lattice neighbour (-42,·,10), while (-42,·,12) is — the water boundary is exactly where the stall said it was",
+    "the shipped planner on the measured stall pose returns requestedGoalWasWet true, 'already-at-resolved-goal', 1 waypoint, resolved z 12: the stall itself, reproduced",
+    "a candidate ON the long survey is rejected even though it clears COMMON by 2.83/4.47 (the audit proposal, explicitly asserted)",
+    "an arbitrary RECORDED excursion that runs over the preferred candidate forces selection elsewhere, and the new choice still clears the recorded polyline by segments",
+    "with ground that supports nothing, the rail HOLDS with a null target instead of publishing a walk",
+    "ch13-return pre-handoff does not claim the destination early",
+    "ch13-return with the route offline is not committed",
+    "ch13-return with currentWorld and activePlanetId disagreeing (either direction) is not committed",
+    "the measured second mutator (setActiveSystemPlanet back to the hearth) un-commits the crossing again — the rule does not paper over a real reclaim",
+    "a reload mid ch13-return still boots on the hearth from both world ids",
+    "a non-crossing beat (ch13-home) and a null beat still get the boot answer even on committed origin state",
+    "ch8-crossing and ch10-ask controls still commit and hold their own destinations",
+    "W-7744 still holds for body-clearance when her body really is on his path, and releases only after she has actually moved"
+  ],
+  "checks": [
+    {
+      "name": "full composite verification",
+      "command": "npm --prefix main run verify",
+      "cwd": "/home/thomasphillip/Projects/vox",
+      "exitCode": 0,
+      "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/handoff-standby-repair/verify.log",
+      "logSha256": "54a473d489deff9e73bc8c1379955e31684907f1fb773eb3de0e6ecd765d7fa0",
+      "result": "351 test files passed, 3158 tests passed; build succeeded",
+      "componentsCovered": [
+        "catalog:check", "scene:av:check", "creative:workflow:check",
+        "chapter:registry:check", "chapter:journey:check", "typecheck",
+        "preview:check", "audio:diagnostic-check", "story:ladder:check",
+        "guidance:target-check", "story:authority", "test", "audio:check", "build"
+      ],
+      "note": "The story, registry, authority, UX/guidance and AV checks are the named package scripts inside this one composite command. They were not re-invoked separately, and nothing was re-run without a change or a failure."
+    },
+    {
+      "name": "focused regression (task A)",
+      "command": "npx vitest run src/App.test.tsx",
+      "cwd": "/home/thomasphillip/Projects/vox/main",
+      "exitCode": 0,
+      "result": "10 passed",
+      "supersededBy": "the composite run above"
+    },
+    {
+      "name": "focused regression (task B)",
+      "command": "npx vitest run src/story/commonGroundDirector.test.ts",
+      "cwd": "/home/thomasphillip/Projects/vox/main",
+      "exitCode": 0,
+      "result": "116 passed (107 pre-existing + 9 new)",
+      "supersededBy": "the composite run above"
+    },
+    {
+      "name": "post-repair source rehash of the 98 manifest files",
+      "command": "python3 verifier/probes/flight-discriminator/rehash.py integration-handoff-standby-after",
+      "cwd": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth",
+      "exitCode": 0,
+      "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/handoff-standby-repair/source-rehash-after.json",
+      "logSha256": "31b017153f91b1af7c719a2f07cf2c7c180664357df37fe73248cde1c92b91c2",
+      "result": "95 matched, 3 changed (exactly the three commissioned game-source paths), 0 missing, 0 unexpected drift"
+    }
+  ],
+  "reproductions": [
+    {
+      "id": "standby-terrain-repro",
+      "probe": "verifier/probes/handoff-standby-repair/standby-terrain-repro.mjs",
+      "probeSha256": "4f45c1ba6824c83a8f7b7688634c0c92cf15ac65de40d5c3b98c4590227c28ce",
+      "log": "logs/handoff-standby-repair/standby-terrain-repro.log",
+      "logSha256": "0d2424033d90ea857500c47282b0f97b3ac376b42d02766b0a2c1ed9cd4d4c8a",
+      "ranBeforeAnySourceEdit": true,
+      "kind": "CPU terrain/navigation reconstruction, read-only, shipped modules bundled out-of-tree with the repo's own esbuild",
+      "identity": "seed 3215739679, world -1,-1, planetSize 50, VOXEL_SCALE 2, face 'top', renderedRadiusCells 25",
+      "planetSizeProvenance": "planetSize 50 is asserted from source (the shipped CommonGroundWorld boundary test pins the same identity); the capture screenshot's totalvox 125000 = 50^3 supports it but does not itself record the field"
+    },
+    {
+      "id": "dry-map",
+      "probe": "verifier/probes/handoff-standby-repair/dry-map.mjs",
+      "probeSha256": "914a2c13069079fd468216acffe1baf4fc53fc35da7bfa51dfb15ceddfeb89f6",
+      "log": "logs/handoff-standby-repair/dry-map.log",
+      "logSha256": "70c7d02834621a9e413abc6315bab1c7bd88bc2f0dbee8af2bfb0e984be4056b",
+      "ranBeforeAnySourceEdit": true,
+      "result": "the standable shelf at the audit site: everything south-west of the survey line (x <= -34, low z) is water; x <= -50 carries nothing"
+    },
+    {
+      "id": "standby-candidate-qualification",
+      "probe": "verifier/probes/handoff-standby-repair/standby-candidate-qualification.mjs",
+      "probeSha256": "57f54c003ff49025cb87815ef2701c8316dd3520a81d1e888bd9c88bb99ecc31",
+      "log": "logs/handoff-standby-repair/standby-candidate-qualification.log",
+      "logSha256": "25eb7cee642e5d384065f29d905daad499956221a73f931b28ee5cafdd34bb07",
+      "ranBeforeAnySourceEdit": true,
+      "offeredRouteData": "verifier/probes/handoff-standby-repair/offered-route-witness2.json (sha256 133f074a9ed956037ea991f4fc3c0477cc41a9295c7977ded75acb4275a3d6cf) — 57 body samples extracted from the witness-2 hardware trace between after-F-at-S and at-E-after-draw: her ACTUAL recorded offer, not an authored route",
+      "result": "clearance measured from polyline SEGMENTS for the recorded offer, LONG, SHORT, COMMON, E->H, W, R and T, plus footing and reachability from four start poses"
+    }
+  ],
+  "counterfactuals": [
+    {
+      "target": "main/src/story/tidegardenRoute.ts",
+      "method": "exact pre-repair bytes restored from the task-private backup, focused suite re-run, fixed bytes restored, hash re-verified",
+      "log": "logs/handoff-standby-repair/counterfactual-A-prerepair.log",
+      "logSha256": "582117ca6e8a338545468bca6fcfc8e6265ab7002d5ded20580f085dadf3788b",
+      "result": "1 failed | 9 passed — the post-handoff identity assertion fails with Expected '-1,-1' / Received '-1,-1:p1'",
+      "restoreVerified": true
+    },
+    {
+      "target": "main/src/story/commonGroundDirector.ts",
+      "method": "exact pre-repair bytes restored from the task-private backup, focused suite re-run, fixed bytes restored, hash re-verified",
+      "log": "logs/handoff-standby-repair/counterfactual-B-prerepair.log",
+      "logSha256": "3b756e0340e73bf8b06ff4eeee0ab42ca3cbedcc3da689915f655f2d3022c9a7",
+      "result": "4 failed | 112 passed — reachable standby, recorded-span selection, common-lane positioning and the honest hold all fail on the pre-repair constant",
+      "restoreVerified": true,
+      "note": "The reproduction case and the body-clearance control pass in BOTH states, deliberately: they are the reproduction and the preservation control, not the discriminators."
+    }
+  ],
+  "reproductionHonesty": {
+    "orderingOfTerrainWork": "The terrain/planner reproduction and the whole candidate qualification ran BEFORE any source edit, on frozen bytes. The counterfactual runs necessarily ran after.",
+    "cpuNotGpu": "Everything here is CPU: the real generator, the real footing rule, the real surface planner and the real system-flight store under vitest. No browser, no GPU, no capture, no acceptance claim of any kind is made from it.",
+    "runtimeSeamLimits": "Task B's regressions drive the real director tick, the real actor walk/hold and the shipped planner with nextNavigationStep's own option set. They do not run walkToward/autopilotTick end to end, so they prove selection, footing and reachability rather than the full per-frame control loop; the remaining proof is the physical capture listed below.",
+    "taskATraceLimits": "The App effect ORDER (render, swap effect, ShipController) is still traced-plus-measured rather than instrumented live; what is proved here is the resolver seam on the real committed flight state, plus the measured telemetry the flight discriminator already owns.",
+    "recordedOfferProvenance": "The 57-sample polyline is her actual walked recording from witness-2; the accepted route was 42 samples of that same walk. It is used as the realistic offered span, not as a claim about any other run."
+  },
+  "preservation": {
+    "priorRepairsPreserved": [
+      "the fifth repair's terminal exact-goal handoff and its safe off-grid goal support (untouched, and the new standby targets are cell centres so they do not depend on it)",
+      "movie interaction cadence and ordered route following (CG-IMPL-004/005)",
+      "lifecycle entry-mode, physical coordinate and anchor eligibility fixes",
+      "world support/render/boot fixes, including the rendered-cube clipping in createFooting",
+      "the Continue/save ownership fixes (CG-IMPL-008/011): all of their tests still pass unmodified"
+    ],
+    "signedGeometryUnchanged": true,
+    "signedAgencyUnchanged": true,
+    "copyAndAvUnchanged": true,
+    "scoreAndCameraUnchanged": true,
+    "sharedNavigationSafetyUnchanged": true,
+    "existingTestsPreserved": true,
+    "capturedSourceAndReportsPreserved": "no capture, probe, summary, snapshot or other role's report was edited, moved or deleted",
+    "historicalIncidentsRetained": "the earlier historical checkout and temporary-source incidents remain recorded elsewhere and were not erased or restated as fixed",
+    "immutableBeforeSourceMutated": false
+  },
+  "boundary": {
+    "whatThisProves": "Source-level correctness only. Task A: the crossing seam holds the world its own shipped handoff committed, on the real flight store, with the boot rule and every control unchanged. Task B: the standby the chapter publishes is real ground on the actual world, is reachable by the shipped planner as a genuine dry walk, and clears the actual recorded span, his positioning leg and the common route by segment distance — with an honest hold when it cannot.",
+    "whatThisDoesNotProve": "No hardware, rendering, timing, feel or gameplay acceptance. No GPU claim is made from CPU tests. Neither defect is closed by me.",
+    "requiredNextIndependentPhysicalVerification": [
+      "a fresh headed-hardware ch13-return capture: activationEpoch +1 at the envelope, activePlanetId becoming and STAYING the origin, renderOrigin [0,0,0], no pose jump back to the hearth pad (~2188,-58,-1643), no second 37.2 s cycle, and an actual landing",
+      "controls in the same capture: ch8-crossing and ch10-ask still commit and hold, and a reload during ch13-return still opens on the hearth",
+      "a physical survey capture in which the standby is walked: routeAction leaves 'direct', routeProgressUnits/pose actually change, and she arrives inside the existing 0.6 radius with no threshold, footing, arrive-radius or nudge change in the diff",
+      "the still-unproved COMMON 18-unit ordered passage in a browser (CG-IMPL-009 remains unmeasured; no corner algorithm was added here)",
+      "lawful earned Continue, full story/station pass, AV variants and the independent chapter reviews"
+    ],
+    "capturePreviewNote": "Root has revoked capture readiness and no GPU work was performed during source ownership. Any pre-repair preview build remains PRE-REPAIR source and must not be used to validate this source."
+  },
+  "unresolvedFindings": [
+    {
+      "id": "STANDBY-CANDIDATE-COVERAGE",
+      "severity": "documented consequence, not a defect",
+      "detail": "The candidate list is finite by design. A recorded offer pathological enough to cover every candidate produces an honest hold rather than a walk. That is the intended refusal, and it is regression-tested; widening it would mean inventing ground."
+    },
+    {
+      "id": "B2-LIVE-CONFIRMATION",
+      "severity": "open, needs hardware",
+      "detail": "The wet-cell cause is reproduced on the real generator on CPU. The live world can additionally carry placed/persisted voxels, which this reconstruction deliberately did not inject (voxelSystem reset). A physical capture is still the confirmation."
+    },
+    {
+      "id": "APP-TEST-PATH-ASSUMPTION",
+      "severity": "recorded for root",
+      "detail": "handoff-standby-repair-direction.json listed main/src/App.test.tsx as an existing allowed path; it did not exist. It was created, not silently substituted, and no other path was touched."
+    }
+  ],
+  "logs": {
+    "dir": ".codex/production-runs/2026-09-05-after-the-hearth/logs/handoff-standby-repair",
+    "probeDir": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/handoff-standby-repair",
+    "progress": "integration-handoff-standby-progress.md"
+  },
+  "rootOwnedArtifactsNotEdited": [
+    "implementation-source-manifest.json",
+    "check-results.json",
+    "implementation-gate-pass.json",
+    "iteration-ledger.jsonl",
+    "verification-ready.json",
+    "defects.json",
+    "production-lock.json",
+    "handoff-standby-repair-direction.json",
+    "producer-handoff-standby-budget-decision.json",
+    "all verifier captures, probes and other roles' reports"
+  ],
+  "sourceState": "frozen at the hashes above; no canonical gate compilation, defect closure or review performed by me"
+}

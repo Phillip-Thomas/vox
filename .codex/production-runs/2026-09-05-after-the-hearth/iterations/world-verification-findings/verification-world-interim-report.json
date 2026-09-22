@@ -1,0 +1,526 @@
+{
+ "schema": "paravoxia.verificationWorldInterimReport.v1",
+ "runId": "2026-09-05-after-the-hearth",
+ "role": "story-verifier (independent, continuation 3)",
+ "kind": "INTERIM FAILURE CHECKPOINT \u2014 not final chapter verification, not a scorecard, not acceptance, not a publication decision",
+ "writtenAt": "2026-09-06T11:45:38.579351+00:00",
+ "publicationAuthorized": false,
+ "endedUnder": {
+  "controlAction": "pause",
+  "controlUpdatedAt": "2026-09-06T11:42:15.780109+00:00",
+  "instruction": "Finalize current diagnostics, write this report plus final findings and harness hash/test records, and END the verifier invocation cleanly.",
+  "note": "Recorded as the CURRENT finish instruction. The earlier 11:32:20Z pause is superseded and is not a waiting state."
+ },
+ "verdict": "FAIL (interim). The lifecycle repair fixed both previously measured blockers \u2014 the ch13 on-foot entry and the capsule-centre coordinate frame \u2014 and the chapter now reaches and accepts its first real anchors. Two NEW blocking runtime defects stop it before any route sample is recorded, and the valid intermediate-Continue case remains unproved.",
+ "identity": {
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceManifestSha256": "51b25376aa6c87dc428249fcfd907811c592bc9dfdaf00d82c53112593ea02c3",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "sourceFilesRehashedByVerifier": {
+   "checked": 96,
+   "mismatch": 0,
+   "missing": 0,
+   "recheckedAfterBuild": true
+  },
+  "implementationGateChecks": 1708,
+  "previewUrl": "http://127.0.0.1:45091/",
+  "previewOwner": "root-production-preview (root exec session 89502) \u2014 the verifier started no server and owns none",
+  "previewIndexSha256": "7e1ed124be8fe197ae2f80de6b988c260ed7533aea83a803190abc84bbc89cae",
+  "servedBundle": "/assets/index-Bquz6XRz.js",
+  "servedBundleSha256": "213aa350ea2d340a8a34e802a70d703984fb29ed4ff1b9d2003e457fcaead453",
+  "identityCheckedIndependently": "title '<title>Paravoxia</title>' fetched, and both index.html and the bundle are BYTE-IDENTICAL to this verifier's own build output in main/dist; the served bytes contain __paravoxiaCommonGround, bodyCentre, railCursor and the exact signed marker strings",
+  "oldPreview": "the 43617 preview (manifest 58f275f6\u20260e70) was stopped by root; no claim in this report comes from it",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "rendererClass": "hardware",
+  "headed": true,
+  "heavyLock": "acquired non-blocking with flock for every browser probe and released on exit; no other owner waited on, bypassed or terminated",
+  "worldIdentityObservedInFrame": {
+   "seed": 3215739679,
+   "worldCoordinate": "-1,-1",
+   "totalVoxels": 125000
+  }
+ },
+ "staticGate": {
+  "command": "npm --prefix main run verify",
+  "exitCode": 0,
+  "testFiles": 348,
+  "tests": 3068,
+  "build": "ok (5.88 s)",
+  "wallSeconds": 61,
+  "log": "verifier/logs/final-source/verify-final.log",
+  "logSha256": "53678121a72fd66534f699d0ddfffd94cf532162d9483012cb1563c6be1e16c9",
+  "independence": "executed by this verifier on the frozen final source; it matches the integrator's reported 3068 by independent execution, not by reading their report",
+  "limit": "Static/CPU only. It proves nothing about rendering, traversal, hearing, hardware timing or Continue \u2014 and both blockers below are invisible to it."
+ },
+ "repairsConfirmedFixed": [
+  {
+   "id": "VF-DEEPLINK-1",
+   "result": "NOT REPRODUCIBLE",
+   "detail": "?story=ch13-survey boots ON FOOT. The rail walked the body ~60 units to S and performed the shipped F resolver; no disembark fixture, teleport or grant was used."
+  },
+  {
+   "id": "VF-RAIL-2",
+   "result": "NOT REPRODUCIBLE",
+   "detail": "The published diagnostic reports bodyCentre 52.7890 and grounded bodyPose 50.9890, exactly 1.8 apart along the live up. The body arrives 0.303 horizontal units from the authored S inside the 0.35 arrive radius and the resolver reaches the interaction."
+  },
+  {
+   "id": "CG-IMPL-008 (partial)",
+   "result": "PARTIALLY CONFIRMED LIVE",
+   "detail": "anc.cg.repeated-measure and anc.cg.demonstration-opened were ACCEPTED by the signed AV rail (activation sequence 1 and 2) on ch13-survey, and anc.cg.hatch-boarded / anc.cg.lift-committed on ch13-return. The ch13-home anchors were NOT \u2014 see VF3-AVHOME-1."
+  }
+ ],
+ "blockersForOneBoundedIntegrationPass": [
+  "VF3-FOOTING-1",
+  "VF3-AVHOME-1"
+ ],
+ "openProofGap": {
+  "id": "VF3-CG008-1",
+  "statement": "The valid intermediate-Continue case root asked for is STILL NOT PROVED. What exists is an isolated AV-order boundary probe (real runtime, direct anchor calls, no WorldSave reconstruction): with no ch13 receipt held, anc.cg.route-offered and anc.cg.route-tested are refused; with story:ch13-route-tested held they succeed. Only six durable ch13 milestones exist and every survey predecessor is keyed on the FINAL one, so a mid-drawing save can carry nothing that excuses them.",
+  "counterResult": "The mid-COMMON case does NOT reproduce: the crossing receipt is marked before its anchor is noted, and it excuses anc.cg.reciprocal-reference.",
+  "whyNotProved": "A physically earned partial survey could never be produced, because VF3-FOOTING-1 refuses the very first sample. No WorldSave was constructed through its validator/restore, and no physical Continue was performed.",
+  "engineerRequirement": "The bounded pass must reproduce this through the real save/driver seam, not through direct anchor calls."
+ },
+ "harnessChanges": {
+  "policy": "verifier-owned probes only; no game source and no game test file was added, changed or deleted",
+  "changes": [
+   "physicalPose.mjs \u2014 selectPlayerPose/selectWorkerPose now LEAD with the published window.__paravoxiaCommonGround.snapshot() (full-precision bodyCentre, grounded bodyPose, live up, actor pose and leg), retaining __autopilot and the entity record as reconcilable secondaries.",
+   "cg-journey-probe.mjs \u2014 stall phase now leads with the chapter's OWN executed rail action (the legacy __autopilot.routeAction reports 'idle' throughout this chapter, which silently kept the stall predicate out of scope for a whole 189.8 s run: 200 'phase-out-of-scope:idle' resets); cgHoldReason now reads the published nested .diagnostic.holdReason; a change of pose SOURCE is recorded as a measurement discontinuity instead of being counted as a body teleport.",
+   "cg-harness-selftest.mjs \u2014 B5/B6 added for the published hook and for malformed/absent diagnostics: 25/25 offline checks pass (was 23/23).",
+   "cg-footing-diag.mjs \u2014 NEW bounded diagnostic; its own offline self-test covers the cell arithmetic and all three verdict signatures. One bug found and fixed after its live run (it awaited the synchronous frameStats helper and crashed at the final write); its summary was reconstructed offline from its own trace and is labelled as such."
+  ],
+  "offlineTestsAreHarnessChecksNotGameProof": true
+ },
+ "notMeasured_notClaimed": [
+  "Any route sample, either route class, the ordered 18 units, corner behaviour, manual-corner deviation and recovery, the common beat, completion or handback \u2014 the survey never recorded a first sample.",
+  "Three cold focused journeys, the continuous station->home->ch13 bridge, the full story movie.",
+  "The 28 signed anchors as a set; the 17+2 objective lifecycles end to end; the reset matrix; mobile / reduced-motion / lowest tier.",
+  "Every performance figure: fps, draw calls, materials, programs, memory, handback budgets.",
+  "Every audio and score claim. NOTHING WAS LISTENED TO at any point, and no cue-synchronisation or audibility claim is made anywhere."
+ ],
+ "noAcceptance": "No mechanical acceptance requirement of the signed contract is marked satisfied by this report. No unrun check is recorded as passed. No chapter completion, no scorecard, no creative approval and no publication.",
+ "integrity": [
+  "No game source was modified.",
+  "No threshold, predicate, radius or tolerance was touched.",
+  "No teleport, progress grant, prerequisite fixture or timeout rescue was used or counted as success.",
+  "No server was started by this role and none is orphaned.",
+  "All prior captures, logs and reports are preserved; new work is under verifier/{logs,captures}/final-source|final and verifier/tests."
+ ],
+ "rawMediaInventory": {
+  "captures": [
+   {
+    "path": "verifier/captures/final/footing-diag/0000-footing-diag.png",
+    "bytes": 1377555,
+    "sha256": "ad99d643684cae55bc46ba38c027688c3659f8393732eecde9d662f1152a7aec"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0000-obj-enter-ch13_home_review.png",
+    "bytes": 94278,
+    "sha256": "162af15c07f9c8cd5dce345e4417cc94a41828ceb528f0675318da4c4dcd42c3"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0001-strip-ch13-home.png",
+    "bytes": 87526,
+    "sha256": "f8ff60d2da86fc601cdb6549198b29c74e0a4fb66397a5cc448faaa6f3f428bf"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0002-obj-enter-ch13_home_choose-return.png",
+    "bytes": 480637,
+    "sha256": "5c6b05a59001b9d0d9b3083aacae09a62ca25caadca41ee604e26b632211a0ee"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0003-beat-ch13-return.png",
+    "bytes": 1034575,
+    "sha256": "1f44a5c666a0951854945a0e968281f183fde92df70db2084062f2b6fbaae02f"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0004-obj-enter-ch13_return_board.png",
+    "bytes": 935974,
+    "sha256": "484bf3724ab19fe657eff8e4846382dcd055b3880d3bb2bf1f16f01dee66d05e"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0005-obj-enter-ch13_return_launch.png",
+    "bytes": 785269,
+    "sha256": "7f42dfb7d6838c025aecc42223cfe9d231711ce3859ba71ed6330c43b3200d26"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0006-anchor-anc.cg.hatch-boarded.png",
+    "bytes": 721326,
+    "sha256": "444c3bed013b437060077420c76f8f7deffb1a0bb05e07941aabee1e800c32ad"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0007-after-anchor-anc.cg.hatch-boarded.png",
+    "bytes": 596459,
+    "sha256": "7f7b6e144d1b039b3f8ebbd2ca861403508a65e0baef61d8bb398453c3a29a0a"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0008-obj-enter-ch13_return_origin.png",
+    "bytes": 588614,
+    "sha256": "5c58cc37c3c71f1f448f312a9ba8d473513345590987e6fc23fd9cfe920d040e"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0009-anchor-anc.cg.lift-committed.png",
+    "bytes": 589402,
+    "sha256": "9db883d91c5c20331b74ef6d81ca47706991e2be636599d87f3d72a7f9af6670"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0010-after-anchor-anc.cg.lift-committed.png",
+    "bytes": 570996,
+    "sha256": "0dbb2269294d54b89953c03a4e5ab42e75e3d6da054b51d7dce2e8042cce37ce"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0011-strip-ch13-return.png",
+    "bytes": 749002,
+    "sha256": "d193321336cd64b7b066e4b78b486740e1bdbc897b1b9c2785ff16bcec70b130"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0012-strip-ch13-return.png",
+    "bytes": 747670,
+    "sha256": "ef00284a78926e6da481ce7e54b7b4e47b7216ff44534efc8cc0d80a00ba488b"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0013-strip-ch13-return.png",
+    "bytes": 751983,
+    "sha256": "5f0730e37981d6e96fcdb5e2ce07ca3bdfa32be62d681186de483dc2edc5bc8b"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/0014-strip-ch13-return.png",
+    "bytes": 733446,
+    "sha256": "0d58684079010428690149768016be5ad61c0e2b1805722e7f1c1a155c32fd9c"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0000-obj-enter-ch13_survey_offer.png",
+    "bytes": 93505,
+    "sha256": "40e747f8348c017076964543ac59a04985a73ddbc83209a65f66ed966da866e2"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0001-strip-ch13-survey.percept.png",
+    "bytes": 4250,
+    "sha256": "7a5175f59992a07616d58b06a310b2a3909c43df6d406a736ef54995563a09ed"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0001-strip-ch13-survey.png",
+    "bytes": 86866,
+    "sha256": "d0ec79f357acfb62d6dd44aa164127bb5dde1b2723a44df34536664472fed55d"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0003-anchor-anc.cg.repeated-measure.percept.png",
+    "bytes": 798332,
+    "sha256": "881a3fe82a8c4c0fea2e0cd5bba583ea1357ecb18ab05cbfcfde96716a39ad4e"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0003-anchor-anc.cg.repeated-measure.png",
+    "bytes": 1035514,
+    "sha256": "09b2ddde7a50d8df936ab346d7f07c0066752ab188e824843dc80e5c8c4e5c7e"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0005-after-anchor-anc.cg.repeated-measure.percept.png",
+    "bytes": 1224799,
+    "sha256": "66f9b52f7c1bad1dea0b94a65e5dca598aee1a436547aac2302f9c8f6e9a91dd"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0005-after-anchor-anc.cg.repeated-measure.png",
+    "bytes": 1172447,
+    "sha256": "6640c7c8e72e92cc88b21f75189bc06a76a1101c453fe98afd5aa462668dca93"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0007-obj-enter-ch13_survey_start.png",
+    "bytes": 1270704,
+    "sha256": "a180d992b7f354872899c5411e7acc39ef49413b57ce7c5706f58af46803ec93"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0008-anchor-anc.cg.demonstration-opened.percept.png",
+    "bytes": 1316300,
+    "sha256": "7e4d5e5ba8f70640a3ba874edbf70b6e6a3d643c1470c3e82faa8c32144c434e"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0008-anchor-anc.cg.demonstration-opened.png",
+    "bytes": 1286312,
+    "sha256": "1904bf6d357540a481c7ec112bd8946557e54e638b3cde951c05ce15cd39a07d"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0010-strip-ch13-survey.percept.png",
+    "bytes": 1376393,
+    "sha256": "ec00391e5928fc16919fda5dcbee7b4d4cb88f43843ad2306f877aa915acf19c"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0010-strip-ch13-survey.png",
+    "bytes": 1307268,
+    "sha256": "1763431d47638c949f83fac52fb7eb8d2642209ce2c05b38ca884100e309cb4d"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0012-after-anchor-anc.cg.demonstration-opened.percept.png",
+    "bytes": 1411095,
+    "sha256": "6b43275f34f702c937186d6bdc9aff67038d577e4741a7ece3487a080eb0e038"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0012-after-anchor-anc.cg.demonstration-opened.png",
+    "bytes": 1327456,
+    "sha256": "cbeda2ddf3000c7f5fb047ed1571f3195e6a281900d3487152009130452475c8"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0014-strip-ch13-survey.percept.png",
+    "bytes": 1298994,
+    "sha256": "7797049550e9055c52a9105b425d8547513527b0f253560b08e6f878ed43f483"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0014-strip-ch13-survey.png",
+    "bytes": 1212848,
+    "sha256": "250f2720c4211a23aa98cb470fa40c3330dbee918950a647256505592f204968"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0016-strip-ch13-survey.percept.png",
+    "bytes": 1357162,
+    "sha256": "a7b50a2f8d0076ab5b90c4f7192ff500edb38d3fc36f92fd6d8caf75a9a2de04"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0016-strip-ch13-survey.png",
+    "bytes": 1276893,
+    "sha256": "457ae013ad286e7ec4c3f60189b09eae18935b68d15be2d65792fbc74bc825b5"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0018-strip-ch13-survey.percept.png",
+    "bytes": 1275450,
+    "sha256": "4b0d452dbe94f7dd5049e3b6bf67ebe6e504e7f01bea1d938ddd96be4a9709a7"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0018-strip-ch13-survey.png",
+    "bytes": 1207504,
+    "sha256": "d323ac91dfc7f886704b7feafa21735db896b5093e82fe8fdee26400b03d87ea"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0020-strip-ch13-survey.percept.png",
+    "bytes": 1227910,
+    "sha256": "d0406c260cf6a56f679e19a920f51c5feba33112d2fa7359cc43d23ec86decef"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0020-strip-ch13-survey.png",
+    "bytes": 1163130,
+    "sha256": "61f46dbe67500e9eccbd7ad724018ccbd1ecda33e7a36fc89c68ae32d0f777a1"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0022-strip-ch13-survey.percept.png",
+    "bytes": 1279784,
+    "sha256": "4e006edb6e88191dfcff6247c2f00f84240481c937879dfc3ed97bc921d8c197"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0022-strip-ch13-survey.png",
+    "bytes": 1211649,
+    "sha256": "acf9d006c77e40ce5ececef0ea5cd301e51b442078dc6fe1e75275ca84d6ea9a"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0024-strip-ch13-survey.percept.png",
+    "bytes": 1262812,
+    "sha256": "8604fccd2532ba31ad46d6005d1e653f48753443eec9548bd439b33101f1dfe1"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0024-strip-ch13-survey.png",
+    "bytes": 1208810,
+    "sha256": "62281cd5aea2f0321303a80629a093e8a0fcfeb96d51d1bb2e071f62677255a2"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0026-strip-ch13-survey.percept.png",
+    "bytes": 1236054,
+    "sha256": "57e17aecb32e427e9766f7655a91d076bd9b4b005770a19cc28b9d2d85b5fd08"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0026-strip-ch13-survey.png",
+    "bytes": 1194241,
+    "sha256": "419505cc20b30d3d024d427c77259139c11a8900c891ee6e5a9870cef4b0e449"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0028-strip-ch13-survey.percept.png",
+    "bytes": 1094266,
+    "sha256": "23beddc044c4f0d3a824dd1242cee3c3c916ea33f1f9cda7e75bb5e3f628dc73"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0028-strip-ch13-survey.png",
+    "bytes": 1062863,
+    "sha256": "4d2cfe0a352b072048ac61c4a693e845242b02fd4b096f66ab4244c88e87d756"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0030-strip-ch13-survey.percept.png",
+    "bytes": 1042281,
+    "sha256": "2d9c2dd960dc82157785699203cab0d6cf299e8168d01bbd22d8c37b1b0e5733"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0030-strip-ch13-survey.png",
+    "bytes": 1011419,
+    "sha256": "672e90939e67af2ff7c1d0192c45bcc8da9223d1a493d5e8643f5bd61d7cc39f"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0032-strip-ch13-survey.percept.png",
+    "bytes": 999905,
+    "sha256": "200421099bbfca9ec37b0270325ff92c9a3488b4e4a0ef98d73c26d7cb7bb105"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0032-strip-ch13-survey.png",
+    "bytes": 978513,
+    "sha256": "5c3cb21e4eb342cd8251d35c87e4e5ea08f6b586fb346b28c99c36b0a5029f5d"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0034-strip-ch13-survey.percept.png",
+    "bytes": 1006041,
+    "sha256": "92fc91cf6825144e1660b87099e0118e2fa325b48abc10f462fe24194dc9add2"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0034-strip-ch13-survey.png",
+    "bytes": 978104,
+    "sha256": "d5247391638572720cbc8d4150c8da12c496fbc38d8d718455df33e73ed35685"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/0036-root-checkpoint.png",
+    "bytes": 959312,
+    "sha256": "6f4fc204258562890edfe388dcd412c5594b2c25113e543d7de7c6ffc88b3be3"
+   }
+  ],
+  "traces": [
+   {
+    "path": "verifier/captures/final/footing-diag/trace.ndjson",
+    "bytes": 145107,
+    "sha256": "3338d91d233c02c8da0c0ad7f1bedd3f4019ae0e780b51d1439e2fff04bd28f4"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/trace.ndjson",
+    "bytes": 5722170,
+    "sha256": "909ac362c2f8f95477605030a5583a065dd1ec2ab7980485467baac8a43ebed7"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/trace.ndjson",
+    "bytes": 28618418,
+    "sha256": "848642f97b1b83013bc4039b6853bb46c6367642f7835a355990b39344f8e0ad"
+   },
+   {
+    "path": "verifier/captures/final/footing-diag/summary.json",
+    "bytes": 5263,
+    "sha256": "165a3d1ec37ccf031f872a220b79f253be5b2407707c74e57bcf8cbb590b0fac"
+   },
+   {
+    "path": "verifier/captures/final/smoke-home/summary.json",
+    "bytes": 182469,
+    "sha256": "97fdace1e1f1b5ad12e1b2d7dbc03db2d4f6ecead050f09fc878c7b97cebe904"
+   },
+   {
+    "path": "verifier/captures/final/survey-movie/summary.json",
+    "bytes": 394718,
+    "sha256": "9f2b749664a81b3026fb25486fb96d14ccd5d4a8d6f685188303810b3c9d420b"
+   }
+  ],
+  "logs": [
+   {
+    "path": "verifier/logs/final-source/cg008-midbeat-repro.log",
+    "bytes": 3312,
+    "sha256": "6114a162d85aff22949232cb6edded3ddb2d2d3d81e8739bb679a668706733f5"
+   },
+   {
+    "path": "verifier/logs/final-source/footing-diag.log",
+    "bytes": 982,
+    "sha256": "4c6fbb835b36045d93144e041c57bf04daebd6dafbe099ba526106186c28de64"
+   },
+   {
+    "path": "verifier/logs/final-source/selftest-2.json",
+    "bytes": 3359,
+    "sha256": "fc956985fb3248d5c59dd32bf5df2f3252b3d4c6e7016eeacdb9d9381c2a42e5"
+   },
+   {
+    "path": "verifier/logs/final-source/selftest.json",
+    "bytes": 3120,
+    "sha256": "b5ce211f3f6de45a36fbdc632e257c404d162245edc3b3daba7fad5b8d7556d7"
+   },
+   {
+    "path": "verifier/logs/final-source/selftest.log",
+    "bytes": 45,
+    "sha256": "5822c87aaeaa55f24a4ef515e6eb3916d996004058d05d9a695f976a5bbd22cd"
+   },
+   {
+    "path": "verifier/logs/final-source/smoke-home.log",
+    "bytes": 3211,
+    "sha256": "7f2729c92e2ef31dd828c37723d6a1f30e13f63b26f12b7a9ee929cb5121a78c"
+   },
+   {
+    "path": "verifier/logs/final-source/survey-movie.log",
+    "bytes": 1541,
+    "sha256": "7bf9ca76ee36d24ece7c7af577c96fad971a999c382915e289a2b950509ac151"
+   },
+   {
+    "path": "verifier/logs/final-source/verify-final.log",
+    "bytes": 38090,
+    "sha256": "53678121a72fd66534f699d0ddfffd94cf532162d9483012cb1563c6be1e16c9"
+   }
+  ],
+  "probes": [
+   {
+    "path": "verifier/probes/cg-footing-diag.mjs",
+    "bytes": 13588,
+    "sha256": "e26fbb0f096b58f9e95eba978b86d2f9eb25d5b4f2bd236e3c5767a1e30bacc0"
+   },
+   {
+    "path": "verifier/probes/cg-harness-selftest.mjs",
+    "bytes": 25604,
+    "sha256": "5f0b88831199d8d5efc088df887d9f717da0d16cfad58df49d5a1a6f67e77d71"
+   },
+   {
+    "path": "verifier/probes/cg-journey-probe.mjs",
+    "bytes": 46084,
+    "sha256": "d5e789ee1018106afc7de6b462157054614e165d0f329bc78704e40d942ab6f7"
+   },
+   {
+    "path": "verifier/probes/cg-lifecycle-probe.mjs",
+    "bytes": 11835,
+    "sha256": "acc022f20c305f8fb0e38c9002b124e3bb4586922196c2631bc8ea5df3921b0a"
+   },
+   {
+    "path": "verifier/probes/cg-manual-input-probe.mjs",
+    "bytes": 6686,
+    "sha256": "cc803a2d5402cb2141caf45cd37d54203fbe2933facbea17c2e56106d5ea516a"
+   },
+   {
+    "path": "verifier/probes/cg-preservation-diff.mjs",
+    "bytes": 4336,
+    "sha256": "e8b8472ca68688929164d2a7149e7f913ef73858459aaa5da4befb8401157279"
+   },
+   {
+    "path": "verifier/probes/cg-preview-daemon.mjs",
+    "bytes": 3261,
+    "sha256": "90596e81232b82c6274cae4982be28d85173e96f0e1e5e0cdaba370f72476fdb"
+   },
+   {
+    "path": "verifier/probes/cg-reset-matrix-probe.mjs",
+    "bytes": 7643,
+    "sha256": "e6470950b614947f34c6bb92cf3cebb013c88138c65116be186ef3c7c0038510"
+   },
+   {
+    "path": "verifier/probes/lib/captureProvenance.mjs",
+    "bytes": 6857,
+    "sha256": "22492552cb7b05b685ae6576d76bc3a0be434033a8874fe3ed279e255400c968"
+   },
+   {
+    "path": "verifier/probes/lib/cgContract.mjs",
+    "bytes": 3620,
+    "sha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551"
+   },
+   {
+    "path": "verifier/probes/lib/physicalPose.mjs",
+    "bytes": 15531,
+    "sha256": "a70e611f8eec484b3625e57ca54801ea17a5b0864fe0f0874a86231437cee236"
+   },
+   {
+    "path": "verifier/probes/lib/stallWatch.mjs",
+    "bytes": 11956,
+    "sha256": "681fd58b39ba6bf438912f0e2c2567a8431cdf1674b67ec757888d1a83591d3f"
+   }
+  ],
+  "tests": [
+   {
+    "path": "verifier/tests/cg008-midbeat-continue.repro.test.ts",
+    "bytes": 6161,
+    "sha256": "5ba15363f3173eadfac4378b3c9c62874cfe56b3c71c2ce962d81086f9830041"
+   },
+   {
+    "path": "verifier/tests/vitest.verifier.config.ts",
+    "bytes": 563,
+    "sha256": "b159c54e8f896cc66eaa96cbe1529d671ab98927b6e3ee63e1ca66e7b86bd811"
+   }
+  ]
+ }
+}

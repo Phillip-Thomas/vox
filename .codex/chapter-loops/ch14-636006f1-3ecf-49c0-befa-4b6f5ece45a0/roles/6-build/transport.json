@@ -1,0 +1,22 @@
+{
+  "exitCode": 0,
+  "signal": null,
+  "reason": null,
+  "bytes": 522368,
+  "pid": 3285474,
+  "usage": {
+    "roleLaunches": 0,
+    "modelTurns": 50,
+    "inputTokens": 127595,
+    "cacheReadTokens": 4332288,
+    "outputTokens": 29840
+  },
+  "session": "01a07ede-c209-7c41-a3ed-91a002108cb7",
+  "resolved": null,
+  "completed": true,
+  "failed": false,
+  "contextTokens": 0,
+  "reported": true,
+  "accounting": "Token usage arrives at turn completion; item count is a conservative work-step limit, not an exact API-call count.",
+  "requestedModel": "gpt-6-astra"
+}

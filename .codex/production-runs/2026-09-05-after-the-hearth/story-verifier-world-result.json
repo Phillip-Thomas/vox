@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 1010382,
+  "stop_reason": "end_turn",
+  "session_id": "77ef7283-eb8c-4b2f-8244-3f0489491890",
+  "total_cost_usd": 7.545700499999999,
+  "usage": {
+    "input_tokens": 156,
+    "cache_creation_input_tokens": 173048,
+    "cache_read_input_tokens": 7982233,
+    "output_tokens": 72749,
+    "output_tokens_details": {
+      "thinking_tokens": 13489
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 173048,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 3084,
+        "cache_read_input_tokens": 174202,
+        "cache_creation_input_tokens": 4270,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4270
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 4499,
+      "outputTokens": 20,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.004599000000000001,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 156,
+      "outputTokens": 72749,
+      "cacheReadInputTokens": 7982233,
+      "cacheCreationInputTokens": 173048,
+      "webSearchRequests": 0,
+      "costUSD": 7.541101499999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 13489,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 87,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Final control is `continue`, but every remaining commissioned test is gated behind the blocker, and I have two reproductions plus a decisive discriminator \u2014 further waiting would only re-measure the same freeze. Ending cleanly with evidence.\n\nCleanup hygiene: all my captures recorded post-`finally` receipts `state: stopped`, 1 stop invocation, no errors. The 16 surviving Chromium processes all carry `--user-data-dir=\u2026/paraform-managed-webgpu` (another owner's) \u2014 untouched. Root preview 1015147 still alive, HTTP 200.\n\n---\n\n**VERDICT: BLOCKED \u2014 chapter verification is NOT complete.** One new reproducible blocker prevents the survey route, and therefore every downstream commissioned test. Prior blocker VF3-FOOTING-1 is repaired; VF3-AVHOME-1 is improved but not closed.\n\n## Gate & identity (all independently checked before measuring)\n\n| Check | Result |\n|---|---|\n| Engineer finished / exit 0 / ready:true | PASS (12:19:37Z, ready 12:21:08Z) |\n| Contract scene-v2 + all three creative signatures | `4dbf722b\u2026ff88e`, unchanged |\n| Signed manifest (control=ready=gate-pass) | `d9e36ae3\u202696caf2` (manifest **file-bytes** SHA) |\n| Canonical ordered source-set hash | `8a1ef53d\u20265fea31` \u2014 a **different** identity, not interchangeable |\n| Working-tree drift | 97/97 byte-identical, **0 drift**; re-hashed again after build, still 0 |\n| `npm --prefix main run verify` | **EXIT=0**, 349 files / **3091 tests**, 12:22:06\u219212:23:06Z |\n| Preview `http://127.0.0.1:40131/` | title Paravoxia; index + bundle `index-D6fwfFv7.js` **byte-identical** to my dist (`cmp`), not just HTTP 200 |\n| Renderer | ANGLE / NVIDIA GB10 / OpenGL 4.5.0, headed \u2014 **hardware, no software fallback** |\n\n## Measurements\n\n| Item | Prior source `51b25376` | This source `d9e36ae3` |\n|---|---|---|\n| `supported` at survey site | **false** | **true** |\n| Survey phase after 150 s | `idle`/`awaiting-start` | `drawing` |\n| Recorded samples | **0** (200 real F attempts) | **4**, 32 once moving |\n| Home AV anchor ledger | hatch/lift only | `home-steady`\u2192`fault-reviewed`\u2192`hatch-boarded`\u2192`lift-committed` |\n| Survey walk | never started | **freezes at rail vertex 1**, 2/2 runs |\n\n**VF4-SURVEY-STALL-1 (new blocker).** Body bit-identical for 131.8 s at `[-26.0374755859375, 52.78897476196289, 13.833585739135742]` while the rail keeps publishing `action:\"walk\"`, target `[-26,51.05,14.6]`, `arriveRadius 0.35`, `railCursor 1`, `supported:true`, `holdReason:null`, beat clock advancing 16.3\u2192145.2 s. Opt-in stall predicate (true CG `walk` phase, 30 s) fired at 30041 ms, `playerMovedUnits 0`, exit 3, **no rescue**.\n\nDiscriminator with ordinary movement keys only: no-input 8 s \u2192 0.0009 units; `W` 1.2 s \u2192 **4.34** units, cursor 1\u21924, samples 4\u219211; and after input stopped the rail **resumed autonomously** (cursor 12\u219213). So it is the navigator issuing no controls, **not collision and not missing ground**. Both freeze poses sit inside 0.2 of snapped voxel centre `(-26,14)` (0.1706, 0.1485) while the target stays beyond 0.35 \u2014 consistent with root's `nextNavigationStep`/`steerFreeToward` deadzone candidate. I did not read the resolved waypoint, so the snapped endpoint is an **inference, not an observed navWaypoint claim**. I patched nothing.\n\n**Impact:** movie lane cannot self-complete the survey, so `ch13-common` is unreachable without a rescue \u2014 the zero-rescue full-story movie is blocked here.\n\n## Harness (run-local only, no game source touched)\n\nRoot's two commissioned corrections done and offline-tested: `assertFreshOutputDir` refuses **any** existing nonempty folder (incl. legacy, manifest-less) before mkdir/snapshot/trace; post-`finally` `cleanup-receipt.json` records the actual outcome while `summary.cleanup` is now labelled `pre-finally`. Gate **41/41** (was 26/26) plus **25/25** re-confirmed; non-vacuity proven by two reverted mutations (36/41 and 40/41), libraries restored byte-identical. Versions archived pre-edit/v2/v3 with SHA manifests.\n\n**I found and fixed a defect in my own harness:** `CG_DIAGNOSTIC_HOOKS` probed `.diagnostic()`/`.scoreDiagnostic()`, which the build does not define; the shipped surface is `window.__paravoxiaCommonGround.snapshot()`. A live recheck proved it answering all along. **Every earlier capture reported CG physical state as unavailable by harness defect** \u2014 those gaps are unmeasured-by-harness, not absent runtime state. No prior capture was altered.\n\n**Still-open harness gap:** `markerCount` sampled 0 while frame `survey-1/0009-\u2026png` plainly renders \"survey end \u00b7 demonstrate a route \u2013 15m\". Sampler mismatch \u2014 marker parity for the 28 anchors is **UNMEASURED, not failed**.\n\n## Not measured (gaps reported as gaps)\n\nEarly tests 3/4/5 (full route, valid WorldSave partial Continue, manual corner) \u2014 all blocked. Three cold chapters, station\u2192home\u2192ch13\u2192final, full movie, 19 objective lifecycles, 28 anchors, WorldSave/reference/occupancy limits, reset/variant matrix, handback budgets, FPS. **All audio: nothing was heard**; `score.mood` is runtime state only, and `noteAnchor` separately drives chapter music.\n\n## Artifacts\n\n- `/\u2026/2026-09-05-after-the-hearth/verifier-findings.json`, `verification-world-final-report.json`, `verifier-progress.md` (phases W4-A/B/C)\n- `verifier/logs/world-final/verify-world-final.log` (EXIT=0)\n- `verifier/captures/world-final/{smoke-home,smoke-home-v2,smoke-home-v3,survey-1,survey-2,stall-discriminator}`\n- `verifier/probes/scratch/{hook-recheck,stall-discriminator}.mjs`; `verifier/artifacts/world-final-harness-archive/`\n- Prior evidence preserved: `verifier-findings.prior-source-51b25376.json`, `\u2026-58f275f6.json`, all earlier captures unmodified\n\nRecommend routing **one** bounded integration pass for VF4-SURVEY-STALL-1; it must reproduce the freeze before any fix and must not relax arrival radius or route-credit predicates. I offer no scorecard, signature or acceptance judgment.",
+  "ttft_ms": 2241,
+  "type": "result",
+  "duration_ms": 1394193,
+  "uuid": "44c2af93-5528-4250-a393-bf43b0a21ba3",
+  "ttft_stream_ms": 1256,
+  "time_to_request_ms": 32,
+  "first_content_frame_ms": 1262,
+  "queued_turn_count": 0
+}

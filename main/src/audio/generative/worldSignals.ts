@@ -1,4 +1,5 @@
 import type { MusicScene } from '../musicDirector.ts';
+import type { BiomeId } from '../../game/data/biomes.ts';
 import type { VoxelRealityStage } from '../../game/systems/realityRenderSystem.ts';
 import { seededUnit } from '../../utils/worldCoordinates.ts';
 import {
@@ -18,6 +19,9 @@ import {
   ERA_FADE_WIDTH,
   ERA_MATERIAL,
   NIGHT_REGISTER_SINK,
+  OXYGEN_DENSITY_THIN,
+  OXYGEN_PAD_ROLLOFF,
+  OXYGEN_STRAIN_ONSET,
   PARADOX_TICK_RATIO,
   REGISTER_SHIFT_MAX,
   SHIMMER_MATERIAL_PORTION,
@@ -55,6 +59,8 @@ import {
 // this module is a pure function of the snapshot — testable without WebAudio.
 
 export interface BedSignals {
+  /** Profile blend, consumed at phrase boundaries for single-step mode weather. */
+  biomeWeights?: Partial<Record<BiomeId, number>>;
   // Rails (musicPrimitives) + reality.
   era: number;
   stage: VoxelRealityStage;
@@ -391,4 +397,32 @@ export function resolveMacroDrift(planetSeed: number, timeSec: number, daylight:
   );
   const textureLean = 0.5 + 0.5 * phase(DRIFT_TEXTURE_MIN, SALT_DRIFT_TEXTURE_PHASE);
   return { warmthBias, registerShift, textureLean };
+}
+
+// --- Oxygen under the dive (Stage 5 — the last dead mapping) ----------------------------------------
+
+export interface OxygenControls {
+  /** 0 with air to spare; → 1 as oxygen runs out UNDER WATER (dry land never strains). */
+  strain: number;
+  /** Multiplier on ostinato/sub-motif density (the tune thins as breath runs out). */
+  densityScale: number;
+  /** Multiplier on pad brightness (HF rolls off — the water closes over). */
+  padBrightnessScale: number;
+}
+
+/**
+ * Oxygen was carried in BedSignals and consumed nowhere. It is a DIVE signal:
+ * strain rises smoothly as oxygen falls below OXYGEN_STRAIN_ONSET, scaled by
+ * submergence so a low tank on dry land changes nothing. Pure, continuous
+ * (no bar-to-bar step larger than the signal's own), and identity when
+ * oxygen is full — every existing render is unchanged by construction.
+ */
+export function resolveOxygenControls(s: Pick<BedSignals, 'oxygen' | 'submergence'>): OxygenControls {
+  const low = smoothstep(0, OXYGEN_STRAIN_ONSET, OXYGEN_STRAIN_ONSET - clamp01(s.oxygen));
+  const strain = clamp01(low * clamp01(s.submergence));
+  return {
+    strain,
+    densityScale: 1 - OXYGEN_DENSITY_THIN * strain,
+    padBrightnessScale: 1 - OXYGEN_PAD_ROLLOFF * strain
+  };
 }

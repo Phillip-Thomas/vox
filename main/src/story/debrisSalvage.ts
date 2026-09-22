@@ -84,6 +84,18 @@ export function debrisSalvageComplete(): boolean {
   return collectedDebrisCount() >= getDebrisScattered();
 }
 
+/** Required quota receipts; optional physical debris retains its original lifecycle. */
+export function requiredDebrisSalvageComplete(): boolean {
+  return [0, 1, 2].every(isDebrisCollected);
+}
+
+export interface DebrisCollectionReceipt { index: number; receiptId: string }
+const receiptListeners = new Set<(receipt: DebrisCollectionReceipt) => void>();
+export function subscribeDebrisCollectionReceipt(listener: (receipt: DebrisCollectionReceipt) => void): () => void {
+  receiptListeners.add(listener);
+  return () => { receiptListeners.delete(listener); };
+}
+
 /** Walk-over collection: grants the piece's loot exactly once. */
 export function collectDebris(index: number): void {
   if (isDebrisCollected(index)) return;
@@ -92,6 +104,7 @@ export function collectDebris(index: number): void {
     addItem(loot.id, loot.qty);
   }
   playSfx('terminalKey');
+  for (const listener of receiptListeners) listener({ index, receiptId: `debris:${index}` });
 }
 
 // Live piece positions (registered by DebrisField for the autopilot's sweep).

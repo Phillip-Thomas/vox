@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 807522,
+  "stop_reason": "end_turn",
+  "session_id": "cd6cd506-df1b-45a4-b324-93c48559bf5e",
+  "total_cost_usd": 5.433014499999999,
+  "usage": {
+    "input_tokens": 122,
+    "cache_creation_input_tokens": 140064,
+    "cache_read_input_tokens": 4730353,
+    "output_tokens": 66589,
+    "output_tokens_details": {
+      "thinking_tokens": 11800
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 140064,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1187,
+        "cache_read_input_tokens": 139456,
+        "cache_creation_input_tokens": 4733,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4733
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1758,
+      "outputTokens": 21,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001863,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 122,
+      "outputTokens": 66589,
+      "cacheReadInputTokens": 4730353,
+      "cacheCreationInputTokens": 140064,
+      "webSearchRequests": 0,
+      "costUSD": 5.4311514999999995,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 11800,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 63,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Both changes are in, tested offline, and reported. Final state:\n\n## What I changed (run-local verifier probes only)\n\n**1. Pre-capture source snapshot** \u2014 new `verifier/probes/lib/sourceSnapshot.mjs`, wired into both probes. After the output folder is created but *before* the trace is truncated and before any browser opens, each probe writes `<outDir>/source-snapshot/{manifest.json, files/<repo-rel-path>}`: byte-exact copies of itself, its real local libs, and the read-only repo helpers it imports (discovered by parsing actual import statements \u2014 11 files for the journey probe, including `main/tools/lib/evidence.mjs` and its own imports; no `node_modules`, no game source). Each entry keeps the repo-relative path *and* the original absolute path. `manifestSha256` covers only path/hash/size, so it's deterministic across clocks. The ref is bound into `summary.json` (next to `probeSha256`, plus `probeSha256Reconstructable`) and a `kind:\"source-snapshot\"` trace line. An existing snapshot is a hard refusal \u2014 raised before the trace is truncated, so a re-run can't clobber an earlier capture. Old captures were not touched and are explicitly not claimed to have this.\n\n**2. Guaranteed owned-session cleanup** \u2014 new `verifier/probes/lib/ownedSession.mjs`; both probes adopt the session they open and wrap the measuring body in `try/catch/finally`. `stopOnce()` invokes that session's own `stop()` at most once; the catch writes `failure.json` + a `probe-failure` trace line and **re-throws the original error**; the journey probe's stall exit 3 now happens *after* cleanup, unchanged. No preview stop, no process kill, no signals; a cleanup failure is recorded but never replaces the real one.\n\n## Tests (offline, cwd `verifier/probes`, all exit 0)\n\nExisting `cg-harness-selftest` **25/25** (file unchanged), new `cg-harness-prep-selftest` **28/28**, both probe `--self-test` gates, `node --check` on all six touched files. The new suite uses stub sessions and deliberate thrown capture/summary/checkpoint errors. I confirmed the tests aren't vacuous by two temporary mutations (non-idempotent cleanup \u2192 A5/A6 fail; overwrite allowed \u2192 B7 fails), reverted from exact byte backups and re-hashed identical.\n\n## Honest limits\n\nNo browser, preview, GPU, build, game test or network was used. \"Cleanup runs exactly once\" means the harness control flow invokes `stop()` once \u2014 **no real browser process was observed to exit**. The probes' own try/finally is covered by a static structure check plus behavioural tests of the helpers they call.\n\nTwo things reported, not acted on: the archived dry-run snapshot legitimately shows drift on one file (my later one-line edit \u2014 the detector working, kept rather than rewritten), and the interim report's open blockers plus the inbox concern about `cg008-midbeat-continue.repro.test.ts` seeding non-constant milestone strings.\n\nDeliverables: `harness-final-prep-report.json` (`c65596b6\u2026`), `harness-final-prep-report.md` (`d4de680b\u2026`), `harness-final-prep-progress.md`, pre-edit archive under `verifier/artifacts/harness-final-prep-archive/`, logs under `verifier/logs/harness-final-prep/`. The probes are ready for the next independent verifier; I'm ending here.",
+  "ttft_ms": 1795,
+  "type": "result",
+  "duration_ms": 811278,
+  "uuid": "93e7f99e-4fc2-4741-a4d4-d01b8d3ebe7d",
+  "ttft_stream_ms": 794,
+  "time_to_request_ms": 20,
+  "first_content_frame_ms": 794,
+  "queued_turn_count": 0
+}

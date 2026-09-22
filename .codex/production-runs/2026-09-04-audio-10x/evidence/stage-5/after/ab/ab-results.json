@@ -1,0 +1,256 @@
+{
+  "rows": [
+    {
+      "name": "bed-sandbox-day",
+      "seconds": 210,
+      "before": {
+        "I": -20.36,
+        "sMax": -17.9,
+        "sAt": 131.1,
+        "TP": -9.02,
+        "LRA": 3.71,
+        "composedSpread": 2.72
+      },
+      "after": {
+        "I": -20.1,
+        "sMax": -14.83,
+        "sAt": 78.3,
+        "TP": -5.11,
+        "LRA": 7.77,
+        "composedSpread": 7.35
+      },
+      "smoothnessViolations": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    {
+      "name": "bed-sandbox-night",
+      "seconds": 210,
+      "before": {
+        "I": -20.39,
+        "sMax": -18.04,
+        "sAt": 123.7,
+        "TP": -8.03,
+        "LRA": 3.36,
+        "composedSpread": 2.71
+      },
+      "after": {
+        "I": -20.27,
+        "sMax": -14.7,
+        "sAt": 77.7,
+        "TP": -5.89,
+        "LRA": 8.11,
+        "composedSpread": 7.53
+      },
+      "smoothnessViolations": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    {
+      "name": "bed-contrast-A",
+      "seconds": 210,
+      "before": {
+        "I": -20.39,
+        "sMax": -16.59,
+        "sAt": 45,
+        "TP": -8.22,
+        "LRA": 3.77,
+        "composedSpread": 4.39
+      },
+      "after": {
+        "I": -19.97,
+        "sMax": -14.06,
+        "sAt": 45,
+        "TP": -4.87,
+        "LRA": 5.35,
+        "composedSpread": 8.43
+      },
+      "smoothnessViolations": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    {
+      "name": "bed-contrast-B",
+      "seconds": 210,
+      "before": {
+        "I": -20.96,
+        "sMax": -18.79,
+        "sAt": 169.7,
+        "TP": -9.13,
+        "LRA": 5.27,
+        "composedSpread": 2.29
+      },
+      "after": {
+        "I": -19.57,
+        "sMax": -14.8,
+        "sAt": 72.4,
+        "TP": -5.3,
+        "LRA": 3.95,
+        "composedSpread": 6.94
+      },
+      "smoothnessViolations": {
+        "before": 0,
+        "after": 0
+      }
+    }
+  ],
+  "verdicts": [
+    {
+      "id": "bloom.smax.bed-sandbox-day",
+      "term": "bed-sandbox-day BLOOM short-term max",
+      "target": "-14 ±1 LU",
+      "measured": "-14.83 LU at 78.3s",
+      "met": true
+    },
+    {
+      "id": "bed.lufs.bed-sandbox-day",
+      "term": "bed-sandbox-day bed-alone integrated",
+      "target": "-20.5 ±1 LU",
+      "measured": "-20.1 LU",
+      "met": true
+    },
+    {
+      "id": "bed.tp.bed-sandbox-day",
+      "term": "bed-sandbox-day true peak",
+      "target": "≤ -1 dBTP",
+      "measured": "-5.11 dBTP",
+      "met": true
+    },
+    {
+      "id": "bed.spread.bed-sandbox-day",
+      "term": "bed-sandbox-day composedSpread (pre-tail S-max − I)",
+      "target": "rises from ≈2.5 toward 6.5 LU",
+      "measured": "2.72 → 7.35 LU",
+      "met": true
+    },
+    {
+      "id": "bed.smooth.bed-sandbox-day",
+      "term": "bed-sandbox-day smoothness violations",
+      "target": "0",
+      "measured": "0",
+      "met": true
+    },
+    {
+      "id": "bloom.smax.bed-sandbox-night",
+      "term": "bed-sandbox-night BLOOM short-term max",
+      "target": "-14 ±1 LU",
+      "measured": "-14.7 LU at 77.7s",
+      "met": true
+    },
+    {
+      "id": "bed.lufs.bed-sandbox-night",
+      "term": "bed-sandbox-night bed-alone integrated",
+      "target": "-20.5 ±1 LU",
+      "measured": "-20.27 LU",
+      "met": true
+    },
+    {
+      "id": "bed.tp.bed-sandbox-night",
+      "term": "bed-sandbox-night true peak",
+      "target": "≤ -1 dBTP",
+      "measured": "-5.89 dBTP",
+      "met": true
+    },
+    {
+      "id": "bed.spread.bed-sandbox-night",
+      "term": "bed-sandbox-night composedSpread (pre-tail S-max − I)",
+      "target": "rises from ≈2.5 toward 6.5 LU",
+      "measured": "2.71 → 7.53 LU",
+      "met": true
+    },
+    {
+      "id": "bed.smooth.bed-sandbox-night",
+      "term": "bed-sandbox-night smoothness violations",
+      "target": "0",
+      "measured": "0",
+      "met": true
+    },
+    {
+      "id": "bloom.smax.bed-contrast-A",
+      "term": "bed-contrast-A BLOOM short-term max",
+      "target": "-14 ±1 LU",
+      "measured": "-14.06 LU at 45s",
+      "met": true
+    },
+    {
+      "id": "bed.lufs.bed-contrast-A",
+      "term": "bed-contrast-A bed-alone integrated",
+      "target": "-20.5 ±1 LU",
+      "measured": "-19.97 LU",
+      "met": true
+    },
+    {
+      "id": "bed.tp.bed-contrast-A",
+      "term": "bed-contrast-A true peak",
+      "target": "≤ -1 dBTP",
+      "measured": "-4.87 dBTP",
+      "met": true
+    },
+    {
+      "id": "bed.spread.bed-contrast-A",
+      "term": "bed-contrast-A composedSpread (pre-tail S-max − I)",
+      "target": "rises from ≈2.5 toward 6.5 LU",
+      "measured": "4.39 → 8.43 LU",
+      "met": true
+    },
+    {
+      "id": "bed.smooth.bed-contrast-A",
+      "term": "bed-contrast-A smoothness violations",
+      "target": "0",
+      "measured": "0",
+      "met": true
+    },
+    {
+      "id": "bloom.smax.bed-contrast-B",
+      "term": "bed-contrast-B BLOOM short-term max",
+      "target": "-14 ±1 LU",
+      "measured": "-14.8 LU at 72.4s",
+      "met": true
+    },
+    {
+      "id": "bed.lufs.bed-contrast-B",
+      "term": "bed-contrast-B bed-alone integrated",
+      "target": "-20.5 ±1 LU",
+      "measured": "-19.57 LU",
+      "met": true
+    },
+    {
+      "id": "bed.tp.bed-contrast-B",
+      "term": "bed-contrast-B true peak",
+      "target": "≤ -1 dBTP",
+      "measured": "-5.3 dBTP",
+      "met": true
+    },
+    {
+      "id": "bed.spread.bed-contrast-B",
+      "term": "bed-contrast-B composedSpread (pre-tail S-max − I)",
+      "target": "rises from ≈2.5 toward 6.5 LU",
+      "measured": "2.29 → 6.94 LU",
+      "met": true
+    },
+    {
+      "id": "bed.smooth.bed-contrast-B",
+      "term": "bed-contrast-B smoothness violations",
+      "target": "0",
+      "measured": "0",
+      "met": true
+    },
+    {
+      "id": "chip.hash.bare-bed",
+      "term": "bare-bed fingerprint unchanged (pulse/rail gated above material); pcm d713e7fa→72e39cc8 informational",
+      "target": "0249349aa58b6d5b",
+      "measured": "0249349aa58b6d5b",
+      "met": true
+    },
+    {
+      "id": "chip.hash.color-bed",
+      "term": "color-bed fingerprint unchanged (pulse/rail gated above material); pcm ad732275→a86cfe90 informational",
+      "target": "6a81f00121858af8",
+      "measured": "6a81f00121858af8",
+      "met": true
+    }
+  ]
+}

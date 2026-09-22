@@ -1,0 +1,7 @@
+{
+  "at": "2026-09-09T04:55:24.055402+00:00",
+  "probePid": 333577,
+  "browserPid": 333588,
+  "reason": "Different diagnostic landing produces no-safe-route for recommended site; preserve separately from original harvest-location stall. Retire GPU job and use captured ordinary save for local reproduction/forward discovery.",
+  "stopMethod": "Owned Node probe SIGTERM; direct snap-browser SIGTERM denied by local process policy. Check browser exit separately."
+}

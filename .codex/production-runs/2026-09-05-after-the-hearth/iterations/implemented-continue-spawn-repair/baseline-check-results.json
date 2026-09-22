@@ -1,0 +1,86 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "compiledAt": "2026-09-06T21:21:11.183379+00:00",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "productionScope": {
+    "status": "passed",
+    "evidenceRefs": [
+      "implementation.diff",
+      "implementation-source-manifest.json",
+      "production-lock.json",
+      "producer-boundary-completion.json",
+      "producer-concurrent-validation-tooling-review.json"
+    ]
+  },
+  "creativeContract": {
+    "status": "passed",
+    "evidenceRefs": [
+      "contract-gate-pass.json",
+      "scene-v3-contract-gate.log",
+      "final-contract-gate-pass.json",
+      "scene-v3-final-contract-gate.log",
+      "director-signoffs.json"
+    ]
+  },
+  "typecheck": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/manual-credit-finale-verifier/typecheck.log"
+    ]
+  },
+  "tests": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/integration-manual-credit-finale-frontier/focused-tests.log"
+    ]
+  },
+  "build": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/manual-credit-finale-verifier/build.log"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npm run typecheck",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/manual-credit-finale-verifier/typecheck.log",
+      "evidenceSha256": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af",
+      "startedAt": "2026-09-06T21:20:16Z",
+      "finishedAt": "2026-09-06T21:20:23Z"
+    },
+    {
+      "command": "npm run build",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/manual-credit-finale-verifier/build.log",
+      "evidenceSha256": "5d8a38ad1a500e2517f71f276ca42d945ac5f7f377dea915cfa4630bc02129be",
+      "startedAt": "2026-09-06T21:20:28Z",
+      "finishedAt": "2026-09-06T21:20:35Z"
+    },
+    {
+      "command": "npx vitest run src/story/StoryDirectorDriver.test.tsx src/story/commonGroundRoute.test.ts src/story/commonGroundDirector.test.ts src/story/commonGroundScore.test.ts src/story/storyDirector.test.ts --reporter=verbose",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/integration-manual-credit-finale-frontier/focused-tests.log",
+      "evidenceSha256": "f71a5d150781b9d3818a36a1feb638de2ced890dbbb3b037311673e53b01da99",
+      "result": "254 tests / 5 files passed; focused only"
+    }
+  ],
+  "scope": "Independent candidate typecheck/build and engineer focused254tests. Runtime and one stable fullverify pending; no chapter acceptance.",
+  "externalSourceChanges": {
+    "reviewRef": "producer-concurrent-validation-tooling-review.json",
+    "reviewSha256": "61c6095b0abaeb21ce189a3658826220aab6086365766e6a93331fb60cb420da",
+    "hashes": {
+      "main/tools/creative-triad-gate.mjs": "23b347b7d7f8ae67c87d3e0eff14baf80d6e9e80cb2255bff81bc91a555e66bf"
+    }
+  }
+}

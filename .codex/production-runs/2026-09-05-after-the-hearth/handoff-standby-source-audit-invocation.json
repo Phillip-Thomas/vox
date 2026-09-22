@@ -1,0 +1,16 @@
+{
+  "role": "handoff-standby-source-auditor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T15:25:00.544091+00:00",
+  "commissionSha256": "ed8a59c68e2b369082f0b9da53204b18416bab3c6fa252c95fd41dfffb3ecf57",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "sourceFilesRehashedBefore": 98,
+  "scope": "Read-only causal source diagnosis for measured return handoff reset and standby physical target; no game edits, GPU or acceptance",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T15:33:20.815485+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "06ec2502-1afa-4a76-bc0e-b9ff3f23ffa3",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 98
+}

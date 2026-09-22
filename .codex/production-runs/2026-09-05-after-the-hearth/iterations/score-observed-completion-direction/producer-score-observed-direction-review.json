@@ -1,0 +1,12 @@
+{
+  "schema": "paravoxia.producerDirectionReview.v1",
+  "at": "2026-09-06T20:36:40.521710+00:00",
+  "directionRef": "score-observed-completion-direction.json",
+  "directionSha256": "634bffcbeb8f446424387cce1c6ed4f766c4bf350d5a4c64ae0fdb1ca0d73586",
+  "acceptedForBoundedRepair": true,
+  "contractChangeRequired": false,
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "dynamicSoleCallerProved": false,
+  "audibleVerdict": false,
+  "basis": "Observed actual completion active=false makes existing foreground predicate false and unconditional suspension conflicts with signed normal-done exception. Reuse Score direction; preserve actual cancellations and immediate controls. No forced attack or duration minimum."
+}

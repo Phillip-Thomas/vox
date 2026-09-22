@@ -1,0 +1,86 @@
+{
+  "schema": "paravoxia.verifier.arrivalCommonShortProbe.pin.v1",
+  "role": "arrival-common-short-runtime",
+  "pinnedAtUtc": "2026-09-06T00:00:00+00:00",
+  "status": "PREPARED-NOT-RUN",
+  "why": "This lane owns verifier/probes/arrival-common-short/ only. Concurrent roles may edit verifier/probes/lib/* and the arrival-common-manual helpers while this lane waits for release, so it imports ONLY bytes it owns. The originals were NOT edited; their hashes are recorded so drift is detectable and REPORTABLE without this role fixing or hiding it.",
+  "pins": [
+    {
+      "pinned": "verifier/probes/arrival-common-short/cgContract.pinned.mjs",
+      "copiedFrom": "verifier/probes/arrival-common-manual/cgContract.pinned.mjs",
+      "alsoIdenticalTo": "verifier/probes/lib/cgContract.mjs",
+      "sourceSha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+      "pinnedSha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+      "byteIdentical": true,
+      "usedFor": "RUN_DIR / REPO_ROOT / ART path resolution ONLY. Its loadContract() is NOT used: it pins the scene-v2 signature, and this lane reads the CURRENT scene-v3 bytes and compares them to the recorded scene-v3 sha itself.",
+      "depthNote": "placed at the SAME directory depth as verifier/probes/lib/* so the RUN_DIR/REPO_ROOT resolution is unchanged"
+    },
+    {
+      "pinned": "verifier/probes/arrival-common-short/ownedSession.pinned.mjs",
+      "copiedFrom": "verifier/probes/arrival-common-manual/ownedSession.pinned.mjs",
+      "alsoIdenticalTo": "verifier/probes/lib/ownedSession.mjs",
+      "sourceSha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "pinnedSha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "byteIdentical": true,
+      "usedFor": "one owned browser lifetime, try/finally cleanup and the POST-FINALLY cleanup receipt"
+    },
+    {
+      "pinned": "verifier/probes/arrival-common-short/sourceSnapshot.pinned.mjs",
+      "copiedFrom": "verifier/probes/arrival-common-manual/sourceSnapshot.pinned.mjs",
+      "alsoIdenticalTo": "verifier/probes/lib/sourceSnapshot.mjs",
+      "sourceSha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "pinnedSha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "byteIdentical": true,
+      "usedFor": "nonempty-output refusal and the probe/library source snapshot written into every capture"
+    },
+    {
+      "pinned": "verifier/probes/arrival-common-short/commonPassageLogic.mjs",
+      "copiedFrom": "verifier/probes/arrival-common-manual/commonPassageLogic.mjs",
+      "sourceSha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+      "pinnedSha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+      "byteIdentical": true,
+      "usedFor": "heavyLockOwnership (inherited EXCLUSIVE flock receipt), fetchServedIdentity, previewBindingDecision, preflightDecision, identityVerdict, mayPressF/promptOffersF, calibrated walking helpers"
+    },
+    {
+      "pinned": "verifier/probes/arrival-common-short/entryObservation.mjs",
+      "copiedFrom": "verifier/probes/arrival-common-manual/entryObservation.mjs",
+      "sourceSha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+      "pinnedSha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+      "byteIdentical": true,
+      "usedFor": "the SAFE PASSIVE Window/Document input observer and passive console/pageerror sinks. It requests nothing, cancels nothing, forces no click and never calls requestPointerLock. Its failure is an instrumentation limitation, never a gameplay failure."
+    }
+  ],
+  "ownedNewFiles": [
+    "verifier/probes/arrival-common-short/shortSurveyLogic.mjs",
+    "verifier/probes/arrival-common-short/short-survey-probe.mjs",
+    "verifier/probes/arrival-common-short/selftest.mjs",
+    "verifier/probes/arrival-common-short/pin.json"
+  ],
+  "unpinnedDependency": {
+    "path": "main/tools/lib/evidence.mjs",
+    "sha256AtPrep": "1997cf2a3e9db88ae6e1e474b76232a2589c78a58fe69a579b493b44e5aa5328",
+    "why": "Deliberately NOT copied: it transitively imports sibling main tooling (previewServer.mjs with the mandatory assertHardwareGl check, pixel-laws.mjs) whose relative paths a copy would break. Its hash is recorded so drift is detectable; it is read-only shared tooling and this role does not edit it."
+  },
+  "quotedSources": {
+    "main/src/story/commonGroundState.ts": "7a3c03fb73cb715116ddbf1952fc2c312f52d1dac68b765b8097f4becdb0452e",
+    "main/src/story/commonGroundRoute.ts": "6025bc4c55098bb3bffc54dd04134fa3b666ef71361e22bba1a9b3fad7a1f1ff",
+    "main/src/story/commonGroundDirector.ts": "3b2b95ccd1701b863348e147a8181a704c2ed73258467ea98617e06f0f25aba3",
+    "main/src/story/commonGroundRoute.test.ts": "69e1760a1e2296b363af1dea7a7efe7bdde72044e0cf4449cee0bbee28e29f88"
+  },
+  "runFacts": {
+    "implementationSourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sceneContractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+    "sceneContractVersion": "scene-v3",
+    "sceneContractStatus": "frozen",
+    "verifierControlActiveRoleAtPrep": "arrival-common-verifier",
+    "requiredActiveRoleToRun": "arrival-common-short-runtime",
+    "heavyLock": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock (EXCLUSIVE flock, inherited on fd 9; this probe never opens or acquires it)"
+  },
+  "preservedOriginals": {
+    "note": "No original probe was edited, moved or deleted by this preparation. Hashes recorded before and after are in logs/arrival-common-short-prep/.",
+    "verifier/probes/manual-focused/manual-witness-hold-probe.mjs": "fffd3fa70e4e065d6fe0a592c42436ecf46fb35692d265ff30e09df69901aac8",
+    "verifier/probes/manual-focused/manual-witness-clearance-probe.mjs": "24af20e07eaf1f5d59e22ba6f8b40d03a85d21f961630dd28d360b37e328ae3c",
+    "verifier/probes/cg-journey-probe.mjs": "af35801e5e7a231ece902fc1d28f78ca8cde380a192bec329606362d70572c41",
+    "verifier/probes/arrival-common-manual/common-passage-probe.mjs": "3eafe3960d87a44caf1292be72b24ad06e878f81abe1e492875fad84b05f7cf9"
+  }
+}

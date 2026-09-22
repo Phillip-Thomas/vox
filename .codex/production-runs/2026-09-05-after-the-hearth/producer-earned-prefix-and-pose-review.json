@@ -1,0 +1,16 @@
+{
+  "schema": "paravoxia.producer.evidenceReview.v1",
+  "reviewedAt": "2026-09-06T19:45:33.177632+00:00",
+  "isAcceptance": false,
+  "savedRef": "verifier/captures/arrival-common-earned/earned-1/worldsave-pvx.v1.world.-1_-1.json",
+  "savedSha256": "4d1bdd7a89c2c79258e04cdf3c9d8629c161d357a2d7d659424316c32f304f62",
+  "afterContinueRef": "verifier/captures/arrival-common-earned/earned-1/worldsave-after-continue-pvx.v1.world.-1_-1.json",
+  "afterContinueSha256": "cb7778e06d712adba444d1a32ec80b0cffa8dd3a96528f15e1b2198843723456",
+  "savedWorkingSampleCount": 18,
+  "afterContinueWorkingSampleCount": 19,
+  "savedPrefixExactlyEqual": true,
+  "qualifiedPriorSummary": "The explicit first serialized WorldSave contains18points, not19. The later snapshot contains19; all18original points/fields match exactly. Additional sample is observed, not inferred loss.",
+  "poseGap": "Player pose persists separately at pvx.v1.world.-1,-1.player via persistence.ts savePlayerPose/loadPlayerPose. Existing capture lists this key but does not retain its bytes. GlobalSave/WorldSave lack a pose field because pose has its own key. EfficientScene.tsx loads that pose for ch13 then validates dry clearance or falls back. Actual saved position and branch are not observed.",
+  "newActionProved": false,
+  "next": "Preserve source; a bounded Continue probe correction must capture actual separate pose bytes before/after navigation and use 3D/tangent-aware actual movement. Planar XZ movement failure on +Xface does not establish a game restore failure."
+}

@@ -1,0 +1,16 @@
+{
+  "role": "continue-pose-handoff-runtime",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T22:52:41.608430+00:00",
+  "commissionSha256": "bb8c9df1d6148a962d2e9251c6a9d894bdcbbd45f1b1c2b0af03e6db01239387",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "sourceFilesRehashedBefore": 100,
+  "scope": "Finish bounded private Continue pose observation and capture actual selector and physical writer; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T22:59:24.854779+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "3ccec08c-6f1b-419b-8c3d-4c8f1907f573",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 100
+}

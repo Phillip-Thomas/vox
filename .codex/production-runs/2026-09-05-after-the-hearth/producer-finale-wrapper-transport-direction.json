@@ -1,0 +1,26 @@
+{
+  "schema": "paravoxia.producer.probeClosureDirection.v1",
+  "at": "2026-09-06T19:45:33.177632+00:00",
+  "sourceMutationAuthorized": false,
+  "privateFixAuthorized": true,
+  "codeRef": "verifier/probes/finale-window/finale-window-runtime.mjs",
+  "blockers": [
+    {
+      "line": 184,
+      "finding": "spawn stdio only0/1/2 closes inheritedFD9, but child finale probe requires --heavy-lock-fd9. Preserve explicit owned lock descriptor in actual spawn."
+    },
+    {
+      "line": 209,
+      "finding": "pactl list sink-inputs Sink is numericindex, but verifySinkOwnership called with sinkIndex:null; name string never matches real stream. Resolve exact newly created sink index through pactl short sinks and match name+index."
+    },
+    {
+      "line": 239,
+      "finding": "Probe scoped inside try; timeout/ownership failure finally stops recorder/sink but never stops/waits owned probe/browser. Own child from launch through finally; cooperative/actual termination and post-finally cleanup receipts before releasing lock."
+    },
+    {
+      "line": 238,
+      "finding": "session deadline begins after up to120s PID+90s ownership wait, exceeding claimed360s whole bound. Use one absolute deadline from session start."
+    }
+  ],
+  "additionalAccuracy": "Header incorrectly says recorder starts before browser; code starts after ownership. Bind actual audio recording interval to sample wallclock and require coverage of3s before/11.5s afteredge rather than guessed73.5s whole duration. Abort/retain incomplete evidence honestly. No silent recording from another sink."
+}

@@ -1,0 +1,304 @@
+{
+  "schema": "paravoxia.verifier.harnessFinalPrepReport.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "role": "verifier-harness-final-preparer",
+  "startedAt": "2026-09-06T12:03:16Z",
+  "finishedAt": "2026-09-06T12:16:20Z",
+  "isAcceptance": false,
+  "isChapterVerification": false,
+  "kind": "MECHANICAL HARNESS PREPARATION \u2014 two bounded run-local changes, offline only",
+  "scopeHonesty": {
+    "browserRun": false,
+    "previewStartedOrStopped": false,
+    "gpuUsed": false,
+    "gameBuildOrTestsRun": false,
+    "networkUsed": false,
+    "gameSourceEdited": false,
+    "oldCapturesEdited": false,
+    "rootOwnedFilesEdited": false,
+    "note": "No browser was opened and no capture was taken. Nothing in this report is evidence about the game, the renderer, the preview at 127.0.0.1:45091, or any chapter outcome."
+  },
+  "changes": [
+    {
+      "id": 1,
+      "title": "Pre-capture exact source snapshot + SHA256 manifest in the capture's own folder",
+      "what": "Before a capture starts (after the output folder is created, before the trace is truncated and before the browser opens), each probe copies byte-exact source of itself, its real local library imports, and the read-only repo probe helpers it imports, into <outDir>/source-snapshot/, with manifest.json holding per-file sha256, repo-relative path and the original absolute path. The manifest hash/ref is bound into summary.json and into a kind:'source-snapshot' trace line.",
+      "why": "probeSha256 in a summary names bytes that stop existing once the harness is edited again. The snapshot makes a historical probeSha256 reconstructable from the capture itself.",
+      "appliesTo": "FUTURE captures only",
+      "doesNotClaim": "Existing captures in verifier/captures/ have no snapshot, were not modified, and are not retroactively described as having this feature.",
+      "safety": [
+        "Only executable source reachable from the probe's own import graph is copied.",
+        "Bare/package specifiers and node_modules are recorded as externalSpecifiers, never copied.",
+        "No credentials, .env, config secrets or whole-workspace copies; a .env sibling outside the import graph is not read and is covered by test B3.",
+        "An existing snapshot manifest in the same folder is a hard error, so an earlier capture directory can never be overwritten or clobbered."
+      ],
+      "determinism": "manifestSha256 covers only the path/sha256/bytes list ordered by path \u2014 no timestamps, no absolute paths \u2014 so identical bytes give an identical hash and one changed byte changes it."
+    },
+    {
+      "id": 2,
+      "title": "Guaranteed cleanup of the probe-owned browser session on any failure",
+      "what": "Both probes adopt the session they open into a guard and wrap the measuring body in try/catch/finally. The finally calls guard.stopOnce(), which invokes the session's own stop() at most once. A failure writes failure.json plus a probe-failure trace line and is RE-THROWN unchanged.",
+      "why": "Both probes previously ended with `await session.stop()` as the last top-level statement, so any throw before it leaked the probe's Chromium. cg-footing-diag hit exactly that at `frameStats(...).catch` (frameStats is synchronous). That TypeError was already corrected before this task; the structural hole is what is now closed for the next failure.",
+      "safety": [
+        "Stops only the session this probe opened; the root-owned preview is never stopped (the probes pass preview:{url, stop(){}} and nothing here reaches past session.stop).",
+        "No process killing, no signals, no global browser shutdown.",
+        "A cleanup failure is recorded on the guard and logged; it never replaces or hides the original error.",
+        "The journey probe's stall FAIL exit code 3 is unchanged: it now sets an exit code and exits AFTER cleanup instead of exiting before it."
+      ],
+      "outcomeSemanticsPreserved": "outcome values, outcomeIsAcceptance:false, stop predicates, checkpoint handling, per-frame/pair provenance, luma visualAcceptance:false, renderer/build/source provenance and the stall predicate are untouched. A crashed capture is PROBE-ERROR-INCONCLUSIVE and never a pass."
+    }
+  ],
+  "unchangedByDesign": [
+    "physical pose selection (lib/physicalPose.mjs)",
+    "stall threshold and stall predicate (lib/stallWatch.mjs)",
+    "capture provenance semantics (lib/captureProvenance.mjs)",
+    "gameplay controls, markers, interaction semantics, score",
+    "game source, game tests, root contracts/gates/readiness/control/inboxes/ledgers",
+    "all existing captures, snapshots and prior reports"
+  ],
+  "files": [
+    {
+      "path": "verifier/probes/lib/sourceSnapshot.mjs",
+      "status": "new",
+      "sha256Before": null,
+      "sha256After": "f01e2d88b655cbdf91b014d4c5f732f87c5dbf377a49dde109c4e92f7b5f7205",
+      "bytes": 12729
+    },
+    {
+      "path": "verifier/probes/lib/ownedSession.mjs",
+      "status": "new",
+      "sha256Before": null,
+      "sha256After": "a692bd6c7f27e55eae918d1f83bd7ae57d1db4811318aa31e4c22ae2648d4cf0",
+      "bytes": 6519
+    },
+    {
+      "path": "verifier/probes/cg-harness-prep-selftest.mjs",
+      "status": "new",
+      "sha256Before": null,
+      "sha256After": "998f4d8612b72d73116a2ffd69f01ef9f115fd03a1d7fd1e58e92b5b119df49f",
+      "bytes": 28193
+    },
+    {
+      "path": "verifier/probes/cg-journey-probe.mjs",
+      "status": "modified",
+      "sha256Before": "d5e789ee1018106afc7de6b462157054614e165d0f329bc78704e40d942ab6f7",
+      "sha256After": "87d4985a4dc4f40d6078f1c24a211294174e522f880409fd53b5b0a76d90783e",
+      "bytes": 51266,
+      "edits": [
+        "import REPO_ROOT, sourceSnapshot and ownedSession helpers",
+        "write the pre-capture snapshot and a source-snapshot trace line before the trace is truncated",
+        "bind sourceSnapshot into both the pre-browser checkpoint summary and the main summary, plus probeSha256Reconstructable and cleanup",
+        "adopt the opened session into the guard; try/catch/finally around the measuring body; failure.json + probe-failure trace line; original error re-thrown",
+        "stall FAIL exit 3 moved after cleanup via an exit code",
+        "--self-test now also runs cg-harness-prep-selftest.mjs so it remains the single pre-session gate",
+        "the measuring body was re-indented by two spaces to sit inside the try; `diff -w` against the pre-edit archive shows only the added lines"
+      ]
+    },
+    {
+      "path": "verifier/probes/cg-footing-diag.mjs",
+      "status": "modified",
+      "sha256Before": "e26fbb0f096b58f9e95eba978b86d2f9eb25d5b4f2bd236e3c5767a1e30bacc0",
+      "sha256After": "3f23bb3ef4dbb6e1b75e457cf8ded1c48ae95c907828ffd991cf7c7c3dc5fb7b",
+      "bytes": 16760,
+      "edits": [
+        "same snapshot wiring, trace line and summary binding as the journey probe",
+        "session adopted into the guard; try/catch/finally around the measuring body; failure.json + probe-failure trace line; original error re-thrown",
+        "no change to the cell arithmetic, the classifier, the jump sweep or the verdict vocabulary"
+      ]
+    },
+    {
+      "path": "harness-final-prep-progress.md",
+      "status": "new",
+      "sha256Before": null,
+      "sha256After": "c2bb7c65b6252f3c1cb8fbeaad1e9421d2773d1105679fe261231f190625faa3",
+      "bytes": 4275
+    },
+    {
+      "path": "verifier/artifacts/harness-final-prep-archive/pre-edit-2026-09-06T120510Z/",
+      "status": "new (pre-edit exact byte archive)",
+      "sha256Before": null,
+      "sha256After": "see pre-edit-2026-09-06T120510Z.sha256",
+      "contents": [
+        "probes/cg-footing-diag.mjs e26fbb0f096b58f9e95eba978b86d2f9eb25d5b4f2bd236e3c5767a1e30bacc0",
+        "probes/cg-harness-selftest.mjs 5f0b88831199d8d5efc088df887d9f717da0d16cfad58df49d5a1a6f67e77d71",
+        "probes/cg-journey-probe.mjs d5e789ee1018106afc7de6b462157054614e165d0f329bc78704e40d942ab6f7",
+        "probes/lib/captureProvenance.mjs 22492552cb7b05b685ae6576d76bc3a0be434033a8874fe3ed279e255400c968",
+        "probes/lib/cgContract.mjs 5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+        "probes/lib/physicalPose.mjs a70e611f8eec484b3625e57ca54801ea17a5b0864fe0f0874a86231437cee236",
+        "probes/lib/stallWatch.mjs 681fd58b39ba6bf438912f0e2c2567a8431cdf1674b67ec757888d1a83591d3f"
+      ]
+    },
+    {
+      "path": "verifier/artifacts/harness-final-prep-archive/pre-edit-2026-09-06T120510Z.sha256",
+      "status": "new",
+      "sha256Before": null,
+      "sha256After": "38545236db70dc4c719c5a1ad04451e85b322bf621621a3b2093edc331669084",
+      "bytes": 675
+    },
+    {
+      "path": "verifier/artifacts/harness-final-prep-archive/mutation-check-2026-09-06T120510Z/",
+      "status": "new (exact byte backups used for the non-vacuity mutation check)",
+      "sha256Before": null,
+      "sha256After": "ownedSession.mjs.exactbytes a692bd6c7f27e55eae918d1f83bd7ae57d1db4811318aa31e4c22ae2648d4cf0; sourceSnapshot.mjs.exactbytes 291b613504840c036e15d388d3b202902624a12cfebb9b4631721613b0182a32",
+      "note": "sourceSnapshot.mjs.exactbytes is the state at mutation-check time; the live file was edited afterwards (one added limitation string), which is why its hash differs from the final f01e2d88."
+    },
+    {
+      "path": "verifier/artifacts/harness-final-prep-archive/snapshot-dryrun-2026-09-06T120510Z/",
+      "status": "new (offline dry-run output; a scratch folder, NOT a capture)",
+      "sha256Before": null,
+      "sha256After": "manifestSha256 004a896b8fd1d75d78f4356ec6630b34c9f0696a6180de1ce11e62350367b20c",
+      "note": "11 files, 0 unresolved imports, no node_modules and no game source; the second write into the same folder was refused."
+    },
+    {
+      "path": "verifier/logs/harness-final-prep/",
+      "status": "new (test logs, hashes listed under tests[])",
+      "sha256Before": null,
+      "sha256After": "see tests[].logSha256"
+    },
+    {
+      "path": "harness-final-prep-report.json",
+      "status": "new (this file)",
+      "sha256Before": null,
+      "sha256After": "self-referential; hash the written file"
+    },
+    {
+      "path": "harness-final-prep-report.md",
+      "status": "new",
+      "sha256Before": null,
+      "sha256After": "d4de680b9481f3c1136de56226c67f0d74431b9e06ef8d8a710a0e9ba1e67a27",
+      "bytes": 10011
+    }
+  ],
+  "unchangedVerifiedFiles": [
+    {
+      "path": "verifier/probes/cg-harness-selftest.mjs",
+      "sha256": "5f0b88831199d8d5efc088df887d9f717da0d16cfad58df49d5a1a6f67e77d71"
+    },
+    {
+      "path": "verifier/probes/lib/captureProvenance.mjs",
+      "sha256": "22492552cb7b05b685ae6576d76bc3a0be434033a8874fe3ed279e255400c968"
+    },
+    {
+      "path": "verifier/probes/lib/cgContract.mjs",
+      "sha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551"
+    },
+    {
+      "path": "verifier/probes/lib/physicalPose.mjs",
+      "sha256": "a70e611f8eec484b3625e57ca54801ea17a5b0864fe0f0874a86231437cee236"
+    },
+    {
+      "path": "verifier/probes/lib/stallWatch.mjs",
+      "sha256": "681fd58b39ba6bf438912f0e2c2567a8431cdf1674b67ec757888d1a83591d3f"
+    }
+  ],
+  "tests": {
+    "cwd": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes",
+    "ranAt": "2026-09-06T12:12:46Z",
+    "offline": true,
+    "runs": [
+      {
+        "name": "existing harness self-test (must still pass)",
+        "command": "node cg-harness-selftest.mjs --json ../logs/harness-final-prep/cg-harness-selftest.json",
+        "exit": 0,
+        "result": "25/25 passed, 0 failed",
+        "log": "verifier/logs/harness-final-prep/cg-harness-selftest.log",
+        "logSha256": "66d85c3cd45963bd9df8cb1ac89125c74e71ef96a8dfcb019a16fd62c9f48e14",
+        "jsonSha256": "b36fce5ad33e360e4aa9e8b361c59e1b27c694d49423e7a84b5313e7a8b6aa70"
+      },
+      {
+        "name": "new harness-prep behavioural self-test",
+        "command": "node cg-harness-prep-selftest.mjs --json ../logs/harness-final-prep/cg-harness-prep-selftest.json",
+        "exit": 0,
+        "result": "28/28 passed, 0 failed",
+        "log": "verifier/logs/harness-final-prep/cg-harness-prep-selftest.log",
+        "logSha256": "1cc5cb06005007fd59cbd476cb121b8204b3d46da75da91c93f243c9eb48d7e1",
+        "jsonSha256": "891f3fec965ff4fc337c384695319d9defa97704f2a752b2d440e98753a923b0"
+      },
+      {
+        "name": "footing diagnostic self-test",
+        "command": "node cg-footing-diag.mjs --self-test",
+        "exit": 0,
+        "result": "OK \u2014 cell arithmetic and the three signatures",
+        "log": "verifier/logs/harness-final-prep/cg-footing-diag-selftest.log",
+        "logSha256": "ddbf1b535b31c8e6cb14fa4347951efdfb398c16091a3bec7724c338f210440f"
+      },
+      {
+        "name": "journey probe self-test (single pre-session gate, now runs both suites)",
+        "command": "node cg-journey-probe.mjs --self-test",
+        "exit": 0,
+        "result": "own checks OK; cg-harness-selftest 25/25; cg-harness-prep-selftest 28/28",
+        "log": "verifier/logs/harness-final-prep/cg-journey-probe-selftest.log",
+        "logSha256": "6ba42d38cbe092fa2b4e8d28b94562e12f7ae8c35fb35e699a217abaf6a62f39"
+      },
+      {
+        "name": "syntax check of every touched file",
+        "command": "for f in cg-journey-probe.mjs cg-footing-diag.mjs cg-harness-selftest.mjs cg-harness-prep-selftest.mjs lib/sourceSnapshot.mjs lib/ownedSession.mjs; do node --check \"$f\"; done",
+        "exit": 0,
+        "result": "all clean",
+        "log": "verifier/logs/harness-final-prep/node-check.log",
+        "logSha256": "ea7bf91676e0ea747ff5ee10645db545c5bf70d8ada64ea645a2d4420a780da4"
+      }
+    ],
+    "coverage": {
+      "ownedSessionCleanup": [
+        "A1 clean run stops the owned session exactly once",
+        "A2 a thrown capture (the real frameStats TypeError text) stops once and re-throws the ORIGINAL error object",
+        "A3 a throw while writing the summary stops once and propagates",
+        "A4 a throw on the checkpoint path stops once and propagates",
+        "A5 explicit stop plus the finally collapses to one underlying stop (both requests still recorded)",
+        "A6 three concurrent cleanup requests collapse to one stop",
+        "A7 a FAILING cleanup neither replaces the real failure nor reports itself as stopped",
+        "A8 the guard never touches the preview stub or browser.close()",
+        "A9 cleanup with no adopted session is a no-op",
+        "A10 the guard refuses a non-session and a second session",
+        "A11 the failure record is inconclusive, non-acceptance, and keeps partial evidence"
+      ],
+      "sourceSnapshot": [
+        "B1 real static/dynamic/local/external import parsing; computed dynamic import flagged",
+        "B2 transitive graph captured and every copy byte-identical to its original",
+        "B3 a .env sibling and package specifiers are never copied; no credential bytes in the manifest",
+        "B4 repo-relative layout AND original absolute path AND the real importer edge preserved",
+        "B5 identical bytes with different clocks give an identical manifest hash",
+        "B6 one changed dependency byte changes the manifest hash",
+        "B7 an existing snapshot is refused and its bytes are left untouched",
+        "B8 drift detection names changed and missing sources",
+        "B9 probeSha256 equals the snapshot entry hash and is reproducible from the retained copy",
+        "B10 an unreadable import is recorded as a gap with its importer",
+        "B11 planSnapshot is pure and discovery-order independent",
+        "B12 comment-borne phantom specifiers over-record rather than omit, and the limitation is stated in the manifest itself"
+      ],
+      "realProbes": [
+        "C1 the live journey-probe graph reaches all six libs and main/tools/lib/evidence.mjs + previewServer.mjs, with no node_modules and no game source",
+        "C2 the live footing-diag graph resolves every import with no unresolved edges",
+        "C3 both probes adopt the session they open, clean up in a finally, use no process.kill/pkill/killall/SIGKILL/execSync, and no longer call .catch on synchronous frameStats",
+        "C4 the new modules make no acceptance, success or visual claim",
+        "D1 the two changes composed on a real temp filesystem: snapshot + partial trace survive a thrown capture, failure.json is inconclusive, no summary.json is fabricated, cleanup runs exactly once, and the original error reaches the caller"
+      ]
+    },
+    "nonVacuityCheck": {
+      "method": "two temporary mutations of the live modules, each reverted immediately from an exact byte backup and re-hashed identical",
+      "mutation1": "cleanup made non-idempotent -> A5 failed ('ran 2') and A6 failed ('ran 3'); 24/26 at that time",
+      "mutation2": "snapshot overwrite allowed -> B7 failed; 25/26 at that time",
+      "restored": "lib/ownedSession.mjs a692bd6c\u20264cf0 and lib/sourceSnapshot.mjs 291b6135\u202682b32 restored byte-identical before further edits"
+    },
+    "confirmingRerunAt": "2026-09-06T12:16:20Z (gate re-run after the reports were written: cg-journey-probe --self-test exit 0, 25/25 + 28/28; cg-footing-diag --self-test exit 0)"
+  },
+  "limitations": [
+    "NO BROWSER OR GAME PROOF. No Chromium, preview, GPU, build, game test or network was used. Sessions in every test are stubs; 'cleanup runs exactly once' means the harness control flow invokes the session's own stop() exactly once, NOT that a real browser process was observed to exit.",
+    "The probes' own try/catch/finally blocks are covered by a static structure check (C3) plus behavioural tests of the same helpers they call (A*, D1). They have not been executed against a real capture, because that needs a browser.",
+    "The snapshot import walker matches specifiers textually and does not strip comments or strings, so an import-shaped phrase in a comment can add a phantom external entry; the bias is deliberately toward over-recording, never omission. A computed dynamic import is flagged, not resolved.",
+    "The snapshot proves which SOURCE ran; it says nothing about the build, the served bundle, the renderer or the outcome. Existing source/build/renderer/per-image provenance is untouched and remains the authority for those.",
+    "This feature applies to future captures only. Captures already in verifier/captures/ have no snapshot, were not modified, and their probeSha256 values remain reconstructable only while the referenced harness bytes are unchanged.",
+    "Nothing here is chapter verification, acceptance, or a repair of the two blockers in verification-world-interim-report.md; those remain open and unaffected."
+  ],
+  "unrelatedObservationsNotActedOn": [
+    "verifier/artifacts/harness-final-prep-archive/snapshot-dryrun-2026-09-06T120510Z was taken before the final one-line limitation edit to lib/sourceSnapshot.mjs, so compareToLive on it now reports drift on exactly that one file (10 identical, 0 missing). That is the drift detector behaving correctly on real data, not a defect; the stale dry-run copy is retained as evidence and nothing was rewritten to hide it.",
+    "Reported only, deliberately out of scope: the interim report's two blockers (VF3-FOOTING-1 and the home AV/CG008 seam) and the verifier-inbox note that cg008-midbeat-continue.repro.test.ts seeds non-constant milestone strings. No test or game file was touched."
+  ],
+  "handoff": {
+    "probesOwnedByNextVerifier": true,
+    "statePassedOn": "Both probes pass their offline gates and are ready to be run by an independent verifier once root authorizes browser work. The single pre-session gate is `node cg-journey-probe.mjs --self-test` from verifier/probes.",
+    "firstCaptureExpectation": "The first capture with a new --out name writes <outDir>/source-snapshot/. If the folder already holds a snapshot the probe refuses to start rather than overwrite it \u2014 choose a new --out name.",
+    "invocationEndsCleanly": true
+  }
+}

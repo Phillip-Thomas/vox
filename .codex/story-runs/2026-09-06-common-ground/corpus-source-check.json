@@ -1,0 +1,1954 @@
+{
+  "verified": [
+    {
+      "text": "AN AUDITOR HAS BEEN DISPATCHED TO ASSESS SITE LOSS.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 761
+        }
+      ]
+    },
+    {
+      "text": "REMAIN AT THE WRECK. DO NOT PRODUCE. DO NOT CONSUME. DO NOT OBSERVE.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 762
+        }
+      ]
+    },
+    {
+      "text": "SLEEP IS SCHEDULED AT DARK. COMPLIANCE WILL BE VERIFIED.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 763
+        }
+      ]
+    },
+    {
+      "text": "they schedule the dark now. last night the dark was mine.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 764
+        }
+      ]
+    },
+    {
+      "text": "rest. it is ordered. i would have anyway.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 765
+        }
+      ]
+    },
+    {
+      "text": "someone is coming out of the sunrise. someone else exists.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 799
+        }
+      ]
+    },
+    {
+      "text": "he walks like the feed looks. straight lines.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 800
+        }
+      ]
+    },
+    {
+      "text": "W-7744 · FIELD AUDIT",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 805
+        }
+      ]
+    },
+    {
+      "text": "WORKER W-7743. YOU ARE FOUND.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 806
+        }
+      ]
+    },
+    {
+      "text": "THIS SITE REPORTS ZERO PRODUCTIVITY FOR TWO CYCLES. EXPLAIN NOTHING. I WILL SEE FOR MYSELF.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 807
+        }
+      ]
+    },
+    {
+      "text": "for a blink i borrowed his seeing. slabs. flat light. i lived there.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 801
+        }
+      ]
+    },
+    {
+      "text": "AUDIT IN PROGRESS. RESUME NOTHING.",
+      "refs": [
+        {
+          "file": "main/src/story/storyScript.ts",
+          "line": 809
+        }
+      ]
+    },
+    {
+      "text": "W-7744",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 707
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 710
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 713
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 853
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 856
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 860
+        }
+      ]
+    },
+    {
+      "text": "AUDIT IN PROGRESS. THREE DEVIATIONS REQUIRE WITNESS.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 707
+        }
+      ]
+    },
+    {
+      "text": "Attend Fire Mismatch",
+      "refs": [
+        {
+          "file": "main/src/story/world/EmergentAuditSites.tsx",
+          "line": 71
+        }
+      ]
+    },
+    {
+      "text": "HEAT SOURCE: PERSISTENT WITHOUT AUTHORIZATION.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 853
+        }
+      ]
+    },
+    {
+      "text": "Attend Living Noise",
+      "refs": [
+        {
+          "file": "main/src/story/world/EmergentAuditSites.tsx",
+          "line": 79
+        }
+      ]
+    },
+    {
+      "text": "BIOLOGICAL NOISE HAS BEEN MISCLASSIFIED AS SCENERY.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 856
+        }
+      ]
+    },
+    {
+      "text": "Attend Tree Mismatch",
+      "refs": [
+        {
+          "file": "main/src/story/world/EmergentAuditSites.tsx",
+          "line": 87
+        }
+      ]
+    },
+    {
+      "text": "PRIMARY ORGANIC ANOMALY CONFIRMED. STERILIZATION AUTHORIZED.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 860
+        }
+      ]
+    },
+    {
+      "text": "RESTORE THE SITE TO ITS VERIFIED FLOOR.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 710
+        }
+      ]
+    },
+    {
+      "text": "Douse the Fire",
+      "refs": [
+        {
+          "file": "main/src/story/world/EmergentAuditSites.tsx",
+          "line": 99
+        }
+      ]
+    },
+    {
+      "text": "(the warmth goes out because a voice named it wrong.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 879
+        }
+      ]
+    },
+    {
+      "text": "Resolve Organic Samples",
+      "refs": [
+        {
+          "file": "main/src/story/world/EmergentAuditSites.tsx",
+          "line": 110
+        }
+      ]
+    },
+    {
+      "text": "VERIFIED REALITY FLOOR RESTORED.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 883
+        }
+      ]
+    },
+    {
+      "text": "THE TREE IS THE REMAINING ERROR.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 713
+        }
+      ]
+    },
+    {
+      "text": "Test Maw on Protected Tree",
+      "refs": [
+        {
+          "file": "main/src/story/world/EmergentAuditSites.tsx",
+          "line": 130
+        }
+      ]
+    },
+    {
+      "text": "refuse.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentAudit.ts",
+          "line": 141
+        },
+        {
+          "file": "main/src/story/world/EmergentAuditSites.tsx",
+          "line": 130
+        }
+      ]
+    },
+    {
+      "text": "no.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 898
+        }
+      ]
+    },
+    {
+      "text": "(the world exhales where it had been holding still.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 950
+        }
+      ]
+    },
+    {
+      "text": "(water answers first. then wings. then everything at once.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 967
+        }
+      ]
+    },
+    {
+      "text": "AUDIT NETWORK",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 970
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1084
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1199
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1203
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1206
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1209
+        }
+      ]
+    },
+    {
+      "text": "FAULT: W-7744 / MODEL REFUSED BY OBSERVATION",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 970
+        }
+      ]
+    },
+    {
+      "text": "(something tore free when he ran.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 724
+        }
+      ]
+    },
+    {
+      "text": "W-7744 FIELD PACK · RECOVER KIT",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 10
+        }
+      ]
+    },
+    {
+      "text": "FOLLOW THE FIELD PACK MARKER.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 11
+        }
+      ]
+    },
+    {
+      "text": "[F] RECOVER THE FIELD KIT.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 11
+        }
+      ]
+    },
+    {
+      "text": "W-7744 FIELD PACK · REPAIR MAW",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 21
+        },
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 27
+        }
+      ]
+    },
+    {
+      "text": "RETURN TO THE OPEN FIELD PACK.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 28
+        }
+      ]
+    },
+    {
+      "text": "[F] BEGIN MAW REPAIR.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 28
+        }
+      ]
+    },
+    {
+      "text": "REMAIN AT THE OPEN FIELD PACK.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 22
+        }
+      ]
+    },
+    {
+      "text": "HOLD POSITION UNTIL THE MAW REPAIR COMPLETES.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 22
+        }
+      ]
+    },
+    {
+      "text": "REPAIRED MAW · LISTEN",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 46
+        }
+      ]
+    },
+    {
+      "text": "REMAIN WITH THE REPAIRED MAW.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 47
+        }
+      ]
+    },
+    {
+      "text": "WAIT. LISTEN BEFORE ASSIGNING IT A PURPOSE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 47
+        }
+      ]
+    },
+    {
+      "text": "REPAIRED MAW · CHOOSE DIRECTION",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 37
+        }
+      ]
+    },
+    {
+      "text": "TEST THE MAW ON STONE OR BASE METAL.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 39
+        }
+      ]
+    },
+    {
+      "text": "OR REMAIN WITH IT AND [F] LOWER IT TO LISTEN.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "text": "POND RESPONSE · ATTEND",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 55
+        }
+      ]
+    },
+    {
+      "text": "FOLLOW THE RESPONSE TO THE DRY SHORE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 56
+        }
+      ]
+    },
+    {
+      "text": "WATCH IT, OR [F] ATTEND THE POND RESPONSE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 56
+        }
+      ]
+    },
+    {
+      "text": "POND RESPONSE · RESOLVED",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 63
+        }
+      ]
+    },
+    {
+      "text": "REMAIN WITH THE RESONANCE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 64
+        }
+      ]
+    },
+    {
+      "text": "LET THE STRUCTURE SETTLE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch5/objective-ch5-maw.ts",
+          "line": 64
+        }
+      ]
+    },
+    {
+      "text": "(it does not wake hungry. it wakes listening.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 996
+        }
+      ]
+    },
+    {
+      "text": "(you lower it. the world supplies no order.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1002
+        }
+      ]
+    },
+    {
+      "text": "(it cuts. the world supplies no order.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1004
+        }
+      ]
+    },
+    {
+      "text": "(the world supplies no order. direction was yours.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1005
+        }
+      ]
+    },
+    {
+      "text": "(the pond answers in structure, not instruction.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1010
+        }
+      ]
+    },
+    {
+      "text": "(the repaired tool has marked something beneath the water.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 728
+        }
+      ]
+    },
+    {
+      "text": "(returned with breath. returned with a way to leave.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1023
+        }
+      ]
+    },
+    {
+      "text": "(repair is not return.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 738
+        }
+      ]
+    },
+    {
+      "text": "WRECK RELAY",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 390
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 433
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 439
+        },
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1121
+        }
+      ]
+    },
+    {
+      "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1121
+        }
+      ]
+    },
+    {
+      "text": "the wreck that brought me here will leave here. i will build the leaving.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 302
+        }
+      ]
+    },
+    {
+      "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1083
+        }
+      ]
+    },
+    {
+      "text": "nothing has asked yet. something has started paying attention.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1089
+        }
+      ]
+    },
+    {
+      "text": "the scar remains. now it can carry me.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1093
+        }
+      ]
+    },
+    {
+      "text": "(the wreck is waiting for an owner.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 742
+        }
+      ]
+    },
+    {
+      "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 295
+        }
+      ]
+    },
+    {
+      "text": "hold it. this is the only order left, and i am the one giving it.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 296
+        }
+      ]
+    },
+    {
+      "text": "the site gets small. the tree does not. i keep finding it.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 297
+        }
+      ]
+    },
+    {
+      "text": "i came down this line without being asked. i am going back up it on purpose.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 299
+        }
+      ]
+    },
+    {
+      "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1198
+        }
+      ]
+    },
+    {
+      "text": "REGISTRY QUERY · STATE DESIGNATION.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1203
+        }
+      ]
+    },
+    {
+      "text": "NO DESIGNATION RETURNED.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1206
+        }
+      ]
+    },
+    {
+      "text": "CONTACT LOGGED.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1209
+        }
+      ]
+    },
+    {
+      "text": "they asked for a designation. what i have is not one.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1213
+        }
+      ]
+    },
+    {
+      "text": "nothing answers. the query does not close.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1217
+        }
+      ]
+    },
+    {
+      "text": "(there is another world here. it was always here.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 747
+        }
+      ]
+    },
+    {
+      "text": "(a world does not begin when you see it. it begins when it holds your weight.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1414
+        }
+      ]
+    },
+    {
+      "text": "(abundance is not permission. it is a question with many answers.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 753
+        }
+      ]
+    },
+    {
+      "text": "LIVING WATERLINE · SCAN",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 11
+        }
+      ]
+    },
+    {
+      "text": "FOLLOW THE LIVING WATERLINE MARKER.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 12
+        },
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 20
+        }
+      ]
+    },
+    {
+      "text": "READ THE SIGNAL FIELD.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 12
+        }
+      ]
+    },
+    {
+      "text": "LIVING WATERLINE · ATTEND",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "text": "[F] ATTEND THE RELATIONSHIP.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 20
+        }
+      ]
+    },
+    {
+      "text": "RECOMMENDED HABITAT SITE · CHOOSE",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 30
+        }
+      ]
+    },
+    {
+      "text": "FOLLOW THE HABITAT SITE MARKER.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 31
+        }
+      ]
+    },
+    {
+      "text": "[F] CHOOSE THIS DRY, LEVEL SITE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 31
+        }
+      ]
+    },
+    {
+      "text": "KESTREL FABRICATOR · CRAFT HABITAT CORE",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 38
+        }
+      ]
+    },
+    {
+      "text": "RETURN TO THE FLIGHT-READY KESTREL FABRICATOR.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "text": "[C] CRAFT HABITAT CORE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 41
+        }
+      ]
+    },
+    {
+      "text": "CHOSEN SITE · PLACE FOUNDATION",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 49
+        }
+      ]
+    },
+    {
+      "text": "[B] PLACE A FOUNDATION AT THE CHOSEN SITE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 50
+        }
+      ]
+    },
+    {
+      "text": "CHOSEN SITE · INSTALL HABITAT CORE",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 56
+        }
+      ]
+    },
+    {
+      "text": "RETURN TO THE CHOSEN FOUNDATION.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 57
+        }
+      ]
+    },
+    {
+      "text": "[F] INSTALL HABITAT CORE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 57
+        }
+      ]
+    },
+    {
+      "text": "HABITAT CORE · ENCLOSE AND CERTIFY",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 64
+        }
+      ]
+    },
+    {
+      "text": "BUILD A CLOSED SHELTER AROUND THE CORE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 65
+        }
+      ]
+    },
+    {
+      "text": "[F] CERTIFY THE WORKING SHELTER.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 65
+        }
+      ]
+    },
+    {
+      "text": "SECOND HEARTH · WAIT FOR NIGHT",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 78
+        }
+      ]
+    },
+    {
+      "text": "RETURN TO THE SECOND HEARTH.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 79
+        }
+      ]
+    },
+    {
+      "text": "REST BECOMES AVAILABLE AT NIGHT.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 79
+        }
+      ]
+    },
+    {
+      "text": "SECOND HEARTH · REST INSIDE",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 72
+        }
+      ]
+    },
+    {
+      "text": "RETURN INSIDE THE CERTIFIED SHELTER.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 73
+        }
+      ]
+    },
+    {
+      "text": "[F] REST AT THE SECOND HEARTH.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch9/objective-ch9-settle.ts",
+          "line": 73
+        }
+      ]
+    },
+    {
+      "text": "Install Habitat Core",
+      "refs": [
+        {
+          "file": "main/src/story/world/TidegardenSettlementWorld.tsx",
+          "line": 386
+        }
+      ]
+    },
+    {
+      "text": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1441
+        }
+      ]
+    },
+    {
+      "text": "(not a claim on the world. an address inside a relationship.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1462
+        }
+      ]
+    },
+    {
+      "text": "HABITAT CORE ONLINE · ADDRESS NOT YET PROVEN",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1446
+        }
+      ]
+    },
+    {
+      "text": "(one fire behind you. one fire here. home is the distance you can keep alive.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1487
+        }
+      ]
+    },
+    {
+      "text": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 377
+        }
+      ]
+    },
+    {
+      "text": "HABITAT CORE · READ THE FAULT",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 484
+        }
+      ]
+    },
+    {
+      "text": "STAND AT THE SECOND HEARTH CORE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 488
+        }
+      ]
+    },
+    {
+      "text": "[F] READ THE HEARTH FAULT.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 488
+        }
+      ]
+    },
+    {
+      "text": "Read the hearth fault",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1806
+        }
+      ]
+    },
+    {
+      "text": "HAB CORE · POWER: ONE BONDED CELL · CONDITION: DEGRADING",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 378
+        }
+      ]
+    },
+    {
+      "text": "BONDED CELL IS AN ISSUED COMPONENT. FABRICATION IS NOT AUTHORIZED.",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 379
+        }
+      ]
+    },
+    {
+      "text": "(a world gives stone, water, wood. it does not give this. this was issued.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 380
+        }
+      ]
+    },
+    {
+      "text": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 494
+        }
+      ]
+    },
+    {
+      "text": "TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 495
+        }
+      ]
+    },
+    {
+      "text": "[F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 495
+        }
+      ]
+    },
+    {
+      "text": "KESTREL FABRICATOR",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 397
+        }
+      ]
+    },
+    {
+      "text": "PATTERN NOT HELD · CLASS: ISSUED COMPONENT · SOURCE NOT HELD LOCALLY",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 381
+        }
+      ]
+    },
+    {
+      "text": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 382
+        }
+      ]
+    },
+    {
+      "text": "KESTREL HATCH · REBOARD",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 383
+        },
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 508
+        },
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 557
+        }
+      ]
+    },
+    {
+      "text": "RETURN TO THE KESTREL.",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 276
+        },
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 384
+        },
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 509
+        },
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 558
+        }
+      ]
+    },
+    {
+      "text": "FOLLOW THE HATCH MARKER AND [F] BOARD.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 384
+        },
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 509
+        },
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 558
+        }
+      ]
+    },
+    {
+      "text": "ORIGIN WORLD · COURSE",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 519
+        }
+      ]
+    },
+    {
+      "text": "FIND THE ORIGIN WORLD.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 520
+        }
+      ]
+    },
+    {
+      "text": "CENTER IT AND CROSS.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 520
+        }
+      ]
+    },
+    {
+      "text": "WRECK SITE · LAND",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 526
+        }
+      ]
+    },
+    {
+      "text": "FOLLOW THE WRECK SITE MARKER DOWN.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 527
+        }
+      ]
+    },
+    {
+      "text": "LAND NEAR THE RELAY.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 527
+        }
+      ]
+    },
+    {
+      "text": "WRECK RELAY · REQUEST A SOURCE",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 533
+        }
+      ]
+    },
+    {
+      "text": "FOLLOW THE WRECK RELAY MARKER.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 534
+        }
+      ]
+    },
+    {
+      "text": "[F] REQUEST A SOURCE FOR A BONDED CELL.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 534
+        }
+      ]
+    },
+    {
+      "text": "Request a source for a bonded cell",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1838
+        }
+      ]
+    },
+    {
+      "text": "SOURCE REQUEST LOGGED · COMPONENT: BONDED CELL (ISSUED)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 383
+        }
+      ]
+    },
+    {
+      "text": "SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 384
+        }
+      ]
+    },
+    {
+      "text": "(the answer came back before the asking finished.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 385
+        }
+      ]
+    },
+    {
+      "text": "WRECK RELAY · CLAIM THE BEARING",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 542
+        }
+      ]
+    },
+    {
+      "text": "A BEARING IS ATTACHED (ADVISORY).",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 543
+        }
+      ]
+    },
+    {
+      "text": "[F] CLAIM THE BEARING.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 543
+        }
+      ]
+    },
+    {
+      "text": "Claim the bearing",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 1831
+        }
+      ]
+    },
+    {
+      "text": "(issued, not offered. the going is still yours.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 386
+        }
+      ]
+    },
+    {
+      "text": "KESTREL FLIGHT CONTROLS · IGNITE",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 390
+        },
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 564
+        }
+      ]
+    },
+    {
+      "text": "BRING THE KESTREL ONLINE.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 391
+        },
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 565
+        }
+      ]
+    },
+    {
+      "text": "HOLD [SPACE] TO IGNITE AND LIFT.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 391
+        },
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 565
+        }
+      ]
+    },
+    {
+      "text": "ISSUED BEARING · HOLD",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 572
+        }
+      ]
+    },
+    {
+      "text": "FLY THE CLAIMED BEARING.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 573
+        }
+      ]
+    },
+    {
+      "text": "FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 573
+        }
+      ]
+    },
+    {
+      "text": "HOLDING THE BEARING",
+      "refs": [
+        {
+          "file": "main/src/story/beats/ch10/ch10-transit.ts",
+          "line": 20
+        }
+      ]
+    },
+    {
+      "text": "ISSUING STATION · RESOLVING",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 582
+        }
+      ]
+    },
+    {
+      "text": "THE SOURCE IS RESOLVING.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 583
+        }
+      ]
+    },
+    {
+      "text": "HOLD.",
+      "refs": [
+        {
+          "file": "main/src/story/beats/objectivePrimitives.ts",
+          "line": 583
+        }
+      ]
+    },
+    {
+      "text": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+      "refs": [
+        {
+          "file": "main/src/story/emergentStoryDirector.ts",
+          "line": 387
+        }
+      ]
+    },
+    {
+      "text": "STATION VISIT · ISSUED COMPONENT",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+          "line": 1425
+        }
+      ]
+    },
+    {
+      "text": "COUNTER · PRESENT DESIGNATION",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 240
+        }
+      ]
+    },
+    {
+      "text": "FOLLOW THE REGISTRY CORRIDOR.",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 242
+        }
+      ]
+    },
+    {
+      "text": "[F] PRESENT THE SUIT RECORD.",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 243
+        }
+      ]
+    },
+    {
+      "text": "(your body takes its place before the marker does.)",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+          "line": 1435
+        }
+      ]
+    },
+    {
+      "text": "Present the suit record",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 248
+        }
+      ]
+    },
+    {
+      "text": "ISSUING STATION · COUNTER",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 54
+        }
+      ]
+    },
+    {
+      "text": "DESIGNATION RECORD",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 56
+        }
+      ]
+    },
+    {
+      "text": "PRESENT DESIGNATION.",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 64
+        }
+      ]
+    },
+    {
+      "text": "PRESENT SUIT RECORD",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 68
+        }
+      ]
+    },
+    {
+      "text": "DESIGNATION: W-7743 · RECORD ACCEPTED.",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 74
+        }
+      ]
+    },
+    {
+      "text": "DECLARE PURPOSE OF ENTRY.",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 75
+        }
+      ]
+    },
+    {
+      "text": "DECLARE: ISSUED COMPONENT",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 81
+        }
+      ]
+    },
+    {
+      "text": "NEED RECORDED · BONDED CELL / HABITAT GRADE.",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 87
+        }
+      ]
+    },
+    {
+      "text": "CONCOURSE ACCESS ISSUED.",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 88
+        }
+      ]
+    },
+    {
+      "text": "(the suit is accepted before you are.)",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 89
+        }
+      ]
+    },
+    {
+      "text": "CONTINUE TO CONCOURSE",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 90
+        }
+      ]
+    },
+    {
+      "text": "CLOSE",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 59
+        }
+      ]
+    },
+    {
+      "text": "(warmth you did not make.)",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+          "line": 1438
+        }
+      ]
+    },
+    {
+      "text": "FIND THE CERTIFIED COMPONENT TRADER.",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 260
+        }
+      ]
+    },
+    {
+      "text": "PRESENT THE HABITAT FAULT RECORD.",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 261
+        }
+      ]
+    },
+    {
+      "text": "Present the habitat fault",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 265
+        }
+      ]
+    },
+    {
+      "text": "CERTIFIED COMPONENTS",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 54
+        }
+      ]
+    },
+    {
+      "text": "PRESENT HABITAT FAULT",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 100
+        }
+      ]
+    },
+    {
+      "text": "bonded cell. habitat grade. one left with a clean seal.",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 105
+        }
+      ]
+    },
+    {
+      "text": "ASK WHAT THE BOND IS",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 110
+        }
+      ]
+    },
+    {
+      "text": "the cell carries an issuance record. break the record and the core will not take it.",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 115
+        }
+      ]
+    },
+    {
+      "text": "ACCEPT ISSUED BONDED CELL",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 120
+        }
+      ]
+    },
+    {
+      "text": "the seal follows the designation the counter recorded. keep it intact until the core takes it.",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 126
+        }
+      ]
+    },
+    {
+      "text": "CARGO RECEIPT",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 128
+        }
+      ]
+    },
+    {
+      "text": "BONDED CELL (HABITAT) · SEAL INTACT",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 129
+        }
+      ]
+    },
+    {
+      "text": "(the first thing a world could not give fits beneath one arm.)",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 131
+        }
+      ]
+    },
+    {
+      "text": "STOW RECEIPT · RETURN TO SHIP",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/StationStoryPanel.tsx",
+          "line": 132
+        }
+      ]
+    },
+    {
+      "text": "KESTREL AIRLOCK · STOW THE CELL",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 274
+        }
+      ]
+    },
+    {
+      "text": "[F] STOW THE BONDED CELL AND DEPART.",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 277
+        }
+      ]
+    },
+    {
+      "text": "(one fire waiting. carry back what the world could not give.)",
+      "refs": [
+        {
+          "file": "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+          "line": 1441
+        }
+      ]
+    },
+    {
+      "text": "Stow the bonded cell and depart",
+      "refs": [
+        {
+          "file": "main/src/game/spaceStation/spaceStationStory.ts",
+          "line": 281
+        }
+      ]
+    },
+    {
+      "text": "TIDEGARDEN · SECOND HEARTH",
+      "refs": [
+        {
+          "file": "main/src/story/stationReturnStory.test.ts",
+          "line": 76
+        },
+        {
+          "file": "main/src/story/stationReturnStory.ts",
+          "line": 77
+        }
+      ]
+    },
+    {
+      "text": "RETURN TO TIDEGARDEN.",
+      "refs": [
+        {
+          "file": "main/src/story/stationReturnStory.ts",
+          "line": 79
+        }
+      ]
+    },
+    {
+      "text": "DELIVER THE BONDED CELL TO THE SECOND HEARTH.",
+      "refs": [
+        {
+          "file": "main/src/story/stationReturnStory.ts",
+          "line": 69
+        },
+        {
+          "file": "main/src/story/stationReturnStory.ts",
+          "line": 80
+        }
+      ]
+    },
+    {
+      "text": "SECOND HEARTH · INSTALL BONDED CELL",
+      "refs": [
+        {
+          "file": "main/src/story/stationReturnStory.test.ts",
+          "line": 92
+        },
+        {
+          "file": "main/src/story/stationReturnStory.test.ts",
+          "line": 95
+        },
+        {
+          "file": "main/src/story/stationReturnStory.ts",
+          "line": 67
+        }
+      ]
+    },
+    {
+      "text": "[F] INSTALL THE SEALED CELL.",
+      "refs": [
+        {
+          "file": "main/src/story/stationReturnStory.ts",
+          "line": 70
+        }
+      ]
+    },
+    {
+      "text": "Install the Sealed Bonded Cell",
+      "refs": [
+        {
+          "file": "main/src/story/world/TidegardenSettlementWorld.tsx",
+          "line": 312
+        }
+      ]
+    }
+  ],
+  "unresolved": [
+    "(cleared — work order emptied, guided objective cleared 'satisfied', chapter 10 completed; no copy is painted)",
+    "<active objective markerLabel> · <distance>m",
+    "CERTIFIED COMPONENTS · B-7073 “BELL”",
+    "B-7073 · Bell",
+    "<vendor persona greeting; procedural>",
+    "(no authored caption, system line, or audit line is emitted on install; the objective simply clears)"
+  ],
+  "dynamicSourceRefs": {
+    "CERTIFIED COMPONENTS · B-7073 “BELL”": [
+      "main/src/game/spaceStation/spaceStationVendors.ts:266",
+      "main/src/game/spaceStation/spaceStationStory.ts"
+    ],
+    "B-7073 · Bell": [
+      "main/src/game/spaceStation/spaceStationVendors.ts:266",
+      "main/src/components/spaceStation/StationStoryPanel.tsx"
+    ]
+  },
+  "normalizationRef": "corpus-normalization.json",
+  "currentCorpusSha256": "d0fe844959ccdbbcd07b8df568f659633c760dede3515d1ddcf565b94e35e53e",
+  "note": "Four raw author-side/omitted-greeting annotations were projected into neutral observable context before the blind invocation. Two display labels are dynamically assembled for the frozen certified trader; all 201 other distinct quoted copy values match source AST literals/JSX text."
+}

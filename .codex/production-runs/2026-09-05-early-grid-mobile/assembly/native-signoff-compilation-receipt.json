@@ -1,0 +1,20 @@
+{
+  "compiledAt": "2026-09-05T21:15:05.975269+00:00",
+  "contractSha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a",
+  "sources": [
+    {
+      "path": "chapter-contract-signoff.json",
+      "sha256": "ed1bed9a0a4d0ddf6f3f7928f077107aeedb9ecc97b19b840ca1b7f409b15e4d"
+    },
+    {
+      "path": "score-contract-signoff.json",
+      "sha256": "c1c5422e8b4bb55940eb4a4a6da8dff60d9a446a00ebb25846696c8023480c9c"
+    },
+    {
+      "path": "cinematography-contract-signoff.json",
+      "sha256": "d3a6598b339ccb7b29a6dd5ec57248e0caa807b6fbb6afabd6e322336f0e12d3"
+    }
+  ],
+  "compiledSha256": "be8247253f77930ba35d63e40f6c1495015c3504314892a7177288ffb86b5302",
+  "method": "Nativefive-fieldlosslessprojectionofeachgenuineoriginaldirectorownsignoff;originalconditionsretainedintheirsourceartifacts."
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "paravoxia.producerCausalAuditReview.v1",
+  "at": "2026-09-06T16:24:49.838868+00:00",
+  "author": "creative-producer",
+  "auditRef": "common-terminal-source-audit.json",
+  "auditSha256": "6bc39c2015c524eb096bbf3152eaef79e98313ced1aef8b2e9ad0c1771d26ed7",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "accepted": [
+    "Measured COMMON cursor3 target and actual frozen pose align with an unsafe exact-goal footprint refusal plus retained snapped steering target.",
+    "Actual shipped terrain/planner CPU reconstruction finds wet/edge adjacent columns at COMMON offsets3,6,9; passed survey offsets provide a useful negative control.",
+    "The existing footprint safety refusal must remain. All COMMON movie targets require reachability and actual original corner-plane proof before code acceptance."
+  ],
+  "qualified": [
+    "Handoff/footprint/rail functions were transcribed; actual terrain/planner imports are executed. Engineer must use real source seams for regression/counterfactual, no transcribed pseudo-unit-test offered as runtime proof.",
+    "CPU generated world omits live persisted edits; captured live refusal string not observed, later vertices6/9 are predictions until reached.",
+    "A goal on the outgoing direction has acceptable point arithmetic only; actual approach may still skip the incoming original plane under stopping tolerance. Must prove physical ordered18 and all corners."
+  ],
+  "rejected": [
+    "Audit labels .6 overshoot signed and calls any terminalOvershoot change a creative geometry decision. Chapter Director exact interpretation establishes these as controller devices; moving C/route is neither necessary by this evidence nor authorized."
+  ],
+  "chapterDispositionRef": "chapter-common-terminal-interpretation.json",
+  "chapterDispositionSha256": "0684a9f5ae563a7dab30aca2f54abbcecc76b7cd58d92126a9fa20d4f793a26a",
+  "contractChangeRequiredForMovieSteeringOnly": false,
+  "separateArrivalAmendment": "Exact signed scene-v3 candidate for CG014, not geometric redesign.",
+  "sourceMutationAuthorizedNow": false,
+  "next": "Finish manual runtime, compile final bounded repair direction and contract gate before one engineer."
+}

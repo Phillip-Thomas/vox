@@ -1,0 +1,178 @@
+{
+ "schema": "paravoxia.verifier.finaleAuthoritySeamConfirmedRun.report.v1",
+ "writtenAtUtc": "2026-09-06T22:49:50Z",
+ "role": "finale-authority-seam-runtime",
+ "scenario": "normal-expiry",
+ "outcome": "CAPTURED-NO-VERDICT",
+ "outcomeIsAcceptance": false,
+ "audibleClaim": "none - bytes recorded only; no listening, taste, or acceptance claim",
+ "defectClosure": "none - this report closes no defect",
+ "capture": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/manual-credit-finale/authority-seam-confirmed-20260906T224646Z",
+ "logs": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/logs/finale-authority-seam-confirmed-run/",
+ "launcherExit": 0,
+ "probeExitCode": 0,
+ "probeTimedOut": false,
+ "probeElapsedS": 76.628,
+ "flock": {
+  "fd": 9,
+  "path": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "validated": true,
+  "problems": [],
+  "exclusiveHeld": true
+ },
+ "controlGate": "activeRole=finale-authority-seam-runtime action=continue - matched, launcher did not exit 3/4",
+ "adapter": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0) - real hardware, headed, not swiftshader",
+ "rootPreviewUntouched": true,
+ "gesture": {
+  "trustedClick": "click@640,360",
+  "focus": true,
+  "pointerLock": false,
+  "userActivation": true,
+  "beforeCompletion": true
+ },
+ "seamAttach": {
+  "resolved": "10/10",
+  "exactColumn": 2,
+  "inexactColumn": 8,
+  "evaluationErrors": 0
+ },
+ "criticalEvents": [
+  {
+   "seq": 0,
+   "k": "authority-entry",
+   "note": "startup release: storyLeads=false isRelease=true targetGain=0 atTime=0.1067 crossfadeS=4.5 fadeEndAt=4.6067 masterPresent=true; bedCallbackPresent=false (seq2) so no bed hook at this point"
+  },
+  {
+   "seq": "3,4",
+   "k": "cancel",
+   "note": "live=false startedAtMs=null willRelease=false - no-op cancels, reasonArg=null but reasonArgObservable=true"
+  },
+  {
+   "seq": "6-11",
+   "k": "mood->mMA(true)",
+   "note": "acquire: built=true ctxPresent=true ctxState=running ctxCurrentTime=4.1813 transition=true noop=false; targetGain=0.9 fadeEndAt=8.6813 bedCallbackInvoked=true"
+  },
+  {
+   "seq": "15-20",
+   "k": "mood->mMA(false)",
+   "note": "mid-run release atTime=42.592 fadeEnd/bedEnd=47.092; superseded 1.034s later by re-acquire seq23-26 (newFadeUntil=48.1267) - release fade never reached zero"
+  },
+  {
+   "seq": 27,
+   "k": "begin",
+   "note": "TOKEN CREATION beat=ch13-common mood=demonstrating restored=false audioUnavailable=false alreadyLive=false prevStartedAtMs=null cap=5 wall=1788734878440 mono=63939.1"
+  },
+  {
+   "seq": "31-36",
+   "k": "mMA(false, atTime=62.408)",
+   "note": "ACTUAL RELEASE at mono 63946.2, wall 1788734878448 = +6.3ms AFTER token creation (mono 63939.1) and +0.3ms after token startedAtMs 63945.9. built=true ctxPresent=true ctxState=running idleNow=true transition=true noop=false. isRelease=true targetGain=0 crossfadeS=4.5 prevFadeUntil=48.1267 newFadeUntil=66.908 bedCallbackPresent=true bedCallbackInvoked=true bedEndAt=66.908"
+  },
+  {
+   "seq": "37-49",
+   "k": "deadline",
+   "note": "14 recorded of 4193 hits (4179 rate-skipped). ageS 4.8035->5.0043, spacing ~16.7ms = 60fps frame cadence; willRelease flips true at ageS 5.0043"
+  },
+  {
+   "seq": 50,
+   "k": "release",
+   "note": "TOKEN EXPIRY at mono 69019 ageS=5.0731 overshootMs=73.1 beatBefore=null moodBefore=null - token expired UNUSED (normal-expiry)"
+  },
+  {
+   "seq": "51-53",
+   "k": "mood->mMA post-expiry",
+   "note": "wasLeading=false idleBefore=true nowLeading=false transition=false NOOP=true, ctxState=running ctxCurrentTime=67.488"
+  }
+ ],
+ "answers": {
+  "mMA_false_atTime": 62.408,
+  "mMA_false_wallMs": 1788734878448,
+  "mMA_false_relativeToTokenCreation": "+6.3ms AFTER begin(seq27); +0.3ms after token startedAtMs",
+  "contextAtRelease": {
+   "built": true,
+   "ctxPresent": true,
+   "ctxState": "running",
+   "ctxCurrentTime": 62.408
+  },
+  "scoreBed_4p5s_endpoints": {
+   "fadeEndAtCtx": 66.908,
+   "bedEndAtCtx": 66.908,
+   "crossfadeS": 4.5,
+   "bedCallbackInvoked": true
+  },
+  "endpointsVsTokenExpiry": "crossfade/bed both end at ctx 66.908; token expiry release observed at ctx 67.488 -> endpoints completed 0.580s BEFORE expiry",
+  "alreadyReleasedVsLiveRetention": "ALREADY-RELEASED / NO-OP. Post-expiry mood pass reports wasLeading=false, idleBefore=true, noop=true, nowLeading=false. No second mMA(false) fired at expiry. No evidence of live authority retention across the 5s token window.",
+  "unusedTokenAgeLimit": "qualified: cap=5s, deadlineAtMs=68945.9, released at ageS=5.0731 (overshoot 73.1ms), token never consumed (beatBefore/moodBefore null)",
+  "comparisonToEarlierNormalE4null": "consistent - earlier run showed release ~0.2ms after creation; this run shows +6.3ms after creation with built+running context. Early release with a built context is therefore reproducible here, not a one-off."
+ },
+ "gaps": [
+  "Context was BUILT and running at every mood-ctx sample (7/7). No unbuilt-context gap to report; no audio-authority claim is made either way from this data.",
+  "8 of 10 CDP breakpoints resolved inexact (column shifted 7-9 chars from requested pin). Recorded ordering is at statement granularity, not sub-expression granularity.",
+  "4179 of 4193 deadline logpoint hits were rate-skipped by the sampler cap; the age curve is sampled, not exhaustive.",
+  "reasonArg on both cancel events is null; cancel cause is not recoverable from this capture.",
+  "score.beat and score.mood are null at and after the edge sample; the ndjson does not independently corroborate the seam-level lead state.",
+  "commonGround.scoreDiagnostic and journeyProbe.getCommonGroundScoreDiagnostic were undefined at arm time (sampler armed log) - that diagnostic surface was unavailable this run."
+ ],
+ "timingPerturbationExplicit": "CDP logpoint evaluation on a 60fps-driven deadline check is an explicit perturbation source. 4193 deadline pin hits were evaluated in-browser during the ~5s token window. The 73.1ms release overshoot (~4.4 frames at 16.7ms) is within the plausible range of that instrumentation cost and is NOT attributed to the game.",
+ "wav": {
+  "file": "owned-sink.wav",
+  "bytes": 13172780,
+  "riff": "RIFF/WAVE",
+  "channels": 2,
+  "sampleRateHz": 44100,
+  "bits": 16,
+  "declaredDataBytes": 13172736,
+  "actualDataBytes": 13172736,
+  "headerConsistent": true,
+  "durationS": 68.608,
+  "recorderDevice": "paravoxia_finale_window.monitor",
+  "isMicrophone": false,
+  "isDefaultMonitor": false,
+  "recorderExit": 0,
+  "preserved": true,
+  "complete": true
+ },
+ "coverage": {
+  "complete": true,
+  "sampleCount": 852,
+  "preEdgeCoveredMs": 61927,
+  "postEdgeCoveredMs": 14802,
+  "reason": "recorder-interval-covers-3000ms-pre-edge-through-11500ms-post-edge"
+ },
+ "ownership": {
+  "initial": "all-streams-in-probe-browser-process-tree",
+  "recheck": "all-streams-in-probe-browser-process-tree",
+  "streams": 1,
+  "streamPid": 2299373,
+  "browserPid": 2299036,
+  "sinkIndex": 16545,
+  "moduleId": "536870913"
+ },
+ "cleanup": {
+  "sinkModuleUnloaded": true,
+  "noParavoxiaModuleRemains": true,
+  "defaultSinkBefore": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+  "defaultSinkAfter": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+  "defaultSinkRestored": true,
+  "browserTeardownProven": true,
+  "receiptState": "stopped",
+  "cleanupError": null,
+  "forced": false,
+  "killsProcesses": false,
+  "stopsRootPreview": false,
+  "spawnErrors": [],
+  "teardownErrors": [],
+  "incompleteCleanup": []
+ },
+ "separateOpenItem": "Escape-attempt unproven paused state remains a separate, unaddressed item; nothing in this capture speaks to it.",
+ "hashes": {
+  "seam-events.json": "97e82ccbdc0d94fe2a45ec2195570cac5a640d4200bf8ba7f09475ed5b72ce2d",
+  "runtime-record.json": "d86aeb5744124398acaf2581b547c64afd2a38a4769f62c291a607e117231353",
+  "summary.json": "cc745eefdcf85f754ef9626bfae0f2ea21340f2db55ddb42110f59316a4656ae",
+  "window.ndjson": "22838efd2a745c9dc9758ce649d2a4d149893a7453b8d32c4fcc95fe9a4585f8",
+  "owned-sink.wav": "d8731928afd92cf1d66eaf5fc2fda96704c1cdb1c04c401b1101e756100fc373",
+  "cleanup-receipt.json": "841becf3e2fc2d0b675730d9bfe6cb87c21e1802243d5405dd2099ad3223bcdc",
+  "probe-console.log": "22f9a297ab3077b839ab999fe9e7bcd9fe1c75d34a7575d6e861d3748e5b2223",
+  "stop-request.json": "be3149a6957850a9e4fed2efe27a2c1546351b2c35f5b22584eed85256d6b783",
+  "browser-pid.json": "a12a4d40e0a65e8a691b2724f42fa1d3468eb5aeea1774c74bc52e437194929a"
+ }
+}

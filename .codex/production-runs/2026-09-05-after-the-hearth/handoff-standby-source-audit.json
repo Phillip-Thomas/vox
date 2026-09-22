@@ -1,0 +1,192 @@
+{
+  "schema": "paravoxia.readOnlySourceAudit.v1",
+  "role": "handoff-standby-source-audit",
+  "model": "opus",
+  "recordedAt": "2026-09-06T15:29:31Z",
+  "workWindowUtc": { "start": "2026-09-06T15:25:04Z", "end": "2026-09-06T15:29:31Z" },
+  "authority": "read-only mechanical source audit; not an acceptance, not a defect closure, not a repair authorization",
+  "mutation": {
+    "gameSource": false,
+    "contract": false,
+    "defects": false,
+    "captures": false,
+    "sharedProbes": false,
+    "otherRoleArtifacts": false,
+    "owned": [
+      "handoff-standby-source-audit.json",
+      "handoff-standby-source-audit.md",
+      "verifier/probes/handoff-standby-audit/resolver-repro.mjs",
+      "verifier/probes/handoff-standby-audit/bundle/tidegardenRoute.mjs",
+      "logs/handoff-standby-audit/resolver-repro.log"
+    ]
+  },
+  "environment": { "browser": false, "gpu": false, "build": false, "verify": false, "newDependencies": false, "tempFilesInMainSrc": false },
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "sourceFreezeNote": "Files were read only. Standing freeze proof is the flight-discriminator before/after rehash (98/98 match, aggregate a2f8a69148306c9d55f33e157322a956938258f8744127d3dc3e58bfe04ce7f6).",
+  "inspectedFileHashes": {
+    "main/src/App.tsx": "36abbf3822b828bc0e28f617ba0e5a1b436f39c2dab0b2e86e29683736b81980",
+    "main/src/story/tidegardenRoute.ts": "e7237efcf339efb599222a171a22b0c4b118712025f3f777030c08482b7e103e",
+    "main/src/state/systemFlight.ts": "9ca9c8580cbf83886814b820bbdcbba01320fbeb5fe0a37bfc275b59137ae77d",
+    "main/src/components/ShipController.tsx": "57dc26174b70a5f171ee49512538b575c3ad6bb4c929eeeed606461fd7d2e6d3",
+    "main/src/components/EfficientScene.tsx": "ab95dfe4d2dbb59bbaa22e4fdf60faf8f4fa4f9fd959040bfe17fdb4a776f995",
+    "main/src/components/SystemTravelDriver.tsx": "7f330ffcdd71326e735b6b3e180ec4bc6f6f1b1afefe4daf8970cc1c7659b2f4",
+    "main/src/story/commonGroundDirector.ts": "980590b0add81f8e0ce6bdc182cb834940af336454435ff4d304a64e47ad11b5",
+    "main/src/story/commonGroundState.ts": "7a3c03fb73cb715116ddbf1952fc2c312f52d1dac68b765b8097f4becdb0452e",
+    "main/src/utils/agentSurfaceNavigation.ts": "7e5046d37aeb21b2ef36988b98504ad37a117f9c9b536fa4619db0dda78f8279",
+    "main/src/game/starSystem.ts": "8900fca3cf640bc0fe5c90666c1e355e7d08dd0e569622af27588585490ce145"
+  },
+
+  "taskA": {
+    "title": "ch13-return flight reset — causal source chain",
+    "verdict": "The shipped same-system handoff commits to Origin correctly; the story-world binding reclaims the departure world one render later and ShipController re-seats the ship on the hearth pad. Not a parked ship, not an unready approach shell, not an aim cone, not a speed budget.",
+    "rootCause": {
+      "symbol": "CROSSING_DESTINATION_WORLD_ID",
+      "file": "main/src/story/tidegardenRoute.ts",
+      "lines": "128-131",
+      "defect": "'ch13-return' is absent from the runtime crossing-destination table; only 'ch8-crossing' and 'ch10-ask' are listed. The module docstring at :118-127 documents this exact failure mode for ch10, and the boot-resolver comment at :88-96 states ch13-return is owned by its launch world 'exactly as ch10-ask is' — but ch10-ask is in the table and ch13-return is not.",
+      "consequence": "resolveStoryRuntimeWorldId (:138-154) falls through to resolveStoryBootWorldId, which for chapter ch13 with routeOnline returns TIDEGARDEN_WORLD_ID ('-1,-1:p1'), overriding the already-committed Origin crossing."
+    },
+    "worldIdentities": {
+      "STORY_PRIMARY_WORLD_ID": "-1,-1",
+      "STORY_PRIMARY_meaning": "Origin, slot 0, crossing destination",
+      "TIDEGARDEN_WORLD_ID": "-1,-1:p1",
+      "TIDEGARDEN_meaning": "hearth, slot 1, departure world",
+      "evidence": "main/src/game/starSystem.ts:90-94 planetWorldId omits the :pN suffix for slot 0"
+    },
+    "executedReproduction": {
+      "kind": "CPU-only, node, shipped module bundled out-of-tree with the repo's own esbuild; no game change, no new dependency",
+      "probe": "verifier/probes/handoff-standby-audit/resolver-repro.mjs",
+      "log": "logs/handoff-standby-audit/resolver-repro.log",
+      "modulesCalled": ["resolveStoryRuntimeWorldId", "resolveStoryBootWorldId", "STORY_PRIMARY_WORLD_ID", "TIDEGARDEN_WORLD_ID"],
+      "results": [
+        { "beat": "ch13-return", "currentWorldId": "-1,-1:p1", "activePlanetId": "-1,-1:p1", "runtime": "-1,-1:p1", "boot": "-1,-1:p1", "verdict": "stable (pre-handoff)" },
+        { "beat": "ch13-return", "currentWorldId": "-1,-1", "activePlanetId": "-1,-1", "runtime": "-1,-1:p1", "boot": "-1,-1:p1", "verdict": "SWAPS BACK — the defect" },
+        { "beat": "ch13-survey", "currentWorldId": "-1,-1", "activePlanetId": "-1,-1", "runtime": "-1,-1", "boot": "-1,-1", "verdict": "stable" },
+        { "beat": "ch13-common", "currentWorldId": "-1,-1", "activePlanetId": "-1,-1", "runtime": "-1,-1", "boot": "-1,-1", "verdict": "stable" },
+        { "beat": "ch10-ask", "currentWorldId": "-1,-1", "activePlanetId": "-1,-1", "runtime": "-1,-1", "boot": "-1,-1:p1", "verdict": "CONTROL — protected by the table entry ch13-return lacks" },
+        { "beat": "ch8-crossing", "currentWorldId": "-1,-1:p1", "activePlanetId": "-1,-1:p1", "runtime": "-1,-1:p1", "boot": "-1,-1:p1", "verdict": "control, stable" }
+      ]
+    },
+    "runtimeChain": [
+      { "step": 1, "site": "main/src/App.tsx:1264-1298", "action": "beginPreparedSystemTargetHandoff.onMidpoint -> commitSystemPlanetHandoff({worldId:'-1,-1', renderOrigin:[0,0,0]}), enterAtmosphere(), setCurrentWorld(Origin)", "status": "PROVED EXECUTED (telemetry, see epochEvidence)", "note": "story gate at :1268-1271 passes because the Tidegarden route is online; the generic handoff is not the fault" },
+      { "step": 2, "site": "main/src/App.tsx:537-545", "action": "storyRuntimeWorldId recomputes to '-1,-1:p1'; storyWorldSwapPending true", "status": "traced branch + executed resolver reproduction" },
+      { "step": 3, "site": "main/src/App.tsx:622-634", "action": "story-world swap effect: resetSceneReady(), setCurrentWorld(hearth), setArrivalMode('surface')", "status": "traced branch implication" },
+      { "step": 4, "site": "main/src/components/EfficientScene.tsx:744", "action": "activePlanetWorldId={commandContext.world.worldId} -> hearth", "status": "traced branch implication" },
+      { "step": 5, "site": "main/src/components/ShipController.tsx:472-473, 476-478", "action": "same systemId so the else-branch runs setActiveSystemPlanet('-1,-1:p1'), then re-acquires the pose lease and republishes planetLocalPoseToSystemPose(boarding pad, hearth position)", "status": "PROVED as the executing mutator (see mutatorProof)" }
+    ],
+    "epochEvidence": {
+      "source": "logs/flight-discriminator/telemetry.jsonl",
+      "boundary1": { "beforePerfMs": 41110, "afterPerfMs": 41400, "gapMs": 290 },
+      "before": { "activationEpoch": 3, "locationMode": "local_space", "activePlanetId": "-1,-1:p1", "target": "-1,-1", "renderOrigin": [2180, -110, -1635], "originCentreDistance": 181.23 },
+      "after": { "activationEpoch": 5, "locationMode": "atmosphere", "activePlanetId": "-1,-1:p1", "lastActivePlanetId": "-1,-1:p1", "target": null, "renderOrigin": [0, 0, 0], "position": [2187.9, -58.5, -1643], "originCentreDistance": 2736.78 },
+      "boundary2": { "beforePerfMs": 78098, "note": "second cycle identical in kind; epoch 6 -> 8" }
+    },
+    "mutatorProof": {
+      "firstIncrement": {
+        "mutator": "commitSystemPlanetHandoff",
+        "site": "main/src/state/systemFlight.ts:203-232",
+        "epoch": "3 -> 4",
+        "proof": "renderOrigin becomes [0,0,0] (Origin's system position) together with locationMode 'atmosphere' and target null. No other mutator produces that triple. This also RESOLVES the flight-discriminator's open question: a transient activePlanetId === '-1,-1' did exist inside the unsampled gap."
+      },
+      "secondIncrement": {
+        "mutator": "setActiveSystemPlanet('-1,-1:p1')",
+        "site": "main/src/state/systemFlight.ts:189-200",
+        "epoch": "4 -> 5",
+        "proof": "activePlanetId AND lastActivePlanetId return to '-1,-1:p1' while renderOrigin STAYS [0,0,0]. Of the three mutators that can change activePlanetId, commitSystemPlanetHandoff would have rewritten renderOrigin to the hearth position and resetSystemFlightForInterstellarArrival would have rewritten renderOrigin and systemId. Neither did."
+      },
+      "callSite": {
+        "executed": "main/src/components/ShipController.tsx:472-473",
+        "excluded": "main/src/components/EfficientScene.tsx:648",
+        "exclusionProof": "The EfficientScene effect returns early while controlMode === 'flight' (:622) and unconditionally calls setSystemLocationMode('surface') at :650; the observed locationMode stayed 'atmosphere'."
+      },
+      "poseReplacement": "ShipController.tsx:476-478 republishes planetLocalPoseToSystemPose(pad, hearth systemPosition) under a fresh lease — a hearth-local pad pose while renderOrigin still names Origin, exactly the inconsistent state captured."
+    },
+    "refutedOrSuperseded": {
+      "arrivalReady300Shell": "already arithmetically refuted by the flight-discriminator; nothing here revives it",
+      "parkedOrUnreadyDiagnosis": "refuted — the handoff committed, so the approach path succeeded",
+      "aimConeStarvesTargetReady": "not operative — target -> null is part of the commit, not a precursor",
+      "genericHandoffBroken": "FALSE — the generic handoff works up to and including the commit; only the chapter override reacts afterwards"
+    },
+    "genericVsChapterOverride": "The existing generic same-system handoff works correctly until the chapter world override reacts on the next render. The failure is entirely in the story-routing layer, not in systemFlight, SystemTravelDriver, or the approach corridor.",
+    "smallestCorrectionSeam": {
+      "file": "main/src/story/tidegardenRoute.ts",
+      "lines": "128-131",
+      "symbol": "CROSSING_DESTINATION_WORLD_ID",
+      "change": "add the entry 'ch13-return': STORY_PRIMARY_WORLD_ID",
+      "symbolCount": 1,
+      "explicitlyNotChanged": ["resolveStoryBootWorldId", "originOwnedBeat", "state/systemFlight.ts", "components/SystemTravelDriver.tsx", "components/ShipController.tsx", "App.tsx"],
+      "whySafe": "resolveStoryRuntimeWorldId honours the table only when routeOnline && currentWorldId === destination && activePlanetId === destination — i.e. only after the shipped generic handoff has already committed.",
+      "rejectedAlternative": "Adding 'ch13-return' to originOwnedBeat in resolveStoryBootWorldId would boot/Continue the player onto Origin without flying — a teleport in all but name.",
+      "preserves": ["station chapter", "ch10", "ch12", "natural same-system crossing", "saved active planet/world boot routing", "actual Origin landing via tickReturn"],
+      "forbiddenMechanismsUsed": { "milestoneGrant": false, "teleport": false, "targetReadyBypass": false, "distanceTolerance": false, "speedInflation": false },
+      "changeClasses": { "geometry": false, "agency": false, "copy": false, "audioVisual": false }
+    },
+    "regressionAndControl": [
+      "POSITIVE: one live ch13-return capture must show activationEpoch advancing by exactly +1 at the envelope, activePlanetId becoming and staying '-1,-1', renderOrigin [0,0,0], and no pose jump back to ~[2188,-58,-1643]. A second 37.2 s cycle falsifies the fix.",
+      "CONTROL: ch8-crossing and ch10-ask must still commit and hold their destinations; a reload during ch13-return must still open on the hearth. If a reload now opens on Origin, the wrong seam was edited.",
+      "UNIT FALSIFIER: re-running the reproduction table must flip only the ch13-return post-handoff row; all five other rows must be byte-identical."
+    ],
+    "uncertainty": [
+      "Runtime chain steps 2-5 are traced branch implication corroborated by measured state, not a live instrumented read of React effect ordering; the executed reproduction covers the resolver only.",
+      "Proved by evidence: the Origin handoff committed, and setActiveSystemPlanet('-1,-1:p1') from ShipController.tsx:472-473 reverted it.",
+      "targetReady, the 6-degree aim cone and getSystemTravelAssistTarget() were not read; they are unnecessary because the commit proves the approach succeeded.",
+      "No live observation was made by this role. All runtime numbers come from the flight-discriminator's existing telemetry."
+    ]
+  },
+
+  "taskB": {
+    "title": "CG012 standby failure at E.z-3 = (-42, 51.05, 9)",
+    "newEstablishedFact": {
+      "claim": "Every authored pose and every route vertex in ch13 sits on even x and even z; with VOXEL_SCALE=2 and worldToGrid = Math.round(coord/VOXEL_SCALE), even world coordinates are exactly voxel-cell centres. The chapter is authored on the lattice.",
+      "evidence": ["main/src/story/commonGroundState.ts:68-118", "main/src/utils/agentSurfaceNavigation.ts:218-226", "main/src/utils/cubeGravityConstants.ts VOXEL_SCALE = 2"],
+      "consequence": "CG_STANDBY_CLEAR_OF_E (commonGroundDirector.ts:1950) is the ONLY target in the chapter that is off-lattice: E.z-3 = 9 is odd, round(9/2)=5 -> cell centred z=10, and z=9 is that cell's lower boundary — the maximum possible 3.0 units from the body's terminal cell centre z=12. The exact-goal rescue therefore refuses with goal-outside-terminal-cell. This target could not be handed off even if its cell were dry."
+    },
+    "twoDistinctFaults": {
+      "B1": { "status": "established from authored constants, terrain-independent", "statement": "the standby target is off-lattice by construction" },
+      "B2": { "status": "UNMEASURED", "statement": "cell centred (-42,.,10) was additionally rejected as a goal cell; otherwise the resolved goal would have been that cell and she would at least have walked. Physical reason (wet / unsupported / clearance / edge margin) not measured — no terrain sample taken.", "note": "authored qualified pose W = (-34,51.05,10) proves the z=10 row is not globally unusable, so B2 is local to x=-42" }
+    },
+    "priorAuditConsistency": "The standby-source-audit chain (agentSurfaceNavigation.ts:420 dry-cell resolution -> :651 nearest-first -> :742 already-at-resolved-goal -> direct; single waypoint on the body's own cell; dead zone -> no input -> stillTime 0, nudges 0) is consistent with every captured field. Nothing contradicting it was found.",
+    "worldIdentity": { "seed": 3215739679, "coordinate": "-1,-1", "planetSize": 50, "voxelScale": 2, "totalVoxInferred": 125000, "source": "raw screenshot 0054", "limit": "planetSize 50 is inferred from totalvox 125000 = 50^3, not a recorded capture field" },
+    "localStandbyFromExistingFootprint": {
+      "answer": "YES — a qualified standby exists inside geometry the chapter already owns and the movie already walked; no new signed geometry is required.",
+      "candidateSource": "CG_ROUTE_LONG (commonGroundState.ts:95-103), of which survey-movie-1 walked 35.31 of 36 units across 41 tested samples",
+      "candidates": [
+        { "point": [-42, 51.05, 14], "onCommonRoute": true, "minDistToCommonPolyline": 0.0, "distToEHLeg": 2.0, "onLattice": true, "usable": false },
+        { "point": [-42, 51.05, 16], "onCommonRoute": true, "minDistToCommonPolyline": 0.0, "distToEHLeg": 4.0, "onLattice": true, "usable": false },
+        { "point": [-42, 51.05, 18], "onCommonRoute": false, "minDistToCommonPolyline": 2.0, "distToEHLeg": 6.0, "onLattice": true, "usable": true },
+        { "point": [-42, 51.05, 20], "onCommonRoute": false, "minDistToCommonPolyline": 4.0, "distToEHLeg": 8.0, "onLattice": true, "usable": true, "preferred": true },
+        { "point": [-42, 51.05, 22], "onCommonRoute": false, "minDistToCommonPolyline": 6.0, "distToEHLeg": 10.0, "onLattice": true, "usable": true },
+        { "point": [-42, 51.05, 9], "onCommonRoute": false, "minDistToCommonPolyline": 3.0, "distToEHLeg": 3.0, "onLattice": false, "usable": false, "note": "the shipped derived target" }
+      ],
+      "clearanceRule": "commonGroundActor.ts:249 blocks his next step under 1 unit horizontal separation; every usable candidate clears it by 2x or more"
+    },
+    "smallestCorrectionSeam": {
+      "file": "main/src/story/commonGroundDirector.ts",
+      "line": 1950,
+      "symbol": "CG_STANDBY_CLEAR_OF_E",
+      "change": "stop deriving from E.z - 3; either bind to an existing qualified long-route vertex or, preferred, select from CG_ROUTE_LONG the first vertex whose distance from every CG_ROUTE_COMMON vertex and from the E->H segment exceeds the chapter's clearance requirement",
+      "symbolCount": 1,
+      "callSitesInheriting": ["main/src/story/commonGroundDirector.ts:2371", "main/src/story/commonGroundDirector.ts:2402"],
+      "untouched": ["CG_POSES", "CG_ROUTE_SHORT", "CG_ROUTE_LONG", "CG_ROUTE_COMMON", "utils/agentSurfaceNavigation.ts", "utils/primitives.ts", "commonGroundActor.ts 1-unit clearance"],
+      "changeClasses": { "geometry": false, "agency": false, "copy": false, "audioVisual": false },
+      "copyNote": "the published rail reason 'standing clear of the span he is testing' stays literally true",
+      "forbiddenMechanismsUsed": { "thresholdWeakening": false, "relaxedFooting": false, "endpointCredit": false, "teleportRescue": false, "arriveRadiusChange": false },
+      "sharedCodeOptionsDeferred": ["B: surface the degenerate single-cell route as a refusal (agentSurfaceNavigation.ts:742 + walkToward)", "C: qualify rail targets at publish time"],
+      "sharedCodeNote": "B and C remain correct and valuable but are shared-code and belong to those owners; neither is needed to unblock CG012 and neither should be bundled with it"
+    },
+    "regressionAndControl": [
+      "POSITIVE: the navigation/survey lane must show routeAction leaving 'direct' and player pose actually changing after the standby is published, then normal arrival inside the EXISTING 0.6 stop radius, with no threshold/footing/arrive-radius/nudge change in the diff.",
+      "CONTROL: W-7744's body-clearance hold must still engage if she stands on his span (commonGroundActor.ts:249 unrelaxed), and the short/long/common route tests in commonGroundDirector.test.ts must be unchanged.",
+      "B2 FALSIFIER: run the already-scoped read-only planner discriminator now that world identity is pinned; if the candidate standby cell reports dry with waypoints.length > 1 the fix is sound, if it also resolves to the start cell the candidate must move — never the thresholds."
+    ],
+    "limits": [
+      "No CPU terrain replay was run: exact stall state cannot be reconstructed without the live terrain generator plus actor/occupancy state, and planetSize is not a recorded capture field.",
+      "All lattice, route and clearance figures above are pure arithmetic on frozen authored constants and do not depend on the planetSize inference.",
+      "B2's physical cause remains unmeasured.",
+      "The manual-focused witness-1 reference-occluded-survey-housing hold is treated as the authored required witness action, not a defect.",
+      "Manual controls are NOT inferred broken; input works."
+    ]
+  },
+
+  "closing": { "acceptance": false, "defectClosure": false, "repairAuthorization": false, "mutation": false, "furtherWorkRequested": false }
+}

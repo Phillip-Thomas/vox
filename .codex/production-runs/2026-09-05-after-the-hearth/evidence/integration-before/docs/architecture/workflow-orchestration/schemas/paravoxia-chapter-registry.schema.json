@@ -1,0 +1,457 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://paravoxia.local/schemas/paravoxia-chapter-registry.schema.json",
+  "title": "Paravoxia Chapter Registry v1",
+  "description": "A thin ordered chapter interface over runtime progression, player guidance, reveals, signed audiovisual contracts, and acceptance evidence. Rich scene content remains in its source contracts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "runtimeAuthorityRef",
+    "terminalBeat",
+    "sceneContracts",
+    "chapters"
+  ],
+  "properties": {
+    "schema": {
+      "const": "paravoxia.chapterRegistry.v1"
+    },
+    "runtimeAuthorityRef": {
+      "$ref": "#/$defs/pathRef"
+    },
+    "terminalBeat": {
+      "const": "done"
+    },
+    "sceneContracts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sceneContractLink"
+      }
+    },
+    "chapters": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/chapter"
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stableId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@-]*$"
+    },
+    "chapterId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "qualityProfile": {
+      "type": "string",
+      "enum": ["ULTRA", "HIGH", "MEDIUM", "LOW", "POTATO"]
+    },
+    "variantViewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 320 },
+        "height": { "type": "integer", "minimum": 480 }
+      }
+    },
+    "acceptanceVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "qualityProfile", "deviceClass", "viewport", "reducedMotion"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "qualityProfile": { "$ref": "#/$defs/qualityProfile" },
+        "deviceClass": { "type": "string", "enum": ["desktop", "mobile"] },
+        "viewport": { "$ref": "#/$defs/variantViewport" },
+        "reducedMotion": { "type": "boolean" }
+      }
+    },
+    "beatId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "pathRef": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "runtimeOrSceneRef": {
+      "type": "string",
+      "pattern": "^(runtime|scene):.+$"
+    },
+    "factRef": {
+      "type": "string",
+      "pattern": "^(milestone|state):.+$"
+    },
+    "evidenceRef": {
+      "type": "string",
+      "pattern": "^(runtime|scene|milestone|state):.+$"
+    },
+    "uniqueStringList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "chapterIdList": {
+      "type": "array",
+      "maxItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/chapterId"
+      }
+    },
+    "factRefList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/factRef"
+      }
+    },
+    "runtimeOrSceneRefList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/runtimeOrSceneRef"
+      }
+    },
+    "sceneContractLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sceneId",
+        "contractVersion",
+        "path",
+        "sha256",
+        "coversBeats"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "sceneId": {
+          "$ref": "#/$defs/stableId"
+        },
+        "contractVersion": {
+          "$ref": "#/$defs/stableId"
+        },
+        "path": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "coversBeats": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/beatId"
+          }
+        }
+      }
+    },
+    "chapterBoundaryEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "beat",
+        "requirements",
+        "stateRefs"
+      ],
+      "properties": {
+        "beat": {
+          "$ref": "#/$defs/beatId"
+        },
+        "requirements": {
+          "$ref": "#/$defs/factRefList"
+        },
+        "stateRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^state:.+$"
+          }
+        }
+      }
+    },
+    "chapterBoundaryExit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "beat",
+        "guarantees",
+        "stateRefs"
+      ],
+      "properties": {
+        "beat": {
+          "$ref": "#/$defs/beatId"
+        },
+        "guarantees": {
+          "$ref": "#/$defs/factRefList"
+        },
+        "stateRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^state:.+$"
+          }
+        }
+      }
+    },
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "beat",
+        "key",
+        "milestone",
+        "resumeBeat",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "beat": {
+          "$ref": "#/$defs/beatId"
+        },
+        "key": {
+          "$ref": "#/$defs/stableId"
+        },
+        "milestone": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9:_-]*$"
+        },
+        "resumeBeat": {
+          "$ref": "#/$defs/beatId"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidenceRef"
+          }
+        }
+      }
+    },
+    "avBoundaryState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anchorRefs",
+        "scoreRefs",
+        "cameraRefs",
+        "paletteRefs"
+      ],
+      "properties": {
+        "anchorRefs": {
+          "$ref": "#/$defs/runtimeOrSceneRefList"
+        },
+        "scoreRefs": {
+          "$ref": "#/$defs/runtimeOrSceneRefList"
+        },
+        "cameraRefs": {
+          "$ref": "#/$defs/runtimeOrSceneRefList"
+        },
+        "paletteRefs": {
+          "$ref": "#/$defs/runtimeOrSceneRefList"
+        }
+      }
+    },
+    "avBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sceneContractRefs",
+        "entry",
+        "exit"
+      ],
+      "properties": {
+        "sceneContractRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/stableId"
+          }
+        },
+        "entry": {
+          "$ref": "#/$defs/avBoundaryState"
+        },
+        "exit": {
+          "$ref": "#/$defs/avBoundaryState"
+        }
+      }
+    },
+    "acceptanceBudgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimumColdRuns",
+        "minimumVariantProfiles",
+        "maxOpenCriticalDefects",
+        "maxOpenHighDefects",
+        "maxRepairLoops"
+      ],
+      "properties": {
+        "minimumColdRuns": {
+          "type": "integer",
+          "minimum": 3
+        },
+        "minimumVariantProfiles": {
+          "type": "integer",
+          "minimum": 4
+        },
+        "maxOpenCriticalDefects": {
+          "const": 0
+        },
+        "maxOpenHighDefects": {
+          "const": 0
+        },
+        "maxRepairLoops": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "performanceBudgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxEntryLoadMs",
+        "maxSceneReadyMs",
+        "maxBoundaryMs",
+        "minFps",
+        "maxP95FrameTimeMs",
+        "maxFrameGapMs",
+        "maxLongTasks",
+        "maxHeapBytes"
+      ],
+      "properties": {
+        "maxEntryLoadMs": { "type": "number", "exclusiveMinimum": 0 },
+        "maxSceneReadyMs": { "type": "number", "exclusiveMinimum": 0 },
+        "maxBoundaryMs": { "type": "number", "exclusiveMinimum": 0 },
+        "minFps": { "type": "number", "exclusiveMinimum": 0 },
+        "maxP95FrameTimeMs": { "type": "number", "exclusiveMinimum": 0 },
+        "maxFrameGapMs": { "type": "number", "exclusiveMinimum": 0 },
+        "maxLongTasks": { "type": "integer", "minimum": 0 },
+        "maxHeapBytes": { "type": "integer", "exclusiveMinimum": 0 }
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidenceRefs",
+        "requiredObjectiveBeats",
+        "requiredVariantProfiles",
+        "performanceBudgets",
+        "budgets"
+      ],
+      "properties": {
+        "evidenceRefs": {
+          "$ref": "#/$defs/runtimeOrSceneRefList"
+        },
+        "requiredObjectiveBeats": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/beatId" }
+        },
+        "requiredVariantProfiles": {
+          "type": "array",
+          "minItems": 4,
+          "items": { "$ref": "#/$defs/acceptanceVariant" }
+        },
+        "performanceBudgets": {
+          "$ref": "#/$defs/performanceBudgets"
+        },
+        "budgets": {
+          "$ref": "#/$defs/acceptanceBudgets"
+        }
+      }
+    },
+    "chapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "order",
+        "beats",
+        "before",
+        "after",
+        "entry",
+        "exit",
+        "checkpoints",
+        "objectiveRefs",
+        "revealRefs",
+        "avBoundary",
+        "acceptance"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/chapterId"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "beats": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/beatId"
+          }
+        },
+        "before": {
+          "$ref": "#/$defs/chapterIdList"
+        },
+        "after": {
+          "$ref": "#/$defs/chapterIdList"
+        },
+        "entry": {
+          "$ref": "#/$defs/chapterBoundaryEntry"
+        },
+        "exit": {
+          "$ref": "#/$defs/chapterBoundaryExit"
+        },
+        "checkpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/checkpoint"
+          }
+        },
+        "objectiveRefs": {
+          "$ref": "#/$defs/runtimeOrSceneRefList"
+        },
+        "revealRefs": {
+          "$ref": "#/$defs/runtimeOrSceneRefList"
+        },
+        "avBoundary": {
+          "$ref": "#/$defs/avBoundary"
+        },
+        "acceptance": {
+          "$ref": "#/$defs/acceptance"
+        }
+      }
+    }
+  }
+}

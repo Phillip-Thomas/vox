@@ -1,0 +1,1537 @@
+{
+  "schema": "paravoxia.shippedVisualBaseline.v1",
+  "runId": "2026-09-04-audio-10x",
+  "sceneId": "audio-10x-overhaul",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641",
+  "sourceRevisionShort": "b631a52",
+  "capturedAt": "2026-09-05T01:55:56.948Z",
+  "captureAuthority": "current shipped runtime before this run implements any of the six locked audio stages",
+  "capturedBy": "story-verifier (mechanical, read-only). No game source was modified by this probe.",
+  "purpose": "Mechanical grounding for the eleven shipped scoreHit call sites named in story-intent.md section 2. Each hit has a before/at/after still strip of the shipped cut at the beat where it fires, so a Stage 3 quantization change can be compared against what shipped.",
+  "anchorBindingStatus": "bound",
+  "anchorBindingNote": "Bound to scene-contract.json draft-v1 (sceneId audio-10x-overhaul) by the integration engineer. Each capture's anchor now resolves to the contract sync anchor for its hitRef, using the ten frozen anchor ids of chapter-note-01: hit-01-ch1-track-unbolt = anc.track.unbolt; hit-02-a1-ramp-color-landing = anc.a1.color-stabilizes; hit-03-a2-liberation-braam = anc.a2.feed-wall-falls; hit-04-a2-handoff-bloom = anc.a2.hand-back; hit-05-06-descent-impact = anc.descent.impact; hit-07-ch1-lift-dpr-snap = anc.lift.perspective-issued; hit-08-a3-first-blade = anc.a3.first-blade; hit-09-a3-material-landing = anc.a3.material-lands; hit-10-maw-repair-committed = anc.maw.repair-answer; hit-11-a4-exhale-life-front = anc.a4.life-front. No hash, capture path or measurement was altered by the rebinding; only the anchor field, the camera and palette state anchors, and the sceneId changed.",
+  "previewServer": {
+    "url": "http://127.0.0.1:5212",
+    "pid": 95250,
+    "startedBy": "pre-existing vite dev server (inherited, per README canonical preview URL policy)",
+    "startedByThisProbe": false,
+    "command": "PROBE_NO_HMR=1 BROWSER=none npx vite --host 127.0.0.1 --port 5212 --strictPort"
+  },
+  "captureEnvironment": {
+    "browser": "playwright-core chromium at ~/.cache/ms-playwright/chromium-1217/chrome-linux/chrome",
+    "flags": [
+      "--no-sandbox",
+      "--disable-dev-shm-usage",
+      "--ignore-gpu-blocklist",
+      "--enable-webgl",
+      "--use-gl=angle",
+      "--use-angle=gl",
+      "--enable-gpu-rasterization"
+    ],
+    "webglRenderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "rendererNote": "The repo's usual --enable-unsafe-swiftshader flag set resolves to ANGLE/SwiftShader on this box and, under the concurrent load present during this session, ran the shipped scene at roughly 0.3 fps with 12 s screenshots — too slow for any before/at/after strip. ANGLE/GL resolves the real NVIDIA GB10 and was used instead. The SwiftShader gate remains the authority for the score:fps budget; it is not the authority for what the shipped frame looks like.",
+    "lane": "movie lane: ?story=BEAT&movie=1&profile=LOW",
+    "pageErrors": 0
+  },
+  "viewport": "1280x720",
+  "devicePixelRatio": 1,
+  "qualityTier": "LOW",
+  "realityStage": "bare through alive — the eleven hits span the whole fidelity ladder",
+  "realityStageLadder": [
+    "bare (ch1-track, descent, ch1-lift, a1-ramp before the landing)",
+    "color (ch2-color, a2-awakening, ch3-gather, a3-dawn before the landing)",
+    "material (ch3-thirst, a4-exhale before the landing)",
+    "alive (ch5-maw, a4-exhale after commitA4Alive)"
+  ],
+  "workingTreeStatus": {
+    "clean": false,
+    "note": "The tree was dirty and actively changing during capture: a separate Stage 0 audio agent was editing main/src/audio/* while these frames were taken. The eleven call sites were re-verified byte-for-byte at the exact live line numbers immediately after the run and were unchanged.",
+    "callSiteFilesAtCapture": [
+      {
+        "path": "main/src/story/storyDirector.ts",
+        "sha256": "6f71d1d0d1c2da2252bdfab330419986b6079971efeebf488d2985b5b186d020"
+      },
+      {
+        "path": "main/src/story/signedSceneAvRuntime.ts",
+        "sha256": "a1aa5e09972f3bf4f5747c1d023f6517d149b772fa43b16867c468c083899c69"
+      },
+      {
+        "path": "main/src/story/emergentStoryDirector.ts",
+        "sha256": "a20600de9e7692271fe97df6c28b5a7e0ef056340a86fff7014055648c1e5d35"
+      }
+    ]
+  },
+  "stage0AudioBaselines": {
+    "status": "pending Stage 0",
+    "note": "PARAVOXIA_AUDIO_10X_PLAN.md section 7 still records the Stage 0 rows as unmeasured: \"Combined music+SFX render exists: no\", \"LUFS / true-peak measurable: no\", \"verify audio step: none\", and the Stage 1 loudness row reads \"unmeasured, peak 0.558\". No integrated-LUFS or true-peak baseline exists to copy into this file yet.",
+    "measuredBeforeValuesAlreadyInSection7": {
+      "padPartialsSounding": "3 of <=5",
+      "waveShaperStagesInMusicPath": 0,
+      "alivedBedPeak": 0.558,
+      "audioParamWritesPerSecondSteadyState": "~1140",
+      "storyHitsOnGrid": "0 / 11",
+      "distinctMineRendersPer200": 1,
+      "roomPresets": 0,
+      "barNovelty32MinThreeSeeds": "0.31-0.50",
+      "tabuBypasses": "16-100",
+      "distinctChords": "14-21",
+      "fpsWithScoreSwiftshaderGateMedian": 60.39,
+      "smoothnessViolations": 0
+    }
+  },
+  "captures": [
+    {
+      "path": "captures/baseline/hit-01-ch1-track-unbolt_before.png",
+      "sha256": "4238e562eff450ee6d37c6b822b260767f58900df99c711c64a5dee3e55f8c6c",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch1-track",
+      "anchor": "anc.track.unbolt",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-01-ch1-track-unbolt",
+      "hitCallSite": "main/src/story/storyDirector.ts:846",
+      "hitTimbre": "bloom",
+      "stripPosition": "before",
+      "offsetMsFromHit": -733,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "bare",
+      "bytes": 504500
+    },
+    {
+      "path": "captures/baseline/hit-01-ch1-track-unbolt_at.png",
+      "sha256": "09e510c0cf18203574a7ee4595aaf6f989320ee9210be841c191654b5788c743",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch1-track",
+      "anchor": "anc.track.unbolt",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-01-ch1-track-unbolt",
+      "hitCallSite": "main/src/story/storyDirector.ts:846",
+      "hitTimbre": "bloom",
+      "stripPosition": "at",
+      "offsetMsFromHit": 0,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "bare",
+      "bytes": 559344
+    },
+    {
+      "path": "captures/baseline/hit-01-ch1-track-unbolt_after.png",
+      "sha256": "a0ef9f25ed4630949b4d50ec4314b691580d75c65961fbed16c4809c21fd6a68",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch1-track",
+      "anchor": "anc.track.unbolt",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-01-ch1-track-unbolt",
+      "hitCallSite": "main/src/story/storyDirector.ts:846",
+      "hitTimbre": "bloom",
+      "stripPosition": "after",
+      "offsetMsFromHit": 1300,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "bare",
+      "bytes": 632661
+    },
+    {
+      "path": "captures/baseline/hit-02-a1-ramp-color-landing_before.png",
+      "sha256": "d1fd7d621e6c8287d5d7a703d4bace6919a29b689c4dfa4e869061ae45d0c4c0",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch2-color",
+      "anchor": "anc.a1.color-stabilizes",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-02-a1-ramp-color-landing",
+      "hitCallSite": "main/src/story/storyDirector.ts:1233",
+      "hitTimbre": "bloom",
+      "stripPosition": "before",
+      "offsetMsFromHit": -979,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "bare",
+      "bytes": 278125
+    },
+    {
+      "path": "captures/baseline/hit-02-a1-ramp-color-landing_at.png",
+      "sha256": "59d5272747cb805b3c4982696c378c17100f0d638a1904b2ccdc3fa8eeb685e7",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch2-color",
+      "anchor": "anc.a1.color-stabilizes",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-02-a1-ramp-color-landing",
+      "hitCallSite": "main/src/story/storyDirector.ts:1233",
+      "hitTimbre": "bloom",
+      "stripPosition": "at",
+      "offsetMsFromHit": 0,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 303029
+    },
+    {
+      "path": "captures/baseline/hit-02-a1-ramp-color-landing_after.png",
+      "sha256": "e762d281cae7d6eacf04a40ea329fecc18e7dae333920c006df93e1bbbf75fee",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch2-color",
+      "anchor": "anc.a1.color-stabilizes",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-02-a1-ramp-color-landing",
+      "hitCallSite": "main/src/story/storyDirector.ts:1233",
+      "hitTimbre": "bloom",
+      "stripPosition": "after",
+      "offsetMsFromHit": 1300,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 303058
+    },
+    {
+      "path": "captures/baseline/hit-03-a2-liberation-braam_before.png",
+      "sha256": "67f391bc58dae1d1fba681791f5a917e51be96d7b8aa9c3cd4b25646e64b4982",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "a2-awakening",
+      "anchor": "anc.a2.feed-wall-falls",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-03-a2-liberation-braam",
+      "hitCallSite": "main/src/story/storyDirector.ts:1292",
+      "hitTimbre": "braam",
+      "stripPosition": "before",
+      "offsetMsFromHit": -670,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 398727
+    },
+    {
+      "path": "captures/baseline/hit-03-a2-liberation-braam_at.png",
+      "sha256": "f12ddcbd39aaf22e869154c59ebe2041e7b560770b0bd172547b89b55c527c5a",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "a2-awakening",
+      "anchor": "anc.a2.feed-wall-falls",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-03-a2-liberation-braam",
+      "hitCallSite": "main/src/story/storyDirector.ts:1292",
+      "hitTimbre": "braam",
+      "stripPosition": "at",
+      "offsetMsFromHit": 0,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 430151
+    },
+    {
+      "path": "captures/baseline/hit-03-a2-liberation-braam_after.png",
+      "sha256": "a50907252952236a7da61061489c2c7f4ebee91165b9ffc108bf2960e241ef40",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "a2-awakening",
+      "anchor": "anc.a2.feed-wall-falls",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-03-a2-liberation-braam",
+      "hitCallSite": "main/src/story/storyDirector.ts:1292",
+      "hitTimbre": "braam",
+      "stripPosition": "after",
+      "offsetMsFromHit": 1300,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 436498
+    },
+    {
+      "path": "captures/baseline/hit-04-a2-handoff-bloom_before.png",
+      "sha256": "6d08522be18593def84f1a5ba11f202599f0aa99d55e74de02c277e9d795e82d",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch3-gather",
+      "anchor": "anc.a2.hand-back",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-04-a2-handoff-bloom",
+      "hitCallSite": "main/src/story/storyDirector.ts:1314",
+      "hitTimbre": "bloom",
+      "stripPosition": "before",
+      "offsetMsFromHit": -668,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 406008
+    },
+    {
+      "path": "captures/baseline/hit-04-a2-handoff-bloom_at.png",
+      "sha256": "4ab543a91624fa67fc5a90b07af49f2a2e39ac61f8624af1c9e11d61962780c1",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch3-gather",
+      "anchor": "anc.a2.hand-back",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-04-a2-handoff-bloom",
+      "hitCallSite": "main/src/story/storyDirector.ts:1314",
+      "hitTimbre": "bloom",
+      "stripPosition": "at",
+      "offsetMsFromHit": 0,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 431770
+    },
+    {
+      "path": "captures/baseline/hit-04-a2-handoff-bloom_after.png",
+      "sha256": "48d2994b2bd839626fa0e23922e95ad6644bcc772c33e402f5f69893b92a501e",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch3-gather",
+      "anchor": "anc.a2.hand-back",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-04-a2-handoff-bloom",
+      "hitCallSite": "main/src/story/storyDirector.ts:1314",
+      "hitTimbre": "bloom",
+      "stripPosition": "after",
+      "offsetMsFromHit": 1300,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 435461
+    },
+    {
+      "path": "captures/baseline/hit-05-06-descent-impact_before.png",
+      "sha256": "dcda406f023c8c035d4c1d8d62a8c25cf0b350bfbc0ba77c0bd8796d333df088",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "descent",
+      "anchor": "anc.descent.impact",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-05-06-descent-impact",
+      "hitCallSite": "main/src/story/storyDirector.ts:1362 + main/src/story/storyDirector.ts:1363",
+      "hitTimbre": "boom+braam",
+      "stripPosition": "before",
+      "offsetMsFromHit": -682,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "bare",
+      "bytes": 585751
+    },
+    {
+      "path": "captures/baseline/hit-05-06-descent-impact_at.png",
+      "sha256": "b8dc5ed8fa3d6619b049b5b9d2f7947b6cbceb1cde7c718b8b9c302067911bfe",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "descent",
+      "anchor": "anc.descent.impact",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-05-06-descent-impact",
+      "hitCallSite": "main/src/story/storyDirector.ts:1362 + main/src/story/storyDirector.ts:1363",
+      "hitTimbre": "boom+braam",
+      "stripPosition": "at",
+      "offsetMsFromHit": 0,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "bare",
+      "bytes": 259306
+    },
+    {
+      "path": "captures/baseline/hit-05-06-descent-impact_after.png",
+      "sha256": "55463e15bd9817b7c22eff659d79d64ccfccde3d62103e06340a3330cc54ff38",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "descent",
+      "anchor": "anc.descent.impact",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-05-06-descent-impact",
+      "hitCallSite": "main/src/story/storyDirector.ts:1362 + main/src/story/storyDirector.ts:1363",
+      "hitTimbre": "boom+braam",
+      "stripPosition": "after",
+      "offsetMsFromHit": 1300,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "bare",
+      "bytes": 584736
+    },
+    {
+      "path": "captures/baseline/hit-07-ch1-lift-dpr-snap_before.png",
+      "sha256": "16fdf4e40eed0cad1764977b6d3b6b80c43a37f3b027808dd69fdf9b00880e20",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch1-lift",
+      "anchor": "anc.lift.perspective-issued",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-07-ch1-lift-dpr-snap",
+      "hitCallSite": "main/src/story/storyDirector.ts:1434",
+      "hitTimbre": "braam",
+      "stripPosition": "before",
+      "offsetMsFromHit": -890,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "bare",
+      "bytes": 524600
+    },
+    {
+      "path": "captures/baseline/hit-07-ch1-lift-dpr-snap_at.png",
+      "sha256": "5e21325689a04051268c2dd2372246575e04abca967ef08ea81390623561067a",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch1-lift",
+      "anchor": "anc.lift.perspective-issued",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-07-ch1-lift-dpr-snap",
+      "hitCallSite": "main/src/story/storyDirector.ts:1434",
+      "hitTimbre": "braam",
+      "stripPosition": "at",
+      "offsetMsFromHit": 0,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "bare",
+      "bytes": 512808
+    },
+    {
+      "path": "captures/baseline/hit-07-ch1-lift-dpr-snap_after.png",
+      "sha256": "5a58d03c4ceaef6df006fa98fd21f8b3adf63f667365309379d2740b041c6c98",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch1-lift",
+      "anchor": "anc.lift.perspective-issued",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-07-ch1-lift-dpr-snap",
+      "hitCallSite": "main/src/story/storyDirector.ts:1434",
+      "hitTimbre": "braam",
+      "stripPosition": "after",
+      "offsetMsFromHit": 1300,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "bare",
+      "bytes": 454994
+    },
+    {
+      "path": "captures/baseline/hit-08-a3-first-blade_before.png",
+      "sha256": "21cf185306b91e1f8739c2d43b62a68830f9525c8a672561908e706a2a83d6ac",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "a3-dawn",
+      "anchor": "anc.a3.first-blade",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-08-a3-first-blade",
+      "hitCallSite": "main/src/story/storyDirector.ts:1741",
+      "hitTimbre": "bloom",
+      "stripPosition": "before",
+      "offsetMsFromHit": -1002,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 518108
+    },
+    {
+      "path": "captures/baseline/hit-08-a3-first-blade_at.png",
+      "sha256": "f22e59e1c954450b6dccb6dc3a7d7b774e32620e7295c989f9d2c9213170ca5e",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "a3-dawn",
+      "anchor": "anc.a3.first-blade",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-08-a3-first-blade",
+      "hitCallSite": "main/src/story/storyDirector.ts:1741",
+      "hitTimbre": "bloom",
+      "stripPosition": "at",
+      "offsetMsFromHit": 0,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 619187
+    },
+    {
+      "path": "captures/baseline/hit-08-a3-first-blade_after.png",
+      "sha256": "04d50495b0646ffd6ed757d3b649bb114c41a60a0972b18ca984e5dac053842f",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "a3-dawn",
+      "anchor": "anc.a3.first-blade",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-08-a3-first-blade",
+      "hitCallSite": "main/src/story/storyDirector.ts:1741",
+      "hitTimbre": "bloom",
+      "stripPosition": "after",
+      "offsetMsFromHit": 1300,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 653785
+    },
+    {
+      "path": "captures/baseline/hit-09-a3-material-landing_before.png",
+      "sha256": "08af75177be89f10414423a63e42afbd5220d906f8453e1078ae1e0b303d9862",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch3-thirst",
+      "anchor": "anc.a3.material-lands",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-09-a3-material-landing",
+      "hitCallSite": "main/src/story/storyDirector.ts:1760",
+      "hitTimbre": "bloom",
+      "stripPosition": "before",
+      "offsetMsFromHit": -1113,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "color",
+      "bytes": 666396
+    },
+    {
+      "path": "captures/baseline/hit-09-a3-material-landing_at.png",
+      "sha256": "ecc73a44f8d30b570e8d9462f30242a74afc36463f43412ad19ba595d737aea5",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch3-thirst",
+      "anchor": "anc.a3.material-lands",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-09-a3-material-landing",
+      "hitCallSite": "main/src/story/storyDirector.ts:1760",
+      "hitTimbre": "bloom",
+      "stripPosition": "at",
+      "offsetMsFromHit": 0,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "material",
+      "bytes": 680646
+    },
+    {
+      "path": "captures/baseline/hit-09-a3-material-landing_after.png",
+      "sha256": "22cd5004a8d8978a403c5f85bd22ff2b29e766cd2c5d07266bf330dd47fbab1f",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch3-thirst",
+      "anchor": "anc.a3.material-lands",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-09-a3-material-landing",
+      "hitCallSite": "main/src/story/storyDirector.ts:1760",
+      "hitTimbre": "bloom",
+      "stripPosition": "after",
+      "offsetMsFromHit": 1300,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "material",
+      "bytes": 680468
+    },
+    {
+      "path": "captures/baseline/hit-10-maw-repair-committed_before.png",
+      "sha256": "588ec89111526fd1bb88f9f893330e9390918e31d47bd4452129e03710552b1c",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch5-maw",
+      "anchor": "anc.maw.repair-answer",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-10-maw-repair-committed",
+      "hitCallSite": "main/src/story/signedSceneAvRuntime.ts:445",
+      "hitTimbre": "bloom",
+      "stripPosition": "before",
+      "offsetMsFromHit": -240,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "alive",
+      "bytes": 668514
+    },
+    {
+      "path": "captures/baseline/hit-10-maw-repair-committed_at.png",
+      "sha256": "cf060852c2b7cad686ddbae36e35d5f7e4e5086c6a458b9a41e9dc3990fbf4f7",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch5-maw",
+      "anchor": "anc.maw.repair-answer",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-10-maw-repair-committed",
+      "hitCallSite": "main/src/story/signedSceneAvRuntime.ts:445",
+      "hitTimbre": "bloom",
+      "stripPosition": "at",
+      "offsetMsFromHit": 0,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "alive",
+      "bytes": 673406
+    },
+    {
+      "path": "captures/baseline/hit-10-maw-repair-committed_after.png",
+      "sha256": "fe445fb7c5e7df78ab9d10bd7f4584754713859eff7a87b347a772e996981eb4",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "ch5-maw",
+      "anchor": "anc.maw.repair-answer",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-10-maw-repair-committed",
+      "hitCallSite": "main/src/story/signedSceneAvRuntime.ts:445",
+      "hitTimbre": "bloom",
+      "stripPosition": "after",
+      "offsetMsFromHit": 1300,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "alive",
+      "bytes": 763457
+    },
+    {
+      "path": "captures/baseline/hit-11-a4-exhale-life-front_before.png",
+      "sha256": "b1d3619af3bd35636291e7ecffae8fb9ec6423cb8ed94e8eb812cda63131b19e",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "a4-exhale",
+      "anchor": "anc.a4.life-front",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-11-a4-exhale-life-front",
+      "hitCallSite": "main/src/story/emergentStoryDirector.ts:941",
+      "hitTimbre": "bloom",
+      "stripPosition": "before",
+      "offsetMsFromHit": -563,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "material",
+      "bytes": 564048
+    },
+    {
+      "path": "captures/baseline/hit-11-a4-exhale-life-front_at.png",
+      "sha256": "f8930c2ad0c709982261beec1c0a7dea7008091ff7118fd5734d9766e0061bfb",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "a4-exhale",
+      "anchor": "anc.a4.life-front",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-11-a4-exhale-life-front",
+      "hitCallSite": "main/src/story/emergentStoryDirector.ts:941",
+      "hitTimbre": "bloom",
+      "stripPosition": "at",
+      "offsetMsFromHit": 0,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "alive",
+      "bytes": 596723
+    },
+    {
+      "path": "captures/baseline/hit-11-a4-exhale-life-front_after.png",
+      "sha256": "edb15565e865754b71c7b52037b92f19ab2b490d9e08cd72dc3af9c9ec6cb96c",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0.0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "beat": "a4-exhale",
+      "anchor": "anc.a4.life-front",
+      "anchorBinding": "bound-to-scene-contract-draft-v1",
+      "hitRef": "hit-11-a4-exhale-life-front",
+      "hitCallSite": "main/src/story/emergentStoryDirector.ts:941",
+      "hitTimbre": "bloom",
+      "stripPosition": "after",
+      "offsetMsFromHit": 1300,
+      "kind": "still-frame",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "LOW",
+      "realityStageAtFrame": "alive",
+      "bytes": 655792
+    }
+  ],
+  "hitAnchors": [
+    {
+      "hitRef": "hit-01-ch1-track-unbolt",
+      "callSite": "main/src/story/storyDirector.ts:846",
+      "commissionRef": "813",
+      "timbre": "bloom",
+      "beat": "ch1-track",
+      "observedBeatAtHit": "ch1-track",
+      "observedBeatElapsedSecondsWallClock": 0,
+      "detector": {
+        "type": "beat",
+        "value": "ch1-track"
+      },
+      "signedSceneAnchorObserved": null,
+      "signedSceneEventObserved": null,
+      "presentationBundleThatChases": "camera unbolt start (fixed-cam to tracking transfer), playSfx storyAwaken",
+      "frames": [
+        "captures/baseline/hit-01-ch1-track-unbolt_before.png",
+        "captures/baseline/hit-01-ch1-track-unbolt_at.png",
+        "captures/baseline/hit-01-ch1-track-unbolt_after.png"
+      ]
+    },
+    {
+      "hitRef": "hit-02-a1-ramp-color-landing",
+      "callSite": "main/src/story/storyDirector.ts:1233",
+      "commissionRef": "1200",
+      "timbre": "bloom",
+      "beat": "a1-ramp",
+      "observedBeatAtHit": "ch2-color",
+      "observedBeatElapsedSecondsWallClock": 0,
+      "detector": {
+        "type": "beat",
+        "value": "ch2-color"
+      },
+      "signedSceneAnchorObserved": null,
+      "signedSceneEventObserved": null,
+      "presentationBundleThatChases": "setVoxelRealityStage(color) at storyDirector.ts:1227, desat 0, stage cut, advanceToBeat(ch2-color)",
+      "frames": [
+        "captures/baseline/hit-02-a1-ramp-color-landing_before.png",
+        "captures/baseline/hit-02-a1-ramp-color-landing_at.png",
+        "captures/baseline/hit-02-a1-ramp-color-landing_after.png"
+      ]
+    },
+    {
+      "hitRef": "hit-03-a2-liberation-braam",
+      "callSite": "main/src/story/storyDirector.ts:1292",
+      "commissionRef": "1259",
+      "timbre": "braam",
+      "beat": "a2-awakening",
+      "observedBeatAtHit": "a2-awakening",
+      "observedBeatElapsedSecondsWallClock": 5.62,
+      "detector": {
+        "type": "sfx",
+        "value": "storyAwaken"
+      },
+      "signedSceneAnchorObserved": null,
+      "signedSceneEventObserved": null,
+      "presentationBundleThatChases": "FOV liberation onset; HUD death (k>0.55) is already past; playSfx storyAwaken",
+      "frames": [
+        "captures/baseline/hit-03-a2-liberation-braam_before.png",
+        "captures/baseline/hit-03-a2-liberation-braam_at.png",
+        "captures/baseline/hit-03-a2-liberation-braam_after.png"
+      ]
+    },
+    {
+      "hitRef": "hit-04-a2-handoff-bloom",
+      "callSite": "main/src/story/storyDirector.ts:1314",
+      "commissionRef": "1281",
+      "timbre": "bloom",
+      "beat": "a2-awakening",
+      "observedBeatAtHit": "ch3-gather",
+      "observedBeatElapsedSecondsWallClock": 0,
+      "detector": {
+        "type": "beat",
+        "value": "ch3-gather"
+      },
+      "signedSceneAnchorObserved": null,
+      "signedSceneEventObserved": null,
+      "presentationBundleThatChases": "setStoryLookMode(free), setStoryTargetDpr(null), treatment 0, advanceToBeat(ch3-gather) as one bundle",
+      "frames": [
+        "captures/baseline/hit-04-a2-handoff-bloom_before.png",
+        "captures/baseline/hit-04-a2-handoff-bloom_at.png",
+        "captures/baseline/hit-04-a2-handoff-bloom_after.png"
+      ]
+    },
+    {
+      "hitRef": "hit-05-06-descent-impact",
+      "callSite": "main/src/story/storyDirector.ts:1362 + main/src/story/storyDirector.ts:1363",
+      "commissionRef": "1329/1330",
+      "timbre": "boom+braam",
+      "beat": "descent",
+      "observedBeatAtHit": "descent",
+      "observedBeatElapsedSecondsWallClock": 6.64,
+      "detector": {
+        "type": "sfx",
+        "value": "shipCrash"
+      },
+      "signedSceneAnchorObserved": null,
+      "signedSceneEventObserved": null,
+      "presentationBundleThatChases": "r.flash 1, r.glitch 1, r.scanRoll 0.8, playSfx shipCrash. Two scoreHit calls, one onset, never split.",
+      "frames": [
+        "captures/baseline/hit-05-06-descent-impact_before.png",
+        "captures/baseline/hit-05-06-descent-impact_at.png",
+        "captures/baseline/hit-05-06-descent-impact_after.png"
+      ]
+    },
+    {
+      "hitRef": "hit-07-ch1-lift-dpr-snap",
+      "callSite": "main/src/story/storyDirector.ts:1434",
+      "commissionRef": "1401",
+      "timbre": "braam",
+      "beat": "ch1-lift",
+      "observedBeatAtHit": "ch1-lift",
+      "observedBeatElapsedSecondsWallClock": 5.78,
+      "detector": {
+        "type": "sfx",
+        "value": "storyGlitch"
+      },
+      "signedSceneAnchorObserved": null,
+      "signedSceneEventObserved": null,
+      "presentationBundleThatChases": "r.glitch 0.8, r.scanRoll 0.5, playSfx storyGlitch, setStoryTargetDpr(null) — all simultaneous, masking the framebuffer snap",
+      "frames": [
+        "captures/baseline/hit-07-ch1-lift-dpr-snap_before.png",
+        "captures/baseline/hit-07-ch1-lift-dpr-snap_at.png",
+        "captures/baseline/hit-07-ch1-lift-dpr-snap_after.png"
+      ]
+    },
+    {
+      "hitRef": "hit-08-a3-first-blade",
+      "callSite": "main/src/story/storyDirector.ts:1741",
+      "commissionRef": "1708",
+      "timbre": "bloom",
+      "beat": "a3-dawn",
+      "observedBeatAtHit": "a3-dawn",
+      "observedBeatElapsedSecondsWallClock": 17.63,
+      "detector": {
+        "type": "text",
+        "value": "the wood remembers being a tree.",
+        "delayMs": 1000
+      },
+      "signedSceneAnchorObserved": null,
+      "signedSceneEventObserved": null,
+      "presentationBundleThatChases": "setLifeReveal wave front from the campfire origin; the grain captions have already landed",
+      "frames": [
+        "captures/baseline/hit-08-a3-first-blade_before.png",
+        "captures/baseline/hit-08-a3-first-blade_at.png",
+        "captures/baseline/hit-08-a3-first-blade_after.png"
+      ]
+    },
+    {
+      "hitRef": "hit-09-a3-material-landing",
+      "callSite": "main/src/story/storyDirector.ts:1760",
+      "commissionRef": "1727",
+      "timbre": "bloom",
+      "beat": "a3-dawn",
+      "observedBeatAtHit": "ch3-thirst",
+      "observedBeatElapsedSecondsWallClock": 0,
+      "detector": {
+        "type": "beat",
+        "value": "ch3-thirst"
+      },
+      "signedSceneAnchorObserved": null,
+      "signedSceneEventObserved": null,
+      "presentationBundleThatChases": "setVoxelRealityStage(material) at storyDirector.ts:1756 and clearLifeReveal() simultaneously, advanceToBeat(ch3-thirst)",
+      "frames": [
+        "captures/baseline/hit-09-a3-material-landing_before.png",
+        "captures/baseline/hit-09-a3-material-landing_at.png",
+        "captures/baseline/hit-09-a3-material-landing_after.png"
+      ]
+    },
+    {
+      "hitRef": "hit-10-maw-repair-committed",
+      "callSite": "main/src/story/signedSceneAvRuntime.ts:445",
+      "commissionRef": "signed-scene",
+      "timbre": "bloom",
+      "beat": "ch5-maw",
+      "observedBeatAtHit": "ch5-maw",
+      "observedBeatElapsedSecondsWallClock": 20.54,
+      "detector": {
+        "type": "sceneAvAnchor",
+        "value": "anc.maw.repair-committed"
+      },
+      "signedSceneAnchorObserved": "anc.maw.repair-committed",
+      "signedSceneEventObserved": "maw_repaired",
+      "presentationBundleThatChases": "the Maw's audible/visible answer to anc.maw.repair-committed; the receipt/commit itself is immediate",
+      "frames": [
+        "captures/baseline/hit-10-maw-repair-committed_before.png",
+        "captures/baseline/hit-10-maw-repair-committed_at.png",
+        "captures/baseline/hit-10-maw-repair-committed_after.png"
+      ]
+    },
+    {
+      "hitRef": "hit-11-a4-exhale-life-front",
+      "callSite": "main/src/story/emergentStoryDirector.ts:941",
+      "commissionRef": "emergent",
+      "timbre": "bloom",
+      "beat": "a4-exhale",
+      "observedBeatAtHit": "a4-exhale",
+      "observedBeatElapsedSecondsWallClock": 4.93,
+      "detector": {
+        "type": "sfx",
+        "value": "storyAwaken"
+      },
+      "signedSceneAnchorObserved": "anc.a4.life-front",
+      "signedSceneEventObserved": "ev.a4.alive-authority-committed",
+      "presentationBundleThatChases": "playSfx storyAwaken, the caption, and the lifeProgress origin as one bundle; commitA4Alive is immediate",
+      "frames": [
+        "captures/baseline/hit-11-a4-exhale-life-front_before.png",
+        "captures/baseline/hit-11-a4-exhale-life-front_at.png",
+        "captures/baseline/hit-11-a4-exhale-life-front_after.png"
+      ]
+    }
+  ],
+  "hitCameraStates": [
+    {
+      "hitRef": "hit-01-ch1-track-unbolt",
+      "beat": "ch1-track",
+      "authority": "lens-rig",
+      "fovDeg": 50.0,
+      "dprPolicy": "RASTER_DPR 0.4",
+      "sourceRef": "main/src/story/storyInputPolicy.ts:71 FEED_FOV via rasterPolicy (buildPolicyForBeat case ch1-track)"
+    },
+    {
+      "hitRef": "hit-02-a1-ramp-color-landing",
+      "beat": "a1-ramp",
+      "authority": "player-camera",
+      "fovDeg": 50.0,
+      "dprPolicy": "device DPR (embodiedSurveyPolicy targetDpr null)",
+      "sourceRef": "main/src/story/storyInputPolicy.ts:72 FEED_FOV via embodiedSurveyPolicy (case a1-ramp)"
+    },
+    {
+      "hitRef": "hit-03-a2-liberation-braam",
+      "beat": "a2-awakening",
+      "authority": "player-camera",
+      "fovDeg": 50.0,
+      "dprPolicy": "device DPR reasserted at the HUD death (storyDirector.ts:1288 setStoryTargetDpr(null))",
+      "sourceRef": "main/src/story/storyInputPolicy.ts:72 FEED_FOV at liberation onset; storyDirector.ts:1298 lerps setStoryTargetFov toward SANDBOX_FOV 75 across A2_TIMELINE.liberationSeconds 6.0"
+    },
+    {
+      "hitRef": "hit-04-a2-handoff-bloom",
+      "beat": "a2-awakening",
+      "authority": "player-camera",
+      "fovDeg": 75.0,
+      "dprPolicy": "device DPR (setStoryTargetDpr(null) in the handoff bundle)",
+      "sourceRef": "main/src/story/storyInputPolicy.ts:70 SANDBOX_FOV via ch3Policy (case ch3-gather)"
+    },
+    {
+      "hitRef": "hit-05-06-descent-impact",
+      "beat": "descent",
+      "authority": "lens-rig",
+      "fovDeg": 50.0,
+      "dprPolicy": "RASTER_DPR 0.4",
+      "sourceRef": "main/src/story/storyInputPolicy.ts:72 FEED_FOV via rasterPolicy (case descent)"
+    },
+    {
+      "hitRef": "hit-07-ch1-lift-dpr-snap",
+      "beat": "ch1-lift",
+      "authority": "lens-rig",
+      "fovDeg": 50.0,
+      "dprPolicy": "ISO_DPR 0.55 released to device DPR at the snap (setStoryTargetDpr(null))",
+      "sourceRef": "main/src/story/storyInputPolicy.ts:72 FEED_FOV via rasterPolicy (case ch1-lift)"
+    },
+    {
+      "hitRef": "hit-08-a3-first-blade",
+      "beat": "a3-dawn",
+      "authority": "player-camera",
+      "fovDeg": 75.0,
+      "dprPolicy": "device DPR",
+      "sourceRef": "main/src/story/storyInputPolicy.ts:70 SANDBOX_FOV via ch3Policy (case a3-dawn, moveSpeedScale 0)"
+    },
+    {
+      "hitRef": "hit-09-a3-material-landing",
+      "beat": "a3-dawn",
+      "authority": "player-camera",
+      "fovDeg": 75.0,
+      "dprPolicy": "device DPR",
+      "sourceRef": "main/src/story/storyInputPolicy.ts:70 SANDBOX_FOV via ch3Policy (case ch3-thirst)"
+    },
+    {
+      "hitRef": "hit-10-maw-repair-committed",
+      "beat": "ch5-maw",
+      "authority": "player-camera",
+      "fovDeg": 75.0,
+      "dprPolicy": "device DPR",
+      "sourceRef": "main/src/story/storyInputPolicy.ts:70 SANDBOX_FOV via SANDBOX_POLICY (case ch5-maw)"
+    },
+    {
+      "hitRef": "hit-11-a4-exhale-life-front",
+      "beat": "a4-exhale",
+      "authority": "player-camera",
+      "fovDeg": 75.0,
+      "dprPolicy": "device DPR",
+      "sourceRef": "main/src/story/storyInputPolicy.ts:70 SANDBOX_FOV via ch3Policy (case a4-exhale, moveSpeedScale 0)"
+    }
+  ],
+  "hitPaletteStates": [
+    {
+      "hitRef": "hit-01-ch1-track-unbolt",
+      "beat": "ch1-track",
+      "realityStageBefore": "bare",
+      "realityStageAfter": "bare",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "hitRef": "hit-02-a1-ramp-color-landing",
+      "beat": "a1-ramp",
+      "realityStageBefore": "bare",
+      "realityStageAfter": "color",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "hitRef": "hit-03-a2-liberation-braam",
+      "beat": "a2-awakening",
+      "realityStageBefore": "color",
+      "realityStageAfter": "color",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "hitRef": "hit-04-a2-handoff-bloom",
+      "beat": "a2-awakening",
+      "realityStageBefore": "color",
+      "realityStageAfter": "color",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "hitRef": "hit-05-06-descent-impact",
+      "beat": "descent",
+      "realityStageBefore": "bare",
+      "realityStageAfter": "bare",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "hitRef": "hit-07-ch1-lift-dpr-snap",
+      "beat": "ch1-lift",
+      "realityStageBefore": "bare",
+      "realityStageAfter": "bare",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "hitRef": "hit-08-a3-first-blade",
+      "beat": "a3-dawn",
+      "realityStageBefore": "color",
+      "realityStageAfter": "color",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "hitRef": "hit-09-a3-material-landing",
+      "beat": "a3-dawn",
+      "realityStageBefore": "color",
+      "realityStageAfter": "material",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "hitRef": "hit-10-maw-repair-committed",
+      "beat": "ch5-maw",
+      "realityStageBefore": "alive",
+      "realityStageAfter": "alive",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "hitRef": "hit-11-a4-exhale-life-front",
+      "beat": "a4-exhale",
+      "realityStageBefore": "material",
+      "realityStageAfter": "alive",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    }
+  ],
+  "cameraStates": [
+    {
+      "anchor": "anc.track.unbolt",
+      "authority": "lens-rig",
+      "fovDeg": 50.0,
+      "sourceRef": "main/src/story/storyInputPolicy.ts:71 FEED_FOV via rasterPolicy (buildPolicyForBeat case ch1-track)"
+    },
+    {
+      "anchor": "anc.a1.color-stabilizes",
+      "authority": "player-camera",
+      "fovDeg": 50.0,
+      "sourceRef": "main/src/story/storyInputPolicy.ts:72 FEED_FOV via embodiedSurveyPolicy (case a1-ramp)"
+    },
+    {
+      "anchor": "anc.a2.feed-wall-falls",
+      "authority": "player-camera",
+      "fovDeg": 50.0,
+      "sourceRef": "main/src/story/storyInputPolicy.ts:72 FEED_FOV at liberation onset; storyDirector.ts:1298 lerps setStoryTargetFov toward SANDBOX_FOV 75 across A2_TIMELINE.liberationSeconds 6.0"
+    },
+    {
+      "anchor": "anc.a2.hand-back",
+      "authority": "player-camera",
+      "fovDeg": 75.0,
+      "sourceRef": "main/src/story/storyInputPolicy.ts:70 SANDBOX_FOV via ch3Policy (case ch3-gather)"
+    },
+    {
+      "anchor": "anc.descent.impact",
+      "authority": "lens-rig",
+      "fovDeg": 50.0,
+      "sourceRef": "main/src/story/storyInputPolicy.ts:72 FEED_FOV via rasterPolicy (case descent)"
+    },
+    {
+      "anchor": "anc.lift.perspective-issued",
+      "authority": "lens-rig",
+      "fovDeg": 50.0,
+      "sourceRef": "main/src/story/storyInputPolicy.ts:72 FEED_FOV via rasterPolicy (case ch1-lift)"
+    },
+    {
+      "anchor": "anc.a3.first-blade",
+      "authority": "player-camera",
+      "fovDeg": 75.0,
+      "sourceRef": "main/src/story/storyInputPolicy.ts:70 SANDBOX_FOV via ch3Policy (case a3-dawn, moveSpeedScale 0)"
+    },
+    {
+      "anchor": "anc.a3.material-lands",
+      "authority": "player-camera",
+      "fovDeg": 75.0,
+      "sourceRef": "main/src/story/storyInputPolicy.ts:70 SANDBOX_FOV via ch3Policy (case ch3-thirst)"
+    },
+    {
+      "anchor": "anc.maw.repair-answer",
+      "authority": "player-camera",
+      "fovDeg": 75.0,
+      "sourceRef": "main/src/story/storyInputPolicy.ts:70 SANDBOX_FOV via SANDBOX_POLICY (case ch5-maw)"
+    },
+    {
+      "anchor": "anc.a4.life-front",
+      "authority": "player-camera",
+      "fovDeg": 75.0,
+      "sourceRef": "main/src/story/storyInputPolicy.ts:70 SANDBOX_FOV via ch3Policy (case a4-exhale, moveSpeedScale 0)"
+    }
+  ],
+  "paletteStates": [
+    {
+      "anchor": "anc.track.unbolt",
+      "family": "planet-derived",
+      "realityStage": "bare",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "anchor": "anc.a1.color-stabilizes",
+      "family": "planet-derived",
+      "realityStage": "color",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "anchor": "anc.a2.feed-wall-falls",
+      "family": "planet-derived",
+      "realityStage": "color",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "anchor": "anc.a2.hand-back",
+      "family": "planet-derived",
+      "realityStage": "color",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "anchor": "anc.descent.impact",
+      "family": "planet-derived",
+      "realityStage": "bare",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "anchor": "anc.lift.perspective-issued",
+      "family": "planet-derived",
+      "realityStage": "bare",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "anchor": "anc.a3.first-blade",
+      "family": "planet-derived",
+      "realityStage": "color",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "anchor": "anc.a3.material-lands",
+      "family": "planet-derived",
+      "realityStage": "material",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "anchor": "anc.maw.repair-answer",
+      "family": "planet-derived",
+      "realityStage": "alive",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    },
+    {
+      "anchor": "anc.a4.life-front",
+      "family": "planet-derived",
+      "realityStage": "alive",
+      "sourceRefs": [
+        "main/src/game/systems/realityRenderSystem.ts",
+        "main/src/story/storyState.ts",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ]
+    }
+  ],
+  "adjacentEntryRefs": [
+    "captures/baseline/hit-01-ch1-track-unbolt_before.png"
+  ],
+  "adjacentExitRefs": [
+    "captures/baseline/hit-11-a4-exhale-life-front_after.png"
+  ],
+  "headedStatus": "pending",
+  "headedNote": "These are headless stills of the shipped picture only. The run's taste gate is an owner audition of A/B audio excerpts per stage; no headless artifact substitutes for it.",
+  "evidenceRefs": [
+    ".codex/production-runs/2026-09-04-audio-10x/baseline-hit-probe.mjs",
+    ".codex/production-runs/2026-09-04-audio-10x/captures/baseline/baseline-hit-trace.json"
+  ]
+}

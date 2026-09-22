@@ -1,0 +1,110 @@
+{
+  "schema": "terra.runProfile.v1",
+  "identity": {
+    "slug": "paravoxia-creative-delta",
+    "name": "Paravoxia Creative Delta",
+    "version": "v1"
+  },
+  "domain": "audiovisual_game_direction",
+  "mode": "three_director_delta",
+  "executionBudget": {
+    "tier": "fast",
+    "maxModelCalls": 18,
+    "maxPatchLoops": 2,
+    "maxIndependentReviewPasses": 2,
+    "preferDeterministicChecksBeforeModelCritique": true,
+    "spendMostModelTokensOnDirectorsAndCohesionJudge": true
+  },
+  "exploration": {
+    "depth": 1,
+    "requireCurrentAuthority": true,
+    "requireShippedEvidence": true,
+    "requireShippedUxBaseline": true,
+    "requireAdjacentSceneSurvey": true,
+    "requireIndependentTreatments": true,
+    "requireIndependentPlayerExperienceAudit": true,
+    "minimumDistinctTreatments": 1
+  },
+  "approval": {
+    "weightedScoreThreshold": 4.75,
+    "categoryFloor": 4.3,
+    "stagedGate": "final",
+    "humanTasteApproval": {
+      "required": false,
+      "requiresHeadedRealGpuEvidence": false,
+      "cannotBeInferredFromModelReview": true
+    },
+    "publishRequiresSeparateDecision": true
+  },
+  "autonomousLoopPolicy": {
+    "enabled": true,
+    "routeOpenDefectsToOwningLane": true,
+    "stopWhenScoreStallsForLoops": 2,
+    "minimumMaterialScoreDelta": 0.05,
+    "requiresHumanExceptionForUnresolvedMediumOrHigherDefects": true
+  },
+  "requiredEvidence": [
+    "production-lock",
+    "production-lock-machine",
+    "shipped-visual-baseline",
+    "shipped-ux-baseline",
+    "shipped-reference-map",
+    "story-intent",
+    "score-treatment",
+    "cinematography-treatment",
+    "director-notes",
+    "director-signoffs",
+    "scene-contract",
+    "implementation-diff",
+    "check-results",
+    "verification-report",
+    "raw-audiovisual-evidence",
+    "objective-lifecycle-evidence",
+    "chapter-journey-evidence",
+    "evidence-registry",
+    "story-audit",
+    "score-audit",
+    "cinematography-audit",
+    "ux-audit",
+    "naive-audience-report",
+    "critic-report",
+    "defects",
+    "repair-contract-disposition",
+    "iteration-ledger",
+    "final-scorecard",
+    "creative-run-quality-report",
+    "lessons-learned"
+  ],
+  "stateCoverage": {
+    "requiredStates": [
+      "affected_desktop",
+      "affected_mobile",
+      "reduced_motion",
+      "lowest_supported_quality",
+      "objective_enter",
+      "objective_marker_ready",
+      "objective_completion_clear",
+      "focused_journey_contracts",
+      "affected_reset_paths",
+      "sandbox_inactive"
+    ],
+    "stressStatesRequired": false,
+    "exactAnchorEvidenceRequired": true,
+    "scopeOutPolicy": "Only demonstrably unaffected states may be scoped out, with a written verifier rationale and Cohesion Judge acceptance."
+  },
+  "repairPolicy": {
+    "unchangedContract": {
+      "inheritSignedTreatmentsAndUnchangedEvidence": true,
+      "newModelCalls": 3,
+      "roles": [
+        "integration-engineer",
+        "affected-independent-reviewer",
+        "scene-cohesion-judge"
+      ],
+      "runtimeBeforeBroadVerification": true,
+      "reuseChecksOnlyForExactSourceAndCommand": true,
+      "reopenDirectorsOnlyForChangedCreativeMeaning": true
+    },
+    "finalQualityThresholdsUnchanged": true
+  }
+}

@@ -1,0 +1,479 @@
+{
+  "schema": "paravoxia.implementationSnapshot.v1",
+  "capturedAt": "2026-09-06T11:18:48.687514+00:00",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "beforeManifestRefs": [
+    "integration-before-manifest.json",
+    "producer-boundary-completion.json"
+  ],
+  "preservationChecked": 958,
+  "unexpectedDrift": [],
+  "changedPaths": [
+    {
+      "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-registry.schema.json",
+      "beforeSha256": "e42580b512569bd62b2f6768b727614e1d5a222e493bf3c21501db15d58b9f84",
+      "afterSha256": "9a5546cb31b5585cf5d25487f3fe8c71dd6ea9640dad39b4aa93e50a8fd4f626",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json",
+      "beforeSha256": "d80e8f3762c567c270d118f189d19fbbccb166f2fe93517e51971b4174689769",
+      "afterSha256": "c336a1c2ff2b1c2bb2a761838400802cad05a89197ebb48bee887b0c8444fc8b",
+      "kind": "modified"
+    },
+    {
+      "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+      "beforeSha256": "c0b7b64608d8d661419194b1322b8a36e4cae8eb1f31cda7e8a86a29c659c59d",
+      "afterSha256": "100580dbf52df04a7bd83378c8b992524ef774e005a6af28c12f1e7a1d1f547c",
+      "kind": "modified"
+    },
+    {
+      "path": "main/chapter-journey-contract.json",
+      "beforeSha256": "a72cfc20955d1976b57088936762c29e01c088c3538232708876eee6ea56bdfb",
+      "afterSha256": "d441395fca161b654c95dda86d111a2d592ca19dd83ed59adbbfdfc1dec0bdc2",
+      "kind": "modified"
+    },
+    {
+      "path": "main/chapter-registry.json",
+      "beforeSha256": "96da5f745d3e317f711e5e2f2ce386a6a99793594954441fae11718d6ac3d088",
+      "afterSha256": "6ae185a0944321e6b0c9b438e7df4b06bbee76da8463f9b72856a2196fd3bd98",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+      "beforeSha256": "d4a86689442cfb905e496545ee892c90026cf9984555ab5419ac07c40bfb8107",
+      "afterSha256": "82a255d626326fab8a5986bf219caff70fcab43d94f201675198abccd0dea0af",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/components/spaceStation/StationScreeningDriver.tsx",
+      "beforeSha256": "16defc01c53a7fe4653b5b7d043e9374b419f0072904bb403806329e49c86a6a",
+      "afterSha256": "0720e6fc0d25498e41026ef6b5a911f6c64b892cb4b88604283309fbe61365c5",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/game/systems/interactionSystem.ts",
+      "beforeSha256": "37667895eb72f54b6fb9ea0203f10696a94a58ddb72742d9b3a97ebe3437e465",
+      "afterSha256": "4367379dbd226d98d2f40138bec0fd88f1a0aa44827ec2827efcae14a0db97ab",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/game/systems/persistence.ts",
+      "beforeSha256": "6b4f9ff830dbf0159ddc8942b42f7fa3f6d0e1bba57e0eddfb8af5a5a9d490ed",
+      "afterSha256": "c8d51b1d6055ba221cb910f3eb4cb28c943ac1dd037581a8c1acfa97a0765404",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/StoryDebugPanel.tsx",
+      "beforeSha256": "9d41894069ed5d89a857e336c38831ba10377e820161ce79c326fd129ca21b96",
+      "afterSha256": "875443375da39429f91cb3ddf100a7fbae34400397ee4fb0d57f9cc9cdc9d8d1",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/StoryDirectorDriver.tsx",
+      "beforeSha256": "46ed17413bbd37ecf5cadfa9b5b2feb67f694931f34b010ec3e3004a66e28c8c",
+      "afterSha256": "284f981accdf1ecfaed567d0668329d084e353233b5d1e0cea295a9d60e4e32a",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/auditWorkerPresence.ts",
+      "beforeSha256": "7619167efb615e13bf24ff151fc92fe6b85051e47b9259c2674a41538f8321d8",
+      "afterSha256": "dfd53eda5841ad4383191c9828b08d9a0f213663cbc09c8d2d2aa3251ae5932e",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/autopilot/primitives.ts",
+      "beforeSha256": "381eb9936da434bbffe8e4cd2bebc4b4727e8047cd60a3e8f05e971d14615deb",
+      "afterSha256": "4cce7261ba455e28a31d77f300e339d5dd907c00c691208b824a058f723313ca",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/autopilot/rail-ch13-common.ts",
+      "beforeSha256": null,
+      "afterSha256": "9df20c7dc5600da6ca4ce4ab677088b4944a32198c956fe64e92fdbc8f7a24ac",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/autopilot/rail-ch13-home.ts",
+      "beforeSha256": null,
+      "afterSha256": "c8fea24cd23827663955fcde41dadea2b609a770c22ab5af91cc48741b4b8893",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/autopilot/rail-ch13-return.ts",
+      "beforeSha256": null,
+      "afterSha256": "a1e04dc73e687b8c0ce68aca78aac653e8109bf69849e591229ce98b9ab82376",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/autopilot/rail-ch13-survey.ts",
+      "beforeSha256": null,
+      "afterSha256": "4717372fccda26c8e808779f51c727aa61e4b2c7b6307b34b26edce579441a2d",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/beats/allContracts.test.ts",
+      "beforeSha256": "49b1a8b182b574cf2e9ba30aa4e88d8bbae82e68c929985c1c25cc5a47314a6b",
+      "afterSha256": "5c2075682c806e21f2a276c0e745d8204400b5c3b0496c9ef7796344837272eb",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/beats/ch13/ch13-common.ts",
+      "beforeSha256": null,
+      "afterSha256": "68368540c33cb2c49eca1802c9b559fb3cc2562951577a9a86846314b969686c",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/beats/ch13/ch13-home.ts",
+      "beforeSha256": null,
+      "afterSha256": "5d97e8cea9f3a3e0307d9c7e16a4ce45e4470b9f75c5186bc9aca888630d374b",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/beats/ch13/ch13-return.ts",
+      "beforeSha256": null,
+      "afterSha256": "f0710d49683de2cd632853bd9db8cee95e5ee92d4c26f3a5c7bccd15626196e5",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/beats/ch13/ch13-survey.ts",
+      "beforeSha256": null,
+      "afterSha256": "08f9d635212be77a4b3f4fa4dbdb5797f09fea77fbea4a5acf9e57615ae8b1d1",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/beats/ch13/index.ts",
+      "beforeSha256": null,
+      "afterSha256": "dc144cd8c9bcb8a5003a0685a8947df39d5143fc494bb5a3e93b7256c86d4488",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/beats/definitions.ts",
+      "beforeSha256": "8bd9caca3a418078909a32046b4c88ffa6a69665909de1bc4fdd0fe58eaca065",
+      "afterSha256": "8da5464972a4eb33ba90b632d2e7688e24916e0cd30070f7ab675200ea7fffb8",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/beats/index.ts",
+      "beforeSha256": "c0c43148df906af691f635eb4b214bd52964822f46c58fb8dd9e0adbb20c2fa7",
+      "afterSha256": "f2df41b8e819ce3cffb11e85ea0fac95c92230c832ecf2341112de0d3d8f7884",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/beats/metadata.generated.ts",
+      "beforeSha256": "ef7c3dd76da0f6508c7f389746f7d6177e235878a18dd9d33e334b72a7c41d3d",
+      "afterSha256": "d3b97f03f7711c5b12ddf282fcaff5405c91c43c038a09439ced5ce47b460d76",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/beats/objectivePrimitives.ts",
+      "beforeSha256": "d1617080f497a57668f53848bf6f201f89fc82ce04c75d3cf7fa55fc002258b5",
+      "afterSha256": "8770c1ff28f070d60bcd44db1e84b4b1cb23b38538ba61fe3d0b6cd0ceb36076",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/beats/screeningParity.test.ts",
+      "beforeSha256": "ce6e762bcd66f3535df263847ff22ee00ec070d5393fdeb8560154cf61055f22",
+      "afterSha256": "6e866c31ec27d7da0c1592d2bb003aa34834777f2ec1de93a988f73f73073905",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/beats/worldHandles.ts",
+      "beforeSha256": "d08546bbde517c6bfca1ee23091bf5960b8b5701b10bbf7156302fbea8b648b6",
+      "afterSha256": "5a4aac0f7ca7a5244f32ceae341458abd844e9f95307f369c195ab0942bd4d64",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/commonGroundActor.ts",
+      "beforeSha256": null,
+      "afterSha256": "2592bc115e043ad2f17d00a72af1cd9c977e46dd4422c5839efbd02c4a3406bb",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "02986e15185168adfd02e7e01eaa0103479f8e3645ac0626b53742dc0bc0021e",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.ts",
+      "beforeSha256": null,
+      "afterSha256": "81289ffd48e4260971b12b68dfd4bb8fa591faf03fc4a03ed1ba9cf847f64e6f",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/commonGroundRoute.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "69e1760a1e2296b363af1dea7a7efe7bdde72044e0cf4449cee0bbee28e29f88",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/commonGroundRoute.ts",
+      "beforeSha256": null,
+      "afterSha256": "6025bc4c55098bb3bffc54dd04134fa3b666ef71361e22bba1a9b3fad7a1f1ff",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/commonGroundScore.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "70630be669128d832814a82491d23c61f56927668f085f564920f4063fa3d535",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/commonGroundScore.ts",
+      "beforeSha256": null,
+      "afterSha256": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/commonGroundState.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "578dcd265393a4603004455cadada7e01d2f642f6c9b5a44aa0bc7605279b446",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/commonGroundState.ts",
+      "beforeSha256": null,
+      "afterSha256": "2094b261328143dda5cfc198aa2791fceb470fefcf006e7cb06e7669d55db2bf",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/emergentStoryDirector.test.ts",
+      "beforeSha256": "2f78b32d01b05af67bca5cf0eb09e87e959e5ec996e96effe559dd966d99184d",
+      "afterSha256": "596f79cb230f95963cab20ed5813c0820fb4e8fc976cd865d1e0c2e5d3c50c9b",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/emergentStoryDirector.ts",
+      "beforeSha256": "d22984991cd46bad66d51841f288e695bc308b61dd999e9c46903893d295eadd",
+      "afterSha256": "022d8609c651f3049b47eea6ed203d11de4a90eb7e6f6bafa284b3b5f3055737",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/generatedSceneAvRuntime.json",
+      "beforeSha256": "9ed00b63e6e50fd5cd8a993607acb008c9b3b76e978ee5e7061da2756f933782",
+      "afterSha256": "0433dc0a1032c6bc8ae2b301fd78b85002bda539b7447ccf7128a4b91229655b",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/signedSceneAvRuntime.test.ts",
+      "beforeSha256": "56c91d5a02dc6511e3b93b3468a6954c4ead9e334a7244f4fe2ad0ce28b09a48",
+      "afterSha256": "390077a75338593c52253d02927c4378adb7a52e1fe936d5f905b2b728de3fff",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/signedSceneAvRuntime.ts",
+      "beforeSha256": "248e72d45e20e832815a41f6bd4abeb3e8c184fd0bd1c9a282388cf2b5b444a1",
+      "afterSha256": "9b513a850c81f0ae3a75b26ded69156e11c429b6ba227568fcda19d99818a982",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/storyBoundaryTelemetry.test.ts",
+      "beforeSha256": "37426d2b387cb1e8225e34c5755ad55209d1b0b33815f88ae0ac2b1e23efe757",
+      "afterSha256": "6f5b79019391ffe5edabbff9a81726a63adfe9ceed635cf862b3e536ee0c2c5d",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/storyBoundaryTelemetry.ts",
+      "beforeSha256": "e77e53a1563a5cc29bd81dffd4c4249aa357bc68e33a2144c2272274151ec0d1",
+      "afterSha256": "4da721807ff6d9215e748e925d70020d881f115d17bde04494e81b1379fc549f",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/storyDirector.test.ts",
+      "beforeSha256": "2450e17d0cbac1bf4544cbfef533fb47abd6170a4d8734cb9124c4d0fdebc50f",
+      "afterSha256": "15b9dc1f6a4082b5f0b7a0fec939724917945cdbfe63bae2133e4210f85ef161",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "beforeSha256": "1acd9ca92d89004ed0ff49c5db279448b606749bc520b5b04e326e37f71d219e",
+      "afterSha256": "82fe1ca596ab6322aeb61c2f33ebed018b1ac1fc22a8fd10d3b2377aa2bf385b",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/storyInteractions.ts",
+      "beforeSha256": "d23254cd98b9fa65de12f6c90c3a97b4919b432308e73a42cba2b04df78c420e",
+      "afterSha256": "420646181820e2794914a944480adac214770fdd846906278576851d09384ee6",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/storyObjectiveGuidance.test.ts",
+      "beforeSha256": "97f7680698aa6952305fbd332b616f2c3a173636b5500d5da049bd9152475cb9",
+      "afterSha256": "8fe8e902bb636b59f0d1667a20c5955ef8f9fc3c0ec47f89867f5b7510446643",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/storyState.test.ts",
+      "beforeSha256": "5f458cf95d4bbfcb2d29031987fbcaf49a410e6d850e8308915c79aa465be440",
+      "afterSha256": "f425b6e4e9467585f6a46ba1d48a355cb3e85d36546ef666a69f516bec4d2e22",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/storyState.ts",
+      "beforeSha256": "878705bafae81fa6c7fd088e6fc544264b9ee89848fb05a353fd2e152b6030d4",
+      "afterSha256": "e8802af8a93e4e82623c96f5d81053b2fd8b74027570dcdfa90b3478a9449915",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/storyWorldHandles.ts",
+      "beforeSha256": "2fa464367b750fd45418ebfe8b402e1565e187f381dd6368abf3f74e859a9193",
+      "afterSha256": "6f6dd706168112ab18f8e13beb1e134249ebdc2b60eef23a7bca4e18084c4d9f",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/tidegardenRoute.ts",
+      "beforeSha256": "16904583da2e22bd393feafd59f0d84c4b42cfea35e11fe2e483f0c972b00875",
+      "afterSha256": "e7237efcf339efb599222a171a22b0c4b118712025f3f777030c08482b7e103e",
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/world/CommonGroundWorld.tsx",
+      "beforeSha256": null,
+      "afterSha256": "d564573757f160aabdf3868d11234a9945346f2e9efd4d2979053a0f51aea096",
+      "kind": "added"
+    },
+    {
+      "path": "main/src/story/world/StoryWorldProps.tsx",
+      "beforeSha256": "cdf09473848c93a5127984b434e5465f7941e51e4e8f24f83fbbead76b84b3ac",
+      "afterSha256": "61ea2827b14bc0fe6a5bcc75604f01175462e0899d8562292b46cda6ad850cba",
+      "kind": "modified"
+    },
+    {
+      "path": "main/story-authority.json",
+      "beforeSha256": "a1d851d1dbc3591a3bc89ccf62964bd4a5baa71a0f5b9c39ab01318bc3006386",
+      "afterSha256": "a302656509bfe430ab24f4ee9bb1a0531df253545cbc7b3b9df5b40e55c497ba",
+      "kind": "modified"
+    },
+    {
+      "path": "main/tools/chapter-registry-gate.mjs",
+      "beforeSha256": "9f58fa7da2a3e56039d3ddb83715c03b0c455e968743b395cd757a8615a005c6",
+      "afterSha256": "cb50ef45eae4be5293bfb25bec16046b24050c5ac4388c9d83e57a7b3a6680bc",
+      "kind": "modified"
+    },
+    {
+      "path": "main/tools/creative-triad-gate.mjs",
+      "beforeSha256": "404431dd7092067db81d60196c56afffacd4c1b7ab831d56165509183c54ed2a",
+      "afterSha256": "1a57c5ce722d545a0a48ce7e7d86839581af3041f0132f932a4e3e45f875a0b1",
+      "kind": "modified"
+    },
+    {
+      "path": "main/tools/generate-scene-av-runtime.mjs",
+      "beforeSha256": "06c1ac11b015ddd59827d9534540fdf0dcfbb43917855f9df379feffa9604b02",
+      "afterSha256": "a0681f65079a6232a8bbe95692bcf304e086b5a41703f1c1006d65b576eedfc0",
+      "kind": "modified"
+    },
+    {
+      "path": "main/tools/lib/guidanceTargets.mjs",
+      "beforeSha256": "ae36ee7387d137b15bfe6ee7acf92f75f9d436812445d1c2595cba2f3f053375",
+      "afterSha256": "5bf024f3247af78f536330f545e796662d1fffbd050d9b7a8a3294dba977c319",
+      "kind": "modified"
+    },
+    {
+      "path": "main/tools/story-authority-gate.mjs",
+      "beforeSha256": "e7caa35770b8f1283fcf8d6fb6b29c302869c3141ab05c2b22c562ee9cb2f434",
+      "afterSha256": "7987c19b313e197fbf61e5661bdeab1a3c3c9a80ad227d9eb353a566b9604171",
+      "kind": "modified"
+    }
+  ],
+  "hashes": {
+    "docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-journey-contract.schema.json": "31cfdf19cc5a621bce2c88b8485e80602ecbbcc1c328f428a719bb4d55682bde",
+    "docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-registry.schema.json": "9a5546cb31b5585cf5d25487f3fe8c71dd6ea9640dad39b4aa93e50a8fd4f626",
+    "docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json": "c336a1c2ff2b1c2bb2a761838400802cad05a89197ebb48bee887b0c8444fc8b",
+    "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json": "100580dbf52df04a7bd83378c8b992524ef774e005a6af28c12f1e7a1d1f547c",
+    "main/PARAVOXIA_STORY_BIBLE.md": "6e0e0660fcaddad30a0c89435d914171c6a8e322cd6036e8534dfacf3387721a",
+    "main/PARAVOXIA_STORY_EXECUTION_PLAN.md": "78f7d30063227a472985d4bf4aaaeececeea84b7b131f06b15bf405f9dea397d",
+    "main/STORY.md": "f36794117c7722c7012fa9caa92c89a168cf1c392eba99499104f2a18de0d468",
+    "main/chapter-journey-contract.json": "d441395fca161b654c95dda86d111a2d592ca19dd83ed59adbbfdfc1dec0bdc2",
+    "main/chapter-registry.json": "6ae185a0944321e6b0c9b438e7df4b06bbee76da8463f9b72856a2196fd3bd98",
+    "main/src/App.tsx": "36abbf3822b828bc0e28f617ba0e5a1b436f39c2dab0b2e86e29683736b81980",
+    "main/src/components/spaceStation/SpaceStationSandbox.tsx": "82a255d626326fab8a5986bf219caff70fcab43d94f201675198abccd0dea0af",
+    "main/src/components/spaceStation/StationScreeningDriver.tsx": "0720e6fc0d25498e41026ef6b5a911f6c64b892cb4b88604283309fbe61365c5",
+    "main/src/game/spaceStation/spaceStationStory.test.ts": "52cfff79542d53e6ba77eb15f689e74a9b75243cea34b71be778ee9fbdcb8829",
+    "main/src/game/spaceStation/spaceStationStory.ts": "c688c184c5a309955be711f2f459cd7cac6baa9cffb9a1a4a7696e293b7b9e9a",
+    "main/src/game/spaceStation/spaceStationUndock.test.ts": "d363a8d654197c52964f3745a3a6417e2dbf89fd223bf35ee6907fb0390e44c8",
+    "main/src/game/spaceStation/spaceStationUndock.ts": "f8806b7171abc9fcea79d451efcf2e40f7a43f5841540837b9d12dfca2d53441",
+    "main/src/game/systems/interactionSystem.test.ts": "96cc644c7b2d7ba840f204e665ef42778dbad60278568f1251bb6b198a9d711b",
+    "main/src/game/systems/interactionSystem.ts": "4367379dbd226d98d2f40138bec0fd88f1a0aa44827ec2827efcae14a0db97ab",
+    "main/src/game/systems/persistence.test.ts": "c0c2b159b08b12d689bbac403e40069d21a2fdc5bfba6c45ace7dfe38063d734",
+    "main/src/game/systems/persistence.ts": "c8d51b1d6055ba221cb910f3eb4cb28c943ac1dd037581a8c1acfa97a0765404",
+    "main/src/story/StoryDebugPanel.tsx": "875443375da39429f91cb3ddf100a7fbae34400397ee4fb0d57f9cc9cdc9d8d1",
+    "main/src/story/StoryDirectorDriver.tsx": "284f981accdf1ecfaed567d0668329d084e353233b5d1e0cea295a9d60e4e32a",
+    "main/src/story/auditWorkerPresence.test.ts": "3bef56dd10132f40df3092bcdd583812b60945de8f3605fd5996db1a732478b2",
+    "main/src/story/auditWorkerPresence.ts": "dfd53eda5841ad4383191c9828b08d9a0f213663cbc09c8d2d2aa3251ae5932e",
+    "main/src/story/autopilot/primitives.ts": "4cce7261ba455e28a31d77f300e339d5dd907c00c691208b824a058f723313ca",
+    "main/src/story/autopilot/rail-ch13-common.ts": "9df20c7dc5600da6ca4ce4ab677088b4944a32198c956fe64e92fdbc8f7a24ac",
+    "main/src/story/autopilot/rail-ch13-home.ts": "c8fea24cd23827663955fcde41dadea2b609a770c22ab5af91cc48741b4b8893",
+    "main/src/story/autopilot/rail-ch13-return.ts": "a1e04dc73e687b8c0ce68aca78aac653e8109bf69849e591229ce98b9ab82376",
+    "main/src/story/autopilot/rail-ch13-survey.ts": "4717372fccda26c8e808779f51c727aa61e4b2c7b6307b34b26edce579441a2d",
+    "main/src/story/autopilot/rails.ts": "f03c56f5e6d1c15d97541d5f20c8c9b17936cd67476f9a4ffd2e0f2826d96b6d",
+    "main/src/story/beats/allContracts.test.ts": "5c2075682c806e21f2a276c0e745d8204400b5c3b0496c9ef7796344837272eb",
+    "main/src/story/beats/beatRegistry.test.ts": "c4986c70c7722e83b3dfe030d0b81e78423b2cf5729a4f1e343a559630ac3a16",
+    "main/src/story/beats/ch13/ch13-common.ts": "68368540c33cb2c49eca1802c9b559fb3cc2562951577a9a86846314b969686c",
+    "main/src/story/beats/ch13/ch13-home.ts": "5d97e8cea9f3a3e0307d9c7e16a4ce45e4470b9f75c5186bc9aca888630d374b",
+    "main/src/story/beats/ch13/ch13-return.ts": "f0710d49683de2cd632853bd9db8cee95e5ee92d4c26f3a5c7bccd15626196e5",
+    "main/src/story/beats/ch13/ch13-survey.ts": "08f9d635212be77a4b3f4fa4dbdb5797f09fea77fbea4a5acf9e57615ae8b1d1",
+    "main/src/story/beats/ch13/index.ts": "dc144cd8c9bcb8a5003a0685a8947df39d5143fc494bb5a3e93b7256c86d4488",
+    "main/src/story/beats/definitions.ts": "8da5464972a4eb33ba90b632d2e7688e24916e0cd30070f7ab675200ea7fffb8",
+    "main/src/story/beats/index.ts": "f2df41b8e819ce3cffb11e85ea0fac95c92230c832ecf2341112de0d3d8f7884",
+    "main/src/story/beats/markerTargets.ts": "f3ab3856004307a8d6b21dbc6b3cbf0a0ad2c7714c2e1213ca12922f640aa3b9",
+    "main/src/story/beats/metadata.generated.ts": "d3b97f03f7711c5b12ddf282fcaff5405c91c43c038a09439ced5ce47b460d76",
+    "main/src/story/beats/objectivePrimitives.ts": "8770c1ff28f070d60bcd44db1e84b4b1cb23b38538ba61fe3d0b6cd0ceb36076",
+    "main/src/story/beats/railDiscipline.test.ts": "2dbe653e6a6c10eda45fdec96fb5c83c1d48d7351f80cee69ad8a6e8ee78aeaf",
+    "main/src/story/beats/screeningParity.test.ts": "6e866c31ec27d7da0c1592d2bb003aa34834777f2ec1de93a988f73f73073905",
+    "main/src/story/beats/worldHandles.ts": "5a4aac0f7ca7a5244f32ceae341458abd844e9f95307f369c195ab0942bd4d64",
+    "main/src/story/commonGroundActor.ts": "2592bc115e043ad2f17d00a72af1cd9c977e46dd4422c5839efbd02c4a3406bb",
+    "main/src/story/commonGroundDirector.test.ts": "02986e15185168adfd02e7e01eaa0103479f8e3645ac0626b53742dc0bc0021e",
+    "main/src/story/commonGroundDirector.ts": "81289ffd48e4260971b12b68dfd4bb8fa591faf03fc4a03ed1ba9cf847f64e6f",
+    "main/src/story/commonGroundRoute.test.ts": "69e1760a1e2296b363af1dea7a7efe7bdde72044e0cf4449cee0bbee28e29f88",
+    "main/src/story/commonGroundRoute.ts": "6025bc4c55098bb3bffc54dd04134fa3b666ef71361e22bba1a9b3fad7a1f1ff",
+    "main/src/story/commonGroundScore.test.ts": "70630be669128d832814a82491d23c61f56927668f085f564920f4063fa3d535",
+    "main/src/story/commonGroundScore.ts": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+    "main/src/story/commonGroundState.test.ts": "578dcd265393a4603004455cadada7e01d2f642f6c9b5a44aa0bc7605279b446",
+    "main/src/story/commonGroundState.ts": "2094b261328143dda5cfc198aa2791fceb470fefcf006e7cb06e7669d55db2bf",
+    "main/src/story/emergentScoreDirector.test.ts": "e0fdafa4d72e06bd195926eee6dbffa48619568b401a429dd96763ed4465161c",
+    "main/src/story/emergentScoreDirector.ts": "417d1735b4d7d00115b1c1a97527fd7ea0925c93a26f4a7c5d5940c559c33e1c",
+    "main/src/story/emergentStoryDirector.test.ts": "596f79cb230f95963cab20ed5813c0820fb4e8fc976cd865d1e0c2e5d3c50c9b",
+    "main/src/story/emergentStoryDirector.ts": "022d8609c651f3049b47eea6ed203d11de4a90eb7e6f6bafa284b3b5f3055737",
+    "main/src/story/emergentStoryEvents.test.ts": "cf5feb33d7c150a6c7619f24dc1f139e4e939856a67ad1acc4723954deffacab",
+    "main/src/story/emergentStoryEvents.ts": "fa30f7af5e16a9283f635e79cedee2ad1372e95f468707652cca71e9397d0c8a",
+    "main/src/story/generatedSceneAvRuntime.json": "0433dc0a1032c6bc8ae2b301fd78b85002bda539b7447ccf7128a4b91229655b",
+    "main/src/story/signedSceneAvRuntime.test.ts": "390077a75338593c52253d02927c4378adb7a52e1fe936d5f905b2b728de3fff",
+    "main/src/story/signedSceneAvRuntime.ts": "9b513a850c81f0ae3a75b26ded69156e11c429b6ba227568fcda19d99818a982",
+    "main/src/story/stationReturnStory.test.ts": "517db8683f78977618090a7be20a341248b5ea5c7be2db66d40a8eb3bce1a0a8",
+    "main/src/story/stationReturnStory.ts": "5844152757cd0788df28d349dae6eee092bdbc09df8e3c487111c71bbfe37b49",
+    "main/src/story/storyBoundaryTelemetry.test.ts": "6f5b79019391ffe5edabbff9a81726a63adfe9ceed635cf862b3e536ee0c2c5d",
+    "main/src/story/storyBoundaryTelemetry.ts": "4da721807ff6d9215e748e925d70020d881f115d17bde04494e81b1379fc549f",
+    "main/src/story/storyDirector.test.ts": "15b9dc1f6a4082b5f0b7a0fec939724917945cdbfe63bae2133e4210f85ef161",
+    "main/src/story/storyDirector.ts": "82fe1ca596ab6322aeb61c2f33ebed018b1ac1fc22a8fd10d3b2377aa2bf385b",
+    "main/src/story/storyInteractions.test.ts": "2db194acbc3a262b32788bbf56f5b83a62f588962622caa589c68196f1cd981a",
+    "main/src/story/storyInteractions.ts": "420646181820e2794914a944480adac214770fdd846906278576851d09384ee6",
+    "main/src/story/storyObjectiveGuidance.test.ts": "8fe8e902bb636b59f0d1667a20c5955ef8f9fc3c0ec47f89867f5b7510446643",
+    "main/src/story/storyObjectiveGuidance.ts": "cc0e37a63c9023dc18d53566c31564d878b88b9542289630253255b9164891e6",
+    "main/src/story/storyScore.test.ts": "24e4643b6e6c6de383004e6d1c34b526880c821828f9a8608bdefb21e742c286",
+    "main/src/story/storyScore.ts": "94d560db834ed0067689e2b4784fb93a5fc6a962f0942082fbcd7038651f7d05",
+    "main/src/story/storyState.test.ts": "f425b6e4e9467585f6a46ba1d48a355cb3e85d36546ef666a69f516bec4d2e22",
+    "main/src/story/storyState.ts": "e8802af8a93e4e82623c96f5d81053b2fd8b74027570dcdfa90b3478a9449915",
+    "main/src/story/storyWorldHandles.ts": "6f6dd706168112ab18f8e13beb1e134249ebdc2b60eef23a7bca4e18084c4d9f",
+    "main/src/story/tidegardenRoute.ts": "e7237efcf339efb599222a171a22b0c4b118712025f3f777030c08482b7e103e",
+    "main/src/story/ux/feedbackCues.test.ts": "a3a2a4154b761fc57f4c340b22731f8c535bfcd7d9882906fc9ffa9c9b3bccc9",
+    "main/src/story/ux/feedbackCues.ts": "e8a076e2280ae4761d9ddba5b6d76682ee3e59636140c3ca6960bef15e548322",
+    "main/src/story/ux/objectiveCommandFeedback.test.ts": "57523e027209d98e0b97fd79b193b7b58f52f3cd55e195a752a577c7a8b620c2",
+    "main/src/story/ux/objectiveCommandFeedback.ts": "dad1453150ac880ba62e07559ff863b899e8d7b3a7ad658b838b2cace553162b",
+    "main/src/story/ux/objectiveEventFeedback.test.ts": "0d60b23182b09db70e7f1b57b213c954f5a9a927831825da918ace3b720c4fd2",
+    "main/src/story/ux/objectiveEventFeedback.ts": "5d5ff442b660a7bc0d89b52f9cc5ac77fcd693108a6b5d5d6ee7fc74877165f3",
+    "main/src/story/world/AuditWorker.tsx": "88fc065747f9c82aa9896e59d686b85f54e0c007a2ae76b646b369c400a34f3e",
+    "main/src/story/world/CommonGroundWorld.tsx": "d564573757f160aabdf3868d11234a9945346f2e9efd4d2979053a0f51aea096",
+    "main/src/story/world/StoryWorldProps.tsx": "61ea2827b14bc0fe6a5bcc75604f01175462e0899d8562292b46cda6ad850cba",
+    "main/src/story/world/TidegardenSettlementWorld.tsx": "a1b8ff5292c38e6dbe1319708810573d4e28fbfcbe0006034b8ecaad7264122c",
+    "main/story-authority.json": "a302656509bfe430ab24f4ee9bb1a0531df253545cbc7b3b9df5b40e55c497ba",
+    "main/tools/chapter-registry-gate.mjs": "cb50ef45eae4be5293bfb25bec16046b24050c5ac4388c9d83e57a7b3a6680bc",
+    "main/tools/chapter-registry-generate.mjs": "4ccf1d6b72cc7d6cfd35630d8a1ad69a759c6862448fea322a2846390ab636de",
+    "main/tools/creative-triad-gate.mjs": "1a57c5ce722d545a0a48ce7e7d86839581af3041f0132f932a4e3e45f875a0b1",
+    "main/tools/generate-scene-av-runtime.mjs": "a0681f65079a6232a8bbe95692bcf304e086b5a41703f1c1006d65b576eedfc0",
+    "main/tools/lib/guidanceTargets.mjs": "5bf024f3247af78f536330f545e796662d1fffbd050d9b7a8a3294dba977c319",
+    "main/tools/story-authority-gate.mjs": "7987c19b313e197fbf61e5661bdeab1a3c3c9a80ad227d9eb353a566b9604171"
+  },
+  "implementationDiffSha256": "1c7940a589680761757e4b01e7d13cc0367625f36a0b91ba9e78acdb06ce9e87"
+}

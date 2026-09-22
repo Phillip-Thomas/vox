@@ -1,0 +1,81 @@
+{
+  "director": "cinematography",
+  "scope": "Arena note reconciliation only; no revised-candidate signature, selected range, measured layout or runtime approval.",
+  "recipientDispositions": [
+    {
+      "noteId": "CG-A-CH-CIN",
+      "from": "chapter",
+      "to": "cinematography",
+      "by": "cinematography",
+      "disposition": "accept",
+      "reasons": [
+        "Accept the explicit Terra tactic/belief amendment and necessary common comparison beyond the fixed plate but within W-7744's held reference. Her moving body and the maintained reference cannot occupy the required positions simultaneously; that makes his contribution necessary to her own result while walking, looking, retreat and departure remain free.",
+        "Accept the proposed sparse before/after response lines only at their actual physical facts; they cannot substitute for the measured dependence or force a failed crossing. The worker's held body, instrument relation and Terra's actual passage must establish the change in the player-owned view.",
+        "Accept quiet continuous tracing with one standing objective, no per-sample prompt/chime/substep, and the exact proposed draw and reciprocal guidance replacements. Current views must ground marker/work-order placement without hiding the physical evidence.",
+        "Accept one passive plate, honest equal fixed/occupied range, the two nominated constants 12 and 24 for measured comparison, unchanged caps and the stated proposal-quality bounds. Preserve the saved bank-route class separately from the common reciprocal span. The outgoing CG-A-CIN-CH note requests exact confirmation that the final worker traversal obeys that same reference rule."
+      ],
+      "evidenceRefs": [
+        "arena-chapter-reconciliation.md#shared-arena-direction",
+        "arena-chapter-reconciliation.md#cg-judge-005-make-terra-need-the-comparison",
+        "arena-chapter-reconciliation.md#cg-judge-004-keep-the-action-hers",
+        "arena-cinema-reconciliation.md",
+        "critic-report.md: finding 4, Terra's in-chapter opposition and belief movement"
+      ]
+    },
+    {
+      "noteId": "CG-A-SC-CIN",
+      "from": "score",
+      "to": "cinematography",
+      "by": "cinematography",
+      "disposition": "accept",
+      "reasons": [
+        "Accept static scale/end stop and disclosed actual distance/limit while the ground remains visibly walkable. No range-circle sonification, proximity-pitch ramp, in-range chime or new attack is needed to make the apparatus legible.",
+        "Accept one quiet refused-hold entry for an offered test encountering a newly unsupported reference span, distinct visual reasons for range, solid occlusion and footing, and unchanged texture for temporary loss/resumption of an already established witness. Jitter, repeated input and camera direction cannot retrigger refusal.",
+        "Accept restrained demonstrating at useful reciprocal passage and independent-test initiation, with changed spacing reserved for actual final arrival plus reciprocal proof. Both route classes remain musically unranked; first-try success omits refusal honestly.",
+        "Accept quiet tracing and the existing bounded live final texture, immediate controls/progression, all signed cancellation/no-replay rules and no extra coda. These are future implementation/listening obligations, not current audio evidence or measured-geometry approval."
+      ],
+      "evidenceRefs": [
+        "arena-score-reconciliation.md#response-to-cinematography",
+        "arena-score-reconciliation.md#hold-and-anchor-mapping",
+        "arena-score-reconciliation.md#required-candidate-and-scene-wording",
+        "arena-cinema-reconciliation.md"
+      ]
+    }
+  ],
+  "outgoingNotes": [
+    {
+      "id": "CG-A-CIN-CH",
+      "from": "cinematography",
+      "to": "chapter",
+      "beat": "ch13-survey / ch13-common",
+      "anchor": "CG-05-other-end / CG-06-his-test / CG-07-model-incomplete",
+      "kind": "predicate-and-staging-confirmation",
+      "severity": "high",
+      "evidence": [
+        "arena-chapter-reconciliation.md requires Terra's common comparison to lie beyond the fixed plate's useful range and within W-7744's maintained reference, then says his final independent test follows.",
+        "arena-chapter-refinement.md applies the same selected range to every fixed or occupied reference; a human witness is not an unlimited relay.",
+        "arena-cinema-reconciliation.md explicitly requires the subsequent worker test to obey the same range/reference rule and preserves the bank-route/common-comparison state boundary.",
+        "critic-report.md finding 4 requires Terra to need his maintained reference for her own comparison."
+      ],
+      "requestedAction": "Confirm in the revised candidate that W-7744's final independently initiated traversal obeys the same selected finite range, actual solid visibility, grounding, explicit offered-reference and occupancy rules as every other test. Retained reciprocal proof must not become unlimited sensing or certify an unsupported next span. Where required by the measured layout, Terra's occupied final reference may support his traversal within the existing exchanged-reference mechanic; this is not a second puzzle or an automatic substitute. Independent describes his initiation and completion of the test, not exemption from physical reference validity. Preserve actual arrival plus earned reciprocal proof as completion, Terra's necessary common comparison and quiet tracing, and the saved distinction between the independently repeatable longer bank route and the shorter bank route's intermediate witness. Record the actual reference ownership at each final-test anchor before the scene contract signs.",
+      "status": "open"
+    },
+    {
+      "id": "CG-A-CIN-SC",
+      "from": "cinematography",
+      "to": "score",
+      "beat": "ch13-survey / ch13-common",
+      "anchor": "CG-04-specific-hold / CG-05-other-end / CG-06-his-test / CG-07-model-incomplete",
+      "kind": "semantic-edge-and-attention-confirmation",
+      "severity": "medium",
+      "evidence": [
+        "arena-score-reconciliation.md maps actual newly unsupported reference spans to one quiet refused-hold edge and leaves temporary witness loss/resumption musically unchanged.",
+        "arena-chapter-reconciliation.md gives Terra a materially necessary comparison and a quiet standing trace objective.",
+        "arena-cinema-reconciliation.md requires visible scale, walkable ground, held body and actual passage to explain dependence under player-owned view."
+      ],
+      "requestedAction": "Confirm the stated new-span versus temporary-witness-loss mapping without adding an acquisition chime, proximity ramp, per-sample reward or special Terra-realization cue. At CG-05 the worker's actually useful maintained reference and Terra's real reciprocal passage lead the presentation; offering a reference or entering range alone is not completed comparison. CG-06 remains restrained demonstrating even if Terra must maintain the final reference for his independently initiated test. Reserve changed spacing for CG-07 actual final arrival plus reciprocal proof, with the already signed live-only release and immediate control/progression rules. Both route choices and first-try success remain equally complete; muted or omitted attacks must leave the physical cause and outcome intelligible.",
+      "status": "open"
+    }
+  ],
+  "remainingEvidence": "Both nominated ranges and the proposed water-bank/common-comparison geometry remain unproven. After measured coordinates, targeted current physical baseline precedes exact scene layout; new trace, range-hold, retry, reciprocal and save behavior follows signed implementation. Existing final hardware and independent review gates are unchanged."
+}

@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 684826,
+  "stop_reason": "end_turn",
+  "session_id": "9a71dfb5-9224-4134-a4ac-0fbaea13dc32",
+  "total_cost_usd": 4.7746645,
+  "usage": {
+    "input_tokens": 114,
+    "cache_creation_input_tokens": 124963,
+    "cache_read_input_tokens": 4326799,
+    "output_tokens": 54363,
+    "output_tokens_details": {
+      "thinking_tokens": 3621
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 124963,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1366,
+        "cache_read_input_tokens": 127804,
+        "cache_creation_input_tokens": 1319,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1319
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1890,
+      "outputTokens": 20,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00199,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 114,
+      "outputTokens": 54363,
+      "cacheReadInputTokens": 4326799,
+      "cacheCreationInputTokens": 124963,
+      "webSearchRequests": 0,
+      "costUSD": 4.772674500000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 3621,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 61,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**PREPARED \u2014 NOT RUN.** CPU-only; no browser, GPU, build, full-suite, game-source or contract touched. Heavy lock never opened (`common-exact-input-runtime` retains it).\n\n## What the evidence actually says\n\nI read `producer-earned-prefix-and-pose-review.json` first and carried it forward unchanged: `savedPrefixExactlyEqual = true` \u2014 the initial 18-point WorldSave prefix matches the later 19-point snapshot exactly, the extra sample is *observed*, and the prior 16/18/19 framing is not restated anywhere.\n\nThe 90 s navigation failure is a **probe steering defect**, confirmed from earned-1's own bytes: after Continue the live `up` was `(0.99999999999984, 1.81e-07, -5.42e-07)` \u2192 **+X face**, body `[52.789, 17.5, -20]`, while E `[-42, 51.05, 12]` lies on **+Y**. `walkTowards` calibrated on `[dx, dz]` and rejected keys below 0.05 XZ, so A/D \u2014 which move in world Y there \u2014 were recorded `null`, leaving no lateral control across 144 bursts. **This is not evidence of a game restore failure**, and nothing in the prepared files treats it as one.\n\n## Prepared (private copy, originals byte-identical)\n\n`verifier/probes/earned-continue-3d/` \u2014 the original probe still hashes `4bc46bb\u2026`, matching earned-1's recorded `probeSource.entrySha256`; the saved WorldSave still hashes `4d1bdd7a\u2026`, matching the producer review.\n\n- **`tangentSteering3d.mjs`** (new, `1c1523c4\u2026`) \u2014 real 3D local-tangent control from the live published `up`: projects both target delta and *measured* key displacement onto the tangent plane, tracks all three coordinates, `dist3` for arrival, recalibrates on face change or >12\u00b0 tilt, one bounded route attempt that stops on measured stall telemetry rather than a forced action or a bigger timeout. Audit-plane `supported` and physics grounding are reported **separately**; the shipped bridge publishes no grounded flag, so that stays null and declared.\n- **`poseObservation.mjs`** (new, `35d26b06\u2026`) \u2014 raw `.player` bytes + sha at four lifecycle points, plus a **passive CDP `DOMStorage`** stream (no monkeypatch, no game value changed) that places each pose write in a marked window, separating a shipped-save write from an early menu-boot overwrite.\n- **`earned-continue-3d-probe.mjs`** (`f0cf8172\u2026`) \u2014 role `earned-continue-3d-runtime`; all prior gates kept plus `requiredGates.actualAcceptedNewAction`, so restore alone cannot be a pass.\n\nCPU verification: 45/45 new steering checks (including the required *A/D non-zero on +X* and *+Y-selection-on-+X* cases, on the same module bytes the probe imports \u2014 no mirrored assertions), inherited 108/108 reused unchanged, `--self-test` and `node --check` clean. Learned timings and fixture labels preserved.\n\n## Two things worth your attention\n\n1. **Root must publish `activeRole = earned-continue-3d-runtime`** in `verifier-control.json` \u2014 that role does not exist there yet, so the probe will refuse at preflight without it.\n2. **Five gaps stay open and unresolved**, notably: EfficientScene's saved-pose validation/fallback branch publishes no marker and remains unobservable (only the resulting position can be classified \u2014 no source change proposed); `arrivalPose.playerSurfacePosition` is not exposed, so \"resumed-at-arrival-fallback\" cannot be confirmed; and CDP DOMStorage attachment is **untested against a live browser** in this CPU-only lane.\n\nNo runtime claim, no accepted-action claim, no source fix inferred. Reports: `earned-continue-3d-prep-report.json` / `.md`; logs in `logs/earned-continue-3d-prep/`.",
+  "ttft_ms": 1952,
+  "type": "result",
+  "duration_ms": 686000,
+  "uuid": "87a55fad-ca06-4e76-a295-89a26de3f7f2",
+  "ttft_stream_ms": 1338,
+  "time_to_request_ms": 45,
+  "first_content_frame_ms": 1338,
+  "queued_turn_count": 0
+}

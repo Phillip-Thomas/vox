@@ -1,0 +1,63 @@
+{
+  "documentKind": "cinema-arrival-guidance-amendment-review",
+  "director": "cinematography",
+  "runId": "2026-09-05-after-the-hearth",
+  "authoredBy": "Cinematography Director (/root/cinematography_director)",
+  "authoredAt": "2026-09-06T16:17:04.127433+00:00",
+  "proposalRef": "chapter-arrival-guidance-interpretation.json",
+  "proposalSha256": "c470b753cd4081d1d3d97e0bd6baa932b3dba9309eabd4ef3ef62e5b100f4315",
+  "proposalMarkdownSha256": "70b6783f3c95000e19fc310cd53ac9972ae2e447bb769537b1bbf0205e09336f",
+  "reviewedContractVersion": "scene-v2",
+  "reviewedContractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "reviewedCinemaLaneSha256": "38fb1b5b520a50db80a531b56f12a801ea59225c4989854568f3d4e13287d032",
+  "disposition": "approve",
+  "contractChangeRequired": true,
+  "rationale": "Approve the exact seven asserted groups and derived intent replacement. They complete the existing return travel objective with truthful state-conditioned standing copy across the existing vehicle-to-embodied transition. The physical route, worker arrival predicate, shot grouping and player camera remain intact.",
+  "assertionChecks": {
+    "sevenJsonTestGroupsMatchFrozenTargets": true,
+    "derivedIntentOldTextOccursExactlyOnce": true,
+    "frozenContractHashMatchesProposal": true
+  },
+  "laneFindings": [
+    {
+      "topic": "clarity",
+      "finding": "The flight, grounded-boarded and grounded-on-foot text each names the available next action. Keeping the existing flight workOrder as the base and defining exact conditional variants in variantIntent and the mirrored realTransition is consistent with the scene-v2 conditional-copy convention."
+    },
+    {
+      "topic": "one marker and focal continuity",
+      "finding": "Origin · audit site remains the sole required destination during arrival. Its on-foot target must resolve the real worker approach, so the existing lower-left work order and central interaction band agree with that destination. Optional hatch boarding must not replace the required audit approach or create a competing required marker."
+    },
+    {
+      "topic": "readiness and completion",
+      "finding": "World activation, a landing or a control-mode switch cannot earn origin-landed. Grounded Origin, actual embodied state and physical W-7744 reach together own the arrival commit. A missing or unready real destination remains the existing preparation/world-return state; no zero-position marker or assumed actor substitutes for it. Subsequent survey offer and real start interaction retain their existing readiness."
+    },
+    {
+      "topic": "camera and handback",
+      "finding": "Existing vehicle controls continue to own landing/disembarkation; the current free player camera owns the on-foot approach at its signed 75-degree FOV. The amendment adds no forced look, cut, movement restriction, new disembark input or timed arrival. Existing shot.cg.return already contains real travel, approach and worker reinspection, so no added shot is needed."
+    },
+    {
+      "topic": "silent continuity and variants",
+      "finding": "Phase changes update the standing work order under the same objective ID without another acknowledgement or score event. Continue and world/control handoff reconstruct the actual next action. The same phase meanings and destination apply to desktop/mobile, reduced motion and all tiers; current HUD safe areas, palette, lights, resource and score authority are unchanged."
+    }
+  ],
+  "requestedProposalChanges": [],
+  "verificationLimits": [
+    "This is concurrence with an exact proposed documentation amendment, not an amended-contract signature or implementation authorization beyond the producer workflow.",
+    "The reported 28.527-second boarding regression and NVIDIA diagnostic provenance are supplied by Chapter/producer evidence. This review did not inspect that screenshot, rerun telemetry or capture any image; it claims no new visual, manual, hardware, color, timing, audio or performance acceptance.",
+    "Producer supplied the 99-file frozen implementation manifest SHA256 dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c; this review did not independently regenerate or verify it.",
+    "Retain the already requested actual manual grounded-Origin-to-W destination/actionability and control transition proof, raw objective/marker/copy/arrival lifecycle, silent same-ID updates, and Continue/reset checks. Scripted movement past an incorrect instruction cannot satisfy that proof."
+  ],
+  "evidenceRefs": [
+    "chapter-arrival-guidance-interpretation.json",
+    "chapter-arrival-guidance-interpretation.md",
+    "scene-contract.json#/guidance/objectives/4",
+    "scene-contract.json#/story/events/6",
+    "scene-contract.json#/syncAnchors/6",
+    "scene-contract.json#/story/agencyWindows/1",
+    "scene-contract.json#/shots/1",
+    "scene-cinema-lane.json#/objectiveBindings/4",
+    "scene-cinema-lane.json#/camera",
+    "scene-cinema-lane.json#/guidanceComposition",
+    "scene-cinema-lane.json#/shotLedger/1"
+  ]
+}

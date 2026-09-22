@@ -1,0 +1,648 @@
+{
+  "schema": "paravoxia.mechanicalAssembly.v1",
+  "compiledAt": "2026-09-05T20:46:18.961085+00:00",
+  "runId": "2026-09-05-early-grid-mobile",
+  "contractVersion": "draft-v1",
+  "contractSha256": "2ef9a016f8c803a1fadbf456d75b7fe1e6a9ae79f072854024d29704ee346410",
+  "sourceBindings": [
+    {
+      "path": "chapter-treatment.json",
+      "sha256": "5a582598cd5d38291010042b0382075fe30ad146efe254a8e9ec7e61f55afe5f",
+      "immutableSourcePath": "assembly/originals/chapter-treatment.json"
+    },
+    {
+      "path": "chapter-native-contract-contribution.json",
+      "sha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9",
+      "immutableSourcePath": "assembly/originals/chapter-native-contract-contribution.json"
+    },
+    {
+      "path": "chapter-stage3-proposal.json",
+      "sha256": "0402d9d566a729acb1c01eff4125c0f9b5d06ea1d45aa6f6ac08f8c0f23dd116",
+      "immutableSourcePath": "assembly/originals/chapter-stage3-proposal.json"
+    },
+    {
+      "path": "cinematography-treatment.json",
+      "sha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b",
+      "immutableSourcePath": "assembly/originals/cinematography-treatment.json"
+    },
+    {
+      "path": "cinematography-stage3-native-delta.json",
+      "sha256": "ad0912eea97a31acfc863ad5e7b3cdb320520ea0a808f03490a2de2df54a1a17",
+      "immutableSourcePath": "assembly/originals/cinematography-stage3-native-delta.json"
+    },
+    {
+      "path": "score-treatment.json",
+      "sha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d",
+      "immutableSourcePath": "assembly/originals/score-treatment.json"
+    },
+    {
+      "path": "score-stage3-native-delta.json",
+      "sha256": "15d8704f4927c10a55ded685e324a6cb7bd7ad029177dae6b1a0dd976973f989",
+      "immutableSourcePath": "assembly/originals/score-stage3-native-delta.json"
+    },
+    {
+      "path": "decision-brief.json",
+      "sha256": "ee362e3a10d5ebc15e667bd1cf28c20cabceff59d5cb367d911a2f1829653114",
+      "immutableSourcePath": "assembly/originals/decision-brief.json"
+    },
+    {
+      "path": "decision-brief.md",
+      "sha256": "51e37ac750dd24d8760c40e63d9d8f0bcbd8b29850d1b9f617ac95eeb5d6faf7",
+      "immutableSourcePath": "assembly/originals/decision-brief.md"
+    },
+    {
+      "path": "story-intent.md",
+      "sha256": "63eca86bd673e0e26f68d18a48054f98ac7a6286e56d0bdf1bd34abcbc4582a2",
+      "immutableSourcePath": "assembly/originals/story-intent.md"
+    },
+    {
+      "path": "score-treatment.md",
+      "sha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77",
+      "immutableSourcePath": "assembly/originals/score-treatment.md"
+    },
+    {
+      "path": "cinematography-treatment.md",
+      "sha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+      "immutableSourcePath": "assembly/originals/cinematography-treatment.md"
+    }
+  ],
+  "operations": [
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "operationIndex": 0,
+      "operation": "replace",
+      "path": "cinematography",
+      "oldValueSha256": "53cadbafc9d8735c22fa21c7a29c520c68485c8b20cf9cfd55b4ce1af83774fd"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "operationIndex": 1,
+      "operation": "replaceById",
+      "path": "shots",
+      "oldValueSha256": "5bbe4ec73761ccefcf32ac7d282ee3947ef79967cc6b1475d7ace58f81cd88c3"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "operationIndex": 2,
+      "operation": "replaceById",
+      "path": "shots",
+      "oldValueSha256": "7e967bd5b07ab4306abd52366a13539a5deabdb2e9d4c722b8b8727a25d69008"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "operationIndex": 3,
+      "operation": "appendAfterId",
+      "path": "shots",
+      "oldValueSha256": "940cb80f7dab7b75c580de0bea90b4146b891a6b8e386f617b66203ec5fca991"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "operationIndex": 4,
+      "operation": "replace",
+      "path": "reset",
+      "oldValueSha256": "c1c5cbe0a9749b0362eb62387b31a3e231f15bed5ac143f818ae6b890023f955"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "operationIndex": 5,
+      "operation": "append",
+      "path": "evidence.captures",
+      "oldValueSha256": "49160b190f344e22d9edff8de55727fafaddf23a006cadaba4aa3293338b5ff2"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "operationIndex": 6,
+      "operation": "append",
+      "path": "evidence.captures",
+      "oldValueSha256": "ad73adb3ff718050c7643abe30602539e85143557f4b3d791743c1819820c188"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "operationIndex": 0,
+      "operation": "replace",
+      "path": "score",
+      "oldValueSha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "operationIndex": 1,
+      "operation": "append",
+      "path": "reset.states",
+      "oldValueSha256": "aebe025d0d193ef9391ef36287b989f0147ec2873261a25dcccd77b9252c3073"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "operationIndex": 2,
+      "operation": "append",
+      "path": "evidence.captures",
+      "oldValueSha256": "f0a43f56f3879b8c3af057313cfd4b30faaa58d97bc67227388420a50ff06aea"
+    }
+  ],
+  "referenceNormalizations": [
+    {
+      "path": "/shots/0/evidenceRefs/0",
+      "old": "base.desktop.descent",
+      "new": "cinematography-treatment.json#base.desktop.descent",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/1/evidenceRefs/0",
+      "old": "base.portrait.fixed",
+      "new": "cinematography-treatment.json#base.portrait.fixed",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/2/evidenceRefs/0",
+      "old": "base.desktop.fixed",
+      "new": "cinematography-treatment.json#base.desktop.fixed",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/3/evidenceRefs/0",
+      "old": "base.portrait.offscreen",
+      "new": "cinematography-treatment.json#base.portrait.offscreen",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/4/evidenceRefs/0",
+      "old": "base.portrait.track.mid",
+      "new": "cinematography-treatment.json#base.portrait.track.mid",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/4/evidenceRefs/3",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/5/evidenceRefs/0",
+      "old": "base.portrait.raster",
+      "new": "cinematography-treatment.json#base.portrait.raster",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/6/evidenceRefs/0",
+      "old": "base.desktop.raster",
+      "new": "cinematography-treatment.json#base.desktop.raster",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/7/evidenceRefs/0",
+      "old": "capture.early.quota-clear-hold",
+      "new": "contract:capture:capture.early.quota-clear-hold",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/7/evidenceRefs/2",
+      "old": "base.desktop.raster",
+      "new": "cinematography-treatment.json#base.desktop.raster",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/7/evidenceRefs/3",
+      "old": "base.portrait.raster",
+      "new": "cinematography-treatment.json#base.portrait.raster",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/shots/8/evidenceRefs/0",
+      "old": "base.portrait.depth",
+      "new": "cinematography-treatment.json#base.portrait.depth",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/desktop/evidenceRefs/0",
+      "old": "capture.early.contacts",
+      "new": "contract:capture:capture.early.contacts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/desktop/evidenceRefs/1",
+      "old": "capture.early.transfer",
+      "new": "contract:capture:capture.early.transfer",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/desktop/evidenceRefs/2",
+      "old": "capture.early.targets",
+      "new": "contract:capture:capture.early.targets",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/mobile/evidenceRefs/0",
+      "old": "capture.early.contacts",
+      "new": "contract:capture:capture.early.contacts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/mobile/evidenceRefs/1",
+      "old": "capture.early.transfer",
+      "new": "contract:capture:capture.early.transfer",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/mobile/evidenceRefs/2",
+      "old": "capture.early.targets",
+      "new": "contract:capture:capture.early.targets",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/reducedMotion/evidenceRefs/0",
+      "old": "capture.early.contacts",
+      "new": "contract:capture:capture.early.contacts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/reducedMotion/evidenceRefs/1",
+      "old": "capture.early.transfer",
+      "new": "contract:capture:capture.early.transfer",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/reducedMotion/evidenceRefs/2",
+      "old": "capture.early.targets",
+      "new": "contract:capture:capture.early.targets",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/qualityTiers/0/evidenceRefs/0",
+      "old": "capture.early.performance",
+      "new": "contract:capture:capture.early.performance",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/qualityTiers/0/evidenceRefs/1",
+      "old": "capture.early.targets",
+      "new": "contract:capture:capture.early.targets",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/qualityTiers/1/evidenceRefs/0",
+      "old": "capture.early.performance",
+      "new": "contract:capture:capture.early.performance",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/qualityTiers/1/evidenceRefs/1",
+      "old": "capture.early.targets",
+      "new": "contract:capture:capture.early.targets",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/qualityTiers/2/evidenceRefs/0",
+      "old": "capture.early.performance",
+      "new": "contract:capture:capture.early.performance",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/qualityTiers/2/evidenceRefs/1",
+      "old": "capture.early.targets",
+      "new": "contract:capture:capture.early.targets",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/qualityTiers/3/evidenceRefs/0",
+      "old": "capture.early.performance",
+      "new": "contract:capture:capture.early.performance",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/variants/qualityTiers/3/evidenceRefs/1",
+      "old": "capture.early.targets",
+      "new": "contract:capture:capture.early.targets",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/0/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/0/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/1/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/1/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/2/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/2/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/3/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/3/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/4/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/4/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/5/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/5/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/6/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/6/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/7/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/7/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/8/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/8/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/9/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/9/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/10/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/10/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/11/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/11/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/12/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/12/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/13/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/13/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/14/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/14/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/15/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/15/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/16/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/16/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/17/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/17/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/18/evidenceRefs/1",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/cues/18/evidenceRefs/2",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/evidenceRefs/2",
+      "old": "capture.early.score-receipts",
+      "new": "contract:capture:capture.early.score-receipts",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/evidenceRefs/3",
+      "old": "capture.early.track-text",
+      "new": "contract:capture:capture.early.track-text",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/score/evidenceRefs/4",
+      "old": "capture.early.quota-clear-hold",
+      "new": "contract:capture:capture.early.quota-clear-hold",
+      "reason": "native file/contract reference syntax; same authored target"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/26",
+      "old": "normal final fiber real receipt -> null active objective and no target/order<=2frames -> one120..240ms ack -> unchanged hold -> no repeated completion",
+      "new": "normal final fiber real receipt -> null active objective and no target/order≤2frames -> one120..240ms ack -> unchanged hold -> no repeated completion",
+      "reason": "Mathematically identical Unicode less-than-or-equal representation prevents numeric comparison plus arrow being mistaken for a template token; exact source criterion preserved in authored projection."
+    }
+  ],
+  "retainedOriginals": [
+    {
+      "path": "assembly/originals/chapter-treatment.json",
+      "sha256": "5a582598cd5d38291010042b0382075fe30ad146efe254a8e9ec7e61f55afe5f"
+    },
+    {
+      "path": "assembly/originals/chapter-native-contract-contribution.json",
+      "sha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9"
+    },
+    {
+      "path": "assembly/originals/chapter-stage3-proposal.json",
+      "sha256": "0402d9d566a729acb1c01eff4125c0f9b5d06ea1d45aa6f6ac08f8c0f23dd116"
+    },
+    {
+      "path": "assembly/originals/cinematography-treatment.json",
+      "sha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b"
+    },
+    {
+      "path": "assembly/originals/cinematography-stage3-native-delta.json",
+      "sha256": "ad0912eea97a31acfc863ad5e7b3cdb320520ea0a808f03490a2de2df54a1a17"
+    },
+    {
+      "path": "assembly/originals/score-treatment.json",
+      "sha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d"
+    },
+    {
+      "path": "assembly/originals/score-stage3-native-delta.json",
+      "sha256": "15d8704f4927c10a55ded685e324a6cb7bd7ad029177dae6b1a0dd976973f989"
+    },
+    {
+      "path": "assembly/originals/production-lock.json",
+      "sha256": "f77661be80d2d5d7fc674610a600a35a79f18463e7a13c0008e0ab3e111be9ba"
+    },
+    {
+      "path": "assembly/originals/production-lock.md",
+      "sha256": "de06784ff4650eafa61ef250068c8a92c4e89ff8b829e48363af56db7728ea83"
+    },
+    {
+      "path": "assembly/originals/decision-brief.json",
+      "sha256": "ee362e3a10d5ebc15e667bd1cf28c20cabceff59d5cb367d911a2f1829653114"
+    },
+    {
+      "path": "assembly/originals/decision-brief.md",
+      "sha256": "51e37ac750dd24d8760c40e63d9d8f0bcbd8b29850d1b9f617ac95eeb5d6faf7"
+    },
+    {
+      "path": "assembly/originals/shipped-visual-baseline.json",
+      "sha256": "46395cee350f1ee4a6b7c0c310d550baf7ce0e6f6630a5ece8a25a3ac19a434b"
+    },
+    {
+      "path": "assembly/originals/shipped-ux-baseline.json",
+      "sha256": "3b388660d31ffe84ba5518f53429e22f423b206aa7e08f7cc27e9a99d0b374f8"
+    },
+    {
+      "path": "assembly/originals/story-intent.md",
+      "sha256": "63eca86bd673e0e26f68d18a48054f98ac7a6286e56d0bdf1bd34abcbc4582a2"
+    },
+    {
+      "path": "assembly/originals/score-treatment.md",
+      "sha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77"
+    },
+    {
+      "path": "assembly/originals/cinematography-treatment.md",
+      "sha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8"
+    }
+  ],
+  "directors": {
+    "notesAuthoredByCompiler": 0,
+    "repliesAuthoredByCompiler": 0,
+    "signaturesAuthoredByCompiler": 0
+  },
+  "counts": {
+    "anchors": 14,
+    "objectives": 6,
+    "shots": 9,
+    "captures": 12,
+    "scoreCues": 19
+  },
+  "remainingAbsolutePerformanceBudgets": false
+}

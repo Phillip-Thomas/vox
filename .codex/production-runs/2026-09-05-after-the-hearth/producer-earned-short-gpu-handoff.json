@@ -1,0 +1,14 @@
+{
+  "at": "2026-09-06T18:35:27.312221+00:00",
+  "from": "arrival-common-earned",
+  "to": "arrival-common-short-runtime",
+  "priorRoleFinished": true,
+  "cleanupReceipt": {
+    "path": "verifier/captures/arrival-common-earned/earned-1/cleanup-receipt.json",
+    "sha256": "9080c9824de0292b658822fdc475290b8cfec1ed6b6ed6b3862bbd3382f01892"
+  },
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashed": 99,
+  "isAcceptance": false,
+  "sourceMutationAuthorized": false
+}

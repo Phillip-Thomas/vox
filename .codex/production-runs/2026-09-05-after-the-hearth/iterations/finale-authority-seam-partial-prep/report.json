@@ -1,0 +1,63 @@
+{
+ "documentKind": "finale-authority-seam-prep",
+ "role": "story-verifier (CPU-only prep)",
+ "at": "2026-09-06T22:22:30.338656+00:00",
+ "runId": "2026-09-05-after-the-hearth",
+ "capturePerformed": false,
+ "gpuAudioLockPreviewUsed": false,
+ "sourceModified": false,
+ "frozen": {
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "previewPort": 37395,
+  "bundle": "main/dist/assets/index-C1X65dZp.js",
+  "bundleSha256Verified": "68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b"
+ },
+ "newOwnedPaths": [
+  "verifier/probes/manual-credit-finale/finale-authority-seam/",
+  "verifier/logs/finale-authority-seam-prep/",
+  "finale-authority-seam-prep-report.json"
+ ],
+ "copiedOnceFrom": "verifier/probes/manual-credit-finale/finale-window-fr (5 files, unmodified; no deeper copy)",
+ "importDepthVerified": {
+  "main/tools/lib(7x..)": true,
+  "../../lib/ownedSession.mjs": true
+ },
+ "preparedFiles": {
+  "audio-isolation-plan.json": "80598be940380c4c9f7c2530602597215ea110931ad0843ada2cc803d21424ba",
+  "candidate-pins.json": "2eaf013c2e284cb447036ae7b7af565ae524313a7e1b376cdeb02ce7cad6efea",
+  "closure-checks.mjs": "1dcc5c25a336ea06351322b9a66c4f8fd7c29d0949fb03f40c0da1b4325c8b72",
+  "finale-window-probe.mjs": "97da9f8ff5bf17a61bb42e80cca30ba402a3ace033a7a7cfe1802f10b9feb28f",
+  "finale-window-runtime.mjs": "a312accb54ba8af745a8c660c5ff23eff0132d385f0ddf0c5c8b4e5609d922b2",
+  "run-seam.mjs": "bb3de302cc3a777b088bacbe6a0d1627001e80f7d360983d3f743e0bb5a19d56",
+  "seamLogpoints.mjs": "3b73392e32c0c2d86dde1e468ef7cf5421ce2433ee002a356045acb490ca6686",
+  "windowSampler.mjs": "c984535db45b4f8717b57e335d2cb2b1f6e93dfa579485f651b24a5b79ff5c68"
+ },
+ "prepared": {
+  "seamPins": "10/10 resolved-unique offline in the served bundle (all line 7840)",
+  "chainCoverage": {
+   "tokenCreation/startedAtMs": "Qwe pin",
+   "deadlineChecksAroundExpiry": "hwe pin (ageS vs cap Bwe=5)",
+   "releaseTimeAndPath": "LKA pin",
+   "setScoreBeat(null)/setScoreMood(null)": "B4 pin (arg/selectedBefore/noop)",
+   "storyLeadingBefore/after + no-op discrimination": "E4 pin (leadingBefore/isRelease/noop)",
+   "cancellation": "ngA pin"
+  },
+  "nonPausing": "every condition terminates in ,!1 ; launcher enforces this",
+  "scenarios": [
+   "normal-expiry",
+   "one real Escape pause cancel at a live post-complete age (ordinary key input only)"
+  ],
+  "launcherRefusal": "verified exit 70 without activeRole; also gates action=continue, inherited exclusive fd9, bundle sha, pin uniqueness, unique capture dir, per-attempt code snapshot"
+ },
+ "unresolved": {
+  "scheduleStoryAuthority(false,atTime)": "NOT pinned. $Z() is invoked with NO arguments at E4(null); atTime and the 4.5s endpoints are internal to $Z. No literal 4.5 adjacent to currentTime/gain/ramp found in the bundle.",
+  "complementaryBedAutomationStart/End": "NOT pinned (same cause).",
+  "context.running/currentTime": "not in scope at any pin; needs a separate read-only evaluation, not an alias.",
+  "built/storyLeading beyond c4": "only c4 (leading beat) observable; 'built' graph availability unobservable at these pins.",
+  "tokenIdentity": "no published id; stable identity = captured startedAtMs.",
+  "cancelReason": "ngA discards its argument; recorded as reasonArgObservable:false, never fabricated."
+ },
+ "perturbationLimitsRecorded": true,
+ "proposedRuntimeCommand": "bash -c 'exec 9>/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/artifacts/heavy.lock; flock -w 60 -x 9 || exit 75; SEAM_ACTIVE_ROLE=finale-authority-seam-runtime SEAM_ACTION=continue SEAM_SCENARIO=normal-expiry node /home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-authority-seam/run-seam.mjs'",
+ "decisionImpact": "Chain is prepared only up to the score-beat/leadership transition. Without the $Z internals, a release-pass or an audible cap violation still cannot be concluded; the prep does not close CG-IMPL-016."
+}

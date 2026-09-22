@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 1031910,
+  "stop_reason": "end_turn",
+  "session_id": "e781032d-b222-40b6-a324-910ab1f01e1d",
+  "total_cost_usd": 10.070398000000003,
+  "usage": {
+    "input_tokens": 188,
+    "cache_creation_input_tokens": 230681,
+    "cache_read_input_tokens": 11696126,
+    "output_tokens": 76468,
+    "output_tokens_details": {
+      "thinking_tokens": 13295
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 230681,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2150,
+        "cache_read_input_tokens": 234231,
+        "cache_creation_input_tokens": 517,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 517
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2805,
+      "outputTokens": 16,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0028850000000000004,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 188,
+      "outputTokens": 76468,
+      "cacheReadInputTokens": 11696126,
+      "cacheCreationInputTokens": 230681,
+      "webSearchRequests": 0,
+      "costUSD": 10.067513000000003,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 13295,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 108,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: PASS** on all three commissioned lanes \u2014 independent verify, actual return flight, and movie survey/COMMON on the LONG route (3 cold runs). No acceptance, no defect closure, no publication.\n\n## Measurements\n\n| lane | measurement | result |\n|---|---|---|\n| Verify | `npm --prefix main run verify`, cwd `/vox`, 17:45:06.245184591Z \u2192 17:46:07.106885453Z | **exit 0**, 351 files / **3172** tests \u00b7 log `e57a9dab\u2026d6ba` |\n| Flight | 17:49:14.083704865Z \u2192 17:50:31.522277478Z, 272 samples @250 ms | **74 800 ms of 120 000 ms bound**, exit 0 |\n| COMMON\u20111 | 17:52:29.679 \u2192 17:58:01.895, `--seconds 330 --until-anchor anc.cg.handback` | exit 0, beat `done` @ **62.095 s** |\n| COMMON\u20112 | 17:59:58.051 \u2192 18:01:04.054, `--until-beat done` | exit 0, `done` @ **62.610 s** |\n| COMMON\u20113 | 18:01:09.280 \u2192 18:02:15.484, `--until-beat done` | exit 0, `done` @ **62.506 s** |\n\nRun variance across 3 cold runs: **0.515 s**. Stall predicate never fired; 0 page errors; `teleportNudgesTotal` 0 in all three.\n\n## Source & preview integrity\nManifest `6ef957c3\u2026` = control = readiness. Contract scene\u2011v3 `5ef85a32\u2026`. **99/99 game-source files matched before, after and at end**; external `creative-triad-gate.mjs` matched throughout. One **auxiliary** drift preserved, not repaired: `paravoxia-creative-delta.run-profile.json` `a0b0ecdd\u2026` \u2192 `605fb2ef\u2026` (unused profile; root disposition `producer-nonbinding-auxiliary-observation.json`).\n\nPreview 38007 was **never measured** (prior manifest + stopped). Root's new 34413 verified independently: `GET /` 200 `6c8c378b\u2026` `<title>Paravoxia</title>`, bundle `efc87feb\u2026` \u2014 both equal to **my** build. Shipped JSON file-map buildHash **`aa52b034\u2026`** kept distinct from the auxiliary path/NUL/hash/newline hash **`318e2a54\u2026`**. All browsers headed hardware **ANGLE / NVIDIA GB10 (OpenGL 4.5.0)** via `assertHardwareGl`, each under exclusive `flock -n -x`.\n\n## Key findings\n- **Flight**: epoch **2\u21923\u21924** monotone; committed `activePlanetId -1,-1` at 174.15 units and held it. **The prior departure-reset (3\u21925, 6\u21928, pad reclaimed) did not reproduce.** `anc.cg.origin-landed` present in named `activationHistoryAnchorIds`; `story:ch13-origin-landed` latched; `ch13-return \u2192 ch13-survey`.\n- **Signed phases**, same `ch13:return:origin` ID and `Origin \u00b7 audit site` label throughout, no board regression: `[\"Fly to Origin.\",\"Follow the audit-site approach and land.\"]` (154 samples) \u2192 `[\"Disembark.\",\"Follow the audit-site marker on foot.\"]` (**1** sample) \u2192 `[\"Follow the audit-site marker on foot.\"]` (107 samples). All byte-exact to the contract.\n- **COMMON**: every original corner passed; prior stall target `[-44.6,51.05,16]` is now `[-44.24,51.05,16]`. `terraUnits` **18**, `workerUnits` **18**, `committed true` in all 3 runs. W held H `(-40,51.05,12)`. Terra's actual F (`rail.action interact`) **plus** occupancy for 47/50/50 samples. `anc.cg.route-tested`, `anc.cg.complete`, `anc.cg.handback` all committed; objective cleared at `done`.\n- **Repaired standby**: actual occupied grounded body `(-44.09, 50.989, 12.01)`, `supported: true`, min clearance **2.083\u20132.092 units from the entire offered polyline**.\n\n## Objective visual defects\n**None** in the frames inspected (`journey-common-2/0054-\u2026reciprocal-crossed.png`, `\u2026/0074-stop-reached-beat_done.png`, `flight-1/0164-workOrder.png`). Sampled scan only, not a visual acceptance.\n\n## Unmeasured (explicitly not claimed)\nFrame coverage of the boarded-surface `Disembark.` copy (telemetry-only, 1 sample); same-ID acknowledgement emission count; `nudges`/`backstops`/`stuck` in the journey lane (fields absent \u2014 **not** zero); clearance vs. engine-**accepted** sample coordinates (not exposed); final completion message; SHORT survey lane; manual COMMON corner recovery (CG\u2011IMPL\u2011009); earned Continue; full-story/station continuity; variants; FPS; AV/audibility; reset matrix; creative reviews.\n\n**Retained failure**: first journey attempt exited **1 before any browser** on the shared lib's scene\u2011v2 pin; fixed by a run-local `cgContract-v3.mjs` (pin only) \u2014 shared probes untouched. **Correction applied** per root's 18:08:12 inbox note on `sample.autopilot` field availability.\n\n**Cleanup**: 4 browsers owned, **0 left running**, post-finally receipts all `stopped`/`error: null`, root preview untouched, no process killed, heavy lock free.\n\n## Artifacts\n- Probes `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/arrival-common-verifier/`\n- Captures `\u2026/verifier/captures/arrival-common/{flight-1,journey-common-1,journey-common-2,journey-common-3}/`\n- Logs `\u2026/logs/arrival-common-verifier/`\n- Reports `verification-arrival-common-report.json` (`69b4fcd4\u2026`) / `.md` (`c4aa316d\u2026`), progress `verifier-arrival-common-progress.md`",
+  "ttft_ms": 1539,
+  "type": "result",
+  "duration_ms": 1583332,
+  "uuid": "8b6608a3-f06c-41cb-8fa5-bb549394dabc",
+  "ttft_stream_ms": 759,
+  "time_to_request_ms": 19,
+  "first_content_frame_ms": 760,
+  "queued_turn_count": 0
+}

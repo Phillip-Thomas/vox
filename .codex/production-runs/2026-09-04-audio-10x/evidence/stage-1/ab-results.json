@@ -1,0 +1,1216 @@
+{
+  "schema": "paravoxia.audioStageAb.v1",
+  "generatedAt": "2026-09-05T10:05:33.063Z",
+  "beforeDir": "before",
+  "afterDir": "after",
+  "noGlueDir": "after-noglue",
+  "rows": [
+    {
+      "name": "bed-sandbox-day",
+      "seconds": 210,
+      "before": {
+        "integratedLufs": -24.55,
+        "shortTermMaxLufs": -21.73,
+        "truePeakDbtp": -11.46,
+        "loudnessRangeLu": 3.75,
+        "correlation": 0.962,
+        "bandFractions": [
+          0.863,
+          0.074,
+          0.06,
+          0.003
+        ],
+        "zcrHz": 530,
+        "smoothnessViolations": 0,
+        "pcmSha256": "1f6337604f649c9312e550298f4d69712d9bc6416fa7f8c6137c0a52fc0d5878"
+      },
+      "after": {
+        "integratedLufs": -20.48,
+        "shortTermMaxLufs": -18.12,
+        "truePeakDbtp": -9.37,
+        "loudnessRangeLu": 3.59,
+        "correlation": 0.936,
+        "bandFractions": [
+          0.83,
+          0.115,
+          0.052,
+          0.003
+        ],
+        "zcrHz": 499,
+        "smoothnessViolations": 0,
+        "pcmSha256": "aa9d0d89d803c9cddc80cf0caef07c4ae499f3520f33ae68d16d20d381edb492"
+      },
+      "delta": {
+        "integratedLu": 4.06,
+        "shortTermMaxLu": 3.61,
+        "truePeakDb": 2.09,
+        "correlation": -0.026,
+        "bandFractions": [
+          -0.032,
+          0.04,
+          -0.008,
+          0
+        ],
+        "zcrHz": -31
+      }
+    },
+    {
+      "name": "bed-sandbox-night",
+      "seconds": 210,
+      "before": {
+        "integratedLufs": -22.93,
+        "shortTermMaxLufs": -20.08,
+        "truePeakDbtp": -8.59,
+        "loudnessRangeLu": 3.49,
+        "correlation": 0.961,
+        "bandFractions": [
+          0.848,
+          0.112,
+          0.04,
+          0
+        ],
+        "zcrHz": 350,
+        "smoothnessViolations": 0,
+        "pcmSha256": "8ce828b1d1fac13f6a3ce7348dc394715ea60d79d64ea9a2a06b7d7acb22fae4"
+      },
+      "after": {
+        "integratedLufs": -20.51,
+        "shortTermMaxLufs": -18.25,
+        "truePeakDbtp": -8.43,
+        "loudnessRangeLu": 3.26,
+        "correlation": 0.943,
+        "bandFractions": [
+          0.846,
+          0.124,
+          0.03,
+          0
+        ],
+        "zcrHz": 333,
+        "smoothnessViolations": 0,
+        "pcmSha256": "0f05fa7dbdd9f6d6f273fcb62efbff0cb77b284234ed120e00feb8111bd8414c"
+      },
+      "delta": {
+        "integratedLu": 2.42,
+        "shortTermMaxLu": 1.82,
+        "truePeakDb": 0.16,
+        "correlation": -0.018,
+        "bandFractions": [
+          -0.002,
+          0.012,
+          -0.01,
+          0
+        ],
+        "zcrHz": -17
+      }
+    },
+    {
+      "name": "bed-contrast-A",
+      "seconds": 210,
+      "before": {
+        "integratedLufs": -25.02,
+        "shortTermMaxLufs": -20.24,
+        "truePeakDbtp": -6.57,
+        "loudnessRangeLu": 4.03,
+        "correlation": 0.967,
+        "bandFractions": [
+          0.872,
+          0.092,
+          0.036,
+          0.001
+        ],
+        "zcrHz": 332,
+        "smoothnessViolations": 0,
+        "pcmSha256": "fdac7d8950a89067094ac79564a5859a7210f287b7037617c54790a832d1205f"
+      },
+      "after": {
+        "integratedLufs": -20.53,
+        "shortTermMaxLufs": -16.88,
+        "truePeakDbtp": -8.65,
+        "loudnessRangeLu": 3.67,
+        "correlation": 0.929,
+        "bandFractions": [
+          0.82,
+          0.14,
+          0.038,
+          0.002
+        ],
+        "zcrHz": 401,
+        "smoothnessViolations": 0,
+        "pcmSha256": "8304b4c9951318d746d3b82fd1c1941c3667e09199ade8a583b08272885cf072"
+      },
+      "delta": {
+        "integratedLu": 4.49,
+        "shortTermMaxLu": 3.36,
+        "truePeakDb": -2.07,
+        "correlation": -0.037,
+        "bandFractions": [
+          -0.051,
+          0.048,
+          0.002,
+          0.001
+        ],
+        "zcrHz": 68
+      }
+    },
+    {
+      "name": "bed-contrast-B",
+      "seconds": 210,
+      "before": {
+        "integratedLufs": -25.29,
+        "shortTermMaxLufs": -22.88,
+        "truePeakDbtp": -11.86,
+        "loudnessRangeLu": 5.08,
+        "correlation": 0.968,
+        "bandFractions": [
+          0.876,
+          0.076,
+          0.047,
+          0.002
+        ],
+        "zcrHz": 389,
+        "smoothnessViolations": 0,
+        "pcmSha256": "da9e0fb529c8a13521404d166ef37122a7d2f266dbfc1f43d8550047cc09b11b"
+      },
+      "after": {
+        "integratedLufs": -21.07,
+        "shortTermMaxLufs": -18.94,
+        "truePeakDbtp": -9.47,
+        "loudnessRangeLu": 5.13,
+        "correlation": 0.944,
+        "bandFractions": [
+          0.849,
+          0.109,
+          0.04,
+          0.002
+        ],
+        "zcrHz": 385,
+        "smoothnessViolations": 0,
+        "pcmSha256": "8155295b93a1c00b1d904e6a25599042093019f0f20fd1de5e6f6c22543b6ef7"
+      },
+      "delta": {
+        "integratedLu": 4.22,
+        "shortTermMaxLu": 3.95,
+        "truePeakDb": 2.39,
+        "correlation": -0.024,
+        "bandFractions": [
+          -0.027,
+          0.034,
+          -0.007,
+          0
+        ],
+        "zcrHz": -4
+      }
+    },
+    {
+      "name": "story-beat",
+      "seconds": 90,
+      "before": {
+        "integratedLufs": -19.95,
+        "shortTermMaxLufs": -17.87,
+        "truePeakDbtp": -8.59,
+        "loudnessRangeLu": 2.55,
+        "correlation": 0.872,
+        "bandFractions": [
+          0.703,
+          0.223,
+          0.07,
+          0.004
+        ],
+        "zcrHz": 679,
+        "smoothnessViolations": 0,
+        "pcmSha256": "e1942712f3bbe376c1b6eba85d242c3fc3eb4f20cbf4d4e5a3ab89b099e9efbc"
+      },
+      "after": {
+        "integratedLufs": -20.18,
+        "shortTermMaxLufs": -18.28,
+        "truePeakDbtp": -9.64,
+        "loudnessRangeLu": 2.4,
+        "correlation": 0.875,
+        "bandFractions": [
+          0.702,
+          0.223,
+          0.071,
+          0.004
+        ],
+        "zcrHz": 683,
+        "smoothnessViolations": 0,
+        "pcmSha256": "5d134fa193d55dd1fcf177271ef9a01ed8268ce53b49b635d15b147be4c7eb28"
+      },
+      "delta": {
+        "integratedLu": -0.23,
+        "shortTermMaxLu": -0.42,
+        "truePeakDb": -1.04,
+        "correlation": 0.003,
+        "bandFractions": [
+          -0.001,
+          0,
+          0.001,
+          0
+        ],
+        "zcrHz": 4
+      }
+    },
+    {
+      "name": "era-transition",
+      "seconds": 120,
+      "before": {
+        "integratedLufs": -26.1,
+        "shortTermMaxLufs": -22.57,
+        "truePeakDbtp": -5.12,
+        "loudnessRangeLu": 11.17,
+        "correlation": 0.978,
+        "bandFractions": [
+          0.86,
+          0.093,
+          0.045,
+          0.002
+        ],
+        "zcrHz": 436,
+        "smoothnessViolations": 12,
+        "pcmSha256": "6dea9896e278ed460f419321d54047698279985874db141ccede766c0fe1421e"
+      },
+      "after": {
+        "integratedLufs": -22.58,
+        "shortTermMaxLufs": -18.94,
+        "truePeakDbtp": -9.03,
+        "loudnessRangeLu": 15.18,
+        "correlation": 0.958,
+        "bandFractions": [
+          0.837,
+          0.119,
+          0.042,
+          0.002
+        ],
+        "zcrHz": 448,
+        "smoothnessViolations": 12,
+        "pcmSha256": "15677e7782208da095ca447db38cdfb0487f9b1f7317570c7d02a960c27327d5"
+      },
+      "delta": {
+        "integratedLu": 3.53,
+        "shortTermMaxLu": 3.63,
+        "truePeakDb": -3.91,
+        "correlation": -0.02,
+        "bandFractions": [
+          -0.024,
+          0.026,
+          -0.003,
+          0
+        ],
+        "zcrHz": 12
+      }
+    },
+    {
+      "name": "bare-bed",
+      "seconds": 48,
+      "before": {
+        "integratedLufs": -34.53,
+        "shortTermMaxLufs": -34.17,
+        "truePeakDbtp": -25.16,
+        "loudnessRangeLu": 0.46,
+        "correlation": 1,
+        "bandFractions": [
+          0.48,
+          0.402,
+          0.101,
+          0.017
+        ],
+        "zcrHz": 651,
+        "smoothnessViolations": 51,
+        "pcmSha256": "348ee6f5ebf5cb36eefcff7899625aefadafebd2cb62e9cf671e3a2200f9ca33"
+      },
+      "after": {
+        "integratedLufs": -34.53,
+        "shortTermMaxLufs": -34.17,
+        "truePeakDbtp": -25.17,
+        "loudnessRangeLu": 0.46,
+        "correlation": 1,
+        "bandFractions": [
+          0.48,
+          0.402,
+          0.101,
+          0.017
+        ],
+        "zcrHz": 654,
+        "smoothnessViolations": 54,
+        "pcmSha256": "2d937cac7982dea070f6409449a90021acbbfcadc2f26b3d3a507894af6d63b8"
+      },
+      "delta": {
+        "integratedLu": 0,
+        "shortTermMaxLu": 0,
+        "truePeakDb": -0.01,
+        "correlation": 0,
+        "bandFractions": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "zcrHz": 2
+      }
+    },
+    {
+      "name": "bare-story-ch1-fixed",
+      "seconds": 60,
+      "before": {
+        "integratedLufs": -35.96,
+        "shortTermMaxLufs": -34.17,
+        "truePeakDbtp": -25.29,
+        "loudnessRangeLu": 16.57,
+        "correlation": 1,
+        "bandFractions": [
+          0.458,
+          0.422,
+          0.103,
+          0.017
+        ],
+        "zcrHz": 638,
+        "smoothnessViolations": 56,
+        "pcmSha256": "372f93d385d581415c276390ac62d8e58f37fee6ebe3102fe1c3b20a4920a959"
+      },
+      "after": {
+        "integratedLufs": -35.95,
+        "shortTermMaxLufs": -34.17,
+        "truePeakDbtp": -25.3,
+        "loudnessRangeLu": 16.57,
+        "correlation": 1,
+        "bandFractions": [
+          0.458,
+          0.422,
+          0.103,
+          0.017
+        ],
+        "zcrHz": 640,
+        "smoothnessViolations": 54,
+        "pcmSha256": "ecb80c421f6e69884e2239a81bfdcdaf29fd847e75110792c49ac3400cecf838"
+      },
+      "delta": {
+        "integratedLu": 0.01,
+        "shortTermMaxLu": 0,
+        "truePeakDb": -0.01,
+        "correlation": 0,
+        "bandFractions": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "zcrHz": 2
+      }
+    },
+    {
+      "name": "color-bed",
+      "seconds": 48,
+      "before": {
+        "integratedLufs": -27.27,
+        "shortTermMaxLufs": -26.57,
+        "truePeakDbtp": -19.17,
+        "loudnessRangeLu": 1.44,
+        "correlation": 1,
+        "bandFractions": [
+          0.849,
+          0.131,
+          0.018,
+          0.002
+        ],
+        "zcrHz": 300,
+        "smoothnessViolations": 0,
+        "pcmSha256": "662869b06ba26c4981da34e52ccb79d696c7fb52ddd107587f2e44ba75c68aba"
+      },
+      "after": {
+        "integratedLufs": -27.28,
+        "shortTermMaxLufs": -26.58,
+        "truePeakDbtp": -19.21,
+        "loudnessRangeLu": 1.44,
+        "correlation": 1,
+        "bandFractions": [
+          0.849,
+          0.131,
+          0.018,
+          0.002
+        ],
+        "zcrHz": 302,
+        "smoothnessViolations": 0,
+        "pcmSha256": "3d74b7f227fbbfaaa60488102c9504dbe10df9b1f6e489bf1fda19aab8153741"
+      },
+      "delta": {
+        "integratedLu": -0.01,
+        "shortTermMaxLu": -0.01,
+        "truePeakDb": -0.04,
+        "correlation": 0,
+        "bandFractions": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "zcrHz": 2
+      }
+    },
+    {
+      "name": "bed-check",
+      "seconds": 90,
+      "before": {
+        "integratedLufs": -23.14,
+        "shortTermMaxLufs": -19.38,
+        "truePeakDbtp": -9.7,
+        "loudnessRangeLu": 6.88,
+        "correlation": 0.932,
+        "bandFractions": [
+          0.824,
+          0.127,
+          0.048,
+          0.002
+        ],
+        "zcrHz": 442,
+        "smoothnessViolations": 0,
+        "pcmSha256": "b551cc1a97c0860f20c4f33d5862949b96b2a07ef5716377ba490da8082c2814"
+      },
+      "after": {
+        "integratedLufs": -20.41,
+        "shortTermMaxLufs": -18.75,
+        "truePeakDbtp": -9.15,
+        "loudnessRangeLu": 3.26,
+        "correlation": 0.922,
+        "bandFractions": [
+          0.819,
+          0.138,
+          0.041,
+          0.002
+        ],
+        "zcrHz": 465,
+        "smoothnessViolations": 0,
+        "pcmSha256": "704fa3e09bc7be8ac8b9cdc301eac077626e783dcb20cbfa71bc2e03f18f914d"
+      },
+      "delta": {
+        "integratedLu": 2.73,
+        "shortTermMaxLu": 0.63,
+        "truePeakDb": 0.55,
+        "correlation": -0.01,
+        "bandFractions": [
+          -0.005,
+          0.012,
+          -0.007,
+          0
+        ],
+        "zcrHz": 23
+      }
+    },
+    {
+      "name": "combined-check",
+      "seconds": 90,
+      "before": {
+        "integratedLufs": -23.13,
+        "shortTermMaxLufs": -19.38,
+        "truePeakDbtp": -9.7,
+        "loudnessRangeLu": 6.84,
+        "correlation": 0.932,
+        "bandFractions": [
+          0.824,
+          0.127,
+          0.048,
+          0.002
+        ],
+        "zcrHz": 443,
+        "smoothnessViolations": 0,
+        "pcmSha256": "903538cae8689ffa3565d3b66592ee42e15c5feec99ca8ced4f3f4a7d5e22bdb"
+      },
+      "after": {
+        "integratedLufs": -20.4,
+        "shortTermMaxLufs": -18.75,
+        "truePeakDbtp": -9.15,
+        "loudnessRangeLu": 3.26,
+        "correlation": 0.922,
+        "bandFractions": [
+          0.819,
+          0.138,
+          0.041,
+          0.002
+        ],
+        "zcrHz": 466,
+        "smoothnessViolations": 0,
+        "pcmSha256": "a894f4bd6388c116bd6c906c319bf382fd0980e6ceefb00a94f28a0cf3815c78"
+      },
+      "delta": {
+        "integratedLu": 2.73,
+        "shortTermMaxLu": 0.63,
+        "truePeakDb": 0.55,
+        "correlation": -0.01,
+        "bandFractions": [
+          -0.004,
+          0.012,
+          -0.007,
+          0
+        ],
+        "zcrHz": 24
+      }
+    }
+  ],
+  "bareEra": {
+    "bare-bed": {
+      "before": {
+        "pcmSha256": "348ee6f5ebf5cb36eefcff7899625aefadafebd2cb62e9cf671e3a2200f9ca33",
+        "fingerprintSha256": "4c88561cccfe8e2e4b52b4f8ac8478026be1f787b6c2647703859643d6565494"
+      },
+      "afterWithGlue": {
+        "pcmSha256": "2d937cac7982dea070f6409449a90021acbbfcadc2f26b3d3a507894af6d63b8",
+        "fingerprintSha256": "8610b1d8565ca59a3621702521ffa5e48e0f6c70ee97aeaf39f5755a380b0a75",
+        "fingerprintIdentical": false,
+        "wav": {
+          "identicalBytes": false,
+          "shaA": "14c977ae591db2d230580454e40977a0e1418a0c3f8259f408f53e112fc49091",
+          "shaB": "ede2fd6966ba6ece996fc55c4762f2c663bbc05ed8227030646c770c71926251",
+          "maxInt16Delta": 2877,
+          "maxDeltaDbfs": -21.13,
+          "differingSamples": 4142758,
+          "firstDifferenceS": 0.188,
+          "lengthMismatch": false
+        },
+        "integratedLuDelta": 0
+      },
+      "afterNoGlue": {
+        "pcmSha256": "c483381b5e1ec7a6d56d6b2f719b6a39ff96dbe7295b997c891725b6c6a1d057",
+        "fingerprintSha256": "4c88561cccfe8e2e4b52b4f8ac8478026be1f787b6c2647703859643d6565494",
+        "fingerprintIdentical": true,
+        "pcmIdentical": false,
+        "wav": {
+          "identicalBytes": false,
+          "shaA": "14c977ae591db2d230580454e40977a0e1418a0c3f8259f408f53e112fc49091",
+          "shaB": "413217bf9991793109b9795d4737d6820ada4aff874e8214d6e2f7b3f0cd5dd7",
+          "maxInt16Delta": 1,
+          "maxDeltaDbfs": -90.31,
+          "differingSamples": 8,
+          "firstDifferenceS": 0.786,
+          "lengthMismatch": false
+        },
+        "verdict": {
+          "fingerprintIdentical": true,
+          "lsbCeiling": 2,
+          "withinLsbCeiling": true,
+          "pass": true
+        }
+      }
+    },
+    "bare-story-ch1-fixed": {
+      "before": {
+        "pcmSha256": "372f93d385d581415c276390ac62d8e58f37fee6ebe3102fe1c3b20a4920a959",
+        "fingerprintSha256": "3c411ae3ca68c85412c5c4c1091f29120573d623169c66ff5b88bde5303ca8e6"
+      },
+      "afterWithGlue": {
+        "pcmSha256": "ecb80c421f6e69884e2239a81bfdcdaf29fd847e75110792c49ac3400cecf838",
+        "fingerprintSha256": "97f536aa4b91b278a27131e0d67bc0cea7e6a8cd3950b885b2704044e12b782d",
+        "fingerprintIdentical": false,
+        "wav": {
+          "identicalBytes": false,
+          "shaA": "014725ab93810d3a1f1630d1f83ea101e54aa2fad037042c2fcfa038f279f2be",
+          "shaB": "f6fd69763cc81f4d97cad7f70b3d9970feade5656c6058178ff2a4028a58301b",
+          "maxInt16Delta": 2877,
+          "maxDeltaDbfs": -21.13,
+          "differingSamples": 5130676,
+          "firstDifferenceS": 0.188,
+          "lengthMismatch": false
+        },
+        "integratedLuDelta": 0.01
+      },
+      "afterNoGlue": {
+        "pcmSha256": "770b0e3f91dee7af27a19ed2edd0c7e62b8f4395dbb4a37d8ea23c83b664a189",
+        "fingerprintSha256": "3c411ae3ca68c85412c5c4c1091f29120573d623169c66ff5b88bde5303ca8e6",
+        "fingerprintIdentical": true,
+        "pcmIdentical": false,
+        "wav": {
+          "identicalBytes": false,
+          "shaA": "014725ab93810d3a1f1630d1f83ea101e54aa2fad037042c2fcfa038f279f2be",
+          "shaB": "98d287ba5888f3d8e343e5de685c10623a236e8dce8c0aadceba6b75ff23a472",
+          "maxInt16Delta": 1,
+          "maxDeltaDbfs": -90.31,
+          "differingSamples": 6,
+          "firstDifferenceS": 0.786,
+          "lengthMismatch": false
+        },
+        "verdict": {
+          "fingerprintIdentical": true,
+          "lsbCeiling": 2,
+          "withinLsbCeiling": true,
+          "pass": true
+        }
+      }
+    },
+    "color-bed": {
+      "before": {
+        "pcmSha256": "662869b06ba26c4981da34e52ccb79d696c7fb52ddd107587f2e44ba75c68aba",
+        "fingerprintSha256": "91dbe5785974976c39ee1609eb28d006dec8807894dd9abd818860974f89c7a7"
+      },
+      "afterWithGlue": {
+        "pcmSha256": "3d74b7f227fbbfaaa60488102c9504dbe10df9b1f6e489bf1fda19aab8153741",
+        "fingerprintSha256": "824a4ef2981f9432f8a984ec3befc3adc0f54f739b72cc304fd5d6565f5b373e",
+        "fingerprintIdentical": false,
+        "wav": {
+          "identicalBytes": false,
+          "shaA": "470297c4a7c3de344bc117bdfe5b7d9e2682286c972a1841b34a57f91d2b7b87",
+          "shaB": "6fd1e1c6f949b4489b30d304a72c9678c591a6e8b0569e0de10921b90da8c12c",
+          "maxInt16Delta": 6199,
+          "maxDeltaDbfs": -14.46,
+          "differingSamples": 4216228,
+          "firstDifferenceS": 0.188,
+          "lengthMismatch": false
+        },
+        "integratedLuDelta": -0.01
+      },
+      "afterNoGlue": {
+        "pcmSha256": "7f4125c41c8fc7b4b84a3e17cca8747638d52c3a888577f9e4490d5d78d03f5f",
+        "fingerprintSha256": "91dbe5785974976c39ee1609eb28d006dec8807894dd9abd818860974f89c7a7",
+        "fingerprintIdentical": true,
+        "pcmIdentical": false,
+        "wav": {
+          "identicalBytes": false,
+          "shaA": "470297c4a7c3de344bc117bdfe5b7d9e2682286c972a1841b34a57f91d2b7b87",
+          "shaB": "5d40ec11e89272d1591ef97d5187061f83babb54e8acb85c7e67babf3a1ffa82",
+          "maxInt16Delta": 1,
+          "maxDeltaDbfs": -90.31,
+          "differingSamples": 134,
+          "firstDifferenceS": 3.718,
+          "lengthMismatch": false
+        },
+        "verdict": {
+          "fingerprintIdentical": true,
+          "lsbCeiling": 2,
+          "withinLsbCeiling": true,
+          "pass": true
+        }
+      }
+    }
+  },
+  "sweeps": {
+    "before": {
+      "sandbox": {
+        "seconds": 180,
+        "planetSeed": 5,
+        "archetype": "verdant",
+        "bars": 59,
+        "analysis": {
+          "seconds": 180,
+          "peak": 0.3042568266391754,
+          "rms": 0.07576466222741407,
+          "nanCount": 0,
+          "clipCount": 0,
+          "longestSilenceS": 0,
+          "maxWindowRms": 0.10172406056629703,
+          "maxSmoothnessDeltaRms": 0.006820406192513465,
+          "maxSmoothnessDeltaAtS": 111.3,
+          "maxSmoothnessDeltaDb": 0.8286166212987525,
+          "maxSmoothnessDeltaDbAtS": 173.3,
+          "maxSmoothnessPreviousRms": 0.06527351346217071,
+          "maxSmoothnessCurrentRms": 0.07180717165660588,
+          "smoothnessViolations": 0
+        },
+        "report": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "finite-plans",
+              "pass": true,
+              "violations": 0,
+              "detail": "every plan field finite"
+            },
+            {
+              "name": "chord-legality",
+              "pass": true,
+              "violations": 0,
+              "detail": "14 transitions, mean displacement 2.79 st"
+            },
+            {
+              "name": "phrase-tabu",
+              "pass": true,
+              "violations": 0,
+              "detail": "2 statements, 2 distinct"
+            },
+            {
+              "name": "mediant-ration",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 mediants (incl. pivot awe-chords) over 8 phrases (ration 1/phrase; paradox 2)"
+            },
+            {
+              "name": "mode-drift",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 drift steps, all single-accidental"
+            },
+            {
+              "name": "signal-smoothness",
+              "pass": true,
+              "violations": 0,
+              "detail": "worst normalized bar step 0.513 (limit 0.7)"
+            },
+            {
+              "name": "no-deadlock",
+              "pass": true,
+              "violations": 0,
+              "detail": "heldNoLegal 0 bars, worst streak 0 (limit 12)"
+            }
+          ],
+          "stats": {
+            "bars": 59,
+            "phrases": 8,
+            "chordChanges": 14,
+            "distinctChords": 5,
+            "mediants": 0,
+            "landingPivots": 0,
+            "stageBlooms": 0,
+            "modeDrifts": 0,
+            "melodyStatements": 2,
+            "distinctStatements": 2,
+            "barNovelty": 0.424,
+            "tabuBypasses": 1,
+            "commonToneRelaxes": 0,
+            "worstSignalStep": 0.513,
+            "modes": "dorian:59",
+            "arrangement": "BED:35 BUILD:8 BLOOM:8 EBB:8"
+          }
+        },
+        "pass": true
+      },
+      "eraBuild": {
+        "seconds": 80,
+        "planetSeed": 5,
+        "archetype": "verdant",
+        "bars": 26,
+        "analysis": {
+          "seconds": 80,
+          "peak": 0.21924377977848053,
+          "rms": 0.05966147363700329,
+          "nanCount": 0,
+          "clipCount": 0,
+          "longestSilenceS": 0,
+          "maxWindowRms": 0.07960564939863796,
+          "maxSmoothnessDeltaRms": 0.004611358766145671,
+          "maxSmoothnessDeltaAtS": 41.3,
+          "maxSmoothnessDeltaDb": 0.6367662559905197,
+          "maxSmoothnessDeltaDbAtS": 29.3,
+          "maxSmoothnessPreviousRms": 0.04263448773399796,
+          "maxSmoothnessCurrentRms": 0.04587745965559609,
+          "smoothnessViolations": 0
+        },
+        "report": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "finite-plans",
+              "pass": true,
+              "violations": 0,
+              "detail": "every plan field finite"
+            },
+            {
+              "name": "chord-legality",
+              "pass": true,
+              "violations": 0,
+              "detail": "12 transitions, mean displacement 3.33 st"
+            },
+            {
+              "name": "phrase-tabu",
+              "pass": true,
+              "violations": 0,
+              "detail": "1 statements, 1 distinct"
+            },
+            {
+              "name": "mediant-ration",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 mediants (incl. pivot awe-chords) over 4 phrases (ration 1/phrase; paradox 2)"
+            },
+            {
+              "name": "mode-drift",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 drift steps, all single-accidental"
+            },
+            {
+              "name": "signal-smoothness",
+              "pass": true,
+              "violations": 0,
+              "detail": "worst normalized bar step 0.567 (limit 0.7)"
+            },
+            {
+              "name": "no-deadlock",
+              "pass": true,
+              "violations": 0,
+              "detail": "heldNoLegal 0 bars, worst streak 0 (limit 12)"
+            }
+          ],
+          "stats": {
+            "bars": 26,
+            "phrases": 4,
+            "chordChanges": 12,
+            "distinctChords": 5,
+            "mediants": 0,
+            "landingPivots": 0,
+            "stageBlooms": 0,
+            "modeDrifts": 0,
+            "melodyStatements": 1,
+            "distinctStatements": 1,
+            "barNovelty": 0.385,
+            "tabuBypasses": 1,
+            "commonToneRelaxes": 0,
+            "worstSignalStep": 0.567,
+            "modes": "dorian:26",
+            "arrangement": "BED:16 BUILD:8 BLOOM:2"
+          }
+        },
+        "pass": true
+      },
+      "storyHandoff": {
+        "seconds": 72,
+        "planetSeed": 5,
+        "archetype": "verdant",
+        "bars": 14,
+        "analysis": {
+          "seconds": 72,
+          "peak": 0.33355945348739624,
+          "rms": 0.06582340006020648,
+          "nanCount": 0,
+          "clipCount": 0,
+          "longestSilenceS": 0,
+          "maxWindowRms": 0.1004475174361362,
+          "maxSmoothnessDeltaRms": 0.020631700822231598,
+          "maxSmoothnessDeltaAtS": 17.8,
+          "maxSmoothnessDeltaDb": 3.922403858370891,
+          "maxSmoothnessDeltaDbAtS": 17,
+          "maxSmoothnessPreviousRms": 0.04730413326345958,
+          "maxSmoothnessCurrentRms": 0.030114724645978228,
+          "smoothnessViolations": 0
+        },
+        "report": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "finite-plans",
+              "pass": true,
+              "violations": 0,
+              "detail": "every plan field finite"
+            },
+            {
+              "name": "chord-legality",
+              "pass": true,
+              "violations": 0,
+              "detail": "3 transitions, mean displacement 3.00 st"
+            },
+            {
+              "name": "phrase-tabu",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 statements, 0 distinct"
+            },
+            {
+              "name": "mediant-ration",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 mediants (incl. pivot awe-chords) over 2 phrases (ration 1/phrase; paradox 2)"
+            },
+            {
+              "name": "mode-drift",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 drift steps, all single-accidental"
+            },
+            {
+              "name": "signal-smoothness",
+              "pass": true,
+              "violations": 0,
+              "detail": "worst normalized bar step 0.310 (limit 0.7)"
+            },
+            {
+              "name": "no-deadlock",
+              "pass": true,
+              "violations": 0,
+              "detail": "heldNoLegal 0 bars, worst streak 0 (limit 12)"
+            }
+          ],
+          "stats": {
+            "bars": 14,
+            "phrases": 2,
+            "chordChanges": 3,
+            "distinctChords": 4,
+            "mediants": 0,
+            "landingPivots": 0,
+            "stageBlooms": 0,
+            "modeDrifts": 0,
+            "melodyStatements": 0,
+            "distinctStatements": 0,
+            "barNovelty": 0.5,
+            "tabuBypasses": 0,
+            "commonToneRelaxes": 0,
+            "worstSignalStep": 0.31,
+            "modes": "dorian:14",
+            "arrangement": "BED:8 REST:6"
+          }
+        },
+        "pass": true
+      }
+    },
+    "after": {
+      "sandbox": {
+        "seconds": 180,
+        "planetSeed": 5,
+        "archetype": "verdant",
+        "bars": 59,
+        "analysis": {
+          "seconds": 180,
+          "peak": 0.34597405791282654,
+          "rms": 0.10183785818677549,
+          "nanCount": 0,
+          "clipCount": 0,
+          "longestSilenceS": 0,
+          "maxWindowRms": 0.12197031146766454,
+          "maxSmoothnessDeltaRms": 0.013108288604148921,
+          "maxSmoothnessDeltaAtS": 22.5,
+          "maxSmoothnessDeltaDb": 1.1379999134034224,
+          "maxSmoothnessDeltaDbAtS": 173.1,
+          "maxSmoothnessPreviousRms": 0.08764349398330466,
+          "maxSmoothnessCurrentRms": 0.09991246605491895,
+          "smoothnessViolations": 0
+        },
+        "report": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "finite-plans",
+              "pass": true,
+              "violations": 0,
+              "detail": "every plan field finite"
+            },
+            {
+              "name": "chord-legality",
+              "pass": true,
+              "violations": 0,
+              "detail": "14 transitions, mean displacement 2.79 st"
+            },
+            {
+              "name": "phrase-tabu",
+              "pass": true,
+              "violations": 0,
+              "detail": "2 statements, 2 distinct"
+            },
+            {
+              "name": "mediant-ration",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 mediants (incl. pivot awe-chords) over 8 phrases (ration 1/phrase; paradox 2)"
+            },
+            {
+              "name": "mode-drift",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 drift steps, all single-accidental"
+            },
+            {
+              "name": "signal-smoothness",
+              "pass": true,
+              "violations": 0,
+              "detail": "worst normalized bar step 0.513 (limit 0.7)"
+            },
+            {
+              "name": "no-deadlock",
+              "pass": true,
+              "violations": 0,
+              "detail": "heldNoLegal 0 bars, worst streak 0 (limit 12)"
+            }
+          ],
+          "stats": {
+            "bars": 59,
+            "phrases": 8,
+            "chordChanges": 14,
+            "distinctChords": 5,
+            "mediants": 0,
+            "landingPivots": 0,
+            "stageBlooms": 0,
+            "modeDrifts": 0,
+            "melodyStatements": 2,
+            "distinctStatements": 2,
+            "barNovelty": 0.424,
+            "tabuBypasses": 1,
+            "commonToneRelaxes": 0,
+            "worstSignalStep": 0.513,
+            "modes": "dorian:59",
+            "arrangement": "BED:35 BUILD:8 BLOOM:8 EBB:8"
+          }
+        },
+        "pass": true
+      },
+      "eraBuild": {
+        "seconds": 80,
+        "planetSeed": 5,
+        "archetype": "verdant",
+        "bars": 26,
+        "analysis": {
+          "seconds": 80,
+          "peak": 0.3138914406299591,
+          "rms": 0.08707597869041099,
+          "nanCount": 0,
+          "clipCount": 0,
+          "longestSilenceS": 0,
+          "maxWindowRms": 0.12007426172692959,
+          "maxSmoothnessDeltaRms": 0.010656244596198156,
+          "maxSmoothnessDeltaAtS": 51.2,
+          "maxSmoothnessDeltaDb": 1.4275063561430605,
+          "maxSmoothnessDeltaDbAtS": 28.3,
+          "maxSmoothnessPreviousRms": 0.03387953000672183,
+          "maxSmoothnessCurrentRms": 0.039931230626034445,
+          "smoothnessViolations": 0
+        },
+        "report": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "finite-plans",
+              "pass": true,
+              "violations": 0,
+              "detail": "every plan field finite"
+            },
+            {
+              "name": "chord-legality",
+              "pass": true,
+              "violations": 0,
+              "detail": "12 transitions, mean displacement 3.33 st"
+            },
+            {
+              "name": "phrase-tabu",
+              "pass": true,
+              "violations": 0,
+              "detail": "1 statements, 1 distinct"
+            },
+            {
+              "name": "mediant-ration",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 mediants (incl. pivot awe-chords) over 4 phrases (ration 1/phrase; paradox 2)"
+            },
+            {
+              "name": "mode-drift",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 drift steps, all single-accidental"
+            },
+            {
+              "name": "signal-smoothness",
+              "pass": true,
+              "violations": 0,
+              "detail": "worst normalized bar step 0.567 (limit 0.7)"
+            },
+            {
+              "name": "no-deadlock",
+              "pass": true,
+              "violations": 0,
+              "detail": "heldNoLegal 0 bars, worst streak 0 (limit 12)"
+            }
+          ],
+          "stats": {
+            "bars": 26,
+            "phrases": 4,
+            "chordChanges": 12,
+            "distinctChords": 5,
+            "mediants": 0,
+            "landingPivots": 0,
+            "stageBlooms": 0,
+            "modeDrifts": 0,
+            "melodyStatements": 1,
+            "distinctStatements": 1,
+            "barNovelty": 0.385,
+            "tabuBypasses": 1,
+            "commonToneRelaxes": 0,
+            "worstSignalStep": 0.567,
+            "modes": "dorian:26",
+            "arrangement": "BED:16 BUILD:8 BLOOM:2"
+          }
+        },
+        "pass": true
+      },
+      "storyHandoff": {
+        "seconds": 72,
+        "planetSeed": 5,
+        "archetype": "verdant",
+        "bars": 14,
+        "analysis": {
+          "seconds": 72,
+          "peak": 0.3243124783039093,
+          "rms": 0.07603145872036342,
+          "nanCount": 0,
+          "clipCount": 0,
+          "longestSilenceS": 0,
+          "maxWindowRms": 0.1196950370382425,
+          "maxSmoothnessDeltaRms": 0.02791898936611556,
+          "maxSmoothnessDeltaAtS": 18.1,
+          "maxSmoothnessDeltaDb": 4.222132946489666,
+          "maxSmoothnessDeltaDbAtS": 18.1,
+          "maxSmoothnessPreviousRms": 0.04460273085545308,
+          "maxSmoothnessCurrentRms": 0.07252172022156864,
+          "smoothnessViolations": 0
+        },
+        "report": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "finite-plans",
+              "pass": true,
+              "violations": 0,
+              "detail": "every plan field finite"
+            },
+            {
+              "name": "chord-legality",
+              "pass": true,
+              "violations": 0,
+              "detail": "3 transitions, mean displacement 3.00 st"
+            },
+            {
+              "name": "phrase-tabu",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 statements, 0 distinct"
+            },
+            {
+              "name": "mediant-ration",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 mediants (incl. pivot awe-chords) over 2 phrases (ration 1/phrase; paradox 2)"
+            },
+            {
+              "name": "mode-drift",
+              "pass": true,
+              "violations": 0,
+              "detail": "0 drift steps, all single-accidental"
+            },
+            {
+              "name": "signal-smoothness",
+              "pass": true,
+              "violations": 0,
+              "detail": "worst normalized bar step 0.310 (limit 0.7)"
+            },
+            {
+              "name": "no-deadlock",
+              "pass": true,
+              "violations": 0,
+              "detail": "heldNoLegal 0 bars, worst streak 0 (limit 12)"
+            }
+          ],
+          "stats": {
+            "bars": 14,
+            "phrases": 2,
+            "chordChanges": 3,
+            "distinctChords": 4,
+            "mediants": 0,
+            "landingPivots": 0,
+            "stageBlooms": 0,
+            "modeDrifts": 0,
+            "melodyStatements": 0,
+            "distinctStatements": 0,
+            "barNovelty": 0.5,
+            "tabuBypasses": 0,
+            "commonToneRelaxes": 0,
+            "worstSignalStep": 0.31,
+            "modes": "dorian:14",
+            "arrangement": "BED:8 REST:6"
+          }
+        },
+        "pass": true
+      }
+    }
+  }
+}

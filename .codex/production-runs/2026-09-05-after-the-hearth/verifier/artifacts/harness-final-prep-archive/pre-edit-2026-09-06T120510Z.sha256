@@ -1,0 +1,7 @@
+e26fbb0f096b58f9e95eba978b86d2f9eb25d5b4f2bd236e3c5767a1e30bacc0  ./probes/cg-footing-diag.mjs
+5f0b88831199d8d5efc088df887d9f717da0d16cfad58df49d5a1a6f67e77d71  ./probes/cg-harness-selftest.mjs
+d5e789ee1018106afc7de6b462157054614e165d0f329bc78704e40d942ab6f7  ./probes/cg-journey-probe.mjs
+22492552cb7b05b685ae6576d76bc3a0be434033a8874fe3ed279e255400c968  ./probes/lib/captureProvenance.mjs
+5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551  ./probes/lib/cgContract.mjs
+a70e611f8eec484b3625e57ca54801ea17a5b0864fe0f0874a86231437cee236  ./probes/lib/physicalPose.mjs
+681fd58b39ba6bf438912f0e2c2567a8431cdf1674b67ec757888d1a83591d3f  ./probes/lib/stallWatch.mjs

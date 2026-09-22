@@ -82,14 +82,25 @@ export function resolveStoryBootWorldId(
   routeOnline: boolean,
   point: { readonly chapter: string; readonly beat: string | null }
 ): string {
+  // The field record follows the saved world during a detour. Its own live
+  // Origin/reach gate decides whether a new visit can be recorded.
+  if (point.chapter === 'ch14') return routeOnline ? (_savedWorldId ?? STORY_PRIMARY_WORLD_ID) : STORY_PRIMARY_WORLD_ID;
   // A crossing that is under way belongs to the world it LAUNCHED FROM, in
   // whatever chapter it happens to live. Ch8's launch and crossing are excluded
   // by the ordering below; ch10's transit is not, because chapter 10 flies back
   // to the origin in `ch10-ask` (the relay is there and nowhere else) and lifts
   // off from the wreck. Naming it here keeps the physical rule ahead of the
   // ordinal one instead of letting a chapter number claim a ship in flight.
-  const crossingFromOrigin = point.beat === 'ch10-transit';
-  const tidegardenOwned = !crossingFromOrigin
+  //
+  // Chapter 13 adds two more of the same kind, for the same reason: the survey
+  // and the reciprocal proof are BOTH ON THE ORIGIN, at the audit site, even
+  // though ch13 orders after ch9. Its first two beats are not listed, and that
+  // is deliberate — ch13-home is at the restored second hearth, and ch13-return
+  // is owned by the world it launches from, exactly as ch10-ask is.
+  const originOwnedBeat = point.beat === 'ch10-transit'
+    || point.beat === 'ch13-survey'
+    || point.beat === 'ch13-common';
+  const tidegardenOwned = !originOwnedBeat
     && (point.beat === 'ch8-landfall'
       || storyChapterAtLeast(point.chapter as StoryChapter, 'ch9'));
   // Opening the route exposes the sibling body; it does not move an unfinished
@@ -118,6 +129,18 @@ export function resolveStoryBootWorldId(
  */
 const CROSSING_DESTINATION_WORLD_ID: Readonly<Record<string, string>> = {
   'ch8-crossing': TIDEGARDEN_WORLD_ID,
+  // Chapter 13's return crossing is the SAME physical seam as ch10-ask, in the
+  // same direction, and it was missing here. Measured on hardware: the ship
+  // twice flew inside the origin's activation envelope, the generic same-system
+  // handoff committed (`activePlanetId` and `renderOrigin` became the origin's,
+  // `locationMode` 'atmosphere', target cleared), and one render later this
+  // resolver still answered Tidegarden — so the story-world swap effect reclaimed
+  // the departure world and the ship controller re-seated the ship on the hearth
+  // pad. Activation epoch advanced twice per attempt (3->5, 6->8) and the
+  // landing could never happen. Nothing else changes: the boot resolver above is
+  // untouched, so a reload mid-crossing still restarts from the world the ship
+  // launched from rather than granting the destination without the flight.
+  'ch13-return': STORY_PRIMARY_WORLD_ID,
   'ch10-ask': STORY_PRIMARY_WORLD_ID
 };
 

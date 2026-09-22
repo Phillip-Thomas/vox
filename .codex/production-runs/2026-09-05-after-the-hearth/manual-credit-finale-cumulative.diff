@@ -1,0 +1,893 @@
+--- baseline/main/src/story/commonGroundRoute.ts
++++ candidate/main/src/story/commonGroundRoute.ts
+@@ -441,28 +441,40 @@
+  * so progress advances only while the body is near the segment it claims to be
+  * walking, and never jumps ahead of the segment it has reached.
+  *
+- * THE FRONTIER RULE IS DELIBERATE, and the recorded manual-corner risk
+- * (`producer-manual-corner-risk.json`) is its cost, not a defect in it.
+- * `commonGroundRoute.test.ts` reproduces that risk from real per-frame
+- * displacement: turning 0.18 units before the first vertex leaves every later
++ * THE FRONTIER RULE IS DELIBERATE for a corner that was CUT, and the recorded
++ * manual-corner risk (`producer-manual-corner-risk.json`) is its cost there, not
++ * a defect in it. `commonGroundRoute.test.ts` reproduces that risk from real
++ * per-frame displacement: turning 0.18 units BEFORE a vertex — so that its
++ * incoming plane is never actually crossed at the corner — leaves every later
+  * projection permanently beyond `previousUnits + displacement`, so the credited
+- * span holds at four while the body walks the remaining fourteen units, and
+- * three hundred further units of walking on and looping at the far end recover
+- * nothing at all.
++ * span holds at the last ground actually covered (four units, at the corner it
++ * failed to round) while
++ * the body walks the remaining fourteen units, and three hundred further units
++ * of walking on and looping at the far end recover nothing at all.
+  *
+  * The same tests show that is a LOCK ONLY IF THE BODY NEVER GOES BACK. Walking
+  * back along the route to the frontier it actually reached and re-traversing
+  * from there credits the full eighteen units exactly — ordinary movement, no
+- * reset, no second F, no new marker, and the four units earned before the
+- * deviation are retained throughout.
++ * reset, no second F, no new marker, and the units earned before the deviation
++ * are retained throughout.
+  *
+  * The cheaper reconciliation — letting the frontier creep toward the body's own
+  * projection at walking pace — was implemented, measured and REMOVED: it pays
+  * for the omitted wedge with displacement spent anywhere in the corridor,
+  * including a wiggle at the far end, which the chapter's signed reading of
+- * `#/story/events/21` and `#/guidance/objectives/13` forbids. Making the
+- * recovery cheaper is a creative question about the cost of a steering error,
+- * not an implementation defect, and it is reported rather than decided here.
++ * `#/story/events/21` and `#/guidance/objectives/13` forbids.
++ *
++ * WHAT THIS RULE IS NOT. It is not a claim that every projection ahead of one
++ * frame's displacement is a cut corner. A body that walks THROUGH a vertex and
++ * overshoots it — the ordinary way a human rounds a corner — turns onto the next
++ * leg already a little way along it, and this function's ceiling then rejects
++ * that whole projection frame after frame, because from there the projection and
++ * the ceiling advance at the same rate. Measured live: credit 6, projection
++ * 6.2944830004, ceiling 6.1635971455, frozen
++ * (`producer-common-entry-crossing-review.json`, call 298). That case is settled
++ * by `nextRouteCoverage` below, from actual ordered coverage between two real
++ * feet, and NOT by loosening anything here: this function is unchanged, and the
++ * early cut it refuses stays refused there too.
+  */
+ export function routeProgressUnits(
+   route: readonly CommonGroundPoint[],
+@@ -500,6 +512,247 @@
+     travelled += segment;
+   }
+   return Math.min(best, travelled);
++}
++
++// --- Ordered physical coverage --------------------------------------------------------
++//
++// ONE defect, one correction, and it is NOT a bank. The frontier rule credited a
++// frame only when the body's whole projection fell under `previousUnits +
++// displacement`, so an ordinary rounded corner — walk through the vertex,
++// overshoot it, turn onto the next leg already a little way along — left a
++// residual that no later frame could ever clear, because from then on both the
++// projection and the ceiling advanced at exactly the same rate. Measured live
++// (`producer-common-entry-crossing-review.json`, call 298 of
++// `verifier/captures/common-entry-crossing/run1`): credit exactly 6 at vertex
++// (-44, 51.05, 16), foot 0.2742 past it, projection 6.2944830004 against a
++// ceiling of 6.1635971455, frozen from there on.
++//
++// The correction is to measure what the body PHYSICALLY COVERED, in order, from
++// its real previous foot to its real current foot, rather than to hand it an
++// allowance it may spend anywhere:
++//
++//   * A vertex is REACHED only by an actual motion that crosses its incoming
++//     plane — previous foot strictly short of it, current foot at or past it —
++//     AND that passes within the unchanged 0.35 vertex reach of the vertex
++//     itself. Both facts come from the two real feet. Standing on the far side
++//     proves nothing; being the nearest vertex proves nothing.
++//   * Vertices are reached STRICTLY IN ORDER, one route index at a time. A body
++//     that cut a corner has not reached it, so nothing beyond it can be covered
++//     however far or long it walks afterwards, and the z 15.82 refusal and its
++//     walk-back-and-re-traverse repair are exactly preserved.
++//   * Within the leg it has actually reached, credit is the body's own position
++//     on that leg, clamped to the leg and to the corridor, and monotone. It is
++//     the ground under the body, so it cannot be pumped: a stationary, lateral,
++//     late-leg or far-end body projects to the same arc however long it wiggles,
++//     and nothing at all can be earned past the next unreached vertex.
++//   * A motion is only usable while the chain of real feet is unbroken. An
++//     unsupported, unreferenced, reset, respawned or freshly seeded frame drops
++//     the previous foot, and a null previous foot is never replaced by the
++//     current one — a gap is a gap, and no crossing may be claimed across it.
++//
++// Nothing is granted, no timer, tolerance, corridor, vertex, C or arrival rule
++// changes here, and `routeProgressUnits` above is untouched.
++
++/** Unchanged route-vertex reach: how close the body must pass to round a vertex. */
++const ROUTE_VERTEX_REACH_UNITS = 0.35;
++
++/**
++ * Live, non-persisted physical coverage of the common route.
++ *
++ * `units` mirrors the credited span, `reachedVertex` is the last route vertex
++ * the body actually crossed and passed, and `foot` is its real last position.
++ * None of it is stored, restored or trusted across a break: see
++ * `syncedRouteCoverage`.
++ */
++export interface RouteCoverage {
++  readonly units: number;
++  readonly reachedVertex: number;
++  readonly foot: CommonGroundPoint | null;
++}
++
++export const NO_ROUTE_COVERAGE: RouteCoverage = Object.freeze({
++  units: 0,
++  reachedVertex: 0,
++  foot: null
++});
++
++/** Arc length from the head of the route to `index`. */
++function arcAtVertex(route: readonly CommonGroundPoint[], index: number): number {
++  let arc = 0;
++  for (let i = 1; i <= index && i < route.length; i += 1) {
++    arc += distanceBetween(route[i - 1], route[i]);
++  }
++  return arc;
++}
++
++/**
++ * The last vertex a span of `units` PROVES was rounded.
++ *
++ * Strictly below the credit, deliberately. Credit sitting exactly on a vertex's
++ * arc does not prove that vertex was passed — the recorded early cut pins at
++ * exactly 4 without ever coming within 0.35 of (-42, ., 16) — so a span that has
++ * to be re-derived, rather than carried live, always re-derives the conservative
++ * answer and makes the body cross the corner again.
++ */
++function provenVertex(route: readonly CommonGroundPoint[], units: number): number {
++  let proven = 0;
++  let arc = 0;
++  for (let index = 1; index < route.length; index += 1) {
++    arc += distanceBetween(route[index - 1], route[index]);
++    if (arc + 1e-9 < units) proven = index;
++  }
++  return proven;
++}
++
++/**
++ * Coverage re-seeded against the authoritative credited span.
++ *
++ * The snapshot owns the units. Whenever they differ from what this state last
++ * saw — a resumed leg, a migrated save, a rewritten span, an actor or world
++ * swap — the reached vertex is re-derived conservatively and the foot chain is
++ * dropped, so nothing earned elsewhere is inherited as permission to move on.
++ */
++export function syncedRouteCoverage(
++  route: readonly CommonGroundPoint[],
++  coverage: RouteCoverage,
++  units: number
++): RouteCoverage {
++  if (Math.abs(coverage.units - units) <= 1e-9) return coverage;
++  return { units, reachedVertex: provenVertex(route, units), foot: null };
++}
++
++/** Signed distance along the incoming leg, measured from `route[index]`. */
++function planeOffset(
++  route: readonly CommonGroundPoint[],
++  index: number,
++  body: CommonGroundPoint
++): number {
++  const from = route[index - 1];
++  const at = route[index];
++  const length = distanceBetween(from, at);
++  if (!(length > 0)) return 0;
++  return ((body.x - at.x) * (at.x - from.x)
++    + (body.y - at.y) * (at.y - from.y)
++    + (body.z - at.z) * (at.z - from.z)) / length;
++}
++
++/** Closest approach of the real motion `from`->`to` to `point`. */
++function segmentApproach(
++  from: CommonGroundPoint,
++  to: CommonGroundPoint,
++  point: CommonGroundPoint
++): number {
++  const dx = to.x - from.x;
++  const dy = to.y - from.y;
++  const dz = to.z - from.z;
++  const lengthSq = dx * dx + dy * dy + dz * dz;
++  if (!(lengthSq > 0)) return distanceBetween(from, point);
++  const t = Math.max(0, Math.min(1,
++    ((point.x - from.x) * dx + (point.y - from.y) * dy + (point.z - from.z) * dz) / lengthSq));
++  return distanceBetween(point, {
++    x: from.x + dx * t,
++    y: from.y + dy * t,
++    z: from.z + dz * t
++  });
++}
++
++/**
++ * Position on the leg out of `reachedVertex`, or null when the body is not on it.
++ *
++ * The arc can never leave that leg: the far vertex bounds it until an actual
++ * crossing reaches it, which is why no amount of movement beyond an unreached
++ * corner is worth anything.
++ */
++function coveredOnReachedLeg(
++  route: readonly CommonGroundPoint[],
++  reachedVertex: number,
++  body: CommonGroundPoint,
++  corridorRadius: number
++): number | null {
++  const next = reachedVertex + 1;
++  if (next >= route.length) return arcAtVertex(route, reachedVertex);
++  const from = route[reachedVertex];
++  const to = route[next];
++  const segment = distanceBetween(from, to);
++  if (!(segment > 0)) return null;
++  const dx = to.x - from.x;
++  const dy = to.y - from.y;
++  const dz = to.z - from.z;
++  const t = Math.max(0, Math.min(1,
++    ((body.x - from.x) * dx + (body.y - from.y) * dy + (body.z - from.z) * dz)
++      / (segment * segment)));
++  const closest = { x: from.x + dx * t, y: from.y + dy * t, z: from.z + dz * t };
++  if (distanceBetween(body, closest) > corridorRadius) return null;
++  return arcAtVertex(route, reachedVertex) + segment * t;
++}
++
++/**
++ * Next credited span, from the body's ACTUAL motion over the route.
++ *
++ * `coverage.foot` is the real previous foot and is never synthesised from the
++ * current one. With no previous foot the motion is unknown, so this update
++ * records the foot and credits nothing at all.
++ */
++export function nextRouteCoverage(
++  route: readonly CommonGroundPoint[],
++  body: CommonGroundPoint,
++  displacementUnits: number,
++  coverage: RouteCoverage,
++  corridorRadius = 2.5,
++  vertexReach = ROUTE_VERTEX_REACH_UNITS
++): RouteCoverage {
++  const foot = { x: body.x, y: body.y, z: body.z };
++  const previous = coverage.foot;
++  // NO MOTION, NO COVERAGE, and no chain either: a body that has not moved has
++  // covered nothing, however long it stands there and however often it is
++  // sampled. Standing at C is still worth exactly zero.
++  if (!previous || !(displacementUnits > 0)) {
++    return { units: coverage.units, reachedVertex: coverage.reachedVertex, foot };
++  }
++
++  // ONE VERTEX AT A TIME, IN ORDER, each by an actual crossing of its incoming
++  // plane made by this very motion, each within the unchanged vertex reach, AND
++  // each with the incoming leg ACTUALLY COVERED up to that vertex under the same
++  // strict frontier accounting. Crossing a corner is not a receipt for the leg
++  // that led to it: a body that was dropped onto the last metre of the leg, or
++  // that carries a saved half unit from somewhere else entirely, crosses the
++  // plane just as convincingly as one that walked, so the crossing is refused
++  // here and the corner is simply not certified.
++  let reachedVertex = coverage.reachedVertex;
++  let certifiedUnits = coverage.units;
++  let certifiedCorner = false;
++  while (reachedVertex + 1 < route.length) {
++    const next = reachedVertex + 1;
++    const crossed = planeOffset(route, next, previous) < 0
++      && planeOffset(route, next, foot) >= 0;
++    if (!crossed) break;
++    if (segmentApproach(previous, foot, route[next]) > vertexReach) break;
++    const incomingArc = arcAtVertex(route, next);
++    if (certifiedUnits + displacementUnits + 1e-9 < incomingArc) break;
++    reachedVertex = next;
++    certifiedUnits = Math.max(certifiedUnits, incomingArc);
++    certifiedCorner = true;
++  }
++
++  // ORDINARY LEG MOVEMENT STAYS STRICT. The body's projection on the leg is only
++  // credited when the frontier could honestly have advanced that far in this one
++  // update; an arbitrary later projection neither maxes nor creeps toward the
++  // frontier, which is what keeps a seeded foot at (-42, ., 13) worth 0 until the
++  // start of the leg is physically returned to and re-traversed.
++  //
++  // The ONE exception is the corner just certified above, where the incoming leg
++  // was covered to the vertex and the vertex was really rounded: there the
++  // outgoing projection settles the LOCAL residual that corner-cutting geometry
++  // creates (call 298: credit 6 at (-44, 51.05, 16), projection 6.2944830004
++  // against a per-update ceiling of 6.1635971455). It is bounded by the next
++  // unreached vertex, and the very next ordinary update is strict again.
++  const onLeg = coveredOnReachedLeg(route, reachedVertex, foot, corridorRadius);
++  let covered = certifiedUnits;
++  if (onLeg !== null && onLeg > covered
++    && (certifiedCorner || onLeg <= coverage.units + displacementUnits + 1e-9)) {
++    covered = onLeg;
++  }
++  return { units: covered, reachedVertex, foot };
+ }
+ 
+ // --- Display grammar ------------------------------------------------------------------
+--- baseline/main/src/story/commonGroundRoute.test.ts
++++ candidate/main/src/story/commonGroundRoute.test.ts
+@@ -16,6 +16,10 @@
+   commonGuideGlyphs,
+   commonTestedGlyphs,
+   routeProgressUnits,
++  nextRouteCoverage,
++  syncedRouteCoverage,
++  NO_ROUTE_COVERAGE,
++  type RouteCoverage,
+   sampleRouteEvenly,
+   segmentHitsBoxInclusive,
+   traceGlyphs,
+@@ -665,3 +669,280 @@
+     expect(partial.length).toBe(noHold.length + 1);
+   });
+ });
++
++// --- CG-IMPL-015: ordered physical coverage --------------------------------------------
++//
++// ACTUAL CAPTURED FRAMES, not an assumed 60 Hz walk. The captured numbers below
++// are read from `producer-common-entry-crossing-review.json` /
++// `verifier/captures/common-entry-crossing/run1`, and every walk uses unequal
++// deltas so nothing here depends on a frame time at all.
++describe('ordered physical coverage of the common route (CG-IMPL-015)', () => {
++  const CAPTURED_PREV = { x: -44.274284163907716, y: 50.98912926551148, z: 16.130885899955892 };
++  const CAPTURED_CUR = { x: -44.274162965076364, y: 50.989121615150424, z: 16.294483000367848 };
++  const CAPTURED_NEXT = { x: -44.27410309186772, y: 50.989121587196365, z: 16.376281547075248 };
++  const CAPTURED_DELTA = 0.1635971454851342;
++  const NEXT_DELTA = 0.08179856861977866;
++  const DELTAS = [0.1635971454851342, 0.08179856861977866, 0.21, 0.0402];
++
++  type Foot = { x: number; y: number; z: number };
++
++  /** Walk a body through `path` in unequal steps, crediting every real motion. */
++  function walk(
++    path: readonly Foot[],
++    start: Foot,
++    coverage: RouteCoverage,
++    seed = 0
++  ): { coverage: RouteCoverage; at: Foot } {
++    let at = { ...start };
++    let state: RouteCoverage = { ...coverage, foot: coverage.foot ?? { ...start } };
++    let tick = seed;
++    for (const goal of path) {
++      for (let guard = 0; guard < 40000; guard += 1) {
++        const remaining = Math.hypot(goal.x - at.x, goal.y - at.y, goal.z - at.z);
++        if (remaining <= 1e-12) break;
++        const step = Math.min(DELTAS[tick++ % DELTAS.length], remaining);
++        const next = remaining <= step ? { ...goal } : {
++          x: at.x + ((goal.x - at.x) * step) / remaining,
++          y: at.y + ((goal.y - at.y) * step) / remaining,
++          z: at.z + ((goal.z - at.z) * step) / remaining
++        };
++        const moved = Math.hypot(next.x - at.x, next.y - at.y, next.z - at.z);
++        at = next;
++        state = nextRouteCoverage(CG_ROUTE_COMMON, at, moved, state);
++      }
++    }
++    return { coverage: state, at };
++  }
++
++  const CAPTURED_APPROACH: readonly Foot[] = [
++    { x: -42, y: CAPTURED_PREV.y, z: 14 },
++    { x: -42, y: CAPTURED_PREV.y, z: 16 },
++    { x: -44, y: CAPTURED_PREV.y, z: 16 },
++    CAPTURED_PREV
++  ];
++  const CAPTURED_START = { x: -42, y: CAPTURED_PREV.y, z: 12 };
++
++  it('is the recorded refusal: the plain frontier rule still returns 6 at call 298', () => {
++    // Unchanged, and left unchanged: projection 6.294483, ceiling 6.163597.
++    expect(routeProgressUnits(CG_ROUTE_COMMON, CAPTURED_CUR, 6, CAPTURED_DELTA)).toBe(6);
++  });
++
++  it('advances the captured call 298 and the call after it, from real feet', () => {
++    const approached = walk(CAPTURED_APPROACH, CAPTURED_START, NO_ROUTE_COVERAGE);
++    // The vertex at (-44, ., 16) was actually crossed and actually passed.
++    expect(approached.coverage.reachedVertex).toBe(3);
++    expect(approached.coverage.foot).toEqual(CAPTURED_PREV);
++    expect(approached.coverage.units).toBeCloseTo(6.130885899955892, 9);
++
++    const call298 = nextRouteCoverage(
++      CG_ROUTE_COMMON, CAPTURED_CUR, CAPTURED_DELTA, approached.coverage
++    );
++    expect(call298.units).toBeCloseTo(6.294483000367848, 9);
++    expect(call298.units).toBeGreaterThan(approached.coverage.units);
++
++    const after = nextRouteCoverage(CG_ROUTE_COMMON, CAPTURED_NEXT, NEXT_DELTA, call298);
++    expect(after.units).toBeCloseTo(6.376281547075248, 9);
++  });
++
++  it('covers nothing at all for a stationary body, however long it stands', () => {
++    const approached = walk(CAPTURED_APPROACH, CAPTURED_START, NO_ROUTE_COVERAGE);
++    let state = approached.coverage;
++    const held = state.units;
++    for (let frame = 0; frame < 600; frame += 1) {
++      state = nextRouteCoverage(CG_ROUTE_COMMON, CAPTURED_PREV, 0, state);
++    }
++    expect(state.units).toBe(held);
++  });
++
++  it('rounds BOTH corner directions with overshoots and unequal deltas, to exactly 18', () => {
++    // The -44 corner turns +z, the -48 corner turns -z, and each is walked
++    // THROUGH by 0.27 — the recorded overshoot — which is what a body does.
++    const overshot = walk([
++      { x: -42, y: CG_POSES.E.y, z: 14 },
++      { x: -42, y: CG_POSES.E.y, z: 16.27 },
++      { x: -44.27, y: CG_POSES.E.y, z: 16.27 },
++      { x: -44.27, y: CG_POSES.E.y, z: 18.27 },
++      { x: -46, y: CG_POSES.E.y, z: 18.27 },
++      { x: -48.27, y: CG_POSES.E.y, z: 18.27 },
++      { x: -48.27, y: CG_POSES.E.y, z: 16 },
++      { x: -48, y: CG_POSES.E.y, z: 12 }
++    ], CG_POSES.E, NO_ROUTE_COVERAGE, 1);
++    expect(overshot.coverage.units).toBeCloseTo(CG_COMMON_ROUTE_UNITS, 6);
++  });
++
++  it('STILL refuses the recorded early z 15.82 cut, and never repays it by walking on', () => {
++    // Turning 0.18 short of (-42, ., 16) and going on: the plane of that vertex
++    // is never crossed at the corner, so the span pins where the body actually
++    // covered ground and three hundred further units recover nothing.
++    const cut = walk([
++      { x: -42, y: CG_POSES.E.y, z: 15.82 },
++      { x: -44, y: CG_POSES.E.y, z: 16.1 },
++      { x: -44, y: CG_POSES.E.y, z: 18 },
++      { x: -48, y: CG_POSES.E.y, z: 18 },
++      { x: -48, y: CG_POSES.E.y, z: 12 },
++      { x: -48, y: CG_POSES.E.y, z: 18 },
++      { x: -48, y: CG_POSES.E.y, z: 12 }
++    ], CG_POSES.E, NO_ROUTE_COVERAGE);
++    expect(cut.coverage.units).toBeCloseTo(4, 9);
++    expect(cut.coverage.reachedVertex).toBe(1);
++  });
++
++  it('refuses the near-corner late-leg wiggle predicted by the producer', () => {
++    // Pinned at four by the early cut, standing on the OUTGOING corridor around
++    // (-43, ., 16.1), never within 0.35 of the required (-42, ., 16), wiggling
++    // across that vertex's plane on the x > -43 side. Both the crossing and the
++    // 0.35 pass are required, so this pays for nothing.
++    const cut = walk([
++      { x: -42, y: CG_POSES.E.y, z: 15.82 },
++      { x: -43, y: CG_POSES.E.y, z: 16.1 }
++    ], CG_POSES.E, NO_ROUTE_COVERAGE);
++    expect(cut.coverage.units).toBeCloseTo(4, 9);
++
++    let state = cut.coverage;
++    for (let frame = 0; frame < 400; frame += 1) {
++      const wiggle = [
++        { x: -42.9, y: CG_POSES.E.y, z: 15.9 },
++        { x: -42.9, y: CG_POSES.E.y, z: 16.3 },
++        { x: -43.1, y: CG_POSES.E.y, z: 16.1 },
++        { x: -42.95, y: CG_POSES.E.y, z: 15.95 }
++      ][frame % 4];
++      const moved = Math.hypot(
++        wiggle.x - (state.foot?.x ?? wiggle.x),
++        wiggle.z - (state.foot?.z ?? wiggle.z)
++      );
++      state = nextRouteCoverage(CG_ROUTE_COMMON, wiggle, moved, state);
++    }
++    // It really did cross the z = 16 plane, repeatedly, and it is worth nothing.
++    expect(state.units).toBeCloseTo(4, 9);
++    expect(state.reachedVertex).toBe(1);
++  });
++
++  it('pays the retained early cut only by an actual return and re-traversal', () => {
++    const cut = walk([
++      { x: -42, y: CG_POSES.E.y, z: 15.82 },
++      { x: -43, y: CG_POSES.E.y, z: 16.1 },
++      { x: -44, y: CG_POSES.E.y, z: 17 }
++    ], CG_POSES.E, NO_ROUTE_COVERAGE);
++    expect(cut.coverage.units).toBeCloseTo(4, 9);
++
++    // Ordinary movement back to the corner it skipped, then on. No reset, no
++    // second F, no marker: the four units are retained the whole way back.
++    const repaired = walk([
++      { x: -42, y: CG_POSES.E.y, z: 15.5 },
++      { x: -42, y: CG_POSES.E.y, z: 16 },
++      { x: -44, y: CG_POSES.E.y, z: 16 },
++      { x: -44, y: CG_POSES.E.y, z: 18 },
++      { x: -48, y: CG_POSES.E.y, z: 18 },
++      { x: -48, y: CG_POSES.E.y, z: 12 }
++    ], cut.at, cut.coverage, 2);
++    expect(repaired.coverage.units).toBeCloseTo(CG_COMMON_ROUTE_UNITS, 6);
++  });
++
++  it('refuses a far-end wiggle and a distant loop against an unfinished corner', () => {
++    const cut = walk([
++      { x: -42, y: CG_POSES.E.y, z: 15.82 },
++      { x: -44, y: CG_POSES.E.y, z: 16.1 },
++      { x: -48, y: CG_POSES.E.y, z: 12 }
++    ], CG_POSES.E, NO_ROUTE_COVERAGE);
++    let state = cut.coverage;
++    for (let frame = 0; frame < 400; frame += 1) {
++      const at = { x: -48, y: CG_POSES.E.y, z: 12 + (frame % 2) * 0.4 };
++      state = nextRouteCoverage(CG_ROUTE_COMMON, at, 0.4, state);
++    }
++    expect(state.units).toBeCloseTo(4, 9);
++  });
++
++  it('never invents a previous foot, so no crossing can be claimed across a gap', () => {
++    // A broken chain — an unsupported, unreferenced, respawned or freshly seeded
++    // frame — keeps every earned unit and buys nothing with the gap it opened.
++    const approached = walk([
++      { x: -42, y: CG_POSES.E.y, z: 14 },
++      { x: -42, y: CG_POSES.E.y, z: 15.9 }
++    ], CG_POSES.E, NO_ROUTE_COVERAGE);
++    const broken: RouteCoverage = { ...approached.coverage, foot: null };
++    // The very motion that would have rounded the corner is unusable: with no
++    // previous foot the update credits nothing and only records where the body is.
++    const jumped = nextRouteCoverage(
++      CG_ROUTE_COMMON, { x: -44, y: CG_POSES.E.y, z: 16 }, 2.1, broken
++    );
++    expect(jumped.units).toBe(approached.coverage.units);
++    expect(jumped.reachedVertex).toBe(approached.coverage.reachedVertex);
++    expect(jumped.foot).toEqual({ x: -44, y: CG_POSES.E.y, z: 16 });
++  });
++
++  it('re-derives a span written elsewhere conservatively, and drops the chain', () => {
++    const approached = walk(CAPTURED_APPROACH, CAPTURED_START, NO_ROUTE_COVERAGE);
++    expect(syncedRouteCoverage(CG_ROUTE_COMMON, approached.coverage, approached.coverage.units))
++      .toBe(approached.coverage);
++    // A resumed, migrated or rewritten span proves only the vertices strictly
++    // behind it, and its foot chain is gone.
++    const reseeded = syncedRouteCoverage(CG_ROUTE_COMMON, approached.coverage, 6);
++    expect(reseeded.units).toBe(6);
++    expect(reseeded.reachedVertex).toBe(2);
++    expect(reseeded.foot).toBeNull();
++  });
++
++  // --- Producer counterexamples (producer-manual-credit-finale-frontier-review.json)
++  //
++  // Three cases predicted from the code, not from a GPU run: an unbounded
++  // projection maximised into credit after any positive displacement, and a
++  // geometric corner crossing read as a receipt for the leg that led to it.
++
++  it('credits NOTHING for a seeded foot late on the leg, until the start is really re-walked', () => {
++    const y = CG_POSES.E.y;
++    // Case 1: seed at (-42, ., 13) with no motion, then move one centimetre.
++    const seeded = nextRouteCoverage(CG_ROUTE_COMMON, { x: -42, y, z: 13 }, 0, NO_ROUTE_COVERAGE);
++    expect(seeded.units).toBe(0);
++    expect(seeded.foot).toEqual({ x: -42, y, z: 13 });
++
++    const nudged = nextRouteCoverage(CG_ROUTE_COMMON, { x: -42, y, z: 13.01 }, 0.01, seeded);
++    // The projection there is 1.01. The body walked 0.01 and never touched the
++    // first unit of ground, so it is worth 0 — no max, no creep toward it.
++    expect(nudged.units).toBe(0);
++    expect(nudged.reachedVertex).toBe(0);
++
++    // Standing there longer buys nothing either.
++    let state = nudged;
++    for (let frame = 0; frame < 200; frame += 1) {
++      state = nextRouteCoverage(CG_ROUTE_COMMON, { x: -42, y, z: 13.01 }, 0.004, state);
++    }
++    expect(state.units).toBe(0);
++
++    // PHYSICAL RETURN AND RE-TRAVERSAL pays in full, by ordinary movement.
++    const rewalked = walk([{ x: -42, y, z: 12 }, { x: -42, y, z: 13.01 }], { x: -42, y, z: 13.01 }, state);
++    expect(rewalked.coverage.units).toBeCloseTo(1.01, 9);
++  });
++
++  it('retains a carried span across a gap without paying for the ground it skipped', () => {
++    const y = CG_POSES.E.y;
++    // Case 2: a reference/support gap left {units: .5, reachedVertex: 0, foot: null}.
++    const gapped: RouteCoverage = { units: 0.5, reachedVertex: 0, foot: null };
++    const seeded = nextRouteCoverage(CG_ROUTE_COMMON, { x: -42, y, z: 13.5 }, 0, gapped);
++    expect(seeded.units).toBe(0.5);
++    expect(seeded.foot).toEqual({ x: -42, y, z: 13.5 });
++
++    const nudged = nextRouteCoverage(CG_ROUTE_COMMON, { x: -42, y, z: 13.51 }, 0.01, seeded);
++    // Projection 1.51; earned prefix 0.5 is kept, the unreferenced unit is not sold.
++    expect(nudged.units).toBe(0.5);
++    expect(nudged.reachedVertex).toBe(0);
++  });
++
++  it('does NOT certify a corner from the crossing alone when the incoming leg lags', () => {
++    const y = CG_POSES.E.y;
++    const gapped: RouteCoverage = { units: 0.5, reachedVertex: 0, foot: null };
++    const before = nextRouteCoverage(CG_ROUTE_COMMON, { x: -42, y, z: 13.99 }, 0, gapped);
++    // Case 3: real feet 13.99 -> 14.01 genuinely cross vertex 1 within the
++    // unchanged 0.35 reach. That proves the corner was rounded; it does NOT
++    // prove the two units of incoming leg under it were ever walked.
++    const crossing = nextRouteCoverage(CG_ROUTE_COMMON, { x: -42, y, z: 14.01 }, 0.02, before);
++    expect(crossing.units).toBe(0.5);
++    expect(crossing.reachedVertex).toBe(0);
++    expect(crossing.units).not.toBeCloseTo(2, 6);
++    expect(crossing.units).not.toBeCloseTo(2.01, 6);
++
++    // Walking the incoming leg for real certifies the same corner and pays it.
++    const earned = walk([{ x: -42, y, z: 12 }, { x: -42, y, z: 14.01 }], { x: -42, y, z: 14.01 }, crossing);
++    expect(earned.coverage.reachedVertex).toBe(1);
++    expect(earned.coverage.units).toBeCloseTo(2.01, 9);
++  });
++});
+--- baseline/main/src/story/commonGroundDirector.ts
++++ candidate/main/src/story/commonGroundDirector.ts
+@@ -89,12 +89,15 @@
+   WORKER_BODY_HEIGHT,
+   bodiesClear,
+   nextOccupancy,
++  nextRouteCoverage,
+   playerSocket,
+-  routeProgressUnits,
+   walkedSegmentSupported,
+   workerSocket,
++  NO_ROUTE_COVERAGE,
++  syncedRouteCoverage,
+   type CommonGroundAabb,
+-  type CommonGroundFooting
++  type CommonGroundFooting,
++  type RouteCoverage
+ } from './commonGroundRoute.ts';
+ import {
+   seedCommonGroundActorPose,
+@@ -166,6 +169,16 @@
+   actorId: string;
+   /** Last observed player position, for ACTUAL displacement rather than a timer. */
+   lastPlayer: CommonGroundPoint | null;
++  /**
++   * Live ordered physical coverage of the common route, and NOTHING else.
++   *
++   * It remembers the last vertex the body actually crossed and passed and the
++   * real foot it was last seen at, so an ordinary rounded corner's overshoot is
++   * measured rather than frozen. It grants no units by itself, is never
++   * persisted or restored, and dies with the beat, the actor, the world and
++   * every Continue — see `resetCommonGroundRuntime`.
++   */
++  routeCoverage: RouteCoverage;
+   /** True while the completed chapter's local tester runs outside a beat. */
+   localTester: boolean;
+   /**
+@@ -222,6 +235,7 @@
+   runId: -1,
+   actorId: '',
+   lastPlayer: null,
++  routeCoverage: NO_ROUTE_COVERAGE,
+   localTester: false,
+   completionWasRestored: false,
+   resumeUnits: 0,
+@@ -242,6 +256,7 @@
+   runtime.publishedWorkOrder = null;
+   runtime.publishedObjectiveId = null;
+   runtime.lastPlayer = null;
++  runtime.routeCoverage = NO_ROUTE_COVERAGE;
+   runtime.localTester = false;
+   runtime.completionWasRestored = false;
+   runtime.resumeUnits = 0;
+@@ -1317,9 +1332,28 @@
+     const supported = walked
+       && checkReference(socket, playerSocket(body), referenceOptions()).ok;
+     if (supported) {
+-      common.terraUnits = routeProgressUnits(
+-        CG_ROUTE_COMMON, body, common.terraUnits, displacement
++      // The span is what the body PHYSICALLY COVERED, in order, between its real
++      // previous foot and this one. The snapshot stays the authority for the
++      // units, so a span written anywhere else re-derives the corner it proves
++      // instead of inheriting one.
++      const coverage = nextRouteCoverage(
++        CG_ROUTE_COMMON,
++        body,
++        displacement,
++        syncedRouteCoverage(CG_ROUTE_COMMON, runtime.routeCoverage, common.terraUnits)
+       );
++      runtime.routeCoverage = coverage;
++      common.terraUnits = coverage.units;
++    } else {
++      // AN UNSUPPORTED OR UNREFERENCED FRAME BREAKS THE CHAIN OF FEET. Every
++      // earned unit is kept, but the gap it opened may never be walked across:
++      // the next update has no previous foot, so it can claim no crossing at
++      // all, and none is ever synthesised from the current position.
++      runtime.routeCoverage = {
++        units: common.terraUnits,
++        reachedVertex: runtime.routeCoverage.reachedVertex,
++        foot: null
++      };
+     }
+     if (common.terraUnits >= CG_COMMON_ROUTE_UNITS - 1e-6) {
+       common.comparisonProved = true;
+--- baseline/main/src/story/StoryDirectorDriver.tsx
++++ candidate/main/src/story/StoryDirectorDriver.tsx
+@@ -142,13 +142,39 @@
+   useFrame((state, rawDt) => {
+     const story = getStoryStateSnapshot();
+     const camera = state.camera as THREE.PerspectiveCamera;
+-    const foreground = story.active && !paused && getAppStateSnapshot().phase === 'playing' && !documentIsHidden();
++    const playingPhase = getAppStateSnapshot().phase === 'playing';
++    const hidden = documentIsHidden();
++    const foreground = story.active && !paused && playingPhase && !hidden;
++    // A STORY THAT FINISHED IS NOT A STORY THAT WAS INTERRUPTED.
++    //
++    // `foreground` includes `story.active`, so the normal handback — the real
++    // first completion transitioning to done — turns it false on the very frame
++    // the signed live-only token was created, and this callback runs at priority
++    // -1, ahead of the frame that carries the token's own deadline. Suspending
++    // unconditionally therefore cancelled that token about 13ms after it began
++    // (`verifier/captures/finale-window/window-4`, sample 179: Terra 18, worker
++    // 18, committed, both anchors, visible and focused, token age 21.2ms, gone
++    // at the next atomic sample), which is exactly the completion the reset
++    // clause's single exception protects.
++    //
++    // So the cancellation asks for an ACTUAL cancellation cause. Pause, a phase
++    // that is no longer playing and visibility loss each still cancel here, at
++    // once, with the reason they always carried; mere inactivity does not. This
++    // does NOT make an inactive story foreground: nothing below ticks, the
++    // completed story does not reactivate, guidance still retires immediately on
++    // this frame, and every other cancellation class — quit, menu, mute, zero
++    // volume, unavailable audio, reset, actor or world change, new story,
++    // optional survey, deep link, replay, sandbox and any other beat exit — is
++    // untouched at its own seam. The token still expires on its existing
++    // monotonic five-second deadline through its existing 4.5-second release,
++    // carried by `tickCommonGroundEntry` on the free-play frames below.
++    const interrupted = paused || !playingPhase || hidden;
+     earlyTicked.current = false;
+     if (!foreground) {
+       cancelPendingStoryUxFeedback('foreground-loss');
+       // The live-only texture is cancelled by pause and by visibility loss, and
+       // it never resumes, hydrates or defers to unlock.
+-      suspendCommonGroundPresentation(paused ? 'pause' : 'visibility-loss');
++      if (interrupted) suspendCommonGroundPresentation(paused ? 'pause' : 'visibility-loss');
+     }
+     if (!camera.isPerspectiveCamera || !/^ch1-(fixed|track|raster)$/.test(story.beat ?? '')) return;
+     const target = getFeedRuntime().brackets.find(bracket => bracket.visible);
+--- baseline/main/src/story/StoryDirectorDriver.test.tsx
++++ candidate/main/src/story/StoryDirectorDriver.test.tsx
+@@ -0,0 +1,165 @@
++import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
++
++// --- CG-IMPL-016: the driver's own foreground seam -------------------------------------
++//
++// THE REAL CALLBACK, NOT A REGEX OVER IT. This file renders the shipped
++// `StoryDirectorDriver`, captures the per-frame callback it actually registers
++// with `useFrame`, and runs it against the real exported suspension seam it
++// calls. Reading the source for a condition would prove nothing about which
++// frames reach that call.
++const driverTest = vi.hoisted(() => ({
++  frames: [] as ((state: unknown, dt: number) => void)[],
++  suspend: vi.fn(),
++  story: { active: true, beat: 'ch13-common-ground' as string | null }
++}));
++
++vi.mock('@react-three/fiber', () => ({
++  // The driver registers MORE THAN ONE per-frame callback. Keeping only the last
++  // one silently tested the wrong callback, so every one it registers is captured
++  // and every one is run, in registration order, exactly as the renderer does.
++  useFrame: (callback: (state: unknown, dt: number) => void) => {
++    driverTest.frames.push(callback);
++  },
++  useThree: (selector?: (state: unknown) => unknown) => {
++    const state = {
++      camera: { isPerspectiveCamera: false },
++      clock: { elapsedTime: 0, getElapsedTime: () => 0 },
++      gl: { domElement: { clientWidth: 1280, clientHeight: 720 } },
++      size: { width: 1280, height: 720 },
++      scene: {}
++    };
++    return selector ? selector(state) : state;
++  },
++  addAfterEffect: () => () => {}
++}));
++
++vi.mock('./storyState.ts', async importOriginal => {
++  const actual = await importOriginal<typeof import('./storyState.ts')>();
++  return {
++    ...actual,
++    getStoryStateSnapshot: () => ({ ...actual.getStoryStateSnapshot(), ...driverTest.story })
++  };
++});
++
++vi.mock('./commonGroundDirector.ts', async importOriginal => {
++  const actual = await importOriginal<typeof import('./commonGroundDirector.ts')>();
++  return { ...actual, suspendCommonGroundPresentation: driverTest.suspend };
++});
++
++import { enterPlaying, returnToMenu } from '../state/appState.ts';
++import { renderToStaticMarkup } from 'react-dom/server';
++import { createElement } from 'react';
++import StoryDirectorDriver from './StoryDirectorDriver.tsx';
++
++function mountDriver(paused: boolean): ((state: unknown, dt: number) => void)[] {
++  driverTest.frames = [];
++  renderToStaticMarkup(createElement(StoryDirectorDriver, { paused, planetRadius: 50 }));
++  if (driverTest.frames.length === 0) throw new Error('the driver registered no per-frame callback');
++  return driverTest.frames;
++}
++
++/** One real frame through the shipped callback. */
++function runFrame(options: {
++  paused?: boolean;
++  active?: boolean;
++  phase?: string;
++  hidden?: boolean;
++  beat?: string;
++}): void {
++  driverTest.story = { active: options.active ?? true, beat: options.beat ?? 'ch13-common-ground' };
++  // The REAL app phase and the REAL visibility the driver reads, not a stub of
++  // its own predicate.
++  if ((options.phase ?? 'playing') === 'playing') enterPlaying(); else returnToMenu();
++  if (options.hidden) {
++    (globalThis as { document?: unknown }).document = { visibilityState: 'hidden' };
++  } else {
++    delete (globalThis as { document?: unknown }).document;
++  }
++  const state = {
++    camera: { isPerspectiveCamera: false },
++    clock: { elapsedTime: 0, getElapsedTime: () => 0 },
++    gl: { domElement: { clientWidth: 1280, clientHeight: 720 } },
++    size: { width: 1280, height: 720 },
++    scene: {}
++  };
++  for (const frame of mountDriver(options.paused ?? false)) frame(state, 1 / 60);
++}
++
++describe('the driver suspends the finale only for an actual interruption (CG-IMPL-016)', () => {
++  beforeEach(() => {
++    driverTest.suspend.mockClear();
++  });
++
++  afterEach(() => {
++    driverTest.story = { active: true, beat: 'ch13-common-ground' };
++    delete (globalThis as { document?: unknown }).document;
++    enterPlaying();
++  });
++
++  it('does NOT cancel on the normal handback frame, where the story just went inactive', () => {
++    // The measured window: the completion frame is visible, focused, playing and
++    // unpaused, and only `story.active` has turned false because the story is
++    // DONE. That frame is the signed exception, and this callback is a necessary
++    // condition for the token surviving it — the driver is one caller among the
++    // seams that can cancel, and the others are asserted below and at their own
++    // modules.
++    runFrame({ active: false });
++    expect(driverTest.suspend).not.toHaveBeenCalled();
++  });
++
++  it('still cancels a paused frame, with the pause reason, done or not', () => {
++    runFrame({ active: true, paused: true });
++    expect(driverTest.suspend).toHaveBeenCalledWith('pause');
++    driverTest.suspend.mockClear();
++    // A story that finished and was then paused is an interruption of the token,
++    // and the exception does not cover it.
++    runFrame({ active: false, paused: true });
++    expect(driverTest.suspend).toHaveBeenCalledWith('pause');
++  });
++
++  it('still cancels a hidden document, done or not', () => {
++    runFrame({ active: true, hidden: true });
++    expect(driverTest.suspend).toHaveBeenCalledWith('visibility-loss');
++    driverTest.suspend.mockClear();
++    runFrame({ active: false, hidden: true });
++    expect(driverTest.suspend).toHaveBeenCalledWith('visibility-loss');
++  });
++
++  it('still cancels when the app phase leaves play — menu, quit or any exit', () => {
++    runFrame({ active: true, phase: 'menu' });
++    expect(driverTest.suspend).toHaveBeenCalledTimes(1);
++    driverTest.suspend.mockClear();
++    runFrame({ active: false, phase: 'menu' });
++    expect(driverTest.suspend).toHaveBeenCalledTimes(1);
++  });
++
++  it('never suspends an ordinary live foreground frame', () => {
++    runFrame({ active: true });
++    expect(driverTest.suspend).not.toHaveBeenCalled();
++  });
++
++  // --- The lifecycle around that one exception -------------------------------------
++  //
++  // Sparing the token on the completion frame must not become a standing grant.
++  // This runs the shipped callback over a long run of real done frames.
++
++  it('spares the token frame after frame, and never attacks or renews it', () => {
++    // The driver neither cancels the token nor holds it open: it simply stops
++    // calling the suspension seam, and the token's own existing monotonic
++    // five-second deadline and 4.5-second release end it elsewhere.
++    for (let frame = 0; frame < 400; frame += 1) runFrame({ active: false });
++    expect(driverTest.suspend).not.toHaveBeenCalled();
++  });
++
++  it('cancels the moment a real interruption reaches an already-done story', () => {
++    // The exception covers inactivity ALONE. Every genuine cancellation class
++    // still lands on a finished story, at this seam and at the others.
++    runFrame({ active: false });
++    expect(driverTest.suspend).not.toHaveBeenCalled();
++    runFrame({ active: false, paused: true });
++    expect(driverTest.suspend).toHaveBeenCalledWith('pause');
++    driverTest.suspend.mockClear();
++    runFrame({ active: false, hidden: true });
++    expect(driverTest.suspend).toHaveBeenCalledWith('visibility-loss');
++  });
++});

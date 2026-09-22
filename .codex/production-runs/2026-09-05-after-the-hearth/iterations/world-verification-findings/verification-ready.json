@@ -1,0 +1,22 @@
+{
+  "schema": "paravoxia.verificationReadiness.v1",
+  "ready": true,
+  "readyAt": "2026-09-06T11:19:00.605666+00:00",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "integrationInvocationRef": "integration-lifecycle-repair-invocation.json",
+  "integrationFinishedAt": "2026-09-06T11:17:11.957546+00:00",
+  "sourceManifestRef": "implementation-source-manifest.json",
+  "sourceManifestSha256": "51b25376aa6c87dc428249fcfd907811c592bc9dfdaf00d82c53112593ea02c3",
+  "implementationGateRef": "implementation-gate-pass.json",
+  "implementationGateChecks": 1708,
+  "checkResultsRef": "check-results.json",
+  "instructions": "Use verification-lifecycle-commission.txt. Full independent verify/build first, then current immutable preview. Old failures retained; all current acceptance remains unmeasured.",
+  "publicationAuthorized": false,
+  "limitations": [
+    "Static checks do not prove gameplay, rendering, hearing, hardware budgets or creative acceptance.",
+    "Manual corner recovery and mid-beat Continue need independent physical/AV evidence.",
+    "The currently running preview is older source until root explicitly replaces it."
+  ]
+}

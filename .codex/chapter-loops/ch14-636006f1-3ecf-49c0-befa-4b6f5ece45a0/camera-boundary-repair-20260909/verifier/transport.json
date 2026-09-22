@@ -1,0 +1,22 @@
+{
+  "exitCode": 0,
+  "signal": null,
+  "reason": null,
+  "bytes": 2041943,
+  "pid": 94745,
+  "usage": {
+    "roleLaunches": 0,
+    "modelTurns": 37,
+    "inputTokens": 69597,
+    "cacheReadTokens": 1082928,
+    "outputTokens": 26207
+  },
+  "session": "f6bb536b-a00c-4e38-9b4d-d2d813cdccfd",
+  "resolved": "claude-opus-5",
+  "completed": true,
+  "failed": false,
+  "final": "**VERDICT**: fail — cause established. `ch1-fixed` can never advance on the immutable preview build because fixed-screen coverage geometry is invalid on every frame.\n\n**Measurements** (one 88 s headed run, 1280×720, non-touch, `?story=ch1-fixed&movie=1&journeyprobe=1&profile=HIGH`)\n\n| item | value |\n|---|---|\n| beat for whole run | `ch1-fixed` (18/18 samples) |\n| objective | `ch1:fixed:cross-camera-cell`, health `ready`, work order `WALK [A]/[D] TO THE NEXT CAMERA.` |\n| prerequisites | `DEBRIS 1/1 · FIBER 1/1` from t=12 s |\n| player travel | x 11.72 → 37.00 (~25 m), then pinned at exactly 37.00 from t=57 s |\n| camera cuts | 0 — `SITE CAM 04-A` unchanged all 88 s |\n| rail backstop | `rail-stuck: ch1-fixed @55s — objective incomplete after 55s; not-planned` |\n| measured reservations | work-order 26–46, camera-status 26–65.6, ledger 682–702, **story-debug-trigger 66–110 (top-right)** |\n\n**Root cause.** `resolveFixedScreenCoverageGeometry` whitelists only `feed-work-order`, `feed-camera-status`, `story-journal-trigger` as top reservations; every other id-bearing rect drives `bottom = min(bottom, rect.top - 14)`. The `?story=` debug-disclosure button is emitted as `story-debug-trigger` at top=66, so:\n\n- top = max(18, 46+14, 65.6+14) = **79.6**\n- bottom = min(702, 682−14, **66−14**) = **52**\n\n`bottom < top` ⇒ `bodyTop >= top && bodyBottom <= bottom` is unsatisfiable for any fov/rig/DPR (`bodyBottom > bodyTop` by construction; `offsetY` is 0 off-touch). So `geometry.valid === false` forever → `coverage.valid === false` → `cellId`/`anchorCenter` frozen at 0, `transfer` null, `transferSequence` 0 → the entire ch1-fixed cell block sits behind `if (coverage?.valid)` → `fixedTransferAwaitingPaint` stays 0 → `advanceToBeat('ch1-track')` unreachable. `computeRigFrame`'s `coverage?.anchorCenter ?? 0` also keeps the frame bolted at cell 0, which is why the worker walks out of frame.\n\nBound to the immutable build: the served bundle `/assets/index-B4uyILAX.js` (sha256 `f98e8114…`) contains the classifier verbatim, and contains the sibling solver `solveEarlyFeedLayout` which *does* classify `story-debug-trigger` and `hud-corner-actions` as upper — the asymmetry is in the shipped artifact, not inferred from the working tree.\n\n**Decisive pointer**: `main/src/story/sideLens.ts:121-124` (top whitelist omits `story-debug-trigger` and `hud-corner-actions`), gate at `sideLens.ts:139-140`, emitter `storyHudLayout.ts:734-745`, correct comparison classifier `storyHudLayout.ts:750`, stalled consumer `storyDirector.ts:2366-2404`.\n\n**Not the cause**: the x=37.00 pin is the `CH1_2D_TRAVEL_BAND.gather = 29` wall; along=29 is ~2× the half-cell, so a valid geometry would have crossed well before it. `rail-ch1-fixed.ts:15` then loops on `pos+30` forever, making the stall permanent but not creating it.\n\n**Objective visual defects**: `shots/t017s-ch1-fixed.png`, `shots/t063s-ch1-fixed.png` — traverse objective standing with no worker anywhere in frame, identical static wide shot 46 s apart; `shots/final.png` — SITE CAM still 04-A at 88 s.\n\n**Artifacts** (all under `…/camera-boundary-repair-20260909/verifier/`): `result.json`, `ch1-fixed-blocker-probe.mjs`, `raw-samples.json`, `shots/`. No source edited, no server launched, no state injected; GPU work ran under `flock -s` on `.heavy.lock`, browser closed in `finally`.",
+  "contextTokens": 69543,
+  "reported": true,
+  "accounting": "Live per-message usage, reconciled to cumulative terminal usage."
+}

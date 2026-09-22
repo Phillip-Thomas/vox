@@ -1,3 +1,5 @@
+import { resolveObjective } from './beats/ch6/objective-ch6-dive.ts';
+import { resolveAuthoredObjective } from './beats/objectivePrimitives.ts';
 import { getLocalActorId, type ActorId } from '../game/playerActors.ts';
 import { getItemCount } from '../game/systems/inventorySystem.ts';
 import { attendObservation } from '../game/systems/observationLedger.ts';
@@ -40,42 +42,11 @@ const OXYGEN_THRESHOLDS = [75, 50, 25] as const;
 export function getAuthoredDiveGuidance(
   actorId: ActorId = getLocalActorId()
 ): GuidedStoryObjective {
-  if (hasMilestone(EMERGENT_UNIQUE_ITEM_MILESTONES.keelMemoryBanked, actorId)) {
-    return {
-      id: 'dive:shore-handoff',
-      kind: 'wait',
-      markerLabel: 'KEEL MEMORY · SECURED',
-      workOrder: ['KEEL MEMORY SECURED.', 'BREATHE. LET THE SHORE RETURN.'],
-      requiresMarker: false
-    };
-  }
-  if (
-    hasMilestone(EMERGENT_UNIQUE_ITEM_MILESTONES.keelMemory, actorId)
-    && !hasMilestone(AUTHORED_DIVE_MILESTONES.surfacedWithKeel, actorId)
-  ) {
-    return {
-      id: 'dive:surface-with-keel',
-      kind: 'travel',
-      markerLabel: 'WATERLINE · SURFACE WITH KEEL',
-      workOrder: [
-        'CARRY THE KEEL MEMORY THROUGH THE WATERLINE.',
-        'IF RECOVERY MOVED YOU TO SHORE, RE-ENTER THE WATER AND SURFACE.'
-      ]
-    };
-  }
-  return hasMilestone(EMERGENT_UNIQUE_ITEM_MILESTONES.keelMemory, actorId)
-    ? {
-        id: 'dive:return-to-shore',
-        kind: 'travel',
-        markerLabel: 'DRY SHORE · SECURE KEEL MEMORY',
-        workOrder: ['FOLLOW THE DRY SHORE MARKER.', 'RETURN THE KEEL MEMORY TO DRY GROUND.']
-      }
-    : {
-        id: 'dive:recover-keel-memory',
-        kind: 'interact',
-        markerLabel: 'KEEL MEMORY',
-        workOrder: ['FOLLOW THE KEEL MEMORY MARKER BELOW.', 'INTERACT TO RECOVER THE KEEL MEMORY.']
-      };
+  return resolveAuthoredObjective(resolveObjective, { dive: {
+    banked: hasMilestone(EMERGENT_UNIQUE_ITEM_MILESTONES.keelMemoryBanked, actorId),
+    recovered: hasMilestone(EMERGENT_UNIQUE_ITEM_MILESTONES.keelMemory, actorId),
+    surfaced: hasMilestone(AUTHORED_DIVE_MILESTONES.surfacedWithKeel, actorId)
+  } });
 }
 
 interface DiveRuntime {

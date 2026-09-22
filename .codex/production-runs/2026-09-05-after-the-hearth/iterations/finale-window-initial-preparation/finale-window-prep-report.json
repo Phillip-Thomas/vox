@@ -1,0 +1,146 @@
+{
+  "schema": "paravoxia.verifier.finaleWindowPrep.v1",
+  "state": "PREPARED-NOTRUN",
+  "outcomeIsAcceptance": false,
+  "verdicts": {
+    "audible": "none made",
+    "causal": "none made",
+    "acceptance": "none made",
+    "note": "This is a CPU-only preparation. No browser, GPU, build, verify suite, production run or game mutation occurred."
+  },
+  "runId": "2026-09-05-after-the-hearth",
+  "lane": "finale-window",
+  "preparedAt": "2026-09-06T18:23:30Z",
+  "preparedBy": "mechanical probe engineer (opus), prthomas0321@gmail.com",
+  "ownedArtifacts": [
+    { "path": "verifier/probes/finale-window/finale-window-probe.mjs", "sha256": "1c06d7997db706e960457bf078e1271b412f31fd3dedcd01c9c47e36e5349adf", "bytes": 23929, "role": "runtime discriminator entry (prepared, not run)" },
+    { "path": "verifier/probes/finale-window/windowSampler.mjs", "sha256": "cd0daff6e1009181581d18baebba6f90514f8883b296be2b1db47467e82ae2f6", "bytes": 15871, "role": "atomic in-page sampler source + pure decision core" },
+    { "path": "verifier/probes/finale-window/audio-isolation-plan.json", "sha256": "80598be940380c4c9f7c2530602597215ea110931ad0843ada2cc803d21424ba", "bytes": 5912, "role": "prepared audio isolation/cleanup/metadata plan" },
+    { "path": "logs/finale-window-prep/selftest.log", "sha256": "407401435a2c53545b7afe7a8edfca0a0eca584c8ea4eba52381071e1f65e178" },
+    { "path": "logs/finale-window-prep/selftest.rc", "sha256": "7e1cd69fab85528649b3c67810caed1f9db026f90623c7d226ea1477c93b6a46" },
+    { "path": "logs/finale-window-prep/selftest-start.txt", "sha256": "5741145c750aa7e7981183465cca005e9a2ea5a0ba38dffeaf2dde8dfeb4b526" },
+    { "path": "logs/finale-window-prep/selftest-end.txt", "sha256": "b7943bd10295d7980af95785e5c5886f5249380251b916225ce5c7e250b04949" },
+    { "path": "logs/finale-window-prep/audio-syntax-check.log", "sha256": "0e451d72856cc1998ef0fcd794dfc0dfb337eec5412579bf3217d4ac7092a477" },
+    { "path": "finale-window-prep-report.json", "sha256": "self" },
+    { "path": "finale-window-prep-report.md", "sha256": "see md" }
+  ],
+  "nothingElseTouched": "No other report, probe, capture, private pin, contract or game file was created, modified or overwritten. No original probe was edited; the arrival-common-verifier probes are byte-unchanged and were only read.",
+  "commandsActuallyRun": [
+    {
+      "command": "node verifier/probes/finale-window/finale-window-probe.mjs --self-test",
+      "cwd": "verifier/probes/finale-window",
+      "startedAt": "2026-09-06T18:22:23.732287283Z",
+      "endedAt": "2026-09-06T18:22:23.797096444Z",
+      "wallMs": 65,
+      "exit": 0,
+      "checks": 33,
+      "failed": 0,
+      "logRef": "logs/finale-window-prep/selftest.log"
+    },
+    {
+      "command": "bash -n <prepared audio sequence>; pactl --help; parecord --help; pactl info | grep 'Default Sink'; python3 -c json.load(plan)",
+      "startedAt": "2026-09-06T18:23:09Z",
+      "exit": 0,
+      "effect": "syntax/availability only. NO module loaded, NO sink created, NO recorder started, NO default changed.",
+      "logRef": "logs/finale-window-prep/audio-syntax-check.log"
+    }
+  ],
+  "cpuChecksMeaning": {
+    "kind": "structural, window-termination and guard checks only — deliberately not a mirror of any test count",
+    "atomicSamplerStructure": [
+      "the injected installer is ONE arrow-function body with no async/await, so a record cannot be stitched across turns",
+      "the installer actually reads every required signal: __paravoxiaCommonGround.snapshot (score/beat/anchors), __paravoxiaJourneyProbe.getSnapshot (story active/chapter/beat/runId, avFull complete+handback, common units), __voxBundleDiag (heldChain + trace tail), __voxAudioDiag, document visibility/hidden/hasFocus, __autopilot/__auditWorker identity",
+      "the installer contains no game-state write, no localStorage write, no AudioContext construction, no dispatchEvent"
+    ],
+    "eventWindowTermination": [
+      "completion edge requires beat done/active false AND complete AND handback in AV history (a beat-only flip is refused as the edge)",
+      "the sampler is still running at edge+11000 ms and seals at edge+11500 ms",
+      "retained window preEdge 3000 ms + postEdge 11500 ms = 14.5 s of retention around an ~12 s requirement",
+      "no-edge and truncated-window terminations are named failures, never a pass",
+      "pre-edge ring trimming keeps the trailing 3 s; post-edge samples are never trimmed; a memory cap hit is reported, not hidden"
+    ],
+    "sourceRoleLockGuards": [
+      "rehash of all 99 manifest game paths: 0 mismatches; manifest file sha256 equals the pinned 6ef957c3...5d6; scene-contract.json sha256 equals the pinned 5ef85a32...54",
+      "the single tolerated non-game auxiliary mismatch is exactly the delta run-profile already recorded in producer-nonbinding-auxiliary-observation.json",
+      "role gate refuses when verifier-control.activeRole is not finale-window-runtime (live control currently reads arrival-common-earned, so the probe would refuse to start right now — correct)",
+      "heavy lock refuses without an inherited fd and without a lock path",
+      "a non-empty output dir is refused"
+    ]
+  },
+  "runtimeSafeguardsWiredIn": {
+    "verificationReady": "verification-ready.json .ready must be true",
+    "sourceRehash": "all 99 game paths rehashed at start; any mismatch aborts before the browser",
+    "manifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6 (verified now: MATCH)",
+    "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54 (verified now: MATCH)",
+    "rootOwnership": "verifier/artifacts/preview-ownership.json must be state=running at http://127.0.0.1:34413/",
+    "httpIdentity": "index fetched over HTTP must hash 6c8c378b... and contain <title>Paravoxia</title>; /assets/index-BiDWGouH.js must hash efc87feb...",
+    "noOwnPreview": "preview passed in as { url, stop(){} }; the probe never starts or stops a preview",
+    "freshOutputDir": "new empty dir under verifier/captures/finale-window/",
+    "activeRole": "finale-window-runtime required in verifier-control.json",
+    "heavyLock": "inherited exclusive flock via --heavy-lock-fd, verified against /proc/self/fd and /proc/locks, plus a flock -n contention probe that MUST be refused",
+    "gpu": "headed only; PARAVOXIA_ALLOW_SWIFTSHADER aborts; assertHardwareGl must report the NVIDIA GB10 ANGLE renderer; headless NVIDIA is never used",
+    "cleanupReceipt": "post-finally cleanupReceipt written for both success and failure; failureRecord written on any throw",
+    "dependencyBytesArchived": "probe-snapshot/ copies of both owned modules + hashes are written BEFORE the measurement"
+  },
+  "preparedCommandLine": {
+    "stateOnlyVariant": "flock -x $LOCK -c 'exec 9<$LOCK; node .codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/finale-window/finale-window-probe.mjs --out finale-window/window-1 --heavy-lock $LOCK --heavy-lock-fd 9 --probe-lock-contention --seconds 360'",
+    "liveOutputVariant": "PULSE_SINK=paravoxia_finale_window flock -x $LOCK -c 'exec 9<$LOCK; node .../finale-window-probe.mjs --unmuted --out finale-window/window-audio-1 --heavy-lock $LOCK --heavy-lock-fd 9 --probe-lock-contention --seconds 360'",
+    "prerequisite": "root sets verifier-control.json activeRole=finale-window-runtime and $LOCK to the run's existing shared heavy lock path",
+    "url": "http://127.0.0.1:34413/?story=ch13-survey&journeyprobe=1&debug=1&movie=1",
+    "lane": "movie, ordinary shipped autopilot; the probe sends no key input and performs no store/pose/anchor/progress/audio write",
+    "estimatedWallTime": "~70-90 s to the completion edge on the observed journey-common-1 timing, plus 11.5 s of retained window"
+  },
+  "measurementDesign": {
+    "atomicity": "ONE synchronous in-page function per record, executed from a rAF callback (driver=raf; a bounded setTimeout driver exists as a justified fallback only if rAF is throttled). This replaces the three stitched awaited reads that produced E1 of the lifecycle audit.",
+    "window": "from arming (mid ch13, before completion) with a 3 s retained pre-edge tail, through 11.5 s after a complete+handback edge; real performance.now()/rAF timestamps plus performance.timeOrigin and Date.now() per record",
+    "cdpDiscipline": "between arming and sealing the probe issues ZERO screenshots; only a tiny status() poll at 2 Hz crosses CDP. The buffer is serialized after sealing, so no CDP round trip can lose the completion edge.",
+    "frames": "one pre-window baseline frame at arm time, then exactly three post-seal frames, each with its own atomic before/after sample, real shot duration and an explicit label that they are NOT the completion edge and NOT simultaneous with either state read. No per-frame screenshots.",
+    "finalStatusRetention": "the window keeps sampling for the full 11.5 s after the edge even though beat is already 'done' and the CG token reads null."
+  },
+  "signals": {
+    "exposedAndCaptured": [
+      "__paravoxiaCommonGround.snapshot().score.finalTextureSeconds / .beat / .mood (presence vs null distinguished)",
+      "__paravoxiaCommonGround.snapshot().diagnostic.beat, anchors, pendingAnchors, railCursor, bodyCentre, supported",
+      "__paravoxiaJourneyProbe.getSnapshot(): story.active / chapter / beat / runId, objective id, recent milestones, avFull activation history (complete + handback), Common Ground units, restoration/world identity when present",
+      "__voxBundleDiag(): heldChain, tonic, trace length and last trace entry (storyScore.ts:953)",
+      "__voxAudioDiag(): describeGameAudioOutputRoutes() string (audioCore.ts:368)",
+      "document.visibilityState / document.hidden / document.hasFocus()",
+      "__autopilot.pos + routeAction, __auditWorker.pos, __storyBeat mirror"
+    ],
+    "missingAndDeclaredUNAVAILABLE": [
+      { "signal": "cancellation reason / calling site of cancelCommonGroundFinalTexture", "why": "commonGroundScore.ts:259 names the parameter _reason and discards it; no ledger exists", "consequence": "No capture can name the caller. This probe records timing adjacency only, which is circumstantial and is labelled as such." },
+      { "signal": "AudioContext.state, mute flag, musicVolume at the clearing frame", "why": "no shipped read-only hook exposes them; __voxAudioDiag returns a route description string, not context state", "consequence": "Alternative A1 (audio-block cancel) cannot be excluded by state read." },
+      { "signal": "paused / hudBlockingOverlayOpen / downed / worldGenReady / initialRenderReleased", "why": "React component state with no diagnostic surface", "consequence": "Alternative A2 (the 'pause' reason label) stays indistinguishable from the story-inactive label by state read." }
+    ],
+    "explicitNonClaim": "The existing hooks do NOT reveal the cancellation reason or the audio context state, and this preparation does not pretend otherwise. No debug hook was added and no source was changed to obtain them."
+  },
+  "audioCapture": {
+    "status": "PREPARED-NOT-EXECUTED (isolation is feasible)",
+    "planRef": "verifier/probes/finale-window/audio-isolation-plan.json",
+    "server": "PipeWire via pipewire-pulse (/run/user/1000/pulse/native); one existing sink alsa_output.platform-NVDA2014_00.hdmi-stereo, no existing null sink",
+    "isolation": "probe-owned module-null-sink 'paravoxia_finale_window'; ONLY the probe's Chromium child gets PULSE_SINK=paravoxia_finale_window; recording is of that sink's OWN monitor; system default sink untouched; no other stream moved; no microphone or source device opened; the default monitor is never recorded",
+    "verificationBeforeRecording": "the sink-inputs attached to the owned sink must be exactly the probe child's process tree; a foreign stream aborts the capture instead of producing a mixed recording",
+    "teardown": "pactl unload-module of the recorded module id in a finally, with a post-check that the module is gone and Default Sink is unchanged",
+    "muteAudioFinding": "previewServer.mjs CHROMIUM_ARGS carries --mute-audio and openParavoxia offers no override, so all existing captures in this run were muted at the browser output stage regardless of a 'running' page AudioContext. The --unmuted variant reuses the same shipped headed hardware route and flags with only --mute-audio filtered out; no source edit, never headless, never SwiftShader.",
+    "shippedTap": "none exists: __voxAudioDiag returns a description string only, and there is no shipped MediaStream/destination tap. An in-page tap would require adding a hook or patching a global, both refused.",
+    "refusedSubstitutions": ["offline score render as a stand-in for live output", "default-monitor (mixed) recording", "silent global/AudioContext patching"]
+  },
+  "sourceIntegrity": {
+    "gamePathsRehashed": 99,
+    "mismatches": 0,
+    "manifestFileSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+    "toleratedNonBindingAuxiliary": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-delta.run-profile.json (already recorded in producer-nonbinding-auxiliary-observation.json; unused by this run and not a game path)",
+    "changedByThisLane": "nothing under main/ — no source, contract, gate, manifest, hook or other lane's artifact was written"
+  },
+  "notDone": [
+    "no browser launched, no GPU used, no build, no verify, no production run",
+    "no sink created, no module loaded, no recorder started",
+    "no verifier-control.json edit (root grants the finale-window-runtime role)",
+    "no verdict about audibility, cause, repair need or acceptance"
+  ],
+  "rootDecisionNeeded": [
+    "grant activeRole finale-window-runtime and provide the shared heavy lock path/fd for this lane",
+    "choose the state-only run, the --unmuted live-output run with the owned null sink, or both in that order"
+  ]
+}

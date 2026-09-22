@@ -1,0 +1,217 @@
+{
+  "documentKind": "finale-lifecycle-audit",
+  "role": "read-only mechanical source auditor",
+  "runId": "2026-09-05-after-the-hearth",
+  "auditedAt": "2026-09-06T18:20:00Z",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceIntegrity": {
+    "manifest": "implementation-source-manifest.json",
+    "fileCount": 99,
+    "verifiedBefore": "all 99 hashes match",
+    "verifiedAfter": "all 99 hashes match",
+    "mutations": "none (no game/probe/contract/gate/manifest file written)",
+    "preservedNonBlocker": "producer-nonbinding-auxiliary-observation delta-profile drift left untouched"
+  },
+  "inputsReadFirst": [
+    "score-final-completion-interpretation.json",
+    "score-final-completion-interpretation.md",
+    "producer-score-completion-interpretation-review.json"
+  ],
+  "evidenceRefs": {
+    "trace": "verifier/captures/arrival-common/journey-common-1/trace.ndjson",
+    "traceSha256": "3ad4bda044795529b686110f8a50f3de13770c44fe39e3ef8fed5c6911bcc72b",
+    "traceRecords": 2525,
+    "directorReadPrefix": "iterations/score-completion-interpretation/trace-at-director-read.ndjson (sha256 c7473a705f516f2f1c381534bf8b7fb55fd8249635469a2f8d6b9ca1c67356d1) — prefix of the same file, unchanged in the audited window",
+    "probeEntry": "verifier/probes/arrival-common-verifier/journey-probe.mjs"
+  },
+  "sourceRefs": {
+    "main/src/story/commonGroundScore.ts": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+    "main/src/story/commonGroundDirector.ts": "3b2b95ccd1701b863348e147a8181a704c2ed73258467ea98617e06f0f25aba3",
+    "main/src/story/StoryDirectorDriver.tsx": "284f981accdf1ecfaed567d0668329d084e353233b5d1e0cea295a9d60e4e32a",
+    "main/src/story/storyDirector.ts": "82fe1ca596ab6322aeb61c2f33ebed018b1ac1fc22a8fd10d3b2377aa2bf385b",
+    "main/src/story/storyState.ts": "e8802af8a93e4e82623c96f5d81053b2fd8b74027570dcdfa90b3478a9449915",
+    "main/src/story/emergentStoryDirector.ts": "022d8609c651f3049b47eea6ed203d11de4a90eb7e6f6bafa284b3b5f3055737"
+  },
+
+  "executedEvidence": [
+    {
+      "id": "E1",
+      "claim": "The trace sample record is NOT atomic: story/beat/milestones come from readState(), avFull from a second page.evaluate, and cgDiagnostic/cgScoreDiagnostic from a THIRD page.evaluate awaited after it.",
+      "ref": "journey-probe.mjs:286-399 (base=readState 287; extra evaluate 288; phys evaluate 341; merged 385)",
+      "consequence": "In sample 61793 the story fields (active true, ch13-common, no story:ch13-complete, avFull without complete/handback) are OLDER than the CG/score fields in the same record. The apparent 'live token during an active chapter beat' is a read-ordering artefact, not a state contradiction."
+    },
+    {
+      "id": "E2",
+      "claim": "In sample 61793 the CG director read already shows the post-handback state: cgDiagnostic.value.beat = null AND diagnostic.beat = null, while cgScoreDiagnostic = {beat:null, mood:null, finalTextureSeconds:0.0235}.",
+      "ref": "trace.ndjson elapsedMs 61793",
+      "consequence": "enterCommonGroundScoreBeat(null) had already run (commonGroundDirector.ts:718-720 from enterCommonGroundBeat(null)) and the token was deliberately retained across that frame (storyDirector.ts:1232 guard). Retention at the handback frame WORKED."
+    },
+    {
+      "id": "E3",
+      "claim": "The token existed at all, with age 0.0235 s.",
+      "ref": "commonGroundScore.ts:207-216 (begin) + :288 (diagnostic)",
+      "consequence": "beginCommonGroundFinalTexture returned true, therefore at the completion edge eligibility.restoredCompletion was false AND commonGroundAudioUnavailable() was false — i.e. not muted, musicVolume>0, an AudioContext existed and its state was 'running' (commonGroundDirector.ts:550-559). This is a state fact, NOT an audibility or hearing claim."
+    },
+    {
+      "id": "E4",
+      "claim": "Token null by the next CG read (62095) and at every later read; story runId stays 1 throughout; no interaction prompts or interaction attempts occur in the window.",
+      "ref": "trace.ndjson 62095/62890/62998/63115/63230/63348; story.runId=1; prompts [] and unchanged interactionTrace",
+      "consequence": "Excludes the runId-driven reset route and the optional-survey-action cancel route for this window."
+    },
+    {
+      "id": "E5",
+      "claim": "Observed token lifetime upper bound is ~0.3 s of wall time (61793 -> 62095 sample separation), and the observed age at the only live read is 0.0235 s ≈ 1.4 frames at 60 Hz.",
+      "ref": "trace.ndjson elapsedMs/tMs deltas",
+      "consequence": "The 5-second monotonic deadline (commonGroundScore.ts:94, :234-240) cannot have fired. The clear was a cancel path, not a deadline release."
+    }
+  ],
+
+  "sourceRoutesEnumerated": {
+    "allTokenClearRoutes": [
+      {
+        "route": "deadline release",
+        "site": "commonGroundScore.ts:234-240 -> :243-252",
+        "requires": "elapsed >= 5 s",
+        "status": "EXCLUDED by E5"
+      },
+      {
+        "route": "cancelCommonGroundFinalTexture('optional-survey-action')",
+        "site": "commonGroundDirector.ts:1711 (commitCommonGroundRepeatSurvey)",
+        "requires": "runtime.localTester and a performed [F] repeat",
+        "status": "EXCLUDED for this window by E4"
+      },
+      {
+        "route": "suspendCommonGroundPresentation(reason) -> cancel",
+        "site": "commonGroundDirector.ts:1751-1754, called ONLY from StoryDirectorDriver.tsx:151 and :230",
+        "requires": "StoryDirectorDriver.tsx:145 foreground === false, which includes story.active === false",
+        "status": "PRIMARY CANDIDATE — fires unconditionally on every frame after the handback deactivates the story"
+      },
+      {
+        "route": "audio-blocked cancel inside tickCommonGroundScore",
+        "site": "commonGroundDirector.ts:574-583, reached post-handback only via tickCommonGroundEntry (:653) from StoryDirectorDriver.tsx:226",
+        "requires": "mute / musicVolume<=0 / no context / context.state!=='running' at that frame",
+        "status": "ALTERNATIVE — contradicted at t_begin by E3, and it runs LATER in the same frame than the primary candidate (see frameOrdering)"
+      },
+      {
+        "route": "releaseCommonGroundScore via releaseCommonGroundChapter",
+        "site": "commonGroundDirector.ts:1769-1774",
+        "requires": "a caller",
+        "status": "EXCLUDED — releaseCommonGroundChapter has NO production caller (only its own definition); grep over main/src excluding tests"
+      },
+      {
+        "route": "resetCommonGroundScoreRuntime",
+        "site": "commonGroundDirector.ts:252 via resetCommonGroundRuntime, reached only from syncCommonGroundRun (:685-691) on a runId change",
+        "requires": "story.runId change",
+        "status": "EXCLUDED by E4 (runId constant 1)"
+      }
+    ],
+    "frameOrdering": {
+      "claim": "Within one rendered frame the cancel path runs BEFORE the deadline/entry path.",
+      "basis": [
+        "StoryDirectorDriver.tsx:142 useFrame(..., -1) contains the foreground check and suspend call (:145-152); StoryDirectorDriver.tsx:167 useFrame(...) has default priority 0 and contains the free-play branch calling tickCommonGroundEntry (:226) / tickCommonGroundFreePlay (:228).",
+        "@react-three/fiber sorts subscribers ascending by priority (main/node_modules/@react-three/fiber/dist/events-485b18b5.cjs.dev.js:1085) and only priority > 0 takes over rendering (:1077). Priority -1 therefore executes first and does not manualize the loop."
+      ]
+    },
+    "handbackFrameSequence": [
+      "commonGroundDirector.ts:1405-1411 tickCommon: committed=true; markMilestone(ch13Complete); noteAnchor('anc.cg.complete') -> beginCommonGroundFinalTexture (:418-425); noteAnchor('anc.cg.handback') -> holds, returns (:426-431); completeChapter13().",
+      "storyState.ts:980-983 -> completeStory() :939-954 setSnapshot({active:false, chapter:'complete', beat:'done'}) — synchronous subscriber notify.",
+      "storyDirector.ts:1201-1242 syncBeat: onBeatEntered(null) -> emergentStoryDirector.ts:798 enterCommonGroundBeat(null) -> commonGroundDirector.ts:718-720 enterCommonGroundScoreBeat(null) (beat/mood nulled, token intentionally left alive); storyDirector.ts:1232 skips setScoreBeat(null) because commonGroundFinalTextureHolds() — the signed retention exception.",
+      "NEXT FRAME, StoryDirectorDriver.tsx:143-151: story.active is now false, so foreground is false, so suspendCommonGroundPresentation(paused ? 'pause' : 'visibility-loss') -> commonGroundDirector.ts:1754 cancelCommonGroundFinalTexture(reason) -> commonGroundScore.ts:259-263 -> releaseCommonGroundFinalTexture() clears the token.",
+      "Same frame, later (priority 0): StoryDirectorDriver.tsx:226 tickCommonGroundEntry -> commonGroundDirector.ts:653 tickCommonGroundScore, which now sees no token."
+    ]
+  },
+
+  "causalHypothesis": {
+    "statement": "The finale token is cancelled by the normal handback itself, one rendered frame after it. StoryDirectorDriver.tsx:145 computes foreground with story.active as a conjunct, so the moment completeChapter13/completeStory sets active:false the very next frame takes the !foreground branch and calls suspendCommonGroundPresentation('visibility-loss') (or 'pause'), which cancels the live token unconditionally — even though the document is visible, the app is playing and nothing was paused.",
+    "confidence": "high for the source route; the specific firing caller is INFERRED, not observed",
+    "supportingFit": [
+      "Quantitative fit: 0.0235 s ≈ 1.4 frames at 60 Hz — exactly the 'survived the handback frame, died on the next one' shape, not a 5 s deadline and not an instantaneous same-frame kill.",
+      "Every other clear route is excluded (E4, E5, no caller for releaseCommonGroundChapter) or requires an audio-block state that E3 shows was false ~24 ms earlier.",
+      "It explains why the two deliberate retention mechanisms (storyDirector.ts:1232 exception, commonGroundDirector.ts:653 done-frame deadline carrier, documented at StoryDirectorDriver.tsx:223-226) are effectively unreachable in normal play: an earlier-priority frame callback cancels first."
+    ],
+    "contractRelation": "If confirmed, this is a clear attributable SOLELY to ordinary handback/done with no declared cancellation, which is exactly the case the score interpretation and producer review call conflicting with the explicit retention exception. Nothing here asserts an audible failure, an audible minimum, a fixed 5 s performance, or that anyone heard anything.",
+    "notClaimed": [
+      "No audible onset, silence, loudness, mix or release-envelope claim.",
+      "The reason label passed to cancelCommonGroundFinalTexture is discarded (parameter is `_reason`, commonGroundScore.ts:259), so no runtime evidence of WHICH reason fired exists in any current capture.",
+      "No repair, patch, replacement implementation or acceptance is proposed."
+    ]
+  },
+
+  "alternatives": [
+    {
+      "id": "A1",
+      "hypothesis": "Cancel came from the audio-availability check (commonGroundDirector.ts:576-579) because the headless capture's AudioContext left 'running' right after the begin edge.",
+      "discriminator": "Read AudioContext/mute state in the SAME evaluate as the token read across the clear. E3 makes it unlikely (audio was unblocked ~24 ms earlier) and the frame ordering makes it unreachable-first, but it is not excluded by capture."
+    },
+    {
+      "id": "A2",
+      "hypothesis": "Cancel came from StoryDirectorDriver.tsx:230 ('pause') because `paused` was true at that moment (App.tsx:1690 conjunction).",
+      "discriminator": "App.tsx never calls setStoryCompleteOpen(true) (only :764/:772/:786 set false), so that conjunct is dead; but `paused`, `hudBlockingOverlayOpen`, `downed`, `worldGenReady`, `initialRenderReleased` were not sampled. Same causal family as the primary hypothesis (handback-induced), different reason label."
+    },
+    {
+      "id": "A3",
+      "hypothesis": "The token was cleared by some path outside ch13 that mutates module state.",
+      "discriminator": "Excluded by construction: the token lives in commonGroundScore.ts module state and is only cleared by the six routes enumerated above; all callers were grepped across main/src."
+    }
+  ],
+
+  "missingEvidence": [
+    "No cancellation/release-cause ledger anywhere: the reason argument is deliberately unused, so no current capture can name the caller or reason.",
+    "No per-frame timestamps: samples are ~110-300 ms apart and internally non-atomic (E1), so token lifetime is bounded only to (0.0235 s, ~0.33 s].",
+    "No contemporaneous audio-context/mute/focus/visibility/pause sample in the trace.",
+    "No captured audio output; Root has not heard audio and this audit makes no audible claim."
+  ],
+
+  "measurementPlan": {
+    "goal": "Distinguish 'cancelled by story-inactive foreground check' from 'cancelled by audio-block' and from 'paused', and measure exact token lifetime in frames — using ONLY existing read-only hooks, no source/probe/contract change.",
+    "smallestExecutableStep": {
+      "lane": "the existing arrival-common journey probe, movie lane, same URL/preview identity",
+      "window": "from 2 s before the ch13 commit to 8 s after (covers begin, any cancel, and the 5 s deadline + 4.5 s release if it ever survives)",
+      "method": "ONE page.evaluate per poll at ~4-8 ms containing ALL of the following reads so the record is atomic (this is the fix for E1 — no new hook is needed, only co-location):",
+      "readsPerPoll": [
+        "performance.now()",
+        "window.__paravoxiaCommonGround.snapshot().score  (beat, mood, finalTextureSeconds)",
+        "window.__paravoxiaCommonGround.snapshot().diagnostic.beat / .anchors",
+        "window.__paravoxiaJourneyProbe.getSnapshot().state.story  (active, chapter, beat, runId)",
+        "window.__voxBundleDiag()  (score bundle trace + heldChain: whether the override was actually held/released)",
+        "window.__voxAudioDiag()  (output route description)",
+        "document.visibilityState, document.hasFocus(), document.hidden"
+      ],
+      "derived": [
+        "t_begin = first poll with finalTextureSeconds !== null, minus its own age",
+        "t_clear = first poll with finalTextureSeconds === null after t_begin",
+        "t_inactive = first poll with story.active === false",
+        "lifetimeMs = t_clear - t_begin, and (t_clear - t_inactive) in ms and in estimated frames"
+      ]
+    },
+    "decisionRule": [
+      "If (t_clear - t_inactive) is within ~1-2 frames AND visibilityState==='visible' AND hasFocus() AND __voxAudioDiag shows a live running route across the window => the clear is caused by the story-inactive foreground branch (StoryDirectorDriver.tsx:145-151). That is a cancellation attributable solely to normal handback/done.",
+      "If __voxAudioDiag / context state shows the route not running or music muted at or before t_clear => the audio-block cancel (commonGroundDirector.ts:576-579) is the responsible path, which IS a declared cancellation and explains the early clear without any audible-minimum claim.",
+      "If t_clear precedes t_inactive => neither; re-open the enumeration.",
+      "In every branch, record __voxBundleDiag heldChain across t_clear so the existing 4.5 s release is observed as state, separately from any audible claim."
+    ],
+    "explicitlyNotRequested": [
+      "no new probe/hook/source/contract change",
+      "no full verify, no broad suite, no GPU/browser work by this auditor",
+      "no forced attack, no repeated finale, no audition claim"
+    ]
+  },
+
+  "cpuExperiment": {
+    "run": false,
+    "reason": "A task-private CPU harness against the real commonGroundScore.ts functions can only re-demonstrate module semantics already legible in source (cancel clears the token; the deadline needs 5 s). It cannot discriminate WHICH caller fired, which is the open question; that requires the runtime co-located poll above. No simulated integration was produced."
+  },
+
+  "limits": {
+    "sourceEdited": false,
+    "probeOrContractEdited": false,
+    "browserOrGpuUsed": false,
+    "buildOrVerifyRun": false,
+    "audioHeard": false,
+    "audibleClaim": false,
+    "cancellationInferredFromNullAlone": false,
+    "acceptanceOrRepairDecision": false,
+    "newRunOrIterationCreated": false
+  }
+}

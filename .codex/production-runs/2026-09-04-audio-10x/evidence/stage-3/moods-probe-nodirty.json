@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-09-05T11:42:24.724Z",
+  "seconds": 12,
+  "count": 62,
+  "moods": {
+    "crawl": {
+      "beat": "crawl",
+      "variant": null,
+      "pcmSha256": "a33ce6c6bebd9b6c6e3e4f37547d0c9c763df99bd87713fcc291fb32a2a889e8",
+      "fingerprintSha256": "90b714caa6dda872723ae5fc5a332a669bd4d719eabeaf6b8fddd42b849afec7",
+      "smoothness": 0,
+      "nan": 0
+    },
+    "voyage": {
+      "beat": "voyage",
+      "variant": null,
+      "pcmSha256": "77fcae3ad6017786ada9878986dcf7c1e7dd4d1b2f9ae12a1049618588f37b53",
+      "fingerprintSha256": "dbe45785508efed6f31411ce177a702adf5059f5d2bff118a697ce44c0923069",
+      "smoothness": 0,
+      "nan": 0
+    },
+    "a3-dawn": {
+      "beat": "a3-dawn",
+      "variant": null,
+      "pcmSha256": "85c40e27c04e538c7bf2f8895dd514b83724ffe6d433a26b3aa46da4505ad95a",
+      "fingerprintSha256": "2378b384d8404f3054e7e10dcf8aebf3fc62c74220776db93eefa517648044dd",
+      "smoothness": 0,
+      "nan": 0
+    },
+    "ch10-ask/relay-answer": {
+      "beat": "ch10-ask",
+      "variant": "relay-answer",
+      "pcmSha256": "4141f2266592e702a130105f51c42bd21114c24c4d054f9ec763d55ffa616ee3",
+      "fingerprintSha256": "811d4a179bc37e06ba5d55e17e6635e10f7e38c364b2f40b2ad7616ac2c153d9",
+      "smoothness": 0,
+      "nan": 0
+    }
+  }
+}

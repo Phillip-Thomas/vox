@@ -19,6 +19,19 @@ export function setTouchActive(value: boolean): void {
   touchActive = value;
 }
 
+/** A released touch can click the canvas after its control unmounts. Keep that
+ * compatibility click out of pointer lock even while no touch UI is mounted:
+ * a lock prevents the next touch control from capturing its pointer. */
+export function allowsMousePointerLock(event: MouseEvent): boolean {
+  const source = event as MouseEvent & {
+    pointerType?: string;
+    sourceCapabilities?: { firesTouchEvents?: boolean } | null;
+  };
+  return !touchActive
+    && (!source.pointerType || source.pointerType === 'mouse')
+    && source.sourceCapabilities?.firesTouchEvents !== true;
+}
+
 /** Heuristic: a touch-first device (also covers narrow viewports for testing). */
 export function isTouchDevice(): boolean {
   if (typeof window === 'undefined') return false;

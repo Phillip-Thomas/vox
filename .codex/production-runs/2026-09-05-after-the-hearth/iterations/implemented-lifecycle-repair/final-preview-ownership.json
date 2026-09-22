@@ -1,0 +1,23 @@
+{
+  "schema": "paravoxia.verifier.previewOwnership.v0",
+  "runId": "2026-09-05-after-the-hearth",
+  "owner": "root-production-preview",
+  "state": "stopped",
+  "url": "http://127.0.0.1:45091/",
+  "port": 45091,
+  "daemonPid": 886956,
+  "built": false,
+  "buildHash": "6e07599ac8fab7a8747da5422adcf16e56a9c41502cb94b6c78b68ad42422582",
+  "snapshotDir": "/tmp/paravoxia-preview-sVYHXA/dist",
+  "indexSha256": "7e1ed124be8fe197ae2f80de6b988c260ed7533aea83a803190abc84bbc89cae",
+  "startedAt": "2026-09-06T11:21:46.516Z",
+  "stoppedAt": "2026-09-06T12:24:34.154Z",
+  "note": "Root owns this immutable preview independently of reviewer CLI lifetime. Single canonical URL for probes and owner review; port is chosen free.",
+  "stopReason": "stop-file",
+  "sourceManifestSha256": "51b25376aa6c87dc428249fcfd907811c592bc9dfdaf00d82c53112593ea02c3",
+  "rootExecSessionId": 89502,
+  "identityRecheckedAt": "2026-09-06T11:22:08.926155+00:00",
+  "fullVerifyLog": "verifier/logs/final-source/verify-final.log",
+  "bundlePath": "/assets/index-Bquz6XRz.js",
+  "bundleSha256": "213aa350ea2d340a8a34e802a70d703984fb29ed4ff1b9d2003e457fcaead453"
+}

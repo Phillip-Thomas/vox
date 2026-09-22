@@ -1,0 +1,16 @@
+{
+  "role": "entry-discriminatoror",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T16:36:15.611632+00:00",
+  "commissionSha256": "03d0f14d111c306ea9e55d64698237e2dd78a23fb30e551bd76386e157d82cc4",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "One bounded headed input-entry discriminator only; no game mutation or chapter acceptance",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T16:43:56.661509+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "35e560c1-4a17-4e6d-8d24-30f034dd4da7",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

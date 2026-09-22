@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 2151630,
+  "stop_reason": "end_turn",
+  "session_id": "82186deb-65b8-4e1e-a9a5-97dd05b6208b",
+  "total_cost_usd": 23.22136099999999,
+  "usage": {
+    "input_tokens": 340,
+    "cache_creation_input_tokens": 319725,
+    "cache_read_input_tokens": 31926242,
+    "output_tokens": 162257,
+    "output_tokens_details": {
+      "thinking_tokens": 78971
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 319725,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1544,
+        "cache_read_input_tokens": 319594,
+        "cache_creation_input_tokens": 4198,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4198
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2765,
+      "outputTokens": 20,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002865,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 340,
+      "outputTokens": 162257,
+      "cacheReadInputTokens": 31926242,
+      "cacheCreationInputTokens": 319725,
+      "webSearchRequests": 0,
+      "costUSD": 23.21849599999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 78971,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 179,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Work complete. Summary:\n\n## What I did\n\n**A \u2014 CG-IMPL-010 (COMMON movie navigation).** I reproduced the seam *before* patching, with the shipped planner and shipped Origin terrain, and found the audit's cause plus a second half it missed:\n\n- **Floor:** the shared walker releases all controls inside `NAVIGATION_STEER_DEAD_ZONE` (0.2), so an aim not further past a vertex than 0.2 parks the body short and `vertexReached`'s crossing requirement can never fire.\n- **Ceiling:** on a cube planet the up is *tilted*, so projecting out the normal component of the 1.8-unit foot-goal/clearance-waypoint gap leaves a real tangential residue of `1.8\u00b7|up.x|\u00b7up.y`. At COMMON vertex 6, one cell from the planet-face edge, that is **~0.256** at the crossing. `0.2 + 0.256 = 0.456` against a 0.5 footprint reach \u2014 **the whole slack at that corner is ~0.044 of a unit**, and the shipped 0.6 spent it several times over.\n\nRepair: `CG_RAIL_CORNER_OVERSHOOT` 0.6 \u2192 0.24, and the walker's stop radius split out of the cursor's vertex tolerance as a **smaller** `CG_RAIL_ROUTE_STOP = 0.15`. `CG_RAIL_ROUTE_ARRIVE` stays 0.35. No route/C change, no wider radius, no bypass \u2014 and `autopilot/primitives.ts` is byte-unchanged, because the residue tracks the real tilted capsule and removing it would weaken the guard the audit says is working.\n\nThe audit's outgoing-aim suggestion does **not** work (the residue is on the incoming axis at zero overshoot), and the terminal vertex did **not** force a geometry decision.\n\n**B \u2014 CG-IMPL-014.** Fact selection now asks the world before the control mode: grounded at Origin gives the exact signed v3 disembark/on-foot copy under the same ID, label and marker; board/lift/descent are untouched; completion still needs physical W reach.\n\n**C \u2014 blocked, reported, not worked around.** The ch13 binding lives in three files the direction does not grant, and the generator throws before writing without one of them. I did only the granted `story-authority.json` part and proved with a task-private generator copy that the missing regeneration changes **nothing but two provenance fields**.\n\n## Numbers\n\n- 3158 \u2192 **3172** tests, 351 files, **0 removed, 0 weakened** (one tightened in place).\n- Counterfactual on exact pre-repair bytes: **10 failures, all by value**, naming vertices **3, 6 and 9** and `expected 'board' not to be 'board'`. Restore proven byte-identical.\n- `story:ux:check` exit 0. `verify` exit 1 \u2014 **aborting at step 2 of 14**, so I ran all 14 gates individually rather than credit that command with work it didn't do: **11 pass, 3 fail**, all three pre-existing from the producer's v3 promotion.\n\n## Two things worth your attention\n\n1. **Vertex 6 has no engineering headroom** \u2014 ~0.044 units. The repair sits inside it, but any change to the standing offset, clearance plane, dead zone, capsule radius or that terrain reopens the defect. The new bound tests fail loudly if so.\n2. **A concurrent session modified `main/tools/creative-triad-gate.mjs`, `main/package.json` and a run profile at 13:28\u201313:29**, after my last write (13:22) and last check (13:25). I did not revert or touch them. A drift check run now shows six changed manifest files; the sixth is not mine.\n\nNothing here is acceptance, verification, hardware or publication; `independentGPUStatus: not-run`, and manual COMMON traversal remains unmeasured.",
+  "ttft_ms": 1496,
+  "type": "result",
+  "duration_ms": 2314816,
+  "uuid": "92787c57-deee-4b3a-b841-298b3e6fdfba",
+  "ttft_stream_ms": 742,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 742,
+  "queued_turn_count": 0
+}

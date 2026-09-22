@@ -1,0 +1,313 @@
+{
+  "schema": "paravoxia.verifier.commonExactInputRuntime.v1",
+  "role": "common-exact-input-runtime",
+  "at": "2026-09-06T19:56:38.150560+00:00",
+  "verdict": "INSTRUMENTATION GATE PASSED AT RUNTIME; DISCRIMINATOR NOT RUN. No accounting verdict. Not acceptance.",
+  "isAcceptance": false,
+  "prerequisitesReadFirst": {
+    "common-exact-input-prep-report.json": "5e42460cad9d4837470616764ddbab71ca77df3b237c4692fa65fac3150d1fa4",
+    "common-exact-input-prep-report.md": "6a7dc819567cbe90831f70009fe94e8a431ffdf3eac4772d2a4e61d4d7648442",
+    "producer-common-exact-input-prep-review.json": "f9e8aaae9ad172948d81ccdcac8bf097546e4e2563c916dad78106f0983a053c",
+    "allExistedBeforeLaunch": true
+  },
+  "binding": {
+    "previewUrl": "http://127.0.0.1:34413/",
+    "previewOwner": "root-production-preview (untouched, never stopped)",
+    "activeRole": "common-exact-input-runtime",
+    "sourceManifestSha256Before": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sourceManifestSha256After": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sourceFilesRehashed": 99,
+    "sourceDriftBefore": [],
+    "sourceDriftAfter": [],
+    "contractVersion": "scene-v3",
+    "indexSha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207",
+    "servedBundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+    "cdpScriptParsedSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+    "bundleShaUnchangedAfterInstrumentation": true
+  },
+  "observed": {
+    "locationResolution": [
+      {
+        "name": "served-bundle-is-the-root-published-immutable-bundle",
+        "ok": true,
+        "detail": {
+          "status": 200,
+          "bytes": 5667345,
+          "sha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068"
+        }
+      },
+      {
+        "name": "callee-first-statement-column-is-exactly-as-prepared",
+        "ok": true,
+        "detail": {
+          "expected": 193729,
+          "actual": 193729
+        }
+      },
+      {
+        "name": "caller-guarded-credit-statement-column-is-exact",
+        "ok": true,
+        "detail": {
+          "expected": 219885,
+          "actual": 219885
+        }
+      },
+      {
+        "name": "bodies-clear-is-ABSENT-from-this-credit-guard",
+        "ok": true,
+        "detail": {
+          "note": "reported absent, never fabricated true"
+        }
+      },
+      {
+        "name": "bundle-script-was-parsed-exactly-once",
+        "ok": true,
+        "detail": {
+          "count": 1
+        }
+      },
+      {
+        "name": "callee-column-is-an-ACTUAL-possible-breakpoint",
+        "ok": true,
+        "detail": {
+          "requested": 193729,
+          "offered": [
+            193700,
+            193729,
+            193739,
+            193748,
+            193756,
+            193766,
+            193770,
+            193782,
+            193788,
+            193796,
+            193809,
+            193818
+          ]
+        }
+      },
+      {
+        "name": "caller-column-is-an-ACTUAL-possible-breakpoint",
+        "ok": true,
+        "detail": {
+          "requested": 219885,
+          "offered": [
+            219767,
+            219809,
+            219861,
+            219875,
+            219879,
+            219885,
+            219888,
+            219916,
+            219933,
+            219938,
+            219944,
+            219969
+          ]
+        }
+      },
+      {
+        "name": "LP-A-resolved-without-relocation",
+        "ok": true,
+        "detail": {
+          "requested": {
+            "LINE": 7839,
+            "COL_CALLEE": 193729
+          },
+          "actual": {
+            "scriptId": "7",
+            "lineNumber": 7839,
+            "columnNumber": 193729
+          }
+        }
+      },
+      {
+        "name": "LP-B-resolved-without-relocation",
+        "ok": true,
+        "detail": {
+          "requested": {
+            "LINE": 7839,
+            "COL_CALLER": 219885
+          },
+          "actual": {
+            "scriptId": "7",
+            "lineNumber": 7839,
+            "columnNumber": 219885
+          }
+        }
+      },
+      {
+        "name": "logpoints-never-paused-the-debugger",
+        "ok": true,
+        "detail": {
+          "pauses": 0
+        }
+      }
+    ],
+    "possibleBreakpointsNearCallee": [
+      193700,
+      193729,
+      193739,
+      193748,
+      193756,
+      193766,
+      193770,
+      193782,
+      193788,
+      193796,
+      193809,
+      193818,
+      193825,
+      193833,
+      193841,
+      193860,
+      193870,
+      193880,
+      193888,
+      193893,
+      193904
+    ],
+    "possibleBreakpointsNearCaller": [
+      219767,
+      219809,
+      219861,
+      219875,
+      219879,
+      219885,
+      219888,
+      219916,
+      219933,
+      219938,
+      219944,
+      219969,
+      219997,
+      220041,
+      220080,
+      220113,
+      220119,
+      220126
+    ],
+    "resolvedLocations": {
+      "A": {
+        "breakpointId": "2:7839:193729:assets/index-BiDWGouH\\.js$",
+        "locations": [
+          {
+            "scriptId": "7",
+            "lineNumber": 7839,
+            "columnNumber": 193729
+          }
+        ]
+      },
+      "B": {
+        "breakpointId": "2:7839:219885:assets/index-BiDWGouH\\.js$",
+        "locations": [
+          {
+            "scriptId": "7",
+            "lineNumber": 7839,
+            "columnNumber": 219885
+          }
+        ]
+      }
+    },
+    "debuggerPauses": 0,
+    "sinkAtSurveyEntry": {
+      "a": 0,
+      "b": 0,
+      "dropsA": 0,
+      "dropsB": 0,
+      "firstA": null,
+      "firstB": null
+    },
+    "entryUrl": "http://127.0.0.1:34413/?story=ch13-survey&journeyprobe=1&debug=1",
+    "entryFixtureLabel": "LABELLED DIAGNOSTIC FIXTURE: deep labelled survey entry, not full-story continuity, not an earned Continue, grants no acceptance."
+  },
+  "priorCallPointAvailability": {
+    "status": "LOCATION AVAILABLE AND RESOLVED; SCOPE RETENTION UNPROVEN",
+    "site": "index-BiDWGouH.js 7839:219885 \u2014 the guarded credit statement inside Kme, i.e. CALLER scope",
+    "namesIntendedToBeRead": [
+      "g (prior FOOT)",
+      "i (current FOOT)",
+      "I (actual displacement)",
+      "t.stage",
+      "t.terraUnits (old credit)",
+      "t.comparisonProved"
+    ],
+    "provedAtRuntime": "Debugger.getPossibleBreakpoints offered 219885 as an ACTUAL breakpoint location and setBreakpointByUrl resolved there with NO relocation (scriptId 7, line 7839, column 219885).",
+    "NOTproved": "That g/i/I are actually RETAINED (not optimised away) in that scope. Zero records were captured because the credit call only executes in the COMMON beat at stage holding-h, which this session did not reach. Retention remains UNPROVEN and is not claimed.",
+    "notSubstituted": "No adjacent eligible call across skipped updates was substituted."
+  },
+  "discriminator": {
+    "id": "D1-positive-post-plane-overshoot",
+    "status": "NOT RUN",
+    "target": "ordinary held WASD, vertex2 [-42,51.05,16] crossed with a POSITIVE measured overshoot to z~16.15 within the unchanged 0.35, then vertex3 [-44,51.05,16], then vertex4 [-44,51.05,18]",
+    "whyNotRun": "The 20-minute cap was consumed by mandatory prerequisite reading, exact static site derivation, and the instrumentation gate plus its one authorized retry. The survey->E->holding-h prerequisite chain costs ~80s of ordinary play (measured previously by reference-3/deviation-1) and was not started.",
+    "notSubstituted": "The before-plane / squared-corner control C1 was NOT run and was NOT silently substituted. The exact early z15.82 before-plane refusal was NOT retested and is unchanged."
+  },
+  "eOrHPrerequisite": {
+    "grounded_E_achieved": false,
+    "held_H_reference_achieved": false,
+    "reportedPrerequisiteNotAccountingDiagnosis": "Neither a grounded E nor a held H was attempted in this session. Per commission, the actual prerequisite is reported and NO accounting diagnosis is offered."
+  },
+  "accountingVerdict": {
+    "projectionDebtAtVertex3": "NEITHER PROVED NOR FALSIFIED",
+    "reason": "No actual credit-call records exist. Nothing is inferred.",
+    "recommendation": "NONE. No repair is recommended and no patch was made."
+  },
+  "bodiesClear": {
+    "presentInThisCreditGuard": false,
+    "statement": "Re-verified against the LIVE served bytes: the guard is (g?fL(g,i,o,{extraSolids:n}):o.isSupported(i)) && GH(Q,RH(i),zKA()).ok. The minified bodiesClear (TKA) does NOT appear. Reported ABSENT, never fabricated true."
+  },
+  "refusedByCeilingQualification": {
+    "preparedFieldName": "refusedByCeiling",
+    "objection": "gain==0 && displacement>0 is NOT a causal reason; it is also satisfied by backwards motion or by a body outside the corridor.",
+    "renamedTo": "zeroGainWithPositiveDisplacement_causeUnattributed",
+    "attributionRule": "Ceiling may be attributed ONLY after replaying routeProgressUnits from the exact captured arguments and showing the candidate projection lies INSIDE the unchanged 2.5-unit corridor but BEYOND previousUnits+actualDisplacement. No such replay was possible (no records).",
+    "applied": false
+  },
+  "harnessCorrections": [
+    {
+      "kind": "authorized private probe correction (instrumentation, NOT game repair)",
+      "file": "verifier/probes/common-exact-input/resolveLocations.mjs",
+      "attempt": "attempt-1 -> attempt-2",
+      "failure": "ERR_MODULE_NOT_FOUND: playwright-core is installed under main/node_modules, not repo root",
+      "fix": "bound the import to the absolute installed path",
+      "retriesUsed": 1,
+      "preservedFailure": "verifier/captures/common-exact-input/attempt-1 retained empty; the failing attempt is NOT deleted"
+    }
+  ],
+  "knownPulseFalseStall": {
+    "status": "NOT REUSED IN THIS SESSION",
+    "correctionThatWouldApply": "expected displacement must be compared to unitsPerMs * the CLAMPED pulse ms, never to the full remaining commanded distance",
+    "originalProbeFilesUnmodified": true
+  },
+  "limitations": [
+    "CDP conditional breakpoints deoptimise and re-JIT the instrumented function, which can lengthen a frame and shift the DISTRIBUTION of per-update displacement. Displacement is measured, so each record would still be actual, but near-ceiling comparisons must state this. Untested here (no records).",
+    "Debugger.scriptParsed reported hash efc87feb... identical to the served sha256, and no sourceMapURL is shipped; identity is therefore strong, but scriptParsed length 5666733 is UTF-16 code units and is not the 5667345 served byte count.",
+    "The heavy-lock CONTENTION PROBE was MALFORMED (flock fd-form does not accept -c) and printed CONTENTION-PROBE-UNEXPECTEDLY-ACQUIRED. That output is NOT valid evidence that the lock was free. The exclusive flock -w 60 -x 9 itself succeeded and was held across the whole run; contention is simply UNPROVEN this session.",
+    "No screenshots were taken; there was no critical corner to perturb because the measured leg never ran.",
+    "Hardware adapter was NOT recorded this session (headless swiftshader/angle launch; the page was not queried for its renderer string before close). Prior roles on this box recorded ANGLE (NVIDIA GB10/PCIe, OpenGL 4.5.0)."
+  ],
+  "ownedPaths": [
+    "verifier/probes/common-exact-input/resolveLocations.mjs",
+    "verifier/captures/common-exact-input/attempt-1",
+    "verifier/captures/common-exact-input/attempt-2",
+    "logs/common-exact-input-runtime/",
+    "common-exact-input-runtime-report.json",
+    "common-exact-input-runtime-report.md"
+  ],
+  "notTouched": [
+    "any of the 99 frozen game source files",
+    "the root-owned preview (never stopped, never restarted)",
+    "any foreign browser process",
+    "prep-owned probe files creditCallLogpoints.mjs / selftest.mjs / invocation.json",
+    "the scene-v3 contract",
+    "any build"
+  ],
+  "outOfScope": [
+    "full 18-unit passage",
+    "manual UX",
+    "full story/score acceptance"
+  ]
+}

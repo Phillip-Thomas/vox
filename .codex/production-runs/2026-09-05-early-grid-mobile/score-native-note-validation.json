@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-09-05T21:07:28.147Z",
+  "reviewedContractSha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a",
+  "openFirstWaveNotes": 2,
+  "authenticTerminalRecipientReplies": 2,
+  "nativeNoteSchemaErrors": [],
+  "fullNativeGateRun": false,
+  "signatureAuthored": false,
+  "runtimeEvidenceClaim": false
+}

@@ -1,4 +1,7 @@
-import { describe, expect, it, beforeEach } from 'vitest';
+import { getGuidedStoryObjectiveHealth } from './ux/objectiveDirector.ts';
+import { presentRegulationObjective } from './feed/regulationVoice.ts';
+import { getRegulationEchoLines } from './storyDirector.ts';
+import { afterEach, describe, expect, it, beforeEach } from 'vitest';
 import * as THREE from 'three';
 import {
   beginA1,
@@ -17,7 +20,7 @@ import { placeCampfire, resetCampfires } from '../game/systems/campfires.ts';
 import { consumeMawCharge, getMawCharge, MAX_MAW_CHARGE } from '../game/systems/mawSystem.ts';
 import { setMiningProgress } from '../game/systems/miningProgress.ts';
 import { drink, feed, getVitals, setVitals } from '../game/systems/survivalVitals.ts';
-import { getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { getPlayerWorldPosition, setPlayerWorldPosition } from '../state/playerFrame.ts';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getStoryForcedDayPhase } from './storyDayPhase.ts';
 import {
@@ -25,7 +28,7 @@ import {
   getCinematicLookTarget,
   getCinematicLookWeight
 } from './cinematicLook.ts';
-import { seedDebrisCollected, setDebrisScattered } from './debrisSalvage.ts';
+import { collectDebris, seedDebrisCollected, setDebrisScattered } from './debrisSalvage.ts';
 import { seedSupplyPodsCollected } from './supplyPods.ts';
 import { ARRIVAL, CH3_CAPTIONS, DUSK, FIRST_DAY, SIGNAL, VIGIL } from './storyScript.ts';
 import {
@@ -54,10 +57,13 @@ import { subscribeStoryUxFeedback } from './ux/feedbackCues.ts';
 import { createSystemCompanionBodyTargetHandle } from '../state/systemCompanionBodyTargets.ts';
 import { TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
 import { ANOMALY_SURVEY, CH1_FIXED_TUTORIAL, CH1_QUOTA, A1_RAMP_SECONDS } from './storyScript.ts';
-import { CH1_2D_TRAVEL_BAND } from './storyDirector.ts';
+import { registerStoryMarkerWorld } from './beats/markerTargets.ts';
+import { storyWorldHandles } from './storyWorldHandles.ts';
+import { CH1_2D_TRAVEL_BAND, storyFreeMarkerTargetFor } from './storyDirector.ts';
 import { resetStoryClock, setStoryPaused } from './storyClock.ts';
-import { getLensRig } from './sideLens.ts';
+import { getLensRig, setSideLens, clearSideLens, setSideCoverageViewport, sampleFixedScreenCoverage, getFixedScreenCoverage, applyActiveRigTransform, noteFixedScreenCoveragePresented } from './sideLens.ts';
 import { getAuditWorkerPath, storyAnchors, STORY_SEED } from './world/storyWorld.ts';
+import { getStoryBundleTrace } from './storyScore.ts';
 
 const STORY_PLANET_SIZE = 50;
 
@@ -75,7 +81,18 @@ function tickCameraSeconds(seconds: number, camera: THREE.PerspectiveCamera, ste
 }
 
 describe('storyDirector — chapter 1 and A1', () => {
+  afterEach(() => registerStoryMarkerWorld(null));
   beforeEach(() => {
+    // Director tests provide their mounted world explicitly. Production waits
+    // for real targets; scene-less tests must not exercise a hidden exemption.
+    const fixture = { position: new THREE.Vector3(4, 52, 8) };
+    registerStoryMarkerWorld({
+      target: name => storyWorldHandles.target(name) ?? fixture,
+      gather: resource => storyWorldHandles.gather(resource) ?? fixture,
+      audit: beat => storyWorldHandles.audit(beat) ?? fixture,
+      settlement: id => storyWorldHandles.settlement(id) ?? fixture,
+      commonGround: objectiveId => storyWorldHandles.commonGround(objectiveId) ?? fixture
+    });
     deactivateStory();
     resetProgression();
     resetStoryClock();
@@ -93,7 +110,7 @@ describe('storyDirector — chapter 1 and A1', () => {
   });
 
   it('the raster beat sets the survival work order (no auto-advance timer)', () => {
-    expect(getStoryText().workorder.length).toBeGreaterThan(0);
+    expect(renderedWorkOrder().length).toBeGreaterThan(0);
     tickSeconds(20);
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster'); // quota-gated only
   });
@@ -276,9 +293,10 @@ describe('storyDirector — chapter 1 and A1', () => {
     addItem('biofiber', CH1_QUOTA.biofiber);
     addItem('stone', CH1_QUOTA.stone);
     storyDirectorTick(CH1_COLLECTION_TIMING.rasterMinimumSeconds, null);
-    // Debris is already recovered here, so the live rung is the fiber one.
+    // Signed quota edge clears before the unchanged hold; no seventh objective.
     const previousId = 'ch1:raster:extract-fiber-quota';
-    expect(getActiveGuidedStoryObjective()?.id).toBe(previousId);
+    expect(getActiveGuidedStoryObjective()).toBeNull();
+    expect(getStoryText().workorder).toEqual([]);
     const entered: string[] = [];
     const unsubscribe = subscribeStoryUxFeedback(cue => entered.push(cue.objectiveId));
 
@@ -409,12 +427,27 @@ describe('storyDirector — chapter 1 and A1', () => {
     // …the NIGHT gate lives in the [F] resolver; drive on through the dawn:
     tickSeconds(5); // sleep fade + hold black -> wake just before sunrise
     expect(getStoryForcedDayPhase()!).toBeGreaterThan(0.9);
+    const landing = [...getStoryBundleTrace()].reverse().find(row => row.anchorId === 'anc.a3.material-lands')!;
+    expect(landing.schedulingArmAt.beatClock).toBe(0);
+    expect(landing.authoredCommitAt).toBeNull();
+    expect(hasMilestone(STORY_MILESTONES.a3)).toBe(false);
+    expect(getVoxelRealityStage()).not.toBe('material');
+    const storedLanding = landing.bundleAt;
+    setStoryPaused(true);
+    storyDirectorTick(20, null);
+    expect(landing.bundleAt).toBe(storedLanding);
+    expect(landing.authoredCommitAt).toBeNull();
+    expect(getStoryStateSnapshot().beat).toBe('a3-dawn');
+    setStoryPaused(false);
     tickSeconds(25); // fade up + material ramp + captions + handoff
     // The story no longer ends at the dawn: the first day alive begins, uncut.
     expect(getStoryStateSnapshot().active).toBe(true);
     expect(getStoryStateSnapshot().beat).toBe('ch3-thirst');
     expect(getVoxelRealityStage()).toBe('material');
     expect(hasMilestone(STORY_MILESTONES.a3)).toBe(true);
+    expect(landing.bundleAt).toBe(storedLanding);
+    expect(landing.authoredCommitAt!.beatClock).toBeGreaterThanOrEqual(storedLanding);
+    expect(landing.authoredCommits[0].members).toEqual(expect.arrayContaining(['setVoxelRealityStage(material)', 'clearVoxelRealityOverrides', 'clearLifeReveal', 'markMilestone(a3)', 'advanceToBeat(ch3-thirst)']));
     expect(hasMilestone(STORY_MILESTONES.complete)).toBe(false);
     expect(getStoryForcedDayPhase()).not.toBeNull(); // the sun stays the director's
     expect(getStoryInputPolicy().recipeAllowed('waterskin')).toBe(true);
@@ -498,9 +531,10 @@ describe('storyDirector — chapter 1 and A1', () => {
     recordStoryChoice('dispenser', 'hold');
     recordStoryChoice('anomaly', 'ack');
     advanceToBeat('ch1-fixed');
-    const order = getStoryText().workorder.join('\n');
-    expect(order).toContain('THE SCHEDULE WAS KEPT');
-    expect(order).not.toContain('TRANSIT RECORD INCOMPLETE');
+    const record = getRegulationEchoLines().join('\n');
+    expect(record).toContain('THE SCHEDULE WAS KEPT');
+    expect(record).not.toContain('TRANSIT RECORD INCOMPLETE');
+    expect(renderedWorkOrder()).toEqual(['WALK OVER THE DEBRIS TO RECOVER IT.']);
   });
 
   it('arrival breathes, restores the physical lens, and hands directly into audit', () => {
@@ -553,6 +587,34 @@ describe('storyDirector — chapter 1 and A1', () => {
     markSpawnSettled(); // leave the module singleton as the other tests expect
   });
 
+  it.each(['ch1-fixed', 'ch2-color'] as const)('expires descent-only white-out on direct entry to %s', beat => {
+    resetSpawnSettle();
+    advanceToBeat('descent');
+    tickSeconds(1);
+    expect(getFeedRuntime().flash).toBe(1);
+    advanceToBeat(beat);
+    expect(getFeedRuntime().flash).toBe(0);
+    // Entry order may leave a final stale producer write after the subscriber
+    // ran. The next playable tick must enforce the flash's owning beat too.
+    getFeedRuntime().flash = 1;
+    storyDirectorTick(1 / 60, null);
+    expect(getFeedRuntime().flash).toBe(0);
+    markSpawnSettled();
+  });
+
+  it('preserves the natural crash impact and its decay while descent owns the frame', () => {
+    markSpawnSettled();
+    advanceToBeat('descent');
+    let impact = false;
+    for (let i = 0; i < 900 && getStoryStateSnapshot().beat === 'descent'; i++) {
+      storyDirectorTick(1 / 60, null);
+      if (getFeedRuntime().flash > 0.8) impact = true;
+    }
+    expect(impact).toBe(true);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-fixed');
+    expect(getFeedRuntime().flash).toBe(0);
+  });
+
   it('ch1-raster names the fiber gate once the debris is clear', () => {
     // The reproduced stall: the first three debris pieces carry the ENTIRE
     // stone quota, so a player who follows the debris brackets finishes stone
@@ -571,9 +633,8 @@ describe('storyDirector — chapter 1 and A1', () => {
     // The rung, and the feed, now name what is actually outstanding — including
     // the movement the quota cannot be met without.
     expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:raster:extract-fiber-quota');
-    const order = getStoryText().workorder.join('\n');
-    expect(order).toContain('OUTSTANDING: BIOFIBER');
-    expect(order).toContain('HOLD [E] AND WALK [A]/[D] AS YOU EXTRACT.');
+    const order = renderedWorkOrder().join('\n');
+    expect(order).toBe('HOLD [E] TO HARVEST BIOFIBER.');
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
   });
 
@@ -583,26 +644,59 @@ describe('storyDirector — chapter 1 and A1', () => {
     // instruction against a `SCREENS 1/2` ledger, with no marker and no
     // fallback — a permanent stall on the first playable beat of the game.
     advanceToBeat('ch1-fixed');
+    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:recover-first-debris');
+    expect(renderedWorkOrder()).toEqual(['WALK OVER THE DEBRIS TO RECOVER IT.']);
+    collectDebris(0);
     expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:calibrate-extractor');
-    expect(getStoryText().workorder.join('\n')).toContain('HARVEST BIOFIBER');
+    expect(renderedWorkOrder().join('\n')).toContain('HARVEST BIOFIBER');
 
     addItem('biofiber', CH1_FIXED_TUTORIAL.biofiber);
     tickSeconds(0.1);
 
     // The remaining condition is now the only one, and it is stated outright.
     expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:cross-camera-cell');
-    const order = getStoryText().workorder.join('\n');
-    expect(order).toContain('WALK [A]/[D] UNTIL THE FRAME HANDS YOU TO THE NEXT CAMERA.');
-    // The prologue echoes are the record answering back, not work-order copy:
-    // they must survive the directive swap.
-    expect(order).toContain('TRANSIT RECORD INCOMPLETE');
+    const order = renderedWorkOrder().join('\n');
+    expect(order).toBe('WALK [A]/[D] TO THE NEXT CAMERA.');
+    // Echo lineage stays available without bloating the signed imperative.
+    expect(getRegulationEchoLines().join('\n')).toContain('TRANSIT RECORD INCOMPLETE');
     // Still on the beat — the rung changed, progression did not.
     expect(getStoryStateSnapshot().beat).toBe('ch1-fixed');
   });
 
+  it('requires a post-arm movement crossing and a destination paint before the exact track channels', () => {
+    const lens = { origin: new THREE.Vector3(), travelAxis: new THREE.Vector3(1, 0, 0), depthAxis: new THREE.Vector3(0, 0, 1), up: new THREE.Vector3(0, 1, 0) };
+    const viewport = (width: number) => ({ width, height: 844, fov: 75, aspect: width / 844, touch: true, safe: { left: 0, right: 0, top: 0, bottom: 0 }, reservations: [] });
+    const oldPosition = getPlayerWorldPosition();
+    setSideLens(lens); advanceToBeat('ch1-fixed'); setSideCoverageViewport(viewport(390));
+    let frame = 0;
+    const sample = (x: number) => { setPlayerWorldPosition(new THREE.Vector3(x, 0, 0)); sampleFixedScreenCoverage(getPlayerWorldPosition(), ++frame); storyDirectorTick(1 / 60, null); };
+    sample(0); sample(0); sample(5); // A camera change before pickup/harvest cannot complete traversal.
+    expect(getStoryStateSnapshot().beat).toBe('ch1-fixed');
+    collectDebris(0); addItem('biofiber', 1); sample(5);
+    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:cross-camera-cell');
+    setSideCoverageViewport(viewport(400)); sample(5); sample(5);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-fixed');
+    const boundary = getFixedScreenCoverage()!.intervalMax;
+    sample(boundary + 0.1);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-fixed'); // Destination has not been painted.
+    const camera = new THREE.PerspectiveCamera(75, 400 / 844); const parent = new THREE.Group(); parent.position.copy(getPlayerWorldPosition()); parent.add(camera); parent.updateMatrixWorld(true);
+    applyActiveRigTransform(camera, lens, 1 / 60); noteFixedScreenCoveragePresented(); sample(boundary + 0.1);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-track');
+    tickSeconds(0.1);
+    expect(getStoryText().system).toMatchObject({ text: 'CAMERA HAND-OFF: SUSPENDED. ONE VIEW STAYS WITH YOU.', ttlMs: 2800 });
+    tickSeconds(3.3);
+    expect(getStoryText().caption).toMatchObject({ text: '(simpler to keep watching this one.)', ttlMs: 3200 });
+    expect(getStoryText().system).toBeNull();
+    tickSeconds(4);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
+    expect(getStoryText().caption).toBeNull();
+    clearSideLens(); setPlayerWorldPosition(oldPosition);
+  });
+
   it('a genuinely choice-less record (skipped prologue) still assumes compliance', () => {
     advanceToBeat('ch1-fixed');
-    expect(getStoryText().workorder.join('\n')).toContain('TRANSIT RECORD INCOMPLETE');
+    expect(getRegulationEchoLines().join('\n')).toContain('TRANSIT RECORD INCOMPLETE');
+    expect(renderedWorkOrder()).toEqual(['WALK OVER THE DEBRIS TO RECOVER IT.']);
   });
 
   it('the harvester arrives charged and trickle-recharges while idle (not while mining)', () => {
@@ -670,3 +764,88 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getStoryStateSnapshot().beat).toBe('ch4-arrival');
   });
 });
+
+describe('foundational marker publication gate', () => {
+  afterEach(() => registerStoryMarkerWorld(null));
+
+  it('withholds a marker-requiring rung until its target exists', () => {
+    // The measured defect: ch1-depth entered at `missing-marker` health, naming
+    // a SUPPLY POD marker that had not resolved yet. An absent objective is
+    // honestly `idle`; a findable-looking rung pointing at nothing is a lie.
+    let targetExists = false;
+    registerStoryMarkerWorld({ ...storyWorldHandles, target: () => targetExists ? { position: new THREE.Vector3() } : null });
+    advanceToBeat('ch1-depth');
+    tickSeconds(0.1);
+    expect(getActiveGuidedStoryObjective()).toBeNull();
+
+    targetExists = true;
+    tickSeconds(0.1);
+    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:depth:recover-supply-pods');
+    expect(getGuidedStoryObjectiveHealth()).toBe('ready');
+  });
+
+  it('never withholds a rung that declares no marker', () => {
+    // ch1-fixed is markerless by design. Gating it on a marker would strand the
+    // first playable beat of the game behind a target that never arrives.
+    registerStoryMarkerWorld({ ...storyWorldHandles, target: () => null });
+    advanceToBeat('ch1-fixed');
+    tickSeconds(0.1);
+    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:recover-first-debris');
+  });
+
+  it('withholds a mandatory marker until the real world is available on boot', () => {
+    registerStoryMarkerWorld(null);
+    advanceToBeat('ch1-depth');
+    tickSeconds(0.1);
+    expect(getActiveGuidedStoryObjective()).toBeNull();
+    expect(getGuidedStoryObjectiveHealth()).toBe('idle');
+  });
+});
+
+describe('foundational marker publication gate — every chapter', () => {
+  afterEach(() => registerStoryMarkerWorld(null));
+
+  it('withholds a post-feed rung until its candidate has a target', () => {
+    // Previously only four ch1 beats could be gated, because the post-feed
+    // resolver read the PUBLISHED objective. It now takes the candidate, so
+    // ch3-thirst (whose marker is the pond anchor) is held until the pond
+    // exists rather than telling the player to follow a marker that is not there.
+    let pondKnown = false;
+    registerStoryMarkerWorld({ ...storyWorldHandles, target: name => {
+      expect(name).toBe('pond-surface');
+      return pondKnown ? { position: new THREE.Vector3() } : null;
+    } });
+    advanceToBeat('ch3-thirst');
+    tickSeconds(0.1);
+    expect(getActiveGuidedStoryObjective()).toBeNull();
+    pondKnown = true;
+    tickSeconds(0.1);
+    expect(getActiveGuidedStoryObjective()?.id).toBe('ch3:thirst:drink-water');
+  });
+
+  it('resolves the free marker for a candidate without consulting the published objective', () => {
+    // The seam itself: given a candidate for ch3-thirst and a pond anchor, the
+    // resolver answers from the CANDIDATE, whatever is or is not published.
+    const candidate = {
+      id: 'ch3:thirst:drink-water', kind: 'interact' as const,
+      markerLabel: 'DRINKABLE WATER', workOrder: ['FOLLOW THE WATER MARKER.'], requiresMarker: true
+    };
+    storyAnchors.pond = {
+      surface: new THREE.Vector3(1, 2, 3), shore: new THREE.Vector3(1, 1, 3)
+    } as never;
+    try {
+      const target = storyFreeMarkerTargetFor('ch3-thirst', candidate);
+      expect(target?.label).toBe('DRINKABLE WATER');
+      expect(target?.position.toArray()).toEqual([1, 2, 3]);
+      // A cleared objective owns no marker; there is no orphan fallback channel.
+      expect(storyFreeMarkerTargetFor('ch3-thirst', null)).toBeNull();
+    } finally {
+      storyAnchors.pond = null;
+    }
+  });
+});
+
+function renderedWorkOrder(): readonly string[] {
+  const objective = getActiveGuidedStoryObjective();
+  return objective ? presentRegulationObjective(objective, getRegulationEchoLines()) : getStoryText().workorder;
+}

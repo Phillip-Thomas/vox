@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 1172411,
+  "stop_reason": "end_turn",
+  "session_id": "d7a140d6-9a27-4a41-b895-f4c539862207",
+  "total_cost_usd": 11.8111045,
+  "usage": {
+    "input_tokens": 246,
+    "cache_creation_input_tokens": 216972,
+    "cache_read_input_tokens": 14858597,
+    "output_tokens": 88307,
+    "output_tokens_details": {
+      "thinking_tokens": 24316
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 216972,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1091,
+        "cache_read_input_tokens": 220458,
+        "cache_creation_input_tokens": 581,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 581
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 3106,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.003181,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 246,
+      "outputTokens": 88307,
+      "cacheReadInputTokens": 14858597,
+      "cacheCreationInputTokens": 216972,
+      "webSearchRequests": 0,
+      "costUSD": 11.807923500000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 24316,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 133,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done. One bounded repair, both defects, source frozen.\n\n## What I did\n\n**A \u2014 CG-IMPL-013 (measured Origin handoff reset).** The generic same-system handoff was always committing; `CROSSING_DESTINATION_WORLD_ID` in `tidegardenRoute.ts` just never listed `ch13-return`, so one render later the resolver still answered the departure world, App's swap effect reclaimed it and the ship was re-seated on the hearth pad (+2 epochs per attempt). Restored the one entry. `resolveStoryBootWorldId` is untouched \u2014 a reload mid-crossing still restarts from the hearth, so arrival stays earned by flight. New `main/src/App.test.tsx` (10 tests) drives the **real** flight store through the real `commitSystemPlanetHandoff` and evaluates App's own seam expression: post-handoff stable, pre-handoff not early-origin, offline/mismatched uncommitted, the measured reclaim still un-commits, ch8/ch10/boot controls unchanged. Counterfactual: pre-repair bytes fail exactly the post-handoff assertion.\n\n**B \u2014 CG-IMPL-012 (standby stall).** Reproduced on CPU *before* editing, on the actual identity (seed 3215739679, world -1,-1, planet 50, voxel 2): `(-42,51.05,9)` is **over water**, and so is the lattice-aligned `(-42,\u00b7,10)` \u2014 so the planner returned `requestedGoalWasWet`, substituted her own cell, `already-at-resolved-goal`, one waypoint. That is the freeze; the off-lattice theory is not the cause. The audit's `(-42,20/22)` measure **0.00** from LONG and **0.30/0.46** from her actual recorded 57-sample offer \u2014 rejected numerically, as root required. Authored `W` was checked, not presumed, and also fails (his occupied pose, 2.00 off the short survey). Replaced the arithmetic constant with a chapter-local **selection**: nearest candidate the live footing supports that clears, by segments, his current leg through the untested recorded samples, `E\u2192H`, the common route and his body, by 2.6 units \u2014 and an honest hold when none qualifies. No signed pose/route, clearance, arrival radius, shared nav or agency change. 9 regressions run the **real** `createFooting` over the real generator (every earlier chapter test used a flat fixture that answers \"supported\" over water); 4 fail on pre-repair bytes.\n\n**Checks:** `npm --prefix main run verify`, cwd repo root, **exit 0**, 351 files / **3158** tests (baseline 3139, +19, none removed/changed); log SHA recorded. Rehash: 95/98 unchanged, exactly the 3 commissioned game-source paths changed, zero drift; all counterfactuals restored byte-exact; no destructive git; no GPU.\n\n**Two things for your attention:** `main/src/App.test.tsx` was listed as an allowed path but did not exist \u2014 I created it rather than expanding scope, and recorded that. And no GPU acceptance is claimed: the fresh headed ch13-return capture, the walked-standby capture, and the COMMON 18-unit browser proof remain independent gates.",
+  "ttft_ms": 1262,
+  "type": "result",
+  "duration_ms": 1209366,
+  "uuid": "e76e25cc-58f4-4f75-b227-08f2b3e36c7b",
+  "ttft_stream_ms": 803,
+  "time_to_request_ms": 33,
+  "first_content_frame_ms": 803,
+  "queued_turn_count": 0
+}

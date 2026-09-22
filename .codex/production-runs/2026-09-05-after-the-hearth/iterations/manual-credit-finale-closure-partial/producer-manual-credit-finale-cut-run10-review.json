@@ -1,0 +1,23 @@
+{
+  "at": "2026-09-06T21:50:41.600526+00:00",
+  "captureRef": "verifier/captures/manual-credit-finale/cut-run10/summary.json",
+  "captureSha256": "31dd57b8305cbef5e42673f615bde242f1cd314d0286b37b2fb588c0c567cf65",
+  "classification": "UNPAID INCOMING GAP, NOT an established game recovery defect",
+  "actualCredit": 2.1703337873440898,
+  "frontierZOnFirstTwoStraightLegs": 14.17033378734409,
+  "actualFurthestReturnZ": 14.269255559712665,
+  "unpaidGapUnits": 0.09892177236857513,
+  "nominalTarget": [
+    -42,
+    51.05,
+    14
+  ],
+  "why": "Coarse arrival accepted z14.26925556 for target14; earned frontier is14.17033379. The body never returned to the actual credited frontier before retraversal. Later supported corner crossings cannot certify that missing incoming ground under the explicit unchanged rule.",
+  "rejectedClaim": "Verifier text says clean instrumentation and real reproducible game finding. Bounded later vertex crossings do not prove repayment; this is the same prerequisite distinction as earlier root counterexamples.",
+  "gameSourceRepairAuthorized": false,
+  "sourceUnchanged": true,
+  "requiredPrivateCorrection": "Physically return to E/preE (ordinary controls), verify supported actual body at/before credited frontier with clear margin, then retraverse. No reset, grant, tolerance widening or source patch. Preserve failed attempts.",
+  "continueIndependentWork": "Three coldCOMMON and actualfinale remain valid unrelated tasks; do not stop entire assignment at a confounded recovery attempt.",
+  "originalDeadline": "2026-09-06T22:04:34.043543+00:00",
+  "publicationAuthorized": false
+}

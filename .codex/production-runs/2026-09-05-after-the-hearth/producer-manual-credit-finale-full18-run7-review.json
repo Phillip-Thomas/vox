@@ -1,0 +1,355 @@
+{
+  "at": "2026-09-06T21:42:43.184326+00:00",
+  "captureRef": "verifier/captures/manual-credit-finale/full18-run7/summary.json",
+  "captureSha256": "6d19c4d25786f03d32140eb4744a81d3b738bcc65a1815752340a8bb8f394b23",
+  "classification": "Actual manual full18 and reciprocal completion in retained data; stale probe aliases qualified",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "finalCommon": {
+    "stage": "arrived",
+    "terraUnits": 18,
+    "comparisonProved": true,
+    "finalReferenceOffered": true,
+    "finalReferenceOccupied": false,
+    "workerUnits": 18,
+    "committed": true
+  },
+  "realFinalAnchors": [
+    "anc.cg.complete",
+    "anc.cg.handback"
+  ],
+  "firstCompleteSample": {
+    "tMs": 7145,
+    "leg": "arrived",
+    "travelled": 0,
+    "position": {
+      "x": -48,
+      "y": 51.05,
+      "z": 12
+    },
+    "held": false,
+    "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+    ]
+  },
+  "workerProgressSamples": [
+    {
+      "tMs": 5,
+      "leg": "independent-test",
+      "travelled": 1.304624999707937,
+      "position": {
+        "x": -42,
+        "y": 51.05,
+        "z": 13.304624999707936
+      },
+      "held": false,
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test"
+      ]
+    },
+    {
+      "tMs": 1013,
+      "leg": "independent-test",
+      "travelled": 3.784760001343489,
+      "position": {
+        "x": -42,
+        "y": 51.05,
+        "z": 15.78476000134349
+      },
+      "held": false,
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test"
+      ]
+    },
+    {
+      "tMs": 2018,
+      "leg": "independent-test",
+      "travelled": 6.228635000175237,
+      "position": {
+        "x": -44,
+        "y": 51.05,
+        "z": 16.228635000175238
+      },
+      "held": false,
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test"
+      ]
+    },
+    {
+      "tMs": 3021,
+      "leg": "independent-test",
+      "travelled": 8.669079999941582,
+      "position": {
+        "x": -44.66907999994158,
+        "y": 51.05,
+        "z": 18
+      },
+      "held": false,
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test"
+      ]
+    },
+    {
+      "tMs": 4033,
+      "leg": "independent-test",
+      "travelled": 11.113445000058414,
+      "position": {
+        "x": -47.11344500005841,
+        "y": 51.05,
+        "z": 18
+      },
+      "held": false,
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test"
+      ]
+    },
+    {
+      "tMs": 5039,
+      "leg": "independent-test",
+      "travelled": 13.5930900004089,
+      "position": {
+        "x": -48,
+        "y": 51.05,
+        "z": 16.4069099995911
+      },
+      "held": false,
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test"
+      ]
+    },
+    {
+      "tMs": 6048,
+      "leg": "independent-test",
+      "travelled": 16.033779998773348,
+      "position": {
+        "x": -48,
+        "y": 51.05,
+        "z": 13.966220001226652
+      },
+      "held": false,
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test"
+      ]
+    },
+    {
+      "tMs": 7145,
+      "leg": "arrived",
+      "travelled": 0,
+      "position": {
+        "x": -48,
+        "y": 51.05,
+        "z": 12
+      },
+      "held": false,
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ]
+    },
+    {
+      "tMs": 8154,
+      "leg": "arrived",
+      "travelled": 0,
+      "position": {
+        "x": -48,
+        "y": 51.05,
+        "z": 12
+      },
+      "held": false,
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ]
+    },
+    {
+      "tMs": 9161,
+      "leg": "arrived",
+      "travelled": 0,
+      "position": {
+        "x": -48,
+        "y": 51.05,
+        "z": 12
+      },
+      "held": false,
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ]
+    }
+  ],
+  "actualFarReferenceF": {
+    "name": "offer-the-far-reference",
+    "at": "2026-09-06T21:39:58.853Z",
+    "expectedObjectiveId": "ch13:common:offer-final-reference",
+    "verb": "/offer this end|far reference/i",
+    "objectiveId": "ch13:common:offer-final-reference",
+    "prompts": [
+      "F | Offer this end"
+    ],
+    "may": {
+      "ok": true,
+      "why": null,
+      "prompt": "F | Offer this end"
+    },
+    "pressed": true
+  },
+  "finalGuidance": {
+    "objectiveId": null,
+    "markerLabel": null,
+    "hudText": null,
+    "prompts": []
+  },
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "closing": {
+    "ok": true,
+    "problems": []
+  },
+  "incorrectProbeAssertions": [
+    "Worker units were read from nonexistent aliases while finalCg.common.workerUnits=18 and workerRaw.travelled progresses.",
+    "Expected anc.cg.common-committed/anc.cg.reciprocal-proved are invented names. Retained actual anc.cg.complete/anc.cg.handback confirm completion."
+  ],
+  "qualifications": [
+    "Initial WorkerH-toE2 uncredited setup was not densely observed: first postF sample is already1.3046units into independent-test. Do not label that unobserved gap a measured uncredited leg; source semantics and later coldmovie evidence remain distinct.",
+    "Guidance is empty in recorded completion sample; immediate control feel/timing and storydone versus CGbridgebeatnull require explicit lifecycle evidence.",
+    "Fixture/known route control is not naiveUX/continuousstory. Negativecut/recovery,3coldCOMMON and actualfinale/audio remain.",
+    "No defect closure or chapter acceptance from this producer reading."
+  ],
+  "next": "Reuse retained raw positive evidence; correct aliases in own report/probe, proceed negative/recovery and coldmovie/finale without duplicatefullsuite.",
+  "publicationAuthorized": false
+}

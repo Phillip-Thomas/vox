@@ -1,0 +1,130 @@
+{
+  "schema": "paravoxia.integrationReport.v1",
+  "at": "2026-09-06T21:13:43.093246Z",
+  "pass": "eighth material repair (manual-credit finale, frontier)",
+  "producerReviewRead": ".codex/production-runs/2026-09-05-after-the-hearth/producer-manual-credit-finale-frontier-review.json",
+  "runtimeObserved": false,
+  "gpu": false,
+  "acceptanceAuthority": "none (root reviews the final diff; a separate verifier runs stable candidate checks)",
+  "sourceFilesChanged": [
+    "main/src/story/commonGroundRoute.ts",
+    "main/src/story/commonGroundRoute.test.ts",
+    "main/src/story/StoryDirectorDriver.test.tsx"
+  ],
+  "sourceFilesUnchanged": [
+    "main/src/story/StoryDirectorDriver.tsx",
+    "main/src/story/commonGroundDirector.ts",
+    "main/src/story/commonGroundDirector.test.ts",
+    "main/src/story/commonGroundScore.ts",
+    "main/src/story/commonGroundScore.test.ts"
+  ],
+  "finalHashes": {
+    "main/src/story/commonGroundRoute.ts": "c23d85924b07e832b026e7ccc14906a6d63c743c81081c07e35ed5120b80cd71",
+    "main/src/story/commonGroundRoute.test.ts": "0eb052466acf7a01c952674d1e15790bba5cb8bcb0de0f8a9b9161722d6e9b05",
+    "main/src/story/StoryDirectorDriver.test.tsx": "38e5ab90c173518bff45be95176d6760d8f3b7ea82539c2f500c3d98da302f54",
+    "main/src/story/StoryDirectorDriver.tsx": "85327128819f44f745f58f72300da1595a5a2e0283bcdf8777f9495e608f493c",
+    "main/src/story/commonGroundDirector.ts": "73bceed58ff5f17df70d118d1c1091819e964e3ae5761af2b145956171cf0983",
+    "main/src/story/commonGroundDirector.test.ts": "54f9f76781e00325d63a3d187184827fcfaf9d444e4d98a8ec9a98356bd30023",
+    "main/src/story/commonGroundScore.ts": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+    "main/src/story/commonGroundScore.test.ts": "70630be669128d832814a82491d23c61f56927668f085f564920f4063fa3d535"
+  },
+  "rejectedDraftReconstructed": {
+    "dir": ".codex/production-runs/2026-09-05-after-the-hearth/iterations/manual-credit-finale-rejected-projection-draft/source/",
+    "commonGroundRoute.ts": "13b3974e0dd2862bdb046a9439107fa22ba948a7ab9795341fdd6e311be34864",
+    "commonGroundRoute.test.ts": "e2bd0e8334f637d1cf8784cc298200829c43a470f24e41e6a7c7c3dcc25f9d81",
+    "verifiedAgainstProducerPins": true,
+    "note": "StoryDirectorDriver.test.tsx was edited before its rejected bytes were copied; only the producer's pinned hash 0f10a92bf7da3b7b23977053e55b5732f68c4965b33a316fc701473b2d54584d attests it. Not reconstructed, not claimed."
+  },
+  "candidateArchive": ".codex/production-runs/2026-09-05-after-the-hearth/iterations/manual-credit-finale-frontier-candidate/source/",
+  "fix": {
+    "file": "main/src/story/commonGroundRoute.ts",
+    "function": "nextRouteCoverage",
+    "kind": "bounded, mechanical; no new rule, no new scope, no tolerance/precision/geometry change",
+    "one": "Corner certification now also requires the incoming leg to be covered to the vertex under the existing strict frontier/displacement accounting: certifiedUnits + displacementUnits + 1e-9 >= arcAtVertex(next). A crossing alone no longer certifies a corner when the prior leg frontier lags.",
+    "two": "Ordinary leg movement is strict again: the leg projection is credited only when onLeg <= coverage.units + displacementUnits + 1e-9. No max, no min-clamp toward a distant projection, no bank.",
+    "three": "The single exception is the corner certified in this same update, where the outgoing projection reconciles only the local residual that corner-cutting geometry creates; it is bounded by the next unreached vertex and the next ordinary update is strict again.",
+    "preserved": [
+      "real previous foot and real current foot, never synthesised",
+      "null previous foot drops the chain; breaks discard the motion chain",
+      "earned prefix retained across gaps",
+      "monotone credit",
+      "ROUTE_VERTEX_REACH_UNITS 0.35 unchanged",
+      "corridorRadius unchanged",
+      "routeProgressUnits untouched",
+      "provenVertex / syncedRouteCoverage untouched"
+    ]
+  },
+  "producerCounterexamples": [
+    {
+      "case": 1,
+      "seed": "(-42,51.05,13) delta 0 then (-42,51.05,13.01) delta 0.01",
+      "rejectedDraft": 1.01,
+      "candidate": 0,
+      "alsoAsserted": "still 0 after 200 further frames; physical return to z 12 and re-traversal pays 1.01 exactly",
+      "test": "credits NOTHING for a seeded foot late on the leg, until the start is really re-walked"
+    },
+    {
+      "case": 2,
+      "seed": "{units:.5,reachedVertex:0,foot:null}; (-42,51.05,13.5) then 13.51 delta 0.01",
+      "rejectedDraft": 1.51,
+      "candidate": 0.5,
+      "test": "retains a carried span across a gap without paying for the ground it skipped"
+    },
+    {
+      "case": 3,
+      "seed": "same gap, real feet 13.99 -> 14.01 delta 0.02, a genuine crossing of vertex 1 inside 0.35",
+      "rejectedDraft": "2 / 2.01",
+      "candidate": 0.5,
+      "alsoAsserted": "reachedVertex stays 0; walking the incoming leg for real then certifies the corner and pays 2.01",
+      "test": "does NOT certify a corner from the crossing alone when the incoming leg lags"
+    }
+  ],
+  "predictionBasis": "read from the current code and confirmed by executing the shipped functions in the focused suite; no GPU, no runtime capture is claimed",
+  "retainedEvidence": {
+    "call298": "advances the captured call 298 and the call after it, from real feet \u2014 6.130885899955892 -> 6.294483000367848 -> 6.376281547075248, unchanged. Under the strict per-update rule the projection sits exactly on the honest ceiling (6.130885899955892 + the captured delta), so it is paid as ordinary movement, not as a grant.",
+    "z1582": "STILL refuses the recorded early z 15.82 cut, and never repays it by walking on \u2014 unchanged",
+    "others": [
+      "near corner",
+      "far C",
+      "return / re-traversal to exactly 18",
+      "both corner directions with 0.27 overshoots",
+      "stationary body worth 0",
+      "no previous foot invented across a gap",
+      "span rewritten elsewhere re-derived conservatively"
+    ]
+  },
+  "cg016": {
+    "file": "main/src/story/StoryDirectorDriver.test.tsx",
+    "defectFoundInTheTestHarness": "StoryDirectorDriver registers TWO useFrame callbacks; the harness kept only the last one, so three of its own cancellation assertions ran against the wrong callback and failed. The harness now captures every registered callback and runs them all in registration order.",
+    "behaviourNotRegex": "renders the shipped component, captures the real callbacks, drives the real appState phase and the real document visibility, and asserts against the real exported suspension seam",
+    "added": [
+      "spares the token frame after frame, and never attacks or renews it (400 real done frames, no suspension call, no renewal)",
+      "cancels the moment a real interruption reaches an already-done story (pause and visibility-loss both land on a finished story)"
+    ],
+    "preserved": [
+      "normal handback frame is not cancelled",
+      "pause, visibility loss and leaving play still cancel, done or not",
+      "ordinary live foreground frame never suspends"
+    ],
+    "notDone": [
+      "no broad inactive-foreground grant",
+      "no immediate controls/UX change",
+      "existing 5s deadline and 4.5s release untouched",
+      "no forced attack on the token",
+      "StoryDirectorDriver.tsx itself unchanged"
+    ]
+  },
+  "tests": {
+    "command": "npx vitest run src/story/StoryDirectorDriver.test.tsx src/story/commonGroundRoute.test.ts src/story/commonGroundDirector.test.ts src/story/commonGroundScore.test.ts src/story/storyDirector.test.ts --reporter=verbose",
+    "cwd": "main",
+    "result": "5 files passed, 254 tests passed, exit 0",
+    "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/integration-manual-credit-finale-frontier/focused-tests.log",
+    "routeSuiteAlone": "62 passed (59 before, plus the 3 counterexamples)"
+  },
+  "notClaimed": [
+    "no full verify, no build, no broad suite, no typecheck (tmp/tsc.log is unbound WIP from an earlier pass and is not a final typecheck)",
+    "no browser, no GPU, no publication",
+    "no contract or producer-file change",
+    "no budget reset, no new loop, no owner question"
+  ]
+}

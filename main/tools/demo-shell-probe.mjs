@@ -26,10 +26,10 @@ async function capture(page, name) {
 }
 
 async function waitForPlay(page) {
-  const play = page.getByRole('button', { name: /Play Now|Generating world/ });
+  const play = page.getByRole('button', { name: /Free Play|Generating world/ });
   await play.waitFor({ state: 'visible', timeout: 30_000 });
   await page.waitForFunction(() => {
-    const button = [...document.querySelectorAll('button')].find(item => item.textContent?.includes('Play Now'));
+    const button = [...document.querySelectorAll('button')].find(item => item.textContent?.includes('Free Play'));
     return button instanceof HTMLButtonElement && !button.disabled;
   }, undefined, { timeout: 30_000 });
   await play.click();
@@ -38,7 +38,7 @@ async function waitForPlay(page) {
 
 async function waitForSceneReady(page) {
   await page.waitForFunction(() => {
-    const button = [...document.querySelectorAll('button')].find(item => item.textContent?.includes('Play Now'));
+    const button = [...document.querySelectorAll('button')].find(item => item.textContent?.includes('Free Play'));
     return button instanceof HTMLButtonElement && !button.disabled;
   }, undefined, { timeout: 30_000 });
 }
@@ -130,10 +130,10 @@ await runPage('completed-save-landing', { viewport: { width: 1440, height: 900 }
   await page.waitForTimeout(500);
   await page.goto(new URL('?profile=POTATO', baseUrl).toString(), { waitUntil: 'domcontentloaded', timeout: 30_000 });
   console.error('[demo-shell] completed save: open replay confirmation');
-  await page.getByRole('button', { name: /Return to Site/ }).waitFor();
-  await page.getByRole('button', { name: 'Replay Story' }).evaluate(element => element.click());
+  await page.getByRole('button', { name: /^▶\s+Continue$/ }).waitFor();
+  await page.getByRole('button', { name: 'New Game' }).evaluate(element => element.click());
   await page.waitForTimeout(120);
-  await page.getByRole('button', { name: 'Replay from Beginning' }).waitFor();
+  await page.getByRole('button', { name: 'Start New Game' }).waitFor();
   await capture(page, 'completed-save-landing.png');
   return { screenshot: 'completed-save-landing.png' };
 });
@@ -143,7 +143,7 @@ await runPage('completed-return-to-site', { viewport: { width: 1440, height: 900
   await page.goto(new URL('?story=done&profile=POTATO', baseUrl).toString(), { waitUntil: 'domcontentloaded', timeout: 30_000 });
   await page.waitForTimeout(500);
   await page.goto(new URL('?world=7,7&profile=POTATO', baseUrl).toString(), { waitUntil: 'domcontentloaded', timeout: 30_000 });
-  const button = page.getByRole('button', { name: /Return to Site/ });
+  const button = page.getByRole('button', { name: /^▶\s+Continue$/ });
   await button.waitFor({ state: 'visible', timeout: 30_000 });
   await button.click();
   await page.getByRole('button', { name: /Preparing Site/ }).waitFor({ state: 'visible', timeout: 5_000 });
@@ -153,7 +153,7 @@ await runPage('completed-return-to-site', { viewport: { width: 1440, height: 900
     return key ? JSON.parse(localStorage.getItem(key) ?? 'null').lastWorld : null;
   });
   if (savedWorld?.x !== -1 || savedWorld?.y !== -1) {
-    throw new Error(`Return to Site persisted the wrong world: ${JSON.stringify(savedWorld)}`);
+    throw new Error(`Continue (completed save) persisted the wrong world: ${JSON.stringify(savedWorld)}`);
   }
   return { savedWorld };
 });

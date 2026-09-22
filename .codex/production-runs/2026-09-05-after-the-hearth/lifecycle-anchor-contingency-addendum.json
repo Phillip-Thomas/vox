@@ -1,0 +1,11 @@
+{
+  "schema": "paravoxia.implementationFinding.v1",
+  "recordedAt": "2026-09-06T10:31:27.613779+00:00",
+  "defectId": "CG-IMPL-008",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "source": "integration-lifecycle-repair-progress.md#CG-IMPL-008",
+  "finding": "Engineer causal reading found the same ordered-prerequisite mismatch also applies to seven explicitly contingent ch13 anchors. A first-try legal path can omit them; required later anchors must remain eligible under their actual predicates. This is a source finding pending meaningful tests and independent browser proof.",
+  "contractChangeRequired": false,
+  "boundedDisposition": "Within existing anchor eligibility repair: honor explicitly signed contingency without treating unrelated required anchors as optional or fabricating their activation. No new cue/event or creative amendment. Preserve real event/action causality and ordering where required."
+}

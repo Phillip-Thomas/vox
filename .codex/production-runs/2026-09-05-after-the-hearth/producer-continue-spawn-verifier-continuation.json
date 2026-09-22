@@ -1,0 +1,9 @@
+{
+  "at": "2026-09-06T23:34:51.151210+00:00",
+  "reason": "Verifier prematurely ended using stale old-preview control; no GPU/no game failure. Current candidate preview/ready existed before finish. Continue unused originalbudget with all precise rootprivate feedback directly commissioned.",
+  "originalInvocationRef": "story-verifier-continue-spawn-invocation.json",
+  "absoluteDeadline": "2026-09-06T23:45:21.343614Z",
+  "extraBudgetMinutes": 0,
+  "sourceMutation": false,
+  "runtimeAcceptance": false
+}

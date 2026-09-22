@@ -1,0 +1,107 @@
+// --- Story text channels -------------------------------------------------------
+//
+// One tiny store for every authored line the story shows, keyed by channel:
+//   workorder — the feed HUD's standing directive block (replaced wholesale)
+//   violation — the A2 flood ticker (appended, ring-buffered)
+//   caption   — the awakening voice (bottom-center, typewriter, ttl)
+//   system    — neutral system lines (sleep fade, handoff)
+//
+// Renderers subscribe for structure changes; per-frame animation (typewriter
+// reveal) happens in the renderers' own rAF against `shownAt`.
+
+import { storyNow } from './storyClock.ts';
+
+export type StoryTextChannel = 'workorder' | 'violation' | 'caption' | 'system' | 'audit';
+export interface AuditVoiceCue { surfaceId: 'audit-band' | 'ch10-relay'; slot: 0 | 1 }
+
+export interface StoryTextState {
+  workorder: string[];
+  violation: string[];
+  caption: { text: string; shownAt: number; ttlMs: number } | null;
+  system: { text: string; shownAt: number; ttlMs: number } | null;
+  /** Post-feed regulation voice: caps, top band, OVER the living world — the
+   *  system speaks into the player's frame but no longer owns it. */
+  audit: { text: string; header?: string; shownAt: number; ttlMs: number; voice?: AuditVoiceCue } | null;
+}
+
+const MAX_VIOLATIONS = 7;
+
+const state: StoryTextState = {
+  workorder: [],
+  violation: [],
+  caption: null,
+  system: null,
+  audit: null
+};
+
+const listeners = new Set<() => void>();
+let version = 0;
+
+function emit(): void {
+  version++;
+  for (const listener of listeners) listener();
+}
+
+export function getStoryText(): StoryTextState {
+  return state;
+}
+
+/** Monotonic change token — pair with useSyncExternalStore (state mutates in place). */
+export function getStoryTextVersion(): number {
+  return version;
+}
+
+export function subscribeStoryText(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+/** Replace the standing work-order block (the feed HUD's directive lines). */
+export function setWorkOrder(lines: readonly string[]): void {
+  state.workorder = [...lines];
+  emit();
+}
+
+/** Append a violation line (A2 flood); ring-buffered to the newest few. */
+export function pushViolation(line: string): void {
+  state.violation.push(line);
+  if (state.violation.length > MAX_VIOLATIONS) state.violation.shift();
+  emit();
+}
+
+export function clearViolations(): void {
+  if (state.violation.length === 0) return;
+  state.violation = [];
+  emit();
+}
+
+export function showCaption(text: string, ttlMs = 5200): void {
+  state.caption = { text, shownAt: storyNow(), ttlMs };
+  emit();
+}
+
+export function showSystemLine(text: string, ttlMs = 4000): void {
+  state.system = { text, shownAt: storyNow(), ttlMs };
+  emit();
+}
+
+/** The AUDIT band (ch3-signal onward): the network / the auditor's suit. */
+export function showAuditLine(text: string, header?: string, ttlMs = 6500, voice?: AuditVoiceCue): void {
+  state.audit = { text, header, shownAt: storyNow(), ttlMs, ...(voice ? { voice } : {}) };
+  emit();
+}
+
+export function clearAuditLine(): void {
+  if (!state.audit) return;
+  state.audit = null;
+  emit();
+}
+
+export function clearStoryText(): void {
+  state.workorder = [];
+  state.violation = [];
+  state.caption = null;
+  state.system = null;
+  state.audit = null;
+  emit();
+}

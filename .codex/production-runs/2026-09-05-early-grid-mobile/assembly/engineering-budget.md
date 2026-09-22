@@ -1,0 +1,5 @@
+# Root engineering proposal for native review
+
+Root supplied the missing absolute native budgets under the existing engineering scope. The70-frame archived camera dataset has maximum render.calls70 and programs30; exact source is assembly/originals/shipped-visual-baseline.json. The256 MiB limit for application-owned GL buffers/textures/renderbuffers is a proposed future acceptance bound, not a captured measurement or driver/process/device total. Actual texture-format, attachment and allocation byte accounting is required; renderer.info.memory counts cannot establish bytes. Unobservable resources stay unavailable.
+
+Cinema incremental limits remain stricter: no new programs, lights or draw calls at matched frames, and no new textures/geometries. The absolute memory ceiling grants no incremental resource allowance. Original Cinema and the other directors must review these exact contract values before authentic signature. No source, runtime, browser, build or GPU action was performed by this compiler.

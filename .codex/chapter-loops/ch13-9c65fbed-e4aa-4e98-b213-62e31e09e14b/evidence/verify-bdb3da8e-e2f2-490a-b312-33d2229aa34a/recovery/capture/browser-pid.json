@@ -1,0 +1,7 @@
+{
+ "browserPid": 2787519,
+ "probePid": 2787499,
+ "pulseSink": "paravoxia_finale_window",
+ "source": "browser.newBrowserCDPSession() + SystemInfo.getProcessInfo (type===\"browser\")",
+ "at": "2026-09-07T13:24:17.780Z"
+}

@@ -1,0 +1,122 @@
+{
+  "at": "2026-09-09T01:30:14.385942+00:00",
+  "run": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "status": "BLOCKED_INFRASTRUCTURE",
+  "candidateSha256": "b3c09da4612e74b2fe2b206fa140ca36215c54ae311c786cc9309c5b11ccb10a",
+  "motionRepair": {
+    "testsPassed": 151,
+    "manualAcceptedActions": 8,
+    "walks": 42,
+    "calibrations": 6,
+    "changes": [
+      "Session-local measured calibration reuse with invalidation",
+      "Continuous ordinary held input during travel",
+      "Projection onto observed ground plane",
+      "Braking before observation near tight waypoints",
+      "Stable full3D arrival retained",
+      "Main-frame navigation and calibration diagnostics"
+    ]
+  },
+  "proofs": {
+    "manual": {
+      "status": "passed",
+      "proof": {
+        "ordinaryControls": true,
+        "acceptedAction": 8,
+        "completePath": true,
+        "interrupted": false,
+        "recovered": false,
+        "freshCheckpoint": false,
+        "clickedContinue": false,
+        "ctaBeforeRuntimeReady": false,
+        "stateEqual": false,
+        "newAcceptedAction": 0,
+        "hardware": true,
+        "cleanup": true
+      },
+      "errors": [],
+      "report": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/manual/report.json"
+    },
+    "recovery": {
+      "status": "passed",
+      "proof": {
+        "ordinaryControls": true,
+        "acceptedAction": 2,
+        "completePath": false,
+        "interrupted": true,
+        "recovered": true,
+        "freshCheckpoint": false,
+        "clickedContinue": false,
+        "ctaBeforeRuntimeReady": false,
+        "stateEqual": false,
+        "newAcceptedAction": 6,
+        "hardware": true,
+        "cleanup": true,
+        "videoDecodes": true,
+        "audioDecodes": true,
+        "audioIsolated": true,
+        "mediaCleanup": true,
+        "mediaCaptured": true
+      },
+      "errors": [],
+      "report": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/recovery/report.json"
+    },
+    "continue": {
+      "status": "inconclusive",
+      "proof": {
+        "ordinaryControls": true,
+        "acceptedAction": 2,
+        "completePath": false,
+        "interrupted": false,
+        "recovered": false,
+        "freshCheckpoint": true,
+        "clickedContinue": true,
+        "ctaBeforeRuntimeReady": true,
+        "stateEqual": true,
+        "newAcceptedAction": 0,
+        "hardware": true,
+        "cleanup": true,
+        "videoDecodes": true,
+        "audioDecodes": true,
+        "audioIsolated": true,
+        "mediaCleanup": true,
+        "mediaCaptured": true
+      },
+      "errors": [
+        "newActionSteps[0]: bounded wait on /unfinishedMap/ready was not satisfied"
+      ],
+      "report": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/report.json"
+    }
+  },
+  "blocker": "Continue clicked its real landing CTA and record equality passed; /unfinishedMap/ready stayed false on Tidegarden -1,-1:p1, new accepted actions0. Pre-reload route was Origin -1,-1. Exact saved-world/boot cause not yet established; do not normalize distinct planet identities or weaken readiness.",
+  "reviewEntryCaveat": "The repair changed brief previewQuery to manual ch14-record, but source inspection shows parseStoryParam rejects manual ch14-* direct entry. No final player role was dispatched. This binding still needs a supported earned-entry/save handoff before review. The separate live preview uses supported ch13-survey.",
+  "remaining": [
+    "Diagnose and repair Continue world selection under the checked creation workflow",
+    "Prove equality after real Continue plus a newly accepted action",
+    "Fresh continuous journey and AV proof",
+    "Correct player entry binding before final independent reviews",
+    "Triggered specialist and release checks"
+  ],
+  "workflowBoundary": "One final refinement consumed; no extra creative pass or direct game-source edit was dispatched. Failed acceptance remains unaccepted.",
+  "usage": {
+    "roleLaunches": 11,
+    "modelTurns": 303,
+    "inputTokens": 576354,
+    "cacheReadTokens": 20099968,
+    "outputTokens": 93983
+  },
+  "unknownAccounting": "Builder7 terminal usage remains unknown; these are recorded role totals, not all root/infrastructure work.",
+  "advisoryTargetSecondsRemaining": 10993,
+  "goalBudget": null,
+  "preview": {
+    "ownerPid": 4132127,
+    "serverPid": 4132138,
+    "url": "http://127.0.0.1:41981/",
+    "entryUrl": "http://127.0.0.1:41981/?story=ch13-survey&journeyprobe=1&profile=HIGH",
+    "entry": "Supported manual diagnostic route through CommonGround into Chapter14; not a fresh full-story proof.",
+    "build": "322030545cb3b38a54040863b92cdff886eaa1513ed891480818bb85f97c3d7c",
+    "candidateSha256": "b3c09da4612e74b2fe2b206fa140ca36215c54ae311c786cc9309c5b11ccb10a",
+    "startedAt": "2026-09-09T01:29:29.597Z"
+  },
+  "noPublishing": true
+}

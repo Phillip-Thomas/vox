@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 262083,
+  "stop_reason": "end_turn",
+  "session_id": "01bea283-4bb3-4fbd-9a7f-b057587fddd8",
+  "total_cost_usd": 1.8330105,
+  "usage": {
+    "input_tokens": 54,
+    "cache_creation_input_tokens": 71022,
+    "cache_read_input_tokens": 1235611,
+    "output_tokens": 20127,
+    "output_tokens_details": {
+      "thinking_tokens": 5068
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 71022,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 896,
+        "cache_read_input_tokens": 73785,
+        "cache_creation_input_tokens": 1372,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1372
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1460,
+      "outputTokens": 16,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00154,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 54,
+      "outputTokens": 20127,
+      "cacheReadInputTokens": 1235611,
+      "cacheCreationInputTokens": 71022,
+      "webSearchRequests": 0,
+      "costUSD": 1.8314705,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 5068,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 32,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done. The terminology cleanup is complete and clean.\n\n**Preflight** \u2014 Rehashed all 98 `sourceHashes` from `producer-navigation-wording-direction.json`: 0 mismatches in the working tree and 0 in `iterations/navigation-before-wording/source`; the archived manifest hashes to `ba4c3349\u2026`, matching the direction.\n\n**Edit** \u2014 Only the five allowed paths changed, 25 lines total (comments, two `it(...)` titles, and the test-local `placeholder` const with its 3 references \u2192 `initialSnapshot`). Prose now reads \"initial snapshot\" / \"uninitialized snapshot\" as grammar required. The gate was left untouched; the rejected token no longer appears (case-insensitively) in any of the five files.\n\n**Lexical-only proof** \u2014 Line counts are unchanged in all five files, and every differing line, with the new wording substituted back to the rejected word, is byte-identical to the archived before line: **0 non-lexical changed lines**. Diff preserved at `logs/navigation-wording/wording-lexical.diff`.\n\n**Checks** (cwd `main`, after the final edit):\n- `npm run verify` \u2014 14:04:14Z\u219214:05:16Z, exit 0, **Test Files 350 (350)**, **Tests 3139 (3139)**\n- `npm run story:ux:check` \u2014 14:05:23Z\u219214:05:25Z, exit 0, 9 files / 94 tests\n\n**Runtime** \u2014 I built before the edits and compared: all three `dist/**/*.js` hashes are identical before and after, so the shipped bundle is byte-identical. Checked, not assumed.\n\n**Reports** \u2014 New `navigation-wording-report.json` / `.md` with actual timestamps, the five before/after hashes, the full 93-file untouched hash table, exact check rows (command/cwd/logPath/logSha256/exitCode), the bundle comparison, and limitations (wording-only; no probe/GPU/acceptance claim; same-tree before build; long comment lines deliberately not re-wrapped; gate not rerun here). Inbox reread at 14:06:20Z \u2014 latest entry 13:47:57Z, all historical to this 14:02Z direction, nothing affecting this cleanup.\n\nNo prior report, manifest, check-results, gate, readiness, ledger or contract was overwritten; scripts live under `tmp/navigation-wording/`; no temporary source path was created; no child test process is running.",
+  "ttft_ms": 1580,
+  "type": "result",
+  "duration_ms": 331620,
+  "uuid": "b9ce5af0-1184-49dc-b0f4-d235fae3a633",
+  "ttft_stream_ms": 845,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 845,
+  "queued_turn_count": 0
+}

@@ -1,0 +1,16 @@
+{
+  "role": "manual-endpoint-negative-runtime",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T23:59:17.840664+00:00",
+  "commissionSha256": "665e7536f7ff6a9bf997170fdf61d3ab57bc7df76948a231e56bde397c3afe08",
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "sourceFilesRehashedBefore": 103,
+  "scope": "Actual measured C endpoint-negative followed by physical repayment and eligible heldF; prior hardcodedC labels rejected; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-07T00:02:09.627263+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "20a19e96-f1e4-42ae-9cf9-84591e0b7477",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 103
+}

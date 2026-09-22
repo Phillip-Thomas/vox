@@ -1,0 +1,7 @@
+{
+  "updatedAt": "2026-09-06T15:18:38.969077+00:00",
+  "action": "continue",
+  "activeRole": "flight-discriminator",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "instruction": "Preserve captured90s telemetry despite exit1 ERR_STREAM_WRITE_AFTER_END during shutdown. Validate actual ownedbrowser cleanup and source/probe snapshots; fix logging/receipt offline if needed. Do not repeat GPU merely for a postcapture logger-order error if measurementbytes are valid. Actual cycle alreadyshowspositionresetnear2736/epoch3to5/Origintargetclear. Report measuredfields/limits and the cleanup error honestly."
+}

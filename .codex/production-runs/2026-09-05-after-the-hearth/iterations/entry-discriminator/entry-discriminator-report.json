@@ -1,0 +1,178 @@
+{
+ "schema": "paravoxia.verifier.entryInputDiscriminator.report.v1",
+ "role": "entry-discriminator",
+ "activeRoleAtRun": "entry-discriminator",
+ "question": "WHY do actual canvas clicks now fail pointer lock, whereas the 15:17/15:24 manual-focused witness/input captures on the same app/source succeeded?",
+ "answerOneLine": "The premise did not reproduce: ONE ordinary real canvas click took pointer lock on the FIRST attempt at 16:40:59Z on the SAME source (dc63fba...), SAME preview 38007 (index 1f699b4a, bundle 4f39f1ea), SAME URL, SAME headed GB10 ANGLE recipe, 9 minutes after the 16:31 failure. The 16:31 refusal is therefore NOT a deterministic property of this build/entry, and its cause remains UNPROVED.",
+ "verdict": "POINTER-LOCK-SUCCEEDED \u2014 entry input path (click->lock->keyboard) works under current conditions; prior browser/OS cause NOT confirmed and NOT reproduced",
+ "startedAt": "2026-09-06T16:40:50.079Z",
+ "finishedAt": "2026-09-06T16:41:00.951Z",
+ "session": {
+  "count": 1,
+  "headed": true,
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "entryUrl": "http://127.0.0.1:38007/?story=ch13-survey&journeyprobe=1&debug=1",
+  "viewport": {
+   "width": 1280,
+   "height": 720
+  },
+  "realCanvasClicks": 1,
+  "maxAllowed": 2,
+  "cleanup": {
+   "stopped": true,
+   "invoked": true,
+   "reason": "probe-finally",
+   "requests": 1,
+   "error": null
+  },
+  "software/headless": false,
+  "ownPreviewStarted": false
+ },
+ "preflight": {
+  "control": {
+   "activeRole": "entry-discriminator",
+   "action": "continue",
+   "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c"
+  },
+  "readiness": {
+   "ready": true,
+   "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+   "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c"
+  },
+  "heavyLock": {
+   "lockPath": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+   "fd": 9,
+   "owned": true,
+   "procLock": {
+    "kind": "FLOCK",
+    "scope": "ADVISORY",
+    "mode": "WRITE",
+    "pid": 1619911,
+    "major": 259,
+    "minor": 2,
+    "inode": 8397196
+   },
+   "ancestors": [
+    1619912,
+    1619908,
+    1613015,
+    1613010,
+    722387,
+    722380,
+    349992,
+    7668,
+    6224,
+    4302,
+    2737,
+    1
+   ],
+   "contentionProbe": "refused (lock is live)",
+   "problems": []
+  },
+  "servedIdentity": {
+   "url": "http://127.0.0.1:38007/",
+   "indexSha256": "1f699b4ab3edd8c792de8516920309f9a69c0e77152ec4d21041f4e561430260",
+   "bundleSha256": "4f39f1ea60795e31e681c55c1b339af4a05590ec315e5cc0d712aab7a43b0ec4",
+   "status": {
+    "index": 200,
+    "bundle": 200
+   },
+   "errors": []
+  },
+  "previewBindingOk": true
+ },
+ "sourceFrozen": {
+  "unchanged": true,
+  "manifestBefore": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "manifestAfter": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "watchedBytesBefore": {
+   "main/src/components/CameraControls.tsx": "fd63ae2fcdd8f26c51c6d547817b1806bbd2e69741b29fea276b095d94004bde",
+   "main/src/utils/mobileInput.ts": "b6e4ebc2e3b4d13f6eee0a7ac433bfc4a1b59ce495e90c02c5ca51c8aa19aff0",
+   "main/src/components/mobile/TouchControls.tsx": "d84363940b939616a4b9587469efa4ddc9f06f33d9774018730da380b700dcb9",
+   "main/src/App.tsx": "36abbf3822b828bc0e28f617ba0e5a1b436f39c2dab0b2e86e29683736b81980"
+  },
+  "watchedBytesAfter": {
+   "main/src/components/CameraControls.tsx": "fd63ae2fcdd8f26c51c6d547817b1806bbd2e69741b29fea276b095d94004bde",
+   "main/src/utils/mobileInput.ts": "b6e4ebc2e3b4d13f6eee0a7ac433bfc4a1b59ce495e90c02c5ca51c8aa19aff0",
+   "main/src/components/mobile/TouchControls.tsx": "d84363940b939616a4b9587469efa4ddc9f06f33d9774018730da380b700dcb9",
+   "main/src/App.tsx": "36abbf3822b828bc0e28f617ba0e5a1b436f39c2dab0b2e86e29683736b81980"
+  }
+ },
+ "provedFacts": [
+  "Real click at canvas centre (640,360) -> document.pointerLockElement === canvas after 15 ms; 1 pointerlockchange, 0 pointerlockerror, 0 authored 'Pointer lock request failed:' console.warn.",
+  "Because the lock was granted, the authored CameraControls handleClick necessarily passed ALL THREE of its clauses (target===canvas, no lock held, allowsMousePointerLock true) and element.requestPointerLock() resolved. No early return, no rejection.",
+  "Touch facts measured for the first time (never observed by the prior report): navigator.maxTouchPoints=0, 'ontouchstart' in window=false, innerWidth=1280, matchMedia(pointer:coarse)=false / (pointer:fine)=true / (hover:none)=false; isTouchDevice() recomputed from the same facts = FALSE; NO shipped touch-controls DOM mounted (touch-joystick absent, touch-action-cluster absent, zero data-testid starting 'touch-'). Therefore mobileInput touchActive was false and the touchActive clause of allowsMousePointerLock cannot have caused a refusal in this environment configuration.",
+  "Pre-click state matched the 16:31 record exactly: hasFocus true, visibilityState visible, activeElement body, pointerLockElement null, elementFromPoint(centre) IS the canvas with pointerEvents auto, worldBound true, settled spread 0.0022u, supported true, policy moveSpeedScale 1 / lookMode free, movie flag null, autopilot absent.",
+  "Keyboard path is independently enabled: one ordinary 100 ms W pulse (DIAGNOSTIC ONLY) moved the body from z -5.999999998 to z -6.513055322, displacement 0.513055324 u (non-zero, measured, not inferred); key released; pointer lock held at the pulse.",
+  "navigator.userActivation at the click: isActive true, hasBeenActive true."
+ ],
+ "correctionsToTheCommonManualRuntimeReport": [
+  "'allowsMousePointerLock passed' was an ASSERTION, not a measurement: the 16:31 probe never observed click pointerType, sourceCapabilities.firesTouchEvents, or touchActive/touch-controls DOM. This diagnostic measured those facts (all mouse-compatible, no touch UI) but only for the 16:40 session; they cannot be back-applied to 16:31.",
+  "'the refusal came from the browser/OS layer' is NOT established. The 16:31 probe captured no page console, no pointerlockerror event and no native rejection reason, and OS-level window activation was never measured. The same recipe now passes, so a persistent browser/OS refusal is contradicted as a standing condition.",
+  "document.hasFocus()===true does NOT rule out loss of OS-level window activation; the report's rulesOut list did not eliminate that candidate."
+ ],
+ "unknownsNotMeasured": [
+  "The exact per-click pointerType / sourceCapabilities / isTrusted fields were NOT captured in this session: BOTH read-only observer listeners threw TypeError \"Cannot read properties of undefined (reading 'toLowerCase')\" at click time (2 pageerrors at 16:40:59.153/.155) because this probe's own describe() helper called tagName.toLowerCase() on event.currentTarget, which is window/document. This is a defect in THIS probe's bookkeeping only; it did not touch the game handler (the lock was granted in the same click).",
+  "What differed at 16:31:26-16:31:38 is unmeasured and is now unrecoverable: that session captured no console, no pointerlockerror, no native reason, no OS window-activation state, and it has been cleaned up.",
+  "Foreign window/X11 input-focus ownership at either time was not inspected (out of scope by commission).",
+  "A shader-warmup warning ('initial render released without complete preparation', outcome timeout, elapsedMs 3926) was present in THIS run; whether it was present at 16:31 is unknown because that console was never captured."
+ ],
+ "causeIfProved": "NOT PROVED. Proved only that under current conditions the shipped entry-input path (real click -> authored handleClick -> requestPointerLock -> lock -> keyboard movement) works end to end. The 16:31 failure is non-reproducible with the identical recipe and its cause stays open; OS blame is NOT supported by any measurement.",
+ "minimalNextAction": [
+  "Do NOT accept 'browser/OS pointer-lock refusal' as a standing blocker: it did not reproduce.",
+  "Before any re-commissioned manual COMMON run, the SHARED probe (owned by another role; not edited here) needs three read-only additions inside its existing pointer-lock loop: page console capture, a document 'pointerlockerror' listener, and the click-event fields (isTrusted/pointerType/sourceCapabilities). Then a refusal records its own native reason instead of being inferred.",
+  "One-line fix to THIS owned probe before any reuse: describe() must guard non-Element targets (currentTarget window/document) so the click observer cannot throw.",
+  "No further manual retry loop is warranted from this role."
+ ],
+ "notAcceptance": "This diagnostic is NOT manual playability, NOT a COMMON passage, NOT a defect closure, NOT chapter approval and NOT a new workflow. The W pulse was diagnostic instrumentation of the keyboard path only; no chapter progress was sought or made. No game state was written.",
+ "artifacts": {
+  "probe": "verifier/probes/entry-discriminator/entry-input-discriminator.mjs",
+  "pinnedLogic": "verifier/probes/entry-discriminator/commonPassageLogic.pinned.mjs (byte-identical copy of common-manual-focused/commonPassageLogic.mjs, sha256 24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c; the original was NOT edited)",
+  "capture": "verifier/captures/entry-discriminator/diag-1/",
+  "summary": "verifier/captures/entry-discriminator/diag-1/summary.json",
+  "frames": [
+   "frame-before-click.png",
+   "frame-after-click-1.png",
+   "frame-after-w-pulse.png",
+   "frame-final.png"
+  ],
+  "log": "logs/entry-discriminator/entry-input-discriminator.log",
+  "sourceSnapshots": [
+   "verifier/captures/entry-discriminator/diag-1/source-snapshot/",
+   "verifier/captures/entry-discriminator/diag-1/after/source-snapshot/"
+  ]
+ },
+ "measurements": {
+  "clickToLockMs": 15,
+  "pointerlockchange": 1,
+  "pointerlockerror": 0,
+  "authoredWarn": 0,
+  "wPulse": {
+   "purpose": "DIAGNOSTIC ONLY \u2014 measures whether the keyboard path is independently enabled. Not accepted manual input, not playability, no chapter progress.",
+   "heldMs": 100,
+   "before": [
+    7.999999995027595,
+    50.98897476196289,
+    -5.999999997937532
+   ],
+   "after": [
+    7.999999995027595,
+    50.98897476196289,
+    -6.513055321969643
+   ],
+   "displacement": 0.5130553240321118,
+   "displacementXZ": 0.5130553240321118,
+   "pointerLockAtPulse": true
+  },
+  "touchFacts": {
+   "navigatorMaxTouchPoints": 0,
+   "ontouchstartInWindow": false,
+   "innerWidth": 1280,
+   "isTouchDeviceRecomputed": false,
+   "touchJoystickMounted": false,
+   "touchActionClusterMounted": false,
+   "pointerCoarse": false
+  }
+ },
+ "frameCheck": "frame-before-click / after-click-1 / after-w-pulse / final all render the ch13-survey world with HUD, objective card 'W-7744 - offer a route' and debug panels (debug=1). No blank/black frame, no pop, no missing HUD element referenced by the objective copy."
+}

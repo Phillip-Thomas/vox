@@ -1,0 +1,80 @@
+{
+  "mode": "adaptive",
+  "tokenPolicy": "advisory",
+  "targets": {
+    "roleLaunches": {
+      "used": 12,
+      "target": 14,
+      "remaining": 2,
+      "exceeded": false
+    },
+    "modelTurns": {
+      "used": 323,
+      "target": 400,
+      "remaining": 77,
+      "exceeded": false
+    },
+    "inputTokens": {
+      "used": 646604,
+      "target": 1000000,
+      "remaining": 353396,
+      "exceeded": false
+    },
+    "cacheReadTokens": {
+      "used": 20528640,
+      "target": 20000000,
+      "remaining": 0,
+      "exceeded": true
+    },
+    "outputTokens": {
+      "used": 100201,
+      "target": 250000,
+      "remaining": 149799,
+      "exceeded": false
+    },
+    "roleTurns": {
+      "used": 20,
+      "target": 60,
+      "remaining": 40,
+      "exceeded": false
+    },
+    "roleMs": {
+      "used": 240242,
+      "target": 2700000,
+      "remaining": 2459758,
+      "exceeded": false
+    },
+    "activeMs": {
+      "used": 6732109,
+      "target": 28800000,
+      "remaining": 22067891,
+      "exceeded": false
+    },
+    "endToEndMs": {
+      "used": 19312534,
+      "target": 28800000,
+      "remaining": 9487466,
+      "exceeded": false
+    }
+  },
+  "nearing": [
+    "roleLaunches",
+    "modelTurns",
+    "cacheReadTokens"
+  ],
+  "action": "finish-existing-work",
+  "instruction": "Save progress.md with changed paths, exact outstanding defects, evidence and the next action. Stop optional exploration and polish. Reuse passing checks; finish the current implementation and required proof. Scheduling overruns do not terminate generation.",
+  "accountingGaps": [
+    {
+      "role": "7-build",
+      "transport": {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/transport.json",
+        "sha256": "3014b1a0c54dcaa3ec3c2e0495722df98e9274f5fd1c215d87dbc67f9d130769"
+      },
+      "session": "01a082c7-393c-7fe3-80f3-802a6754d95c",
+      "retainedWorkItems": 60,
+      "tokens": null,
+      "explanation": "Previous scheduling hard stop prevented terminal usage reporting. Reported totals exclude this unknown spend; this role is not replayed as a free call."
+    }
+  ]
+}

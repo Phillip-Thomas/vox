@@ -1,0 +1,102 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "well keep grinding through the blockers, being sure to eliminate stuff that doesnty make sense rather than add to the pile",
+  "contributor": "root, mechanical movie rail repair",
+  "scope": "Remove duplicate Euclidean arrival calculations from both campfire-rest rails and use the walking helper return value. Preserve 2.4-unit stop, actual Rest resolver authority and vigil reveal readiness. Run affected full-story continuity before repeating local cases. No progress grant, new repair controller, creative pass or budget reset.",
+  "status": "focused-hardware-pass-final-verification-pending",
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-rest-repair-20260909/previous-state.json",
+    "sha256": "f38b258d0e87c57544f1005a67304fad0b7f0265a1a0eed31842c0e176e6b5d9"
+  },
+  "priorFailure": {
+    "stage": "verify-final",
+    "message": "Probe continuity failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T04:01:01.001Z"
+  },
+  "captureStop": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-rest-repair-20260909/capture-stop.json",
+    "sha256": "eb072f760584049e632cbc2f68ab028e3dfcff24b57737334e5c2b33a33555c4"
+  },
+  "files": [
+    {
+      "path": "main/src/story/beats/ch3/rail-ch3-await-rest.ts",
+      "before": "ca57f4e768837d567d0766bc59ec784cab206fd36d5cf4d704ee4fea8a828ce9",
+      "after": "8a9aba70f25024cc80671a98bd3e98daaa19450416629c6ccf6e1400b7703d7c"
+    },
+    {
+      "path": "main/src/story/beats/ch4/rail-ch4-vigil.ts",
+      "before": "e83ab339c9c499051154a79cc219a425ebd9825e4a8c3cb26577f4d03d54fcd0",
+      "after": "074c2a5030ad347b65a4799cf5b56a1c5bbbfe70c3dba153ab090c15013ca18d"
+    },
+    {
+      "path": "main/src/story/beats/ch4/rail-ch4-vigil.test.ts",
+      "before": null,
+      "after": "40aafedf9594b0630a43a823da530bd6ff07f65eb164649a43b6417c4e303809"
+    }
+  ],
+  "regression": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-rest-repair-20260909/tests-before.log",
+    "sha256": "0ff918b996cd189867291116c05595b51598d7dc1a01f194a931b606cd43dc3a"
+  },
+  "tests": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-rest-repair-20260909/tests-after.log",
+    "sha256": "948419d11166637d9d092ca9135588dcdec1c62ec7948732f60123446be0b593"
+  },
+  "typescript": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-rest-repair-20260909/typescript.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "build": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-rest-repair-20260909/build.log",
+    "sha256": "da3dcadca3982bf14eed896d42107342d7d2cd9d73f589de3489a7a659ef1dac"
+  },
+  "source": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-rest-repair-20260909/source.json",
+    "sha256": "42f728a0a15d408b41f125c785075ce11c8413e8ff998e106db435432b4705d8"
+  },
+  "preview": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-rest-repair-20260909/preview-owner.json",
+    "sha256": "388c4d4866d377c99bfa794fc4b67374adfdfdc43501aa87b4782cd007225c02"
+  },
+  "runtime": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-rest-repair-20260909/gpu-probe/raw-samples.json",
+    "sha256": "6aa4d094ede8ae1627f2bd1f83563ccc130aeb90753b14dd0590a0d7fd24cb05"
+  },
+  "hardware": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-rest-repair-20260909/gpu-probe.log",
+    "sha256": "03cb046feb2e015e69cb1bfead1a10835e46002ac691ed9fe1ed55dfb2f88312"
+  },
+  "caseOrder": {
+    "before": [
+      "recovery",
+      "manual",
+      "continue",
+      "continuity",
+      "av"
+    ],
+    "after": [
+      "continuity",
+      "recovery",
+      "manual",
+      "continue",
+      "av"
+    ]
+  },
+  "retainedUsage": {
+    "roleLaunches": 14,
+    "modelTurns": 414,
+    "inputTokens": 813455,
+    "cacheReadTokens": 23566776,
+    "outputTokens": 162438
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "at": "2026-09-09T04:05:27.391Z"
+}

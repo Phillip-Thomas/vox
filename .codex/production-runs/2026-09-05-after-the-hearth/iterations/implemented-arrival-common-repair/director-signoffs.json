@@ -1,0 +1,27 @@
+{
+  "schema": "paravoxia.directorSignoffs.v1",
+  "contractRevision": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sameRevision": true,
+  "chapter": {
+    "disposition": "approve-with-notes",
+    "revision": "scene-v3",
+    "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+    "signedBy": "Codex chapter_intent \u2014 Chapter Director",
+    "signedAt": "2026-09-06T16:20:05.923482+00:00"
+  },
+  "score": {
+    "disposition": "approve",
+    "revision": "scene-v3",
+    "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+    "signedBy": "Score Director (/root/score_director)",
+    "signedAt": "2026-09-06T16:20:29.093757Z"
+  },
+  "cinematography": {
+    "disposition": "approve",
+    "revision": "scene-v3",
+    "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+    "signedBy": "Cinematography Director (/root/cinematography_director)",
+    "signedAt": "2026-09-06T16:20:00.624476+00:00"
+  }
+}

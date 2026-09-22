@@ -1,0 +1,288 @@
+ M .claude/agents/chapter-director.md
+ M .claude/agents/scene-naive-viewer.md
+ M .claude/skills/creative-triad/SKILL.md
+ M CLAUDE.md
+ M PARAVOXIA_CREATIVE_COUNCIL.md
+ M PARAVOXIA_SCORE.md
+ M docs/architecture/workflow-orchestration/README.md
+ M docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json
+ M main/mining-metronome-probe.mjs
+ M main/package.json
+ M main/src/App.tsx
+ M main/src/audio/audioCore.test.ts
+ M main/src/audio/audioCore.ts
+ M main/src/audio/audioSettings.ts
+ M main/src/audio/bedEngine.ts
+ M main/src/audio/gameAudio.test.ts
+ M main/src/audio/generative/arrangement.test.ts
+ M main/src/audio/generative/arrangement.ts
+ M main/src/audio/generative/bedConductor.ts
+ M main/src/audio/generative/harmonyBrain.ts
+ M main/src/audio/generative/motif.ts
+ M main/src/audio/generative/phraseMemory.test.ts
+ M main/src/audio/generative/phraseMemory.ts
+ M main/src/audio/generative/soak.test.ts
+ M main/src/audio/generative/soak.ts
+ M main/src/audio/generative/theory.test.ts
+ M main/src/audio/generative/theory.ts
+ M main/src/audio/generative/transport.test.ts
+ M main/src/audio/generative/transport.ts
+ M main/src/audio/generative/tuning.ts
+ M main/src/audio/generative/worldSignals.test.ts
+ M main/src/audio/generative/worldSignals.ts
+ M main/src/audio/musicPrimitives.ts
+ M main/src/audio/scoreEngine.test.ts
+ M main/src/audio/scoreEngine.ts
+ M main/src/audio/sfxEngine.test.ts
+ M main/src/audio/sfxEngine.ts
+ M main/src/audio/soak/audioAnalysis.ts
+ M main/src/audio/soak/excerpts.ts
+ M main/src/audio/soak/offlineRender.ts
+ M main/src/audio/soak/soakPage.ts
+ M main/src/components/CameraControls.tsx
+ M main/src/components/EfficientPlanet.tsx
+ M main/src/components/EfficientPlayer.tsx
+ M main/src/components/EfficientScene.tsx
+ M main/src/components/FaunaField.tsx
+ M main/src/components/FloraField.tsx
+ M main/src/components/ForageField.tsx
+ M main/src/components/Lights.tsx
+ M main/src/components/LooseStoneField.tsx
+ M main/src/components/ShipCockpit.tsx
+ M main/src/components/ShipController.tsx
+ M main/src/components/TreeField.tsx
+ M main/src/components/audio/AudioDirector.tsx
+ M main/src/components/hud/OxygenMeter.tsx
+ M main/src/components/spaceStation/SpaceStationApproach.tsx
+ M main/src/components/spaceStation/SpaceStationInterior.tsx
+ M main/src/components/spaceStation/SpaceStationLighting.tsx
+ M main/src/components/spaceStation/SpaceStationSandbox.tsx
+ M main/src/components/spaceStation/stationMaterial.ts
+ M main/src/components/ui/AudioControls.tsx
+ M main/src/components/ui/CraftingPanel.tsx
+ M main/src/components/ui/LandingMenu.tsx
+ M main/src/game/spaceStation/spaceStationDressing.ts
+ M main/src/game/spaceStation/spaceStationLocomotion.test.ts
+ M main/src/game/spaceStation/spaceStationLocomotion.ts
+ M main/src/game/spaceStation/spaceStationShell.ts
+ M main/src/story/AuditBand.tsx
+ M main/src/story/FreeMarker.tsx
+ M main/src/story/StoryCaptions.tsx
+ M main/src/story/StoryDirectorDriver.tsx
+ M main/src/story/autopilot.ts
+ M main/src/story/autopilotInteractionGaze.test.ts
+ M main/src/story/autopilotSafety.test.ts
+ M main/src/story/autopilotSafety.ts
+ M main/src/story/debrisSalvage.ts
+ M main/src/story/emergentDive.ts
+ M main/src/story/emergentMawRepair.ts
+ M main/src/story/emergentMovieRuntime.test.ts
+ M main/src/story/emergentMovieRuntime.ts
+ M main/src/story/emergentScoreDirector.ts
+ M main/src/story/emergentStoryDirector.test.ts
+ M main/src/story/emergentStoryDirector.ts
+ M main/src/story/feed/RegulationFeedHud.test.tsx
+ M main/src/story/feed/RegulationFeedHud.tsx
+ M main/src/story/feed/SurveyBracketDriver.tsx
+ M main/src/story/feed/SurveyBracketOverlay.tsx
+ M main/src/story/feed/surveyBrackets.test.ts
+ M main/src/story/feed/surveyBrackets.ts
+ M main/src/story/physicalBoarding.ts
+ M main/src/story/prologue/ManifestScreen.tsx
+ M main/src/story/prologue/RegulationCrawl.tsx
+ M main/src/story/prologue/TerminalCorruption.tsx
+ M main/src/story/prologue/VoyageLedger.tsx
+ M main/src/story/sideLens.ts
+ M main/src/story/signedSceneAvRuntime.test.ts
+ M main/src/story/signedSceneAvRuntime.ts
+ M main/src/story/storyDirector.test.ts
+ M main/src/story/storyDirector.ts
+ M main/src/story/storyInputPolicy.ts
+ M main/src/story/storyObjectiveGuidance.test.ts
+ M main/src/story/storyObjectiveGuidance.ts
+ M main/src/story/storyScore.test.ts
+ M main/src/story/storyScore.ts
+ M main/src/story/storyScript.ts
+ M main/src/story/storyState.ts
+ M main/src/story/storyText.test.ts
+ M main/src/story/storyText.ts
+ M main/src/story/tidegardenLandfallBootstrap.ts
+ M main/src/story/tidegardenSettlement.ts
+ M main/src/story/ux/README.md
+ M main/src/story/ux/feedbackCues.ts
+ M main/src/story/ux/objectiveDirector.test.ts
+ M main/src/story/ux/objectiveDirector.ts
+ M main/src/story/ux/storyHudLayout.test.ts
+ M main/src/story/ux/storyHudLayout.ts
+ M main/src/story/world/AuditWorker.tsx
+ M main/src/story/world/DebrisField.tsx
+ M main/src/story/world/EmergentAuditSites.tsx
+ M main/src/story/world/HeroAppleTree.tsx
+ M main/src/story/world/KeelMemory.tsx
+ M main/src/story/world/SideWorkerAvatar.tsx
+ M main/src/story/world/TidegardenSettlementWorld.tsx
+ M main/src/story/world/storyWorld.ts
+ M main/src/story/wreckReconstruction.ts
+ M main/src/ui/hudSurfaces.ts
+ M main/src/utils/efficientVoxelSystem.ts
+ M main/src/utils/faunaField.test.ts
+ M main/src/utils/faunaField.ts
+ M main/src/utils/floraField.ts
+ M main/src/utils/grassField.ts
+ M main/src/utils/mobileInput.test.ts
+ M main/src/utils/mobileInput.ts
+ M main/src/utils/proceduralWorldGenerator.ts
+ M main/src/utils/shipDesign.test.ts
+ M main/src/utils/shipDesign.ts
+ M main/src/utils/surfaceCritters.ts
+ M main/src/utils/surfaceEffects.ts
+ M main/src/utils/worldArrival.ts
+ M main/src/utils/worldGenCache.ts
+ M main/src/utils/worldPrepProtocol.test.ts
+ M main/src/utils/worldPrepProtocol.ts
+ M main/src/voxelTest.tsx
+ M main/tools/chapter-journey-probe.mjs
+ M main/tools/creative-triad-gate.mjs
+ M main/tools/demo-shell-probe.mjs
+ M main/tools/emergent-story-runtime-probe.mjs
+ M main/tools/fauna-geometry-budget.ts
+ M main/tools/mobile-hud-capture.mjs
+ M main/tools/objective-hud-probe.mjs
+ M main/tools/primitive-loop-probe.mjs
+ M main/tools/shot-mobile.mjs
+ M main/tools/shot-ui.mjs
+ M main/tools/spaceStation-shots.mjs
+?? .codex/production-runs/2026-08-11-ch10-station-introduction/decision-brief.json
+?? .codex/production-runs/2026-09-04-audio-10x/
+?? .codex/production-runs/2026-09-04-station-interior-light/
+?? .codex/production-runs/2026-09-05-audio-successor-v6/
+?? .codex/production-runs/2026-09-05-ch9-baseline/
+?? .codex/production-runs/2026-09-05-early-grid-mobile/
+?? .codex/production-runs/2026-09-05-evidence-smoke/
+?? .codex/production-runs/2026-09-story-pipeline/
+?? .codex/production-runs/_template/decision-brief.json
+?? .codex/production-runs/_template/decision-brief.md
+?? PARAVOXIA_AUDIO_10X_PLAN.md
+?? PARAVOXIA_STORY_PIPELINE_REFACTOR_PLAN.md
+?? PARAVOXIA_WORLD_GEN_OFFTHREAD_PLAN.md
+?? docs/architecture/workflow-orchestration/schemas/paravoxia-decision-brief.schema.json
+?? main/src/audio/audioCore.topology.test.ts
+?? main/src/audio/generative/bedConductor.stage5.test.ts
+?? main/src/audio/generative/harmonyRecovery.test.ts
+?? main/src/audio/generative/hitSchedule.test.ts
+?? main/src/audio/generative/hitSchedule.ts
+?? main/src/audio/generative/moodConstraint.test.ts
+?? main/src/audio/generative/moodConstraint.ts
+?? main/src/audio/generative/pulse.test.ts
+?? main/src/audio/generative/pulse.ts
+?? main/src/audio/generative/sectionPlanner.test.ts
+?? main/src/audio/generative/sectionPlanner.ts
+?? main/src/audio/generative/timbre.test.ts
+?? main/src/audio/generative/timbre.ts
+?? main/src/audio/generative/tuning.stage1.test.ts
+?? main/src/audio/mix/
+?? main/src/audio/sfx/
+?? main/src/audio/sfxRecipes.test.ts
+?? main/src/audio/soak/diveScript.test.ts
+?? main/src/audio/soak/loudness.test.ts
+?? main/src/audio/soak/recoveryEvidence.ts
+?? main/src/audio/soak/stageDiagnostics.test.ts
+?? main/src/audio/soak/stemDiagnostics.test.ts
+?? main/src/audio/soak/stemDiagnostics.ts
+?? main/src/audio/soak/stressDeclaration.test.ts
+?? main/src/audio/soak/stressDensity.test.ts
+?? main/src/audio/soak/stressDensity.ts
+?? main/src/audio/voice/
+?? main/src/components/EcologyMount.startup.test.tsx
+?? main/src/components/Lights.startup.test.tsx
+?? main/src/components/audio/AudioListenerDriver.tsx
+?? main/src/components/collisionRange.test.ts
+?? main/src/components/collisionRange.ts
+?? main/src/components/effects/ShaderWarmup.startup.test.tsx
+?? main/src/components/effects/ShaderWarmup.tsx
+?? main/src/components/effects/shaderWarmup.test.ts
+?? main/src/components/effects/shaderWarmup.ts
+?? main/src/components/hud/OxygenMeter.test.tsx
+?? main/src/components/hud/SoundCaption.test.tsx
+?? main/src/components/hud/SoundCaption.tsx
+?? main/src/components/hud/soundCaptionTable.test.ts
+?? main/src/components/hud/soundCaptionTable.ts
+?? main/src/components/spaceStation/StationScreeningDriver.test.ts
+?? main/src/components/spaceStation/StationScreeningDriver.tsx
+?? main/src/components/spaceStation/stationFrameOrder.ts
+?? main/src/components/spaceStation/stationLightContract.test.ts
+?? main/src/components/spaceStation/stationMarkerLayout.test.ts
+?? main/src/components/spaceStation/stationMarkerLayout.ts
+?? main/src/components/spaceStation/stationPresentation.test.ts
+?? main/src/components/spaceStation/stationPresentation.ts
+?? main/src/components/spaceStation/stationScreeningActions.test.ts
+?? main/src/components/terrainColliderParity.test.ts
+?? main/src/game/playerCrafting.ts
+?? main/src/game/spaceStation/spaceStationDressing.test.ts
+?? main/src/game/spaceStation/spaceStationNavigation.test.ts
+?? main/src/game/spaceStation/spaceStationNavigation.ts
+?? main/src/game/spaceStation/stationScreening.ts
+?? main/src/story/AuditBand.test.tsx
+?? main/src/story/autopilot/
+?? main/src/story/autopilotVigilSky.test.ts
+?? main/src/story/beats/
+?? main/src/story/feed/regulationVoice.ts
+?? main/src/story/movieShelterLayout.ts
+?? main/src/story/storyScore.stage3.test.ts
+?? main/src/story/storyWorldHandles.ts
+?? main/src/story/ux/feedbackCues.test.ts
+?? main/src/story/ux/objectiveCommandFeedback.test.ts
+?? main/src/story/ux/objectiveCommandFeedback.ts
+?? main/src/story/ux/objectiveEventFeedback.test.ts
+?? main/src/story/ux/objectiveEventFeedback.ts
+?? main/src/story/ux/objectiveRestore.ts
+?? main/src/story/world/auditLightCardinality.test.tsx
+?? main/src/story/world/fixtures/
+?? main/src/story/world/preparedStoryAnchors.test.ts
+?? main/src/story/world/preparedStoryAnchors.ts
+?? main/src/story/world/storyAnchorResolver.ts
+?? main/src/story/world/storyAnchorTypes.ts
+?? main/src/story/world/storyWorldIdentity.ts
+?? main/src/utils/cockpitScreens.ts
+?? main/src/utils/cockpitSurface.ts
+?? main/src/utils/faunaGeometry.ts
+?? main/src/utils/faunaSculpt.ts
+?? main/src/utils/proceduralWorldGeneratorDeterminism.test.ts
+?? main/src/utils/proceduralWorldGeneratorPreparedFields.test.ts
+?? main/src/utils/rendererBootstrap.test.ts
+?? main/src/utils/rendererBootstrap.ts
+?? main/src/utils/worldGenCache.ensure.test.ts
+?? main/tools/_http-diag.mjs
+?? main/tools/audio-band-edge-probe.mjs
+?? main/tools/audio-check-probe.mjs
+?? main/tools/audio-hit-onset-probe.mjs
+?? main/tools/audio-mood-identity-probe.mjs
+?? main/tools/audio-param-writes-probe.mjs
+?? main/tools/audio-recovery-probe.mjs
+?? main/tools/audio-stage-ab-compare.mjs
+?? main/tools/audio-stage-evidence-probe.mjs
+?? main/tools/audio-stage2-compare.mjs
+?? main/tools/audio-stage5-compare.mjs
+?? main/tools/audio-stress-density.ts
+?? main/tools/audio-thread-cost-probe.mjs
+?? main/tools/baselines/
+?? main/tools/beat-seam-probe.mjs
+?? main/tools/beat-tools.config.mjs
+?? main/tools/boot-attribution.mjs
+?? main/tools/boot-stall-probe.mjs
+?? main/tools/chapter-evidence.mjs
+?? main/tools/chapter-registry-generate.mjs
+?? main/tools/cockpit-probe.mjs
+?? main/tools/deploy.mjs
+?? main/tools/generate-beat-views.ts
+?? main/tools/hit-sync-probe.mjs
+?? main/tools/lib/
+?? main/tools/mood-voicing-evidence.ts
+?? main/tools/run-pure-soak.mjs
+?? main/tools/score-stage5-soak-stats.ts
+?? main/tools/story-ladder-diff.mjs
+?? main/tools/story-ladder-trace.mjs
+?? main/tools/story-recovery-probe.mjs
+?? main/tools/visual-gate.mjs
+?? main/tools/worldgen-recovery-probe.mjs
+?? recovery/

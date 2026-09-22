@@ -1,0 +1,29 @@
+{
+  "schema": "paravoxia.focusedRepairProof.v1",
+  "noncertifying": true,
+  "issue": "Vigil reveal cue fired but connected figures were absent in rendered sky",
+  "fix": "Eleven authored host cells provide sparse coverage on every cube face; original shape, colour, gain and cue timing retained",
+  "complete": true,
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "errors": [],
+  "revealObserved": {
+    "min": 0,
+    "max": 1
+  },
+  "finalBeat": "ch4-arrival",
+  "visualObservation": "Connected glowing star figures visible in actual production t75/t80/t85 frames; absent from prior t80/t85 frames despite reveal value1",
+  "beforeFrames": [
+    "focused/t80.png",
+    "focused/t85.png"
+  ],
+  "afterFrames": [
+    "production/t75.png",
+    "production/t80.png",
+    "production/t85.png"
+  ],
+  "raw": "production/result.json",
+  "source": "production/source.json",
+  "buildSha256": "d38888843391fd29bbdeef85d79a0c18fabc7e6215d24907b7decd9dc73ce431",
+  "limits": "Focused diagnostic chapter entry; does not certify fresh continuity or independent artistic acceptance",
+  "at": "2026-09-09T17:24:18.387176+00:00"
+}

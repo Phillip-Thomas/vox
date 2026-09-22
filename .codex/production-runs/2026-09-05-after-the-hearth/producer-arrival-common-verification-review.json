@@ -1,0 +1,28 @@
+{
+  "schema": "paravoxia.producer.evidenceReview.v1",
+  "reviewedAt": "2026-09-06T18:16:14.981967+00:00",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "reportRef": "verification-arrival-common-report.json",
+  "reportSha256": "69b4fcd447dc95be443ee768ac21ba73f5c67c7532d29d305d5e7bfa26359934",
+  "invocationRef": "story-verifier-arrival-common-invocation.json",
+  "isAcceptance": false,
+  "reuseSuccessfulChecks": true,
+  "acceptedMeasurements": [
+    "Independent verify351files3172tests/build exit0 exact source.",
+    "Three cold fixture-start LONG/COMMON physical strict18/18 completions, final anchors, cleared objective; hardwareGB10 and clean cleanup.",
+    "Actual return-flight to Origin/on-foot W-earned survey."
+  ],
+  "qualifications": [
+    "No grounded-Origin/flight-control sample exists; first Disembark row44648ms is alreadyFPS. Boarded-surface duration unmeasured.",
+    "Actual origin-landed/survey first sampled73473ms; later74432/74249 logger events are delayed, not first occurrence.",
+    "teleportNudgesTotal sampled2460/356/354 times, all0; separate nudges/backstops aliases unexposed.",
+    "Cold journey entry does seed prerequisite fixture ch13-survey; final passage proof is earned. Not continuous earned return.",
+    "Whole cursor arrays include prior phase18->0; monotonicity only within COMMON after reset. Some corner indices unsampled despite strict18 completion.",
+    "COMMON W-test standby at T is not proof of earlier survey LONG standby. Clearances to issued route do not prove distances to accepted drawn coordinates.",
+    "Report writtenAt18:05 contradicts its clocknote18:04:09; provenance uses actual invocation finish18:10:49.508594.",
+    "First run outcome BUDGET-EXHAUSTED-INCONCLUSIVE retained although physically completed; runs2/3 reached done, no requested10secondhold.",
+    "Absence of final message in two viewed frames is not proof of absence everywhere."
+  ],
+  "rootEvidenceBasis": "Raw flight/journey samples and viewed frames recorded in root-current-checkpoint.md; producer-arrival-common-gpu-handoff.json binds all four post-finally cleanup receipts.",
+  "remaining": "Manual, earnedContinue, SHORT, fullstation/fullstory, variants/performance/AV and independent acceptance reviews."
+}

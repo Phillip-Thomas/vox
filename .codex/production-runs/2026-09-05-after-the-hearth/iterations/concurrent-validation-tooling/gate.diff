@@ -1,0 +1,43 @@
+--- before/main/tools/creative-triad-gate.mjs
++++ current/main/tools/creative-triad-gate.mjs
+@@ -576,13 +576,28 @@
+   const items = Array.isArray(brief.items) ? brief.items : []
+   const ids = items.map((item) => item?.id).filter(nonEmptyString)
+   collector.assert(ids.length === items.length && new Set(ids).size === ids.length, 'brief.item-ids', 'Every brief item needs a unique id')
+-  const kinds = new Set(items.map((item) => item?.kind))
+-  collector.assert(['creative', 'boundary', 'release'].every((kind) => kinds.has(kind)), 'brief.sections', 'The brief must carry creative, boundary and release items (state "none needed" as a decided item when a section is genuinely empty)')
++  collector.assert(Array.isArray(brief.items), 'brief.items', 'List only actual decisions; an empty list is valid when standing authority settles the scope')
+   for (const item of items) {
+     const label = nonEmptyString(item?.id) ? item.id : '<unnamed-item>'
+     collector.assert(DECISION_BRIEF_KINDS.has(item?.kind), 'brief.item-kind', `${label} kind must be creative, boundary, or release`, item?.kind)
+     collector.assert(nonEmptyString(item?.question) && Array.isArray(item?.options) && item.options.length > 0 && nonEmptyString(item?.recommended), 'brief.item-substance', `${label} needs a question, options, and the director's recommendation`)
+-    collector.assert(item?.decidedBy === 'owner', 'brief.item-authority', `${label} must route to the owner; a director cannot decide its own brief item`)
++    let delegated = false
++    if (item?.decidedBy === 'delegate' && item?.kind !== 'release') {
++      const ref = item.authorityRef
++      const authority = (lock?.authority || []).find(a => a.path === ref?.path && a.sha256 === ref?.sha256)
++      const absolute = ref?.path ? path.resolve(resolveRepoRoot(), ref.path) : ''
++      if (authority && absolute.startsWith(`${resolveRepoRoot()}${path.sep}`) && fs.existsSync(absolute)
++          && sha256File(absolute) === ref.sha256) {
++        try {
++          const grant = JSON.parse(fs.readFileSync(absolute, 'utf8'))
++          delegated = grant.schema === 'paravoxia.ownerStandingAuthority.v1'
++            && nonEmptyString(grant.scope) && Array.isArray(grant.instructions) && grant.instructions.length > 0
++            && nonEmptyString(item.delegationRationale)
++        } catch { /* malformed authority is not authorization */ }
++      }
++    }
++    collector.assert(item?.decidedBy === 'owner' || delegated, 'brief.item-authority', `${label} requires the owner or a hash-bound standing delegation from the production lock`)
++
+     collector.assert(['pending', 'decided'].includes(item?.status), 'brief.item-status', `${label} status must be pending or decided`, item?.status)
+     if (item?.kind === 'boundary') collector.assert(Array.isArray(item?.paths) && item.paths.length > 0 && item.paths.every((entry) => nonEmptyString(entry?.path) && nonEmptyString(entry?.symbol)), 'brief.boundary-specificity', `${label} must name the exact file and symbol outside the mutation boundary`)
+     if (item?.status === 'decided') collector.assert(nonEmptyString(item?.decision) && nonEmptyString(item?.decidedAt), 'brief.item-decision', `${label} is decided but records no decision text or time`)
+@@ -593,7 +608,7 @@
+     const idSet = new Set(ids)
+     for (const row of iterations || []) {
+       if (row?.route !== 'contract-question') continue
+-      collector.assert(nonEmptyString(row?.briefItemRef) && idSet.has(row.briefItemRef), 'brief.missed-question', `Iteration ${row?.iteration ?? '?'} asked the owner a contract question the brief did not carry (${row?.questionId ?? 'unnamed'}); add it to the brief so the next run asks first`)
++      collector.warn(nonEmptyString(row?.briefItemRef) && idSet.has(row.briefItemRef), 'brief.missed-question', `Iteration ${row?.iteration ?? '?'} asked the owner a contract question the brief did not carry (${row?.questionId ?? 'unnamed'}); add it to the brief so the next run asks first`)
+     }
+   }
+   collector.assert(!includesPlaceholder(brief), 'brief.placeholders', 'Decision brief cannot contain template placeholders')

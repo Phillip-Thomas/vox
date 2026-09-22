@@ -1,0 +1,88 @@
+{
+  "updatedAt": "2026-09-06T06:21:16.073599+00:00",
+  "status": "bounded-instrument-proof-before-final-council-signature-and-scene-contract",
+  "objective": "Design, implement, and verify a creative plot-aligned Paravoxia continuation after hearth restoration. User delegates in-scope approvals.",
+  "candidate": "Common Ground ch13: voluntary return to unresolved local audit; walked trace, reciprocal witnesses, limited independent test; no alliance or A5.",
+  "sceneRun": ".codex/production-runs/2026-09-05-after-the-hearth",
+  "runtimeMutated": false,
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+preexisting-dirty-worktree",
+  "standingAuthority": "owner-standing-authority.json",
+  "activeRoles": {
+    "chapter": "/root/chapter_intent",
+    "score": "/root/score_director",
+    "cinematography": "/root/cinematography_director"
+  },
+  "reviewScratch": "/tmp/paravoxia-next-story-prep",
+  "transport": "Safe-mode direct role commissions work. Use default permission mode, not plan mode, for readonly CLI reviews; tools allowlist controls access. Inventory report was harvested losslessly after unavailable plan-write finalization; canon/blind completed normally.",
+  "next": [
+    "Harvest geometry-instrument exact12/24proof and select only qualifyinglayout through three lanes; do not credit intermediate/tmp results",
+    "Finalize v2candidate/register, exactthreefreshsignatures+sixrecipientnotes/delegateddecision; bounded docsiteration3 and finalindependentalignment/cohesion",
+    "Finish sceneintent/brief then independentScore/Cinematreatments and exactscenecontract/gate",
+    "Implement chapter-localstate/world/score/rails + strict externalstationreturntransition + real continuousmovie",
+    "Verify behavior/registry/save/UX/fullrepo and actualcold journeys plushardware when sharedlockreleases; deliverownedpreview"
+  ],
+  "gpu": "Shared flock still held by Paraform wrapper PIDs3624863/3624874/3624875. Current software baselines exist and are honestly limited; hardware proof not run.",
+  "completed": [
+    "Source/copy inventory harvested intact",
+    "201 exact authored strings AST/JSX checked; two dynamic Bell labels source-supported; intent-free corpus hashed",
+    "Fresh canon audit completed on claude-opus-5",
+    "Fresh blind no-tools safe-mode review completed on claude-opus-5, hash/isolation verified",
+    "Three separate lane/source grounding artifacts and integration survey",
+    "Same common packet and hashes supplied to all three creative directors"
+  ],
+  "sessions": {
+    "inventoryReport": "harvested from /tmp/paravoxia-next-story-prep/inventory-authored.json",
+    "canonSession": "fc599b24-5d72-47db-9518-c340109ce967",
+    "blindReceipt": "blind-transport-receipt.json"
+  },
+  "treatments": {
+    "chapter": {
+      "path": "chapter-story-treatment.md",
+      "sha256": "3d33d3239555b4884086e3c75e9c67df3d6c7f409ea73045faaaea4a372676c2"
+    },
+    "score": {
+      "path": "score-story-treatment.md",
+      "sha256": "90444483eca1966a274722cd07236a63df6e41f8924894a5ed330cb700518032"
+    },
+    "cinematography": {
+      "path": "cinematography-story-treatment.md",
+      "sha256": "3362343c3e0e70d55fdf5e388b71cdbcd8b21c79cc14305d8a0165f83085ff7c"
+    }
+  },
+  "baseline": {
+    "typecheck": "passed before source edits, baseline-typecheck.json",
+    "software": "Both baseline runs complete; currentplayer-world/shore groundingonly, no actor/coreproof. Newactor/core/rig staging mandatory after signed implementation.",
+    "hardware": "shared heavy-job lock remains reserved by Paraform; final proof required"
+  },
+  "signedCandidate": {
+    "path": "story-authority-candidate.md",
+    "sha256": "790b2894a48d6eb2a24816dede8ff8d911448e217e18f394d25be35444cd87ae",
+    "decisionsSha256": "017bafdae9b1e7148c5f037b3e79ac44fc850aaa2a26e4ca1f303bd6346690fd",
+    "signatureValidationChecks": 77,
+    "ownerDecision": "owner-story-decision.json",
+    "documentationPatch": "implementation-diff.patch",
+    "authorityChecks": 1094,
+    "smokePassed": true
+  },
+  "activeWork": {
+    "cohesion": "First independent judge REVISE4.633, archived iterations/council-v1; v2 owning-lane repairs drafted, final re-review remains",
+    "geometry": "Exact full qualifier PASS:12range,36long/16short,18common, shiftedW and finalTerra2unitclear. Final literalheadcap endpoint-contact qualifier rootowned Opus session55714 pending; no othersearch.",
+    "targetedBaseline": "Complete11SwiftShaderframes; actorhidden, actualrestoredcoremissingfixture. Normalized limited currentframes into productionbaseline, no futureeventclaim",
+    "audioBaseline": "3currentOfflineAudioContext10sexcerpts decoded clean; creativeScore triedaudioinput unsupported, noneheard; exactlimits in score-current-audio-grounding.md",
+    "integrationPreparation": "Complete implementation-interface-plan.md + scene-contract-assembly-notes.md; one mistaken Origin home-entry criterion corrected by Chapter to Tidegarden",
+    "chapterIntent": "Final-ready draft update running /root/chapter_intent using backedinstrument, exactinterfaces and finalfarreference; geometryselection remains pending",
+    "sceneAssembly": "Mechanical draft schema assembly rootowned Opus session66201; Stage2 Score complete, Cinema completing. Six scene notes next.",
+    "traceCandidate": "Complete isolated patch candidate15/15pure tests and strictTS; producer-review.md records required snapshot additions before live adoption. No runtime mutations."
+  },
+  "draftCandidateV2": {
+    "candidate": "story-authority-candidate.v2-draft.md",
+    "decisions": "canon-decision-register.v2-draft.json",
+    "status": "notselectedgeometry/notsigned/notadopted",
+    "apparatusAuthority": [
+      "arena-instrument-repair-chapter.md",
+      "arena-instrument-repair-cinema.md",
+      "arena-instrument-repair-score.md"
+    ],
+    "priorVersions": "iterations/council-v1/"
+  }
+}

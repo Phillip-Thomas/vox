@@ -1,0 +1,49 @@
+{
+  "schema": "paravoxia.diagnosticCheckpoint.v1",
+  "noncertifying": true,
+  "wallMs": 1788975515512,
+  "url": "http://127.0.0.1:42911/?story=1&movie=1&journeyprobe=1&journeylane=continuous&journeymode=movie&profile=HIGH",
+  "story": {
+    "active": true,
+    "chapter": "ch1",
+    "beat": "ch1-track",
+    "runId": 1
+  },
+  "objective": {
+    "id": "ch1:track:tracking-transfer",
+    "kind": "wait",
+    "markerLabel": "TRACKING VIEW",
+    "workOrder": [
+      "HOLD POSITION."
+    ],
+    "requiresMarker": false,
+    "health": "ready",
+    "revision": 7
+  },
+  "storageState": {
+    "cookies": [],
+    "origins": [
+      {
+        "origin": "http://127.0.0.1:42911",
+        "localStorage": [
+          {
+            "name": "pvx.v1.world.-1,-1",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"structures\":[],\"campfires\":[],\"trees\":[],\"stones\":[],\"forage\":[],\"flora\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.voxels",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"generationSchemaVersion\":1,\"fingerprint\":115629,\"removed\":[[6,25,-2]],\"added\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.player",
+            "value": "{\"pos\":[19.865238189697266,52.789859771728516,-6],\"forward\":[0,0,-1],\"pitch\":0}"
+          },
+          {
+            "name": "pvx.v1.global",
+            "value": "{\"inventory\":{\"berry\":2,\"faulty_maw\":1,\"wood\":2,\"stone\":3,\"biofiber\":1,\"flint\":1},\"mawCharge\":100,\"era\":\"primitive\",\"milestones\":[\"story:started\",\"story:choice:dispenser:unlock\",\"story:choice:lights:dimall\",\"story:choice:question:unknown\",\"story:name:moss\",\"story:choice:light:blinds\",\"story:choice:bell:ring\",\"story:choice:diagnostic:replay\",\"story:choice:replay2:remember\",\"story:choice:hum:join\",\"story:choice:hum2:continue\",\"story:choice:anomaly:ack\",\"story:debris-scattered:3\",\"story:tone:low\",\"story:cell:100\",\"story:prologue-seen\",\"story:debris:0\",\"story:debris:1\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1\",\"dayPhase\":0.25,\"vitals\":{\"health\":100,\"hunger\":49.888866666476,\"thirst\":59.93329999971387,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":\"-1,-1\",\"currentWorldId\":\"-1,-1\",\"parkedPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16]},\"systemPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16],\"velocity\":[0,0,0]},\"locationMode\":\"surface\",\"repairHistory\":[]}}"
+          }
+        ]
+      }
+    ]
+  }
+}

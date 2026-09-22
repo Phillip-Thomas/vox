@@ -1,0 +1,135 @@
+{
+  "schema": "paravoxia.humanDecision.v1",
+  "runId": "2026-09-04-audio-10x",
+  "contractVersion": "draft-v4",
+  "contractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+  "reviewer": "owner (Phillip Thomas)",
+  "reviewedAt": "2026-09-04T00:00:00Z",
+  "decision": "scope-and-direction-approved",
+  "decisionNote": "This record captures the owner's scope and direction decisions taken on 2026-09-04, before any contract exists. It is not a taste approval and not a release decision. The per-stage headed audition and the final taste decision remain outstanding, and this file is rewritten to bind the frozen contract hash when the parent contract is signed.",
+  "headedRealGpuEvidence": false,
+  "headedRealGpuEvidenceNote": "None yet. The headed gate for this run is an owner audition of A and B excerpts per stage, over the six owner excerpts in main/src/audio/soak/excerpts.ts, rendered from the combined music and SFX bus. Headless proof cannot approve timbre, loudness, width or feel.",
+  "scopeMatchesProductionLock": true,
+  "scopeNote": "The 2026-09-04 owner direction expands the production lane to protected audio paths for the scope of PARAVOXIA_AUDIO_10X_PLAN.md only. Shipped copy remains protected, story content is out of scope, the demo release surface stays at ch4-arrival, and publish is not granted.",
+  "ownerDirectionQuotes": [
+    "implement the full plan",
+    "I trust your judgement on all the questions"
+  ],
+  "decisions": [
+    {
+      "id": "owner-2026-09-04-voice-granular-not-tts",
+      "decidedAt": "2026-09-04",
+      "question": "Plan section 6 question 1: granular vocoder baseline only, or text-to-speech at alive?",
+      "decision": "Granular vocoder, no text-to-speech.",
+      "rationale": "The narrator is the hidden pillar; a recognisable synthetic speech voice would resolve the ambiguity the copy law protects, and it would import latency, a network dependency and an asset policy into a system whose whole virtue is that it is generated from the same seed as the world. The granular voice climbs the era ladder with everything else, snaps to the published chord's pitch classes so it can never be a wrong note, and is deterministic under the run seed. The bus stays ready for a later human-voice asset drop rather than a rebuild.",
+      "affects": [
+        "audio-stage-6-voice-bus"
+      ]
+    },
+    {
+      "id": "owner-2026-09-04-loudness-minus18-lufs-minus1-dbtp",
+      "decidedAt": "2026-09-04",
+      "question": "Plan section 6 question 2: loudness target.",
+      "decision": "Minus 18 LUFS integrated, minus 1 dBTP true peak, on the summed game bus.",
+      "rationale": "This is a slow, atmospheric game whose emotional peaks are BLOOMs and dives. Film-like dynamics, with the bed near minus 20 to minus 21 and BLOOM peaks near minus 14 short term, leave 3 to 4 dB for SFX transients to sit on top of the bed rather than fight it, which is the condition for the duck matrix to be subtle. Minus 16 is a streaming and mobile norm that would flatten exactly those dynamics. The player's volume slider, not the master, closes the gap on quiet devices.",
+      "affects": [
+        "audio-stage-1-bed-timbre-mastering",
+        "audio-stage-2-game-mix-buses",
+        "audio-stage-6-voice-bus"
+      ]
+    },
+    {
+      "id": "owner-2026-09-04-sfx-recipe-identical-not-byte-identical",
+      "decidedAt": "2026-09-04",
+      "question": "Plan section 6 question 3: is the byte-identical SFX policy lifted for stages 4 and 5?",
+      "decision": "Byte-identical SFX policy is lifted, replaced by recipe-identical plus a spectral-fingerprint regression.",
+      "rationale": "The twenty shipped recipes keep their synthesis shape: oscillator types, filter path, envelope shape and nominal centre values. Stage 4 may add seeded per-trigger variation, position and room. The protection moves from bit equality, which was never true because the noise source was Math.random, to a per-event spectral fingerprint in the combined render, comparing centroid, bandwidth, duration and peak within tolerance. Stage 0's seeded noise is confirmed as a determinism repair.",
+      "affects": [
+        "audio-stage-4-spatial-sfx",
+        "audio-stage-5-long-form"
+      ]
+    },
+    {
+      "id": "owner-2026-09-04-mobile-lean-budget-not-gate",
+      "decidedAt": "2026-09-04",
+      "question": "Plan section 6 question 4: mobile CPU budget.",
+      "decision": "Mobile is a budget, not a gate: a lean quality tier in the mix snapshot.",
+      "rationale": "A quality field in the mix snapshot with two tiers. Full, for desktop: seven-oscillator unison, three drive stages, five rooms. Lean, for mobile and low tier: three-oscillator unison, one shared drive, two rooms via a feedback-delay reverb instead of convolvers. Audio main-thread cost target 1.5 ms per frame desktop and 3 ms per frame lean, measured by the existing score:fps probe. The SwiftShader gate stays the release gate, and lean is proven on it with the CPU throttled four times.",
+      "affects": [
+        "audio-stage-1-bed-timbre-mastering",
+        "audio-stage-2-game-mix-buses",
+        "audio-stage-4-spatial-sfx"
+      ]
+    },
+    {
+      "id": "owner-2026-09-04-audio-lane-expansion",
+      "decidedAt": "2026-09-04",
+      "question": "May this run change shipped audio paths, which CLAUDE.md protects as a contracted baseline?",
+      "decision": "Protected audio lane expanded for the scope of PARAVOXIA_AUDIO_10X_PLAN.md.",
+      "rationale": "The owner's 2026-09-04 direction to implement the full plan expands the production lane to the protected audio paths named in that plan's stage scopes, routed through the creative triad and its gates. The expansion is bounded to that plan: shipped copy strings stay protected everywhere, story content is out of scope, world generation and post-processing are untouched, the demo release surface stays at ch4-arrival, and publishing remains a separate owner decision.",
+      "affects": [
+        "audio-stage-1-bed-timbre-mastering",
+        "audio-stage-2-game-mix-buses",
+        "audio-stage-3-composed-sync",
+        "audio-stage-4-spatial-sfx",
+        "audio-stage-5-long-form",
+        "audio-stage-6-voice-bus"
+      ]
+    },
+    {
+      "id": "HD-06",
+      "date": "2026-09-04",
+      "decidedBy": "orchestrator interpreting owner direction 'implement the full plan' (plan Stage 6: captions + visual parity)",
+      "decision": "Production lock expanded by seven bounded visual-parity files for sound captions and deaf-player parity; copy remains protected.",
+      "status": "recorded; owner may revoke"
+    },
+    {
+      "id": "HD-07",
+      "date": "2026-09-04",
+      "decidedBy": "orchestrator interpreting owner direction 'implement the full plan'",
+      "decision": "Lock expanded by physicalBoarding.ts, spaceStationDock.ts, objectiveDirector.ts(+test) for room-preset signals and objective clear-reason emission; semantics/copy unchanged.",
+      "status": "recorded; owner may revoke"
+    },
+    {
+      "id": "HD-08",
+      "date": "2026-09-05",
+      "decidedBy": "production lead under owner delegation ('I trust your judgement on all the questions')",
+      "decision": "Loudness architecture: (1) TAIL_REFERENCE_GAIN_DB +1.99 stays as the single named, tested, level-preserving reference gain; the contract's 'no makeup anywhere' rule is amended to 'no dynamic and no hidden gain; exactly one static named reference gain, unity-in-effect, owner-changeable only'. Rationale: it reproduces the level every Stage 1 term was measured through; re-levelling the whole game by 2 dB is a taste decision, not a repair. (2) The BLOOM short-term -14 +/-1 LU window is an arrangement property, not a tail property (the subtract-only tail can open 0.21 LU); it moves to Stage 5 as a BLOOM-only arrangement rail with the evidence the auditor specified (composedSpread field; Stage 5 offline probe showing S-max -14 while bed I stays -20.5 and TP <= -1; owner A/B). Not waived. (3) The -18 LUFS integrated summed-bus target is re-evaluated after Stage 4 gives SFX their designed energy; until then the measured -20.4 to -21.7 on stress scripts is recorded, not failed.",
+      "status": "recorded; folded into draft-v4",
+      "boundContractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d"
+    },
+    {
+      "id": "HD-09",
+      "date": "2026-09-05",
+      "decidedBy": "production lead under owner delegation",
+      "decision": "Limiter wording: the contract calls the tail a 'bounded ceiling with measured margin >= 0.5 dB at +12 dBFS', not a true-peak limiter guarantee; no AudioWorklet is warranted. Event queue: dedupe is per flush within a frame plus held-level across frames; contract wording amended to match, or the queue keyed to the frame clock if Stage 3/4 find a same-frame double.",
+      "status": "recorded; folded into draft-v4",
+      "boundContractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d"
+    }
+  ],
+  "evidenceRefs": [
+    "production-lock.json",
+    "production-lock.md",
+    "shipped-reference-map.md",
+    "PARAVOXIA_AUDIO_10X_PLAN.md"
+  ],
+  "tasteRationale": "No taste decision has been made. The owner delegated the four composer questions to judgement and commissioned the whole plan; the acceptance of each stage is a separate headed audition of A and B excerpts, which has not begun.",
+  "dissentDisposition": "No dissent recorded yet; the directors have not been commissioned.",
+  "acceptedExceptions": [
+    {
+      "id": "AE-01",
+      "date": "2026-09-05",
+      "defectRefs": [
+        "S2-D1"
+      ],
+      "exception": "TAIL_REFERENCE_GAIN_DB +1.99 dB retained as the single named, tested, level-preserving static reference gain in a makeup-free chain; the literal 'no makeup anywhere' rule is replaced in draft-v4 by 'no dynamic and no hidden gain; exactly one static named reference gain, owner-changeable only'.",
+      "acceptedBy": "production lead under owner delegation (HD-08 item 1)",
+      "boundContractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d"
+    }
+  ],
+  "outstandingOwnerGates": [
+    "headed-owner-audition-per-stage",
+    "final-taste-decision",
+    "publish-decision"
+  ]
+}

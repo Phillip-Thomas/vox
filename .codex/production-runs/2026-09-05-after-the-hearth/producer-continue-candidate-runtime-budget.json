@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-06T22:21:39.145536+00:00",
+  "decidedBy": "delegate",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "scope": "20actualwallminutes: real earned Continue equality and new accepted action, corrected private probe reuse",
+  "priorBudgetsNotRewritten": true,
+  "sameProductionRun": true,
+  "sourceMutationAuthorized": false,
+  "publicationAuthorized": false,
+  "previousGpuOwnerFinishedAt": "2026-09-06T22:20:28.980640+00:00",
+  "previousThreeCaptureCleanupComplete": true
+}

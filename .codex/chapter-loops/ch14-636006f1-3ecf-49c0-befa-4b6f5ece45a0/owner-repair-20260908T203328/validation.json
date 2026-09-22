@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "handoffSha256": "3c7ccec03a2b4d93632259285ece4b6ce5fe4af36adc4ed9d770bf43c06071ce",
+  "checks": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/tests-final.log",
+      "sha256": "4f544db0a55bd2ae0d7d294a95239d7b150b19d12e0d30f57b98b3245160b2d5"
+    }
+  ],
+  "review": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/engineering/finish-handoff-review-delta/result.json",
+    "sha256": "27468a83a84faa3b86de291f32399efc96e80e0de5d2ff710a9c8eba78761947"
+  },
+  "testCount": 113,
+  "meaning": "Exact prepared transport passed113 tests and independent initial plus scoped delta review. No gameplay/AV acceptance claimed."
+}

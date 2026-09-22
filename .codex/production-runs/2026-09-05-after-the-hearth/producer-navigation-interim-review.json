@@ -1,0 +1,148 @@
+{
+  "schema": "paravoxia.producerNavigationInterimReview.v1",
+  "recordedAt": "2026-09-06T14:25:25.297782+00:00",
+  "authoredBy": "root producer inspecting raw current evidence; not a verifier final report",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "sourceFilesRehashed": 98,
+  "isChapterAcceptance": false,
+  "survey": {
+    "outcome": "FAIL-STALL",
+    "elapsedMs": 193239,
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "headed": true,
+    "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.revision-ready"
+    ],
+    "finalDiagnostic": {
+      "beat": "ch13-survey",
+      "bodyCentre": [
+        -41.980812072753906,
+        52.7889289855957,
+        12.155896186828613
+      ],
+      "bodyPose": [
+        -41.96532611762542,
+        50.98899560205237,
+        12.155896155875269
+      ],
+      "up": [
+        -0.008603308404711149,
+        0.9999629908574083,
+        1.719630260114575e-08
+      ],
+      "groundOffsetUnits": 1.8,
+      "supported": true,
+      "worldBound": true,
+      "rail": {
+        "action": "walk",
+        "target": [
+          -42,
+          51.05,
+          9
+        ],
+        "interactionId": null,
+        "reason": "standing clear of the span he is testing",
+        "arriveRadius": 0.6
+      },
+      "railCursor": 18,
+      "score": {
+        "beat": "ch13-survey",
+        "mood": "demonstrating",
+        "finalTextureSeconds": null
+      },
+      "diagnostic": {
+        "beat": "ch13-survey",
+        "installWatch": "unknown",
+        "anchors": [
+          "anc.cg.repeated-measure",
+          "anc.cg.demonstration-opened",
+          "anc.cg.survey-started",
+          "anc.cg.trace-drawn",
+          "anc.cg.route-offered",
+          "anc.cg.revision-ready"
+        ],
+        "holdReason": "body-clearance",
+        "worker": {
+          "leg": "testing-span",
+          "travelled": 0.48656999947428703,
+          "legLength": 1.0356557942388147,
+          "held": true,
+          "sampledIndex": 0,
+          "permitted": 1.0356557942388147,
+          "position": {
+            "x": -41.959498142996736,
+            "y": 50.989947221992686,
+            "z": 13.158507095006934
+          }
+        },
+        "survey": {
+          "phase": "held",
+          "approached": true,
+          "samples": 42,
+          "lengthUnits": 35.30846079301215,
+          "walkedUnits": 37.40584652304187,
+          "testedPrefix": 41,
+          "tailRevision": 0,
+          "witnessOffered": false,
+          "witnessOccupied": false,
+          "acceptedSamples": 0,
+          "acceptedClass": null
+        },
+        "common": {
+          "stage": "none",
+          "terraUnits": 0,
+          "comparisonProved": false,
+          "finalReferenceOffered": false,
+          "finalReferenceOccupied": false,
+          "workerUnits": 0,
+          "committed": false
+        }
+      },
+      "pendingAnchors": []
+    },
+    "summaryRef": "verifier/captures/navigation/survey-movie-1/summary.json",
+    "summarySha256": "13f1b9bef0ce24a734be316fac94084aca457398a73bc183cb5872e4026f0da9",
+    "traceSha256": "83e9859c3531b53fffff9092a51f29a4bec33415402d8f1d14b66d41c9e13bb0",
+    "cleanup": {
+      "schema": "paravoxia.verifier.ownedSessionGuard.v1",
+      "probe": "cg-journey-probe.mjs",
+      "writtenAt": "2026-09-06T14:19:04.779Z",
+      "phase": "post-finally",
+      "supersedesForCleanupState": "summary.json .cleanup (captured pre-finally; its sessionStopped is a pre-cleanup value, not the outcome)",
+      "state": "stopped",
+      "cleanupCompleted": true,
+      "label": "cg-journey-probe owned session",
+      "adopted": true,
+      "adoptedAtMs": 1788704151221,
+      "cleanupRequests": 1,
+      "sessionStopInvocations": 1,
+      "sessionStopped": true,
+      "cleanupError": null,
+      "cleanupReason": "probe-finally",
+      "stopsOnlyProbeOwnedSession": true,
+      "stopsRootPreview": false,
+      "killsProcesses": false,
+      "hidesFailureExitCode": false,
+      "note": "Recorded AFTER the finally block ran. This is the actual cleanup outcome of the browser session this probe owned. A stop-failed or never-requested state is reported honestly and does NOT alter the capture outcome, the retained evidence, or the process exit code. It says nothing about the game.",
+      "outcomeUnchanged": true
+    },
+    "conclusion": "Original drawing exact-goal stall passed through actual finite route. Later distinct standby target/body-clearance stall remains; no whole route/common success."
+  },
+  "incompleteFixtureContinue": {
+    "bytes": 1305,
+    "savedSamples": 5,
+    "savedPhase": "drawing",
+    "beforeRef": "verifier/captures/partial-continue/run-5/worldsave-pvx.v1.world.-1_-1.json",
+    "afterRef": "verifier/captures/partial-continue/run-5/worldsave-after-continue-pvx.v1.world.-1_-1.json",
+    "beforeSha256": "5252dfd74a2391ecbae41b99a619703b9e25999f093fb733593094d97463f514",
+    "afterSha256": "5252dfd74a2391ecbae41b99a619703b9e25999f093fb733593094d97463f514",
+    "byteIdentical": true,
+    "conclusion": "Actual data preservation succeeds for incomplete survey fixture. Missing origin-landed lawfully resumes sibling-world departure; primary earned-return Continue remains unmeasured. Verifier provisional routing-defect claim retracted at14:23:08."
+  },
+  "remaining": "Verifier continues actual return-before-save journey and independent manual checks; all final scene-v2 acceptance/reviews remain pending."
+}

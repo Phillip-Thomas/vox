@@ -1,0 +1,189 @@
+{
+ "schema": "paravoxia.audit.returnFlightSource.v1",
+ "recordedAt": "2026-09-06T10:53:55.707683-04:00",
+ "auditor": "return-flight-source-auditor (opus, read-only)",
+ "isAcceptance": false,
+ "isDefectFinding": false,
+ "isRepairAuthorization": false,
+ "isLivePhysics": false,
+ "scope": "ch13-return: Origin not landed within 240s. Source reasoning only.",
+ "clockReceipts": {
+  "startedAt": "2026-09-06T10:47:58-04:00",
+  "rehashBeforeAt": "2026-09-06T10:48:14.156255-04:00",
+  "rehashAfterAt": "2026-09-06T10:53:55.707683-04:00",
+  "boundedMinutes": 20
+ },
+ "manifestRehash": {
+  "files": 98,
+  "beforeMismatches": [],
+  "afterMismatches": [],
+  "beforeEqualsAfter": true,
+  "driftedPaths": []
+ },
+ "writesPerformed": [
+  "return-flight-source-audit.md",
+  "return-flight-source-audit.json",
+  "return-flight-source-audit/scratch/rehash-before.json",
+  "return-flight-source-audit/scratch/rehash-after.json"
+ ],
+ "capturedInputs": {
+  "dir": "verifier/captures/partial-continue/earned-1",
+  "originLanded": false,
+  "returnMs": 240913,
+  "railPlan": {
+   "action": "fly",
+   "target": null,
+   "interactionId": null,
+   "reason": "crossing to Origin",
+   "arriveRadius": 0.6
+  },
+  "anchors": [
+   "anc.cg.hatch-boarded",
+   "anc.cg.lift-committed"
+  ],
+  "objectiveId": "ch13:return:origin",
+  "omittedFields": [
+   "systemFlight.pose.position",
+   "systemFlight.pose.velocity",
+   "systemFlight.target",
+   "systemFlight.locationMode",
+   "systemTravelAssist.ready"
+  ],
+  "evidence": "C"
+ },
+ "causalChain": [
+  {
+   "step": 1,
+   "file": "main/src/story/commonGroundDirector.ts",
+   "line": 2270,
+   "claim": "In flight and !onOrigin(), the ch13 rail can only publish action 'fly'; 'land'/'exit-ship' are unreachable until onOrigin() flips.",
+   "evidence": "S"
+  },
+  {
+   "step": 2,
+   "file": "main/src/story/commonGroundDirector.ts",
+   "line": "804-806",
+   "claim": "onOrigin() === (getSystemFlightSnapshot().activePlanetId === STORY_PRIMARY_WORLD_ID '-1,-1'); a store read, not a distance.",
+   "evidence": "S"
+  },
+  {
+   "step": 3,
+   "file": "main/src/story/commonGroundDirector.ts",
+   "line": "862-869",
+   "claim": "tickReturn returns early on !onOrigin(), gating ch13OriginLanded, anc.cg.origin-landed and advanceToBeat('ch13-survey'). Single choke point.",
+   "evidence": "S"
+  },
+  {
+   "step": 4,
+   "file": "main/src/components/SystemTravelDriver.tsx",
+   "line": "108-260",
+   "claim": "activePlanetId only changes through this gate: enabled + phase deep_space + controlMode flight + 6deg aim cone + targetReady + activation envelope.",
+   "evidence": "S"
+  },
+  {
+   "step": 5,
+   "file": "main/src/game/systemTravelDriverModel.ts",
+   "line": "1,68-79",
+   "claim": "Activation needs centre distance <= nominalFaceRadius(50, starSystem.ts:74) + 135 = 185.",
+   "evidence": "D"
+  },
+  {
+   "step": 6,
+   "file": "main/src/state/systemTravelAssist.ts",
+   "line": "47-50",
+   "claim": "While assist target ready===false the inward speed limit is clamp((d-300)*0.65,0,320): the ship is held at 300 units and cannot reach the 185 activation shell. Applied at ShipController.tsx:899-925 in deep_space.",
+   "evidence": "D"
+  }
+ ],
+ "boundedCandidates": [
+  {
+   "id": "A-unready-approach-hold",
+   "evidence": "D/U",
+   "statement": "Crossing executes but the ship parks on the unready 300-unit approach shell; activePlanetId never changes, so no landing is possible in any budget.",
+   "restsOn": [
+    "systemTravelAssist.ts:47-50",
+    "systemTravelDriverModel.ts:68-79",
+    "commonGroundDirector.ts:804-806"
+   ]
+  },
+  {
+   "id": "B-lock-cancel-prep-thrash",
+   "evidence": "D/U",
+   "statement": "Loss of the 6deg cone cancels the lock (SystemTravelDriver.tsx:238-240) and the world preparation (App.tsx:1238-1241); a cancelled prep resolves false (App.tsx:1215-1222), so targetReady may never latch. Same observable as A.",
+   "restsOn": [
+    "SystemTravelDriver.tsx:238-240",
+    "App.tsx:1215-1241"
+   ]
+  }
+ ],
+ "contractMismatchOrOmission": [
+  {
+   "kind": "implementation-omission",
+   "evidence": "S",
+   "detail": "CommonGroundRailContext (commonGroundDirector.ts:2432-2461) has no aim/attitude primitive and the ch13 rail vocabulary has no term between 'fly' and 'land'; nothing in the ch13 lane observes or reports the unready-hold state."
+  },
+  {
+   "kind": "possible-contract-mismatch",
+   "evidence": "D",
+   "detail": "The 240000ms earned-probe budget is not derived from any source constant; steps 5-6 admit a wait bounded by worldgen preparation rather than flight time."
+  }
+ ],
+ "ruledOut": [
+  {
+   "path": "speed/distance budget",
+   "why": "slot1 radius 2200+u*1100 (starSystem.ts:213-224) vs MAX_SPEED 320 clamped regardless of boost (ShipController.tsx:89,896-898) => ~7-11s crossing.",
+   "evidence": "D"
+  },
+  {
+   "path": "sprint:false in ch13 fly case vs ch10 sprint:true",
+   "why": "BOOST_MULTIPLIER 3.2 scales acceleration only (ShipController.tsx:86,868,886); costs ~4s of spool, not 236s. Real divergence (commonGroundDirector.ts:2520 vs rail-ch10-ask.ts:66-67) but non-causal.",
+   "evidence": "D"
+  },
+  {
+   "path": "tidegarden route offline / single-body manifest",
+   "why": "storyState.ts:568-571 seeds repairStage flight_ready for beats >= ch7-board; shipRestoration.ts:97,110,160 commits TIDEGARDEN_ROUTE_MILESTONE, so App.tsx:1144-1146 systemTravelEnabled holds.",
+   "evidence": "D"
+  },
+  {
+   "path": "world-id identity mismatch in movie steering",
+   "why": "starSystem.ts:90-93 slot0 -> '-1,-1'; ShipController.tsx:340-343 builds with bodyCountOverride 2, so the descriptor targetWorldId names exists.",
+   "evidence": "D"
+  },
+  {
+   "path": "board/launch not earned or controls unwired",
+   "why": "both AV anchors captured; commonGroundDirector.ts:857-860 only notes lift-committed once phase!=='surface', proving virtual jump reached ShipController.",
+   "evidence": "C/S"
+  },
+  {
+   "path": "seated-capsule stillness as flight stall",
+   "why": "commonGroundDirector.ts:2516-2521 asserts only controls.forward in flight; a constant bodyCentre is by design and is not used as evidence.",
+   "evidence": "S"
+  },
+  {
+   "path": "marker distance 435m as celestial distance",
+   "why": "marker space; unrelated to the >=185-unit celestial shells.",
+   "evidence": "D"
+  },
+  {
+   "path": "departure world selection / survey-fixture Continue",
+   "why": "declared lawful and separate by commission.",
+   "evidence": "commission"
+  }
+ ],
+ "uncertainty": "The trace omits every field separating A, B and 'never moved'. Source alone cannot decide; no game defect is asserted. If d<185 with ready:true and activePlanetId unchanged, both candidates are wrong and the fault lies in the handoff commit, which was not read.",
+ "smallestLiveDiscriminator": {
+  "noNewBuildOrGpu": true,
+  "samples": [
+   "getSystemFlightSnapshot().pose.position and .pose.velocity -> centre distance to Origin [0,0,0] and inward speed",
+   "getSystemFlightSnapshot().target {kind,worldId} and .locationMode",
+   "getSystemTravelAssistTarget() {worldId, ready}"
+  ],
+  "readings": {
+   "plateau~300 with ready:false": "candidate A (ready/target flapping separates B)",
+   "d constant 2200-3300 with |v|~0": "neither; thrust/steering never applied",
+   "d<185 with ready:true and activePlanetId unchanged": "handoff commit, outside this audit"
+  }
+ },
+ "smallestRecommendation": "Add only those three per-second reads to the running earned-2 probe and re-run that lane. Change nothing under main/. Decide the candidate before opening any source repair.",
+ "report": "return-flight-source-audit.md"
+}

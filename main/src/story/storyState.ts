@@ -1,3 +1,6 @@
+import { unfinishedMapState } from './unfinishedMapState.ts';
+import { beginGuidedObjectiveRestore } from './ux/objectiveRestore.ts';
+import { BEAT_METADATA } from './beats/metadata.generated.ts';
 import { useSyncExternalStore } from 'react';
 import {
   setVoxelRealityStage,
@@ -37,7 +40,8 @@ import {
 import {
   debugStartInDescent,
   debugStartInSpace,
-  resetTravel
+  resetTravel,
+  restoreFlightAtLocation
 } from '../state/spaceFlight.ts';
 import {
   bootstrapTidegardenHabitatDebug,
@@ -72,6 +76,10 @@ export type StoryChapter =
   | 'none' | 'prologue'
   | 'ch1' | 'ch2' | 'ch3' | 'ch4' | 'ch5' | 'ch6' | 'ch7' | 'ch8' | 'ch9'
   | 'ch10'
+  // chapter 13 — Common Ground. The station visit (ch11) and the return and
+  // install (ch12) are the prior contract's transaction, not beats of their
+  // own; ch13 re-activates at the restored core they produced.
+  | 'ch13' | 'ch14'
   | 'complete';
 
 export type StoryBeat =
@@ -103,6 +111,11 @@ export type StoryBeat =
   // The signed chapter ends at the threshold — a bearing held. After that
   // hand-back, ordinary free flight may continue into the station approach.
   | 'ch10-cold' | 'ch10-ask' | 'ch10-transit'
+  // chapter 13 — Common Ground. Re-activated from `done` free play at the
+  // ACTUAL restored Tidegarden core (on foot, the real install receipt held),
+  // not at Origin: the home she goes back from is the one she just repaired.
+  | 'ch13-home' | 'ch13-return' | 'ch13-survey' | 'ch13-common'
+  | 'ch14-record' | 'ch14-scar' | 'ch14-question' | 'ch14-return'
   | 'done';
 
 export interface StorySnapshot {
@@ -175,6 +188,24 @@ export const STORY_MILESTONES = {
   ch10StationResolved: 'story:ch10-station-resolved',
   ch10Complete: 'story:ch10-complete',
   /**
+   * Chapter 13 — Common Ground. Spelled exactly as the signed scene contract
+   * spells its beats, hyphenated like chapter 10's. The ch11 station and ch12
+   * return receipts are NOT re-declared here: they are owned by
+   * `spaceStationStory.ts` and `stationReturnStory.ts` and remain the prior
+   * contract's evidence, which this chapter reads and never reissues.
+   */
+  ch13FaultReviewed: 'story:ch13-fault-reviewed',
+  ch13ReturnChosen: 'story:ch13-return-chosen',
+  ch13OriginLanded: 'story:ch13-origin-landed',
+  ch13RouteTested: 'story:ch13-route-tested',
+  ch13ReciprocalCrossed: 'story:ch13-reciprocal-crossed',
+  /** The reciprocal proof. Commits exactly once, at his actual arrival. */
+  ch13Complete: 'story:ch13-complete',
+  ch14SurveyIndexed: 'story:ch14:survey-indexed',
+  ch14ScarObserved: 'story:ch14:scar-observed',
+  ch14QuestionRetained: 'story:ch14:question-retained',
+  ch14Complete: 'story:ch14:complete',
+  /**
    * Earned at Chapter 10's threshold hand-back. Until then, the dock offer,
    * approach advisory, canDock grant and KeyF commit-and-navigate path stay
    * inert in story worlds. Once the introduction has resolved the station as a
@@ -190,7 +221,16 @@ export const STORY_MILESTONES = {
   complete: 'story:complete'
 } as const;
 
-let snapshot: StorySnapshot = { active: false, chapter: 'none', beat: null, runId: 0 };
+const STORY_RUN_SESSION_KEY = 'pvx.v1.story-run';
+function sameTabRunId(): number {
+  try {
+    const id = Number(window.sessionStorage.getItem(STORY_RUN_SESSION_KEY));
+    return Number.isSafeInteger(id) && id >= 0 ? id : 0;
+  } catch { return 0; }
+}
+
+// Docking changes pages within this tab; it does not start a new story run.
+let snapshot: StorySnapshot = { active: false, chapter: 'none', beat: null, runId: sameTabRunId() };
 
 const listeners = new Set<() => void>();
 
@@ -200,6 +240,10 @@ function emit(): void {
 
 function setSnapshot(patch: Partial<StorySnapshot>): void {
   snapshot = { ...snapshot, ...patch };
+  if (patch.runId !== undefined) {
+    try { window.sessionStorage.setItem(STORY_RUN_SESSION_KEY, String(snapshot.runId)); }
+    catch { /* Session storage may be unavailable outside the browser. */ }
+  }
   // Dev affordance (mirrors window.__game): lets capture harnesses watch beats.
   if (typeof window !== 'undefined') {
     (window as unknown as { __storyBeat?: string | null }).__storyBeat = snapshot.beat;
@@ -245,6 +289,32 @@ export function storyEntryPoint(): StoryEntryPoint {
   // Chapter 10 is a RE-ACTIVATION out of `done`, so its rungs are read before
   // the two-world terminal below: a save that has noticed the cold resumes
   // inside ch10, and a save that finished ch10 returns to free play.
+  // Chapter 13 is read BEFORE chapter 10's terminal for the same reason chapter
+  // 10 is read before the two-world terminal: it, too, re-activates out of
+  // `done`, so a save inside it must resume inside it. The invitation itself is
+  // NOT resumed here — an unreviewed fault leaves the player in free play and
+  // the live watch opens the chapter at the actual core, exactly as ch10 does.
+  const fieldRecord = unfinishedMapState(id => hasMilestone(id));
+  if (hasMilestone(STORY_MILESTONES.ch13Complete) && fieldRecord.opened) {
+    if (fieldRecord.complete) {
+      if (hasMilestone(STORY_MILESTONES.ch14Complete)) return { chapter: 'complete', beat: 'done' };
+    }
+    if (fieldRecord.retained) {
+      if (hasMilestone(STORY_MILESTONES.ch14QuestionRetained)) return { chapter: 'ch14', beat: 'ch14-return' };
+    }
+    if (fieldRecord.scar) {
+      if (hasMilestone(STORY_MILESTONES.ch14ScarObserved)) return { chapter: 'ch14', beat: 'ch14-question' };
+    }
+    if (fieldRecord.indexed) {
+      if (hasMilestone(STORY_MILESTONES.ch14SurveyIndexed)) return { chapter: 'ch14', beat: 'ch14-scar' };
+    }
+    return { chapter: 'ch14', beat: 'ch14-record' };
+  }
+  if (hasMilestone(STORY_MILESTONES.ch13Complete)) return { chapter: 'complete', beat: 'done' };
+  if (hasMilestone(STORY_MILESTONES.ch13RouteTested)) return { chapter: 'ch13', beat: 'ch13-common' };
+  if (hasMilestone(STORY_MILESTONES.ch13OriginLanded)) return { chapter: 'ch13', beat: 'ch13-survey' };
+  if (hasMilestone(STORY_MILESTONES.ch13ReturnChosen)) return { chapter: 'ch13', beat: 'ch13-return' };
+  if (hasMilestone(STORY_MILESTONES.ch13FaultReviewed)) return { chapter: 'ch13', beat: 'ch13-home' };
   if (hasMilestone(STORY_MILESTONES.ch10Complete)) return { chapter: 'complete', beat: 'done' };
   if (hasMilestone(STORY_MILESTONES.ch10BearingClaimed)) return { chapter: 'ch10', beat: 'ch10-transit' };
   if (hasMilestone(STORY_MILESTONES.ch10FabricationRefused)) return { chapter: 'ch10', beat: 'ch10-ask' };
@@ -291,7 +361,7 @@ export function stageForStoryPoint(entry: StoryEntryPoint): VoxelRealityStage {
   if (entry.chapter === 'complete') return 'alive';
   if (entry.chapter === 'ch5' || entry.chapter === 'ch6' || entry.chapter === 'ch7'
     || entry.chapter === 'ch8' || entry.chapter === 'ch9'
-    || entry.chapter === 'ch10') return 'alive';
+    || entry.chapter === 'ch10' || entry.chapter === 'ch13' || entry.chapter === 'ch14') return 'alive';
   if (entry.chapter === 'ch4') {
     return entry.beat === 'a4-exhale' && hasMilestone(STORY_MILESTONES.a4)
       ? 'alive'
@@ -345,6 +415,11 @@ export const STORY_BEAT_ORDER: readonly StoryBeat[] = [
   // beat: `done` is the runtime terminal (the registry gate pins it as the last
   // authority beat) and free play is where the chapter both starts and ends.
   'ch10-cold', 'ch10-ask', 'ch10-transit',
+  // ch13 opens from `done` free play too, and is ordered after ch10 and before
+  // the terminal for the same reason: `done` is the runtime terminal and free
+  // play is where this chapter both starts and hands back.
+  'ch13-home', 'ch13-return', 'ch13-survey', 'ch13-common',
+  'ch14-record', 'ch14-scar', 'ch14-question', 'ch14-return',
   'done'
 ];
 
@@ -367,7 +442,10 @@ const JUMP_ALIASES: Record<string, StoryBeat> = {
   base: 'ch9-settle',
   hearth: 'ch9-hearth',
   ch10: 'ch10-cold',
-  station: 'ch10-transit'
+  station: 'ch10-transit',
+  ch13: 'ch13-home',
+  survey: 'ch13-survey',
+  common: 'ch13-common'
 };
 
 /** True ONLY for a `?story=<beat|alias>` dev jump — not `?story=1`, not the menu
@@ -407,20 +485,7 @@ function clearStalePreFireCampfires(beat: StoryBeat): void {
 }
 
 export function chapterForBeat(beat: StoryBeat): StoryChapter {
-  // `ch10-*` is tested FIRST: `'ch10-cold'.startsWith('ch1')` is true, so the
-  // monochrome-ladder clause below would otherwise claim the station chapter.
-  return beat.startsWith('ch10') ? 'ch10'
-    : beat === 'crawl' || beat === 'manifest' || beat === 'voyage' || beat === 'deflect' || beat === 'crash' ? 'prologue'
-    : beat === 'descent' || beat.startsWith('ch1') || beat === 'a1-ramp' ? 'ch1'
-    : beat.startsWith('ch2') || beat === 'a2-awakening' ? 'ch2'
-    : beat.startsWith('ch4') || beat === 'a4-exhale' ? 'ch4'
-    : beat.startsWith('ch5') ? 'ch5'
-    : beat.startsWith('ch6') ? 'ch6'
-    : beat.startsWith('ch7') ? 'ch7'
-    : beat.startsWith('ch8') ? 'ch8'
-    : beat.startsWith('ch9') ? 'ch9'
-    : beat === 'done' ? 'complete'
-    : 'ch3';
+  return beat === 'done' ? 'complete' : BEAT_METADATA[beat].chapter;
 }
 
 function beatIndex(beat: StoryBeat): number {
@@ -433,6 +498,10 @@ export function parseStoryParam(): 'full' | StoryBeat | null {
   try {
     const raw = new URLSearchParams(window.location.search).get('story');
     if (!raw) return null;
+    // Screening the record starts at its predecessor's real on-foot test.
+    // No ch13 proof or ch14 receipt is seeded by this diagnostic alias.
+    if (raw === 'ch14-record' && new URLSearchParams(window.location.search).get('movie') === '1') return 'ch13-survey';
+    if (raw.startsWith('ch14-')) return null;
     if (raw === '1') return 'full';
     if (raw in JUMP_ALIASES) return JUMP_ALIASES[raw];
     return (STORY_BEAT_ORDER as readonly string[]).includes(raw) ? (raw as StoryBeat) : null;
@@ -582,6 +651,50 @@ function seedForBeat(beat: StoryBeat): void {
     markMilestone(m.ch10RelayAnswered);
     markMilestone(m.ch10BearingClaimed);
   }
+  // Chapter 13's rehearsals carry the WHOLE prior boundary, because the chapter
+  // is entered at the restored core and its entry facts are exactly the ch11
+  // and ch12 receipts. The receipt ids are written literally, by the same rule
+  // as the ch10 settlement block above: importing spaceStationStory or
+  // stationReturnStory here would close a cycle. They are the prior contract's
+  // strings and are reproduced, never reissued — a rehearsal seeds the boundary
+  // it is not playing, it does not re-run the transaction.
+  const inChapter13 = at >= beatIndex('ch13-home') && at <= beatIndex('ch13-common');
+  if (inChapter13) {
+    markMilestone(m.ch9Hearth);
+    markMilestone(m.ch4Arrived);
+    markMilestone(m.complete);
+    markMilestone('story:tidegarden:relationship-attended');
+    markMilestone('story:tidegarden:habitat-core-online');
+    markMilestone('story:tidegarden:shelter-certified');
+    markMilestone('story:tidegarden:safe-rest-completed');
+    markMilestone('story:tidegarden:two-world-handoff');
+    markMilestone(m.ch10ColdNoticed);
+    markMilestone(m.ch10FaultRead);
+    markMilestone(m.ch10FabricationRefused);
+    markMilestone(m.ch10RelayAsked);
+    markMilestone(m.ch10RelayAnswered);
+    markMilestone(m.ch10BearingClaimed);
+    markMilestone(m.ch10TransitIgnited);
+    markMilestone(m.ch10SeamPassed);
+    markMilestone(m.ch10StationResolved);
+    markMilestone(m.ch10Complete);
+    markMilestone(m.stationDockingAuthorized);
+    // ch11 station and ch12 return, owned by the prior station-continuation
+    // contract. The cell is CONSUMED in a real run, so a rehearsal seeds the
+    // consumed state: installed and restored, with no cell left in the pack.
+    markMilestone('story:ch11-station-departed');
+    markMilestone('story:ch11-bonded-cell-acquired');
+    markMilestone('story:ch12-bonded-cell-installed');
+    markMilestone('story:ch12-hearth-restored');
+    const carriedCells = getItemCount('bonded_cell');
+    if (carriedCells > 0) removeItem('bonded_cell', carriedCells);
+  }
+  if (inChapter13 && at >= beatIndex('ch13-return')) markMilestone(m.ch13FaultReviewed);
+  if (inChapter13 && at >= beatIndex('ch13-survey')) markMilestone(m.ch13ReturnChosen);
+  if (inChapter13 && at >= beatIndex('ch13-common')) {
+    markMilestone(m.ch13OriginLanded);
+    markMilestone(m.ch13RouteTested);
+  }
   if (at >= beatIndex('done')) {
     markMilestone(m.ch9Hearth);
     markMilestone(m.ch4Arrived);
@@ -697,7 +810,13 @@ export function initStoryFromSave(): void {
   // A restored snapshot already IS the state to boot into — terrain, poses,
   // milestones and all. Leave every one of them alone.
   if (keepExistingStateRequested()) return;
-  if (!param) return;
+  if (!param) {
+    // The station returns a screening with movie=1 and its earned save, but
+    // deliberately strips story= to avoid starting a fresh rehearsal. Resume
+    // that save so free-play bridges see its real checkpoint after navigation.
+    if (movieRunRequested() && hasMilestone(STORY_MILESTONES.started)) beginStory();
+    return;
+  }
   // Dev flows (`?story=` jumps, movie runs) start from PRISTINE terrain AND a
   // pristine spawn — debug sessions used to accumulate each other's
   // strip-mining, and a pose saved in a mined pit would resurrect INSIDE the
@@ -719,6 +838,7 @@ export function initStoryFromSave(): void {
   // debris/pods and silently skipping the two profile collection acts.
   const runId = snapshot.runId + 1;
   resetDebugStoryRun(storyWorld);
+  beginGuidedObjectiveRestore('seed');
   seedForBeat(param);
   const chapter = chapterForBeat(param);
   if (chapter === 'complete') {
@@ -743,6 +863,31 @@ export function initStoryFromSave(): void {
     // including the certified hearth itself, which chapter 10 opens inside.
     bootstrapTidegardenSurfaceDebug();
     bootstrapTidegardenHabitatDebug();
+  } else if (param === 'ch13-home' || param === 'ch13-return') {
+    // Both open at the ACTUAL restored second hearth on Tidegarden, on foot.
+    bootstrapTidegardenSurfaceDebug();
+    bootstrapTidegardenHabitatDebug();
+  } else if (param === 'ch13-survey' || param === 'ch13-common') {
+    // The Origin audit site. The hearth is still reconstructed because the
+    // chapter's entry facts include it and the player may fly back to it.
+    bootstrapTidegardenHabitatDebug();
+    bootstrapOriginLaunchDebug();
+    // AND SHE IS ON FOOT, BECAUSE BOTH BEATS ARE.
+    //
+    // `bootstrapOriginLaunchDebug` ends in `restoreBoardedSurfaceFlight` — the
+    // right staging for ch8-launch and ch10-transit, which BEGIN in the cockpit,
+    // and the wrong one here: ch13-survey opens after the landing and the
+    // disembark that ch13-return performs, and ch13-common after the whole
+    // survey. Left boarded, the entry published an on-foot beat over surface
+    // FLIGHT controls, where walk input does nothing, and nothing in the chapter
+    // could recover it (measured: 243 s of exactly zero displacement).
+    //
+    // This restores control ownership only, exactly as the landfall bootstrap
+    // does for its own disembarked surface state. It is a rehearsal seeding the
+    // boundary it is not playing: no exit receipt is issued, no listener fires,
+    // no milestone is granted, and the landed Kestrel is still parked here to be
+    // boarded again by the ordinary interaction.
+    restoreFlightAtLocation('surface');
   } else if (param === 'ch10-transit') {
     // The transit launches from the first world at the wreck, in ch8 grammar.
     // The hearth is still reconstructed: the player may fly home to it, and the
@@ -761,6 +906,7 @@ export function initStoryFromSave(): void {
 export function beginStory(): void {
   markMilestone(STORY_MILESTONES.started);
   const entry = storyEntryPoint();
+  if (entry.beat !== 'crawl') beginGuidedObjectiveRestore('resume');
   if (entry.chapter === 'complete') {
     // Finished players re-enter their world as sandbox, at their earned stage.
     setVoxelRealityStage(stageForStoryPoint(entry));
@@ -782,6 +928,7 @@ export function beginStory(): void {
  * progression and every non-Story world, but resets the carried loadout and the
  * pinned Story site so the opening cannot inherit completed-run advantages. */
 export function restartStory(): void {
+  beginGuidedObjectiveRestore('seed', true);
   const storyWorld = createWorldIdentity(STORY_COORDINATE);
   removeMilestonesByPrefix('story:');
   removeMilestone('maw_repaired');
@@ -870,6 +1017,17 @@ export function completeChapter10(): void {
   completeStory();
 }
 
+/**
+ * Chapter 13's terminal: the reciprocal proof. Commits the chapter's durable
+ * checkpoint and hands the world back through the same completion path chapters
+ * 9 and 10 used, so controls and progression are free in the same frame the
+ * mandatory guidance retires. His record stays incomplete.
+ */
+export function completeChapter13(): void {
+  markMilestone(STORY_MILESTONES.ch13Complete);
+  completeStory();
+}
+
 /** Quit-to-menu mid-story: progress is already in milestones; go dormant. */
 export function deactivateStory(): void {
   if (!snapshot.active) return;
@@ -909,7 +1067,7 @@ export function getWorkerName(): string | null {
 /** The Regulation Feed owns the screen (sandbox HUD hidden) until A2 completes. */
 export function storyHudTakeover(s: StorySnapshot = snapshot): boolean {
   if (!s.active || !s.beat) return false;
-  return s.chapter === 'ch1' || s.chapter === 'ch2';
+  return s.beat !== 'done' && BEAT_METADATA[s.beat].hud.feedEffects;
 }
 
 /**
@@ -921,8 +1079,7 @@ export function storyHudTakeover(s: StorySnapshot = snapshot): boolean {
  */
 export function storyUsesEmbodiedGuidanceHud(s: StorySnapshot = snapshot): boolean {
   if (!s.active || !s.beat) return false;
-  const beat = beatIndex(s.beat);
-  return beat >= beatIndex('ch1-anomaly');
+  return s.beat !== 'done' && BEAT_METADATA[s.beat].hud.embodiedGuidance;
 }
 
 /**
@@ -938,13 +1095,9 @@ export function storyUsesEmbodiedGuidanceHud(s: StorySnapshot = snapshot): boole
  * On touch, these beats otherwise leave the player with no movement affordance,
  * so a themed virtual D-PAD mounts here in place of the analog joystick.
  */
-const EARLY_TOUCH_DPAD_BEATS = new Set<StoryBeat>([
-  'ch1-fixed',
-  'ch1-raster',
-  'ch1-depth',
-  'ch1-nav',
-  'ch1-iso'
-]);
+export const EARLY_TOUCH_DPAD_BEATS: ReadonlySet<StoryBeat> = new Set(
+  Object.entries(BEAT_METADATA).filter(([, beat]) => beat.hud.earlyTouchDpad).map(([id]) => id as StoryBeat)
+);
 
 export function storyUsesEarlyTouchDpad(s: StorySnapshot = snapshot): boolean {
   if (!s.active || !s.beat) return false;
@@ -1073,4 +1226,10 @@ export function storyStatVisible(stat: SuitStat): boolean {
 export function storyHudHideInventory(): boolean {
   if (!hasMilestone(STORY_MILESTONES.started)) return false;
   return !hasMilestone(STORY_MILESTONES.senseInventory);
+}
+
+/** Commit the physically earned final field-record visit and hand back. */
+export function completeChapter14(): void {
+  markMilestone(STORY_MILESTONES.ch14Complete);
+  completeStory();
 }

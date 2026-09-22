@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { StoryBeat } from '../storyState.ts';
-import type { SideLens } from '../sideLens.ts';
+import { sideHarvestProbePointsOffRow, type SideLens } from '../sideLens.ts';
 import { VOXEL_SCALE } from '../../utils/cubeGravityConstants.ts';
 
 // --- The survey brackets ------------------------------------------------------------
@@ -33,15 +33,50 @@ export interface SurveyBracketTarget {
   key: string;
   position: THREE.Vector3;
   label: string;
+  /** Standing pose admitted by the ordinary picker, never the voxel centre. */
+  approach?: THREE.Vector3;
+  facing?: 1 | -1;
 }
 
-/**
- * Four is the ceiling on purpose. The bracket answers "which shape pays?", and
- * one answer plus the next place to walk is the whole lesson; a screen of
- * brackets would be the clutter the ladder is trying to avoid, and would read
- * as decoration rather than designation.
- */
-export const SURVEY_BRACKET_LIMIT = 4;
+/** Exactly one phase-matched actionable designation. */
+export const SURVEY_BRACKET_LIMIT = 1;
+let designatedTargetKey: string | null = null;
+export function getDesignatedSurveyTargetKey(): string | null { return designatedTargetKey; }
+export function setDesignatedSurveyTargetKey(key: string | null): void { designatedTargetKey = key; }
+
+export interface SurveyTargetPresentation {
+  objective: object; objectiveId: string; runVersion: number; restoreVersion: number;
+  geometry: string; frame: number; viewportWidth: number; viewportHeight: number; targetKey: string | null;
+  targetLabel: string | null; nativeActionable: boolean;
+  horizontalOffscreen: boolean; direction: 'A' | 'D' | null;
+  fit: 'pending' | 'visible' | 'unresolved' | 'offscreen';
+  rect?: { left: number; right: number; top: number; bottom: number };
+  approach?: readonly [number, number, number]; facing?: 1 | -1;
+  movementRight?: readonly [number, number, number];
+}
+let targetPresentation: SurveyTargetPresentation | null = null;
+let finalizedPresentation: SurveyTargetPresentation | null = null;
+/** Finalized reads refer to the overlay's completed layout, never a driver's pending projection. */
+export function getSurveyTargetPresentation(finalized = false): Readonly<SurveyTargetPresentation> | null { return finalized ? finalizedPresentation : targetPresentation; }
+export function setSurveyTargetPresentation(next: SurveyTargetPresentation | null, finalized = false): void {
+  targetPresentation = next;
+  if (next === null || finalized) finalizedPresentation = next;
+}
+
+/** Only an actual horizontal projection and admitted approach can issue a bearing. */
+export function resolveSurveyTargetPresentation(input: {
+  ndc: THREE.Vector3; player: THREE.Vector3; approach: THREE.Vector3 | undefined;
+  movementRight: THREE.Vector3; validApproach: boolean; nativeActionable: boolean;
+}): { horizontalOffscreen: boolean; direction: 'A' | 'D' | null } {
+  const { ndc, player, approach, movementRight } = input;
+  const horizontalOffscreen = [ndc.x, ndc.y, ndc.z].every(Number.isFinite)
+    && ndc.z >= -1 && ndc.z <= 1 && Math.abs(ndc.y) <= 1 && Math.abs(ndc.x) > 1;
+  if (!horizontalOffscreen || input.nativeActionable || !input.validApproach || !approach) return { horizontalOffscreen, direction: null };
+  const signedDistance = (approach.x - player.x) * movementRight.x
+    + (approach.y - player.y) * movementRight.y + (approach.z - player.z) * movementRight.z;
+  return { horizontalOffscreen, direction: Number.isFinite(signedDistance) && Math.abs(signedDistance) > 0.01 ? signedDistance > 0 ? 'D' : 'A' : null };
+}
+
 
 /** Half-width of the row scan, in voxels either side of the player. */
 const SCAN_VOXELS = 7;
@@ -87,11 +122,7 @@ export function surveyBracketDemand(
 ): SurveyBracketDemand {
   const mode = surveyBracketMode(beat);
   if (!mode) return { harvest: false, salvage: false };
-  return {
-    harvest: outstanding.fiber,
-    // Only the salvage beat has debris to designate.
-    salvage: mode === 'salvage' && outstanding.debris
-  };
+  return { harvest: !outstanding.debris && outstanding.fiber, salvage: outstanding.debris };
 }
 
 /**
@@ -99,7 +130,7 @@ export function surveyBracketDemand(
  * findable target and is capped so it can never crowd the fiber brackets off
  * the screen the way it did before — the fiber is what the player cannot see.
  */
-export const SURVEY_BRACKET_SALVAGE_SHARE = 2;
+export const SURVEY_BRACKET_SALVAGE_SHARE = 1;
 
 /** A block the extractor will actually pay out for, by drop table. */
 export type VoxelYieldProbe = (
@@ -127,44 +158,30 @@ export function collectHarvestBracketTargets(
   playerPosition: THREE.Vector3,
   lens: SideLens,
   probe: VoxelYieldProbe,
-  limit = SURVEY_BRACKET_LIMIT
+  limit = SURVEY_BRACKET_LIMIT,
+  canApproach: (position: THREE.Vector3) => boolean = () => true
 ): SurveyBracketTarget[] {
-  const found: { target: SurveyBracketTarget; distance: number }[] = [];
-  const rows = [VOXEL_SCALE, -VOXEL_SCALE];
-  for (let step = -SCAN_VOXELS; step <= SCAN_VOXELS; step++) {
-    for (const row of rows) {
-      _scan.copy(playerPosition)
-        .addScaledVector(lens.travelAxis, step * VOXEL_SCALE)
-        .addScaledVector(lens.up, -1.8)
-        .addScaledVector(lens.depthAxis, row);
-      const vx = Math.round(_scan.x / VOXEL_SCALE);
-      const vy = Math.round(_scan.y / VOXEL_SCALE);
-      const vz = Math.round(_scan.z / VOXEL_SCALE);
-      const voxel = probe(vx, vy, vz);
-      if (!voxel?.yields) continue;
-      found.push({
-        target: {
-          key: `v:${vx},${vy},${vz}`,
-          position: new THREE.Vector3(vx * VOXEL_SCALE, vy * VOXEL_SCALE, vz * VOXEL_SCALE),
-          label: 'BIOFIBER'
-        },
-        distance: Math.abs(step)
-      });
+  const found: SurveyBracketTarget[] = [];
+  const seen = new Set<string>();
+  const approaches = [0, ...Array.from({ length: SCAN_VOXELS }, (_, i) => [i + 1, -(i + 1)]).flat()];
+  for (const step of approaches) {
+    _scan.copy(playerPosition).addScaledVector(lens.travelAxis, step * VOXEL_SCALE);
+    const along = _scan.clone().sub(lens.origin).dot(lens.travelAxis);
+    if (Math.abs(along) > 29 || !canApproach(_scan)) continue;
+    for (const facing of [1, -1] as const) {
+      const selected = pickSideHarvestVoxel(_scan, lens, facing, probe, true);
+      if (!selected) continue;
+      const key = `v:${selected.x},${selected.y},${selected.z}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      found.push({ key, position: new THREE.Vector3(selected.x, selected.y, selected.z).multiplyScalar(VOXEL_SCALE), label: 'BIOFIBER', approach: _scan.clone(), facing });
+      if (found.length >= limit) return found;
     }
   }
-  found.sort((a, b) => a.distance - b.distance);
-  return found.slice(0, limit).map(entry => entry.target);
+  return found;
 }
 
-/**
- * Uncollected hull debris, nearest first.
- *
- * `ch1-raster` will not advance until every scattered piece is recovered
- * (`debrisSalvageComplete()`), and the pieces are unmarked grey boxes spread
- * across a ±28 m strip. The signed journey contract already asserts that
- * "missed targets remain explicitly marked" for this rung; this is the
- * implementation of that clause.
- */
+/** Remaining required indices 0..2, nearest first; optional pieces stay collectible and unmarked. */
 export function collectSalvageBracketTargets(
   playerPosition: THREE.Vector3,
   positions: readonly THREE.Vector3[],
@@ -173,7 +190,7 @@ export function collectSalvageBracketTargets(
 ): SurveyBracketTarget[] {
   const found: { target: SurveyBracketTarget; distance: number }[] = [];
   positions.forEach((position, index) => {
-    if (collected(index)) return;
+    if (index > 2 || collected(index)) return;
     found.push({
       target: { key: `d:${index}`, position, label: 'DEBRIS' },
       distance: playerPosition.distanceTo(position)
@@ -184,8 +201,8 @@ export function collectSalvageBracketTargets(
 }
 
 /**
- * Screen-space bracket box for a projected anchor, clamped so the label never
- * escapes the viewport. `size` is the full box edge in px.
+ * Screen-space bracket box at its actual projected anchor. Full label placement
+ * is measured by the DOM overlay without moving this anchor. `size` is the full box edge in px.
  *
  * The box does not scale with range: a designator that shrinks with distance
  * stops reading as a designator and starts reading as an object, and at 1-bit
@@ -209,8 +226,9 @@ export function solveSurveyBracketRect(
   labelWidth = 74
 ): SurveyBracketRect {
   const half = size / 2;
-  const x = clamp(anchorX, half, Math.max(half, viewportWidth - half));
-  const y = clamp(anchorY, half, Math.max(half, viewportHeight - half));
+  const x = Number.isFinite(anchorX) ? anchorX : 0;
+  const y = Number.isFinite(anchorY) ? anchorY : 0;
+  void viewportHeight;
   return {
     x,
     y,
@@ -219,7 +237,19 @@ export function solveSurveyBracketRect(
   };
 }
 
-function clamp(value: number, min: number, max: number): number {
-  if (!Number.isFinite(value)) return min;
-  return Math.min(max, Math.max(min, value));
+/** Shared ordinary-picker priority; read-only probes retain tool admission and fallback semantics. */
+const _harvestPoints = Array.from({ length: 6 }, () => new THREE.Vector3());
+export function pickSideHarvestVoxel(
+  position: THREE.Vector3, lens: SideLens, facing: 1 | -1, probe: VoxelYieldProbe, yieldingOnly = false
+): { x: number; y: number; z: number } | null {
+  const points = sideHarvestProbePointsOffRow(position, lens, facing, _harvestPoints);
+  let fallback: { x: number; y: number; z: number } | null = null;
+  for (const point of points) {
+    const coord = { x: Math.round(point.x / VOXEL_SCALE), y: Math.round(point.y / VOXEL_SCALE), z: Math.round(point.z / VOXEL_SCALE) };
+    const voxel = probe(coord.x, coord.y, coord.z);
+    if (!voxel) continue;
+    if (voxel.yields) return coord;
+    if (!yieldingOnly && !fallback) fallback = coord;
+  }
+  return fallback;
 }

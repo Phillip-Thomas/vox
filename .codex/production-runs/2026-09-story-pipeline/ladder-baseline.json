@@ -1,0 +1,2130 @@
+{
+  "generatedAt": "2026-09-05T08:37:35.625Z",
+  "hash": "807707ac2d5da57f",
+  "trace": {
+    "crawl": [
+      {
+        "beat": "crawl",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "manifest": [
+      {
+        "beat": "manifest",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "voyage": [
+      {
+        "beat": "voyage",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "deflect": [
+      {
+        "beat": "deflect",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "crash": [
+      {
+        "beat": "crash",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "descent": [
+      {
+        "beat": "descent",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch1-fixed": [
+      {
+        "beat": "ch1-fixed",
+        "objective": {
+          "id": "ch1:fixed:calibrate-extractor",
+          "kind": "interact",
+          "markerLabel": "BIOFIBER · CALIBRATE EXTRACTOR",
+          "workOrder": [
+            "HARVEST BIOFIBER FROM THE BRACKETED GROUND.",
+            "HOLD [E] TO EXTRACT."
+          ],
+          "requiresMarker": false,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDVISUAL CORTEX LINK: DOWN. FEED: SITE CAMERAS (1-BIT)DIRECTIVE 1: SURVIVE. (AMENDED: SEE DIRECTIVE 2)DIRECTIVE 2: CALIBRATE EXTRACTOR. HARVEST BIOFIBER.TRAVERSE [A]/[D] · EXTRACT: HOLD [E]COVERAGE IS CELLULAR. CAMERAS DO NOT MOVE. WORKERS DO.NOTE: TRANSIT RECORD INCOMPLETE. ASSUMING COMPLIANCE.",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch1-track": [
+      {
+        "beat": "ch1-track",
+        "objective": {
+          "id": "ch1:track:tracking-transfer",
+          "kind": "wait",
+          "markerLabel": "TRACKING VIEW · CALIBRATING",
+          "workOrder": [
+            "TRACKING VIEW IS REASSIGNING.",
+            "HOLD POSITION."
+          ],
+          "requiresMarker": false,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDCAMERA HAND-OFF: SUSPENDED. ONE VIEW STAYS WITH YOU.JUSTIFICATION: CONTINUITY OF COVERAGE.NO FURTHER JUSTIFICATION IS ON FILE.THIS IS NOT ATTENTION. IT IS COVERAGE.(simpler to keep watching this one.)",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch1-raster": [
+      {
+        "beat": "ch1-raster",
+        "objective": {
+          "id": "ch1:raster:recover-quota",
+          "kind": "interact",
+          "markerLabel": "SITE QUOTA · RECOVER MATERIALS",
+          "workOrder": [
+            "RECOVER EVERY BRACKETED PIECE OF HULL DEBRIS.",
+            "WALK OVER EACH PIECE TO RECOVER IT."
+          ],
+          "requiresMarker": false,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDHELD VIEW UPGRADED: TRAVELING COVERAGE (1-BIT) · PAN-TILT OFFLINEDIRECTIVE 2 (CONT.): RESUME QUOTA. RECOVER HULL DEBRIS.TRAVERSE [A]/[D] · ASCEND [SPACE] · EXTRACT: HOLD [E]DEBRIS IS AUTHORITY PROPERTY. YOU ARE AUTHORITY PROPERTY.NOTE: TRANSIT RECORD INCOMPLETE. ASSUMING COMPLIANCE.",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch1-depth": [
+      {
+        "beat": "ch1-depth",
+        "objective": {
+          "id": "ch1:depth:recover-supply-pods",
+          "kind": "interact",
+          "markerLabel": "SUPPLY POD",
+          "workOrder": [
+            "FOLLOW THE NEXT SUPPLY POD MARKER.",
+            "RECOVER THE SUPPLY POD."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDQUOTA MET. PRODUCTIVITY NOMINAL.PROFILE ACCESS EXTENDED. WORK LINE REMAINS AUTHORITATIVE.SUPPLY PODS PROJECTED TO THE WORK LINE. RECOVER THEM.TRAVERSE [A]/[D] · ROW TRANSFER: WITHHELD.",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowMine": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch1-depth",
+        "objective": {
+          "id": "ch1:depth:recover-supply-pods",
+          "kind": "interact",
+          "markerLabel": "SUPPLY POD",
+          "workOrder": [
+            "FOLLOW THE NEXT SUPPLY POD MARKER.",
+            "RECOVER THE SUPPLY POD."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDQUOTA MET. PRODUCTIVITY NOMINAL.PROFILE ACCESS EXTENDED. WORK LINE REMAINS AUTHORITATIVE.SUPPLY PODS PROJECTED TO THE WORK LINE. RECOVER THEM.TRAVERSE [A]/[D] · ROW TRANSFER: WITHHELD.",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowMine": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch1-depth",
+        "objective": {
+          "id": "ch1:depth:recover-supply-pods",
+          "kind": "interact",
+          "markerLabel": "SUPPLY POD",
+          "workOrder": [
+            "FOLLOW THE NEXT SUPPLY POD MARKER.",
+            "RECOVER THE SUPPLY POD."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": "▶SUPPLY POD",
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDQUOTA MET. PRODUCTIVITY NOMINAL.PROFILE ACCESS EXTENDED. WORK LINE REMAINS AUTHORITATIVE.SUPPLY PODS PROJECTED TO THE WORK LINE. RECOVER THEM.TRAVERSE [A]/[D] · ROW TRANSFER: WITHHELD.",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowMine": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch1-nav": [
+      {
+        "beat": "ch1-nav",
+        "objective": {
+          "id": "ch1:nav:triangulation-1-of-3",
+          "kind": "travel",
+          "markerLabel": "TRIANGULATION 1/3",
+          "workOrder": [
+            "FOLLOW THE ACTIVE TRIANGULATION MARKER.",
+            "ENTER THE TRIANGULATION POINT."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDUNREGISTERED SIGNAL AT SURVEY EDGE.NAV VIEW ENGAGED. YOU ARE THE SMALL MARK.REACH THE TRIANGULATION POINTS. ALL OF THEM.THE MAP OMITS NOTHING OF VALUE. THE TERRITORY DOES.THIS VIEW WILL BE RETAINED AS: SURVEY CHART [M].",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch1-nav",
+        "objective": {
+          "id": "ch1:nav:triangulation-1-of-3",
+          "kind": "travel",
+          "markerLabel": "TRIANGULATION 1/3",
+          "workOrder": [
+            "FOLLOW THE ACTIVE TRIANGULATION MARKER.",
+            "ENTER THE TRIANGULATION POINT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDUNREGISTERED SIGNAL AT SURVEY EDGE.NAV VIEW ENGAGED. YOU ARE THE SMALL MARK.REACH THE TRIANGULATION POINTS. ALL OF THEM.THE MAP OMITS NOTHING OF VALUE. THE TERRITORY DOES.THIS VIEW WILL BE RETAINED AS: SURVEY CHART [M].",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch1-nav",
+        "objective": {
+          "id": "ch1:nav:triangulation-1-of-3",
+          "kind": "travel",
+          "markerLabel": "TRIANGULATION 1/3",
+          "workOrder": [
+            "FOLLOW THE ACTIVE TRIANGULATION MARKER.",
+            "ENTER THE TRIANGULATION POINT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": "▶TRIANGULATION 1/3",
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDUNREGISTERED SIGNAL AT SURVEY EDGE.NAV VIEW ENGAGED. YOU ARE THE SMALL MARK.REACH THE TRIANGULATION POINTS. ALL OF THEM.THE MAP OMITS NOTHING OF VALUE. THE TERRITORY DOES.THIS VIEW WILL BE RETAINED AS: SURVEY CHART [M].",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch1-iso": [
+      {
+        "beat": "ch1-iso",
+        "objective": {
+          "id": "ch1:iso:reach-signal-source",
+          "kind": "travel",
+          "markerLabel": "SIGNAL SOURCE",
+          "workOrder": [
+            "FOLLOW THE SIGNAL SOURCE MARKER.",
+            "ASCEND TO THE SUMMIT."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDELEVATION DATA: RESTORED.THE SIGNAL SOURCE IS ABOVE GRADE.HEIGHT EXISTS. THIS IS A KNOWN DEFECT.ASCEND [SPACE]. REACH THE SOURCE.",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch1-iso",
+        "objective": {
+          "id": "ch1:iso:reach-signal-source",
+          "kind": "travel",
+          "markerLabel": "SIGNAL SOURCE",
+          "workOrder": [
+            "FOLLOW THE SIGNAL SOURCE MARKER.",
+            "ASCEND TO THE SUMMIT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDELEVATION DATA: RESTORED.THE SIGNAL SOURCE IS ABOVE GRADE.HEIGHT EXISTS. THIS IS A KNOWN DEFECT.ASCEND [SPACE]. REACH THE SOURCE.",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch1-iso",
+        "objective": {
+          "id": "ch1:iso:reach-signal-source",
+          "kind": "travel",
+          "markerLabel": "SIGNAL SOURCE",
+          "workOrder": [
+            "FOLLOW THE SIGNAL SOURCE MARKER.",
+            "ASCEND TO THE SUMMIT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": "▶SIGNAL SOURCE",
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDELEVATION DATA: RESTORED.THE SIGNAL SOURCE IS ABOVE GRADE.HEIGHT EXISTS. THIS IS A KNOWN DEFECT.ASCEND [SPACE]. REACH THE SOURCE.",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0.55,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch1-lift": [
+      {
+        "beat": "ch1-lift",
+        "objective": {
+          "id": "ch1:lift:perspective-transfer",
+          "kind": "wait",
+          "markerLabel": "FIRST-PERSON LINK · CALIBRATING",
+          "workOrder": [
+            "PERSPECTIVE TRANSFER IS ACTIVE.",
+            "HOLD POSITION."
+          ],
+          "requiresMarker": false,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": "CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEEDPAN-TILT SURVEY: CALIBRATING…HOLD POSITION. PERSPECTIVE IS BEING ISSUED.",
+        "policy": {
+          "lookMode": "side",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch1-anomaly": [
+      {
+        "beat": "ch1-anomaly",
+        "objective": {
+          "id": "ch1:anomaly:calibrate-pan-tilt",
+          "kind": "interact",
+          "markerLabel": "PAN-TILT SURVEY · CALIBRATE",
+          "workOrder": [
+            "SURVEY THE FULL PERIMETER.",
+            "LOOK ACROSS EVERY HEADING."
+          ],
+          "requiresMarker": false,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "feed",
+          "moveSpeedScale": 0.45,
+          "allowJump": false,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "a1-ramp": [
+      {
+        "beat": "a1-ramp",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "feed",
+          "moveSpeedScale": 0,
+          "allowJump": false,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch2-color": [
+      {
+        "beat": "ch2-color",
+        "objective": {
+          "id": "ch2:color:approach-redaction",
+          "kind": "travel",
+          "markerLabel": "REDACTED SUBJECT",
+          "workOrder": [
+            "FOLLOW THE REDACTED SUBJECT INDICATOR.",
+            "APPROACH THE SUBJECT."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 0.45,
+          "allowJump": false,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch2-color",
+        "objective": {
+          "id": "ch2:color:approach-redaction",
+          "kind": "travel",
+          "markerLabel": "REDACTED SUBJECT",
+          "workOrder": [
+            "FOLLOW THE REDACTED SUBJECT INDICATOR.",
+            "APPROACH THE SUBJECT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 0.45,
+          "allowJump": false,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch2-approach": [
+      {
+        "beat": "ch2-approach",
+        "objective": {
+          "id": "ch2:approach:eat-fruit",
+          "kind": "interact",
+          "markerLabel": "REDACTED SUBJECT · FRUIT",
+          "workOrder": [
+            "APPROACH THE FRUIT AT HAND HEIGHT.",
+            "[F] EAT."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 0.45,
+          "allowJump": false,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch2-approach",
+        "objective": {
+          "id": "ch2:approach:eat-fruit",
+          "kind": "interact",
+          "markerLabel": "REDACTED SUBJECT · FRUIT",
+          "workOrder": [
+            "APPROACH THE FRUIT AT HAND HEIGHT.",
+            "[F] EAT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 0.45,
+          "allowJump": false,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "a2-awakening": [
+      {
+        "beat": "a2-awakening",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 0,
+          "allowJump": false,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch3-gather": [
+      {
+        "beat": "ch3-gather",
+        "objective": {
+          "id": "ch3:gather:craft-hatchet",
+          "kind": "craft",
+          "markerLabel": "STONE HATCHET · CRAFT",
+          "workOrder": [
+            "OPEN THE FABRICATOR.",
+            "[C] CRAFT A STONE HATCHET."
+          ],
+          "requiresMarker": false,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch3-dusk": [
+      {
+        "beat": "ch3-dusk",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch3-await-rest": [
+      {
+        "beat": "ch3-await-rest",
+        "objective": {
+          "id": "ch3:rest:wait-for-night",
+          "kind": "wait",
+          "markerLabel": "CAMPFIRE · WAIT FOR NIGHT",
+          "workOrder": [
+            "REMAIN NEAR THE CAMPFIRE.",
+            "WAIT FOR NIGHT."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch3-await-rest",
+        "objective": {
+          "id": "ch3:rest:wait-for-night",
+          "kind": "wait",
+          "markerLabel": "CAMPFIRE · WAIT FOR NIGHT",
+          "workOrder": [
+            "REMAIN NEAR THE CAMPFIRE.",
+            "WAIT FOR NIGHT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch3-await-rest",
+        "objective": {
+          "id": "ch3:rest:wait-for-night",
+          "kind": "wait",
+          "markerLabel": "CAMPFIRE · WAIT FOR NIGHT",
+          "workOrder": [
+            "REMAIN NEAR THE CAMPFIRE.",
+            "WAIT FOR NIGHT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "campfire · wait for night",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch3-await-rest",
+        "objective": {
+          "id": "ch3:rest:rest-at-fire",
+          "kind": "interact",
+          "markerLabel": "CAMPFIRE · REST",
+          "workOrder": [
+            "RETURN TO THE CAMPFIRE.",
+            "[F] REST."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "campfire · rest",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      }
+    ],
+    "a3-dawn": [
+      {
+        "beat": "a3-dawn",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "a3-dawn",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch3-thirst": [
+      {
+        "beat": "ch3-thirst",
+        "objective": {
+          "id": "ch3:thirst:drink-water",
+          "kind": "interact",
+          "markerLabel": "DRINKABLE WATER",
+          "workOrder": [
+            "FOLLOW THE WATER MARKER.",
+            "LOOK AT THE WATER AND [F] DRINK."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch3-thirst",
+        "objective": {
+          "id": "ch3:thirst:drink-water",
+          "kind": "interact",
+          "markerLabel": "DRINKABLE WATER",
+          "workOrder": [
+            "FOLLOW THE WATER MARKER.",
+            "LOOK AT THE WATER AND [F] DRINK."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch3-thirst",
+        "objective": {
+          "id": "ch3:thirst:drink-water",
+          "kind": "interact",
+          "markerLabel": "DRINKABLE WATER",
+          "workOrder": [
+            "FOLLOW THE WATER MARKER.",
+            "LOOK AT THE WATER AND [F] DRINK."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "drinkable water",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch3-forage": [
+      {
+        "beat": "ch3-forage",
+        "objective": {
+          "id": "ch3:forage:find-food",
+          "kind": "travel",
+          "markerLabel": "EDIBLE FRUIT",
+          "workOrder": [
+            "FOLLOW THE FOOD SOURCE MARKER.",
+            "WALK THROUGH THE FRUIT TO GATHER IT."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch3-forage",
+        "objective": {
+          "id": "ch3:forage:find-food",
+          "kind": "travel",
+          "markerLabel": "EDIBLE FRUIT",
+          "workOrder": [
+            "FOLLOW THE FOOD SOURCE MARKER.",
+            "WALK THROUGH THE FRUIT TO GATHER IT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch3-forage",
+        "objective": {
+          "id": "ch3:forage:find-food",
+          "kind": "travel",
+          "markerLabel": "EDIBLE FRUIT",
+          "workOrder": [
+            "FOLLOW THE FOOD SOURCE MARKER.",
+            "WALK THROUGH THE FRUIT TO GATHER IT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "edible fruit",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch3-signal": [
+      {
+        "beat": "ch3-signal",
+        "objective": {
+          "id": "ch3:signal:report-to-wreck",
+          "kind": "travel",
+          "markerLabel": "THE WRECK",
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "SPRINT TO THE RELAY."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch3-signal",
+        "objective": {
+          "id": "ch3:signal:report-to-wreck",
+          "kind": "travel",
+          "markerLabel": "THE WRECK",
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "SPRINT TO THE RELAY."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch3-signal",
+        "objective": {
+          "id": "ch3:signal:report-to-wreck",
+          "kind": "travel",
+          "markerLabel": "THE WRECK",
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "SPRINT TO THE RELAY."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "the wreck",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch4-vigil": [
+      {
+        "beat": "ch4-vigil",
+        "objective": {
+          "id": "ch4:vigil:remain-at-wreck",
+          "kind": "wait",
+          "markerLabel": "WRECK RELAY · REMAIN",
+          "workOrder": [
+            "RETURN TO THE WRECK RELAY.",
+            "REMAIN UNTIL NIGHT."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch4-vigil",
+        "objective": {
+          "id": "ch4:vigil:remain-at-wreck",
+          "kind": "wait",
+          "markerLabel": "WRECK RELAY · REMAIN",
+          "workOrder": [
+            "RETURN TO THE WRECK RELAY.",
+            "REMAIN UNTIL NIGHT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch4-vigil",
+        "objective": {
+          "id": "ch4:vigil:remain-at-wreck",
+          "kind": "wait",
+          "markerLabel": "WRECK RELAY · REMAIN",
+          "workOrder": [
+            "RETURN TO THE WRECK RELAY.",
+            "REMAIN UNTIL NIGHT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "wreck relay · remain",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch4-arrival": [
+      {
+        "beat": "ch4-arrival",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 0,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch4-audit": [
+      {
+        "beat": "ch4-audit",
+        "objective": {
+          "id": "ch4:audit:attend-fire",
+          "kind": "interact",
+          "markerLabel": "CAMPFIRE · ATTEND",
+          "workOrder": [
+            "FOLLOW W-7744 TO THE CAMPFIRE.",
+            "[F] ATTEND THE FIRE MISMATCH."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch4-audit",
+        "objective": {
+          "id": "ch4:audit:attend-fire",
+          "kind": "interact",
+          "markerLabel": "CAMPFIRE · ATTEND",
+          "workOrder": [
+            "FOLLOW W-7744 TO THE CAMPFIRE.",
+            "[F] ATTEND THE FIRE MISMATCH."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch4-audit",
+        "objective": {
+          "id": "ch4:audit:attend-fire",
+          "kind": "interact",
+          "markerLabel": "CAMPFIRE · ATTEND",
+          "workOrder": [
+            "FOLLOW W-7744 TO THE CAMPFIRE.",
+            "[F] ATTEND THE FIRE MISMATCH."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "campfire · attend",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch4-comply": [
+      {
+        "beat": "ch4-comply",
+        "objective": {
+          "id": "ch4:comply:douse-fire",
+          "kind": "interact",
+          "markerLabel": "CAMPFIRE · DOUSE",
+          "workOrder": [
+            "FOLLOW THE CAMPFIRE MARKER.",
+            "[F] DOUSE THE FIRE."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch4-comply",
+        "objective": {
+          "id": "ch4:comply:douse-fire",
+          "kind": "interact",
+          "markerLabel": "CAMPFIRE · DOUSE",
+          "workOrder": [
+            "FOLLOW THE CAMPFIRE MARKER.",
+            "[F] DOUSE THE FIRE."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch4-comply",
+        "objective": {
+          "id": "ch4:comply:douse-fire",
+          "kind": "interact",
+          "markerLabel": "CAMPFIRE · DOUSE",
+          "workOrder": [
+            "FOLLOW THE CAMPFIRE MARKER.",
+            "[F] DOUSE THE FIRE."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "campfire · douse",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch4-defy": [
+      {
+        "beat": "ch4-defy",
+        "objective": {
+          "id": "ch4:defy:test-protected-tree",
+          "kind": "interact",
+          "markerLabel": "HERO TREE · TEST MAW",
+          "workOrder": [
+            "FOLLOW THE TREE MARKER.",
+            "USE THE MAW ON THE PROTECTED TREE."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch4-defy",
+        "objective": {
+          "id": "ch4:defy:test-protected-tree",
+          "kind": "interact",
+          "markerLabel": "HERO TREE · TEST MAW",
+          "workOrder": [
+            "FOLLOW THE TREE MARKER.",
+            "USE THE MAW ON THE PROTECTED TREE."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch4-defy",
+        "objective": {
+          "id": "ch4:defy:test-protected-tree",
+          "kind": "interact",
+          "markerLabel": "HERO TREE · TEST MAW",
+          "workOrder": [
+            "FOLLOW THE TREE MARKER.",
+            "USE THE MAW ON THE PROTECTED TREE."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "hero tree · test maw",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "a4-exhale": [
+      {
+        "beat": "a4-exhale",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 0,
+          "allowJump": false,
+          "allowSprint": false,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch5-maw": [
+      {
+        "beat": "ch5-maw",
+        "objective": {
+          "id": "maw:recover-field-kit",
+          "kind": "interact",
+          "markerLabel": "W-7744 FIELD PACK · RECOVER KIT",
+          "workOrder": [
+            "FOLLOW THE FIELD PACK MARKER.",
+            "[F] RECOVER THE FIELD KIT."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch5-maw",
+        "objective": {
+          "id": "maw:recover-field-kit",
+          "kind": "interact",
+          "markerLabel": "W-7744 FIELD PACK · RECOVER KIT",
+          "workOrder": [
+            "FOLLOW THE FIELD PACK MARKER.",
+            "[F] RECOVER THE FIELD KIT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "w-7744 field pack · recover kit",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch6-dive": [
+      {
+        "beat": "ch6-dive",
+        "objective": {
+          "id": "dive:recover-keel-memory",
+          "kind": "interact",
+          "markerLabel": "KEEL MEMORY",
+          "workOrder": [
+            "FOLLOW THE KEEL MEMORY MARKER BELOW.",
+            "INTERACT TO RECOVER THE KEEL MEMORY."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch6-dive",
+        "objective": {
+          "id": "dive:recover-keel-memory",
+          "kind": "interact",
+          "markerLabel": "KEEL MEMORY",
+          "workOrder": [
+            "FOLLOW THE KEEL MEMORY MARKER BELOW.",
+            "INTERACT TO RECOVER THE KEEL MEMORY."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch6-dive",
+        "objective": {
+          "id": "dive:recover-keel-memory",
+          "kind": "interact",
+          "markerLabel": "KEEL MEMORY",
+          "workOrder": [
+            "FOLLOW THE KEEL MEMORY MARKER BELOW.",
+            "INTERACT TO RECOVER THE KEEL MEMORY."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "keel memory",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch7-reconstruct": [
+      {
+        "beat": "ch7-reconstruct",
+        "objective": {
+          "id": "reconstruct:diagnose",
+          "kind": "interact",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch7-reconstruct",
+        "objective": {
+          "id": "reconstruct:diagnose",
+          "kind": "interact",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch7-reconstruct",
+        "objective": {
+          "id": "reconstruct:diagnose",
+          "kind": "interact",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "wreck scar · trace relationships",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch7-board": [
+      {
+        "beat": "ch7-board",
+        "objective": {
+          "id": "board:enter-hatch",
+          "kind": "interact",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch7-board",
+        "objective": {
+          "id": "board:enter-hatch",
+          "kind": "interact",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch7-board",
+        "objective": {
+          "id": "board:enter-hatch",
+          "kind": "interact",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "kestrel hatch · board",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch8-launch": [
+      {
+        "beat": "ch8-launch",
+        "objective": {
+          "id": "ch8:launch:ignite",
+          "kind": "interact",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ],
+          "requiresMarker": false,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch8-crossing": [
+      {
+        "beat": "ch8-crossing",
+        "objective": {
+          "id": "ch8:crossing:acquire-sibling",
+          "kind": "travel",
+          "markerLabel": "SIBLING WORLD",
+          "workOrder": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch8-crossing",
+        "objective": {
+          "id": "ch8:crossing:acquire-sibling",
+          "kind": "travel",
+          "markerLabel": "SIBLING WORLD",
+          "workOrder": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      },
+      {
+        "beat": "ch8-crossing",
+        "objective": {
+          "id": "ch8:crossing:acquire-sibling",
+          "kind": "travel",
+          "markerLabel": "SIBLING WORLD",
+          "workOrder": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "sibling world",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch8-landfall": [
+      {
+        "beat": "ch8-landfall",
+        "objective": {
+          "id": "ch8:landfall:land-dry-level",
+          "kind": "travel",
+          "markerLabel": "DRY LEVEL GROUND",
+          "workOrder": [
+            "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+            "[F] LAND ON DRY, LEVEL GROUND."
+          ],
+          "requiresMarker": false,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false
+        }
+      }
+    ],
+    "ch9-settle": [
+      {
+        "beat": "ch9-settle",
+        "objective": {
+          "id": "settle:scan-waterline",
+          "kind": "travel",
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "workOrder": [
+            "FOLLOW THE LIVING WATERLINE MARKER.",
+            "READ THE SIGNAL FIELD."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch9-settle",
+        "objective": {
+          "id": "settle:scan-waterline",
+          "kind": "travel",
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "workOrder": [
+            "FOLLOW THE LIVING WATERLINE MARKER.",
+            "READ THE SIGNAL FIELD."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch9-settle",
+        "objective": {
+          "id": "settle:scan-waterline",
+          "kind": "travel",
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "workOrder": [
+            "FOLLOW THE LIVING WATERLINE MARKER.",
+            "READ THE SIGNAL FIELD."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "living waterline · scan",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch9-settle",
+        "objective": {
+          "id": "settle:attend-waterline",
+          "kind": "interact",
+          "markerLabel": "LIVING WATERLINE · ATTEND",
+          "workOrder": [
+            "FOLLOW THE LIVING WATERLINE MARKER.",
+            "[F] ATTEND THE RELATIONSHIP."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "living waterline · attend",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch9-hearth": [
+      {
+        "beat": "ch9-hearth",
+        "objective": {
+          "id": "settle:scan-waterline",
+          "kind": "travel",
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "workOrder": [
+            "FOLLOW THE LIVING WATERLINE MARKER.",
+            "READ THE SIGNAL FIELD."
+          ],
+          "requiresMarker": true,
+          "health": "missing-marker"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch9-hearth",
+        "objective": {
+          "id": "settle:scan-waterline",
+          "kind": "travel",
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "workOrder": [
+            "FOLLOW THE LIVING WATERLINE MARKER.",
+            "READ THE SIGNAL FIELD."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch9-hearth",
+        "objective": {
+          "id": "settle:scan-waterline",
+          "kind": "travel",
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "workOrder": [
+            "FOLLOW THE LIVING WATERLINE MARKER.",
+            "READ THE SIGNAL FIELD."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "living waterline · scan",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch9-hearth",
+        "objective": {
+          "id": "settle:attend-waterline",
+          "kind": "interact",
+          "markerLabel": "LIVING WATERLINE · ATTEND",
+          "workOrder": [
+            "FOLLOW THE LIVING WATERLINE MARKER.",
+            "[F] ATTEND THE RELATIONSHIP."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "living waterline · attend",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch10-cold": [
+      {
+        "beat": "ch10-cold",
+        "objective": {
+          "id": "station:fault-read",
+          "kind": "interact",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "workOrder": [
+            "STAND AT THE SECOND HEARTH CORE.",
+            "[F] READ THE HEARTH FAULT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch10-cold",
+        "objective": {
+          "id": "station:fault-read",
+          "kind": "interact",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "workOrder": [
+            "STAND AT THE SECOND HEARTH CORE.",
+            "[F] READ THE HEARTH FAULT."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "habitat core · read the fault",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch10-ask": [
+      {
+        "beat": "ch10-ask",
+        "objective": null,
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch10-ask",
+        "objective": {
+          "id": "station:return:reboard",
+          "kind": "travel",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "workOrder": [
+            "RETURN TO THE KESTREL.",
+            "FOLLOW THE HATCH MARKER AND [F] BOARD."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      },
+      {
+        "beat": "ch10-ask",
+        "objective": {
+          "id": "station:return:reboard",
+          "kind": "travel",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "workOrder": [
+            "RETURN TO THE KESTREL.",
+            "FOLLOW THE HATCH MARKER AND [F] BOARD."
+          ],
+          "requiresMarker": true,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": "kestrel hatch · reboard",
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      }
+    ],
+    "ch10-transit": [
+      {
+        "beat": "ch10-transit",
+        "objective": {
+          "id": "station:transit:ignite",
+          "kind": "interact",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ],
+          "requiresMarker": false,
+          "health": "ready"
+        },
+        "feedMarker": null,
+        "freeMarker": null,
+        "feedWorkOrder": null,
+        "policy": {
+          "lookMode": "free",
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true
+        }
+      }
+    ]
+  }
+}

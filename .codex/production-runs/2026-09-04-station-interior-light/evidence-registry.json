@@ -1,0 +1,17 @@
+{
+  "schema": "paravoxia.evidenceRegistry.v1",
+  "runId": "{{RUN_ID}}",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
+  "sourceRevision": "{{GIT_SHA_OR_WORKING_TREE_SNAPSHOT}}",
+  "compiledAt": "{{ISO_8601}}",
+  "entries": [
+    {
+      "ref": "trace:replace-with-stable-evidence-id",
+      "path": "{{RUN_RELATIVE_EVIDENCE_PATH}}",
+      "sha256": "{{SHA256}}",
+      "kind": "{{TRACE_FRAME_AUDIO_LOG_PERF_OR_OTHER}}",
+      "description": "{{WHAT_THIS_FILE_PROVES_WITHOUT_CREATIVE_CONCLUSION}}"
+    }
+  ]
+}

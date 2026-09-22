@@ -1,0 +1,219 @@
+{
+  "at": "2026-09-06T22:18:52.177099+00:00",
+  "scope": "Three independent cold direct COMMON movie completions on frozen candidate; root raw-data review",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "runs": [
+    {
+      "captureRef": "verifier/captures/common-movie-candidate/attempt-20260906T221545Z-run1",
+      "gates": {
+        "movieUrl": true,
+        "allSamplesMovie": true,
+        "done": true,
+        "terra18": true,
+        "worker18": true,
+        "committed": true,
+        "completeAndHandback": true,
+        "guidanceCleared": true,
+        "zeroNudgesCounter": true,
+        "cleanupCompleted": true,
+        "realHeadedGb10": true,
+        "noPageErrors": true
+      },
+      "stopElapsedMs": 35052,
+      "sampleCount": 231,
+      "actualAnchors": [
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ],
+      "common": {
+        "stage": "arrived",
+        "terraUnits": 18,
+        "comparisonProved": true,
+        "finalReferenceOffered": true,
+        "finalReferenceOccupied": false,
+        "workerUnits": 18,
+        "committed": true
+      },
+      "actualAutopilot": {
+        "beat": "ch13-common",
+        "clock": 30.3,
+        "pos": [
+          -44.11,
+          52.79,
+          11.99
+        ],
+        "stillTime": 0,
+        "teleportNudgesTotal": 0,
+        "routeAction": "idle"
+      },
+      "hashes": {
+        "summary.json": "dabf4ca55817747c6ceee877004e98f08f84966ded10090b156e0caa5bb86269",
+        "trace.ndjson": "693640caf81bcb803839d2284bb0174da64be5013597c81e5f0f49c5c319bcc9",
+        "cleanup-receipt.json": "646e6c0571c6c0262a5928782ef51af206398b2f1f58d9156e4cacce259512f9"
+      },
+      "actualAvHistory": [
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ],
+      "allSamplesMovie": true
+    },
+    {
+      "captureRef": "verifier/captures/common-movie-candidate/attempt-20260906T221545Z-run2",
+      "gates": {
+        "movieUrl": true,
+        "allSamplesMovie": true,
+        "done": true,
+        "terra18": true,
+        "worker18": true,
+        "committed": true,
+        "completeAndHandback": true,
+        "guidanceCleared": true,
+        "zeroNudgesCounter": true,
+        "cleanupCompleted": true,
+        "realHeadedGb10": true,
+        "noPageErrors": true
+      },
+      "stopElapsedMs": 34909,
+      "sampleCount": 231,
+      "actualAnchors": [
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ],
+      "common": {
+        "stage": "arrived",
+        "terraUnits": 18,
+        "comparisonProved": true,
+        "finalReferenceOffered": true,
+        "finalReferenceOccupied": false,
+        "workerUnits": 18,
+        "committed": true
+      },
+      "actualAutopilot": {
+        "beat": "ch13-common",
+        "clock": 30.4,
+        "pos": [
+          -44.12,
+          52.79,
+          11.99
+        ],
+        "stillTime": 0,
+        "teleportNudgesTotal": 0,
+        "routeAction": "idle"
+      },
+      "hashes": {
+        "summary.json": "9ba72154124d82d95717c97af735ac738062334241806eec45a0195ffa3e1dfc",
+        "trace.ndjson": "7c457b19b746e5e2a02b08c8957298a76f55207e3e1f4f287e7a1d5e38be4193",
+        "cleanup-receipt.json": "efe842c135f2ce86cc6931913ff56eb92b94b697fde742ea455f50b1e9b9d353"
+      },
+      "actualAvHistory": [
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ],
+      "allSamplesMovie": true
+    },
+    {
+      "captureRef": "verifier/captures/common-movie-candidate/attempt-20260906T221545Z-run3",
+      "gates": {
+        "movieUrl": true,
+        "allSamplesMovie": true,
+        "done": true,
+        "terra18": true,
+        "worker18": true,
+        "committed": true,
+        "completeAndHandback": true,
+        "guidanceCleared": true,
+        "zeroNudgesCounter": true,
+        "cleanupCompleted": true,
+        "realHeadedGb10": true,
+        "noPageErrors": true
+      },
+      "stopElapsedMs": 34912,
+      "sampleCount": 226,
+      "actualAnchors": [
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ],
+      "common": {
+        "stage": "arrived",
+        "terraUnits": 18,
+        "comparisonProved": true,
+        "finalReferenceOffered": true,
+        "finalReferenceOccupied": false,
+        "workerUnits": 18,
+        "committed": true
+      },
+      "actualAutopilot": {
+        "beat": "ch13-common",
+        "clock": 30.4,
+        "pos": [
+          -44.09,
+          52.79,
+          11.99
+        ],
+        "stillTime": 0,
+        "teleportNudgesTotal": 0,
+        "routeAction": "idle"
+      },
+      "hashes": {
+        "summary.json": "663585a96f82d802b0796b91d574e1a30d293ed7238bed390a481a4fc99b9053",
+        "trace.ndjson": "aa760352e83c56677ca3214d21329c0fc53d01f650dfc5510ffb44b2f632248e",
+        "cleanup-receipt.json": "04ac17cf68d06989384af891bce2cd997675b1b0972e349a0a1a61e1241cc87c"
+      },
+      "actualAvHistory": [
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ],
+      "allSamplesMovie": true
+    }
+  ],
+  "elapsedRangeMs": [
+    34909,
+    35052
+  ],
+  "completionVarianceMs": 143,
+  "renderedFrameViewed": "verifier/captures/common-movie-candidate/attempt-20260906T221545Z-run1/0024-anchor-anc.cg.final-reference-offered.percept.png",
+  "frameObservation": "Actual rendered Origin surface, Worker body, route environment and vegetation visible; no blank frame in inspected image. Percept frame suppresses HUD and is not simultaneous with raw partner.",
+  "limits": [
+    "These are actual cold direct ch13-common movie runs, not a continuous station/home/full-story proof. Deep link seeds predecessor milestones through the shipped entry fixture.",
+    "Final zero teleportNudges counter is observed; source hooks and any console rescue evidence belong to verifier report. No manual-as-movie substitution.",
+    "Final explicit diagnostic anchor list includes complete+handback; coarse anchorLedger last ID null must not erase simultaneous completion anchors.",
+    "H-to-E uncredited transient, control feel, FPS limits, lifecycle and taste are not accepted by final18/18 or this limited frame inspection.",
+    "No defect closure, chapter acceptance or publication."
+  ],
+  "verifierReportQualification": {
+    "reportRef": "common-movie-candidate-runtime-report.json",
+    "reportSha256": "873507e9b3e0874c5c3aca4381c4e074b74fb3de10b36795a29f705e095bf2a6",
+    "corrections": [
+      "The summary finalState omits lane, but EVERY retained trace sample s.lane is movie. It is not merely a requested URL.",
+      "Coarse anchorLedger skips simultaneous5/6, but retained trace s.avFull.activationHistoryAnchorIds actually includes complete and handback in all3runs. Final CommonGround diagnostic anchors corroborate actual fired list. These are not only expected contract declarations."
+    ],
+    "retainedGaps": [
+      "Dense H-to-E transition and FPS not established by this matrix; neither fullstory nor chapter acceptance."
+    ],
+    "roleActualFinishedAt": "2026-09-06T22:20:28.980640+00:00"
+  }
+}

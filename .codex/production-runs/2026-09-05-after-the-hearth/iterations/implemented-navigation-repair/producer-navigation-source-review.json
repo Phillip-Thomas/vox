@@ -1,0 +1,48 @@
+{
+  "schema": "paravoxia.producerNavigationSourceReview.v1",
+  "recordedAt": "2026-09-06T14:11:21.656681+00:00",
+  "authoredBy": "root producer",
+  "acceptedForIndependentVerification": true,
+  "isGameplayAcceptance": false,
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "integrationReportSha256": "7eef831002a5e165d4b18714c2ec8e80825b626a197fd6a9dded9c3b06b85a15",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceFilesRehashed": 98,
+  "gate": {
+    "passed": true,
+    "checks": 1704,
+    "reportSha256": "e3c2a900db65de136d336584662ce0d180c7307a16733b0ac07e1da4b1044529"
+  },
+  "reviewed": [
+    "Prior navigation source review and actual autopilotTick repaired-versus-prior control-output regression retained. Safety certification and exact target cache findings are closed in source.",
+    "Closure diff invalidates stale known-empty ownership on a later present read. Both real persistence reproductions fail against preclosure state; full final suite passes. Actual stored chapter data and subsequent new work are asserted.",
+    "Final lexical diff contains only terminology and a test-local rename; all three production JavaScript bundles are byte-identical. The implementation gate remains unchanged.",
+    "All 98 recorded source files match the final manifest and no outside-scope drift was found. Original dirty baseline and historical deviations remain archived."
+  ],
+  "testTotals": {
+    "preRepairV2Baseline": 3091,
+    "baselineFiles": 349,
+    "files": 350,
+    "tests": 3139,
+    "addedByThisPass": 48,
+    "removed": 0,
+    "contributions": {
+      "mainRepairAdded": 46,
+      "producerReviewClosureAdded": 2
+    },
+    "precisionNote": "Main report testsChanged2 includes a revision of the foreign-actor test added in this same repair; it is not evidence of two pre-existing tests changed. Original empty-restore case was made to invoke the real restore lifecycle. No test deletion reported; suite total independently checked in final verify log."
+  },
+  "limitations": [
+    "No hardware, rendering, hearing, full chapter, movie or manual acceptance from source tests.",
+    "The incomplete old deep-link fixture lawfully resumes departure without an origin-landed receipt; actual earned return must be used for valid Continue proof.",
+    "All open implementation/creative defects remain open until current independent evidence and reviews close them.",
+    "HABITAT-CARRY-SYMMETRY remains an unmeasured source observation outside this repair; no expansion or fix claimed."
+  ],
+  "processHistory": [
+    "Temporary counterfactual spec outside allowed paths was created and removed, as reported by engineer. No incident-free claim.",
+    "Historical lifecycle checkout incident remains recorded separately.",
+    "Wording pass is nonbehavioral; closure completed the same uncleared fifth material repair. No additional material loop granted."
+  ],
+  "openDefectsRemainOpen": true,
+  "publicationAuthorized": false
+}

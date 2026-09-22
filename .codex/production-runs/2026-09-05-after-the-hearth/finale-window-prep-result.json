@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 550094,
+  "stop_reason": "end_turn",
+  "session_id": "490296cb-7af2-4958-8991-a0cf88bf83e5",
+  "total_cost_usd": 2.684345,
+  "usage": {
+    "input_tokens": 56,
+    "cache_creation_input_tokens": 89072,
+    "cache_read_input_tokens": 1416930,
+    "output_tokens": 43311,
+    "output_tokens_details": {
+      "thinking_tokens": 4810
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 89072,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1476,
+        "cache_read_input_tokens": 92667,
+        "cache_creation_input_tokens": 472,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 472
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2035,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002105,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 56,
+      "outputTokens": 43311,
+      "cacheReadInputTokens": 1416930,
+      "cacheCreationInputTokens": 89072,
+      "webSearchRequests": 0,
+      "costUSD": 2.6822399999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 4810,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 42,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**PREPARED \u2014 NOTRUN.** No browser, GPU, build, verify, source/contract edit or production run. No audible, causal or acceptance verdict.\n\n**New owned files**\n- `verifier/probes/finale-window/finale-window-probe.mjs` `1c06d799\u202649adf` (23929 B)\n- `verifier/probes/finale-window/windowSampler.mjs` `cd0daff6\u20262ae8ae6`\u2026 (`cd0daff6e1009181581d18baebba6f90514f8883b296be2b1db47467e82ae2f6`, 15871 B)\n- `verifier/probes/finale-window/audio-isolation-plan.json` `80598be9\u2026424ba`\n- `logs/finale-window-prep/{selftest.log,selftest.rc,selftest-start.txt,selftest-end.txt,audio-syntax-check.log}`\n- `finale-window-prep-report.json` `50204d49\u2026c3553`, `.md` `a07e7875\u202608ce6`\n\n**Commands run:** `node finale-window-probe.mjs --self-test` \u2192 exit 0, 33 checks / 0 failures, 18:22:23.732287283Z\u219218:22:23.797096444Z (65 ms). Audio: `bash -n` on the prepared sequence + `pactl/parecord --help` + `pactl info` read \u2192 exit 0; nothing loaded/created/recorded.\n\n**Prepared command:** `flock -x $LOCK -c 'exec 9<$LOCK; node .../finale-window-probe.mjs --out finale-window/window-1 --heavy-lock $LOCK --heavy-lock-fd 9 --probe-lock-contention --seconds 360'` on `http://127.0.0.1:34413/?story=ch13-survey&journeyprobe=1&debug=1&movie=1` (movie lane, shipped autopilot, no input/writes). Live-output variant adds `PULSE_SINK=paravoxia_finale_window` + `--unmuted`. Root must first set `activeRole=finale-window-runtime` (control currently reads `arrival-common-earned`, and the probe correctly refuses today).\n\n**Measurement:** one synchronous in-page sampler per record from a rAF callback (bounded timer fallback) \u2014 the direct fix for audit E1. Retains 3 s pre-edge + 11.5 s post-edge with real `performance` timestamps; edge requires done **and** complete **and** handback in AV history; keeps sampling the full 11.5 s past `done`. Zero screenshots between arm and seal (only a 2 Hz tiny `status()` poll); buffer serialized after sealing; one baseline frame plus three post-seal frames with atomic before/after samples, labelled as not-the-edge.\n\n**Exposed:** CG `finalTextureSeconds`/beat/mood/diagnostic.beat/anchors, story active/chapter/beat/runId + avFull complete/handback + units, `__voxBundleDiag` heldChain/trace, `__voxAudioDiag`, visibility/hidden/hasFocus, actor/worker/world identity. **Missing, preserved explicitly:** cancellation reason/caller (`_reason` discarded at commonGroundScore.ts:259), AudioContext/mute/volume state, App.tsx pause/overlay conjuncts. Existing hooks do not reveal cause or context state and nothing here pretends otherwise.\n\n**Audio:** feasible. PipeWire via pipewire-pulse; one HDMI sink, no null sink. Plan: probe-owned `module-null-sink`, `PULSE_SINK` on that child only, record its own monitor, verify attached sink-inputs are the child's tree, unload in `finally`; never the default monitor, never a mic, no default change. Key finding: shipped `CHROMIUM_ARGS` includes `--mute-audio` with no override in `openParavoxia`, so all prior captures were output-muted; the `--unmuted` variant reuses the same headed GB10 route with only that flag filtered \u2014 no source edit, never headless/SwiftShader. No shipped in-page tap exists.\n\n**Integrity:** 99/99 game paths rehashed exact, manifest `6ef957c3\u2026`, scene-v3 `5ef85a32\u2026` both match; only the already-recorded non-binding delta run-profile differs. Nothing under `main/` and no other lane's artifact was touched.",
+  "ttft_ms": 1530,
+  "type": "result",
+  "duration_ms": 549725,
+  "uuid": "e23b5e9a-a611-42c3-bc6c-7d73234c1cd2",
+  "ttft_stream_ms": 781,
+  "time_to_request_ms": 39,
+  "first_content_frame_ms": 781,
+  "queued_turn_count": 0
+}

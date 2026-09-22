@@ -1,0 +1,18 @@
+{
+  "streamRef": "integration-continue-spawn-stream.jsonl",
+  "streamSha256": "de6f00eee47ac70947fb7ae23b17f453160eb5890c43ef350169f9bb0d90c49e",
+  "actualToolResults": [
+    {
+      "toolUseId": "toolu_018VK7jzWEgr9tXWG63iRern",
+      "content": " RUN  v3.2.4 /home/thomasphillip/Projects/vox/main\n\n \u2713 src/utils/playerSpawnSelection.test.ts (15 tests) 3ms\n\n Test Files  1 passed (1)\n      Tests  15 passed (15)\n   Start at  19:19:48\n   Duration  295ms (transform 36ms, setup 0ms, collect 35ms, tests 3ms, environment 0ms, prepare 37ms)"
+    },
+    {
+      "toolUseId": "toolu_01EkLpDW7GixrfmXb3pMEDs8",
+      "content": "005e3b8f7a0acad7f934332bcadf765d987ec8b8e604133c4c90e8559c9e08b3  src/utils/playerSpawnSelection.ts\nreverted to old-source precedence\n\nExpected: \"restored-saved-on-foot\"\nReceived: \"ship-egress\"\n\n \u276f src/utils/playerSpawnSelection.test.ts:204:50\n    202| \n    203|   it('precedence needs all three conditions together', () => {\n    204|     expect(selectPlayerSpawnChoice(lifecycle())).toBe('restored-saved-\u2026\n       |                                                  ^\n    205|     expect(\n    206|       selectPlayerSpawnChoice(lifecycle({ initialSpawnSource: 'arrival\u2026\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[4/4]\u23af\n\n\n Test Files  1 failed (1)\n      Tests  4 failed | 11 passed (15)\n   Start at  19:19:56\n   Duration  277ms (transform 24ms, setup 0ms, collect 23ms, tests 8ms, environment 0ms, prepare 41ms)"
+    },
+    {
+      "toolUseId": "toolu_01VKNTDQCoLR2jpdbg1Be36u",
+      "content": "005e3b8f7a0acad7f934332bcadf765d987ec8b8e604133c4c90e8559c9e08b3  src/utils/playerSpawnSelection.ts\nexpect 005e3b8f7a0acad7f934332bcadf765d987ec8b8e604133c4c90e8559c9e08b3\n\n \u2713 src/utils/playerSpawnSelection.test.ts (15 tests) 2ms\n\n Test Files  1 passed (1)\n      Tests  15 passed (15)\n   Start at  19:20:03\n   Duration  251ms (transform 38ms, setup 0ms, collect 33ms, tests 2ms, environment 0ms, prepare 48ms)"
+    }
+  ]
+}

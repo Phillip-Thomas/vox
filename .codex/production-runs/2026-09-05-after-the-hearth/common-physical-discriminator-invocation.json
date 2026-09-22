@@ -1,0 +1,16 @@
+{
+  "role": "common-physical-discriminator",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T19:59:37.252325+00:00",
+  "commissionSha256": "9162178483cc6556e369de1ae2a53cd4e5dcfcd5c8969049e621abe37ee8815f",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "Continue unfinished actual manual COMMON credit-call discriminator; CPU preparation then serialized GPU; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T20:17:51.387753+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "dd1f4501-34dd-4d21-98ad-b62dcf0f424c",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

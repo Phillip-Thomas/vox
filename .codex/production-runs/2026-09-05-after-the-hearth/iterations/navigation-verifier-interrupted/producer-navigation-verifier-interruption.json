@@ -1,0 +1,18 @@
+{
+  "schema": "paravoxia.producerVerifierInterruption.v1",
+  "requestedAt": "2026-09-06T15:09:07.507344+00:00",
+  "targetPid": 1277390,
+  "roleInvocationRef": "story-verifier-navigation-invocation.json",
+  "signal": "SIGTERM",
+  "reason": "Close broad verifier after valid current survey/save/return captures and repeated invalid manual probes. Root hold/close instruction was not read before further manual4/5 launches. Latest manual5 completed cleanup; no source writer, source98unchanged. Continue manual verification in a fresh bounded role with strict settled-world/input/arrival guards.",
+  "latestBrowserCleanupRef": "verifier/captures/manual-survey/manual-5/cleanup-receipt.json",
+  "latestBrowserCleanupSha256": "e113afe3753fbdf8379cddc966e000a1dcce2020d03594a3c58779322250960b",
+  "sourceFilesRehashed": 98,
+  "sourceUnchanged": true,
+  "finalRoleReportClaim": false,
+  "currentChapterAcceptance": false,
+  "validEarlierEvidenceRetained": true,
+  "noUnrelatedProcessSignalled": true,
+  "manual4Qualifier": "It did show3.648horizontalmovement amidverticalsettling, unlike manual5 pure1.061verticalsettling. Neither is full manual route/corner proof.",
+  "next": "Harvest actual interrupted invocation and evidence; bounded manual-focused role prepared but not launched."
+}

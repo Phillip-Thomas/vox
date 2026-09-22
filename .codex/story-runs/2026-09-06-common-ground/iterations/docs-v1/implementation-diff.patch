@@ -1,0 +1,338 @@
+--- before/main/PARAVOXIA_STORY_BIBLE.md
++++ after/main/PARAVOXIA_STORY_BIBLE.md
+@@ -1,15 +1,110 @@
+ # PARAVOXIA — Living Story Bible
+ 
+-**Portable canon snapshot — 2026-07-15**
++**Portable canon snapshot — 2026-09-06; July 15 lineage retained**
+ 
+ **Current documentation lane:** runtime-reality reconciliation. This snapshot
+-governs canon while the worktree runtime reaches `ch9-hearth` and the public
++governs canon while the formal worktree runtime reaches `ch10-transit`, the
++separate station/return sidecar restores the second hearth, and the public
+ release remains separately frozen at W-7744's arrival.
+ 
+ **Machine authority map:** `story-authority.json` records runtime beat IDs, the
+-`ch9-hearth` worktree ceiling, the independent `ch4-arrival` release ceiling,
++`ch10-transit` formal worktree ceiling, the independent `ch4-arrival` release ceiling,
+ open release gates, and protected questions. It is a drift detector, not a
+ replacement for this creative canon.
++
++## Current continuation authority — 2026-09-06
++
++This bounded addendum supersedes earlier present-tense implementation ceilings
++and “next movement” labels below. Earlier dated treatments and delivery
++rationales remain lineage; their future A5 and later questions remain open.
++
++The current worktree's formal sequence reaches `ch10-transit` and `done`.
++The separate station application and world-return sidecar already perform the
++station transaction and second-hearth restoration, using the established
++ch11/ch12 receipt names. The signed historical Chapter 10 reveal ends before
++that interior visit; its non-spends are not retroactively rewritten. Current
++source is evidence of implemented behavior, not fresh continuous acceptance.
++The public release ceiling remains `ch4-arrival`.
++
++**Common Ground — approved direction, not yet implemented.** The user delegated
++in-scope creative and implementation decisions on 2026-09-06. The exact
++three-director candidate, decision register, recipient notes, signatures and
++separate delegated approval are retained in
++`../.codex/story-runs/2026-09-06-common-ground/`. The approved candidate is
++`story-authority-candidate.md` and its decision IDs are `CG-D01`–`CG-D12`.
++This records delegated authority, not a claim that the user personally viewed
++the later artifact hashes. Runtime requires its own signed scene contract.
++
++The station errand first receives its earned conclusion: the installed cell
++restores a reliable home. Live installation gets one local acknowledgment;
++already-restored saves get the steady state without consuming another cell or
++replaying completion. Terra can review the visibly stored old audit fault at
++that home and explicitly choose to revisit Origin. The record is not an
++incoming summons; Terra does not know where W-7744 currently is. Departure
++arises from security and curiosity, not another fault or threat to the hearth.
++
++For this local recurrence only, W-7744 has returned from his local retreat to
++repeat the measurement his model could not reconcile. His repeated inspection
++makes that cause visible. No rejected report, superior's dispatch, unseen
++punishment, offworld journey, elapsed absence, tracking cell or station link is
++established. The protected `w7744-return-cause` family remains in the authority
++map: later offworld/A5 recurrence, cause, timing, belief state and eventual turn
++are still open. This is a scoped answer, not a global resolution.
++
++The player demonstrates a route through the familiar living site by actually
++walking it. A bounded survey trace records that proposal. W-7744 tests its
++grounded spans and can stop for a specific footing or reference failure. The
++player can redraw the untested tail without losing valid work, choose a longer
++route he can repeat independently, or use a shorter bend requiring exchanged
++witness positions. Both routes are complete choices with different retained
++geometry and repeatability; neither receives a moral or musical rank.
++
++Both choices require the reversal: W-7744 holds a reference while Terra makes
++the reciprocal crossing. After the earned comparison and physical clearance,
++he makes the final grounded test on his own responsibility. His local entry is
++`PASSAGE OBSERVED. MODEL INCOMPLETE.` It is not a network clearance, friendship,
++alliance, passenger invitation or awakening installed by Terra. He remains a
++bounded local tester on Origin; the route and optional repeat survey persist.
++His old A4 departure and lost pack remain true.
++
++The new capacity is relational reading at `alive`: a shared act can preserve
++different accounts. Witness validity uses actual world/actor/reference geometry
++and occupied position, never camera gaze, waiting, optional foliage density,
++music or interpretation. The trace reveals only walked ground. No alternate
++renderer, consciousness score or higher reality stage is introduced. First
++interstellar warp still owns A5 Light. Worker 9 remains conscious; this chapter
++adds no attributed voice, third-consciousness sign, Maker answer or
++greater-threat revelation.
++
++The audiovisual direction retains a player-owned embodied view and existing
++world palettes. Grounded feet, the trace break and exchanged positions carry
++the turn. The hearth's warmth returns first. At Origin, the unresolved audit
++square returns; temporary witness holds do not repeatedly restart its phrase.
++Only his actually completed test permits changed phrase spacing, without a
++victory cadence or alliance theme. Controls return immediately; a live-only
++final texture may last at most five seconds before the existing 4.5-second
++release fade, with early cancellation and no replay on restore or repeat play.
++There is no extra coda, forced camera, new light, postprocessing unlock or
++shared audio-engine rewrite.
++
++**Bounded voice clarification (`CG-D08`).** New ch13 sensory or involuntary
++thought may remain lowercase and parenthetical; deliberately owned intent is
++bare lowercase. W-7744 retains procedural capitals and his already issued
++first person. The older blanket post-embodiment parenthesis ban remains dated
++lineage outside this explicit scope. This does not rewrite earlier copy or
++identify an additional speaker.
++
++The intended formal chapter is ch13. Existing ch11/ch12 receipts retain their
++identity through an explicitly evidenced station/return transition; arrival at
++the station cannot claim to guarantee a home repaired later. Exact route
++geometry, all-day readability, scene controls/anchors, movie continuity, saves,
++audio and tier/input/reset acceptance remain production obligations. Qualified
++software frames can ground geometry; they cannot pass hardware visual quality,
++motion or performance. No new chapter is called playable until implemented
++and verified, and publishing remains a separate decision.
++
++---
++
+ 
+ This document is a self-contained account of Paravoxia's story, its playable
+ scenes, its philosophical and creative laws, the decisions explicitly requested
+@@ -1182,8 +1277,10 @@
+   discoveries rather than declarations.
+ - **Pre-conscious Terra** speaks in lowercase parentheses. Parentheses mean a
+   private thought not yet permitted to become speech.
+-- After the first “i—”, Terra's embodied interior voice must not return to
+-  parenthetical grammar.
++- Historical blanket rule: after the first “i—”, Terra's embodied interior
++  voice must not return to parenthetical grammar. The 2026-09-06 `CG-D08`
++  addendum above explicitly supersedes this rule only for new ch13 sensory
++  thought versus deliberately owned intent; older copy is unchanged.
+ 
+ ### The narrator is the interface
+ 
+--- before/main/PARAVOXIA_STORY_EXECUTION_PLAN.md
++++ after/main/PARAVOXIA_STORY_EXECUTION_PLAN.md
+@@ -2,9 +2,9 @@
+ 
+ **Authored:** 2026-07-13
+ 
+-**Runtime status:** **CORE PATH REACHABLE THROUGH `ch9-hearth` — SIGNED PHYSICAL RAIL IMPLEMENTED — ACCEPTANCE EVIDENCE/PUBLISH GATED**
+-
+-**Documentation status:** **runtime-reality reconciliation — CURRENT THROUGH 2026-07-15**
++**Runtime status:** **FORMAL PATH THROUGH `ch10-transit`; STATION/RETURN SIDECAR IMPLEMENTED; COMMON GROUND APPROVED DIRECTION — ACCEPTANCE/PUBLISH GATED**
++
++**Documentation status:** **runtime-reality reconciliation — CURRENT THROUGH 2026-09-06; EARLIER DELIVERY LINEAGE RETAINED**
+ 
+ **Authorization provenance:** **OWNER-AUTHORIZED STAGED IMPLEMENTATION**
+ 
+@@ -40,6 +40,77 @@
+ or gates on the critical path. The first interstellar warp still owns A5 Light.
+ 
+ ---
++
++## 0. Current continuation packet — Common Ground, 2026-09-06
++
++This section supersedes dated “current/next” implementation claims below for
++the affected range; the July delivery rationale and protected later gates
++remain lineage. Runtime source remains authoritative for what exists.
++
++| Boundary | Current disposition |
++| --- | --- |
++| Formal sequence | WORKTREE-IMPLEMENTED through `ch10-transit`, then `done` |
++| Station visit and return | WORKTREE-IMPLEMENTED sidecar using ch11/ch12 receipts; registry IDs do not yet represent separate formal chapters |
++| Movie continuation | Existing station screening stops after cell acquisition/look-around; departure, actual flight/landing/install and subsequent entry still require integration |
++| Common Ground / ch13 | APPROVED DIRECTION; no runtime implementation or current audiovisual acceptance claimed by this documentation patch |
++| Public release | `ch4-arrival`; unchanged and separately gated |
++
++Authority is the three-director `council-v1` candidate and `CG-D01`–`CG-D12`
++decision register in `../.codex/story-runs/2026-09-06-common-ground/`, with
++`owner-story-decision.json` recording the user's standing delegation. The user
++requested creative plot-aligned continuation and explicitly approved autonomous
++in-scope decisions. This is not fictitious personal review of future media.
++
++Production order:
++
++1. Give the real second-hearth install its bounded acknowledgment; preserve
++   every installed/restored receipt and legacy save. Offer the stored-audit
++   review and explicit voluntary return from the working home.
++2. Preserve the ch11/ch12 sidecar identity through a typed external transition
++   with strict entry/exit evidence. Do not weaken direct registry adjacency or
++   add a restored-home guarantee to ch10. Extend the actual movie departure,
++   return flight, landing and cell installation without a `story=` reseed.
++3. Build `ch13-home`, `ch13-return`, `ch13-survey`, `ch13-common` through a
++   matching production lock and signed scene contract. Use chapter-local
++   state/director/world/beat/rail modules and one integrator for shared owners.
++4. Implement the actual walked trace, reversible tested-prefix/untested-tail
++   rules, two durable route classes, world-position witness hysteresis,
++   reciprocal crossing and W-7744's grounded independent test. Retain a bounded
++   local actor and optional repeat survey after completion. Existing
++   observation-ledger entries remain non-gating.
++5. Bind world/actor-scoped versioned persistence, resume/deep-link/reset,
++   objective/marker/F arbitration and one-shot semantic feedback. Preserve
++   unrelated dirty files, especially live beat/autopilot and audio work.
++6. Realize the accepted score and embodied staging through existing camera,
++   material, lighting and score authorities. No new shared audio graph, light
++   topology, world generation or alternate renderer is commissioned.
++
++Before exact scene geometry is signed, establish two actual dry route/reference
++possibilities and usable day/night spatial relations. Do not require the new
++unimplemented mechanic's interaction proof at that earlier boundary; verify it
++after signed implementation. If either physical route cannot exist, reopen the
++bounded arena decision. Software frames are geometry diagnostics only; final
++headed hardware and supported-tier evidence remain required.
++
++Acceptance is the run's `implementation-acceptance.md`: existing restored and
++pending-cell saves; actual continuous station-to-home-to-ch13 play; three cold
++movies with no timeout rescue; both route choices and their distinct saved
++repeatability; physical/reference refusal, revision and witness recovery;
++W-7744's necessary reciprocal contribution and real final arrival; correct
++objective/prompt/marker/feedback lifecycles; full verification; bounded audio
++tail and listening; night, mobile, reduced motion, low tier, replay/quit/focus
++and sandbox behavior; fresh independent story, score, cinema, player-experience
++and cohesion reviews. New scene approval is separate from publication.
++
++`CG-D03` answers only W-7744's local ch13 reinspection. `G-A5-01` and later
++offworld recurrence/turn questions remain open; the protected family key stays
++present. This local comparison is not the A6 collaboration milestone. First
++interstellar warp still owns A5, and all Worker 9/third-consciousness/Maker/
++greater-threat/ending boundaries remain intact. New ch13 voice follows the
++Bible's bounded `CG-D08` clarification; no global old-copy pass is implied.
++
++---
++
+ 
+ ## 1. Outcome contract
+ 
+--- before/main/STORY.md
++++ after/main/STORY.md
+@@ -1,15 +1,33 @@
+-# Paravoxia — Story Mode (Prologue → Chapter 4's arrival)
+-
+-**What this is.** The playable first act of the fidelity-ladder narrative
+-(design: `../PARAVOXIA_PROGRESSION.md`; chapter-4 contract:
+-`../PARAVOXIA_CH4_PLAN.md`). Rendering fidelity IS the story: the game opens as
+-a 1-bit terminal, becomes a monochrome CCTV "Regulation Feed," gains color at
+-A1, depth/freedom at A2, texture + time at A3 — then plays THE FIRST DAY ALIVE
+-(thirst → forage → the klaxon → the scheduled sleep) and ends, for now, on
+-chapter 4's arrival: the other worker, W-7744. TEMPORARY TERMINAL: the arrival
+-completes the story (sandbox at `material`). `ch4-audit` remains the contracted
+-continuation, but it is not the active production lane (see the marked hand-off
+-in `storyDirector.ts`).
++# Paravoxia — Story Mode and current production boundary
++
++**Current worktree — 2026-09-06.** The formal story registry runs from the
++terminal prologue through `ch10-transit`, then `done`. Beyond that threshold,
++the separate space-station application issues the bonded cell and the world
++return sidecar installs it at Tidegarden's second hearth. Their durable
++ch11/ch12 receipts remain distinct from formal chapter registration. Source
++owners are `src/game/spaceStation/spaceStationStory.ts` and
++`src/story/stationReturnStory.ts`. This source inventory is not a fresh
++continuous movie or audiovisual acceptance claim.
++
++**Approved next direction: Common Ground (ch13).** From a reliable restored
++home, Terra may review the stored audit fault and choose to revisit Origin.
++W-7744 repeats his own unresolved local measurement. The player demonstrates
++and revises a walked route; the two exchange witness positions before his
++independent final test. The retained local result admits an incomplete model.
++This direction is approved through the exact three-director council and the
++user's standing delegation in
++`../.codex/story-runs/2026-09-06-common-ground/`. It is not yet implemented by
++this documentation patch. The current station movie still stops inside;
++authentic departure, return, installation and new-chapter continuity are part
++of the next signed production packet. No route choice spends A5 or grants an
++alliance, and the repaired home is preserved.
++
++**Public release boundary.** The release surface remains Prologue → Chapter
++4's arrival (`ch4-arrival`). Later worktree implementation is authorized by the
++owner's July 28 gate lift and separately contracted production; publication
++remains a separate decision. The first-act guide below retains its historical
++release scope, while current beat IDs and resume behavior come from
++`src/story/storyState.ts` and the generated beat contracts.
+ 
+ **Canon and future delivery.** The portable, current canon—including wonder,
+ Terra/Worker 9's emergent third consciousness, communion, W-7744's recurring
+@@ -17,14 +35,15 @@
+ `PARAVOXIA_STORY_BIBLE.md`. The audited gap register, system architecture,
+ owner/proposal coverage ledger, dependency gates, and sole future-story resume
+ point live in `PARAVOXIA_STORY_EXECUTION_PLAN.md`. The current release authority
+-remains `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`; no post-arrival runtime work is
+-authorized while that demo lock is active.
++remains `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`; the unchanged demo release
++ceiling does not revoke the July 28 authorization to build later story through
++its Creative-Triad and registry gates.
+ 
+ ## Playing it
+ 
+ - **Menu → "◈ Story"** (next to Play; label becomes "Continue Story" mid-run).
+ - Dev deep links: `?story=1` (full run from the terminal prologue) and
+-  `?story=<beat>` for EVERY beat (`crawl|manifest|voyage|deflect|crash|descent|
++  `?story=<beat>` for the historical first-act entries listed here (`crawl|manifest|voyage|deflect|crash|descent|
+   ch1-fixed|ch1-track|ch1-raster|ch1-depth|ch1-nav|ch1-iso|ch1-lift|
+   ch1-anomaly|a1-ramp|ch2-color|ch2-approach|a2-awakening|ch3-gather|ch3-dusk|
+   ch3-await-rest|a3-dawn|ch3-thirst|ch3-forage|ch3-signal|ch4-vigil|
+--- before/main/story-authority.json
++++ after/main/story-authority.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "paravoxia.storyAuthority.v2",
+-  "snapshotDate": "2026-07-15",
++  "snapshotDate": "2026-09-06",
+   "status": {
+     "documentationLane": "existing-story-reconciliation",
+     "runtimeLane": "owner-authorized-implemented-release-gated",
+@@ -22,7 +22,12 @@
+       "src/story/ux/feedbackCues.ts",
+       "src/story/ux/StoryGuidanceHud.tsx",
+       "src/game/systems/mawSystem.ts",
+-      "src/game/systems/shipRestoration.ts"
++      "src/game/systems/shipRestoration.ts",
++      "src/story/beats/metadata.generated.ts",
++      "src/game/spaceStation/spaceStationStory.ts",
++      "src/story/stationReturnStory.ts",
++      "src/components/spaceStation/StationScreeningDriver.tsx",
++      "src/story/autopilot/primitives.ts"
+     ],
+     "shippedOverview": "STORY.md",
+     "canon": "PARAVOXIA_STORY_BIBLE.md",
+--- before/docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json
++++ after/docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json
+@@ -24,7 +24,7 @@
+       "const": "paravoxia.storyAuthority.v2"
+     },
+     "snapshotDate": {
+-      "const": "2026-07-15"
++      "const": "2026-09-06"
+     },
+     "status": {
+       "const": {
+@@ -50,7 +50,12 @@
+           "src/story/ux/feedbackCues.ts",
+           "src/story/ux/StoryGuidanceHud.tsx",
+           "src/game/systems/mawSystem.ts",
+-          "src/game/systems/shipRestoration.ts"
++          "src/game/systems/shipRestoration.ts",
++          "src/story/beats/metadata.generated.ts",
++          "src/game/spaceStation/spaceStationStory.ts",
++          "src/story/stationReturnStory.ts",
++          "src/components/spaceStation/StationScreeningDriver.tsx",
++          "src/story/autopilot/primitives.ts"
+         ],
+         "shippedOverview": "STORY.md",
+         "canon": "PARAVOXIA_STORY_BIBLE.md",

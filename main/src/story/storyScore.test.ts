@@ -4,8 +4,17 @@ const score = vi.hoisted(() => ({
   setScoreMood: vi.fn(),
   unlockScore: vi.fn(),
   setScoreIntensity: vi.fn(),
-  scoreHit: vi.fn()
+  scoreHit: vi.fn(),
+  // Stage 3 façade seams (composed sync / one tonic); inert here.
+  scheduleHit: vi.fn(() => null),
+  cancelPendingScheduledHits: vi.fn(() => 0),
+  readLiveBedTonic: vi.fn(() => null),
+  resolveScorePlanetHomeRoot: vi.fn(() => 0),
+  noteImmediateHit: vi.fn(),
+  getScoreMoodTonic: vi.fn(() => ({ tonicSemis: 0, voicingPolicy: 'literal' })),
+  SCORE_ROOT_HZ: 55
 }));
+vi.mock('../audio/audioCore.ts', () => ({ peekAudioContext: () => null }));
 
 vi.mock('../audio/scoreEngine.ts', () => score);
 
@@ -159,14 +168,13 @@ describe('storyScore chapter 7 reconstruction', () => {
 
     expect(hasStoryScoreMoodOverride('ch7-reconstruct')).toBe(true);
     expect(score.setScoreMood).toHaveBeenCalledTimes(1);
-    expect(score.setScoreMood).toHaveBeenLastCalledWith(override);
+    // Stage 3: the façade passes the entry's voicing policy alongside the mood.
+    expect(score.setScoreMood.mock.lastCall?.[0]).toEqual(override);
 
     expect(clearStoryScoreMoodOverride('ch7-reconstruct')).toBe(true);
     expect(hasStoryScoreMoodOverride('ch7-reconstruct')).toBe(false);
     expect(score.setScoreMood).toHaveBeenCalledTimes(2);
-    expect(score.setScoreMood).toHaveBeenLastCalledWith(
-      getStoryScoreMood('ch7-reconstruct')
-    );
+    expect(score.setScoreMood.mock.lastCall?.[0]).toEqual(getStoryScoreMood('ch7-reconstruct'));
     expect(score.scoreHit).not.toHaveBeenCalled();
   });
 });

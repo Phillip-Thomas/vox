@@ -10,7 +10,11 @@ import {
 import { neutralBedSignals, type BedSignals } from './worldSignals.ts';
 import { barDurationSec } from './transport.ts';
 import { MODE_BRIGHTNESS_CHAIN, type ModeName } from './theory.ts';
+import { hashBar } from './phraseMemory.ts';
 import {
+  ARRANGEMENT_LEVELS,
+  BAR_TABU,
+  BAR_TABU_BYPASS_BUDGET,
   ERA_ALIVE,
   ERA_COLOR,
   ERA_MATERIAL,
@@ -21,6 +25,7 @@ import {
   PHRASE_BARS,
   PHRASE_TABU,
   SIDECHAIN_DEPTH,
+  WITHHELD_LEVEL,
   VL_COMMON_TONE_TENSION,
   VL_TOTAL_MAX,
   VL_VOICE_MAX
@@ -46,6 +51,8 @@ import {
  * is unbounded. 1.5 phrases is the line between "gravitating" and "stuck".
  */
 export const SOAK_MAX_CONSECUTIVE_HELD = 12;
+/** Bars per BAR_TABU_BYPASS_BUDGET: BAR_TABU_BUDGET_MINUTES (32) at the slowest shipped bar (66 bpm 4/4 = 1056 bars). */
+export const SOAK_BAR_BUDGET_BARS = 1056;
 /** Samples at/above this absolute value count as clipped in audio soaks. */
 export const SOAK_CLIP_LIMIT = 1.0;
 /** Day/night period of the fullSoak scenario, seconds. */
@@ -308,6 +315,24 @@ export interface SoakBarRecord {
   windPan: number;
   windTurbulence: number;
   tempoBpm: number;
+  // --- Stage 5 long form ---
+  levels: { sub: number; pad: number; ostinato: number; texture: number; lead: number; percussion: number; riser: number };
+  sectionIndex: number;
+  phraseInSection: number;
+  sectionStarted: boolean;
+  statementScheduled: boolean;
+  registerArc: string | null;
+  withheldLayer: string | null;
+  withheldActive: boolean;
+  bloomBudget: number;
+  forcedBuild: boolean;
+  bloomLift: number;
+  pulseLevel: number;
+  pulseBeats: number;
+  barTabuBypass: boolean;
+  barVariationOps: number;
+  /** Section identity carried per bar so the pair audit needs no side table. */
+  statementSchedule: string | null;
 }
 
 export interface SoakLog {
@@ -396,7 +421,23 @@ export function createSoakCollector(
         windDrive: plan.wind.drive,
         windPan: plan.wind.pan,
         windTurbulence: plan.wind.turbulence,
-        tempoBpm: plan.tempoBpm
+        tempoBpm: plan.tempoBpm,
+        levels: { ...plan.levels },
+        sectionIndex: plan.sectionIndex,
+        phraseInSection: plan.phraseInSection,
+        sectionStarted: plan.sectionStarted,
+        statementScheduled: plan.statementScheduled,
+        registerArc: plan.registerArc,
+        withheldLayer: plan.withheldLayer,
+        withheldActive: plan.withheldActive,
+        bloomBudget: plan.bloomBudget,
+        forcedBuild: plan.forcedBuild,
+        bloomLift: plan.bloomLift,
+        pulseLevel: plan.pulse.level,
+        pulseBeats: plan.pulse.beats.length,
+        barTabuBypass: plan.barTabuBypass,
+        barVariationOps: plan.barVariationOps,
+        statementSchedule: conductor.section ? conductor.section.statementSchedule.join('.') : null
       });
       prevUppers = [...h.voicing.uppers] as [number, number, number];
       prevMode = h.mode;
@@ -477,7 +518,9 @@ const SMOOTH_SIGNAL_CONTROLS = [
   'eraSub',
   'windDrive',
   'windPan',
-  'windTurbulence'
+  'windTurbulence',
+  'bloomLift',
+  'pulseLevel'
 ] as const;
 
 type SmoothSignalControl = (typeof SMOOTH_SIGNAL_CONTROLS)[number];
@@ -697,15 +740,116 @@ export function auditSoakLog(log: SoakLog): SoakReport {
     `heldNoLegal ${heldTotal} bars, worst streak ${worstStreak} (limit ${SOAK_MAX_CONSECUTIVE_HELD})`
   );
 
+  // 8. Whole-bar fingerprint law (Stage 5): the bar hash is RE-DERIVED here
+  //    from the raw log (never trusting plan.barHash) and may not recur inside
+  //    BAR_TABU bars while the law is armed (a section in flight), except as a
+  //    flagged bypass; bypasses are budgeted per BAR_TABU_BUDGET_MINUTES.
+  const barHashOf = (r: SoakBarRecord): number =>
+    hashBar({
+      chordId: r.chordId,
+      uppers: r.uppers,
+      arrangement: r.arrangement,
+      melodyChain: r.melodyChain,
+      ostinato: r.ostinato.map((n) => `${n.slot}:${n.semis}`),
+      percussion: r.percussion,
+      levels: [r.levels.sub, r.levels.pad, r.levels.ostinato, r.levels.texture, r.levels.lead, r.levels.percussion, r.levels.riser]
+    });
+  const recomputedBarHashes = bars.map(barHashOf);
+  let barTabuViolations = 0;
+  let barTabuDetail = '';
+  let barBypasses = 0;
+  for (let i = 0; i < bars.length; i++) {
+    if (bars[i].sectionIndex < 0 || bars[i].arrangement === 'REST') continue; // law not armed (chip eras); REST is stillness
+    if (bars[i].barTabuBypass) {
+      barBypasses++;
+      continue;
+    }
+    const window = recomputedBarHashes.slice(Math.max(0, i - BAR_TABU), i);
+    if (window.includes(recomputedBarHashes[i])) {
+      barTabuViolations++;
+      if (!barTabuDetail) barTabuDetail = `bar ${bars[i].barIndex} (${bars[i].arrangement}) repeats a bar inside ${BAR_TABU}`;
+    }
+  }
+  const bypassBudget = Math.max(
+    BAR_TABU_BYPASS_BUDGET,
+    Math.ceil((BAR_TABU_BYPASS_BUDGET * bars.length) / SOAK_BAR_BUDGET_BARS)
+  );
+  const overBudget = barBypasses > bypassBudget ? barBypasses - bypassBudget : 0;
+  push(
+    'bar-tabu',
+    barTabuViolations + overBudget,
+    barTabuViolations
+      ? barTabuDetail
+      : overBudget
+        ? `${barBypasses} bypasses over the budget of ${bypassBudget}`
+        : `${barBypasses} bypasses (budget ${bypassBudget}), no unflagged repeat inside ${BAR_TABU} bars`
+  );
+
+  // 9. Bloom paid (Stage 5): every BLOOM entered from a PLANNED build belongs
+  //    to a section with bloomBudget 1 AND that section withheld a layer before
+  //    the build — checked from the logged LEVELS against the arrangement table,
+  //    not from the planner's own flags. Forced gestures (warp/launch) are the
+  //    payment themselves and are exempt.
+  let unpaidBlooms = 0;
+  let unpaidDetail = '';
+  for (let i = 1; i < bars.length; i++) {
+    const r = bars[i];
+    if (r.arrangement !== 'BLOOM' || bars[i - 1].arrangement === 'BLOOM') continue;
+    if (r.forcedBuild || r.sectionIndex < 0) continue;
+    let paid = false;
+    if (r.bloomBudget === 1 && r.withheldLayer !== null) {
+      const layer = r.withheldLayer as keyof typeof WITHHELD_LEVEL;
+      const key = layer === 'shimmer' ? 'texture' : layer;
+      for (let j = i - 1; j >= 0 && bars[j].sectionIndex === r.sectionIndex; j--) {
+        const b = bars[j];
+        if (b.arrangement === 'BUILD' || b.arrangement === 'BLOOM') continue;
+        const baseLevel = ARRANGEMENT_LEVELS[b.arrangement as keyof typeof ARRANGEMENT_LEVELS][key];
+        // Withheld means the layer sat at or under its withheld share of the state's table level
+        // (a state whose table level is already 0 evidences nothing either way).
+        if (b.withheldActive && (baseLevel === 0 || b.levels[key] <= baseLevel * WITHHELD_LEVEL[layer] + 1e-6)) {
+          paid = true;
+          break;
+        }
+      }
+    }
+    if (!paid) {
+      unpaidBlooms++;
+      if (!unpaidDetail) unpaidDetail = `bloom at bar ${r.barIndex} (section ${r.sectionIndex}) was not paid for by a withhold`;
+    }
+  }
+  push('bloom-paid', unpaidBlooms, unpaidBlooms ? unpaidDetail : 'every planned bloom was paid for by a prior withhold');
+
+  // 10. Section pairs (Stage 5): no section repeats its (statementSchedule, registerArc) pair.
+  const sectionPairs = new Map<number, string>();
+  for (const r of bars) {
+    if (r.sectionIndex >= 0 && !sectionPairs.has(r.sectionIndex)) {
+      sectionPairs.set(r.sectionIndex, `${r.statementSchedule}|${r.registerArc}`);
+    }
+  }
+  const pairList = [...sectionPairs.values()];
+  const repeatedPairs = pairList.length - new Set(pairList).size;
+  push(
+    'section-pairs',
+    repeatedPairs,
+    repeatedPairs ? `${repeatedPairs} section(s) repeat a (schedule, arc) pair` : `${pairList.length} sections, all pairs distinct`
+  );
+
+  // 11. Hand-back law (contract [16]): a section planned after a story hand-back
+  //     carries no bloom budget and a plateau|fall register arc. The log does
+  //     not carry the hand-back edge itself, so this checks the planner's
+  //     consistency: no bloom entered from a planned build inside a budget-0 section.
+  let budgetViolations = 0;
+  for (let i = 1; i < bars.length; i++) {
+    const r = bars[i];
+    if (r.arrangement === 'BLOOM' && bars[i - 1].arrangement !== 'BLOOM' && !r.forcedBuild && r.sectionIndex >= 0 && r.bloomBudget === 0) {
+      budgetViolations++;
+    }
+  }
+  push('bloom-budget', budgetViolations, budgetViolations ? `${budgetViolations} unforced bloom(s) inside a budget-0 section` : 'no unforced bloom inside a budget-0 section');
+
   // Stats (informational — novelty and occupancy, for the report).
   const chordIds = new Set(bars.map((r) => r.chordId));
-  const barHashes = new Set(
-    bars.map((r) =>
-      fnv1a32(
-        `${r.chordId}|${r.arrangement}|${r.melodyChain}|${r.ostinato.map((n) => n.slot + ':' + n.semis).join(',')}|${r.percussion.join(',')}`
-      )
-    )
-  );
+  const barHashes = new Set(recomputedBarHashes);
   const modeHist: Record<string, number> = {};
   for (const rec of bars) modeHist[rec.mode] = (modeHist[rec.mode] ?? 0) + 1;
   const arrangeHist: Record<string, number> = {};
@@ -722,7 +866,12 @@ export function auditSoakLog(log: SoakLog): SoakReport {
     melodyStatements: statements.length,
     distinctStatements: new Set(hashes).size,
     barNovelty: bars.length ? Number((barHashes.size / bars.length).toFixed(3)) : 1,
+    /** Harmony chord-tabu bypasses (harmonyBrain CHORD_TABU) — unchanged by Stage 5, chord-pool pass pending. */
     tabuBypasses: bars.filter((r) => r.tabuBypass).length,
+    /** Whole-bar tabu bypasses (the Stage 5 law's audited exception). */
+    barTabuBypasses: barBypasses,
+    sections: pairList.length,
+    blooms: bars.filter((r, i) => r.arrangement === 'BLOOM' && (i === 0 || bars[i - 1].arrangement !== 'BLOOM')).length,
     commonToneRelaxes: bars.filter((r) => r.commonToneRelaxed).length,
     worstSignalStep: Number(worstSignalStep.toFixed(3)),
     modes: Object.entries(modeHist)

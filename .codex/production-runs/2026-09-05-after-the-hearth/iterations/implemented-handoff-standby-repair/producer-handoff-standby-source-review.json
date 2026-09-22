@@ -1,0 +1,74 @@
+{
+  "schema": "paravoxia.producerSourceReview.v1",
+  "reviewedAt": "2026-09-06T15:59:01.755831+00:00",
+  "reviewedBy": "root producer",
+  "acceptedForIndependentVerification": true,
+  "isChapterAcceptance": false,
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "integrationReportSha256": "9676f54cc97b4027998f13e07f8da6758c9ec166faff738c3f3dbee060c9abb6",
+  "sourceFilesRehashed": 99,
+  "initialSourcePreservationChecked": 958,
+  "unexpectedDrift": [],
+  "changedPaths": [
+    {
+      "path": "main/src/story/tidegardenRoute.ts",
+      "beforeSha256": "e7237efcf339efb599222a171a22b0c4b118712025f3f777030c08482b7e103e",
+      "afterSha256": "f35f6b160b812438f7439a9ecacccdd0d6cf9151ead370e4eb876b1e44e504bf",
+      "created": false,
+      "inAllowedPaths": true
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.ts",
+      "beforeSha256": "980590b0add81f8e0ce6bdc182cb834940af336454435ff4d304a64e47ad11b5",
+      "afterSha256": "acc0d9cf6331f13f77bd95d29b3bd311033a382fcdc3bff3d9ab977297166c46",
+      "created": false,
+      "inAllowedPaths": true
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.test.ts",
+      "beforeSha256": "8379b552bd076c4311ba333182e7f0399e0b82a60093a16feddcdc0ed1fb8492",
+      "afterSha256": "1b8e76af7b94aa4c71f5da07a4e34c7114aeaffbc2c404c599632eb4cb11a97b",
+      "created": false,
+      "inAllowedPaths": true
+    },
+    {
+      "path": "main/src/App.test.tsx",
+      "beforeSha256": null,
+      "afterSha256": "f19a1e4a116be4c8b7849f3da4074abafb04584e2302aa415e68e55cbe7bd271",
+      "created": true,
+      "inAllowedPaths": true,
+      "nullReason": "genuinely absent on disk before this pass; the direction listed it as an allowed path assuming it existed"
+    }
+  ],
+  "tests": {
+    "files": 351,
+    "tests": 3158,
+    "added": 19,
+    "removed": 0,
+    "actualLogRef": "logs/handoff-standby-repair/verify.log",
+    "actualLogSha256": "54a473d489deff9e73bc8c1379955e31684907f1fb773eb3de0e6ecd765d7fa0"
+  },
+  "gate": {
+    "passed": true,
+    "checks": 1704,
+    "checkedAt": "2026-09-06T15:58:03.908Z",
+    "reportSha256": "a53d13f2e7e2f6ed5a9e243b247d0c2d0e0bf0c6206d90c2602dae4c58c6bedb"
+  },
+  "review": [
+    "Missing ch13-return runtime crossing entry now preserves only agreed committed Origin state; boot resolver and other crossings unchanged. New App.test.tsx uses real store commits and resolver, with a transcribed App swap predicate. It does not mount React or replace forthcoming live arrival proof.",
+    "Standby uses live support and segment clearance from actor/current remaining offered samples, positioning and common route. Candidate offsets are local movie waiting places; signed poses/routes and player actions unchanged. Finite candidate exhaustion yields hold. Actual footing/route geometry and counterfactual regressions support the source change; new hardware behavior remains unmeasured.",
+    "Root verified the four commissioned paths only: three existing source/test files changed plus explicitly allowed previously absent App.test.tsx. Initial958source preservation check passes with no unexpected source drift. All99finalmanifest files match.",
+    "The actual composite log passes3158tests/351files andbuild. Ten new App tests and nine director tests, none removed. Counterfactuals fail1and4 target tests on oldcode and restore exactfixedbytes; those are intentional negative controls, not unresolved suite failures.",
+    "Raw engineer report uses equivalent differently named contract/test/log fields. Run-local compiler adapters normalize these in memory and keep original report bytes. Two logged commands registered; unlogged focused commands remain corroborated/superseded by retained full suite, not invented separate log receipts.",
+    "Full vitest suite covers src/story/ux; story:ux:check is the filtered vitest alias and was not separately invoked in this pass. Guidance/AV/authority/registry scripts are present in the actual composite. Physical UX lifecycle proof remains pending."
+  ],
+  "manualProbeStatus": {
+    "acceptedForGpuInvocation": false,
+    "reason": "Original prep passed43selftests but root found real lock-ownership, served-byte identity, stand-clear and pulse-size/action-guard defects. Mechanical closure exec27013 is active. First dedicated flight/movie verifier owns separate probes; manual COMMON capture remains held until closure review."
+  },
+  "limitations": [
+    "No new GPU, flight, survey/common, Continue or AV acceptance from source tests.",
+    "All original chapter acceptance and fresh independent reviewer requirements remain; no defect exception or publication."
+  ]
+}

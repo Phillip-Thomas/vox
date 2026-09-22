@@ -1,0 +1,103 @@
+[
+  {
+    "id": "CG-JUDGE-001",
+    "title": "Stale present-tense beat range in a patched governing document",
+    "taxonomyCategory": "shipped_claim_mismatch",
+    "severity": "low",
+    "evidence": [
+      "main/PARAVOXIA_STORY_EXECUTION_PLAN.md:300 (F01 'Current truth' column: 'now continues from ch4-audit through ch9-hearth and done')",
+      "main/src/story/storyState.ts:349-350 (done follows ch10-transit)",
+      "documentation-audit.md \u00a73 R1"
+    ],
+    "ownerRole": "documentation-patch-engineer",
+    "routingTarget": "repair-story-authority-docs",
+    "status": "open",
+    "acceptanceAuthority": "documentation auditor with producer countersign; no owner decision required",
+    "scope": "One table cell in the F01 row of the already-patched Execution Plan. Explicitly not a gap-register or old-canon pass."
+  },
+  {
+    "id": "CG-JUDGE-002",
+    "title": "Refreshed snapshotDate over intentionally retained stale production identity",
+    "taxonomyCategory": "reference_or_manifest_drift",
+    "severity": "low",
+    "evidence": [
+      "main/story-authority.json:3 (snapshotDate 2026-09-06)",
+      "main/story-authority.json:50 (ownerApprovedSceneContract.activePath -> 2026-07-13-distance-between-fires)",
+      "main/story-authority.json:62-66 (activeProduction.runId 2026-07-13-distance-between-fires)",
+      "inventory-open-issues.json OI-1",
+      "PARAVOXIA_STORY_BIBLE.md:1493-1496 and PARAVOXIA_STORY_EXECUTION_PLAN.md:1665-1666 (retention declared intentional)"
+    ],
+    "ownerRole": "story-inventory-verifier",
+    "routingTarget": "verify-story-authority",
+    "status": "accepted-pending-scene-contract",
+    "acceptanceAuthority": "creative producer; already disclosed in two patched documents",
+    "scope": "Manifest identity fields only. Must be resolved when ch13 is registered; not a documentation-patch defect now."
+  },
+  {
+    "id": "CG-JUDGE-003",
+    "title": "Core dual-route promise not established by measurement at signature time",
+    "taxonomyCategory": "causal_gap",
+    "severity": "medium",
+    "evidence": [
+      "story-authority-candidate.md:17 ('Both are complete solutions')",
+      "story-authority-candidate.md:51 ('Sign exact arena geometry only after two actual dry grounded routes...')",
+      "PARAVOXIA_STORY_BIBLE.md (addendum: 'the continuous-reference outer route is not yet established by measurement')",
+      "alignment-report.md \u00a74 ('one source-derived dry route under its sampled witness assumptions, not both designed route classes')",
+      "dissent-register.md \u00b65 ('Failure to demonstrate the two route classes reopens the arena; it cannot be marked an accepted artistic exception')"
+    ],
+    "ownerRole": "chapter-director",
+    "routingTarget": "direct-story-correction / cross-examine-story-directions at geometry gate",
+    "status": "open-accepted-as-declared-precondition",
+    "acceptanceAuthority": "three director signatures + owner-story-decision.json accept it AS AN OPEN GATE, not as satisfied evidence; reopening the bounded arena is owner-level",
+    "scope": "Feasibility of the two retained route classes and their distinct witness dependence in the existing Origin geometry. Non-blocking for the documentation candidate only because the candidate refuses to sign the arena and states the reopening condition."
+  },
+  {
+    "id": "CG-JUDGE-004",
+    "title": "Inherited authorship/guidance-register debt carried into a guidance-heavy new chapter",
+    "taxonomyCategory": "agency_misrepresentation",
+    "severity": "low",
+    "evidence": [
+      "naive-reader-report.md \u00a73 SEVERITY 1 and \u00a76 items 1 and 3",
+      "alignment-report.md A2 and A4",
+      "alignment-scope-dispositions.json (A1/A2/A4 status: existing-runtime-perception-debt-unresolved)",
+      "story-authority-candidate.md:73 (per-verb objective enumeration for ch13)"
+    ],
+    "ownerRole": "chapter-director",
+    "routingTarget": "align-intent-with-cold-read at scene contract; older-copy portion remains uncommissioned",
+    "status": "open-inherited-not-closed-by-this-patch",
+    "acceptanceAuthority": "owner for any older-copy pass; chapter director for ch13 guidance wording",
+    "scope": "ch13 guidance register only. This defect does not close, reopen or re-scope the pre-existing runtime perception debt, and it commissions no rewrite of older copy."
+  },
+  {
+    "id": "CG-JUDGE-005",
+    "title": "Terra's in-chapter opposition and belief movement under-pressurised",
+    "taxonomyCategory": "character_motivation_gap",
+    "severity": "low",
+    "evidence": [
+      "story-authority-candidate.md:21 (Terra row)",
+      "canon-decision-register.json CG-D02 (no summons, no threat, hearth stays reliable)",
+      "chapter-story-treatment.md 'W-7744 must supply something' (single reciprocal crossing carries her dependence)"
+    ],
+    "ownerRole": "chapter-director",
+    "routingTarget": "direct-story-correction at scene contract",
+    "status": "open",
+    "acceptanceAuthority": "creative producer; no owner canon decision required",
+    "scope": "Staging and response envelope of the reciprocal crossing so Terra's dependence is materially necessary. No new canon, no new mechanic, no added external threat or clock."
+  },
+  {
+    "id": "CG-JUDGE-006",
+    "title": "In-flight geometry pass 2 must not be back-credited to the signed decision",
+    "taxonomyCategory": "reference_or_manifest_drift",
+    "severity": "low",
+    "evidence": [
+      "geometry-pass2.json (generatedAt postdates all three signoffs, owner-story-decision.json, check-results.json, documentation-audit.md and alignment-report.md)",
+      "No signoff, validation, audit or alignment artifact cites it",
+      "PARAVOXIA_STORY_BIBLE.md / PARAVOXIA_STORY_EXECUTION_PLAN.md still state the outer route class is unestablished"
+    ],
+    "ownerRole": "creative-producer",
+    "routingTarget": "verify-story-authority / cross-examine-story-directions once the stream completes",
+    "status": "monitoring",
+    "acceptanceAuthority": "producer routes; chapter + cinematography directors accept the measurement",
+    "scope": "Provenance only. If and when pass 2 is independently verified, the two 'not yet established by measurement' sentences require a dated update; until then they stand and are correct. This judgement credits pass 2 with nothing."
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "schema": "paravoxia.producerManualProbeClosureReview.v1",
+  "at": "2026-09-06T16:15:20.317533+00:00",
+  "author": "creative-producer",
+  "acceptedForBoundedManualVerification": true,
+  "captureAuthorizedNow": false,
+  "captureCondition": "Finished handoff-standby-verifier, exact source frozen and root switches activeRole to common-manual-focused. Shared exclusive lock and bound HTTP bytes still required.",
+  "reportRef": "common-manual-probe-closure-report.json",
+  "reportSha256": "d2cc476eebbfbf05122ec2ac7dfa106c160a5c799576216fdb450dc28cec4192",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "sourceFilesRehashed": 99,
+  "sourceDrift": [],
+  "accepted": [
+    "Actual inherited fdinfo flock ownership with real private lock tests including unrelated owner rejection.",
+    "Required actual HTTP index and bundle byte binding; current ownership publishes11files.",
+    "Live-calibrated short key pulses and honest oscillation failure; no later F after failed movement/drawing.",
+    "Required objective plus authored verb for every F.",
+    "Survey stand-clear candidate requires actual earlier arrival and actual occupied body clearance.",
+    "Reference and early-corner recovery retain full ordered18unit proof."
+  ],
+  "qualifications": [
+    "Closure report confuses99sourcefiles with11distfiles in its stated matched-build COUNT. Code records actual ownership count, which is11; this is reporting error, not identity acceptance of99files.",
+    "Recommended command uses relative --out ../../captures but probe resolves --out against RUN_DIR, not cwd. Future invocation must use absolute run-owned capture path.",
+    "Recommended PARAVOXIA_HEAVY_LOCK env value is not self-contained; future invocation supplies exact absolute shared lock path and inheritedFD9.",
+    "Closure report local finishedAt16:13 is report-author time, not role completion. Actual invocation completed16:14:45.642925Z.",
+    "Neither83unitchecks nor refusalruns prove live steering or actual COMMON passage; first capture remains diagnostic until prerequisites and end proof are observed."
+  ],
+  "gpuRun": false,
+  "chapterAccepted": false
+}

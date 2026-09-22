@@ -1,0 +1,72 @@
+{
+  "status": "BLOCKED_INFRASTRUCTURE",
+  "chapter": "ch13",
+  "next": null,
+  "spent": {
+    "activeMs": 571647,
+    "roleLaunches": 0,
+    "modelTurns": 0,
+    "inputTokens": 0,
+    "cacheReadTokens": 0,
+    "outputTokens": 0
+  },
+  "limits": {
+    "activeMs": 14400000,
+    "firstPlayableMs": 5400000,
+    "roleLaunches": 14,
+    "modelTurns": 400,
+    "inputTokens": 1000000,
+    "cacheReadTokens": 20000000,
+    "outputTokens": 250000,
+    "roleMs": 2700000,
+    "roleTurns": 60,
+    "contextTokens": 64000,
+    "promptBytes": 96000,
+    "transcriptBytes": 32000000,
+    "lookCycles": 3,
+    "listenCycles": 2,
+    "infrastructureRetries": 1
+  },
+  "remaining": {
+    "activeMs": 13828353,
+    "roleLaunches": 14,
+    "modelTurns": 400,
+    "inputTokens": 1000000,
+    "cacheReadTokens": 20000000,
+    "outputTokens": 250000
+  },
+  "priorSpend": {
+    "run": ".codex/production-runs/2026-09-05-after-the-hearth",
+    "usage": {
+      "input": 9232,
+      "cacheCreate": 9747851,
+      "cacheRead": 570758839,
+      "output": 4098892,
+      "turns": 5246,
+      "durationMs": 64558539,
+      "costListUSD": 485.5702335
+    },
+    "scope": "Top-level local CLI result receipts only; excludes root Codex conversation, missing/interrupted results and any unrecorded sessions. Lower-bound accounting, not exact quota or bill.",
+    "retained": true
+  },
+  "preview": {
+    "url": "http://127.0.0.1:34825/?story=ch13-home",
+    "kind": "diagnostic",
+    "live": true,
+    "reused": true,
+    "candidateSha256": "d41becaea454bd702bcc1c5f552055501ab7dd0bb068681dd105f6a4fff001fa",
+    "pid": 2375543,
+    "command": "npm --prefix main run chapter:loop -- preview --run .codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b"
+  },
+  "evidence": null,
+  "candidateSha256": null,
+  "findings": null,
+  "failure": {
+    "stage": "verify",
+    "message": "Probe av failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-07T13:29:02.418Z"
+  },
+  "release": "Creation result only. Existing certification/release gates and publishing authority remain separate.",
+  "elapsedMs": 44986352
+}

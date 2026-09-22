@@ -1,0 +1,346 @@
+{
+  "schema": "paravoxia.verificationNavigationReport.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "authoredBy": "independent story-verifier (fresh navigation-repair continuation)",
+  "writtenAt": "2026-09-06T14:56:36+00:00",
+  "verdict": "FAIL \u2014 two open blockers prevent chapter completion on this source",
+  "isAcceptance": false,
+  "isChapterVerificationComplete": false,
+  "publicationAuthorized": false,
+  "verdictScope": "This verdict is about measured gameplay reachability only. It is NOT a creative, taste, audio or hardware judgement, and it does not retract the two repairs that DID land.",
+  "preconditions": {
+    "engineerReceiptsRequired": [
+      {
+        "ref": "integration-navigation-repair-invocation.json",
+        "finishedAt": "2026-09-06T13:50:35.308294+00:00",
+        "exitCode": 0,
+        "isError": false
+      },
+      {
+        "ref": "integration-navigation-closure-invocation.json",
+        "finishedAt": "2026-09-06T13:59:56.493039+00:00",
+        "exitCode": 0,
+        "isError": false
+      },
+      {
+        "ref": "integration-navigation-wording-invocation.json",
+        "finishedAt": "2026-09-06T14:07:52.723611+00:00",
+        "exitCode": 0,
+        "isError": false
+      }
+    ],
+    "allEngineerRolesFinished": true,
+    "verificationReady": true,
+    "contractVersion": "scene-v2",
+    "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+    "contractSha256IndependentlyRecomputed": true,
+    "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+    "sourceManifestSha256IndependentlyRecomputed": true,
+    "sourceFilesRehashed": 98,
+    "sourceRehashMismatches": 0,
+    "defectRegisterSha256": "206ab59390baef7fa68732ed8dad0dc68ef72a7a67fb8bb8393e66a446eb084d",
+    "collationAccepted": "integration-navigation-complete-report.json is a root collation of three real engineer reports, not a forged engineer signature; all three invocation finishedAt receipts were required and present."
+  },
+  "independentStaticGate": {
+    "command": "npm run verify",
+    "cwd": "/home/thomasphillip/Projects/vox/main",
+    "startedAt": "2026-09-06T14:11:46Z",
+    "finishedAt": "2026-09-06T14:12:48Z",
+    "exitCode": 0,
+    "status": "passed",
+    "logPath": "logs/verifier-navigation/verify.log",
+    "logSha256": "a3eaf4fbfa043c0ffb718a67209e5382dc42e2d5671002f41a8811316a429ab4",
+    "logBytes": 39125,
+    "testFiles": 350,
+    "tests": 3139,
+    "reproducesReportedTotals": true,
+    "logShaDiffersFromEngineerLog": "expected \u2014 separate execution with its own timings; not build drift",
+    "offlineProbeGate": {
+      "command": "node cg-journey-probe.mjs --self-test",
+      "actualNodeExitCode": 0,
+      "results": "25/25 and 41/41 passed",
+      "logPath": "logs/verifier-navigation/selftest.log",
+      "logSha256": "efaa7f1d6485afd0bb6fa675f98a3faaa743f2c3bea0d0333f2cb99725d3c619"
+    }
+  },
+  "buildAndPreviewIdentity": {
+    "status": "passed",
+    "verifiedBy": "byte comparison of served content against this verifier's OWN build, not HTTP 200",
+    "url": "http://127.0.0.1:38803/",
+    "previewOwner": "root-production-preview",
+    "previewOwnershipRef": "verifier/artifacts/preview-ownership.json",
+    "title": "Paravoxia",
+    "indexSha256": "ca7b448b72cc17407fc843afffe4808df7fc12ea5203a47b77ceece1c6dedc71",
+    "servedBundles": [
+      {
+        "path": "/assets/index-CbB2rmHN.js",
+        "match": true
+      },
+      {
+        "path": "/assets/SpaceStationSandbox-CabWoklJ.js",
+        "match": true
+      },
+      {
+        "path": "/assets/worldPrep.worker-D9jfWRDd.js",
+        "match": true
+      },
+      {
+        "path": "/assets/index-Cu3vcG_z.css",
+        "match": true
+      }
+    ],
+    "allServedFilesMatchLocalDist": true,
+    "shippedManifestBuildHash": "2471402da0c0092972a2d88d7100a9bc2688e193a18f54da70e0ea73c7baf106",
+    "shippedManifestBuildHashAlgorithm": "SHA256 over the JSON file map",
+    "auxiliaryVerifierBuildHash": "9c7d99d7ef0de8f65bdfed9337f038b53c5cf04cc46d0c63467af9431e4c8610",
+    "auxiliaryVerifierBuildHashAlgorithm": "SHA256 over codepoint-sorted path + NUL + file-SHA256 + newline",
+    "buildHashDivergenceIsNotDrift": true,
+    "prePairPreviewNeverMeasured": "port 40131 (d9e36ae3) was never measured and never stopped by this verifier",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "rendererClass": "hardware",
+    "headed": true
+  },
+  "earlyCheck1_zeroRescueSurvey": {
+    "status": "PARTIAL \u2014 navigation repair confirmed effective, beat does not complete",
+    "capture": "verifier/captures/navigation/survey-movie-1",
+    "entryUrl": "http://127.0.0.1:38803/?story=ch13-survey&journeyprobe=1&debug=1&movie=1",
+    "elapsedMs": 193239,
+    "stopReason": "stall-fail",
+    "outcome": "FAIL-STALL",
+    "teleportNudgesTotal": 0,
+    "pageErrors": 0,
+    "realMovementAtTurns": {
+      "walkedPathUnits": 150.915,
+      "walkedPathUnitsHorizontal": 105.843,
+      "netDisplacementUnits": 68.533,
+      "farthestFromStartUnits": 70.88,
+      "poseSource": "cg-diagnostic:window.__paravoxiaCommonGround.snapshot().bodyCentre",
+      "poseSourceResolvedAtMs": 457,
+      "poseSourceSwitches": 0,
+      "largestSingleSampleJumpUnits": 54.771,
+      "largestJumpExplanation": "the first-sample transition from the [0,0,0] boot placeholder to the resolved pose, not an in-world teleport"
+    },
+    "anchorsReachedInOrder": [
+      {
+        "id": "anc.cg.repeated-measure",
+        "elapsedMs": 4409
+      },
+      {
+        "id": "anc.cg.demonstration-opened",
+        "elapsedMs": 14560
+      },
+      {
+        "id": "anc.cg.survey-started",
+        "elapsedMs": 17384
+      },
+      {
+        "id": "anc.cg.trace-drawn",
+        "elapsedMs": 25248
+      },
+      {
+        "id": "anc.cg.route-offered",
+        "elapsedMs": null
+      },
+      {
+        "id": "anc.cg.revision-ready",
+        "elapsedMs": null
+      }
+    ],
+    "nonContingentAnchorsForBeat": 7,
+    "nonContingentAnchorsReached": 6,
+    "anchorNotReached": "anc.cg.route-tested",
+    "blockerRef": "VF-NAV-BLOCK-2",
+    "priorRegressionPassed": "the pre-repair ~0.75-short off-grid goal stop at the turns does NOT reproduce",
+    "notReplayed": "per root instruction the survey was not replayed to reconfirm the later held stage"
+  },
+  "earlyCheck2_partialContinue": {
+    "status": "SPLIT \u2014 data preservation PASSES, valid earned Continue BLOCKED",
+    "incompleteFixtureDataPreservation": {
+      "status": "PASSED",
+      "capture": "verifier/captures/partial-continue/run-5",
+      "scopeWarning": "This is NOT a valid earned Continue success and must not be read as one.",
+      "drawingActuallyEarned": {
+        "samples": 5,
+        "walkedAtProgression": [
+          0,
+          1.248,
+          1.739,
+          2.721,
+          3.457
+        ],
+        "thresholdUsed": 2,
+        "artificialFourSampleBarNotUsed": true
+      },
+      "savePath": "App.tsx beforeunload -> doSave(true) -> saveWorld/savePlayerPose/saveGlobal, fired by same-tab navigation",
+      "continuePath": "waited for landing Continue DOM, clicked the real button, THEN waited for 3D; no deep link, no reseed, storage retained",
+      "bytesBeforeContinue": {
+        "key": "pvx.v1.world.-1,-1",
+        "bytes": 1305,
+        "sha256": "5252dfd74a2391ecbae41b99a619703b9e25999f093fb733593094d97463f514",
+        "surveyPhase": "drawing",
+        "samples": 5
+      },
+      "bytesAfterContinue": {
+        "key": "pvx.v1.world.-1,-1",
+        "bytes": 1305,
+        "sha256": "5252dfd74a2391ecbae41b99a619703b9e25999f093fb733593094d97463f514",
+        "surveyPhase": "drawing",
+        "samples": 5
+      },
+      "byteIdentical": true,
+      "prePreviousFailure": "pre-repair run-4: 1186-byte 4-sample drawing overwritten by a 606-byte idle save",
+      "conclusion": "boot and menu cannot overwrite the original saved drawing even with the incomplete old fixture"
+    },
+    "validEarnedContinue": {
+      "status": "BLOCKED \u2014 NOT MEASURED",
+      "capture": "verifier/captures/partial-continue/earned-2",
+      "probe": "verifier/probes/partial-continue-earned/earned-return-continue-probe.mjs",
+      "probeSha256": "a9fefa6b61043d6658c983235271e29df0b0bf6089430ad8e7a249f24e93220e",
+      "design": "boots ?story=ch13-return&movie=1 and must PHYSICALLY EARN story:ch13-origin-landed via the signed board -> launch -> origin ladder BEFORE any drawing or save; fails loudly rather than fabricating the milestone",
+      "reason": "story:ch13-origin-landed never fires \u2014 see blocker VF-NAV-BLOCK-1",
+      "notFabricated": "no milestone was seeded, forged, granted, teleported or world-jumped to manufacture a pass"
+    }
+  },
+  "earlyCheck3_manualCornerRecovery": {
+    "status": "UNMEASURED \u2014 prerequisite unreachable",
+    "reason": "gated behind VF-NAV-BLOCK-1 and VF-NAV-BLOCK-2; recorded as unmeasured, never as a failure or a fabricated pass",
+    "referenceDocs": [
+      "chapter-manual-corner-interpretation.md",
+      "chapter-corner-candidate-disposition.json"
+    ]
+  },
+  "blockers": [
+    {
+      "id": "VF-NAV-BLOCK-1",
+      "title": "ch13-return Origin approach never lands: repeating ~38.4 s loop, 50 m to 2550 m, 10 cycles in 420 s",
+      "severity": "blocker",
+      "detailRef": "verifier-findings.json"
+    },
+    {
+      "id": "VF-NAV-BLOCK-2",
+      "title": "ch13-survey never reaches anc.cg.route-tested; held at revision-ready standing-clear",
+      "severity": "blocker",
+      "detailRef": "verifier-findings.json"
+    }
+  ],
+  "objectiveAndAnchorCoverage": {
+    "contractObjectivesTotal": 17,
+    "contractAnchorsTotal": 28,
+    "objectivesObserved": 8,
+    "objectivesObservedIds": [
+      "ch13:survey:offer",
+      "ch13:survey:start",
+      "ch13:survey:draw",
+      "ch13:survey:offer-span",
+      "ch13:survey:test",
+      "ch13:survey:revise",
+      "ch13:return:launch",
+      "ch13:return:origin"
+    ],
+    "anchorsObserved": 8,
+    "anchorsObservedIds": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.revision-ready",
+      "anc.cg.hatch-boarded",
+      "anc.cg.lift-committed"
+    ],
+    "markerLabelParity": {
+      "checked": [
+        "ch13:survey:offer",
+        "ch13:survey:start",
+        "ch13:survey:draw",
+        "ch13:survey:offer-span",
+        "ch13:survey:test",
+        "ch13:survey:revise",
+        "ch13:return:board",
+        "ch13:return:launch",
+        "ch13:return:origin"
+      ],
+      "result": "every observed marker label matched the signed contract label exactly, including the on-screen marker 'W-7744 \u00b7 offered route \u00b7 1m' and 'origin \u00b7 audit site \u00b7 435m'",
+      "mismatches": 0
+    },
+    "workOrderActionability": {
+      "result": "every observed standing work order carried a concrete verb or input",
+      "exception": "ch13:survey:test standing copy asserts 'W-7744 is testing the offered route' while W-7744's walk is 0 \u2014 a copy/state mismatch recorded under VF-NAV-BLOCK-2, not a separate defect"
+    },
+    "markerCountSamplerNote": "markerCount 0 from the old sampler is a sampler gap, not an absent marker; DOM/runtime fields were used here and markers were present and correct.",
+    "unobserved": "9 objectives and 20 anchors, including all conditional/reset/clear/ready anchors, remain UNOBSERVED \u2014 unmeasured, not passed"
+  },
+  "objectiveVisualDefects": {
+    "framesRead": [
+      "survey-movie-1/0106-stall-fail.png",
+      "partial-continue/run-5/0003b-after-walk-to-W.png",
+      "partial-continue/earned-2/0000a-origin-landed.png"
+    ],
+    "blankOrBlackFrames": 0,
+    "visualPops": 0,
+    "wrongEraGlimpses": 0,
+    "missingHudElementsReferencedByCopy": 0,
+    "letterboxOrScanlineArtifacts": 0,
+    "note": "No taste judgement is offered. Only unambiguous defects were looked for, and none were found in the frames read."
+  },
+  "mediaAndPerceptEvidence": {
+    "rawHudFrames": 58,
+    "hudSuppressedPerceptFrames": 50,
+    "perceptCapturedSeparately": true,
+    "countsUnequal": "58 raw vs 50 percept \u2014 8 raw frames (event-triggered) have no percept partner; do not assume a 1:1 pairing",
+    "scope": "survey-movie-1 only",
+    "gap": "no HUD-suppressed percept set exists for the return-loop capture; continuous decodable video was NOT produced in this pass",
+    "pairingCaution": "raw and percept partners are captured at different instants and must not be treated as simultaneous"
+  },
+  "audio": {
+    "status": "NOT MEASURED",
+    "hearingClaim": "none",
+    "liveCueSyncClaim": "none",
+    "offlineWavMuxUsed": false,
+    "note": "No scene-v2 audio eligibility, cancel, 5-monotonic, 4.5-release or control-handback condition was measured."
+  },
+  "hardwareBudgets": {
+    "status": "NOT MEASURED",
+    "fpsMeasured": false,
+    "coldHighMeasured": false,
+    "coldLowMeasured": false,
+    "note": "Source constants are not budget measurements and none are quoted as such."
+  },
+  "variantParity": {
+    "desktop": "observed",
+    "mobile": "NOT MEASURED",
+    "reducedMotion": "NOT MEASURED",
+    "lowestTier": "NOT MEASURED"
+  },
+  "resetMatrix": {
+    "status": "NOT MEASURED",
+    "quitToMenu": "UNEXERCISED \u2014 Pause not clickable normally (8 s intercept), forced dispatch is diagnostic only and never counted as player acceptance"
+  },
+  "processCompliance": {
+    "gameSourceEdits": 0,
+    "contractEdits": 0,
+    "publication": "none",
+    "previewsStartedByVerifier": 0,
+    "rootPreviewEverStopped": false,
+    "timeoutRescues": 0,
+    "grantsTeleportsOrEndpointCredit": 0,
+    "forgedSignaturesScoresOrAcceptance": 0,
+    "otherLockOwnersBypassed": 0,
+    "inFlightProbesOrBrowsersAbandoned": 0,
+    "allCapturesHavePostFinallyCleanupReceipt": true,
+    "failedCapturesPreserved": true,
+    "probeSourceSnapshottedBeforeExecution": true,
+    "outputFoldersRefusedIfNonEmpty": true
+  },
+  "limitations": [
+    "This pass measured desktop only, on one machine, with one renderer.",
+    "Two blockers prevented every downstream signed-acceptance journey; those remain UNMEASURED, not failed.",
+    "No cause is diagnosed for either blocker. The standby-cell footing note and the approach-loop are observations plus one root-supplied source pointer, not root-cause findings, and no predicate weakening is proposed.",
+    "9 of 17 objectives and 20 of 28 anchors were never observed.",
+    "No audio was heard; no hearing or live cue-sync claim is made anywhere.",
+    "No FPS or hardware budget figure was measured.",
+    "Static gate success proves none of the above gameplay properties."
+  ],
+  "nextActionSuggestedForRoot": "Both blockers are reproducible and captured. VF-NAV-BLOCK-1 (return approach loop) is the higher-order gate: it blocks the earned Continue, the continuous sequence, the cold journeys and the full movie. Neither is diagnosed; routing them is root's decision, not this verifier's.",
+  "timestampCorrection": "writtenAt originally recorded as 2026-09-06T14:58:00+00:00, which was AHEAD of the actual clock. Corrected to the real wall-clock time of authoring per root's 14:55Z note. No other field changed."
+}

@@ -1,0 +1,202 @@
+{
+  "reachableBeatOrder": {
+    "authority": "main/src/story/storyState.ts :: STORY_BEAT_ORDER",
+    "order": [
+      "crawl",
+      "manifest",
+      "voyage",
+      "deflect",
+      "crash",
+      "descent",
+      "ch1-fixed",
+      "ch1-track",
+      "ch1-raster",
+      "ch1-depth",
+      "ch1-nav",
+      "ch1-iso",
+      "ch1-lift",
+      "ch1-anomaly",
+      "a1-ramp",
+      "ch2-color",
+      "ch2-approach",
+      "a2-awakening",
+      "ch3-gather",
+      "ch3-dusk",
+      "ch3-await-rest",
+      "a3-dawn",
+      "ch3-thirst",
+      "ch3-forage",
+      "ch3-signal",
+      "ch4-vigil",
+      "ch4-arrival",
+      "ch4-audit",
+      "ch4-comply",
+      "ch4-defy",
+      "a4-exhale",
+      "ch5-maw",
+      "ch6-dive",
+      "ch7-reconstruct",
+      "ch7-board",
+      "ch8-launch",
+      "ch8-crossing",
+      "ch8-landfall",
+      "ch9-settle",
+      "ch9-hearth",
+      "ch10-cold",
+      "ch10-ask",
+      "ch10-transit",
+      "done"
+    ],
+    "terminalState": "done",
+    "terminalSemantics": "ch10-* is ordered BEFORE 'done' in the array, but is entered by re-activation OUT of 'done' free play. beats/ch10/ch10-cold.ts declares entry: 'reactivation-from-done'; beats/registry.ts::chapterReactivationBeat resolves it. hasCompletedStory() keys on 'story:ch9:hearth'. storyEntryPoint() reads ch10 rungs BEFORE the ch9Hearth two-world terminal, so a ch10-in-progress save resumes inside ch10 and a ch10-complete save returns to 'done'.",
+    "chapterEnum": "prologue|ch1..ch10|complete (StoryChapter); chapterForBeat('done') === 'complete'"
+  },
+  "publicReleaseCeiling": {
+    "declared": "main/story-authority.json",
+    "runtimeStoryCeiling": "ch10-transit",
+    "releaseStoryCeiling": "ch4-arrival",
+    "runtimeTerminalBeat": "done",
+    "runtimeLane": "owner-authorized-implemented-release-gated",
+    "corroboration": "CLAUDE.md 'Story scope': post-arrival build authorized 2026-07-28; demo release surface unchanged at ch4-arrival; shipping past it is not implied.",
+    "snapshotDateOfAuthorityFile": "2026-07-15"
+  },
+  "sidecarStationAndReturnChronology": {
+    "authorityForm": "R12 post-terminal sidecar (.codex/production-runs/2026-08-11-ch10-station-introduction/station-continuation-contract.md). The ch11/ch12 milestone namespace reserves the intended chronology; the slice claims NO new StoryState beats and NO signed chapter-registry entry. Player-facing header is 'STATION VISIT', not 'CHAPTER 11'.",
+    "ownerAuthorization": "2026-08-14",
+    "entryGate": {
+      "receiptsRequired": [
+        "story:ch10-bearing-claimed",
+        "story:ch10-complete",
+        "story:station-docking-authorized"
+      ],
+      "additionalGates": [
+        "URL search param from=game",
+        "address must equal storyStationAddress() (first station of the STORY_COORDINATE system manifest)"
+      ],
+      "source": "main/src/game/spaceStation/spaceStationStory.ts :: CHAPTER_10_ENTRY_RECEIPTS, stationStoryEligible, bootstrapStationStorySession",
+      "note": "Standalone ?spacestation= remains a noncanonical ephemeral sandbox; the station page is a SEPARATE Vite/React entry and cannot borrow the live Story director or App boot persistence."
+    },
+    "stationStepMachine": {
+      "source": "spaceStationStory.ts :: deriveStationStoryStep()",
+      "steps": [
+        "registry",
+        "issuer",
+        "depart",
+        "complete"
+      ],
+      "derivation": "complete if ch11-station-departed; depart if ch11-bonded-cell-acquired AND itemCount(bonded_cell)>0; issuer if ch11-registry-recorded; else registry. Derived from durable facts only, so reload rebuilds the same step."
+    },
+    "orderedDurableReceipts": [
+      "story:ch11-docked",
+      "story:ch11-designation-presented",
+      "story:ch11-registry-recorded",
+      "story:ch11-concourse-entered",
+      "story:ch11-habitat-fault-presented",
+      "story:ch11-bonded-cell-acquired",
+      "story:station-trade-unlocked",
+      "story:ch11-bonded-cell-stowed",
+      "story:ch11-station-departed",
+      "story:ch12-bonded-cell-installed",
+      "story:ch12-hearth-restored"
+    ],
+    "commitOrderingConstraints": {
+      "commitDesignationPresented": "refused unless story:ch11-docked",
+      "commitRegistryRecorded": "refused unless designation presented",
+      "commitConcourseEntered": "refused unless registry recorded",
+      "commitHabitatFaultPresented": "refused unless registry recorded",
+      "issueBondedCell": "refused unless habitat fault presented; adds bonded_cell only if count===0; also marks story:station-trade-unlocked",
+      "commitBondedCellStowed": "refused unless acquired AND itemCount>=1",
+      "commitStationDeparted": "refused unless stowed"
+    },
+    "persistence": {
+      "store": "same inventory/progression stores as the main game (game/systems/inventorySystem.ts, progressionSystem.ts, persistence.ts)",
+      "item": "bonded_cell, exactly one, durable",
+      "reconciliation": "reconcileStationStoryCargo() repairs interrupted partial writes only: receipt-without-item re-adds one item; item-without-receipt marks acquired ONLY if registry recorded; never creates a second item.",
+      "saveSeam": "persistStationStory() re-saves via createPlanetIdentity(parsePlanetWorldId(lastPlanetWorldId)) so the exact companion-planet identity (e.g. '-1,-1:p1') is what App resumes on undock, not the collapsed system coordinate."
+    },
+    "returnChronology": {
+      "source": "main/src/story/stationReturnStory.ts",
+      "pendingPredicate": "stationReturnPending() = ch11-station-departed AND ch11-bonded-cell-acquired AND NOT ch12-bonded-cell-installed AND itemCount('bonded_cell')>0",
+      "objectiveStates": [
+        "station:return:tidegarden (travel) while not on TIDEGARDEN_WORLD_ID surface — marker projects 'spatial' onto the companion body target",
+        "hearth:return:install-cell (interact) when activePlanetId===TIDEGARDEN_WORLD_ID AND flight.phase==='surface' AND controlMode!=='flight' — marker projects 'surface' onto habitat.core.position"
+      ],
+      "installGuards": "installTidegardenBondedCell refuses on wrong world, missing habitat, distance > STATION_RETURN_INSTALL_REACH (4.2), or missing cell; consumes exactly one bonded_cell; marks ch12-bonded-cell-installed AND ch12-hearth-restored; idempotent second call returns {ok:true, changed:false}",
+      "worldInteraction": "main/src/story/world/TidegardenSettlementWorld.tsx registers interaction id 'story-ch12-install-bonded-cell', verb 'Install the Sealed Bonded Cell', and saveGlobal() on change",
+      "interactionPriority": "storyInteractions.ts: 'story-ch12-install-bonded-cell' = { interactionClass: 'required', priority: 560 } — the highest story priority in the table (ch10 bearing claim is 520)"
+    }
+  },
+  "exactCurrentSourcePaths": {
+    "beatLadderAndMilestones": "main/src/story/storyState.ts",
+    "beatContractRegistry": [
+      "main/src/story/beats/registry.ts",
+      "main/src/story/beats/index.ts",
+      "main/src/story/beats/beatContract.ts",
+      "main/src/story/beats/definitions.ts",
+      "main/src/story/beats/metadata.generated.ts"
+    ],
+    "perBeatContracts": "main/src/story/beats/<chapter>/<beat>.ts (e.g. beats/ch4/ch4-arrival.ts, beats/ch10/ch10-cold.ts, beats/ch10/ch10-ask.ts, beats/ch10/ch10-transit.ts)",
+    "perBeatAutopilotRails": "main/src/story/beats/<chapter>/rail-<beat>.ts plus main/src/story/autopilot/*",
+    "objectiveCopy": [
+      "main/src/story/beats/objectivePrimitives.ts",
+      "main/src/story/beats/ch5/objective-ch5-maw.ts",
+      "main/src/story/beats/ch6/objective-ch6-dive.ts",
+      "main/src/story/beats/ch7/objective-ch7-board.ts",
+      "main/src/story/beats/ch7/objective-ch7-reconstruct.ts",
+      "main/src/story/beats/ch9/objective-ch9-settle.ts"
+    ],
+    "authoredCopyPrologueThroughCh4Arrival": "main/src/story/storyScript.ts",
+    "authoredCopyCh4AuditThroughCh10": "main/src/story/emergentStoryDirector.ts",
+    "textChannels": "main/src/story/storyText.ts (caption/system/workorder/auditLine/violations store only — owns no copy)",
+    "legacyDirector": "main/src/story/storyDirector.ts (prologue→ch4-vigil guidance switch)",
+    "stationSidecar": [
+      "main/src/game/spaceStation/spaceStationStory.ts",
+      "main/src/components/spaceStation/StationStoryPanel.tsx",
+      "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+      "main/src/game/spaceStation/spaceStationVendors.ts",
+      "main/src/components/spaceStation/SpaceStationLighting.tsx"
+    ],
+    "return": "main/src/story/stationReturnStory.ts",
+    "score": [
+      "main/src/story/storyScore.ts",
+      "main/src/story/storyMusicEnvelope.ts",
+      "main/src/story/sceneAvCueRail.ts",
+      "main/src/story/signedSceneAvRuntime.ts",
+      "main/src/story/generatedSceneAvRuntime.json"
+    ],
+    "modularizationNote": "Story is modularized: beats/ owns per-beat contracts, journeys, markers, input policy, rails; autopilot/ owns steering primitives. The legacy giant files no longer own all text — storyScript.ts stops at ARRIVAL_LINES (ch4-arrival) and emergentStoryDirector.ts owns everything from ch4-audit onward."
+  },
+  "sourceOfTruthPrecedence": {
+    "declaredIn": "main/story-authority.json :: sourcePrecedence",
+    "order": [
+      "runtimeBeatAuthority",
+      "releaseAuthority",
+      "canon",
+      "ownerApprovedSceneContract",
+      "executionPlan",
+      "designLineage"
+    ],
+    "resolvedPaths": {
+      "runtimeBeatAuthority": "main/src/story/storyState.ts",
+      "releaseAuthority": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "canon": "main/PARAVOXIA_STORY_BIBLE.md (NOT READ in this role)",
+      "ownerApprovedSceneContract": "run-artifact, pattern .codex/production-runs/<run-id>/scene-contract.json, authorityCondition 'matching-production-lock-and-explicit-owner-approval'; activePath still points at 2026-07-13-distance-between-fires",
+      "executionPlan": "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+      "designLineage": [
+        "PARAVOXIA_PROGRESSION.md",
+        "PARAVOXIA_CH4_PLAN.md",
+        "PARAVOXIA_REVISION_PLAN.md"
+      ]
+    },
+    "supplementaryAuthorities": {
+      "creativeTriadContracts": [
+        "PARAVOXIA_CREATIVE_COUNCIL.md",
+        "main/CINEMATOGRAPHY.md",
+        "main/src/story/ux/README.md",
+        ".codex/production-runs/_template/"
+      ],
+      "stationSidecarContract": ".codex/production-runs/2026-08-11-ch10-station-introduction/station-continuation-contract.md",
+      "namingRule": "CLAUDE.md: 'Anchorage' is retired; the location is the space station."
+    }
+  }
+}

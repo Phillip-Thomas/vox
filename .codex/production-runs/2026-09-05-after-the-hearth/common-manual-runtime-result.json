@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 594638,
+  "stop_reason": "end_turn",
+  "session_id": "172eff9d-6fb9-4ddb-8a19-1e5651813dd8",
+  "total_cost_usd": 4.4643405000000005,
+  "usage": {
+    "input_tokens": 114,
+    "cache_creation_input_tokens": 112854,
+    "cache_read_input_tokens": 4362829,
+    "output_tokens": 46051,
+    "output_tokens_details": {
+      "thinking_tokens": 10879
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 112854,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1828,
+        "cache_read_input_tokens": 118472,
+        "cache_creation_input_tokens": 573,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 573
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2466,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002541,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 114,
+      "outputTokens": 46051,
+      "cacheReadInputTokens": 4362829,
+      "cacheCreationInputTokens": 112854,
+      "webSearchRequests": 0,
+      "costUSD": 4.461799500000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 10879,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 61,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "All owned sessions are closed and reports are written.\n\n**VERDICT: BLOCKED BEFORE GAMEPLAY \u2014 no manual COMMON passage proved, no deviation run, no defect closed.**\n\n## Measurements\n\n| run | mode | started UTC | node exit | verdict | stopped at | legs | plane crossings |\n|---|---|---|---|---|---|---|---|\n| reference-1 | reference | 16:28:06 | 2 | STOPPED-PREREQUISITE | `pointer-lock-and-focus` | 0 | none |\n| reference-2 | reference | 16:31:12 | 2 | STOPPED-PREREQUISITE | `pointer-lock-and-focus` | 0 | none |\n| deviation | \u2014 | not run | \u2014 | \u2014 | \u2014 | \u2014 | \u2014 |\n\nDeviation was not run: it fails at the identical shared prerequisite, and rerunning a known failure is forbidden.\n\nGates passed in both: browser identity on hardware (ANGLE/NVIDIA GB10, headed, served index `1f699b4a\u2026`), manual lane (`movie` null, no autopilot), world bound + non-initial body, settled supported body (spread 0.0022 u), policy permits movement.\n\n## Blocker\n\nThree ordinary real canvas clicks, 5 s wait each, never obtained pointer lock, so the shipped controller never activated and no key could move the body. Measured at every attempt: click point is the **bare canvas** (`isCanvas true`, `pointerEvents auto`), `document.pointerLockElement` null, `hasFocus` true, `visibilityState` visible, `activeElement` body. That rules out an overlay, a lock held elsewhere, an unfocused document, story policy, and world readiness \u2014 `CameraControls.tsx:103`'s three conditions were all satisfiable, so the refusal is at the browser/OS layer. The same recipe passed on this display at 15:17:01, 15:21:45 and 15:24:29 today. Foreign Chrome processes from other sessions are alive and may hold X11 focus; per commission none was touched, and window activation could not be measured (no `xdotool`/`xprop`). `requestPointerLock`'s own rejection reason goes to `console.warn`, which this probe does not capture.\n\n## Commissioned pre-capture correction (applied before the first browser)\n\nStrict ORIGINAL incoming-plane crossing replaces the 0.6/0.5 radius targets at intended-completed COMMON vertices: `incomingPlaneAt`, `signedPlaneOffset`, `planeLateralOffset`, `planeCrossingVerdict` (observed sample strictly before the plane, then on/past it, within 1.0 u of that corner, supported), `orderedFrontierVerdict` (route order, time order, non-decreasing live `terraUnits`), `earlyTurnVerdict` (deviation body must measure strictly before original z=16; an overshot 16+ body is refused). `walkThroughPlane`/`mustCross` keep ordinary keys and the live calibration but cap each pulse by the distance remaining to the plane, so corners 3/6/terminal 9 get short feedback nudges rather than a 0.6 target into water. Approximate navigation to W/S/T/E and the excursion legs deliberately keep ordinary `walkTo`. Nothing relaxed, no state writing, no game/geometry/radius change. `selftest.mjs` \u2192 **OK 95/95** (83 + 12 new). **These predicates have static proof only \u2014 the run never reached COMMON.**\n\nOne further focused repair (diagnostics + ordinary repeat clicks, gate unchanged) was spent making reference-1's bare failure diagnosable; only the invalidated reference work was rerun. No further loop.\n\n## Integrity\n\nSource `dc63\u202636c` before and after, 0 game files modified (`find main/src main/tools -newermt '2026-09-06 16:24'` empty), per-capture `source-snapshot/` before and after. Heavy lock fd 9 `owned=true`, FLOCK WRITE inode 8397196, contention probe *refused (lock is live)*. Preview binding ok (index `1f699b4a\u2026`, bundle `4f39f1ea\u2026`, 11 dist files). Root preview and all foreign processes untouched; both owned browser sessions stopped in `finally`; no probe processes remain. The known movie stall at rail cursor 3 was **not** inherited as a manual verdict.\n\n## Artifacts\n\n- `.../logs/common-manual-runtime/{reference-1.log, reference-2.log, selftest-after-correction.log}`\n- `.../logs/common-manual-runtime/pre-correction-probe-snapshot/` + `SHA256SUMS.txt` (matches closure `afterSha256`)\n- `.../verifier/captures/common-manual-focused/{reference-1,reference-2}/` (`trace.ndjson`, `summary.json`, `stop-pointer-lock-and-focus.png`, `source-snapshot/`)\n- `.../common-manual-runtime-report.json` (sha256 `8a390c35f2cadebdd244a6530fa1f626208daa8197d479ae97d181ba7b30c21e`), `.md`, `common-manual-runtime-progress.md`\n\nNext step is root's, not a verifier repair: the pointer-lock refusal (or the page's own `requestPointerLock` rejection reason) must be resolved before any manual COMMON capture can begin.",
+  "ttft_ms": 1478,
+  "type": "result",
+  "duration_ms": 680482,
+  "uuid": "9b2cbca9-af5b-4e66-b28f-d31b26aa3f9c",
+  "ttft_stream_ms": 724,
+  "time_to_request_ms": 20,
+  "first_content_frame_ms": 724,
+  "queued_turn_count": 0
+}

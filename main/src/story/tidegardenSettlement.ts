@@ -1,3 +1,5 @@
+import { resolveObjective } from './beats/ch9/objective-ch9-settle.ts';
+import { resolveAuthoredObjective } from './beats/objectivePrimitives.ts';
 import * as THREE from 'three';
 import type { ActorId } from '../game/playerActors.ts';
 import type { CommandContext } from '../game/commands.ts';
@@ -230,80 +232,14 @@ export function getTidegardenSettlementGuidance(input: {
   night: boolean;
 }): TidegardenSettlementGuidance {
   const { actorId, coreCarried, foundationPlaced, night } = input;
-  if (!hasMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.scannerOverload, actorId)) {
-    return {
-      id: 'scan-waterline',
-      kind: 'travel',
-      markerLabel: 'LIVING WATERLINE · SCAN',
-      workOrder: ['FOLLOW THE LIVING WATERLINE MARKER.', 'READ THE SIGNAL FIELD.']
-    };
-  }
-  if (!hasMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.relationshipAttended, actorId)) {
-    return {
-      id: 'attend-waterline',
-      kind: 'interact',
-      markerLabel: 'LIVING WATERLINE · ATTEND',
-      workOrder: ['FOLLOW THE LIVING WATERLINE MARKER.', '[F] ATTEND THE RELATIONSHIP.']
-    };
-  }
-  const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
-  if (!habitat) {
-    const chosen = getTidegardenChosenHabitatSite(actorId);
-    if (!chosen) {
-      return {
-        id: 'choose-site',
-        kind: 'interact',
-        markerLabel: 'RECOMMENDED HABITAT SITE · CHOOSE',
-        workOrder: ['FOLLOW THE HABITAT SITE MARKER.', '[F] CHOOSE THIS DRY, LEVEL SITE.']
-      };
-    }
-    if (!coreCarried) {
-      return {
-        id: 'craft-core',
-        kind: 'craft',
-        markerLabel: 'KESTREL FABRICATOR · CRAFT HABITAT CORE',
-        workOrder: [
-          'RETURN TO THE FLIGHT-READY KESTREL FABRICATOR.',
-          '[C] CRAFT HABITAT CORE.'
-        ]
-      };
-    }
-    if (!foundationPlaced) {
-      return {
-        id: 'foundation',
-        kind: 'build',
-        markerLabel: 'CHOSEN SITE · PLACE FOUNDATION',
-        workOrder: ['[B] PLACE A FOUNDATION AT THE CHOSEN SITE.']
-      };
-    }
-    return {
-      id: 'install-core',
-      kind: 'interact',
-      markerLabel: 'CHOSEN SITE · INSTALL HABITAT CORE',
-      workOrder: ['RETURN TO THE CHOSEN FOUNDATION.', '[F] INSTALL HABITAT CORE.']
-    };
-  }
-  if (!habitat.shelterCertification) {
-    return {
-      id: 'certify-shelter',
-      kind: 'build',
-      markerLabel: 'HABITAT CORE · ENCLOSE AND CERTIFY',
-      workOrder: ['BUILD A CLOSED SHELTER AROUND THE CORE.', '[F] CERTIFY THE WORKING SHELTER.']
-    };
-  }
-  return night
-    ? {
-        id: 'rest',
-        kind: 'interact',
-        markerLabel: 'SECOND HEARTH · REST INSIDE',
-        workOrder: ['RETURN INSIDE THE CERTIFIED SHELTER.', '[F] REST AT THE SECOND HEARTH.']
-      }
-    : {
-        id: 'wait-night',
-        kind: 'wait',
-        markerLabel: 'SECOND HEARTH · WAIT FOR NIGHT',
-        workOrder: ['RETURN TO THE SECOND HEARTH.', 'REST BECOMES AVAILABLE AT NIGHT.']
-      };
+  const objective = resolveAuthoredObjective(resolveObjective, { settlement: {
+    scanned: hasMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.scannerOverload, actorId),
+    attended: hasMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.relationshipAttended, actorId),
+    habitat: getHabitatWorldState(TIDEGARDEN_WORLD_ID),
+    chosen: !!getTidegardenChosenHabitatSite(actorId),
+    coreCarried, foundationPlaced, night
+  } });
+  return { ...objective, id: objective.id.replace(/^settle:/, '') as TidegardenSettlementGuidanceId };
 }
 
 /**

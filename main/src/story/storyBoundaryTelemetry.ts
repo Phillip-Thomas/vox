@@ -23,6 +23,7 @@ import {
   type StoryChapter
 } from './storyState.ts';
 import { STORY_PRIMARY_WORLD_ID, TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
+import { STATION_RETURN_MILESTONES } from './stationReturnStory.ts';
 
 export interface BoundaryCameraLike {
   readonly isPerspectiveCamera?: boolean;
@@ -94,6 +95,20 @@ export interface StoryBoundaryRuntimeSnapshot {
     readonly ch10BearingClaimed: boolean;
     readonly ch10SeamPassed: boolean;
     readonly stationDockingAuthorized: boolean;
+    /**
+     * The prior station-continuation contract's two durable boundary facts, and
+     * chapter 13's own reciprocal proof.
+     *
+     * `stationDeparted` and `hearthRestored` are ch11's and ch12's receipts, not
+     * ch13's: the chapter READS them to prove its own entry, and reissuing them
+     * anywhere would be a forgery of somebody else's transaction. They are
+     * published here because the registry may not claim a state the runtime has
+     * no producer for, and the ch10 -> ch13 external transition rests on exactly
+     * these two.
+     */
+    readonly stationDeparted: boolean;
+    readonly hearthRestored: boolean;
+    readonly ch13ReciprocalProof: boolean;
   };
 }
 
@@ -168,6 +183,10 @@ export function deriveStoryBoundaryState(
   if (runtime.durable.ch10BearingClaimed) refs.add('state:story/ch10-bearing-claimed');
   if (runtime.durable.ch10SeamPassed) refs.add('state:story/ch10-seam-passed');
   if (runtime.durable.stationDockingAuthorized) refs.add('state:station/docking-authorized');
+  // The ch11/ch12 boundary and ch13's terminal proof.
+  if (runtime.durable.stationDeparted) refs.add('state:station/departed');
+  if (runtime.durable.hearthRestored) refs.add('state:hearth/restored');
+  if (runtime.durable.ch13ReciprocalProof) refs.add('state:story/ch13-reciprocal-proof');
 
   const verified = (
     Number.isInteger(runtime.story.runId)
@@ -255,7 +274,10 @@ export function readStoryBoundaryRuntime(
       twoWorldHandoff: hasMilestone('story:tidegarden:two-world-handoff', actorId),
       ch10BearingClaimed: hasMilestone(STORY_MILESTONES.ch10BearingClaimed, actorId),
       ch10SeamPassed: hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId),
-      stationDockingAuthorized: hasMilestone(STORY_MILESTONES.stationDockingAuthorized, actorId)
+      stationDockingAuthorized: hasMilestone(STORY_MILESTONES.stationDockingAuthorized, actorId),
+      stationDeparted: hasMilestone(STATION_RETURN_MILESTONES.stationDeparted, actorId),
+      hearthRestored: hasMilestone(STATION_RETURN_MILESTONES.hearthRestored, actorId),
+      ch13ReciprocalProof: hasMilestone(STORY_MILESTONES.ch13Complete, actorId)
     })
   });
 }

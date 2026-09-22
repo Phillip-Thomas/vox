@@ -18,7 +18,7 @@ import {
   SOAK_SCENARIO_NAMES,
   type SoakLog
 } from './soak.ts';
-import { PHRASE_BARS, VL_TOTAL_MAX } from './tuning.ts';
+import { BAR_TABU, PHRASE_BARS, VL_TOTAL_MAX } from './tuning.ts';
 
 // --- The P4 soak harness, smoke-tested on short renders --------------------------------------
 //
@@ -304,6 +304,97 @@ describe('soak evidence quality', () => {
     // Phrase positions stay aligned to the 8-bar grid the whole way.
     for (const rec of log.bars) {
       expect(rec.phrasePos).toBe(rec.barIndex % PHRASE_BARS);
+    }
+  });
+});
+
+describe('the Stage 5 audits can FAIL too', () => {
+  const healthy = (): SoakLog => runPureSoak({ ...SMOKE, minutes: 12 }).log;
+
+  it('a doctored log carrying an unpaid bloom fails the red test', () => {
+    const log = healthy();
+    expect(auditSoakLog(log).checks.find((c) => c.name === 'bloom-paid')!.pass).toBe(true);
+    const i = log.bars.findIndex(
+      (r, k) => r.arrangement === 'BLOOM' && k > 0 && log.bars[k - 1].arrangement !== 'BLOOM' && !r.forcedBuild
+    );
+    expect(i).toBeGreaterThan(0);
+    const section = log.bars[i].sectionIndex;
+    // Erase the payment: the withheld layer sounded at full level before the build.
+    for (const r of log.bars) {
+      if (r.sectionIndex === section && r.barIndex < log.bars[i].barIndex) {
+        r.withheldActive = false;
+        r.levels = { sub: 1, pad: 1, ostinato: 1, texture: 1, lead: 1, percussion: 0.6, riser: 0 };
+      }
+    }
+    expect(auditSoakLog(log).checks.find((c) => c.name === 'bloom-paid')!.pass).toBe(false);
+  });
+
+  it('a bloom inside a budget-0 section fails bloom-budget', () => {
+    const log = healthy();
+    const i = log.bars.findIndex(
+      (r, k) => r.arrangement === 'BLOOM' && k > 0 && log.bars[k - 1].arrangement !== 'BLOOM' && !r.forcedBuild
+    );
+    log.bars[i].bloomBudget = 0;
+    expect(auditSoakLog(log).checks.find((c) => c.name === 'bloom-budget')!.pass).toBe(false);
+  });
+
+  it('a sounding bar copied inside the tabu window fails bar-tabu; a flagged bypass over budget fails too', () => {
+    const log = healthy();
+    expect(auditSoakLog(log).checks.find((c) => c.name === 'bar-tabu')!.pass).toBe(true);
+    const i = log.bars.findIndex(
+      (r, k) => k > BAR_TABU && r.arrangement === 'BED' && r.sectionIndex >= 0 && log.bars[k - 3].arrangement !== 'REST'
+    );
+    expect(i).toBeGreaterThan(BAR_TABU);
+    const src = log.bars[i - 3];
+    const dst = log.bars[i];
+    dst.chordId = src.chordId;
+    dst.uppers = [...src.uppers] as [number, number, number];
+    dst.arrangement = src.arrangement;
+    dst.melodyChain = src.melodyChain;
+    dst.ostinato = src.ostinato.map((n) => ({ ...n }));
+    dst.percussion = [...src.percussion];
+    dst.levels = { ...src.levels };
+    dst.barTabuBypass = false;
+    expect(auditSoakLog(log).checks.find((c) => c.name === 'bar-tabu')!.pass).toBe(false);
+    // Flagging the copy as a bypass is legal — until the budget is spent.
+    dst.barTabuBypass = true;
+    expect(auditSoakLog(log).checks.find((c) => c.name === 'bar-tabu')!.pass).toBe(true);
+    let flagged = 0;
+    for (const r of log.bars) {
+      if (r.arrangement !== 'REST' && r.sectionIndex >= 0 && flagged < 40) {
+        r.barTabuBypass = true;
+        flagged++;
+      }
+    }
+    expect(auditSoakLog(log).checks.find((c) => c.name === 'bar-tabu')!.pass).toBe(false);
+  });
+
+  it('a repeated (schedule, arc) section pair fails section-pairs', () => {
+    const log = healthy();
+    const sections = [...new Set(log.bars.map((r) => r.sectionIndex).filter((i) => i >= 0))];
+    expect(sections.length).toBeGreaterThanOrEqual(2);
+    const first = log.bars.find((r) => r.sectionIndex === sections[0])!;
+    for (const r of log.bars) {
+      if (r.sectionIndex === sections[1]) {
+        r.statementSchedule = first.statementSchedule;
+        r.registerArc = first.registerArc;
+      }
+    }
+    expect(auditSoakLog(log).checks.find((c) => c.name === 'section-pairs')!.pass).toBe(false);
+  });
+
+  it('the 33-minute fullSoak meets the Stage 5 long-form terms for all three reference planets', () => {
+    for (const [planetSeed, archetype] of [
+      [SOAK_HOME_SEED, SOAK_HOME_ARCHETYPE],
+      [SOAK_CONTRAST_SEED_A, SOAK_CONTRAST_ARCHETYPE_A],
+      [SOAK_CONTRAST_SEED_B, SOAK_CONTRAST_ARCHETYPE_B]
+    ] as const) {
+      const { report } = runPureSoak({ planetSeed, archetype, minutes: FULL_MINUTES, scenario: 'fullSoak' });
+      expect(report.pass, `${planetSeed}: ${report.checks.filter((c) => !c.pass).map((c) => c.detail).join('; ')}`).toBe(true);
+      expect(Number(report.stats.barNovelty)).toBeGreaterThanOrEqual(0.85);
+      expect(Number(report.stats.barTabuBypasses)).toBeLessThanOrEqual(4);
+      expect(Number(report.stats.blooms)).toBeGreaterThanOrEqual(4);
+      expect(Number(report.stats.sections)).toBeGreaterThanOrEqual(6);
     }
   });
 });

@@ -1,0 +1,1016 @@
+{
+  "checkedAt": "2026-09-05T20:48:14.432223+00:00",
+  "exactMatchedReferences": 133,
+  "unresolved": [],
+  "matches": [
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/0",
+      "authoredPath": "score-treatment.md",
+      "expectedSha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77",
+      "matchedPath": "assembly/originals/score-treatment.md"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/1",
+      "authoredPath": "score-treatment.json",
+      "expectedSha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d",
+      "matchedPath": "score-treatment.json"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/2",
+      "authoredPath": "score-preparatory-notes.jsonl",
+      "expectedSha256": "c2bd20652736e4f288d7caad674c2d75457b67c185e6b28c64267b8f5c90fc03",
+      "matchedPath": "score-preparatory-notes.jsonl"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/3",
+      "authoredPath": "chapter-stage3-proposal.md",
+      "expectedSha256": "8ab4385e6a08d60a657975fb67196b4d09058d04b92a84e48066c2e4ea2b5115",
+      "matchedPath": "chapter-stage3-proposal.md"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/4",
+      "authoredPath": "chapter-stage3-proposal.json",
+      "expectedSha256": "0402d9d566a729acb1c01eff4125c0f9b5d06ea1d45aa6f6ac08f8c0f23dd116",
+      "matchedPath": "chapter-stage3-proposal.json"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/5",
+      "authoredPath": "chapter-native-contract-contribution.json",
+      "expectedSha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9",
+      "matchedPath": "chapter-native-contract-contribution.json"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/6",
+      "authoredPath": "chapter-stage3-preparatory-notes.jsonl",
+      "expectedSha256": "22597973617ec79700cdb7a3583c3e90a0fab896179939c2405d7e1565689a44",
+      "matchedPath": "chapter-stage3-preparatory-notes.jsonl"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/7",
+      "authoredPath": "cinematography-treatment.md",
+      "expectedSha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+      "matchedPath": "assembly/originals/cinematography-treatment.md"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/8",
+      "authoredPath": "cinematography-treatment.json",
+      "expectedSha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b",
+      "matchedPath": "cinematography-treatment.json"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/9",
+      "authoredPath": "cinematography-preparatory-notes.jsonl",
+      "expectedSha256": "1df2ae871dd5c46775401875999468c5804eab4558ebb317fcee34f35bdb4710",
+      "matchedPath": "cinematography-preparatory-notes.jsonl"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/10",
+      "authoredPath": "cinematography-stage3-reconciliation.jsonl",
+      "expectedSha256": "06c84215ee9861406fceab86e731574d011581ec2351b02cf3ec7b869a35e3be",
+      "matchedPath": "cinematography-stage3-reconciliation.jsonl"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/inputBindings/11",
+      "authoredPath": "cinematography-stage3-native-delta.json",
+      "expectedSha256": "ad0912eea97a31acfc863ad5e7b3cdb320520ea0a808f03490a2de2df54a1a17",
+      "matchedPath": "cinematography-stage3-native-delta.json"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/baseTreatment",
+      "authoredPath": "score-treatment.json",
+      "expectedSha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d",
+      "matchedPath": "score-treatment.json"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/baseReadingCopy",
+      "authoredPath": "score-treatment.md",
+      "expectedSha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77",
+      "matchedPath": "assembly/originals/score-treatment.md"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/guidanceAcceptance/canonicalSource",
+      "authoredPath": "chapter-native-contract-contribution.json",
+      "expectedSha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9",
+      "matchedPath": "chapter-native-contract-contribution.json"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/0",
+      "authoredPath": "main/src/story/StoryCaptions.tsx",
+      "expectedSha256": "2588e150ff5c29ab5fcde36f299ccfce1568c8aad5e276ab689574a2bdf40849",
+      "matchedPath": "assembly/source-snapshots/main/src/story/StoryCaptions.tsx"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/1",
+      "authoredPath": "main/src/story/storyText.ts",
+      "expectedSha256": "19f6aec5803be5c10e3770ead676b42fa4e3cf5812f5ff71cfbfbb1e4234e806",
+      "matchedPath": "assembly/source-snapshots/main/src/story/storyText.ts"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/2",
+      "authoredPath": "main/src/story/feed/regulationVoice.ts",
+      "expectedSha256": "8306b3ddc0b1bac1dd321cb6830db1c9cdc28380fe720c0db9d0368ab9e12182",
+      "matchedPath": "assembly/source-snapshots/main/src/story/feed/regulationVoice.ts"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/3",
+      "authoredPath": "main/src/story/feed/RegulationFeedHud.tsx",
+      "expectedSha256": "80188c72ea6603bfd03758c577a886c6b54d0b00fece4f51a782f297a929bbb0",
+      "matchedPath": "assembly/source-snapshots/main/src/story/feed/RegulationFeedHud.tsx"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/4",
+      "authoredPath": "main/src/audio/voice/voiceGrammar.ts",
+      "expectedSha256": "f871a50466993e87a9b88c6b42cf8eeb9ac680f1fc7da887f16822b76081b37c",
+      "matchedPath": "assembly/source-snapshots/main/src/audio/voice/voiceGrammar.ts"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/5",
+      "authoredPath": "main/src/audio/voice/voicePresentation.ts",
+      "expectedSha256": "7871f27ee50c8a3b8912382fe1456224369382691660df9ddf190a022d3429dd",
+      "matchedPath": "assembly/source-snapshots/main/src/audio/voice/voicePresentation.ts"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/6",
+      "authoredPath": "main/src/story/storyClock.ts",
+      "expectedSha256": "fc362a24b2e093eae1f590d871001596b7a2ca711baab764032884f9acbc1461",
+      "matchedPath": "assembly/source-snapshots/main/src/story/storyClock.ts"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/7",
+      "authoredPath": "main/src/story/storyDirector.ts",
+      "expectedSha256": "4cfeace8d1a8e3fbf90cd48fef8fced3718dc89b4aa57ff5bf63e3f669749806",
+      "matchedPath": "assembly/source-snapshots/main/src/story/storyDirector.ts"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/8",
+      "authoredPath": "main/src/story/ux/feedbackCues.ts",
+      "expectedSha256": "df0f070c7bced43d28dbb54709d9445e5f3329b6a4f9d548b361f5ee81751fb5",
+      "matchedPath": "assembly/source-snapshots/main/src/story/ux/feedbackCues.ts"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/9",
+      "authoredPath": "main/src/story/ux/objectiveDirector.ts",
+      "expectedSha256": "0e9dc3058f1fb1d405b0e565767de319790ed794eb2dd597beaa82d48dc39b05",
+      "matchedPath": "assembly/source-snapshots/main/src/story/ux/objectiveDirector.ts"
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "pointer": "/sourceBindings/10",
+      "authoredPath": "main/src/story/ux/objectiveCommandFeedback.ts",
+      "expectedSha256": "15886ed4d3d3184824016faf75a2902ff176e9a5ea8b41a6b306f99893c43108",
+      "matchedPath": "assembly/source-snapshots/main/src/story/ux/objectiveCommandFeedback.ts"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/0",
+      "authoredPath": "cinematography-treatment.md",
+      "expectedSha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+      "matchedPath": "assembly/originals/cinematography-treatment.md"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/1",
+      "authoredPath": "cinematography-treatment.json",
+      "expectedSha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b",
+      "matchedPath": "cinematography-treatment.json"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/2",
+      "authoredPath": "cinematography-preparatory-notes.jsonl",
+      "expectedSha256": "1df2ae871dd5c46775401875999468c5804eab4558ebb317fcee34f35bdb4710",
+      "matchedPath": "cinematography-preparatory-notes.jsonl"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/3",
+      "authoredPath": "score-treatment.md",
+      "expectedSha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77",
+      "matchedPath": "assembly/originals/score-treatment.md"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/4",
+      "authoredPath": "score-treatment.json",
+      "expectedSha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d",
+      "matchedPath": "score-treatment.json"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/5",
+      "authoredPath": "score-preparatory-notes.jsonl",
+      "expectedSha256": "c2bd20652736e4f288d7caad674c2d75457b67c185e6b28c64267b8f5c90fc03",
+      "matchedPath": "score-preparatory-notes.jsonl"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/6",
+      "authoredPath": "chapter-stage3-proposal.md",
+      "expectedSha256": "8ab4385e6a08d60a657975fb67196b4d09058d04b92a84e48066c2e4ea2b5115",
+      "matchedPath": "chapter-stage3-proposal.md"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/7",
+      "authoredPath": "chapter-stage3-proposal.json",
+      "expectedSha256": "0402d9d566a729acb1c01eff4125c0f9b5d06ea1d45aa6f6ac08f8c0f23dd116",
+      "matchedPath": "chapter-stage3-proposal.json"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/8",
+      "authoredPath": "chapter-native-contract-contribution.json",
+      "expectedSha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9",
+      "matchedPath": "chapter-native-contract-contribution.json"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/9",
+      "authoredPath": "chapter-stage3-preparatory-notes.jsonl",
+      "expectedSha256": "22597973617ec79700cdb7a3583c3e90a0fab896179939c2405d7e1565689a44",
+      "matchedPath": "chapter-stage3-preparatory-notes.jsonl"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/0",
+      "authoredPath": "cinematography-treatment.md",
+      "expectedSha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+      "matchedPath": "assembly/originals/cinematography-treatment.md"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/1",
+      "authoredPath": "cinematography-treatment.json",
+      "expectedSha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b",
+      "matchedPath": "cinematography-treatment.json"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/2",
+      "authoredPath": "cinematography-preparatory-notes.jsonl",
+      "expectedSha256": "1df2ae871dd5c46775401875999468c5804eab4558ebb317fcee34f35bdb4710",
+      "matchedPath": "cinematography-preparatory-notes.jsonl"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/3",
+      "authoredPath": "score-treatment.md",
+      "expectedSha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77",
+      "matchedPath": "assembly/originals/score-treatment.md"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/4",
+      "authoredPath": "score-treatment.json",
+      "expectedSha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d",
+      "matchedPath": "score-treatment.json"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/5",
+      "authoredPath": "score-preparatory-notes.jsonl",
+      "expectedSha256": "c2bd20652736e4f288d7caad674c2d75457b67c185e6b28c64267b8f5c90fc03",
+      "matchedPath": "score-preparatory-notes.jsonl"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/6",
+      "authoredPath": "chapter-stage3-proposal.md",
+      "expectedSha256": "8ab4385e6a08d60a657975fb67196b4d09058d04b92a84e48066c2e4ea2b5115",
+      "matchedPath": "chapter-stage3-proposal.md"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/7",
+      "authoredPath": "chapter-stage3-proposal.json",
+      "expectedSha256": "0402d9d566a729acb1c01eff4125c0f9b5d06ea1d45aa6f6ac08f8c0f23dd116",
+      "matchedPath": "chapter-stage3-proposal.json"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/8",
+      "authoredPath": "chapter-native-contract-contribution.json",
+      "expectedSha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9",
+      "matchedPath": "chapter-native-contract-contribution.json"
+    },
+    {
+      "source": "cinematography-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/9",
+      "authoredPath": "chapter-stage3-preparatory-notes.jsonl",
+      "expectedSha256": "22597973617ec79700cdb7a3583c3e90a0fab896179939c2405d7e1565689a44",
+      "matchedPath": "chapter-stage3-preparatory-notes.jsonl"
+    },
+    {
+      "source": "production-lock.json",
+      "pointer": "/authority/0",
+      "authoredPath": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "expectedSha256": "88f85610c81eb3deae605ea01c0d2f53994487048e0d6029fb3240b1d51909de",
+      "matchedPath": "/home/thomasphillip/Projects/vox/PARAVOXIA_DEMO_FOUNDATION_PLAN.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/independence/frozenReadingCopy",
+      "authoredPath": ".codex/production-runs/2026-09-05-early-grid-mobile/cinematography-treatment.md",
+      "expectedSha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+      "matchedPath": "assembly/originals/cinematography-treatment.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/baselineBindings/0",
+      "authoredPath": ".codex/production-runs/2026-09-05-early-grid-mobile/shipped-visual-baseline.json",
+      "expectedSha256": "46395cee350f1ee4a6b7c0c310d550baf7ce0e6f6630a5ece8a25a3ac19a434b",
+      "matchedPath": "assembly/originals/shipped-visual-baseline.json"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/baselineBindings/1",
+      "authoredPath": ".codex/production-runs/2026-09-05-early-grid-mobile/shipped-ux-baseline.json",
+      "expectedSha256": "3b388660d31ffe84ba5518f53429e22f423b206aa7e08f7cc27e9a99d0b374f8",
+      "matchedPath": "assembly/originals/shipped-ux-baseline.json"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/baselineBindings/2",
+      "authoredPath": ".codex/production-runs/2026-09-05-early-grid-mobile/story-intent.md",
+      "expectedSha256": "979b0ccffecc4a462b50fa98698620a2f5971cfc01f6967c143c92219ea536e5",
+      "matchedPath": "chapter-stage3-input-story-intent.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/baselineBindings/3",
+      "authoredPath": ".codex/production-runs/2026-09-05-early-grid-mobile/chapter-treatment.json",
+      "expectedSha256": "5a582598cd5d38291010042b0382075fe30ad146efe254a8e9ec7e61f55afe5f",
+      "matchedPath": "chapter-treatment.json"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/baselineBindings/4",
+      "authoredPath": ".codex/production-runs/2026-09-05-early-grid-mobile/decision-brief.json",
+      "expectedSha256": "310d50f9dd3e29c3e9e06c42c60c3a81567596a09acae6def8e0d1134c5c8189",
+      "matchedPath": "assembly/originals/decision-brief.pre-stage3.json"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/baselineBindings/5",
+      "authoredPath": ".codex/production-runs/2026-09-05-early-grid-mobile/owner-decisions.md",
+      "expectedSha256": "1a91d33af1e4a2828f5d5c1d4387d885d39e726de9459d0d6d0bef6500002d9c",
+      "matchedPath": "owner-decisions.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/baselineBindings/6",
+      "authoredPath": ".codex/production-runs/2026-09-05-early-grid-mobile/production-lock.json",
+      "expectedSha256": "f77661be80d2d5d7fc674610a600a35a79f18463e7a13c0008e0ab3e111be9ba",
+      "matchedPath": "assembly/originals/production-lock.json"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/authorityBindings/0",
+      "authoredPath": "CLAUDE.md",
+      "expectedSha256": "d47d2f0b5670d801193c5f4c182b37af7da8313d5d8e4bbf55c4418eebc34d93",
+      "matchedPath": "/home/thomasphillip/Projects/vox/CLAUDE.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/authorityBindings/1",
+      "authoredPath": ".claude/agents/cinematography-director.md",
+      "expectedSha256": "bc8675a0f9e1a82be51e1c079f60577c2595a82e3d8903304222b6cd18253770",
+      "matchedPath": "/home/thomasphillip/Projects/vox/.claude/agents/cinematography-director.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/authorityBindings/2",
+      "authoredPath": ".claude/skills/creative-triad/SKILL.md",
+      "expectedSha256": "49ba4848937ff6c3e947f4d9a9d5d568bab5a8e36d23bb109df061a1c1824302",
+      "matchedPath": "/home/thomasphillip/Projects/vox/.claude/skills/creative-triad/SKILL.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/authorityBindings/3",
+      "authoredPath": "PARAVOXIA_CREATIVE_COUNCIL.md",
+      "expectedSha256": "61c06f6ae50b3b870b09764b0ffadf02be2a8e7682946889addca240dd97bcde",
+      "matchedPath": "/home/thomasphillip/Projects/vox/PARAVOXIA_CREATIVE_COUNCIL.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/authorityBindings/4",
+      "authoredPath": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "expectedSha256": "88f85610c81eb3deae605ea01c0d2f53994487048e0d6029fb3240b1d51909de",
+      "matchedPath": "/home/thomasphillip/Projects/vox/PARAVOXIA_DEMO_FOUNDATION_PLAN.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/authorityBindings/5",
+      "authoredPath": "main/story-authority.json",
+      "expectedSha256": "31fdc34b6e4c6d52e91b3d26bbd2d07d5ee3a655318908cba0ab1bd6abca501e",
+      "matchedPath": "assembly/source-snapshots/main/story-authority.json"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/authorityBindings/6",
+      "authoredPath": "main/CINEMATOGRAPHY.md",
+      "expectedSha256": "4524cdbcaddb88606f34e039bd0e8d7c4128dae47f3d64bc6d0b639a9cc1416c",
+      "matchedPath": "assembly/source-snapshots/main/CINEMATOGRAPHY.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/authorityBindings/7",
+      "authoredPath": "main/src/story/ux/README.md",
+      "expectedSha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85",
+      "matchedPath": "assembly/source-snapshots/main/src/story/ux/README.md"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/currentCutEvidence/0",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0090-ch1-fixed.png",
+      "expectedSha256": "3b9e0f5170781be98705faec4234082045f08de310601c06aba529210ec775ce",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0090-ch1-fixed.png"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/currentCutEvidence/1",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0088-ch1-fixed.png",
+      "expectedSha256": "0232564f456ebc3d5afbde74204fc0169cd8a5567a4ba5d8976ec6e84f9066fe",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0088-ch1-fixed.png"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/currentCutEvidence/2",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0107-ch1-fixed.png",
+      "expectedSha256": "9e1b970acc25795122d76b26026cb51d39821055c2ad1cbf3222b78e0ee16462",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0107-ch1-fixed.png"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/currentCutEvidence/3",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0071-ch1-raster.png",
+      "expectedSha256": "f921c6bc865eaad1fc4a52910e83ba916271f12d858a0776ff51cf6de9b70724",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0071-ch1-raster.png"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/currentCutEvidence/4",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0076-ch1-raster.png",
+      "expectedSha256": "0616549484b608d87a4f9f26c8843021d5f26998ba79a4ed8d8083ca39249e52",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0076-ch1-raster.png"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/currentCutEvidence/5",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0056-descent.png",
+      "expectedSha256": "f7667e10e110f345eaabc2d86b09fb181ecfebda86203d15c51ad3bc844fca6e",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0056-descent.png"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/currentCutEvidence/6",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0036-ch1-track.png",
+      "expectedSha256": "30b2a76068d97c2fe1d11b93e254552716e3c1fc47d9339a08865a48c1809a2a",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0036-ch1-track.png"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/currentCutEvidence/7",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0048-ch1-track.png",
+      "expectedSha256": "ebc2e71d3209735766d81473a13acaf72b58c45436ef991f41fce7a00291ea34",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0048-ch1-track.png"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/currentCutEvidence/8",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0145-ch1-depth.png",
+      "expectedSha256": "3635ca1f6cce8bd94c2685fe9f29a2fc264777d7e47414cc3478c969e4bd1c8d",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie-0145-ch1-depth.png"
+    },
+    {
+      "source": "cinematography-treatment.json",
+      "pointer": "/currentCutEvidence/9",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0150-ch1-depth.png",
+      "expectedSha256": "2e5359c6d72f0839e01c36485c68963df79371408edc870e9818fb2546de4007",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie-0150-ch1-depth.png"
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "pointer": "/readTreatments/0",
+      "authoredPath": "story-intent.md",
+      "expectedSha256": "979b0ccffecc4a462b50fa98698620a2f5971cfc01f6967c143c92219ea536e5",
+      "matchedPath": "chapter-stage3-input-story-intent.md"
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "pointer": "/readTreatments/1",
+      "authoredPath": "score-treatment.md",
+      "expectedSha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77",
+      "matchedPath": "assembly/originals/score-treatment.md"
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "pointer": "/readTreatments/2",
+      "authoredPath": "score-treatment.json",
+      "expectedSha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d",
+      "matchedPath": "score-treatment.json"
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "pointer": "/readTreatments/3",
+      "authoredPath": "cinematography-treatment.md",
+      "expectedSha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+      "matchedPath": "assembly/originals/cinematography-treatment.md"
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "pointer": "/readTreatments/4",
+      "authoredPath": "cinematography-treatment.json",
+      "expectedSha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b",
+      "matchedPath": "cinematography-treatment.json"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/runArtifacts/0",
+      "authoredPath": "production-lock.md",
+      "expectedSha256": "de06784ff4650eafa61ef250068c8a92c4e89ff8b829e48363af56db7728ea83",
+      "matchedPath": "assembly/originals/production-lock.md"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/runArtifacts/1",
+      "authoredPath": "production-lock.json",
+      "expectedSha256": "f77661be80d2d5d7fc674610a600a35a79f18463e7a13c0008e0ab3e111be9ba",
+      "matchedPath": "assembly/originals/production-lock.json"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/runArtifacts/2",
+      "authoredPath": "planning-source-manifest.json",
+      "expectedSha256": "09215bd6805e324e34039f9d8e674c07a6d0310de6763f8d0eb4fd6f7e5db623",
+      "matchedPath": "planning-source-manifest.json"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/runArtifacts/3",
+      "authoredPath": "owner-decisions.md",
+      "expectedSha256": "1a91d33af1e4a2828f5d5c1d4387d885d39e726de9459d0d6d0bef6500002d9c",
+      "matchedPath": "owner-decisions.md"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/runArtifacts/4",
+      "authoredPath": "story-intent.md",
+      "expectedSha256": "979b0ccffecc4a462b50fa98698620a2f5971cfc01f6967c143c92219ea536e5",
+      "matchedPath": "chapter-stage3-input-story-intent.md"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/runArtifacts/5",
+      "authoredPath": "chapter-treatment.json",
+      "expectedSha256": "5a582598cd5d38291010042b0382075fe30ad146efe254a8e9ec7e61f55afe5f",
+      "matchedPath": "chapter-treatment.json"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/runArtifacts/6",
+      "authoredPath": "decision-brief.json",
+      "expectedSha256": "310d50f9dd3e29c3e9e06c42c60c3a81567596a09acae6def8e0d1134c5c8189",
+      "matchedPath": "assembly/originals/decision-brief.pre-stage3.json"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/runArtifacts/7",
+      "authoredPath": "shipped-visual-baseline.json",
+      "expectedSha256": "46395cee350f1ee4a6b7c0c310d550baf7ce0e6f6630a5ece8a25a3ac19a434b",
+      "matchedPath": "assembly/originals/shipped-visual-baseline.json"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/runArtifacts/8",
+      "authoredPath": "shipped-ux-baseline.json",
+      "expectedSha256": "3b388660d31ffe84ba5518f53429e22f423b206aa7e08f7cc27e9a99d0b374f8",
+      "matchedPath": "assembly/originals/shipped-ux-baseline.json"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/viewedFrames/0",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0090-ch1-fixed.png",
+      "expectedSha256": "3b9e0f5170781be98705faec4234082045f08de310601c06aba529210ec775ce",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary-0090-ch1-fixed.png"
+    },
+    {
+      "source": "score-treatment.json",
+      "pointer": "/grounding/viewedFrames/1",
+      "authoredPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0107-ch1-fixed.png",
+      "expectedSha256": "9e1b970acc25795122d76b26026cb51d39821055c2ad1cbf3222b78e0ee16462",
+      "matchedPath": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary-0107-ch1-fixed.png"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/baseTreatment",
+      "authoredPath": "cinematography-treatment.json",
+      "expectedSha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b",
+      "matchedPath": "cinematography-treatment.json"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/baseReadingCopy",
+      "authoredPath": "cinematography-treatment.md",
+      "expectedSha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+      "matchedPath": "assembly/originals/cinematography-treatment.md"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/inputBindings/0",
+      "authoredPath": "cinematography-treatment.md",
+      "expectedSha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+      "matchedPath": "assembly/originals/cinematography-treatment.md"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/inputBindings/1",
+      "authoredPath": "cinematography-treatment.json",
+      "expectedSha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b",
+      "matchedPath": "cinematography-treatment.json"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/inputBindings/2",
+      "authoredPath": "cinematography-preparatory-notes.jsonl",
+      "expectedSha256": "1df2ae871dd5c46775401875999468c5804eab4558ebb317fcee34f35bdb4710",
+      "matchedPath": "cinematography-preparatory-notes.jsonl"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/inputBindings/3",
+      "authoredPath": "score-treatment.md",
+      "expectedSha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77",
+      "matchedPath": "assembly/originals/score-treatment.md"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/inputBindings/4",
+      "authoredPath": "score-treatment.json",
+      "expectedSha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d",
+      "matchedPath": "score-treatment.json"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/inputBindings/5",
+      "authoredPath": "score-preparatory-notes.jsonl",
+      "expectedSha256": "c2bd20652736e4f288d7caad674c2d75457b67c185e6b28c64267b8f5c90fc03",
+      "matchedPath": "score-preparatory-notes.jsonl"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/inputBindings/6",
+      "authoredPath": "chapter-stage3-proposal.md",
+      "expectedSha256": "8ab4385e6a08d60a657975fb67196b4d09058d04b92a84e48066c2e4ea2b5115",
+      "matchedPath": "chapter-stage3-proposal.md"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/inputBindings/7",
+      "authoredPath": "chapter-stage3-proposal.json",
+      "expectedSha256": "0402d9d566a729acb1c01eff4125c0f9b5d06ea1d45aa6f6ac08f8c0f23dd116",
+      "matchedPath": "chapter-stage3-proposal.json"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/inputBindings/8",
+      "authoredPath": "chapter-native-contract-contribution.json",
+      "expectedSha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9",
+      "matchedPath": "chapter-native-contract-contribution.json"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/inputBindings/9",
+      "authoredPath": "chapter-stage3-preparatory-notes.jsonl",
+      "expectedSha256": "22597973617ec79700cdb7a3583c3e90a0fab896179939c2405d7e1565689a44",
+      "matchedPath": "chapter-stage3-preparatory-notes.jsonl"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/guidanceMerge/useExactDocument",
+      "authoredPath": "chapter-native-contract-contribution.json",
+      "expectedSha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9",
+      "matchedPath": "chapter-native-contract-contribution.json"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/sourceBindings/0",
+      "authoredPath": "main/src/story/StoryCaptions.tsx",
+      "expectedSha256": "2588e150ff5c29ab5fcde36f299ccfce1568c8aad5e276ab689574a2bdf40849",
+      "matchedPath": "assembly/source-snapshots/main/src/story/StoryCaptions.tsx"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/sourceBindings/1",
+      "authoredPath": "main/src/story/StoryOverlays.tsx",
+      "expectedSha256": "95ee8a6d965258b42763a4301502cbda4db11db86548e1d8d5994934ca4ef516",
+      "matchedPath": "assembly/source-snapshots/main/src/story/StoryOverlays.tsx"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/sourceBindings/2",
+      "authoredPath": "main/src/story/storyText.ts",
+      "expectedSha256": "19f6aec5803be5c10e3770ead676b42fa4e3cf5812f5ff71cfbfbb1e4234e806",
+      "matchedPath": "assembly/source-snapshots/main/src/story/storyText.ts"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/sourceBindings/3",
+      "authoredPath": "main/src/story/feed/regulationVoice.ts",
+      "expectedSha256": "8306b3ddc0b1bac1dd321cb6830db1c9cdc28380fe720c0db9d0368ab9e12182",
+      "matchedPath": "assembly/source-snapshots/main/src/story/feed/regulationVoice.ts"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/sourceBindings/4",
+      "authoredPath": "main/src/story/feed/RegulationFeedHud.tsx",
+      "expectedSha256": "80188c72ea6603bfd03758c577a886c6b54d0b00fece4f51a782f297a929bbb0",
+      "matchedPath": "assembly/source-snapshots/main/src/story/feed/RegulationFeedHud.tsx"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/sourceBindings/5",
+      "authoredPath": "main/src/story/storyDirector.ts",
+      "expectedSha256": "4cfeace8d1a8e3fbf90cd48fef8fced3718dc89b4aa57ff5bf63e3f669749806",
+      "matchedPath": "assembly/source-snapshots/main/src/story/storyDirector.ts"
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "pointer": "/sourceBindings/6",
+      "authoredPath": "main/src/audio/voice/voiceGrammar.ts",
+      "expectedSha256": "f871a50466993e87a9b88c6b42cf8eeb9ac680f1fc7da887f16822b76081b37c",
+      "matchedPath": "assembly/source-snapshots/main/src/audio/voice/voiceGrammar.ts"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/0",
+      "authoredPath": "score-treatment.md",
+      "expectedSha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77",
+      "matchedPath": "assembly/originals/score-treatment.md"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/1",
+      "authoredPath": "score-treatment.json",
+      "expectedSha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d",
+      "matchedPath": "score-treatment.json"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/2",
+      "authoredPath": "score-preparatory-notes.jsonl",
+      "expectedSha256": "c2bd20652736e4f288d7caad674c2d75457b67c185e6b28c64267b8f5c90fc03",
+      "matchedPath": "score-preparatory-notes.jsonl"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/3",
+      "authoredPath": "chapter-stage3-proposal.md",
+      "expectedSha256": "8ab4385e6a08d60a657975fb67196b4d09058d04b92a84e48066c2e4ea2b5115",
+      "matchedPath": "chapter-stage3-proposal.md"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/4",
+      "authoredPath": "chapter-stage3-proposal.json",
+      "expectedSha256": "0402d9d566a729acb1c01eff4125c0f9b5d06ea1d45aa6f6ac08f8c0f23dd116",
+      "matchedPath": "chapter-stage3-proposal.json"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/5",
+      "authoredPath": "chapter-native-contract-contribution.json",
+      "expectedSha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9",
+      "matchedPath": "chapter-native-contract-contribution.json"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/6",
+      "authoredPath": "chapter-stage3-preparatory-notes.jsonl",
+      "expectedSha256": "22597973617ec79700cdb7a3583c3e90a0fab896179939c2405d7e1565689a44",
+      "matchedPath": "chapter-stage3-preparatory-notes.jsonl"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/7",
+      "authoredPath": "cinematography-treatment.md",
+      "expectedSha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+      "matchedPath": "assembly/originals/cinematography-treatment.md"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/8",
+      "authoredPath": "cinematography-treatment.json",
+      "expectedSha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b",
+      "matchedPath": "cinematography-treatment.json"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/9",
+      "authoredPath": "cinematography-preparatory-notes.jsonl",
+      "expectedSha256": "1df2ae871dd5c46775401875999468c5804eab4558ebb317fcee34f35bdb4710",
+      "matchedPath": "cinematography-preparatory-notes.jsonl"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/10",
+      "authoredPath": "cinematography-stage3-reconciliation.jsonl",
+      "expectedSha256": "06c84215ee9861406fceab86e731574d011581ec2351b02cf3ec7b869a35e3be",
+      "matchedPath": "cinematography-stage3-reconciliation.jsonl"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line1/inputBindings/11",
+      "authoredPath": "cinematography-stage3-native-delta.json",
+      "expectedSha256": "ad0912eea97a31acfc863ad5e7b3cdb320520ea0a808f03490a2de2df54a1a17",
+      "matchedPath": "cinematography-stage3-native-delta.json"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/0",
+      "authoredPath": "score-treatment.md",
+      "expectedSha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77",
+      "matchedPath": "assembly/originals/score-treatment.md"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/1",
+      "authoredPath": "score-treatment.json",
+      "expectedSha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d",
+      "matchedPath": "score-treatment.json"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/2",
+      "authoredPath": "score-preparatory-notes.jsonl",
+      "expectedSha256": "c2bd20652736e4f288d7caad674c2d75457b67c185e6b28c64267b8f5c90fc03",
+      "matchedPath": "score-preparatory-notes.jsonl"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/3",
+      "authoredPath": "chapter-stage3-proposal.md",
+      "expectedSha256": "8ab4385e6a08d60a657975fb67196b4d09058d04b92a84e48066c2e4ea2b5115",
+      "matchedPath": "chapter-stage3-proposal.md"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/4",
+      "authoredPath": "chapter-stage3-proposal.json",
+      "expectedSha256": "0402d9d566a729acb1c01eff4125c0f9b5d06ea1d45aa6f6ac08f8c0f23dd116",
+      "matchedPath": "chapter-stage3-proposal.json"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/5",
+      "authoredPath": "chapter-native-contract-contribution.json",
+      "expectedSha256": "ae1c07da3596bead514af2074e9da044f3c97992640bc4f4a79359778c1ff0d9",
+      "matchedPath": "chapter-native-contract-contribution.json"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/6",
+      "authoredPath": "chapter-stage3-preparatory-notes.jsonl",
+      "expectedSha256": "22597973617ec79700cdb7a3583c3e90a0fab896179939c2405d7e1565689a44",
+      "matchedPath": "chapter-stage3-preparatory-notes.jsonl"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/7",
+      "authoredPath": "cinematography-treatment.md",
+      "expectedSha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+      "matchedPath": "assembly/originals/cinematography-treatment.md"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/8",
+      "authoredPath": "cinematography-treatment.json",
+      "expectedSha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b",
+      "matchedPath": "cinematography-treatment.json"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/9",
+      "authoredPath": "cinematography-preparatory-notes.jsonl",
+      "expectedSha256": "1df2ae871dd5c46775401875999468c5804eab4558ebb317fcee34f35bdb4710",
+      "matchedPath": "cinematography-preparatory-notes.jsonl"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/10",
+      "authoredPath": "cinematography-stage3-reconciliation.jsonl",
+      "expectedSha256": "06c84215ee9861406fceab86e731574d011581ec2351b02cf3ec7b869a35e3be",
+      "matchedPath": "cinematography-stage3-reconciliation.jsonl"
+    },
+    {
+      "source": "score-stage3-reconciliation.jsonl",
+      "pointer": "/line2/inputBindings/11",
+      "authoredPath": "cinematography-stage3-native-delta.json",
+      "expectedSha256": "ad0912eea97a31acfc863ad5e7b3cdb320520ea0a808f03490a2de2df54a1a17",
+      "matchedPath": "cinematography-stage3-native-delta.json"
+    }
+  ],
+  "additionalSourceSnapshots": [
+    {
+      "path": "main/src/story/StoryCaptions.tsx",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/StoryCaptions.tsx",
+      "sha256": "2588e150ff5c29ab5fcde36f299ccfce1568c8aad5e276ab689574a2bdf40849"
+    },
+    {
+      "path": "main/src/story/storyText.ts",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/storyText.ts",
+      "sha256": "19f6aec5803be5c10e3770ead676b42fa4e3cf5812f5ff71cfbfbb1e4234e806"
+    },
+    {
+      "path": "main/src/story/feed/regulationVoice.ts",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/feed/regulationVoice.ts",
+      "sha256": "8306b3ddc0b1bac1dd321cb6830db1c9cdc28380fe720c0db9d0368ab9e12182"
+    },
+    {
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/feed/RegulationFeedHud.tsx",
+      "sha256": "80188c72ea6603bfd03758c577a886c6b54d0b00fece4f51a782f297a929bbb0"
+    },
+    {
+      "path": "main/src/audio/voice/voiceGrammar.ts",
+      "snapshotPath": "assembly/source-snapshots/main/src/audio/voice/voiceGrammar.ts",
+      "sha256": "f871a50466993e87a9b88c6b42cf8eeb9ac680f1fc7da887f16822b76081b37c"
+    },
+    {
+      "path": "main/src/audio/voice/voicePresentation.ts",
+      "snapshotPath": "assembly/source-snapshots/main/src/audio/voice/voicePresentation.ts",
+      "sha256": "7871f27ee50c8a3b8912382fe1456224369382691660df9ddf190a022d3429dd"
+    },
+    {
+      "path": "main/src/story/storyClock.ts",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/storyClock.ts",
+      "sha256": "fc362a24b2e093eae1f590d871001596b7a2ca711baab764032884f9acbc1461"
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/storyDirector.ts",
+      "sha256": "4cfeace8d1a8e3fbf90cd48fef8fced3718dc89b4aa57ff5bf63e3f669749806"
+    },
+    {
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/ux/feedbackCues.ts",
+      "sha256": "df0f070c7bced43d28dbb54709d9445e5f3329b6a4f9d548b361f5ee81751fb5"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/ux/objectiveDirector.ts",
+      "sha256": "0e9dc3058f1fb1d405b0e565767de319790ed794eb2dd597beaa82d48dc39b05"
+    },
+    {
+      "path": "main/src/story/ux/objectiveCommandFeedback.ts",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/ux/objectiveCommandFeedback.ts",
+      "sha256": "15886ed4d3d3184824016faf75a2902ff176e9a5ea8b41a6b306f99893c43108"
+    },
+    {
+      "path": "main/story-authority.json",
+      "snapshotPath": "assembly/source-snapshots/main/story-authority.json",
+      "sha256": "31fdc34b6e4c6d52e91b3d26bbd2d07d5ee3a655318908cba0ab1bd6abca501e"
+    },
+    {
+      "path": "main/CINEMATOGRAPHY.md",
+      "snapshotPath": "assembly/source-snapshots/main/CINEMATOGRAPHY.md",
+      "sha256": "4524cdbcaddb88606f34e039bd0e8d7c4128dae47f3d64bc6d0b639a9cc1416c"
+    },
+    {
+      "path": "main/src/story/ux/README.md",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/ux/README.md",
+      "sha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85"
+    },
+    {
+      "path": "main/src/story/StoryOverlays.tsx",
+      "snapshotPath": "assembly/source-snapshots/main/src/story/StoryOverlays.tsx",
+      "sha256": "95ee8a6d965258b42763a4301502cbda4db11db86548e1d8d5994934ca4ef516"
+    }
+  ],
+  "method": "Literal authored SHA matched only against actual original bytes, exact archived sources or targeted log recovery; no hash refresh."
+}

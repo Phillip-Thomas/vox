@@ -1,0 +1,181 @@
+{
+  "schema": "paravoxia.verifier.continueCandidateClosure.v1",
+  "role": "continue-candidate-closure",
+  "action": "continue",
+  "at": "2026-09-06T22:32:00Z",
+  "attempt": 2,
+  "captureRef": "verifier/captures/continue-candidate/attempt-2",
+  "preservedPriorEvidence": [
+    "verifier/captures/continue-candidate/attempt-1",
+    "verifier/captures/continue-candidate/attempt-2-root-sigint-partial (prior 3.4s SIGINT-killed partial, renamed only; bytes untouched)"
+  ],
+  "budgets": {
+    "usedOriginalDocumentedDefaults": true,
+    "returnMs": 180000,
+    "earnMs": 120000,
+    "walkMs": 90000,
+    "noInternalTrimming": true,
+    "launchUtc": "2026-09-06T22:27:22Z",
+    "endUtc": "2026-09-06T22:29:33.512Z",
+    "wallSeconds": 131,
+    "originalDeadline": "2026-09-06T22:41:39.306703+00:00"
+  },
+  "preflight": {
+    "launch": true,
+    "refusals": [],
+    "role": "continue-candidate-closure",
+    "controlActiveRole": "continue-candidate-closure",
+    "url": "http://127.0.0.1:37395/",
+    "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+    "sourceFilesRehashedBefore": 100,
+    "sourceFilesRehashedAfter": 100,
+    "sourceDrift": [],
+    "indexSha256": "a9b880389deff7717b3d76b0f4a962beff1031a2ffa44fde427a5f0022353d8f",
+    "bundleSha256": "68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b",
+    "heavyLockInheritedFd": 9,
+    "heavyLockOpenedByProbe": false,
+    "headed": true,
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "codeSnapshotRef": "logs/continue-candidate-closure/code-snapshot-prelaunch.sha256",
+    "probeSha256": "46496492de0645c43e1a01537cb5cf3453c33f324c2607754da01d9b086bff22"
+  },
+  "gates": {
+    "earnedOriginLanding": {
+      "result": "PASS",
+      "returnMs": 74269,
+      "returnBoundMs": 180000,
+      "originLanded": true,
+      "gateOk": true,
+      "fps": 57.7,
+      "anchorLadder": [
+        "anc.cg.hatch-boarded",
+        "anc.cg.lift-committed",
+        "anc.cg.origin-landed",
+        "anc.cg.demonstration-opened",
+        "anc.cg.repeated-measure",
+        "anc.cg.survey-started"
+      ],
+      "note": "movie-scripted physical flight on the shipped ch13-return rail; labelled scripted-input, NOT a zero-rescue claim"
+    },
+    "partialSurveySave": {
+      "result": "PASS",
+      "caughtAtPartialCheckpoint": true,
+      "savePath": "beforeunload -> doSave(true) -> saveWorld -> serializeCommonGroundForWorld",
+      "savedWorldKey": "pvx.v1.world.-1,-1",
+      "savedBytes": 3050,
+      "savedSha256": "e53b51113869e532e997a40781287a124206c1299923506d2188908d2cbc5a3b",
+      "commonGroundSha256": "d1d74411bdf555864c921e128e35f572121ea9c601612603ceb7a69231fd11f2",
+      "savedSamples": 19,
+      "surveyPhase": "drawing"
+    },
+    "actualLandingContinue": {
+      "result": "PASS",
+      "waitedForLandingCtaBeforeRuntime": true,
+      "cta": "▶ Continue",
+      "subtitle": "STORY COMPLETE · RETURN TO YOUR WORLD",
+      "shippedPath": "LandingMenu.startOrContinueStory -> beginStory() -> storyEntryPoint()",
+      "deepLinkUsed": false,
+      "rafFramesRetained": 361,
+      "captureCompleteness": "complete",
+      "frameErrorCount": 0,
+      "firstValidRuntimeMs": 1645,
+      "holdBeyondFirstValidMs": 5000,
+      "beatAfter": "ch13-survey",
+      "menuStillUp": false,
+      "fpsAfterContinue": 60.3,
+      "afterContinueSha256": "7127eb27f25d6b6e7ce4be34702d72781b7a3d1a4b7defa978f0e4e50ae6449c"
+    },
+    "fullSavedPointPrefixEquality": {
+      "result": "PASS",
+      "path": "/commonGround/survey/working/samples",
+      "savedPointObjects": 19,
+      "restoredPointObjects": 20,
+      "prefixEqualOverObjects": 19,
+      "fullObjectEquality": true,
+      "comparedFields": ["x", "y", "z", "corner", "walkedAt"],
+      "comparison": "full point OBJECTS, not counts; variable-count prefix",
+      "appendedAfterResume": {
+        "x": -32.38463396595951,
+        "y": 51.02737138692924,
+        "z": 19.482595881574124,
+        "corner": true,
+        "walkedAt": 14.541114348877626
+      },
+      "worldIdentityOk": true,
+      "lostMilestones": [],
+      "anchorsAdded": [],
+      "anchorsDropped": [],
+      "noAnchorReplay": true,
+      "overwriteGateOk": true,
+      "note": "The probe's own samplesSurvived=false compares the live 4-sample partial-checkpoint reading against the 20 restored; the authoritative byte comparison of stored WorldSave blobs shows every one of the 19 saved point objects preserved identically, plus one legitimately appended post-resume sample."
+    },
+    "newAuthorizedFOffer": {
+      "result": "NOT PERFORMED — INCONCLUSIVE",
+      "isGameFailure": false,
+      "isAcceptance": false,
+      "expected": {
+        "objectiveId": "ch13:survey:offer-span",
+        "signedScene": "story-ch13-offer-span",
+        "markerLabel": "Offer the walked span",
+        "anchor": "anc.cg.route-offered"
+      },
+      "observedAtBlock": {
+        "objectiveId": "ch13:survey:draw",
+        "markerLabel": "Survey end · demonstrate a route",
+        "hudText": "Walk your route to the survey end. [F] Offer the recorded span.",
+        "markerDistanceShown": "104m"
+      },
+      "authorizationOk": false,
+      "fPressed": false,
+      "routeOfferedAnchorPresent": false,
+      "blockingFinding": "EC3D-NOT-GROUNDED-AT-E",
+      "groundedGateProblems": [
+        "foot is 85.695u from the ground target, outside the existing 1.2u radius",
+        "audit-plane support is not true at the grounded pose (meaningful here: the body IS on the audited plane)",
+        "the shipped prompt is not offering [F]"
+      ],
+      "predicatesUnchanged": true,
+      "noRescueNoForcedAcceptance": true,
+      "noSetterUsed": true
+    }
+  },
+  "proximateCauses": [
+    {
+      "id": "SPAWN-94.5U-FROM-SAVED-POSE",
+      "class": "measured raw observation (branch unobserved)",
+      "savedPose": [-30.324216842651367, 52.78929138183594, 11.998917579650879],
+      "observedBodyPoseAfterContinue": [50.9889747619629, 13.499999944081035, -15.999999832010142],
+      "distanceFromSavedPose": 94.54852154758723,
+      "toleranceUnits": 0.75,
+      "outcome": "resumed-at-neither (unexplained spawn)",
+      "corroboration": "0003-after-continue.png HUD marker reads 'survey end · demonstrate a route · 104m'",
+      "observationGap": "EfficientScene.tsx publishes no marker for resumeIsSafe / findValidSpawnSite / arrivalPose; the validation-fallback BRANCH is unobservable from outside. No source change proposed."
+    },
+    {
+      "id": "PROBE-STEERING-MULTI-FACE-GAP",
+      "class": "probe controller limitation (NOT a game fault)",
+      "detail": "The walk to E terminated after 22498ms of its 90000ms budget, stopReason 'no-usable-key (no-key-scores-above-threshold)', after crossing cube face +X -> +Y. chooseKey3d minScore=0.15; after the face-change recalibration only KeyW/KeyS/KeyA were re-measured and no key projected above threshold toward the wanted tangent. Distance closed 99.38u -> 85.71u before the stall.",
+      "consequence": "The authorized [F] could not be attempted; this is capture-incomplete, not a demonstrated restore or acceptance failure."
+    }
+  ],
+  "visualDefects": [],
+  "cleanup": {
+    "probeOwnedSessionStopped": true,
+    "cleanupCompleted": true,
+    "cleanupError": null,
+    "rootPreviewUntouched": true,
+    "foreignBrowsersUntouched": true,
+    "noProcessesKilled": true,
+    "sourceStableAcrossCapture": true
+  },
+  "notPerformed": [
+    "no standalone fps run",
+    "no broad source audit",
+    "no auxiliary capture",
+    "no full suite rerun (root 352/3192 PASS retained)",
+    "no game source change",
+    "no publishing",
+    "no producer transport/control file writes"
+  ],
+  "verdict": "MIXED — earned Origin landing, partial-survey save, real landing Continue and FULL saved-point prefix equality all PASS on actual hardware; the NEW authorized [F] Offer-the-walked-span action was NOT performed and remains INCONCLUSIVE (probe steering could not traverse the 94.5u spawn displacement across a cube-face change). Equality alone is explicitly NOT accepted as closure."
+}

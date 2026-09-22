@@ -1,0 +1,50 @@
+{
+  "schema": "paravoxia.chapterLoopThroughputValidation.v1",
+  "validatedAt": "2026-09-07T16:52:12.249849+00:00",
+  "scope": "Workflow installation; no chapter restart or acceptance",
+  "tests": {
+    "command": "node --test main/tools/chapter-loop/loop.test.mjs main/tools/chapter-loop/cache.test.mjs main/tools/chapter-loop/release-review.test.mjs main/tools/chapter-loop/runtime-capture.test.mjs",
+    "passed": 88,
+    "failed": 0,
+    "legacyOperatorSelfTest": "passed"
+  },
+  "hardware": {
+    "status": "passed",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "videoSeconds": 15.32,
+    "audioSeconds": 12.288,
+    "report": {
+      "path": "/tmp/paravoxia-throughput-20260907/live-av-fixed/report.json",
+      "sha256": "38b6aac0e14198b3ad21f2e0c8120d531cd92c38828f96105e435983e38761ad"
+    },
+    "failedAttemptRetained": "/tmp/paravoxia-throughput-20260907/live-av/report.json",
+    "frame": "/tmp/paravoxia-throughput-20260907/live-av-fixed/frame.png",
+    "video": "/tmp/paravoxia-throughput-20260907/live-av-fixed/video.webm",
+    "audio": "/tmp/paravoxia-throughput-20260907/live-av-fixed/audio.wav"
+  },
+  "preservedCheckpoint": {
+    "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/state.json",
+    "sha256": "1f2481d4370f081a16f0dabc799dc9d5c984125f9d535cd83bdb4078e6e597d6",
+    "status": "BLOCKED_INFRASTRUCTURE",
+    "activeMs": 571647,
+    "usage": {
+      "roleLaunches": 0,
+      "modelTurns": 0,
+      "inputTokens": 0,
+      "cacheReadTokens": 0,
+      "outputTokens": 0
+    },
+    "retries": 2
+  },
+  "limits": {
+    "elapsedCeilingHours": 8,
+    "firstPlayableMinutes": 90,
+    "refinements": 1
+  },
+  "limitations": [
+    "No end-to-end creative pilot or measured chapter speedup",
+    "Full fresh earned continuity is implemented but not runtime-certified by this AV-only validation",
+    "New chapters must supply chapter-specific manual/recovery/Continue commands and candidate manifests; Chapter13 legacy bindings reject different chapters"
+  ],
+  "publicationAuthorized": false
+}

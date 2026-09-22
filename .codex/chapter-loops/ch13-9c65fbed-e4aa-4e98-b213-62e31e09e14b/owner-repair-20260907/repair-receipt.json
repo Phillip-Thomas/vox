@@ -1,0 +1,49 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b",
+  "failureSha256": "d71c0ebf44fcb65176372eddf44724393ed4221ebbe984c913a584d9c57b9c01",
+  "ownerAuthorization": {
+    "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/owner-repair-20260907/authorization.json",
+    "sha256": "2bcca9e2c1d2ba55278ea17272c3f2b8bbc312f4f30188bef214741b49587c8e"
+  },
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/legacy-capture.mjs",
+      "before": "901d9b39969e00733d55ed32c65889df9930d6cb15692312854de55324e3e772",
+      "after": "15e884907baee0353afa0f5926948b847041c94578959afd97e7f247e4b9d47a"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "f107927f9e6903247d895b5cb97eb29848ef2ee3fb304aa1eb73dc5f464c2f86",
+      "after": "c680645575838634bd2545ae7e1c2e3d6871f75d2a8e3f96b4a13ee9e82c1810"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/earned-continue-3d-probe.mjs",
+      "before": "46496492de0645c43e1a01537cb5cf3453c33f324c2607754da01d9b086bff22",
+      "after": "3d83aba76bfcc71a87d4ab45bb0bb2a34bf88a485a23a1af563107ba80216acc"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "51f4d493dd35aaee95c5f95ff54e04c45b012373111c46c9f638b690be59a9a1",
+      "after": "329824188af15d3d408d1adad10ac2885e39a1e081b24286823cdc297bd9a02f"
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "command": "npm run chapter:loop:test",
+    "tests": 24,
+    "report": {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/owner-repair-20260907/tests.log",
+      "sha256": "8b2d1b6a9d1204ad2c6799d1353faf0d690b137e3da882317dc4811ae20df77d"
+    },
+    "continueGateTests": {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/owner-repair-20260907/continue-gates.log",
+      "sha256": "6221025ba734ad39c34103bcb9a73168498d1147a2400256eb616bbad2acfdf9"
+    },
+    "retainedManualReplay": {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/owner-repair-20260907/manual-replay.json",
+      "sha256": "5720cbe1e9a42aa68d521afc5555e12eee2591fbb173ccef61371b1004227e2f"
+    }
+  },
+  "diagnosis": "Manual probe stores its post-finally cleanup in summary.json.cleanup. Normalize that exact schema; missing or failed cleanup stays inconclusive. Continue uses a real held 80ms F input with unchanged signed arrival and new-route-anchor gates."
+}

@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 252615,
+  "stop_reason": "end_turn",
+  "session_id": "673cad7a-c678-4a74-bf6e-52eed0535b53",
+  "total_cost_usd": 1.32485,
+  "usage": {
+    "input_tokens": 38,
+    "cache_creation_input_tokens": 51241,
+    "cache_read_input_tokens": 608794,
+    "output_tokens": 20239,
+    "output_tokens_details": {
+      "thinking_tokens": 3243
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 51241,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1900,
+        "cache_read_input_tokens": 56695,
+        "cache_creation_input_tokens": 852,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 852
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1813,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001878,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 38,
+      "outputTokens": 20239,
+      "cacheReadInputTokens": 608794,
+      "cacheCreationInputTokens": 51241,
+      "webSearchRequests": 0,
+      "costUSD": 1.322972,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 3243,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 26,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "JSON valid, 15 clean bins. Sealed at **20:24:36Z**, inside the 20:27:05.927860Z deadline. The listed git modifications are pre-existing working-tree state from earlier roles \u2014 I wrote nothing outside my owned paths.\n\n---\n\n# VERDICT: **FINALE-WINDOW-CAPTURED** \u2014 capture succeeded, all required conditions met. Not a chapter acceptance.\n\n## Role grant (read before GPU acquire)\nActual UTC read at **20:20:19.177Z**, before touching the lock. `producer-common-physical-finale-gpu-handoff.json` (20:19:30.296786Z) grants `activeRole: finale-window-runtime`; COMMON finished 20:17:51.387Z, browser cleanup 20:17:11.566Z, `kernelLockEntries: []`. Acquisition was on verified-clean resources, authority from this handoff \u2014 not inferred from the old commission. **No reassignment occurred; ownership wait 0 s.** Prior 33+31 tests and 7 real FD child checks reused, no re-preparation.\n\n## Measurements\n\n| Field | Value |\n|---|---|\n| Lock acquired | 20:20:28.488Z |\n| Session | 20:20:28.553 \u2192 20:21:47.412Z, **78.859 s** (cap 300 s) |\n| Probe | 71.636 s, exit 0, **not timed out** |\n| Deadline | met with ~5.3 min spare |\n| Adapter | **ANGLE (NVIDIA GB10/PCIe, OpenGL 4.5.0)** \u2014 headed, real hardware, no swiftshader |\n| Identity | 34413 / index `6c8c378b\u2026` / bundle `efc87feb\u2026` / manifest `6ef957c3\u2026` / 99 files, 0 mismatches |\n| Heavy lock fd 9 | readlink match + inode 8397196==8397196 + 1 kernel entry + **contention probe conclusive** (second `flock -n` exited 1: refused) |\n| Sampler fix | confirmed \u2014 `getSnapshot`:`function`, `__storyBeat`:`string`, 0 sample errors, 0 page errors |\n\n## Atomic edge \u2014 satisfied\nSample **179**, wall 1788726092396, reason `complete+handback+committed-terra18-worker18`: committed `true`, **terraUnits 18**, **workerUnits 18**, **both** AV anchors (`avHasCgComplete` \u2227 `avHasCgHandback`, history 12, pendingAnchors empty), beat `done`. All read in **one synchronous call in one rAF callback** \u2014 not stitched. Sealed `window-complete`, 847 samples.\n\n## Audio\nIsolated own-sink WAV (`paravoxia_finale_window4_20260906`, module 536870913), recorder on its `.monitor`. **Not mic, not default monitor, no default-sink change, no foreign stream, no forced AudioContext, no forced milestone.** Ownership verified and re-verified: sole stream (pid 2036950) inside the probe browser tree. Coverage **complete** \u2014 3000 ms pre through 11500 ms post in the same capture (56757 ms pre / 14980 ms post).\n\nRaw int16 RMS, no audible claim: pre-edge \u22123000\u20260 = **0.0, 0.0, 0.0**; post-edge rises 936.57 \u2192 3606.09. Required-window 2712.93, whole-file 1357.23.\n\n## Objective visual defects\n**None.** All 4 frames non-blank (mean luma 11.2 / 79.2 / 79.2 / 79.1, full 0\u2013255 range).\n\n## Claims withheld\n`commonGround.scoreDiagnostic` resolved `undefined`; the signed-scene AV member and CG diagnostic were handled by the sampler as designed and the edge was proved from AV history + common-ground snapshot. Cancellation reason, AudioContext.state/mute, and the React pause conjuncts remain unobservable \u2014 **no game-audio or plot-fidelity claim is drawn from them, and no audible/taste claim from RMS.**\n\n## Cleanup\nTeardown proven, receipt `stopped`/cleanupCompleted/no error, root preview untouched, nothing killed, not forced. Sink module unloaded and **verified gone** (post-finally grep: 0 matches). Default sink `alsa_output.platform-NVDA2014_00.hdmi-stereo` unchanged. No private probe fix was needed.\n\n## Artifacts\n- `\u2026/2026-09-05-after-the-hearth/verifier/captures/finale-window/window-4/` (runtime-record, summary, window.ndjson, owned-sink.wav, cleanup-receipt, 4 PNGs)\n- `\u2026/logs/finale-window-capture-continuation/` (preacquire-utc, wrapper.log, artifact-sha256)\n- `\u2026/finale-window-capture-continuation-report.json` / `.md`\n\nNo game/build/contract/new-preview/producer-receipt/control/prior-artifact changes; no earlier capture path renamed or reused.",
+  "ttft_ms": 1564,
+  "type": "result",
+  "duration_ms": 331783,
+  "uuid": "00b00252-d7be-4570-aa78-c8c73fb9c691",
+  "ttft_stream_ms": 991,
+  "time_to_request_ms": 20,
+  "first_content_frame_ms": 992,
+  "queued_turn_count": 0
+}

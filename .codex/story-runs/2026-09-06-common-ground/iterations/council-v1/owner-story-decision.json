@@ -1,0 +1,33 @@
+{
+  "schema": "paravoxia.ownerStoryDecision.v1",
+  "runId": "2026-09-06-common-ground",
+  "decidedAt": "2026-09-06T05:04:48.798409+00:00",
+  "disposition": "approve",
+  "authorityKind": "standing-user-delegation",
+  "personallyReviewedByUser": false,
+  "decidedBy": "Codex production lead exercising explicit user delegation",
+  "sourceInstruction": "yes continue, and please auto approve everything",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "candidateSha256": "790b2894a48d6eb2a24816dede8ff8d911448e217e18f394d25be35444cd87ae",
+  "decisionsSha256": "017bafdae9b1e7148c5f037b3e79ac44fc850aaa2a26e4ca1f303bd6346690fd",
+  "directorSignoffsSha256": "a3289ff1d37127e358906e19d7fe1838100a19510185343c3dc73365e3116696",
+  "decisionIds": [
+    "CG-D01",
+    "CG-D02",
+    "CG-D03",
+    "CG-D04",
+    "CG-D05",
+    "CG-D06",
+    "CG-D07",
+    "CG-D08",
+    "CG-D09",
+    "CG-D10",
+    "CG-D11",
+    "CG-D12"
+  ],
+  "rationale": "Three independent directors reconciled ten notes across all six routes and signed the same candidate. The local reinspection preserves W-7744's established fault, gives successful hearth restoration a payoff, introduces reversible embodied route choices and reciprocal usefulness, and withholds A5/alliance/hidden ontology. All proposed decisions fit the user's request for creative plot-aligned continuation. No further user approval is needed for these in-scope choices.",
+  "scope": "Exact council-v1 direction and bounded documentation patch. Separate scene contract and actual evidence remain required before claiming runtime completion.",
+  "runtimeMutationAuthorizedByThisDecision": false,
+  "publicationAuthorized": false,
+  "acceptedMissingEvidence": false
+}

@@ -1,0 +1,87 @@
+{
+  "schema": "paravoxia.compositionContinuation.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "request": "continue",
+  "requestContext": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/completion-20260908/request.json",
+    "sha256": "db5794e216499e3c296f556a11d796c45a5c6a2cb535aefdb73107f83576ee83"
+  },
+  "previousStateSha256": "6405ccd71272513b187ce1e04f267285a8d0e1dda153921858dde85a7c505746",
+  "useExistingRefinement": true,
+  "advisoryTokenTargets": true,
+  "controlAudioEvidence": true,
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "before": "234a2117bb2c28a5dcd4ab4b254601874f8ca2dcd69aea111eaba4642f35573b",
+      "after": "b312edd26e729a6803d1e801ee68b0aa2b30c74a1c3412467fef0c0206642db5"
+    },
+    {
+      "path": "docs/chapter-loop.md",
+      "before": "0f2a4882e3e95f680df2c0371cfa427edf6d4ead72ababc9dc2ea77afff44b3b",
+      "after": "b46e8940fd24fe907ee00747168c25ed8fc61dc1990557206e59e938e847f245"
+    },
+    {
+      "path": "main/tools/chapter-loop.mjs",
+      "before": "99a51efa17456f19e7e25f483f00bb2e0410deee87c530063e1e9d4f7c97973f",
+      "after": "fc5a625c8dd209cbf78e35af58c06588100b2794cd8a1e74010819fe7a2cef21"
+    },
+    {
+      "path": "main/tools/chapter-loop/budget.mjs",
+      "before": "3bdba98784e7e36be73efa0cbf33fdc1046250afd7e207b7cd1850e6fec2429d",
+      "after": "a74afe3030c1e024c0c9ca302b4436a73ec4514f8b556e7bc5a8b723fc49642b"
+    },
+    {
+      "path": "main/tools/chapter-loop/composition-continuation.mjs",
+      "before": null,
+      "after": "d9975407b2d04235cdce68af7a955804e885ce209425fbb93c536948e7cfa4a8"
+    },
+    {
+      "path": "main/tools/chapter-loop/contract.mjs",
+      "before": "8838b601ac7043b2fd9219ea4636392c30f118041644dea6f4ee443ceb7b009c",
+      "after": "73b4ac2aeb74a391928d778b5588d01bd4798e428dcac85e828524620a47eed3"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820",
+      "after": "e7120d0ac60d17151ac081ca17869ebc1f9d9cb17f1ef955d6efc52c59f84293"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.test.mjs",
+      "before": "d8e57c8ad1ff491cf4107d488f253259f8987f63a80c03a8743bf60e57ddc2c0",
+      "after": "ad2e6e3145533232d8c62bfab3ca689c60285e3fbf96d79169b4e6b298455b39"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-media.mjs",
+      "before": null,
+      "after": "9973968b0305d390a7dedfc620595d805e36777d104484b6e14f329b62dc7f28"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-media.test.mjs",
+      "before": null,
+      "after": "0addc0aec2c8008af7c46b9e2a2e0f84505a7435aa26cc14eabbe97e5f2720cc"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "67060f72c27bf6745125d17fee6feb643bb2da0725914143d51c0f79901e7735",
+      "after": "4bb235b3d4377b9689a163daea8e74d7858e745566e1c5083ac931ed9c477a5b"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "1de6efb6d70619f7fee46f0665a1f4ac3eb2344df01c709300375765f4327f93",
+      "after": "00bf8ed61f9dd240d24717d55174e3e73a7ce2eba82ef9075ec4123606e29b29"
+    }
+  ],
+  "validation": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/completion-20260908/validation.json",
+    "sha256": "835339156b5c27289370f56c57585cc834a34e0740670a83ea604beeb3e17305"
+  },
+  "handoff": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/completion-20260908/handoff.json",
+    "sha256": "006e2dcaaf33c672156010cdce88222ad74b8e93fa0ad412c0b5255cf0cb05ce"
+  },
+  "implementationEvidence": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/completion-20260908/implementation-evidence.json",
+    "sha256": "7e71e746a0bc330d98b92e272bd1461f0ed0bbaefd4211e30e761a93675b30af"
+  }
+}

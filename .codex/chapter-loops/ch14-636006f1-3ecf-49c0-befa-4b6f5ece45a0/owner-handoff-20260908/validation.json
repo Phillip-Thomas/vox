@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "handoffSha256": "15886092a30ec722cbdda2e614e1b76fe65e6ac48994c0becc900ef3312a4321",
+  "checks": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-handoff-20260908/tests.log",
+      "sha256": "1683a0360661cddca0aada2f76f91b564156f9c55d33d56e5aea69c0396f4aa2"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-handoff-20260908/final-checks.log",
+      "sha256": "3ae1ade101bf13f6d0b21bf62cb5c771dbf8bc01eee02b20b0c6f6b6e0281333"
+    }
+  ],
+  "review": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-handoff-20260908/review/result.txt",
+    "sha256": "725866e47f23ee0da34d696799b9310fbeb48d454ce92aa3ab861252ec1e0880"
+  }
+}

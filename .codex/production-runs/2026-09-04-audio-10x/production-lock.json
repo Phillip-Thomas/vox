@@ -1,0 +1,132 @@
+{
+  "schema": "paravoxia.productionLock.v1",
+  "runId": "2026-09-04-audio-10x",
+  "mode": "chapter",
+  "status": "locked",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641",
+  "runProfileRef": "paravoxia-creative-chapter@v1",
+  "releaseCandidate": false,
+  "authority": [
+    {
+      "path": "PARAVOXIA_AUDIO_10X_PLAN.md",
+      "section": "Whole plan. Section 3 stages 1-6 are the contracted work of this run; Stage 0 is additive and is being implemented outside this lock. Section 5 design decisions and Section 6 Decisions taken bind the directors. Section 7 scorecard supplies the before/after targets.",
+      "sha256": "2ba8f22b3d10c913e4eacb8e9146ea58d5cf36a11e602f04a77a1572b48ac246"
+    },
+    {
+      "path": "PARAVOXIA_CREATIVE_COUNCIL.md",
+      "section": "Creative Triad authority, contract freeze, note passing, signoff, and cohesion review",
+      "sha256": "61c06f6ae50b3b870b09764b0ffadf02be2a8e7682946889addca240dd97bcde"
+    },
+    {
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "section": "Owner Gate Lift 2026-07-28; demo release surface unchanged at ch4-arrival; publishing remains a separate owner decision",
+      "sha256": "88f85610c81eb3deae605ea01c0d2f53994487048e0d6029fb3240b1d51909de"
+    },
+    {
+      "path": "PARAVOXIA_SCORE.md",
+      "section": "Shipped score authority: harmonic law, motif inventory, era instrumentation, mood grammar and mix targets that the overhaul must extend rather than replace",
+      "sha256": "695b02454f24ab62ce46dac7477e1dc2f8749de65193de227b733136f5762795"
+    },
+    {
+      "path": "CLAUDE.md",
+      "section": "Orchestration, model tiering, creative triad routing, and the protected shipped copy and audio baselines",
+      "sha256": "d47d2f0b5670d801193c5f4c182b37af7da8313d5d8e4bbf55c4418eebc34d93"
+    },
+    {
+      "path": "main/src/story/ux/README.md",
+      "section": "Executable player-guidance context contract, binding on any change to feedbackCues.ts",
+      "sha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85"
+    }
+  ],
+  "mutationBoundary": "bounded-runtime",
+  "allowedPaths": [
+    ".codex/production-runs/2026-09-04-audio-10x/",
+    "main/src/audio/",
+    "main/src/components/audio/",
+    "main/src/story/storyScore.ts",
+    "main/src/story/storyMusicEnvelope.ts",
+    "main/src/story/storyMusicEnvelope.test.ts",
+    "main/src/story/emergentScoreDirector.ts",
+    "main/src/story/storyDirector.ts",
+    "main/src/story/signedSceneAvRuntime.ts",
+    "main/src/story/emergentStoryDirector.ts",
+    "main/src/story/ux/feedbackCues.ts",
+    "main/src/components/EfficientPlayer.tsx",
+    "main/src/components/ShipController.tsx",
+    "main/src/components/ForageField.tsx",
+    "main/src/components/LooseStoneField.tsx",
+    "main/src/components/miningTrigger.model.ts",
+    "main/src/story/supplyPods.ts",
+    "main/src/story/debrisSalvage.ts",
+    "main/src/story/navWaypoints.ts",
+    "main/src/story/world/HifiWreck.tsx",
+    "main/src/story/world/EmergentAuditSites.tsx",
+    "main/src/story/prologue/TerminalCorruption.tsx",
+    "main/src/story/prologue/RegulationCrawl.tsx",
+    "main/src/story/prologue/ManifestScreen.tsx",
+    "main/src/story/prologue/VoyageLedger.tsx",
+    "main/src/story/prologue/DebrisDeflection.tsx",
+    "main/src/story/prologue/TerminalPrologue.tsx",
+    "main/tools/",
+    "main/package.json",
+    "PARAVOXIA_SCORE.md",
+    "PARAVOXIA_AUDIO_10X_PLAN.md",
+    "main/src/ui/hudSurfaces.ts",
+    "main/src/story/AuditBand.tsx",
+    "main/src/components/hud/OxygenMeter.tsx",
+    "main/src/components/hud/SoundCaption.tsx",
+    "main/src/components/hud/SoundCaption.test.tsx",
+    "main/src/components/hud/soundCaptionTable.ts",
+    "main/src/components/hud/soundCaptionTable.test.ts",
+    "main/src/story/physicalBoarding.ts",
+    "main/src/game/spaceStation/spaceStationDock.ts",
+    "main/src/story/ux/objectiveDirector.ts",
+    "main/src/story/ux/objectiveDirector.test.ts",
+    "main/src/audio/voice/",
+    "main/src/components/hud/OxygenMeter.test.tsx",
+    "main/src/story/AuditBand.test.tsx",
+    "main/src/story/storyScore.test.ts",
+    "main/src/story/storyScore.stage3.test.ts",
+    "main/src/story/signedSceneAvRuntime.test.ts",
+    "main/src/story/emergentStoryDirector.test.ts",
+    "main/src/story/storyDirector.test.ts"
+  ],
+  "protectedPaths": [
+    "main/public/audio/",
+    "main/src/story/storyText.ts",
+    "main/src/components/effects/PostFX.tsx",
+    "main/src/utils/proceduralWorldGenerator.ts",
+    "main/src/components/FaunaField.tsx",
+    "main/story-authority.json",
+    "main/chapter-registry.json",
+    "main/chapter-journey-contract.json",
+    "firebase.json",
+    ".firebaserc"
+  ],
+  "lockedBeats": [
+    "audio-stage-1-bed-timbre-mastering",
+    "audio-stage-2-game-mix-buses",
+    "audio-stage-3-composed-sync",
+    "audio-stage-4-spatial-sfx",
+    "audio-stage-5-long-form",
+    "audio-stage-6-voice-bus"
+  ],
+  "currentRestrictions": {
+    "storyCeiling": "ch4-arrival",
+    "postArrivalStoryMutationAllowed": false,
+    "copyChangeDecisionRefs": [
+      "owner-2026-09-04-audio-lane-expansion"
+    ],
+    "protectedAudioPaths": [
+      "main/public/audio/"
+    ],
+    "openGateRefs": [
+      "headed-owner-audition-per-stage",
+      "true-peak-minus-1-dbtp-combined-render",
+      "score-fps-median-60-swiftshader"
+    ]
+  },
+  "canonicalPreviewUrl": "http://127.0.0.1:5212",
+  "publishAllowed": false,
+  "frozenAt": "2026-09-04T21:31:54-04:00"
+}

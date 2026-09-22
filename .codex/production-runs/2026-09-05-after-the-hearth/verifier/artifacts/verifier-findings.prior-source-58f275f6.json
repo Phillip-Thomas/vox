@@ -1,0 +1,197 @@
+{
+  "schema": "paravoxia.verifier.findings.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "role": "story-verifier",
+  "updatedAt": "2026-09-06T10:20:29.529552+00:00",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceManifestSha256": "58f275f6130914f878942774fd4b4c6ce74327755c33ae257965a9dbeed40e70",
+  "phase": "INTERIM FAILURE CHECKPOINT \u2014 role finishing at root request; not final chapter verification",
+  "publicationAuthorized": false,
+  "findings": [
+    {
+      "id": "VF-C0-1",
+      "severity": "info",
+      "status": "closed",
+      "statement": "Readiness gate satisfied: ready=true, integration-movie-repair finished 09:51:14Z, control/ready manifest hashes agree, and all 96 signed source files were independently rehashed as identical. Source frozen before measurement.",
+      "evidence": [
+        "verification-ready.json",
+        "verifier-control.json",
+        "implementation-source-manifest.json"
+      ]
+    },
+    {
+      "id": "VF-C1-1",
+      "severity": "info",
+      "status": "closed",
+      "statement": "Independent full `npm run verify` on the repaired source passes: 348 test files, 3026 tests, build ok, EXIT 0. creative:gate --phase implementation passes with 1708 checks. These are static/CPU results and do not prove gameplay, render, traversal, hardware or audibility.",
+      "evidence": [
+        "verifier/logs/post-repair/verify-postrepair.log",
+        "verifier/logs/post-repair/creative-gate-implementation.log"
+      ]
+    },
+    {
+      "id": "VF-C2-1",
+      "severity": "info",
+      "status": "closed",
+      "statement": "Run-local probe harness upgraded with root checkpoint control (<=10s poll), physical body-path traversal measurement independent of runtime progress counters, backtrack/retarget detection, stall detection with no rescue path, real stop predicates, and paired HUD-suppressed perceptual frames. Self-test passes with no browser or preview.",
+      "evidence": [
+        "verifier/probes/cg-journey-probe.mjs"
+      ]
+    },
+    {
+      "id": "VF-BLOCK-1",
+      "severity": "blocking",
+      "status": "closed",
+      "owner": "root",
+      "statement": "No owned preview exists. verifier/artifacts/preview-ownership.json is state=stopped (port 38091, killed at the earlier interruption). All browser measurements \u2014 targeted home-review F recheck, both route classes, station-to-home bridge, full story movie, variants, anchors, reset matrix, evidence bundle \u2014 are blocked until root starts the immutable preview and updates ownership to running with the new build identity. The verifier will not start a second preview and refuses to probe a stopped claim. RESOLVED: root published the owned preview http://127.0.0.1:43617/ (buildHash 1dbce6a7\u2026c63f3) at 09:56Z; identity independently rechecked by this role.",
+      "requestedAction": "Root: run cg-preview-daemon.mjs from the root exec session against the current frozen build and publish preview-ownership.json state=running."
+    },
+    {
+      "id": "VF-HOME-1",
+      "severity": "info",
+      "status": "observed",
+      "statement": "CG-IMPL-004 (home interact starvation) is NOT reproducible on the repaired build. Headed hardware (ANGLE NVIDIA GB10) deep-link ?story=ch13-home&movie=1: ch13:home:review entered at 7 ms with the exact signed marker label and work order, the shared interaction path performed it (interactionTrace attemptId 1, interactionId 'story-ch13-fault-review', source 'resolver-perform', performOutcome 'returned', promptOutcome 'cleared', clearingLatencyMs 0), ch13:home:choose-return entered at 2165 ms, and the beat advanced to ch13-return at 2777 ms. Zero page errors, zero teleport nudges. Compare the pre-repair capture home-movie-1, which stalled at ch13:home:review for the full 300 s.",
+      "evidence": [
+        "verifier/captures/post/home-movie-2/summary.json",
+        "verifier/captures/post/home-movie-2/trace.ndjson",
+        "verifier/logs/post-repair/home-movie-2.log"
+      ],
+      "limits": "A deep link into ch13-home seeds its prerequisites; it is NOT proof of the station->home passage. Only 3 state samples fell inside the 2.777 s window because event screenshots throttled the sampler (since corrected), so the inter-act dwell cadence is not yet measured to 10 Hz."
+    },
+    {
+      "id": "VF-ANCHOR-OBS-1",
+      "severity": "info",
+      "status": "revised",
+      "statement": "Independent correction to root's 10:02 note: the empty anchorLedger in home-movie-2 is NOT missing instrumentation. Anchor capture works \u2014 survey-movie-1 recorded anc.cg.repeated-measure (sequence 1) with its exact signed event text and the worker pose. In home-movie-2 the loop exited on its --until-beat predicate at 2777 ms and anc.cg.hatch-boarded activated afterwards, appearing only in the post-loop finalState sample. Separately, no ch13-home anchor activated during that deep-linked run: anc.cg.cell-installed is signed as 'the actual live install receipt from the prior station-continuation contract', which a deep link cannot produce, and signedSceneAvRuntime.activateAnchor refuses an anchor while an earlier pending ordered anchor of the same beat is unactivated. The four ch13-home anchors are therefore expected to be observable only in the continuous station->home journey, which is exactly where they must be proven.",
+      "evidence": [
+        "verifier/captures/post/home-movie-2/summary.json",
+        "verifier/captures/post/survey-movie-1/summary.json",
+        "main/src/story/signedSceneAvRuntime.ts activateAnchor ordering guard",
+        "score-home-anchor-eligibility-interpretation.md"
+      ],
+      "revisedAt": "2026-09-06T10:20:29.529552+00:00",
+      "revisionReason": "Score's home-anchor eligibility interpretation (score-home-anchor-eligibility-interpretation.md) explicitly rejects the 'all four home anchors are continuous-journey-only' reading, and I accept that correction.",
+      "statementRevised": "Two separable observations, restated. (1) Anchor instrumentation is sound: the survey runs recorded anc.cg.repeated-measure and anc.cg.demonstration-opened with exact signed ids/events, and home-movie-2's empty ledger is a capture-window artefact \u2014 the loop exited on its --until-beat predicate at 2777 ms and anc.cg.hatch-boarded activated afterwards, surviving only in the post-loop finalState. (2) I withdraw my earlier inference that ALL FOUR ch13-home anchors are provable only in a continuous journey. Per Score's binding reading, only anc.cg.cell-installed requires the live install boundary; anc.cg.home-steady must restore silently on a hydrated entry, and anc.cg.fault-reviewed / anc.cg.return-chosen bind to the actual F acts, which DID occur in home-movie-2 through the shared resolver. On that reading, the observed absence of home-steady, fault-reviewed and return-chosen during a valid deep link is an OPEN ANOMALY, not expected behaviour.",
+      "openAnomaly": "Deep-linked ch13-home performed both real F acts (interactionTrace resolver-perform, milestones ch13FaultReviewed and ch13ReturnChosen set, beat advanced) yet activationHistoryAnchorIds stayed empty for the whole in-loop window. Source risk candidates, read-only and unconfirmed, matching Score's own reading: noteAnchor() latches runtime.firedAnchors BEFORE calling activateSignedSceneAnchorById and discards its boolean result, so a rejected activation is still spent locally and can never retry; and activateAnchor() refuses any anchor while an earlier pending ordered same-beat anchor (here cell-installed, unobtainable on a deep link) is unactivated. Together these could permanently suppress the later, eligible home anchors. NOT PROVEN: I did not instrument activateAnchor's return value, and I make no audibility claim \u2014 Score correctly notes local score dispatch may continue despite a rejected AV activation, and nothing was listened to."
+    },
+    {
+      "id": "VF-DEEPLINK-1",
+      "severity": "high",
+      "status": "open",
+      "owner": "root",
+      "category": "deep-link boot state / diagnostic-path defect",
+      "statement": "A ?story=ch13-survey&movie=1 deep link boots the player STILL ABOARD THE LANDED KESTREL and can never recover, producing a 243.2-second zero-displacement stall. Measured on headed hardware: spaceFlight {phase:'surface', controlMode:'flight'} for all 2237 samples (the module default is 'fps', so something in the ch13-survey entry leaves or places her in flight control), body frozen at exactly [8, 53.85, -6] with walkedPathUnits 0.000 across 250 s while W-7744 stands mounted at [-34, 51.1, 10] (~44 m away, the distance the HUD marker itself prints). The rail is alive and asking correctly \u2014 autopilot.routeAction 'walk', clock advancing 3.1 -> 238.3 s, stillTime oscillating 0.8-1.5 \u2014 but on-foot walk input does nothing in flight control mode. teleportNudgesTotal 0, pageErrors 0, interactionTrace empty (no act was ever attempted). The captured frame 0039-root-checkpoint.png shows the view from INSIDE the cockpit (yoke, throttle, canopy frame) with the debug HUD reading 'Ship: landed' and 'Flight: surface / flight'.",
+      "rootCauseCandidateFromSourceReading": "commonGroundRailPlan() has an 'exit-ship' branch only under case 'ch13-return' (commonGroundDirector.ts ~1930). The 'ch13-survey' and 'ch13-common' cases return walk/act plans unconditionally and never inspect controlMode, so an entry that begins in flight has no path back to on-foot. In a continuous journey ch13-return performs exit-ship before advancing, so this may be confined to direct beat entry \u2014 that is NOT yet measured and must be confirmed by the continuous run.",
+      "classification": "Deep-link / beat-entry boot-state defect. It is DISTINCT from CG-IMPL-004 (interaction cadence) and CG-IMPL-005 (waypoint retargeting): no route progress algorithm was reached at all, because the body never left the ship. This measurement therefore says nothing yet, either way, about the route/traversal repair.",
+      "impactOnVerification": "Blocks focused ch13-survey and ch13-common cold runs entered by deep link, and blocks the deep-link reset-matrix trigger for those two beats. Does not yet implicate ordinary continuous play.",
+      "evidence": [
+        "verifier/captures/post/survey-movie-1/summary.json",
+        "verifier/captures/post/survey-movie-1/trace.ndjson",
+        "verifier/captures/post/survey-movie-1/0039-root-checkpoint.png",
+        "verifier/logs/post-repair/survey-movie-1.log"
+      ],
+      "notDone": "No source was modified and no rescue, teleport or progress grant was applied. The probe was finalized by root's control pause, not by a timeout dressed up as success."
+    },
+    {
+      "id": "VF-CHECKPOINT-1",
+      "severity": "info",
+      "status": "closed",
+      "statement": "Root's control checkpoint path works end to end: verifier-control.json action 'pause' at 10:05:23Z was picked up within the 10 s poll, the survey probe stopped at the next sample, and it still wrote all 40 frames, the full 2237-sample ndjson trace and a complete summary.json with checkpointed:true and the control record embedded.",
+      "evidence": [
+        "verifier/captures/post/survey-movie-1/summary.json"
+      ]
+    },
+    {
+      "id": "VF-RAIL-2",
+      "severity": "blocking",
+      "status": "open",
+      "owner": "root",
+      "category": "movie-rail arrival predicate vs live body height",
+      "candidateDefectId": "CG-IMPL-006 (new; NOT CG-IMPL-004 or 005)",
+      "statement": "On the repaired build, the ch13 movie rail can never begin the survey recording, because its arrival gates compare a FULL 3D distance between the player's live world position and poses authored on the ground plane. Measured: the player's body y is 52.79-52.80 in every one of 2643 samples while CG_POSES.S is authored at y = 51.05, so the minimum achievable 3D distance to S is 1.745 units (horizontal 0.13). The rail's gate is CG_RAIL_START_AIM + CG_RAIL_ROUTE_ARRIVE = 0.35 + 0.35 = 0.70, which the body can never satisfy. Terra therefore walked 58.6 real units to the survey start, stood within 0.5 horizontal units of it for 261 of 354 pose-ledger entries (~4.5 minutes) with routeAction 'walk' and the live prompt '[F] Begin recording your route', and never acted. The frame 0038-strip-ch13-survey.png shows the marker reading 'survey start \u00b7 begin a route \u00b7 0m' with the F prompt on screen and 'Flight: surface / fps'.",
+      "whyTheResolverStillOffersIt": "The shipped resolver reach is CG_POINT_REACH = 2.0, which 1.745 satisfies with only 0.255 units of margin. That is why the player-facing prompt appears while the rail's tighter gate cannot close.",
+      "whyTheTestsMissedIt": "main/src/story/commonGroundDirector.test.ts standAt() calls setPlayerWorldPosition(point.x, point.y, point.z) with the authored pose y (51.05) \u2014 a body of zero height. Every rail regression therefore runs at a vertical offset of 0, and the 3026 passing tests cannot see this seam.",
+      "gatesBelowTheLiveBodyOffsetOf1.745": [
+        "CG_RAIL_ROUTE_ARRIVE 0.35",
+        "CG_RAIL_POSE_ARRIVE 0.6 (offer-span at E)",
+        "CG_RAIL_START_AIM+ARRIVE 0.70",
+        "CG_RAIL_CORNER_OVERSHOOT 0.6"
+      ],
+      "impactOnVerification": "BLOCKING for the remaining commission. The 18-unit common span, both route classes, the long-vs-short route classes, the three cold focused journeys, the station->home->ch13 continuation and the ch13 segment of the full story movie all sit downstream of an act the rail cannot perform. The CG-IMPL-005 ordered-cursor repair is consequently STILL UNTESTED in a browser: no route traversal was ever entered.",
+      "evidence": [
+        "verifier/captures/post/survey-diag-1/summary.json",
+        "verifier/captures/post/survey-diag-1/trace.ndjson",
+        "verifier/captures/post/survey-diag-1/0038-strip-ch13-survey.png",
+        "verifier/logs/post-repair/survey-diag-1.log"
+      ],
+      "notDone": "No source edit, no threshold change, no teleport, no progress grant, no rescue. Radii and predicates are the integrator's to change, not the verifier's.",
+      "reconciledWithPhysicalBody": true,
+      "reconciliation": "Root correctly asked me to reconcile the actual body frame before calling this a threshold problem. Doing so SHARPENS the finding rather than dissolving it. getPlayerWorldPosition() returns the Rapier capsule CENTRE (EfficientPlayer CapsuleCollider args [PLAYER_CAPSULE_HALF_HEIGHT 1.3, PLAYER_CAPSULE_RADIUS 0.5]; EfficientPlayer.tsx:1525 itself derives feet as centre - HALF_HEIGHT). Feet therefore sit centre - (1.3 + 0.5) = centre - 1.8. Measured body centre y 52.79 -> feet y 50.99, against the authored S plane y 51.05: her FEET are within 0.06 units of the authored ground plane and 0.13 units horizontally of S. Distance from the FEET to S is 0.143 units, which passes the 0.70 gate comfortably. The gate fails only because the comparison is made from the capsule centre in full 3D. So this is a COORDINATE-FRAME mismatch (centre-vs-feet / vertical inclusion) in the rail's arrival comparison, not a too-tight radius and not a body that failed to arrive. She is physically standing on the mark \u2014 the HUD marker itself prints '0m'.",
+      "candidateFixSpace": "Reconciling the comparison frame (feet or ground-projected) is the integrator's decision; widening radii would mask it and could relax genuine physical clearance rules. No prescription is made here.",
+      "sourceCitations": [
+        "main/src/story/commonGroundDirector.ts:1962 (rail gate CG_RAIL_START_AIM+CG_RAIL_ROUTE_ARRIVE at survey start)",
+        "main/src/story/commonGroundDirector.ts:1603-1678 (CG_RAIL_ROUTE_ARRIVE 0.35, CG_RAIL_POSE_ARRIVE 0.6, CG_RAIL_CORNER_OVERSHOOT 0.6, CG_RAIL_START_AIM 0.35)",
+        "main/src/story/commonGroundDirector.ts:585-588 (player() = raw getPlayerWorldPosition)",
+        "main/src/story/commonGroundState.ts:352-354 (distanceBetween is full 3D)",
+        "main/src/story/commonGroundState.ts:72 (CG_POSES.S authored at y 51.05)",
+        "main/src/utils/cubeGravityConstants.ts:8-9 (capsule radius 0.5, half-height 1.3)",
+        "main/src/components/EfficientPlayer.tsx:1525, 2078 (capsule centre vs derived feet)",
+        "main/src/story/commonGroundDirector.test.ts:99 (standAt places the body AT the authored pose y \u2014 a zero-height body, which is why 3026 tests pass)"
+      ],
+      "alsoAtRiskUnverified": "commonGroundRoute.ts:444-479 arc projection (the manual-corner risk Chapter interpreted) may share the same centre-vs-feet frame question. NOT MEASURED \u2014 manual-corner recovery was never reached."
+    },
+    {
+      "id": "VF-COMMON-OBS-1",
+      "severity": "info",
+      "status": "observed",
+      "statement": "Bounded ch13-common diagnostic (deep link + labelled disembark fixture; its survey prerequisites are NOT earned, so this is a synthetic state and proves no journey). Two positive observations and one to re-test properly once VF-RAIL-2 is repaired. POSITIVE: ch13:common:reciprocal entered showing the exact signed scene-v2 PREPARATION conditional work order verbatim \u2014 'W-7744 is taking up the reference position.' / 'Give him room to reach it. When the guide appears, follow it from the survey end.' \u2014 matching the variantIntent-quoted array byte for byte, with the exact signed marker label 'Far reference \u00b7 check my route'. POSITIVE: with Terra's body 0.38 horizontal units from W-7744, he HELD after 0.2 units of movement rather than displacing her or teleporting (teleportNudgesTotal 0) \u2014 consistent with the signed 'player blocks actor leg causes hold, not displacement' rule. TO RE-TEST: the rail walked Terra 60 units onto the reference itself rather than to the signed standby clear of E, and no anchor activated in 145 s; from an unearned deep-link state neither is yet attributable.",
+      "evidence": [
+        "verifier/captures/post/common-diag-1/summary.json",
+        "verifier/logs/post-repair/common-diag-1.log"
+      ]
+    }
+  ],
+  "pending": [
+    "BLOCKED on VF-RAIL-2 (and VF-DEEPLINK-1): long/short route classes, ordered 18-unit common span, retarget/shortcut proof, first-try-legal long success",
+    "Manual-corner deviation and honest recovery (manual lane may behave differently \u2014 resolver reach 2.0 admits the body; not yet measured)",
+    "Three cold focused chapter runs; continuous station->home->ch13 bridge",
+    "Full story movie from the beginning",
+    "Reset/Continue/variant/anchor(28)/performance/score proof",
+    "Headed chapter:evidence bundle for chapter13",
+    "Typed artifacts (verification-report, objective-lifecycle-evidence, chapter-journey-evidence, raw-audiovisual-evidence, evidence-registry) \u2014 will be written with measured values only; unreached checks stay pending/fail"
+  ],
+  "notListened": true,
+  "notes": "No audio has been listened to and no hearing claim is made anywhere. Heavy lock was free on a non-blocking flock at 2026-09-06T~10:00Z; that is an observation, not an acquisition.",
+  "previewOwnership": {
+    "url": "http://127.0.0.1:43617/",
+    "owner": "root-production-preview",
+    "state": "running",
+    "identityRecheckedByVerifier": {
+      "at": "2026-09-06T10:07:43.543800+00:00",
+      "httpStatus": 200,
+      "title": "<title>Paravoxia</title>",
+      "indexSha256": "1f3272687745880e7800b5349795bc4b55eb1ea8ee12a08b340716bcf05b823a",
+      "matchesOwnershipRecord": true,
+      "bundle": "/assets/index-CVcXc2R8.js",
+      "bundleSha256": "c34f18505c959cbe966d676984cf99ef6f1bff3dd3a1d4ef60cd349c36fca9d9",
+      "repairIdentifierPresentInServedBundle": "railTraversal (CG-IMPL-005 ordered cursor) \u2014 1 occurrence; signed labels 'W-7744 \u00b7 offered route', 'Far reference \u00b7 check my route', 'Second hearth \u00b7 unfinished audit' all present"
+    }
+  },
+  "hardware": {
+    "heavyLock": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+    "acquisition": "flock -n acquired for each probe; both hardware probes ran under it and released it on exit",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "rendererClass": "hardware",
+    "headed": true
+  },
+  "blockersForOneBoundedRepair": [
+    {
+      "id": "VF-DEEPLINK-1",
+      "summary": "ch13-survey / ch13-common deep-link entry boots aboard the landed Kestrel in controlMode 'flight'; commonGroundRailPlan has an exit-ship branch only for ch13-return, so the entry can never recover. 243 s zero-displacement stall."
+    },
+    {
+      "id": "VF-RAIL-2",
+      "summary": "Rail arrival gates (0.35 / 0.6 / 0.70) are unsatisfiable against ground-authored poses because the live body sits 1.745 units above them; the movie can never press F at the survey start. Unit tests stand the body at pose height and cannot see it."
+    }
+  ]
+}

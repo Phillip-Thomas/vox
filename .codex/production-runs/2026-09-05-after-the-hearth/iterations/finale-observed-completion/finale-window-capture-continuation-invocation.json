@@ -1,0 +1,19 @@
+{
+  "role": "finale-window-capture-continuation",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T20:19:30.425857+00:00",
+  "commissionSha256": "7214d51eed066a1a583f576486d4c7ffc3b47731cce2449481d822a4177afcbd",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "One unmuted atomic-state and isolated-output finale measurement; no game mutation",
+  "originalTaskDeadlineUtc": "2026-09-06T20:27:05.927860+00:00",
+  "remainingWallSecondsAtContinuation": 455.504472,
+  "budgetRestarted": false,
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T20:25:02.878324+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "673cad7a-c678-4a74-bf6e-52eed0535b53",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

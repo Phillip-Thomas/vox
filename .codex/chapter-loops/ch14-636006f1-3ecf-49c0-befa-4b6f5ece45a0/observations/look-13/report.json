@@ -1,0 +1,72 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "536b30f973ff70838885eab815306fa19019f434a4337351bcdfd549b074b688",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": true,
+    "acceptedAction": 8,
+    "completePath": true,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/cleanup.json",
+      "sha256": "c39827253898cc132ea5f88364a3cc707cfb8c6076ef83b47e5dc8d48bc46493"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/frame-4.png",
+      "sha256": "a3fe3ee71c9e9d36f0dfa298d7d8e9eed38a90a7d5ecc16f8018a665fb4c80fc"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/frame-5.png",
+      "sha256": "49c9e15221edd47121bc574a43002618326badfdd30154d0ee99a056f7b38d61"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/frame-6.png",
+      "sha256": "d799f79a58c838a13e1c967318a0150f348ee98e179f976d7bafa31b9854b7da"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/frame-7.png",
+      "sha256": "7d4f555eb80211ecfce691a53b208e7397c7d2ecad9173205dd315360cbc5d2b"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/observations.json",
+      "sha256": "a49317102c566e0daaabee1a6d3666f9253d9f9e3827703bbe2bd56865809678"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/provenance.json",
+      "sha256": "26841cc65bda5d966f0e2c563a8ee8b298008d0589178035b7fc0d2f88697213"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/trace.ndjson",
+      "sha256": "1c9fc2f7444281c684d89ffb9d059bb893dde2a3aa17dffbc59dba8ce857e681"
+    }
+  ],
+  "media": [
+    {
+      "kind": "frame",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/frame.png",
+      "sha256": "b425b455dd32140606e8cadffd0b34c410bb8c6710af49dcc3ac89be2236c10d"
+    }
+  ],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 0,
+  "reused": false,
+  "status": "passed",
+  "errors": [],
+  "provenance": {
+    "sourceManifestSha256": "20c9167747aaa2c936dae021c8a6328625976e2a90bde8ba76a59e5dfe5fdf45",
+    "buildSha256": "569eaf89de9c51dff801d096c7348b8b77e51127f1b43895daddde7923bb186f",
+    "transportSha256": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820"
+  }
+}

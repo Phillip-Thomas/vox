@@ -1,0 +1,50 @@
+{
+  "schema": "paravoxia.delegatedRecoveryDirection.v1",
+  "decisionId": "recovery-audio-sparse-fixtures-and-lean-calibration-v6",
+  "recordedAt": "2026-09-05T22:11:11.145316+00:00",
+  "decidedBy": "root production lead exercising the existing owner's delegated technical judgment",
+  "newOwnerAnswer": false,
+  "authority": [
+    {
+      "path": "../audio-contract-assembly/human-decision.json",
+      "basis": "Existing recorded delegation: implement the full plan; I trust your judgement on all the questions."
+    },
+    {
+      "basis": "Current recovery request: recover all four interrupted sessions, stick to the original plans as much as possible, finish implementation and ensure the projects are healthy."
+    }
+  ],
+  "baseContractSha256": "843609d181abf6425425de6cf8e07324743e8d784bc741edff47e499f26bf20e",
+  "proposalFreezeManifestSha256": "e208cddc79c83b553d3f4ef2605c1338144feb38cc8a4c824884b0080b204bc8",
+  "decision": "Route the exact frozen Score successor through fresh Chapter and Cinematography reconciliation, a new immutable contract and all three genuine native signatures. Admit this one bounded candidate and the explicitly disclosed sparse-fixture acceptance correction to that review. Do not apply runtime or comparer changes until the complete new contract passes its native gate.",
+  "rationale": "Actual retained renders distinguish transient peak headroom from the integrated energy of long sparse passages. Nine of ten original stress sums miss the old lower bound while all true peaks pass. Preserving atmospheric dynamics, original recipes, actual event density and the player's volume authority is preferable to adding events or global gain merely to fill those sparse windows. This is an explicit acceptance correction under delegated judgment, not a proof that the original intervals are universally impossible and not a retrospective pass.",
+  "acceptanceChange": {
+    "scope": "Only the five existing sparse stress fixtures, unchanged original windows, seeds, controls, events, recipes and density, in full and lean tiers.",
+    "supersedes": [
+      "The per-sparse-fixture application of the integrated lower bound in owner-2026-09-04-loudness-minus18-lufs-minus1-dbtp.",
+      "HD-08(3)'s deferred requirement that each sparse fixture attain integrated -18 +/-1.5 LU after Stage 4.",
+      "The corresponding sparse-stress clauses in the draft-v5 contract and conditions, only through explicit director-authored successor reconciliation."
+    ],
+    "removed": "I >= -19.5 LUFS for each of these five fixed sparse fixtures only.",
+    "retained": "I <= -16.5 LUFS and true peak <= -1 dBTP; nominal programme reference -18 LUFS; standalone bed I [-21.5,-19.5], BLOOM S [-15,-13], original story/refusal/floor and duck/recipe/variation/spatial/room/audibility controls.",
+    "added": "I_actual_sum >= I_matching_music_ducked -0.10 LU using fresh identical source, tier, seed, full window and actual event/duck controls. This is an explicit proposed non-degradation allowance, not meter uncertainty.",
+    "history": "Publish the original and successor verdicts side by side. Preserve every original failed report, contract, signature and decision record unchanged."
+  },
+  "sourceCandidate": {
+    "BLOOM_RAIL_DB": 10.5,
+    "BLOOM_LIFT_SUSTAIN": 0.09836813546324956,
+    "sustainDefinition": "0.1*(10^(10.4/20)-1)/(10^(10.5/20)-1)",
+    "BED_LEAN_BALANCE_DB": -1.25,
+    "scope": "Exactly the existing material-plus bed/room aliveTrim path with real quality, padChoir and night drivers. Preserve existing ramp/return automation. Added quality correction bypasses full tier and padChoir=0 exactly.",
+    "disclosure": "Settled pad/texture multiplier is preserved algebraically; crest and BUILD change slightly, as do other families using the shared sustain. Negative lean calibration explicitly changes upstream material-plus output amplitude and requires a narrow successor to any contrary unchanged-output or no-upstream-relevel condition.",
+    "exclusions": "No master/reference gain change, MOODS change, new events or arrangement, seed/timecode/fixture/LUFS-driven branch, new voice/graph/state, station activation or blind subsequent tuning."
+  },
+  "conditions": [
+    "Fresh Chapter and Cinematography may object; record their genuine disposition and exact condition replacements. Preserve all unaffected current conditions byte for byte, including C6 and the reconciled NEW6.",
+    "The frozen Score five field deltas remain reviewable. Additional changes require explicit authoring and reconciliation; root does not invent peer prose or transfer old signatures.",
+    "Station activation waits for every original silent station visual, numeric, timing, UX, reset, variant and decision prerequisite plus exact-source audio-off/on proof.",
+    "The successor still needs actual unnormalized float evidence, all unchanged bed/BLOOM/protected/safety targets, runtime sync, performance and real audition. Arithmetic, CPU tests and signatures are not those results."
+  ],
+  "tasteApproved": false,
+  "runtimeAccepted": false,
+  "publishAllowed": false
+}

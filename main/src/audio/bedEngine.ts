@@ -1,12 +1,17 @@
 import type { ArchetypeId } from '../game/data/planetArchetypes.ts';
-import { getMusicBus, makeNoiseBuffer, peekAudioContext, rampParamAt } from './audioCore.ts';
+import { getMusicBus, makeImpulseBuffer, makeNoiseBuffer, peekAudioContext, rampParamAt } from './audioCore.ts';
+import { resolveBedQualityTier, tanhDriveCurve, type BedQualityTier } from './generative/timbre.ts';
+import { seededUnit } from '../utils/worldCoordinates.ts';
 import { setMusicChord } from './musicPrimitives.ts';
 import {
   isScoreMoodLeading,
   flushScheduledBedHits,
   registerBedHitOnsetResolver,
+  registerBedTonicResolver,
+  registerBedTonicHandback,
   registerStoryAuthorityCrossfade,
   registerBedQuantizer,
+  registerBedHitQuantumResolver,
   scheduleHit,
   setGenerativeBedLead,
   setScorePlanetGenome,
@@ -14,12 +19,15 @@ import {
 } from './scoreEngine.ts';
 import {
   createBedConductor,
+  noteStoryHandBack,
   planBedBar,
   type BedBarPlan,
   type BedConductorState,
   type CreateBedOptions
 } from './generative/bedConductor.ts';
 import { neutralBedSignals, type BedSignals } from './generative/worldSignals.ts';
+import { pulseBodyHz } from './generative/pulse.ts';
+import { retargetHarmonyKey } from './generative/harmonyBrain.ts';
 import {
   advanceTransportBar,
   barDurationSec,
@@ -27,6 +35,7 @@ import {
   nextQuantumTime,
   requestTransportMeter,
   requestTransportTempo,
+  resolveTransportHitQuantum,
   type HitQuantize,
   type TransportState
 } from './generative/transport.ts';
@@ -44,9 +53,24 @@ import {
   BED_SHIMMER_LEVEL,
   BED_SUB_LEVEL,
   BED_TICK_LEVEL,
+  BED_ALIVE_LIFT,
+  BED_ALIVE_LIFT_SLEW_S,
+  BED_LEAN_BALANCE_DB,
+  BED_NIGHT_TRIM_DAYLIGHT_ONSET,
+  BED_NIGHT_TRIM_DB,
   BED_WASH_LEVEL,
+  BED_XOVER_HZ,
   BED_YIELD_FADE_S,
   CHIP_HARMONY_LEVEL,
+  DRIVE_LEAD_K,
+  DRIVE_LEAD_WET,
+  DRIVE_PAD_K,
+  DRIVE_PAD_PRE_DB,
+  DRIVE_PAD_WET_ALIVE,
+  DRIVE_SUB_K,
+  DRIVE_SUB_WET,
+  DRIVE_THERMAL_WET_LIFT,
+  DRIVE_WET_SLEW_S,
   CHIP_MONO_DUCK,
   CHIP_VIBRATO_CENTS,
   CHIP_VIBRATO_HZ,
@@ -54,17 +78,57 @@ import {
   HIT_MIN_LEAD_S,
   PAD_DETUNE_CENTS_MAX,
   PAD_DETUNE_CENTS_MIN,
+  PAD_BREATH_HZ,
+  PAD_BREATH_LEVEL,
+  PAD_BREATH_Q,
+  PAD_BREATH_S,
+  PAD_OCTAVE_LEVEL_DB,
   PAD_OCTAVE_SHIFT,
+  PAD_UNISON_CENTS,
+  PAD_UNISON_FULL,
+  PAD_UNISON_LEAN,
+  PAD_UNISON_PAN_SPREAD,
+  PAD_VOICE_GAIN_SLEW_S,
+  PAD_VOICE_LP_MIN_HZ,
+  PAD_VOICE_LP_Q,
+  PAD_VOICE_LP_SLEW_S,
+  PAD_VOICE_LP_SPAN_HZ,
+  PAD_VOICES_FULL,
+  PAD_VOICES_LEAN,
+  PAD_WANDER_DEPTH_HZ,
+  PAD_WANDER_HZ_MAX,
+  PAD_WANDER_HZ_MIN,
   PAD_WIDTH_MAX,
   PARADOX_TICK2_LEVEL,
   PHRASE_BARS,
   REVERB_DECAY,
+  REVERB_EARLY_LEVEL,
+  REVERB_EARLY_TAPS,
+  REVERB_EARLY_WINDOW_MS,
+  REVERB_HF_DAMP_HZ,
+  REVERB_LATE_LEVEL,
+  REVERB_LATE_ONSET_MS,
+  REVERB_PREDELAY_MS,
   REVERB_SECONDS,
   REVERB_WET_MAX,
+  SUB_DESIGN_SLEW_S,
+  SUB_HP_HZ,
+  SUB_LP_HZ,
+  UNISON_PAN_SLEW_S,
+  XOVER_BLEND_SLEW_S,
   SHIMMER_OCTAVE_SHIFT,
   SIDECHAIN_RELEASE_BEATS,
   SUB_OCTAVE_SHIFT,
-  TICK_GLIDE_S
+  TICK_GLIDE_S,
+  BED_PULSE_BODY_LEVEL,
+  BED_PULSE_CLICK_LEVEL,
+  BED_PULSE_TAIL_LEVEL,
+  PULSE_BODY_DECAY_S,
+  PULSE_BODY_HZ_FROM,
+  PULSE_CLICK_HP_HZ,
+  PULSE_CLICK_S,
+  PULSE_TAIL_BP_HZ,
+  PULSE_TAIL_S
 } from './generative/tuning.ts';
 
 // --- The generative bed engine (P3 rim) ------------------------------------------------------
@@ -87,9 +151,17 @@ const SCHEDULER_INTERVAL_MS = 60; // the shipped "Tale of Two Clocks" cadence
 const LOOKAHEAD_S = 0.18;
 /** Re-anchor the transport when it lags this many bars behind the clock (tab hides, story leads). */
 const TRANSPORT_STALE_BARS = 1.5;
-const PAD_FILTER_MIN_HZ = 260;
-const PAD_FILTER_SPAN_HZ = 2400;
 const PAD_GLIDE_TAU_S = 0.7;
+/** Stage 1 rim: seeds/salts for the per-voice wander clocks and the breath noise. */
+const PAD_WANDER_SEED = 0x7761_6e64;
+const PAD_BREATH_NOISE_SEED = 0x6272_7468;
+const PAD_BREATH_NOISE_BUFFER_S = 0.5;
+const PAD_BREATH_ATTACK_S = 0.01;
+const PAD_BREATH_STOP_TAIL_S = 0.03;
+/** Crossover biquads at Q = 1/√2, cascaded twice per band = Linkwitz–Riley 4th order. */
+const XOVER_Q = Math.SQRT1_2;
+/** Bare/colour sanity: the Stage 1 wet/blend rails are gated by `padChoir` (material+). */
+const STAGE1_GATE_EPSILON = 0.001;
 const SUB_GLIDE_TAU_S = 0.25;
 const CHIP_DRONE_LEVEL = 0.028;
 const CHIP_DRONE_OCTAVE = 12;
@@ -210,6 +282,8 @@ let built = false;
 let signals: BedSignals = neutralBedSignals();
 let conductor: BedConductorState | null = null;
 let transport: TransportState | null = null;
+/** Audio time of the bed's last harmony publish (Stage 3 live-tonic window). */
+let lastBedPublishAt = Number.NEGATIVE_INFINITY;
 let schedulerTimer: number | null = null;
 let yielding = false;
 let bedLeadTargetGain = BED_MASTER_GAIN;
@@ -273,18 +347,42 @@ let bloomReverbSend: GainNode | null = null;
 let bloomReverbWet: GainNode | null = null;
 
 interface PadVoice {
-  oscA: OscillatorNode;
-  oscB: OscillatorNode;
+  /** Unison saws (PAD_UNISON_FULL / PAD_UNISON_LEAN); left-/right-slotted saws share one side panner each. */
+  saws: OscillatorNode[];
+  /** [left, right] side panners (centre saws feed the filter directly). */
+  sawPans: StereoPannerNode[];
+  /** Signed unison slot per saw, −1..1 (pan and detune scale from it). */
+  slots: number[];
+  /** Cents offset per saw at full spread (signed). */
+  cents: number[];
+  octave: OscillatorNode;
   organ: OscillatorNode;
+  filter: BiquadFilterNode;
+  wanderDepth: GainNode;
   gain: GainNode;
   organGain: GainNode;
+  octaveGain: GainNode;
   pan: StereoPannerNode;
+  /** Currently assigned chord tone (null = the voice is resting at gain 0). */
+  semis: number | null;
 }
 let padVoices: PadVoice[] = [];
-let padFilter: BiquadFilterNode | null = null;
 let padGain: GainNode | null = null;
+let padDriveWet: GainNode | null = null;
 let padSpectralLfo: OscillatorNode | null = null;
 let padSpectralDepth: GainNode | null = null;
+let padBreathNoise: AudioBuffer | null = null;
+let padBreathFilter: BiquadFilterNode | null = null;
+let bedQuality: BedQualityTier = 'full';
+/** Whole-bed mono-below crossover blend (bypass ↔ LR4 split), gated by padChoir. */
+let xoverBypass: GainNode | null = null;
+let xoverLow: GainNode | null = null;
+let xoverHigh: GainNode | null = null;
+/** Designed sub path blend (bypass ↔ drive/HP/LP/centre), gated by padChoir. */
+let subDesignBypass: GainNode | null = null;
+let subDesignOut: GainNode | null = null;
+let subDriveWet: GainNode | null = null;
+let leadDriveWet: GainNode | null = null;
 
 let subSineOsc: OscillatorNode | null = null;
 let subTriangleOsc: OscillatorNode | null = null;
@@ -340,9 +438,18 @@ let riserGain: GainNode | null = null;
 let riserBuilding = false;
 
 let tickGain: GainNode | null = null;
+/** Stage 5 pulse voice (the sidechain source): body into the designed sub path, click + tail dry. */
+let pulseBodyGain: GainNode | null = null;
+let pulseClickFilter: BiquadFilterNode | null = null;
+let pulseTailFilter: BiquadFilterNode | null = null;
+let pulseTransientGain: GainNode | null = null;
+/** Bounded node lifetimes for the pulse transients. */
+const PULSE_NODE_STOP_TAIL_S = 0.02;
+const PULSE_BODY_ENVELOPE_FLOOR = 0.001;
 
 export interface BedDebugSnapshot {
   barIndex: number;
+  quality: BedQualityTier;
   stage: BedSignals['stage'];
   era: number;
   scene: BedSignals['scene'];
@@ -362,6 +469,10 @@ export interface BedDebugSnapshot {
   windGust: number;
   windDrive: number;
   windPan: number;
+  /** Stage 5: section in flight (−1 none), BLOOM-rail lift and pulse level of the last bar. */
+  sectionIndex: number;
+  bloomLift: number;
+  pulseLevel: number;
 }
 let lastBedDebug: BedDebugSnapshot | null = null;
 
@@ -378,6 +489,11 @@ const smoothstep01 = (v: number): number => {
 export function updateBedSignals(next: BedSignals): void {
   signals = next;
   ensureBed();
+}
+
+/** The live bed quality tier (resolved once at build; 'full' before the bed exists). */
+export function getBedQualityTier(): BedQualityTier {
+  return bedQuality;
 }
 
 /** Dev diagnostics: last bar's resolved signal→music controls (read-only copy). */
@@ -441,16 +557,49 @@ function ensureBed(): void {
   const bus = getMusicBus();
   if (!bus) return;
   built = true;
+  bedQuality = resolveLiveBedQuality();
   buildBedGraph(ctx, bus);
 
   // Leadership plumbing: the bed is the sandbox floor from now on.
   setGenerativeBedLead(true);
   registerBedQuantizer(bedQuantize);
+  registerBedHitQuantumResolver((request) => {
+    if (!transport) return null;
+    const planned = lastPlannedBedHitWindow;
+    // The scheduler is already one bar ahead. Include its still-playing
+    // planned bar, and apply the future transport's tempo at the next edge.
+    const from = planned && request.notBefore < planned.end ? {
+      bpm: planned.beatsPerBar * 60 / (planned.end - planned.start),
+      meter: { beatsPerBar: planned.beatsPerBar, sixteenthsPerBeat: planned.beatsPerBar === 2 ? 6 : 4 },
+      barIndex: planned.barIndex, barStartTime: planned.start,
+      pendingBpm: transport.bpm, pendingMeter: transport.meter
+    } : transport;
+    return resolveTransportHitQuantum(from, request);
+  });
   registerBedHitOnsetResolver(resolvePlannedBedHitOnset);
+  // One tonic (Stage 3): a pitch-locked story chain entering from bed-led play
+  // reads THIS centre (harmony brain tonic, last publish, bar length).
+  registerBedTonicResolver(() => {
+    if (!conductor || !transport) return null;
+    return {
+      tonicPc: conductor.harmony.tonicPc,
+      lastPublishAt: lastBedPublishAt,
+      barSeconds: barDurationSec(transport.bpm, transport.meter)
+    };
+  });
+  registerBedTonicHandback((tonicPc) => {
+    if (!conductor) return;
+    // Keep the held chord and its register intact. The existing legality
+    // machinery prepares the next pivot under the outgoing story's tonic.
+    retargetHarmonyKey(conductor.harmony, tonicPc, conductor.harmony.mode);
+  });
   registerStoryAuthorityCrossfade((storyLeads, atTime, durationSec) => {
     yielding = storyLeads;
     bedAuthorityFadeUntil = atTime + durationSec;
-    if (!storyLeads) bedLeadTargetGain = resolveBedLeadTarget(signals.scene);
+    if (!storyLeads) {
+      bedLeadTargetGain = resolveBedLeadTarget(signals.scene);
+      if (conductor) noteStoryHandBack(conductor);
+    }
     if (bedMaster) {
       rampParamAt(
         bedMaster.gain,
@@ -476,7 +625,38 @@ function buildBedGraph(ctx: BaseAudioContext, out: AudioNode): void {
 
   bedBus = ctx.createGain();
   bedBus.gain.value = 1;
-  bedBus.connect(bedMaster);
+  // Mono-below-BED_XOVER_HZ for the whole bed: an LR4 split whose low band is
+  // summed to mono. Blended against an exact bypass so bare/colour (blend 0)
+  // are sample-identical to the pre-Stage-1 topology.
+  xoverBypass = ctx.createGain();
+  xoverBypass.gain.value = 1;
+  bedBus.connect(xoverBypass);
+  xoverBypass.connect(bedMaster);
+  const mkBiquad = (type: BiquadFilterType): BiquadFilterNode => {
+    const f = ctx.createBiquadFilter();
+    f.type = type;
+    f.frequency.value = BED_XOVER_HZ;
+    f.Q.value = XOVER_Q;
+    return f;
+  };
+  const low1 = mkBiquad('lowpass');
+  const low2 = mkBiquad('lowpass');
+  const high1 = mkBiquad('highpass');
+  const high2 = mkBiquad('highpass');
+  xoverLow = ctx.createGain();
+  xoverLow.gain.value = 0;
+  xoverLow.channelCount = 1;
+  xoverLow.channelCountMode = 'explicit';
+  xoverHigh = ctx.createGain();
+  xoverHigh.gain.value = 0;
+  bedBus.connect(low1);
+  low1.connect(low2);
+  low2.connect(xoverLow);
+  xoverLow.connect(bedMaster);
+  bedBus.connect(high1);
+  high1.connect(high2);
+  high2.connect(xoverHigh);
+  xoverHigh.connect(bedMaster);
 
   // Reverb: generated exponential-decay impulse (deterministic), one
   // convolver. Only the air voices (pads/shimmer via breath, lead, delay,
@@ -515,59 +695,120 @@ function buildBedGraph(ctx: BaseAudioContext, out: AudioNode): void {
   breathGain.connect(reverbSend);
   breathGain.connect(bloomReverbSend);
 
-  // PAD CHOIR: 3 voices × 2 detuned saws, per-voice pan, shared lowpass.
-  padFilter = ctx.createBiquadFilter();
-  padFilter.type = 'lowpass';
-  padFilter.frequency.value = 700;
-  padFilter.Q.value = 0.6;
+  // PAD ENSEMBLE (Stage 1): 5 voices (3 lean) × N unison saws with per-saw pan
+  // and phase, +1 octave saw, sine organ, PER-VOICE lowpass with a seeded
+  // wander clock; parallel tanh drive; attack breath on retune. All of it is
+  // gated by padChoir (material+): at bare/colour the pad bus is silent.
   padGain = ctx.createGain();
   padGain.gain.value = 0;
-  padFilter.connect(padGain);
   padGain.connect(breathGain);
-  padVoices = [0, 1, 2].map((i) => {
-    const gain = ctx.createGain();
-    gain.gain.value = 1 / 3;
-    const organGain = ctx.createGain();
-    organGain.gain.value = 0;
-    const pan = ctx.createStereoPanner();
-    pan.pan.value = 0;
-    gain.connect(pan);
-    organGain.connect(pan);
-    pan.connect(padFilter!);
-    const mk = (detune: number): OscillatorNode => {
-      const osc = ctx.createOscillator();
-      osc.type = 'sawtooth';
-      osc.frequency.value = hzOf(
-        PAD_INITIAL_ROOT_SEMIS + i * PAD_INITIAL_VOICE_STEP_SEMIS + PAD_OCTAVE_SHIFT
-      );
-      osc.detune.value = detune;
-      osc.connect(gain);
-      osc.start();
-      return osc;
-    };
-    const organ = ctx.createOscillator();
-    organ.type = 'sine';
-    organ.frequency.value = hzOf(
-      PAD_INITIAL_ROOT_SEMIS + i * PAD_INITIAL_VOICE_STEP_SEMIS + PAD_OCTAVE_SHIFT
-    );
-    organ.connect(organGain);
-    organ.start();
-    return {
-      oscA: mk(-PAD_DETUNE_CENTS_MIN),
-      oscB: mk(PAD_DETUNE_CENTS_MIN),
-      organ,
-      gain,
-      organGain,
-      pan
-    };
-  });
+  const padSum = ctx.createGain();
+  padSum.gain.value = 1;
+  padSum.connect(padGain);
+  const padDrivePre = ctx.createGain();
+  padDrivePre.gain.value = Math.pow(10, DRIVE_PAD_PRE_DB / 20);
+  const padDrive = ctx.createWaveShaper();
+  padDrive.curve = tanhDriveCurve(DRIVE_PAD_K);
+  // Drive inputs are lowpassed (pad ≤ ~3.6 kHz, sub ≤ 200 Hz, lead ≤ 2.2 kHz): a
+  // k 1.8 tanh keeps its audible harmonics under Nyquist, so no oversampling —
+  // it halved the offline render throughput for no audible gain. The music-bus
+  // soft clip keeps '2x' because it sees the full band.
+  padDrive.oversample = 'none';
+  padDriveWet = ctx.createGain();
+  padDriveWet.gain.value = 0;
+  padSum.connect(padDrivePre);
+  padDrivePre.connect(padDrive);
+  padDrive.connect(padDriveWet);
+  padDriveWet.connect(padGain);
   padSpectralLfo = ctx.createOscillator();
   padSpectralLfo.frequency.value = PAD_SPECTRAL_LFO_HZ;
   padSpectralDepth = ctx.createGain();
   padSpectralDepth.gain.value = 0;
   padSpectralLfo.connect(padSpectralDepth);
-  padSpectralDepth.connect(padFilter.frequency);
   padSpectralLfo.start();
+  const voiceCount = bedQuality === 'lean' ? PAD_VOICES_LEAN : PAD_VOICES_FULL;
+  const unison: number = bedQuality === 'lean' ? PAD_UNISON_LEAN : PAD_UNISON_FULL;
+  const unisonCents = unisonCentsFor(unison);
+  padVoices = Array.from({ length: voiceCount }, (_, i) => {
+    const initialHz = hzOf(PAD_INITIAL_ROOT_SEMIS + i * PAD_INITIAL_VOICE_STEP_SEMIS + PAD_OCTAVE_SHIFT);
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = PAD_VOICE_LP_MIN_HZ;
+    filter.Q.value = PAD_VOICE_LP_Q;
+    padSpectralDepth!.connect(filter.frequency);
+    const wander = ctx.createOscillator();
+    wander.frequency.value =
+      PAD_WANDER_HZ_MIN + (PAD_WANDER_HZ_MAX - PAD_WANDER_HZ_MIN) * seededUnit(PAD_WANDER_SEED, i + 1);
+    const wanderDepth = ctx.createGain();
+    wanderDepth.gain.value = 0;
+    wander.connect(wanderDepth);
+    wanderDepth.connect(filter.frequency);
+    wander.start();
+    const gain = ctx.createGain();
+    gain.gain.value = i < 3 ? 1 / voiceCount : 0;
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = 0;
+    filter.connect(gain);
+    gain.connect(pan);
+    pan.connect(padSum);
+    const slots = unisonCents.map((_, k) => (unison === 1 ? 0 : (k / (unison - 1)) * 2 - 1));
+    // Two side panners per voice (not one per saw): the per-saw graded pan cost
+    // 60 panner nodes and halved offline throughput; alternating L/R sides is
+    // the classic supersaw width and keeps the node count flat.
+    const sawPans = [ctx.createStereoPanner(), ctx.createStereoPanner()];
+    for (const sawPan of sawPans) {
+      sawPan.pan.value = 0;
+      sawPan.connect(filter);
+    }
+    const saws = unisonCents.map((cents, k) => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.value = initialHz;
+      osc.detune.value = cents * (PAD_DETUNE_CENTS_MIN / PAD_DETUNE_CENTS_MAX);
+      const slot = slots[k];
+      osc.connect(slot === 0 ? filter : sawPans[slot < 0 ? 0 : 1]);
+      // Phase offset: a seeded start-time jitter inside the first cycle.
+      osc.start(ctx.currentTime + (seededUnit(PAD_WANDER_SEED, 100 + i * 16 + k) * 1) / initialHz);
+      return osc;
+    });
+    const octave = ctx.createOscillator();
+    octave.type = 'sawtooth';
+    octave.frequency.value = initialHz * 2;
+    const octaveGain = ctx.createGain();
+    octaveGain.gain.value = 0;
+    octave.connect(octaveGain);
+    octaveGain.connect(filter);
+    octave.start();
+    const organ = ctx.createOscillator();
+    organ.type = 'sine';
+    organ.frequency.value = initialHz;
+    const organGain = ctx.createGain();
+    organGain.gain.value = 0;
+    organ.connect(organGain);
+    organGain.connect(filter);
+    organ.start();
+    return {
+      saws,
+      sawPans,
+      slots,
+      cents: unisonCents,
+      octave,
+      organ,
+      filter,
+      wanderDepth,
+      gain,
+      organGain,
+      octaveGain,
+      pan,
+      semis: null
+    };
+  });
+  padBreathNoise = makeNoiseBuffer(ctx, PAD_BREATH_NOISE_BUFFER_S, PAD_BREATH_NOISE_SEED);
+  padBreathFilter = ctx.createBiquadFilter();
+  padBreathFilter.type = 'bandpass';
+  padBreathFilter.frequency.value = PAD_BREATH_HZ;
+  padBreathFilter.Q.value = PAD_BREATH_Q;
+  padBreathFilter.connect(padSum);
 
   // TUNED SUB: persistent triangle/sine/harmonic drone layers plus a separate
   // motif oscillator. Era and submergence CROSSFADE gains; oscillator waveform
@@ -618,8 +859,43 @@ function buildBedGraph(ctx: BaseAudioContext, out: AudioNode): void {
   };
   subMotifVoices = Array.from({ length: SUB_MOTIF_VOICE_COUNT }, makeMotifSub);
   subMotifVoiceCursor = 0;
-  subDroneGain.connect(subGain);
-  subMotifGain.connect(subGain);
+  // Stage 1 designed sub: the drone/motif sum runs through a parallel tanh
+  // drive, a 28 Hz floor, a 120 Hz ceiling and a centre-pinned panner. It is
+  // blended against an exact bypass by padChoir, so the chip-era triangle
+  // bass (colour) and the bare floor are untouched by construction.
+  const subDesignIn = ctx.createGain();
+  subDesignIn.gain.value = 1;
+  subDroneGain.connect(subDesignIn);
+  subMotifGain.connect(subDesignIn);
+  subDesignBypass = ctx.createGain();
+  subDesignBypass.gain.value = 1;
+  subDesignIn.connect(subDesignBypass);
+  subDesignBypass.connect(subGain);
+  const subDrive = ctx.createWaveShaper();
+  subDrive.curve = tanhDriveCurve(DRIVE_SUB_K);
+  subDrive.oversample = 'none';
+  subDriveWet = ctx.createGain();
+  subDriveWet.gain.value = 0;
+  const subHp = ctx.createBiquadFilter();
+  subHp.type = 'highpass';
+  subHp.frequency.value = SUB_HP_HZ;
+  subHp.Q.value = XOVER_Q;
+  const subLp = ctx.createBiquadFilter();
+  subLp.type = 'lowpass';
+  subLp.frequency.value = SUB_LP_HZ;
+  subLp.Q.value = XOVER_Q;
+  const subCentre = ctx.createStereoPanner();
+  subCentre.pan.value = 0;
+  subDesignOut = ctx.createGain();
+  subDesignOut.gain.value = 0;
+  subDesignIn.connect(subHp);
+  subDesignIn.connect(subDrive);
+  subDrive.connect(subDriveWet);
+  subDriveWet.connect(subHp);
+  subHp.connect(subLp);
+  subLp.connect(subCentre);
+  subCentre.connect(subDesignOut);
+  subDesignOut.connect(subGain);
   subGain.connect(bedBus);
 
   // CHIP DRONE: the bare-era quiet-bed floor (a barely-there pulse) — and the
@@ -663,6 +939,17 @@ function buildBedGraph(ctx: BaseAudioContext, out: AudioNode): void {
   leadGain.gain.value = 0;
   leadFilter.connect(leadGain);
   leadGain.connect(bedBus);
+  // Stage 1 lead drive: parallel wet path into the bed bus (full tier only).
+  if (bedQuality === 'full') {
+    const leadDrive = ctx.createWaveShaper();
+    leadDrive.curve = tanhDriveCurve(DRIVE_LEAD_K);
+    leadDrive.oversample = 'none';
+    leadDriveWet = ctx.createGain();
+    leadDriveWet.gain.value = 0;
+    leadGain.connect(leadDrive);
+    leadDrive.connect(leadDriveWet);
+    leadDriveWet.connect(bedBus);
+  }
   const delay = ctx.createDelay(1.5);
   delay.delayTime.value = 0.4;
   const feedback = ctx.createGain();
@@ -789,6 +1076,25 @@ function buildBedGraph(ctx: BaseAudioContext, out: AudioNode): void {
   tickGain = ctx.createGain();
   tickGain.gain.value = 0;
   tickGain.connect(bedBus);
+
+  // PULSE (Stage 5): the sidechain's source. The root-tuned body rides the
+  // designed sub path (drive, lowpass, mono-below); click and tail are dry and
+  // centred. Silent by construction outside BUILD/BLOOM (plan.pulse.level 0).
+  pulseBodyGain = ctx.createGain();
+  pulseBodyGain.gain.value = 0;
+  pulseBodyGain.connect(subDesignIn);
+  pulseTransientGain = ctx.createGain();
+  pulseTransientGain.gain.value = 0;
+  pulseTransientGain.connect(bedBus);
+  pulseClickFilter = ctx.createBiquadFilter();
+  pulseClickFilter.type = 'highpass';
+  pulseClickFilter.frequency.value = PULSE_CLICK_HP_HZ;
+  pulseClickFilter.connect(pulseTransientGain);
+  pulseTailFilter = ctx.createBiquadFilter();
+  pulseTailFilter.type = 'bandpass';
+  pulseTailFilter.frequency.value = PULSE_TAIL_BP_HZ;
+  pulseTailFilter.Q.value = 1.2;
+  pulseTailFilter.connect(pulseTransientGain);
 }
 
 function makeImpulse(
@@ -797,23 +1103,130 @@ function makeImpulse(
   decay: number,
   seed: number
 ): AudioBuffer {
-  const frames = Math.floor(ctx.sampleRate * seconds);
-  const buffer = ctx.createBuffer(2, frames, ctx.sampleRate);
-  // Deterministic xorshift noise — reproducible tail, no Math.random.
-  let s = seed >>> 0;
-  const rand = (): number => {
-    s ^= s << 13;
-    s ^= s >>> 17;
-    s ^= s << 5;
-    return ((s >>> 0) / 4294967296) * 2 - 1;
+  // Shared Stage 1 generator: pre-delay, seeded early reflections, HF-damped
+  // late tail, stereo-decorrelated by seed. The story convolver uses the same.
+  return makeImpulseBuffer(ctx, {
+    seconds,
+    decay,
+    seed,
+    preDelayMs: REVERB_PREDELAY_MS,
+    earlyTaps: REVERB_EARLY_TAPS,
+    earlyWindowMs: REVERB_EARLY_WINDOW_MS,
+    earlyLevel: REVERB_EARLY_LEVEL,
+    lateLevel: REVERB_LATE_LEVEL,
+    lateOnsetMs: REVERB_LATE_ONSET_MS,
+    hfDampHz: REVERB_HF_DAMP_HZ,
+    channels: 2
+  });
+}
+
+/** Symmetric unison offsets for `n` saws: ±PAD_UNISON_CENTS pairs (+ a centre saw when odd). */
+export function unisonCentsFor(n: number): number[] {
+  const out: number[] = [];
+  const pairs = Math.floor(n / 2);
+  for (let k = pairs - 1; k >= 0; k--) out.push(-PAD_UNISON_CENTS[Math.min(k, PAD_UNISON_CENTS.length - 1)]);
+  if (n % 2 === 1) out.push(0);
+  for (let k = 0; k < pairs; k++) out.push(PAD_UNISON_CENTS[Math.min(k, PAD_UNISON_CENTS.length - 1)]);
+  return out;
+}
+
+// --- Stage 1 rails: one pure resolver (the era-gate law, testable) ----------------------------------
+
+/** World/plan inputs the Stage 1 material+ rails depend on. */
+export interface Stage1RailInput {
+  /** Actual built quality; omitted only by existing full-tier pure callers. */
+  quality?: BedQualityTier;
+  /** `gates.padChoir` — the material+ era gate every Stage 1 rail multiplies. */
+  padChoir: number;
+  thermal: number;
+  golden: number;
+  daylight: number;
+  /** `plan.wind.turbulence` (0..1). */
+  windTurbulence: number;
+  /** `plan.levels.pad` (arrangement level). */
+  padLevel: number;
+  /** Pad voices in the built graph (PAD_VOICES_FULL / PAD_VOICES_LEAN). */
+  padVoiceCount: number;
+}
+
+/**
+ * Every Stage 1 gain/blend rail as a plain number, resolved from world signals
+ * only. Convention: "active" rails are exactly 0 at padChoir 0; "bypass" rails
+ * are exactly 1 there; `aliveTrim` is exactly 1 there. Panners are position
+ * only (a voice whose gain is 0 has no audible pan), so they are not rails.
+ */
+export interface Stage1Rails {
+  padBusLevel: number;
+  padOctaveLevel: number;
+  padWanderDepthHz: number;
+  padOrganLevel: number;
+  padSpectralDepthHz: number;
+  padDriveWet: number;
+  padBreathLevel: number;
+  xoverBypass: number;
+  xoverLow: number;
+  xoverHigh: number;
+  subDesignBypass: number;
+  subDesignOut: number;
+  subDriveWet: number;
+  leadDriveWet: number;
+  /** Whole-bed alive lift × night trim on the bed bus and both room returns. */
+  aliveTrim: number;
+}
+
+/**
+ * Night depth for the alive-bed trim: 0 for daylight ≥ BED_NIGHT_TRIM_DAYLIGHT_ONSET
+ * (so daylight renders are bit-identical to before the trim existed), smoothstep
+ * to 1 at full night.
+ */
+export function bedNightTrimDepth(daylight: number): number {
+  if (BED_NIGHT_TRIM_DAYLIGHT_ONSET <= 0) return 0;
+  return smoothstep01((BED_NIGHT_TRIM_DAYLIGHT_ONSET - clamp01(daylight)) / BED_NIGHT_TRIM_DAYLIGHT_ONSET);
+}
+
+export function resolveStage1Rails(input: Stage1RailInput): Stage1Rails {
+  const padChoir = input.padChoir;
+  const thermal = clamp01(input.thermal);
+  const golden = clamp01(input.golden);
+  const nightDepth = bedNightTrimDepth(input.daylight);
+  const nightTrim = nightDepth === 0 ? 1 : Math.pow(10, (BED_NIGHT_TRIM_DB * nightDepth) / 20);
+  const qualityTrim = input.quality === 'lean' ? Math.pow(10, BED_LEAN_BALANCE_DB / 20) : 1;
+  return {
+    padBusLevel: BED_PAD_LEVEL * input.padLevel * padChoir,
+    padOctaveLevel: Math.pow(10, PAD_OCTAVE_LEVEL_DB / 20) * padChoir,
+    padWanderDepthHz: PAD_WANDER_DEPTH_HZ * padChoir,
+    padOrganLevel:
+      (PAD_ORGAN_LEVEL / Math.max(1, input.padVoiceCount)) *
+      padChoir *
+      (1 + PAD_ORGAN_THERMAL_LIFT * thermal + PAD_ORGAN_GOLDEN_LIFT * golden),
+    padSpectralDepthHz:
+      padChoir * (thermal * PAD_SPECTRAL_MOTION_HZ + input.windTurbulence * PAD_TURBULENCE_MOTION_HZ),
+    // Drive is drive: thermal worlds lift the WET blend, never the level.
+    padDriveWet: DRIVE_PAD_WET_ALIVE * padChoir * (1 - DRIVE_THERMAL_WET_LIFT + DRIVE_THERMAL_WET_LIFT * thermal),
+    padBreathLevel: PAD_BREATH_LEVEL * padChoir * input.padLevel,
+    xoverBypass: 1 - padChoir,
+    xoverLow: padChoir,
+    xoverHigh: padChoir,
+    subDesignBypass: 1 - padChoir,
+    subDesignOut: padChoir,
+    subDriveWet: DRIVE_SUB_WET * padChoir * (1 + SUB_THERMAL_HARMONIC_LIFT * thermal),
+    leadDriveWet: DRIVE_LEAD_WET * padChoir,
+    aliveTrim: 1 - (1 - BED_ALIVE_LIFT * nightTrim * qualityTrim) * padChoir
   };
-  for (let ch = 0; ch < 2; ch++) {
-    const data = buffer.getChannelData(ch);
-    for (let i = 0; i < frames; i++) {
-      data[i] = rand() * Math.pow(1 - i / frames, decay);
-    }
-  }
-  return buffer;
+}
+
+/** Live tier from the browser's own budget signals (offline renders choose explicitly). */
+function resolveLiveBedQuality(): BedQualityTier {
+  if (typeof navigator === 'undefined') return 'full';
+  const nav = navigator as Navigator & { deviceMemory?: number };
+  return resolveBedQualityTier({
+    hardwareConcurrency: nav.hardwareConcurrency,
+    deviceMemoryGb: nav.deviceMemory,
+    coarsePointer:
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia('(pointer: coarse)').matches
+        : undefined
+  });
 }
 
 // --- The scheduler (one clock; bars planned ahead of ctx.currentTime) -------------------------------
@@ -844,6 +1257,7 @@ function schedulerTick(): void {
   }
   if (yielding) {
     yielding = false;
+    noteStoryHandBack(conductor); // Stage 5 (contract [16]): the next section carries no bloom budget
     bedLeadTargetGain = resolveBedLeadTarget(s.scene);
     bedAuthorityFadeUntil = now + Math.max(BED_RESUME_FADE_S, STORY_AUTHORITY_CROSSFADE_S);
     rampParamAt(
@@ -908,6 +1322,7 @@ function scheduleBar(ctx: BaseAudioContext, plan: BedBarPlan, t: TransportState)
   // ONE harmonic truth: the bed publishes while it leads (we only get here
   // when no story mood leads).
   setMusicChord(plan.publish.root, plan.publish.tones);
+  lastBedPublishAt = barTime;
 
   // Master: scene gain (REST floor is carried by the arrangement levels — the
   // master itself never parks at zero while the bed leads).
@@ -917,48 +1332,76 @@ function scheduleBar(ctx: BaseAudioContext, plan: BedBarPlan, t: TransportState)
   }
 
   // -- Pads: retune to the voicing at the bar line, glide (retune-not-swap).
-  const uppers = plan.publish.tones.slice(1, 4);
+  // Stage 1: all published upper tones sound (colour tones from voice 4 up).
+  const uppers = plan.publish.tones.slice(1, 1 + padVoices.length);
   const detune =
     PAD_DETUNE_CENTS_MIN + (PAD_DETUNE_CENTS_MAX - PAD_DETUNE_CENTS_MIN) * clamp01(s.chroma) * g.stereoWidth;
+  const unisonScale = detune / PAD_DETUNE_CENTS_MAX;
   const width = Math.min(
     1,
     PAD_WIDTH_MAX * g.stereoWidth + (plan.arrangement === 'BLOOM' ? BLOOM_PAD_WIDTH_LIFT : 0)
   );
-  padVoices.forEach((voice, i) => {
-    const semis = uppers[i];
-    if (semis == null) return;
-    const hz = hzOf(semis + PAD_OCTAVE_SHIFT);
-    voice.oscA.frequency.setTargetAtTime(hz, barTime, PAD_GLIDE_TAU_S);
-    voice.oscB.frequency.setTargetAtTime(hz, barTime, PAD_GLIDE_TAU_S);
-    voice.organ.frequency.setTargetAtTime(hz, barTime, PAD_GLIDE_TAU_S);
-    voice.oscA.detune.setTargetAtTime(-detune, barTime, BAR_PARAM_TAU_S);
-    voice.oscB.detune.setTargetAtTime(detune, barTime, BAR_PARAM_TAU_S);
-    voice.pan.pan.setTargetAtTime((i - 1) * width, barTime, BAR_PARAM_TAU_S);
-    voice.organGain.gain.setTargetAtTime(
-      (PAD_ORGAN_LEVEL / Math.max(1, padVoices.length)) *
-        g.padChoir *
-        (1 + PAD_ORGAN_THERMAL_LIFT * clamp01(s.thermal) + PAD_ORGAN_GOLDEN_LIFT * clamp01(s.golden)),
-      barTime,
-      MASTER_TAU_S
-    );
+  const voiceSpan = Math.max(1, padVoices.length - 1);
+  const padVoiceFilterHz =
+    PAD_VOICE_LP_MIN_HZ +
+    plan.padBrightness * PAD_VOICE_LP_SPAN_HZ +
+    clamp01(s.daylight) * DAYLIGHT_PAD_FILTER_LIFT_HZ +
+    clamp01(s.golden) * GOLDEN_PAD_FILTER_LIFT_HZ;
+  // Stage 1 rails resolve in one pure function (the era-gate law lives there).
+  const rails = resolveStage1Rails({
+    quality: bedQuality,
+    padChoir: g.padChoir,
+    thermal: s.thermal,
+    golden: s.golden,
+    daylight: s.daylight,
+    windTurbulence: plan.wind.turbulence,
+    padLevel: plan.levels.pad,
+    padVoiceCount: padVoices.length
   });
-  const padTarget = BED_PAD_LEVEL * plan.levels.pad * g.padChoir;
+  let padRetuned = false;
+  padVoices.forEach((voice, i) => {
+    const semis = uppers[i] ?? null;
+    if (semis != null) {
+      const hz = hzOf(semis + PAD_OCTAVE_SHIFT);
+      if (voice.semis !== semis) padRetuned = true;
+      voice.saws.forEach((saw, k) => {
+        saw.frequency.setTargetAtTime(hz, barTime, PAD_GLIDE_TAU_S);
+        saw.detune.setTargetAtTime(voice.cents[k] * unisonScale, barTime, BAR_PARAM_TAU_S);
+      });
+      voice.sawPans.forEach((sawPan, side) => {
+        rampParamAt(
+          sawPan.pan,
+          (side === 0 ? -1 : 1) * PAD_UNISON_PAN_SPREAD * g.stereoWidth,
+          barTime,
+          UNISON_PAN_SLEW_S
+        );
+      });
+      voice.octave.frequency.setTargetAtTime(hz * 2, barTime, PAD_GLIDE_TAU_S);
+      voice.organ.frequency.setTargetAtTime(hz, barTime, PAD_GLIDE_TAU_S);
+    }
+    voice.semis = semis;
+    rampParamAt(voice.gain.gain, semis == null ? 0 : 1 / padVoices.length, barTime, PAD_VOICE_GAIN_SLEW_S);
+    voice.pan.pan.setTargetAtTime(((i / voiceSpan) * 2 - 1) * width, barTime, BAR_PARAM_TAU_S);
+    rampParamAt(voice.filter.frequency, padVoiceFilterHz, barTime, PAD_VOICE_LP_SLEW_S);
+    rampParamAt(voice.wanderDepth.gain, rails.padWanderDepthHz, barTime, PAD_VOICE_LP_SLEW_S);
+    rampParamAt(voice.octaveGain.gain, rails.padOctaveLevel, barTime, PAD_VOICE_GAIN_SLEW_S);
+    voice.organGain.gain.setTargetAtTime(rails.padOrganLevel, barTime, MASTER_TAU_S);
+  });
+  const padTarget = rails.padBusLevel;
   padGain!.gain.setTargetAtTime(padTarget, barTime, BAR_PARAM_TAU_S);
-  padFilter!.frequency.setTargetAtTime(
-    PAD_FILTER_MIN_HZ +
-      plan.padBrightness * PAD_FILTER_SPAN_HZ +
-      clamp01(s.daylight) * DAYLIGHT_PAD_FILTER_LIFT_HZ +
-      clamp01(s.golden) * GOLDEN_PAD_FILTER_LIFT_HZ,
-    barTime,
-    PAD_GLIDE_TAU_S
-  );
-  padSpectralDepth?.gain.setTargetAtTime(
-    g.padChoir *
-      (clamp01(s.thermal) * PAD_SPECTRAL_MOTION_HZ +
-        plan.wind.turbulence * PAD_TURBULENCE_MOTION_HZ),
-    barTime,
-    MASTER_TAU_S
-  );
+  rampParamAt(padDriveWet!.gain, rails.padDriveWet, barTime, DRIVE_WET_SLEW_S);
+  padSpectralDepth?.gain.setTargetAtTime(rails.padSpectralDepthHz, barTime, MASTER_TAU_S);
+  if (padRetuned && g.padChoir > STAGE1_GATE_EPSILON && padTarget > 0 && !offlineSuppressTransientVoices) {
+    padBreath(ctx, barTime, rails.padBreathLevel);
+  }
+  // Stage 1 material+ blends: whole-bed mono-below crossover, designed sub, lead drive.
+  rampParamAt(xoverBypass!.gain, rails.xoverBypass, barTime, XOVER_BLEND_SLEW_S);
+  rampParamAt(xoverLow!.gain, rails.xoverLow, barTime, XOVER_BLEND_SLEW_S);
+  rampParamAt(xoverHigh!.gain, rails.xoverHigh, barTime, XOVER_BLEND_SLEW_S);
+  rampParamAt(subDesignBypass!.gain, rails.subDesignBypass, barTime, SUB_DESIGN_SLEW_S);
+  rampParamAt(subDesignOut!.gain, rails.subDesignOut, barTime, SUB_DESIGN_SLEW_S);
+  rampParamAt(subDriveWet!.gain, rails.subDriveWet, barTime, DRIVE_WET_SLEW_S);
+  if (leadDriveWet) rampParamAt(leadDriveWet.gain, rails.leadDriveWet, barTime, DRIVE_WET_SLEW_S);
 
   // -- Sub: triangle chip bass and sine/harmonic hybrid are separate persistent
   // voices. Submergence crossfades the root drone against a dedicated motif
@@ -1173,13 +1616,28 @@ function scheduleBar(ctx: BaseAudioContext, plan: BedBarPlan, t: TransportState)
     percHit(ctx, at, plan.barIndex * 31 + slot, g.stereoWidth, g.padChoir);
   }
 
+  // -- The pulse (Stage 5): root-tuned onsets on the felt beats the plan named,
+  //    body share = the alive gate (click + tail alone at material). Levels are
+  //    per-bar rails; onsets are bounded transient nodes like percHit.
+  if (pulseBodyGain && pulseTransientGain) {
+    rampParamAt(pulseBodyGain.gain, BED_PULSE_BODY_LEVEL * plan.pulse.level * plan.pulse.body, barTime, BAR_PARAM_TAU_S);
+    rampParamAt(pulseTransientGain.gain, plan.pulse.level, barTime, BAR_PARAM_TAU_S);
+    const bodyHz = pulseBodyHz(hzOf(plan.publish.root));
+    for (const b of offlineSuppressTransientVoices ? [] : plan.pulse.beats) {
+      const at = Math.max(ctx.currentTime, barTime + b * beatDur);
+      pulseHit(ctx, at, bodyHz, plan.pulse.body > 0.001);
+    }
+  }
+
   // -- Sidechain breathing: transport-keyed dips, sample-accurate (§8.2).
+  //    Stage 5: the dips key off the PULSE onsets and nowhere else — no pumping
+  //    without a source (depth is already 0 outside BUILD/BLOOM and their release).
   if (breathGain) {
     const depth = plan.sidechainDepth;
     breathGain.gain.cancelAndHoldAtTime(barTime);
-    if (depth > 0.01) {
+    if (depth > 0.01 && plan.pulse.beats.length > 0) {
       const release = SIDECHAIN_RELEASE_BEATS * beatDur;
-      for (let b = 0; b < t.meter.beatsPerBar; b++) {
+      for (const b of plan.pulse.beats) {
         const at = barTime + b * beatDur;
         // The old automation hard-stepped directly to 1-depth on the beat. A
         // named attack keeps the ODESZA breath while bounding gain derivative.
@@ -1194,9 +1652,10 @@ function scheduleBar(ctx: BaseAudioContext, plan: BedBarPlan, t: TransportState)
     }
   }
 
-  // -- Riser: one BUILD phrase, landing EXACTLY on the next phrase boundary.
-  if (plan.buildPhrase && plan.phrasePos === 0 && riserGain && riserFilter) {
-    const bloomTime = barTime + PHRASE_BARS * barDur;
+  // -- Riser: the BUILD's riser lands EXACTLY on the planned bloom boundary
+  //    (Stage 5: a build may span 1–3 phrases; the plan names the bars left).
+  if (plan.buildPhrase && plan.phrasePos === 0 && !riserBuilding && riserGain && riserFilter) {
+    const bloomTime = barTime + (plan.buildBarsToBloom ?? PHRASE_BARS) * barDur;
     const filterRiseAt = barTime + RISER_BUILD_GAIN_SLEW_S;
     // Start-anchored target curves cannot interpolate backward from an older
     // automation event. The gain reaches its 95%-settled build target at the
@@ -1235,15 +1694,19 @@ function scheduleBar(ctx: BaseAudioContext, plan: BedBarPlan, t: TransportState)
     riserBuilding = false;
   }
 
+  // -- Stage 1 alive trim × night trim: the bed bus and both room returns, gated by padChoir.
+  const aliveTrim = rails.aliveTrim;
+  rampParamAt(bedBus!.gain, aliveTrim, barTime, BED_ALIVE_LIFT_SLEW_S);
+
   // -- Reverb space: era depth × atmosphere.
   reverbWet!.gain.setTargetAtTime(
-    REVERB_WET_MAX * g.reverb * clamp01(s.atmosphere), barTime, MASTER_TAU_S
+    REVERB_WET_MAX * g.reverb * clamp01(s.atmosphere) * aliveTrim, barTime, MASTER_TAU_S
   );
   const bloomSpace =
     (plan.arrangement === 'BLOOM' ? 1 : BLOOM_REVERB_STATE_FLOOR) +
     BLOOM_REVERB_GOLDEN_LIFT * clamp01(s.golden);
   bloomReverbWet!.gain.setTargetAtTime(
-    BLOOM_REVERB_WET_MAX * g.reverb * clamp01(s.atmosphere) * bloomSpace,
+    BLOOM_REVERB_WET_MAX * g.reverb * clamp01(s.atmosphere) * bloomSpace * aliveTrim,
     barTime,
     MASTER_TAU_S
   );
@@ -1281,6 +1744,7 @@ function scheduleBar(ctx: BaseAudioContext, plan: BedBarPlan, t: TransportState)
 
   lastBedDebug = {
     barIndex: plan.barIndex,
+    quality: bedQuality,
     stage: s.stage,
     era: s.era,
     scene: s.scene,
@@ -1299,7 +1763,10 @@ function scheduleBar(ctx: BaseAudioContext, plan: BedBarPlan, t: TransportState)
     tickPresence: plan.tick.presence,
     windGust: plan.wind.gust,
     windDrive: plan.wind.drive,
-    windPan: plan.wind.pan
+    windPan: plan.wind.pan,
+    sectionIndex: plan.sectionIndex,
+    bloomLift: plan.bloomLift,
+    pulseLevel: plan.pulse.level
   };
 }
 
@@ -1313,6 +1780,25 @@ function chordToneBelow(semis: number, tones: readonly number[]): number {
 }
 
 // --- Transients (bounded lifetimes, like the shipped score voices) -----------------------------------
+
+/** Stage 1 attack breath: a 60 ms filtered-noise puff on a pad retune (material+). */
+function padBreath(ctx: BaseAudioContext, at: number, level: number): void {
+  if (!padBreathNoise || !padBreathFilter || level <= 0) return;
+  const src = ctx.createBufferSource();
+  src.buffer = padBreathNoise;
+  const env = ctx.createGain();
+  env.gain.setValueAtTime(0, at);
+  env.gain.linearRampToValueAtTime(level, at + PAD_BREATH_ATTACK_S);
+  env.gain.linearRampToValueAtTime(0, at + PAD_BREATH_S);
+  src.connect(env);
+  env.connect(padBreathFilter);
+  src.start(at);
+  src.stop(at + PAD_BREATH_S + PAD_BREATH_STOP_TAIL_S);
+  src.onended = () => {
+    src.disconnect();
+    env.disconnect();
+  };
+}
 
 function pluck(
   ctx: BaseAudioContext,
@@ -1423,6 +1909,50 @@ function percHit(
   body?.stop(at + PERC_BODY_DECAY_S + PERC_NODE_STOP_TAIL_S);
 }
 
+/**
+ * One pulse onset (Stage 5): click (2 ms noise, highpassed) + tail (60 ms noise,
+ * bandpassed 200 Hz) into the dry transient gain, and — when the alive gate is
+ * open — a sine body dropping from PULSE_BODY_HZ_FROM to the chord root's sub
+ * over PULSE_BODY_DECAY_S into the designed sub path. Bounded node lifetimes.
+ */
+function pulseHit(ctx: BaseAudioContext, at: number, bodyHz: number, withBody: boolean): void {
+  if (!percNoise || !pulseClickFilter || !pulseTailFilter || !pulseBodyGain) return;
+  const click = ctx.createBufferSource();
+  click.buffer = percNoise;
+  const clickEnv = ctx.createGain();
+  clickEnv.gain.setValueAtTime(BED_PULSE_CLICK_LEVEL, at);
+  clickEnv.gain.linearRampToValueAtTime(0, at + PULSE_CLICK_S);
+  click.connect(clickEnv);
+  clickEnv.connect(pulseClickFilter);
+  click.start(at);
+  click.stop(at + PULSE_CLICK_S + PULSE_NODE_STOP_TAIL_S);
+
+  const tail = ctx.createBufferSource();
+  tail.buffer = percNoise;
+  const tailEnv = ctx.createGain();
+  tailEnv.gain.setValueAtTime(BED_PULSE_TAIL_LEVEL, at);
+  tailEnv.gain.exponentialRampToValueAtTime(PULSE_BODY_ENVELOPE_FLOOR, at + PULSE_TAIL_S);
+  tail.connect(tailEnv);
+  tailEnv.connect(pulseTailFilter);
+  tail.start(at);
+  tail.stop(at + PULSE_TAIL_S + PULSE_NODE_STOP_TAIL_S);
+
+  if (withBody) {
+    const body = ctx.createOscillator();
+    body.type = 'sine';
+    body.frequency.setValueAtTime(PULSE_BODY_HZ_FROM, at);
+    body.frequency.exponentialRampToValueAtTime(bodyHz, at + PULSE_BODY_DECAY_S);
+    const bodyEnv = ctx.createGain();
+    bodyEnv.gain.setValueAtTime(PULSE_BODY_ENVELOPE_FLOOR, at);
+    bodyEnv.gain.exponentialRampToValueAtTime(1, at + PULSE_CLICK_S * 2);
+    bodyEnv.gain.exponentialRampToValueAtTime(PULSE_BODY_ENVELOPE_FLOOR, at + PULSE_BODY_DECAY_S * 2);
+    body.connect(bodyEnv);
+    bodyEnv.connect(pulseBodyGain);
+    body.start(at);
+    body.stop(at + PULSE_BODY_DECAY_S * 2 + PULSE_NODE_STOP_TAIL_S);
+  }
+}
+
 // --- The world-clock tick (its own clock — NEVER the musical grid; §8.1) -------------------------------
 
 function scheduleTicks(ctx: BaseAudioContext, now: number): void {
@@ -1504,7 +2034,7 @@ export function beginOfflineBedRender(
   ctx: BaseAudioContext,
   out: AudioNode,
   planetSeed: number,
-  opts?: CreateBedOptions & OfflineBedHooks
+  opts?: CreateBedOptions & OfflineBedHooks & { quality?: BedQualityTier }
 ): BedConductorState {
   if (built || schedulerTimer != null) {
     throw new Error('bedEngine is live — offline rendering requires a fresh page');
@@ -1532,6 +2062,7 @@ export function beginOfflineBedRender(
   onBarHook = opts?.onBar ?? null;
   offlineHitSink = opts?.onHit ?? null;
   offlineSuppressTransientVoices = opts?.suppressTransientVoices ?? false;
+  bedQuality = opts?.quality ?? 'full';
   buildBedGraph(ctx, out);
   // Skip the live master fade-in: renders start at the composed level.
   bedMaster!.gain.value = BED_MASTER_GAIN;
@@ -1552,6 +2083,7 @@ export function stepOfflineBedRender(ctx: BaseAudioContext, now: number, next: B
   }
   if (yielding) {
     yielding = false;
+    if (conductor) noteStoryHandBack(conductor);
     bedLeadTargetGain = resolveBedLeadTarget(next.scene);
     bedAuthorityFadeUntil = now + STORY_AUTHORITY_CROSSFADE_S;
     if (bedMaster) {
@@ -1599,10 +2131,20 @@ export function endOfflineBedRender(): void {
   bloomReverbSend = null;
   bloomReverbWet = null;
   padVoices = [];
-  padFilter = null;
   padGain = null;
+  padDriveWet = null;
   padSpectralLfo = null;
   padSpectralDepth = null;
+  padBreathNoise = null;
+  padBreathFilter = null;
+  bedQuality = 'full';
+  xoverBypass = null;
+  xoverLow = null;
+  xoverHigh = null;
+  subDesignBypass = null;
+  subDesignOut = null;
+  subDriveWet = null;
+  leadDriveWet = null;
   subSineOsc = null;
   subTriangleOsc = null;
   subHarmonicOsc = null;
@@ -1643,6 +2185,10 @@ export function endOfflineBedRender(): void {
   riserFilter = null;
   riserGain = null;
   tickGain = null;
+  pulseBodyGain = null;
+  pulseClickFilter = null;
+  pulseTailFilter = null;
+  pulseTransientGain = null;
   leadDelay = null;
   leadDelayMixNode = null;
   leadDelayFeedbackNode = null;

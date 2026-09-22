@@ -1,0 +1,39 @@
+{
+  "look": 13,
+  "listen": 3,
+  "firstPlayable": {
+    "kind": "look",
+    "at": "2026-09-08T22:00:04.669Z",
+    "source": "536b30f973ff70838885eab815306fa19019f434a4337351bcdfd549b074b688",
+    "report": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/report.json",
+      "sha256": "95ad13ad14a2de5655c99ce77162807aa7deeba38f75ec56de7dee33263c61e6"
+    },
+    "media": [
+      {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/frame.png",
+        "sha256": "b425b455dd32140606e8cadffd0b34c410bb8c6710af49dcc3ac89be2236c10d",
+        "kind": "frame"
+      }
+    ]
+  },
+  "receipts": [
+    {
+      "kind": "look",
+      "at": "2026-09-08T22:00:04.669Z",
+      "source": "536b30f973ff70838885eab815306fa19019f434a4337351bcdfd549b074b688",
+      "report": {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/report.json",
+        "sha256": "95ad13ad14a2de5655c99ce77162807aa7deeba38f75ec56de7dee33263c61e6"
+      },
+      "media": [
+        {
+          "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/frame.png",
+          "sha256": "b425b455dd32140606e8cadffd0b34c410bb8c6710af49dcc3ac89be2236c10d",
+          "kind": "frame"
+        }
+      ]
+    }
+  ],
+  "active": null
+}

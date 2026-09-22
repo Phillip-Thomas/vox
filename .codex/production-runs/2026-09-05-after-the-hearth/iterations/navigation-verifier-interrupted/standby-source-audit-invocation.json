@@ -1,0 +1,16 @@
+{
+  "role": "navigation-source-auditor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T14:34:08.001681+00:00",
+  "commissionSha256": "4976e93f108252f7a5b728d119c5f9619c409b10d28e387853084551aec1440a",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "sourceFilesRehashedBefore": 98,
+  "scope": "Read-only source discriminator for later standby/body-clearance stall; no game edits, GPU, final acceptance or extra creative lane",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T14:40:51.519240+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "8c83849e-21f9-4a8c-abaa-2b9796683ed7",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 98
+}

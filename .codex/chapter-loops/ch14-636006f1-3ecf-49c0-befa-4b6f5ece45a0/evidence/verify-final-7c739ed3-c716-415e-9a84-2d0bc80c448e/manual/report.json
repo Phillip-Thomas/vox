@@ -1,0 +1,62 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "d5bf42fcd50c66ad41c7f255f8de63b2866eef98be53aa424503fccf4cf96251",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": false,
+    "acceptedAction": 0,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [
+    "ordinaryControls",
+    "acceptedAction",
+    "completePath"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-7c739ed3-c716-415e-9a84-2d0bc80c448e/manual/raw/cleanup.json",
+      "sha256": "73f0c4f2177edd744ba46d1508bd0b0504452a0bcdcfa8a5ce2c847d95383e83"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-7c739ed3-c716-415e-9a84-2d0bc80c448e/manual/raw/observations.json",
+      "sha256": "9fe419c0378181ea881ab304f7d5ddd1ed167bc69f0e58e519a256d43fa357a5"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-7c739ed3-c716-415e-9a84-2d0bc80c448e/manual/raw/provenance.json",
+      "sha256": "24a0e2e4fd0ef7bc3c8f1c5c77435cdbe0bc56b8787cb17175b425da505f61dd"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-7c739ed3-c716-415e-9a84-2d0bc80c448e/manual/raw/trace.ndjson",
+      "sha256": "7c65ae04f3d03330d2779ea17709fe7cc2db76efbe00a7259aed74c94c2e99ec"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-7c739ed3-c716-415e-9a84-2d0bc80c448e/manual/raw/walk-calibration.ndjson",
+      "sha256": "c809b2c92d9f9a452312aecc57a062ec7ca3c3eef54a095b500b2f5176e18dcb"
+    }
+  ],
+  "reviewEntry": null,
+  "media": [],
+  "mediaTimeline": null,
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "Walk stopped making progress toward its target"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "71884e814de96134ea868b6454e0a7167d97b16ca5b87bb633d2622f26cc64cc",
+    "buildSha256": "1d2b97a5095fbbb5c9a1abe8eca9a88e5bf2446297741d0236676fa5b2a18340",
+    "transportSha256": "6548542a5ebac2f6bc17003bd3d53643890bc0c19689ef0ed889ad52a64fa791"
+  }
+}

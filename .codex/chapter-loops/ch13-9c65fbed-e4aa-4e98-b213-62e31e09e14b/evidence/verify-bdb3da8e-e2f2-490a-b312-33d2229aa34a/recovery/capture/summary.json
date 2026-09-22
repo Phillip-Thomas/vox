@@ -1,0 +1,1041 @@
+{
+ "schema": "paravoxia.verifier.finaleWindow.v1",
+ "outcome": "WINDOW-OBSERVED-NO-VERDICT",
+ "outcomeIsAcceptance": false,
+ "outcomeNote": "A recorded window is an observation. This file makes no audible, causal, repair or acceptance claim; the cancellation reason and the AudioContext/mute/pause state are NOT observable through any shipped hook and are listed as missing.",
+ "runId": "2026-09-05-after-the-hearth",
+ "probe": "finale-window-probe.mjs",
+ "probeSha256": "1725d41943add8c37a1351afc483468bb2b7b1a75c76bdf82ac4bc7281469b2d",
+ "dependencyBytes": [
+  {
+   "file": "finale-window-probe.mjs",
+   "sha256": "1725d41943add8c37a1351afc483468bb2b7b1a75c76bdf82ac4bc7281469b2d"
+  },
+  {
+   "file": "windowSampler.mjs",
+   "sha256": "c984535db45b4f8717b57e335d2cb2b1f6e93dfa579485f651b24a5b79ff5c68"
+  }
+ ],
+ "startedAt": "2026-09-07T13:24:16.996Z",
+ "endedAt": "2026-09-07T13:25:36.894Z",
+ "guards": {
+  "control": {
+   "activeRole": "finale-authority-seam-runtime",
+   "action": "continue",
+   "updatedAt": "2026-09-07T13:24:16.840Z",
+   "currentPreviewUrl": "http://127.0.0.1:34825/",
+   "currentIndexSha256": "74025800f5312519a92b480a15b493c3b27f971f0cbcbe1ec2b571342d4f4c82",
+   "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+   "roleGranted": true,
+   "running": true
+  },
+  "ready": true,
+  "rehash": {
+   "manifestFileSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+   "counts": {
+    "game": 103,
+    "aux": 5,
+    "external": 1
+   },
+   "mismatches": [],
+   "toleratedMismatches": [
+    {
+     "group": "aux",
+     "path": "main/package.json",
+     "expected": "2bf78b0d7e14bf89fa31c93790fd77325839ff147e5d7761535a2a540aedd812",
+     "actual": "d3b5fa7125d0e87b89bf16094ed9d275bae6a4543cbf3220973b9b0df480e5d5",
+     "reason": "Exact addition of the two Chapter Loop commands; every pre-existing package field and dependency is byte-equivalent."
+    }
+   ],
+   "gameFileCount": 103,
+   "clean": true
+  },
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "heavyLock": {
+   "lockPath": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+   "fd": 3,
+   "pid": 2787499,
+   "owned": true,
+   "problems": [],
+   "fdTarget": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+   "fdIdentity": {
+    "fdDev": "66306",
+    "fdIno": "8397196",
+    "pathDev": "66306",
+    "pathIno": "8397196",
+    "match": true
+   },
+   "inode": "8397196",
+   "procLock": [
+    "74: FLOCK  ADVISORY  WRITE 2787458 103:02:8397196 0 EOF"
+   ],
+   "contentionProbe": null
+  },
+  "http": {
+   "indexSha256": "74025800f5312519a92b480a15b493c3b27f971f0cbcbe1ec2b571342d4f4c82",
+   "bundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9",
+   "titleIsParavoxia": true
+  },
+  "outDir": {
+   "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-bdb3da8e-e2f2-490a-b312-33d2229aa34a/recovery/capture",
+   "exists": true,
+   "entries": [],
+   "fresh": true
+  }
+ },
+ "request": {
+  "url": "http://127.0.0.1:34825/?story=ch13-survey&journeyprobe=1&debug=1&movie=1",
+  "unmuted": true,
+  "windowCfg": {
+   "preEdgeMs": 3000,
+   "postEdgeMs": 11500,
+   "maxSamples": 6000,
+   "maxRunMs": 420000,
+   "driver": "raf",
+   "timerMs": 8
+  },
+  "seconds": 360,
+  "outDir": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-bdb3da8e-e2f2-490a-b312-33d2229aa34a/recovery/capture"
+ },
+ "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+ "headed": true,
+ "launchArgs": [
+  "--no-sandbox",
+  "--disable-dev-shm-usage",
+  "--ignore-gpu-blocklist",
+  "--enable-webgl",
+  "--use-gl=angle",
+  "--autoplay-policy=no-user-gesture-required",
+  "--disable-background-timer-throttling",
+  "--disable-renderer-backgrounding",
+  "--enable-gpu",
+  "--use-angle=gl",
+  "--window-size=1280,720"
+ ],
+ "samplerSchema": "paravoxia.verifier.finaleWindowSampler.v2",
+ "hookInventory": {
+  "__paravoxiaCommonGround": "object",
+  "commonGround.snapshot": "function",
+  "commonGround.scoreDiagnostic": "undefined",
+  "__paravoxiaJourneyProbe": "object",
+  "journeyProbe.getSnapshot": "function",
+  "journeyProbe.getCommonGroundScoreDiagnostic": "undefined",
+  "__voxBundleDiag": "function",
+  "__voxAudioDiag": "function",
+  "__storyBeat": "string",
+  "__autopilot": "undefined",
+  "__auditWorker": "undefined",
+  "__game": "undefined"
+ },
+ "window": {
+  "startedAtMs": 1832.1000001430511,
+  "startedAtWallMs": 1788787459769,
+  "timeOriginMs": 1788787457937.2,
+  "edgeAtMs": 64660.40000009537,
+  "edgeIndex": 174,
+  "sealed": true,
+  "sealReason": "window-complete",
+  "frames": 4246,
+  "dropped": 3424,
+  "capHit": false,
+  "sampleErrors": 0,
+  "lastError": null,
+  "lastNonEdgeReason": "story-not-done",
+  "edgeReason": "complete+handback+committed-terra18-worker18"
+ },
+ "sampleCount": 822,
+ "baseline": {
+  "role": "pre-window-baseline",
+  "at": 1788787459770,
+  "state": {
+   "tMs": 1833.9000000953674,
+   "rafTimeMs": null,
+   "wallMs": 1788787459771,
+   "cg": {
+    "available": true,
+    "diagnosticBeat": "ch13-survey",
+    "diagnosticPresent": true,
+    "anchors": [],
+    "common": {
+     "available": true,
+     "stage": "none",
+     "committed": false,
+     "committedPresent": true,
+     "workerUnits": 0,
+     "workerUnitsPresent": true,
+     "terraUnits": 0,
+     "terraUnitsPresent": true,
+     "routeUnitsRequired": 18,
+     "comparisonProved": false,
+     "finalReferenceOffered": false
+    },
+    "pendingAnchors": [],
+    "railCursor": null,
+    "bodyCentre": [
+     0,
+     0,
+     0
+    ],
+    "supported": null
+   },
+   "score": {
+    "available": true,
+    "beat": "ch13-survey",
+    "mood": null,
+    "finalTextureSeconds": null,
+    "finalTextureSecondsPresent": true
+   },
+   "story": {
+    "available": true,
+    "active": true,
+    "chapter": "ch13",
+    "beat": "ch13-survey",
+    "runId": 1,
+    "objectiveId": "ch13:survey:offer",
+    "milestones": null,
+    "avMemberPresent": true,
+    "avAvailable": true,
+    "avActive": true,
+    "avSuspended": true,
+    "avBeat": "ch13-survey",
+    "avAnchorId": null,
+    "avAnchorEvent": null,
+    "avActivationSequence": 0,
+    "avHistoryPresent": true,
+    "avHistoryAnchorIds": [],
+    "avHasCgComplete": false,
+    "avHasCgHandback": false,
+    "avHistoryCount": 0,
+    "common": null,
+    "restoration": null,
+    "worldId": null
+   },
+   "bundle": {
+    "available": true,
+    "heldChain": null,
+    "tonic": {
+     "tonicSemis": 0,
+     "voicingPolicy": "brain"
+    },
+    "traceLength": 0,
+    "lastTrace": null
+   },
+   "audioRoute": {
+    "available": true,
+    "describe": "game: direct (running)",
+    "note": "describeGameAudioOutputRoutes() output. It is NOT AudioContext.state, mute, or volume."
+   },
+   "doc": {
+    "available": true,
+    "visibilityState": "visible",
+    "hidden": false,
+    "hasFocus": true
+   },
+   "identity": {
+    "available": true,
+    "playerPos": null,
+    "routeAction": null,
+    "workerPos": null,
+    "storyBeatMirror": "ch13-survey"
+   }
+  }
+ },
+ "frames": [
+  {
+   "file": "001-post-seal-0.png",
+   "role": "post-seal",
+   "shotWallMs": 1788787534692,
+   "shotDurationMs": 250,
+   "before": {
+    "tMs": 76753.40000009537,
+    "rafTimeMs": null,
+    "wallMs": 1788787534690,
+    "cg": {
+     "available": true,
+     "diagnosticBeat": null,
+     "diagnosticPresent": true,
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "common": {
+      "available": true,
+      "stage": "arrived",
+      "committed": true,
+      "committedPresent": true,
+      "workerUnits": 18,
+      "workerUnitsPresent": true,
+      "terraUnits": 18,
+      "terraUnitsPresent": true,
+      "routeUnitsRequired": 18,
+      "comparisonProved": true,
+      "finalReferenceOffered": true
+     },
+     "pendingAnchors": [],
+     "railCursor": 9,
+     "bodyCentre": [
+      -44.09969711303711,
+      52.788665771484375,
+      12.01352596282959
+     ],
+     "supported": true
+    },
+    "score": {
+     "available": true,
+     "beat": null,
+     "mood": null,
+     "finalTextureSeconds": null,
+     "finalTextureSecondsPresent": true
+    },
+    "story": {
+     "available": true,
+     "active": false,
+     "chapter": "complete",
+     "beat": "done",
+     "runId": 1,
+     "objectiveId": null,
+     "milestones": null,
+     "avMemberPresent": true,
+     "avAvailable": true,
+     "avActive": false,
+     "avSuspended": true,
+     "avBeat": null,
+     "avAnchorId": null,
+     "avAnchorEvent": null,
+     "avActivationSequence": 12,
+     "avHistoryPresent": true,
+     "avHistoryAnchorIds": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "avHasCgComplete": true,
+     "avHasCgHandback": true,
+     "avHistoryCount": 12,
+     "common": null,
+     "restoration": null,
+     "worldId": null
+    },
+    "bundle": {
+     "available": true,
+     "heldChain": null,
+     "tonic": {
+      "tonicSemis": 0,
+      "voicingPolicy": "brain"
+     },
+     "traceLength": 0,
+     "lastTrace": null
+    },
+    "audioRoute": {
+     "available": true,
+     "describe": "game: direct (running)",
+     "note": "describeGameAudioOutputRoutes() output. It is NOT AudioContext.state, mute, or volume."
+    },
+    "doc": {
+     "available": true,
+     "visibilityState": "visible",
+     "hidden": false,
+     "hasFocus": true
+    },
+    "identity": {
+     "available": true,
+     "playerPos": [
+      -44.1,
+      52.79,
+      12.01
+     ],
+     "routeAction": "idle",
+     "workerPos": [
+      -48,
+      51.1,
+      12
+     ],
+     "storyBeatMirror": "done"
+    }
+   },
+   "after": {
+    "tMs": 77003.90000009537,
+    "rafTimeMs": null,
+    "wallMs": 1788787534941,
+    "cg": {
+     "available": true,
+     "diagnosticBeat": null,
+     "diagnosticPresent": true,
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "common": {
+      "available": true,
+      "stage": "arrived",
+      "committed": true,
+      "committedPresent": true,
+      "workerUnits": 18,
+      "workerUnitsPresent": true,
+      "terraUnits": 18,
+      "terraUnitsPresent": true,
+      "routeUnitsRequired": 18,
+      "comparisonProved": true,
+      "finalReferenceOffered": true
+     },
+     "pendingAnchors": [],
+     "railCursor": 9,
+     "bodyCentre": [
+      -44.09969711303711,
+      52.788665771484375,
+      12.01352596282959
+     ],
+     "supported": true
+    },
+    "score": {
+     "available": true,
+     "beat": null,
+     "mood": null,
+     "finalTextureSeconds": null,
+     "finalTextureSecondsPresent": true
+    },
+    "story": {
+     "available": true,
+     "active": false,
+     "chapter": "complete",
+     "beat": "done",
+     "runId": 1,
+     "objectiveId": null,
+     "milestones": null,
+     "avMemberPresent": true,
+     "avAvailable": true,
+     "avActive": false,
+     "avSuspended": true,
+     "avBeat": null,
+     "avAnchorId": null,
+     "avAnchorEvent": null,
+     "avActivationSequence": 12,
+     "avHistoryPresent": true,
+     "avHistoryAnchorIds": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "avHasCgComplete": true,
+     "avHasCgHandback": true,
+     "avHistoryCount": 12,
+     "common": null,
+     "restoration": null,
+     "worldId": null
+    },
+    "bundle": {
+     "available": true,
+     "heldChain": null,
+     "tonic": {
+      "tonicSemis": 0,
+      "voicingPolicy": "brain"
+     },
+     "traceLength": 0,
+     "lastTrace": null
+    },
+    "audioRoute": {
+     "available": true,
+     "describe": "game: direct (running)",
+     "note": "describeGameAudioOutputRoutes() output. It is NOT AudioContext.state, mute, or volume."
+    },
+    "doc": {
+     "available": true,
+     "visibilityState": "visible",
+     "hidden": false,
+     "hasFocus": true
+    },
+    "identity": {
+     "available": true,
+     "playerPos": [
+      -44.1,
+      52.79,
+      12.01
+     ],
+     "routeAction": "idle",
+     "workerPos": [
+      -48,
+      51.1,
+      12
+     ],
+     "storyBeatMirror": "done"
+    }
+   },
+   "note": "Taken AFTER the sampled window was sealed. It is not the completion edge and is not simultaneous with either state read."
+  },
+  {
+   "file": "002-post-seal-1.png",
+   "role": "post-seal",
+   "shotWallMs": 1788787535345,
+   "shotDurationMs": 273,
+   "before": {
+    "tMs": 77407.40000009537,
+    "rafTimeMs": null,
+    "wallMs": 1788787535344,
+    "cg": {
+     "available": true,
+     "diagnosticBeat": null,
+     "diagnosticPresent": true,
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "common": {
+      "available": true,
+      "stage": "arrived",
+      "committed": true,
+      "committedPresent": true,
+      "workerUnits": 18,
+      "workerUnitsPresent": true,
+      "terraUnits": 18,
+      "terraUnitsPresent": true,
+      "routeUnitsRequired": 18,
+      "comparisonProved": true,
+      "finalReferenceOffered": true
+     },
+     "pendingAnchors": [],
+     "railCursor": 9,
+     "bodyCentre": [
+      -44.09969711303711,
+      52.788665771484375,
+      12.01352596282959
+     ],
+     "supported": true
+    },
+    "score": {
+     "available": true,
+     "beat": null,
+     "mood": null,
+     "finalTextureSeconds": null,
+     "finalTextureSecondsPresent": true
+    },
+    "story": {
+     "available": true,
+     "active": false,
+     "chapter": "complete",
+     "beat": "done",
+     "runId": 1,
+     "objectiveId": null,
+     "milestones": null,
+     "avMemberPresent": true,
+     "avAvailable": true,
+     "avActive": false,
+     "avSuspended": true,
+     "avBeat": null,
+     "avAnchorId": null,
+     "avAnchorEvent": null,
+     "avActivationSequence": 12,
+     "avHistoryPresent": true,
+     "avHistoryAnchorIds": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "avHasCgComplete": true,
+     "avHasCgHandback": true,
+     "avHistoryCount": 12,
+     "common": null,
+     "restoration": null,
+     "worldId": null
+    },
+    "bundle": {
+     "available": true,
+     "heldChain": null,
+     "tonic": {
+      "tonicSemis": 0,
+      "voicingPolicy": "brain"
+     },
+     "traceLength": 0,
+     "lastTrace": null
+    },
+    "audioRoute": {
+     "available": true,
+     "describe": "game: direct (running)",
+     "note": "describeGameAudioOutputRoutes() output. It is NOT AudioContext.state, mute, or volume."
+    },
+    "doc": {
+     "available": true,
+     "visibilityState": "visible",
+     "hidden": false,
+     "hasFocus": true
+    },
+    "identity": {
+     "available": true,
+     "playerPos": [
+      -44.1,
+      52.79,
+      12.01
+     ],
+     "routeAction": "idle",
+     "workerPos": [
+      -48,
+      51.1,
+      12
+     ],
+     "storyBeatMirror": "done"
+    }
+   },
+   "after": {
+    "tMs": 77679.70000004768,
+    "rafTimeMs": null,
+    "wallMs": 1788787535616,
+    "cg": {
+     "available": true,
+     "diagnosticBeat": null,
+     "diagnosticPresent": true,
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "common": {
+      "available": true,
+      "stage": "arrived",
+      "committed": true,
+      "committedPresent": true,
+      "workerUnits": 18,
+      "workerUnitsPresent": true,
+      "terraUnits": 18,
+      "terraUnitsPresent": true,
+      "routeUnitsRequired": 18,
+      "comparisonProved": true,
+      "finalReferenceOffered": true
+     },
+     "pendingAnchors": [],
+     "railCursor": 9,
+     "bodyCentre": [
+      -44.09969711303711,
+      52.788665771484375,
+      12.01352596282959
+     ],
+     "supported": true
+    },
+    "score": {
+     "available": true,
+     "beat": null,
+     "mood": null,
+     "finalTextureSeconds": null,
+     "finalTextureSecondsPresent": true
+    },
+    "story": {
+     "available": true,
+     "active": false,
+     "chapter": "complete",
+     "beat": "done",
+     "runId": 1,
+     "objectiveId": null,
+     "milestones": null,
+     "avMemberPresent": true,
+     "avAvailable": true,
+     "avActive": false,
+     "avSuspended": true,
+     "avBeat": null,
+     "avAnchorId": null,
+     "avAnchorEvent": null,
+     "avActivationSequence": 12,
+     "avHistoryPresent": true,
+     "avHistoryAnchorIds": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "avHasCgComplete": true,
+     "avHasCgHandback": true,
+     "avHistoryCount": 12,
+     "common": null,
+     "restoration": null,
+     "worldId": null
+    },
+    "bundle": {
+     "available": true,
+     "heldChain": null,
+     "tonic": {
+      "tonicSemis": 0,
+      "voicingPolicy": "brain"
+     },
+     "traceLength": 0,
+     "lastTrace": null
+    },
+    "audioRoute": {
+     "available": true,
+     "describe": "game: direct (running)",
+     "note": "describeGameAudioOutputRoutes() output. It is NOT AudioContext.state, mute, or volume."
+    },
+    "doc": {
+     "available": true,
+     "visibilityState": "visible",
+     "hidden": false,
+     "hasFocus": true
+    },
+    "identity": {
+     "available": true,
+     "playerPos": [
+      -44.1,
+      52.79,
+      12.01
+     ],
+     "routeAction": "idle",
+     "workerPos": [
+      -48,
+      51.1,
+      12
+     ],
+     "storyBeatMirror": "done"
+    }
+   },
+   "note": "Taken AFTER the sampled window was sealed. It is not the completion edge and is not simultaneous with either state read."
+  },
+  {
+   "file": "003-post-seal-2.png",
+   "role": "post-seal",
+   "shotWallMs": 1788787536023,
+   "shotDurationMs": 173,
+   "before": {
+    "tMs": 78084.90000009537,
+    "rafTimeMs": null,
+    "wallMs": 1788787536022,
+    "cg": {
+     "available": true,
+     "diagnosticBeat": null,
+     "diagnosticPresent": true,
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "common": {
+      "available": true,
+      "stage": "arrived",
+      "committed": true,
+      "committedPresent": true,
+      "workerUnits": 18,
+      "workerUnitsPresent": true,
+      "terraUnits": 18,
+      "terraUnitsPresent": true,
+      "routeUnitsRequired": 18,
+      "comparisonProved": true,
+      "finalReferenceOffered": true
+     },
+     "pendingAnchors": [],
+     "railCursor": 9,
+     "bodyCentre": [
+      -44.09969711303711,
+      52.788665771484375,
+      12.01352596282959
+     ],
+     "supported": true
+    },
+    "score": {
+     "available": true,
+     "beat": null,
+     "mood": null,
+     "finalTextureSeconds": null,
+     "finalTextureSecondsPresent": true
+    },
+    "story": {
+     "available": true,
+     "active": false,
+     "chapter": "complete",
+     "beat": "done",
+     "runId": 1,
+     "objectiveId": null,
+     "milestones": null,
+     "avMemberPresent": true,
+     "avAvailable": true,
+     "avActive": false,
+     "avSuspended": true,
+     "avBeat": null,
+     "avAnchorId": null,
+     "avAnchorEvent": null,
+     "avActivationSequence": 12,
+     "avHistoryPresent": true,
+     "avHistoryAnchorIds": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "avHasCgComplete": true,
+     "avHasCgHandback": true,
+     "avHistoryCount": 12,
+     "common": null,
+     "restoration": null,
+     "worldId": null
+    },
+    "bundle": {
+     "available": true,
+     "heldChain": null,
+     "tonic": {
+      "tonicSemis": 0,
+      "voicingPolicy": "brain"
+     },
+     "traceLength": 0,
+     "lastTrace": null
+    },
+    "audioRoute": {
+     "available": true,
+     "describe": "game: direct (running)",
+     "note": "describeGameAudioOutputRoutes() output. It is NOT AudioContext.state, mute, or volume."
+    },
+    "doc": {
+     "available": true,
+     "visibilityState": "visible",
+     "hidden": false,
+     "hasFocus": true
+    },
+    "identity": {
+     "available": true,
+     "playerPos": [
+      -44.1,
+      52.79,
+      12.01
+     ],
+     "routeAction": "idle",
+     "workerPos": [
+      -48,
+      51.1,
+      12
+     ],
+     "storyBeatMirror": "done"
+    }
+   },
+   "after": {
+    "tMs": 78258.20000004768,
+    "rafTimeMs": null,
+    "wallMs": 1788787536195,
+    "cg": {
+     "available": true,
+     "diagnosticBeat": null,
+     "diagnosticPresent": true,
+     "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "common": {
+      "available": true,
+      "stage": "arrived",
+      "committed": true,
+      "committedPresent": true,
+      "workerUnits": 18,
+      "workerUnitsPresent": true,
+      "terraUnits": 18,
+      "terraUnitsPresent": true,
+      "routeUnitsRequired": 18,
+      "comparisonProved": true,
+      "finalReferenceOffered": true
+     },
+     "pendingAnchors": [],
+     "railCursor": 9,
+     "bodyCentre": [
+      -44.09969711303711,
+      52.788665771484375,
+      12.01352596282959
+     ],
+     "supported": true
+    },
+    "score": {
+     "available": true,
+     "beat": null,
+     "mood": null,
+     "finalTextureSeconds": null,
+     "finalTextureSecondsPresent": true
+    },
+    "story": {
+     "available": true,
+     "active": false,
+     "chapter": "complete",
+     "beat": "done",
+     "runId": 1,
+     "objectiveId": null,
+     "milestones": null,
+     "avMemberPresent": true,
+     "avAvailable": true,
+     "avActive": false,
+     "avSuspended": true,
+     "avBeat": null,
+     "avAnchorId": null,
+     "avAnchorEvent": null,
+     "avActivationSequence": 12,
+     "avHistoryPresent": true,
+     "avHistoryAnchorIds": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+     ],
+     "avHasCgComplete": true,
+     "avHasCgHandback": true,
+     "avHistoryCount": 12,
+     "common": null,
+     "restoration": null,
+     "worldId": null
+    },
+    "bundle": {
+     "available": true,
+     "heldChain": null,
+     "tonic": {
+      "tonicSemis": 0,
+      "voicingPolicy": "brain"
+     },
+     "traceLength": 0,
+     "lastTrace": null
+    },
+    "audioRoute": {
+     "available": true,
+     "describe": "game: direct (running)",
+     "note": "describeGameAudioOutputRoutes() output. It is NOT AudioContext.state, mute, or volume."
+    },
+    "doc": {
+     "available": true,
+     "visibilityState": "visible",
+     "hidden": false,
+     "hasFocus": true
+    },
+    "identity": {
+     "available": true,
+     "playerPos": [
+      -44.1,
+      52.79,
+      12.01
+     ],
+     "routeAction": "idle",
+     "workerPos": [
+      -48,
+      51.1,
+      12
+     ],
+     "storyBeatMirror": "done"
+    }
+   },
+   "note": "Taken AFTER the sampled window was sealed. It is not the completion edge and is not simultaneous with either state read."
+  }
+ ],
+ "missingSignals": [
+  {
+   "signal": "final-texture cancellation reason / calling site",
+   "why": "commonGroundScore.ts:259 takes the reason as `_reason` and discards it; nothing records the caller.",
+   "consequence": "No capture, including this one, can name WHICH suspend/cancel call fired. Timing adjacency is the only available discriminator and it is circumstantial."
+  },
+  {
+   "signal": "AudioContext.state / musicVolume / mute at the clearing frame",
+   "why": "No shipped read-only hook exposes the context object or the mixer state; __voxAudioDiag returns describeGameAudioOutputRoutes() (a route description string), not the context state.",
+   "consequence": "The audio-block alternative (A1) cannot be excluded by state read; it can only be bounded by what the route description does or does not say."
+  },
+  {
+   "signal": "paused / hudBlockingOverlayOpen / downed / worldGenReady / initialRenderReleased (App.tsx foreground conjuncts)",
+   "why": "They are React component state, not exposed on any diagnostic surface.",
+   "consequence": "A2 (the \"pause\" reason label) stays undistinguishable from the story-inactive label by state read alone."
+  }
+ ],
+ "atomicity": "Every field of every window.ndjson record was read inside ONE synchronous function call in ONE rAF callback. No record is stitched from separate awaited reads.",
+ "pageErrors": []
+}

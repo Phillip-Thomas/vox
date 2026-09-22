@@ -1,0 +1,56 @@
+{
+  "schema": "paravoxia.audioThreadCost.main.v1",
+  "generatedAt": "2026-09-05T10:00:39.844Z",
+  "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+  "swiftshader": true,
+  "throttle": 4,
+  "tier": "lean",
+  "budgetMsPerFrame": 3,
+  "baseline": {
+    "fpsMedian": 60.41,
+    "fpsP10": 60.36,
+    "p95FrameMs": 16.8,
+    "worstFrameMs": 16.8,
+    "timerMsPerFrameMedian": 0,
+    "timerMsPerFrameMax": 0,
+    "timerMaxCallbackMs": 0,
+    "timerCallsPerS": 0
+  },
+  "bedLed": {
+    "fpsMedian": 60.42,
+    "fpsP10": 60.38,
+    "p95FrameMs": 16.8,
+    "worstFrameMs": 16.8,
+    "timerMsPerFrameMedian": 0.023,
+    "timerMsPerFrameMax": 0.033,
+    "timerMaxCallbackMs": 4.2,
+    "timerCallsPerS": 33.33
+  },
+  "bedState": {
+    "bedQuality": "lean",
+    "bedBarIndex": 3,
+    "era": 1
+  },
+  "withScore": {
+    "fpsMedian": 60.39,
+    "fpsP10": 60.33,
+    "p95FrameMs": 16.8,
+    "worstFrameMs": 16.8,
+    "timerMsPerFrameMedian": 0.067,
+    "timerMsPerFrameMax": 0.07,
+    "timerMaxCallbackMs": 2,
+    "timerCallsPerS": 33.35
+  },
+  "worstPhase": "story-led",
+  "deltaTimerMsPerFrame": 0.067,
+  "audioMainThreadMsPerFrame": 0.067,
+  "state": {
+    "contextState": "running",
+    "scoreLeading": true,
+    "bedQuality": "lean",
+    "bedBarIndex": 8,
+    "era": 1
+  },
+  "pass": true,
+  "note": "timer ms/frame = summed duration of every setInterval/setTimeout callback (the bed and score lookahead schedulers; rAF writes intent only) divided by rAF frames in the window; an upper bound on the audio main-thread cost. Verdict uses the worse of the bed-led and story-led phases."
+}

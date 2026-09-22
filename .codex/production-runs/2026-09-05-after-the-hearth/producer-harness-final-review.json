@@ -1,0 +1,36 @@
+{
+  "schema": "paravoxia.producerHarnessReview.v1",
+  "reviewedAt": "2026-09-06T12:18:13.303940+00:00",
+  "reportSha256": "c65596b653ed72f2268612942bcef7b5064fd13a007938a346e7e106588a03cd",
+  "checkedRefs": [
+    "verifier/probes/lib/sourceSnapshot.mjs",
+    "verifier/probes/lib/ownedSession.mjs",
+    "verifier/probes/cg-harness-prep-selftest.mjs",
+    "verifier/probes/cg-journey-probe.mjs",
+    "verifier/probes/cg-footing-diag.mjs",
+    "harness-final-prep-progress.md",
+    "verifier/artifacts/harness-final-prep-archive/pre-edit-2026-09-06T120510Z.sha256",
+    "harness-final-prep-report.md",
+    "verifier/probes/cg-harness-selftest.mjs",
+    "verifier/probes/lib/captureProvenance.mjs",
+    "verifier/probes/lib/cgContract.mjs",
+    "verifier/probes/lib/physicalPose.mjs",
+    "verifier/probes/lib/stallWatch.mjs",
+    "verifier/logs/harness-final-prep/cg-harness-selftest.log",
+    "verifier/logs/harness-final-prep/cg-harness-prep-selftest.log",
+    "verifier/logs/harness-final-prep/cg-footing-diag-selftest.log",
+    "verifier/logs/harness-final-prep/cg-journey-probe-selftest.log",
+    "verifier/logs/harness-final-prep/node-check.log"
+  ],
+  "mismatches": [],
+  "browserProof": false,
+  "observations": [
+    "Offline preparation completed with 25 existing and 28 new checks. Source snapshot and owned-session finally wiring are present; this does not measure the browser.",
+    "Source manifestSha256 is a documented canonical ordered source-set hash, not the SHA256 of the manifest.json file bytes. Preserve both identities explicitly in evidence.",
+    "Current summary captures cleanup state before finally, so sessionStopped:false is pre-cleanup. No final post-cleanup receipt exists yet; next verifier should record actual completion and process outcome.",
+    "writeSourceSnapshot refuses an existing manifest but does not refuse a legacy nonempty capture folder lacking a manifest. The claim that any earlier capture cannot be overwritten is too broad. Next verifier must guard against any existing nonempty output directory before snapshot/trace writes, use fresh names and test this guard offline.",
+    "The textual import parser may over-record comment-shaped imports and cannot establish general JS dependency completeness. Actual dry-run closure is bounded to these current probes; package and computed imports remain explicit limitations.",
+    "Prep report cites the old invented-milestone reproducer warning as an unrelated observation; the earlier main verifier corrected those strings before finishing. Current world-interim report and retained final reproducer are authoritative."
+  ],
+  "nextAction": "Fresh main verifier may make these bounded run-local capture-safety/provenance corrections before its first short hardware smoke; no game-source change."
+}

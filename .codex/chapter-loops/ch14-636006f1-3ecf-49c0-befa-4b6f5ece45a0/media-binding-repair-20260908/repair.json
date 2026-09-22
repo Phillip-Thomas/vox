@@ -1,0 +1,62 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "failureSha256": "a0df50aad973c3bcbcfbf1cef50e60568241fcc1206ffc1d6fc6306433a21ee9",
+  "blockedRole": {
+    "stage": "compose",
+    "result": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/9-compose/result.json",
+      "sha256": "ee186377f7a7fce4fcc68beadb6b473a96fac352c168e52341622a8eac5fb7d2"
+    }
+  },
+  "perceptionCapability": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/media-binding-repair-20260908/perception/dfb77488-9996-4e0a-a80c-983e7a87f910.json",
+    "sha256": "2999bd5a56584e42281447671d234f97690c0573130f912d9e7a70e9a862689a"
+  },
+  "handoff": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/media-binding-repair-20260908/handoff.json",
+    "sha256": "03bef220c5039db40d1b507f9d1b9286f06073acd0f8453b20074efdb19618aa"
+  },
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/budget.mjs",
+      "before": "44166541c5f7e02377ec0d02967f78b5c095fcf4891eedbfba5b76eae76785f7",
+      "after": "3bdba98784e7e36be73efa0cbf33fdc1046250afd7e207b7cd1850e6fec2429d"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "1c533de268de7416210b604363128c8392def317e1e9cf8869121b6bf35da454",
+      "after": "222709d26da6626f9c7e1ff792c669a35d57652fb82241ef9efaf3a9d7814182"
+    },
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.mjs",
+      "before": "81566b33cf1a1465268818189497517a2335c9963ca6a8b58405a62af366280a",
+      "after": "abc3e04bb58d2aabf6022bedcc149c4a35f10cf96e496f1daa56e1e48f9cffe0"
+    },
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.test.mjs",
+      "before": "84139bac5096c206c4305b23917df8ecd91e433429ee0d3f0b2fb6c2a5a0b04c",
+      "after": "0a9b037cab31c1eb2db99b00eea9a4f025979b8d5aa429c8905054b20cfe1e25"
+    },
+    {
+      "path": "main/tools/chapter-loop/perceive-media.mjs",
+      "before": null,
+      "after": "2a9200729c75d20de32580744507163a33b2a34b443bda4469104d11d5ea1562"
+    },
+    {
+      "path": "main/tools/chapter-loop/perceive-media.test.mjs",
+      "before": null,
+      "after": "e0852e82481fa5fcbbe81d28d55342b29aa6b138a0221329b579a87693e307a2"
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "command": "npm run chapter:loop:test",
+    "tests": 123,
+    "log": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/media-binding-repair-20260908/tests.log",
+      "sha256": "6162a5c1f6031017fec8ae03186f46dcbdddab46a43423d484e59e0be6210eca"
+    }
+  },
+  "note": "Existing unused infrastructure allowance only. Preserve composer9 BLOCKED result and usage; continue composition with its missing native-media capability supplied. No extra creative refinement or game changes."
+}

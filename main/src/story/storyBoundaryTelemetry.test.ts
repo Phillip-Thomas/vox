@@ -32,7 +32,10 @@ function runtime(
       twoWorldHandoff: false,
       ch10BearingClaimed: false,
       ch10SeamPassed: false,
-      stationDockingAuthorized: false
+      stationDockingAuthorized: false,
+      stationDeparted: false,
+      hearthRestored: false,
+      ch13ReciprocalProof: false
     }
   };
   return {
@@ -132,7 +135,10 @@ describe('story boundary telemetry', () => {
         twoWorldHandoff: true,
         ch10BearingClaimed: false,
         ch10SeamPassed: false,
-        stationDockingAuthorized: false
+        stationDockingAuthorized: false,
+      stationDeparted: false,
+      hearthRestored: false,
+      ch13ReciprocalProof: false
       }
     }));
 
@@ -206,7 +212,10 @@ describe('space station boundary claims', () => {
         twoWorldHandoff: true,
         ch10BearingClaimed: true,
         ch10SeamPassed: true,
-        stationDockingAuthorized: false
+        stationDockingAuthorized: false,
+      stationDeparted: false,
+      hearthRestored: false,
+      ch13ReciprocalProof: false
       }
     })).stateRefs;
     expect(beforeHandback).toContain('state:story/ch10-bearing-claimed');
@@ -220,7 +229,10 @@ describe('space station boundary claims', () => {
         twoWorldHandoff: true,
         ch10BearingClaimed: true,
         ch10SeamPassed: true,
-        stationDockingAuthorized: true
+        stationDockingAuthorized: true,
+      stationDeparted: false,
+      hearthRestored: false,
+      ch13ReciprocalProof: false
       }
     })).stateRefs;
     expect(afterHandback).toContain('state:station/docking-authorized');

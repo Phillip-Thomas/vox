@@ -1,0 +1,50 @@
+{
+  "schema": "paravoxia.diagnosticCheckpoint.v1",
+  "noncertifying": true,
+  "wallMs": 1790047844503,
+  "url": "http://127.0.0.1:39637/?story=1&movie=1&journeyprobe=1&journeylane=continuous&journeymode=movie&profile=HIGH",
+  "story": {
+    "active": true,
+    "chapter": "ch7",
+    "beat": "ch7-reconstruct",
+    "runId": 1
+  },
+  "objective": {
+    "id": "reconstruct:repair:frame_restored",
+    "kind": "interact",
+    "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+    "workOrder": [
+      "RETURN TO THE WRECK BENCH.",
+      "[F] RESTORE STRUT FRAME."
+    ],
+    "requiresMarker": true,
+    "health": "ready",
+    "revision": 98
+  },
+  "storageState": {
+    "cookies": [],
+    "origins": [
+      {
+        "origin": "http://127.0.0.1:39637",
+        "localStorage": [
+          {
+            "name": "pvx.v1.world.-1,-1",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"structures\":[],\"campfires\":[],\"trees\":[],\"stones\":[[-8,25,-3],[-10,25,-3],[15,25,-4],[11,25,-5],[23,25,-10],[23,25,-6],[21,25,-7],[20,25,-6],[19,25,-6],[18,25,-6],[16,25,-6],[11,25,-8],[10,25,-7],[-3,25,-5],[-5,25,-1],[-9,25,1],[-11,25,5],[-11,25,10],[-1,25,-1],[-10,25,5],[-8,25,5],[-10,25,4]],\"forage\":[[-11,25,0],[-6,25,-2],[-10,25,8],[-10,25,3]],\"flora\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.voxels",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"generationSchemaVersion\":1,\"fingerprint\":115629,\"removed\":[[6,25,-2],[-10,25,-2],[-10,25,-4],[-5,25,-2]],\"added\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.player",
+            "value": "{\"pos\":[2.9965193271636963,52.78893280029297,-11.234224319458008],\"forward\":[-0.02467034536388154,1.1467849168905947e-8,0.9996956407125255],\"pitch\":-0.04238226905917908}"
+          },
+          {
+            "name": "pvx.v1.global",
+            "value": "{\"inventory\":{\"wood\":1,\"stone\":39,\"berry\":2,\"iron_maw\":1,\"kestrel_keel_memory\":1,\"strut_frame\":2,\"refined_alloy\":3,\"biocomposite\":1,\"silica_pane\":2},\"mawCharge\":0,\"era\":\"emergent\",\"milestones\":[\"story:started\",\"story:choice:dispenser:unlock\",\"story:choice:bell:withhold\",\"story:choice:bell2:necessary\",\"story:choice:question:nothing\",\"story:name:moss\",\"story:choice:lights:dimall\",\"story:choice:diagnostic:replay\",\"story:choice:replay2:remember\",\"story:choice:thermal:hold\",\"story:choice:anomaly:ack\",\"story:debris-scattered:3\",\"story:tone:low\",\"story:cell:100\",\"story:prologue-seen\",\"story:debris:0\",\"story:debris:1\",\"story:ch1:track\",\"story:debris-stone-backfill:v2\",\"story:debris:2\",\"story:ch1:quota\",\"story:pod:0\",\"story:pod:1\",\"story:pod:2\",\"story:ch1:depth\",\"story:ch1:nav\",\"story:ch1:iso\",\"story:a1\",\"story:a2\",\"story:sense:health\",\"story:sense:inventory\",\"story:sense:temp\",\"story:a3\",\"story:sense:water\",\"story:ch3:shiplook\",\"story:ch3:drank\",\"story:sense:food\",\"story:ch3:ate\",\"story:ch3:signal\",\"story:ch4:constellations\",\"story:ch4:vigil\",\"story:ch4:arrived\",\"story:audit:fire-mismatch\",\"story:audit:life-mismatch\",\"story:audit:tree-mismatch\",\"story:ch4:audit-complete\",\"story:comply:fire-doused\",\"story:comply:organics-resolved\",\"story:comply:regression-settled\",\"story:ch4:compliance-complete\",\"story:defy:protected-tool-refused\",\"story:defy:refusal-available\",\"story:defy:refusal-committed\",\"story:ch4:refusal-complete\",\"story:a4\",\"story:a4:pond-response-visible\",\"story:a4:herd-route-visible\",\"story:a4:w7744-fault-recorded\",\"story:a4:field-pack-dropped\",\"story:a4:handback\",\"story:item:maw-repair-kit:acquired\",\"maw_repaired\",\"story:sense:maw\",\"story:maw:first-direction:lowered-and-listened\",\"story:maw:first-direction-resolved\",\"story:maw:pond-resonance-visible\",\"story:ch5:maw-repaired\",\"story:dive:waterline-entered\",\"story:capability:oxygen-online\",\"story:sense:oxygen\",\"story:dive:keel-sonar-revealed\",\"story:item:kestrel-keel-memory:acquired\",\"story:dive:surfaced-with-keel\",\"story:item:kestrel-keel-memory:banked\",\"story:ch6:keel-banked\",\"story:reconstruct:relationships-diagnosed-physical\",\"story:salvage:kestrel:claimed\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1\",\"dayPhase\":0.5590745833334072,\"vitals\":{\"health\":100,\"hunger\":8.324322222229705,\"thirst\":18.33648333334253,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":4,\"records\":[{\"id\":\"maw_repaired\",\"actorId\":\"local\",\"firstEvidenceSequence\":1,\"lastEvidenceSequence\":1,\"evidenceHistory\":[{\"id\":\"story:maw:repair-committed\",\"sequence\":1,\"observedAt\":1790047820049,\"worldId\":\"-1,-1\",\"sourceKey\":\"authored-maw-repair\"}],\"firstEvidenceAt\":1790047820049,\"lastEvidenceAt\":1790047820049},{\"id\":\"returned_with_keel_memory\",\"actorId\":\"local\",\"firstEvidenceSequence\":2,\"lastEvidenceSequence\":2,\"evidenceHistory\":[{\"id\":\"story:dive:keel-banked\",\"sequence\":2,\"sourceKey\":\"story-event\",\"data\":{\"oxygen\":100}}]},{\"id\":\"wreck_salvage_recovered\",\"actorId\":\"local\",\"firstEvidenceSequence\":3,\"lastEvidenceSequence\":3,\"evidenceHistory\":[{\"id\":\"story:reconstruct:wreck-salvage\",\"sequence\":3,\"sourceKey\":\"wreck-salvage\"}]}]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":2,\"records\":[{\"id\":\"wreck_scar_persistence\",\"actorId\":\"local\",\"firstEvidenceSequence\":1,\"lastEvidenceSequence\":1,\"evidenceHistory\":[{\"id\":\"wreck-scar:wrecked\",\"sequence\":1,\"worldId\":\"-1,-1\",\"sourceKey\":\"physical-wreck-scar\",\"data\":{\"stage\":\"wrecked\"}}],\"contradictionIds\":[],\"comparisonIds\":[],\"revisionHistory\":[{\"id\":\"attend:wreck-scar:wrecked\",\"kind\":\"attend\",\"sequence\":1,\"evidenceId\":\"wreck-scar:wrecked\"}],\"acknowledgement\":\"unacknowledged\",\"stage\":\"noticed\"}]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":\"-1,-1\",\"currentWorldId\":\"-1,-1\",\"parkedPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16]},\"systemPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16],\"velocity\":[0,0,0]},\"locationMode\":\"surface\",\"repairHistory\":[]}}"
+          }
+        ]
+      }
+    ]
+  }
+}

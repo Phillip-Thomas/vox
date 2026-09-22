@@ -1,0 +1,33 @@
+{
+  "verification": {
+    "probePass": true,
+    "blankFrames": 0
+  },
+  "scorecard": {
+    "quality": 0.4605,
+    "weighted": 2.3,
+    "reward": 0.3223,
+    "absoluteReward": -0.079,
+    "pairwise": {
+      "reward": 0.4561,
+      "opponents": [
+        {
+          "dir": "pair-ch9",
+          "reward": 0.4561,
+          "orders": 2,
+          "inconsistent": false
+        }
+      ]
+    },
+    "verdict": "REJECT",
+    "dims": {
+      "audiovisual_emotional_alignment": 2.41,
+      "narrative_and_player_causality": 2.27,
+      "cinematic_composition_and_lens": 1.91,
+      "score_coherence_and_sync": 2.54,
+      "palette_light_and_render_cohesion": 2.27,
+      "transition_and_state_integrity": 2.41,
+      "creative_ambition_and_specificity": 2.41
+    }
+  }
+}

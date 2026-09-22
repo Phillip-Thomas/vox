@@ -1,0 +1,18 @@
+{
+  "failure": {
+    "stage": "verify-final",
+    "message": "Probe manual failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T00:56:02.522Z"
+  },
+  "report": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-213b296b-20f3-4eb3-a72c-a9e188fd1eb7/manual/report.json",
+    "sha256": "2b83f5932ae48222939c9dd4d8ad75222588242bcb359e114546df2a0d65ef30"
+  },
+  "before": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/report.json",
+    "sha256": "95ad13ad14a2de5655c99ce77162807aa7deeba38f75ec56de7dee33263c61e6"
+  },
+  "observations": "Failed step28 issued F at body y51.36088 immediately after a proximity arrival; body subsequently settled to y50.98908. The visible prompt was present, but finalReferenceOffered stayed false. The earlier successful trace issued F while descending too, making this input timing-dependent. commitCommonGroundFinalReferenceOffer requires supported body footing.",
+  "fix": "Wait for two stable 150ms body-pose samples within the declared arrival tolerance before walk returns. Only observed poses and ordinary input, same action bound, no retries of F, no game predicate changes. Keep fixed Continue equality/new action checks. Refresh already-authorized frozen toolRefs during infrastructure handoff."
+}

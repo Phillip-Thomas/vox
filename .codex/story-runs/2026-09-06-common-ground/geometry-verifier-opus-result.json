@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 548298,
+  "stop_reason": "end_turn",
+  "session_id": "2fd096d0-adbe-4c88-8b6d-3222de3a22dd",
+  "total_cost_usd": 4.0774995,
+  "usage": {
+    "input_tokens": 116,
+    "cache_creation_input_tokens": 105707,
+    "cache_read_input_tokens": 3882299,
+    "output_tokens": 43087,
+    "output_tokens_details": {
+      "thinking_tokens": 10013
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 105707,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1848,
+        "cache_read_input_tokens": 111381,
+        "cache_creation_input_tokens": 322,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 322
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1435,
+      "outputTokens": 18,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001525,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 116,
+      "outputTokens": 43087,
+      "cacheReadInputTokens": 3882299,
+      "cacheCreationInputTokens": 105707,
+      "webSearchRequests": 0,
+      "costUSD": 4.0759745,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 10013,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 65,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: partial \u2014 one route class established from source, the second (longer outer route with continuous witness) NOT established. Arena geometry cannot be signed yet.**\n\n## Measurements (source-derived, pinned world `-1,-1`, seed 3215739679, planetSize 50)\n\nAnchors (world units): hero tree `(-24.00, 50.95, 22.00)`; pond shore `(4.00, 51.05, -10.00)`, surface `(6,50.5,-12)`, floor `(6,44.6,-12)`, depth 3; wreck relay `(-2.00, 51.00, -2.00)`; pod impact `(3,51,-6)`; mesa `(36,50.5,-22)`; field pack `(-16,51.18,18)` support `(-8,25,9)` relocated. Tree\u2192shore **42.47**, relay\u2192tree **32.62** (relay is the approach, not inside the corridor).\n\n| Route | Plan | Length | Trace pts | Budgets | Witness to tree ref |\n|---|---|---|---|---|---|\n| A shorter | 1 leg `walk`/`dry-surface-path`, 31 wp | 60.00 | 76 | \u2713 \u2264120 / \u2264128 | 58 clear / **18 terrain-blocked** / 0 trunk |\n| B outer (best of 60 candidates, detour `(4,53.05,42)`) | 2 legs `walk` | 108.00 | 127 | \u2713 (1 pt spare) | 44 clear / **83 blocked** |\n\nRejections across the outer search: 18 not walkable, **31 over the point budget**, 0 over length, 11 witness-broken. **Zero candidates achieved continuous witness.**\n\n## Hard facts\n\n- Planner used verbatim `emergentStoryDirector::moveAuditor` options; every leg is `mode:'walk'`, `reason:'dry-surface-path'`, `allowJetpackCrossing:false`, `differentFaceFallback:'unreachable'` \u2014 **no hidden collision traversal, no auto-repair, no invented obstacle**.\n- Trunk geometry is the only stable tree occluder: `CuboidCollider [0.55, h/2, 0.55]`, trunkHeight **8.17**. Corridor census (846 dry columns): terrain occludes **248 (29.3 %)**, trunk occludes **56 (6.6 %)**. Witness must rest on terrain; trunk-based occlusion is a knife-edge.\n- **Budget conflict:** the 1-sample/unit rule makes points bind before length \u2014 108 u\u2192127 pts, 116 u\u2192135, 120 u\u2192139. Effective cap \u2248105\u2013110 units, not 120. Resolve before signing.\n- `agentSurfaceNavigation.ts:182` clamps `maxSlopeCells \u2264 1` \u2014 a recorded player trace is not automatically worker-traversable; each span needs `planAgentSurfaceRoute` revalidation.\n- Undefined in the treatment: the witness line's **endpoints**. I assumed sample\u2192fixed tree-side reference; a moving trace-end reference changes every number.\n\n## API to reuse\n`getHeroTreePose/getPondPose/getWreckRelayPose/getFieldPackPose` (`story/world/storyWorld.ts` facade), `prepareStoryAnchors`/`clonePreparedAnchor`, `createLiveAgentSurfaceTerrain` (+`revision`), `planAgentSurfaceRoute`, `groundedSurfaceRouteLength`/`sampleGroundedSurfaceRoute`/`turnGroundedHeadingToward`, `AUDIT_WORKER_GROUND_CLEARANCE` (1.05 = `waypointClearanceWorld`), `storyWorldIdentity`.\n\n## Not establishable without runtime\nLive-edit truth needs `voxelSystem`; **no existing debug API exposes anchors or route planning to a probe**. Minimal path: (1) CPU witness-driven search restricted to witness-clear dry columns (same script, one added pass) \u2014 if no walkable chain fits 128 points, reopen the bounded arena per CG-CIN-CH-02; (2) only then a contracted story-scoped read-only debug hook (`planSpan(a,b)` + anchors + terrain revision) behind a probe flag. Timeouts/screenings are not proof.\n\n## Artifacts\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/geometry-feasibility.md` (`e57bdff8\u2026`)\n- `\u2026/geometry-feasibility.json` (`f33efd2c\u2026`), `\u2026/geometry-feasibility-probe.mts` (`4dda6f78\u2026`), source hashes inside the md.\n\nRetained failures: `vite-node` unusable (captures ENOSPC watcher trap) \u2192 esbuild bundle to `/tmp`; two probe artifacts found and corrected (tree reference sat inside the trunk column; near-field self-occlusion now reported separately); 60/582 detour candidates evaluated, so the negative outer-route result is unestablished, not impossible. No source, tool, or dirty file was modified (`main` dirty count unchanged; only the new `.codex` artifacts added).",
+  "ttft_ms": 1482,
+  "type": "result",
+  "duration_ms": 553262,
+  "uuid": "240e7ad8-22e6-4ccb-989e-c46629a7c124",
+  "ttft_stream_ms": 735,
+  "time_to_request_ms": 41,
+  "first_content_frame_ms": 736,
+  "queued_turn_count": 0
+}

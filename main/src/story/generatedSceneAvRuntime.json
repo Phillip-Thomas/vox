@@ -18,6 +18,12 @@
       "contractVersion": "draft-v9",
       "sha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
       "status": "frozen"
+    },
+    {
+      "sceneId": "common-ground",
+      "contractVersion": "scene-v3",
+      "sha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+      "status": "frozen"
     }
   ],
   "beats": [
@@ -36,7 +42,11 @@
     "ch9-hearth",
     "ch10-cold",
     "ch10-ask",
-    "ch10-transit"
+    "ch10-transit",
+    "ch13-home",
+    "ch13-return",
+    "ch13-survey",
+    "ch13-common"
   ],
   "anchors": [
     {
@@ -1102,6 +1112,402 @@
       ],
       "shotRefs": [
         "cin.transit.05-threshold-handback"
+      ]
+    },
+    {
+      "id": "anc.cg.cell-installed",
+      "beat": "ch13-home",
+      "order": 0,
+      "event": "CG-B0 boundary: the actual live install receipt from the prior station-continuation contract consumes one sealed cell, reactivates ch13-home at the real core, and may fire the one authored live hearth acknowledgement there.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.cell-installed",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.home"
+      ]
+    },
+    {
+      "id": "anc.cg.home-steady",
+      "beat": "ch13-home",
+      "order": 1,
+      "event": "Entry to ch13-home at the real restored Tidegarden core: the home keeps working and the stored audit fault is visibly archived.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.home-steady",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.home"
+      ]
+    },
+    {
+      "id": "anc.cg.fault-reviewed",
+      "beat": "ch13-home",
+      "order": 2,
+      "event": "Terra reviews the stored audit fault at the core; no new fault, summons or transmission cue is introduced.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.fault-reviewed",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.home",
+        "shot.cg.choose"
+      ]
+    },
+    {
+      "id": "anc.cg.return-chosen",
+      "beat": "ch13-home",
+      "order": 3,
+      "event": "Explicit F accepts the invitation to revisit the Origin audit site; the invitation could have stayed pending.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.return-chosen",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.choose",
+        "shot.cg.return"
+      ]
+    },
+    {
+      "id": "anc.cg.hatch-boarded",
+      "beat": "ch13-return",
+      "order": 4,
+      "event": "The player boards the Kestrel through the shipped boarding interaction.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.hatch-boarded",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.return"
+      ]
+    },
+    {
+      "id": "anc.cg.lift-committed",
+      "beat": "ch13-return",
+      "order": 5,
+      "event": "Ignition and lift commit through the existing held-input flight control.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.lift-committed",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.return"
+      ]
+    },
+    {
+      "id": "anc.cg.origin-landed",
+      "beat": "ch13-return",
+      "order": 6,
+      "event": "The Kestrel lands at the Origin audit site and the player disembarks and approaches on foot.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.origin-landed",
+      "scoreCueRefs": [
+        "sc.cg.hearth-held"
+      ],
+      "shotRefs": [
+        "shot.cg.return"
+      ]
+    },
+    {
+      "id": "anc.cg.repeated-measure",
+      "beat": "ch13-survey",
+      "order": 7,
+      "event": "W-7744 is physically mounted at W and performs the repeated unresolved local measurement: UNRESOLVED FAULT. REPEATING LOCAL MEASUREMENT.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.repeated-measure",
+      "scoreCueRefs": [
+        "sc.cg.unreconciled"
+      ],
+      "shotRefs": [
+        "shot.cg.return"
+      ]
+    },
+    {
+      "id": "anc.cg.demonstration-opened",
+      "beat": "ch13-survey",
+      "order": 8,
+      "event": "Terra offers to demonstrate a route; the survey opens actor-scoped and world-scoped.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.demonstration-opened",
+      "scoreCueRefs": [
+        "sc.cg.unreconciled"
+      ],
+      "shotRefs": [
+        "shot.cg.return",
+        "shot.cg.draw"
+      ]
+    },
+    {
+      "id": "anc.cg.survey-started",
+      "beat": "ch13-survey",
+      "order": 9,
+      "event": "Actual grounded F at the survey start S begins the quiet trace and records the first sample; nothing was recorded beside the inspecting actor.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.survey-started",
+      "scoreCueRefs": [
+        "sc.cg.unreconciled"
+      ],
+      "shotRefs": [
+        "shot.cg.draw"
+      ]
+    },
+    {
+      "id": "anc.cg.trace-drawn",
+      "beat": "ch13-survey",
+      "order": 10,
+      "event": "Continuous grounded walking forms a finite valid trace to the survey end; growth is quiet.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.trace-drawn",
+      "scoreCueRefs": [
+        "sc.cg.unreconciled"
+      ],
+      "shotRefs": [
+        "shot.cg.draw"
+      ]
+    },
+    {
+      "id": "anc.cg.route-offered",
+      "beat": "ch13-survey",
+      "order": 11,
+      "event": "Terra offers the walked span for W-7744 to test; the proposal becomes physical, not proof.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.route-offered",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.draw"
+      ]
+    },
+    {
+      "id": "anc.cg.revision-ready",
+      "beat": "ch13-survey",
+      "order": 12,
+      "event": "The player selects the available unverified-tail revision at its actual last tested point; the unchanged return/F work order is presented before any edit.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.revision-ready",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.hold"
+      ]
+    },
+    {
+      "id": "anc.cg.specific-hold",
+      "beat": "ch13-survey",
+      "order": 13,
+      "event": "Contingent: an actually offered span reaches its first unsupported reference or footing relation, so W-7744 holds at the last safe sample and reports the literal cause.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.specific-hold",
+      "scoreCueRefs": [
+        "sc.cg.refused"
+      ],
+      "shotRefs": [
+        "shot.cg.hold"
+      ]
+    },
+    {
+      "id": "anc.cg.witness-held",
+      "beat": "ch13-survey",
+      "order": 14,
+      "event": "Contingent: the player stands at the intermediate reference, explicitly offers that end, and the test proceeds.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.witness-held",
+      "scoreCueRefs": [
+        "sc.cg.refused"
+      ],
+      "shotRefs": [
+        "shot.cg.witness"
+      ]
+    },
+    {
+      "id": "anc.cg.witness-vacated",
+      "beat": "ch13-survey",
+      "order": 15,
+      "event": "Contingent: the holder leaves the release cylinder, so the test holds at the last safe sample and keeps the proof.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.witness-vacated",
+      "scoreCueRefs": [
+        "sc.cg.refused"
+      ],
+      "shotRefs": [
+        "shot.cg.witness"
+      ]
+    },
+    {
+      "id": "anc.cg.test-resumed",
+      "beat": "ch13-survey",
+      "order": 16,
+      "event": "Contingent: reentry to the inner cylinder revalidates geometry and resumes the test without a second F.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.test-resumed",
+      "scoreCueRefs": [
+        "sc.cg.refused"
+      ],
+      "shotRefs": [
+        "shot.cg.witness"
+      ]
+    },
+    {
+      "id": "anc.cg.tail-reopened",
+      "beat": "ch13-survey",
+      "order": 17,
+      "event": "Contingent: the player explicitly presses F at the actual last tested point to reopen only the unverified tail; a refusal alone never edits the proposal.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.tail-reopened",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.hold"
+      ]
+    },
+    {
+      "id": "anc.cg.route-revised",
+      "beat": "ch13-survey",
+      "order": 18,
+      "event": "Contingent: the unverified suffix is replaced at no cost; the tested prefix survives.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.route-revised",
+      "scoreCueRefs": [
+        "sc.cg.revised"
+      ],
+      "shotRefs": [
+        "shot.cg.hold"
+      ]
+    },
+    {
+      "id": "anc.cg.route-tested",
+      "beat": "ch13-survey",
+      "order": 19,
+      "event": "W-7744 completes his grounded test of the offered span; the chosen survey class is saved.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.route-tested",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating",
+        "sc.cg.revised"
+      ],
+      "shotRefs": [
+        "shot.cg.witness"
+      ]
+    },
+    {
+      "id": "anc.cg.reciprocal-reference",
+      "beat": "ch13-common",
+      "order": 20,
+      "event": "W-7744 physically walks the uncredited two-unit E to H leg and actually reaches and maintains the held reference at H (-40, 51.05, 12) before Terra starts her comparison.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.reciprocal-reference",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.other-end"
+      ]
+    },
+    {
+      "id": "anc.cg.reciprocal-crossed",
+      "beat": "ch13-common",
+      "order": 21,
+      "event": "W-7744 actually maintains the reference at distinct H=(-40,51.05,12) while Terra completes the full 18-unit E-to-C common passage for her own comparison.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.reciprocal-crossed",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.other-end"
+      ]
+    },
+    {
+      "id": "anc.cg.final-reference-offered",
+      "beat": "ch13-common",
+      "order": 22,
+      "event": "Terra explicitly offers the separate far reference, clear of the tested span; conditions for his choice, not a command.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.final-reference-offered",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.his-test"
+      ]
+    },
+    {
+      "id": "anc.cg.reference-vacated",
+      "beat": "ch13-common",
+      "order": 23,
+      "event": "Contingent: Terra leaves the release cylinder during his test, so it holds at the last safe sample.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.reference-vacated",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.his-test"
+      ]
+    },
+    {
+      "id": "anc.cg.reference-resumed",
+      "beat": "ch13-common",
+      "order": 24,
+      "event": "Contingent: reentry and live revalidation resume his test without another F.",
+      "source": "player-action",
+      "storyEventRef": "ev.cg.reference-resumed",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.his-test"
+      ]
+    },
+    {
+      "id": "anc.cg.independent-test",
+      "beat": "ch13-common",
+      "order": 25,
+      "event": "CG-06: after the actual uncredited two-unit H to E return and a valid far Terra reference at T (-44, 51.05, 12), W-7744 begins his independent full 18-unit E to C test.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.independent-test",
+      "scoreCueRefs": [
+        "sc.cg.demonstrating"
+      ],
+      "shotRefs": [
+        "shot.cg.his-test"
+      ]
+    },
+    {
+      "id": "anc.cg.complete",
+      "beat": "ch13-common",
+      "order": 26,
+      "event": "CG-07: W-7744 actually arrives at the far end of his independent full E to C test and the reciprocal proof commits exactly once.",
+      "source": "story-event",
+      "storyEventRef": "ev.cg.complete",
+      "scoreCueRefs": [
+        "sc.cg.independent-settled"
+      ],
+      "shotRefs": [
+        "shot.cg.complete"
+      ]
+    },
+    {
+      "id": "anc.cg.handback",
+      "beat": "ch13-common",
+      "order": 27,
+      "event": "CG-08: mandatory guidance retires and full controls and progression are immediately free; his record stays incomplete.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.cg.handback",
+      "scoreCueRefs": [
+        "sc.cg.independent-settled"
+      ],
+      "shotRefs": [
+        "shot.cg.complete"
       ]
     }
   ],
@@ -4870,6 +5276,393 @@
         "handBackAnchorRef": "anc.ch10.threshold-handback"
       },
       "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.home",
+      "beat": "ch13-home",
+      "startAnchorRef": "anc.cg.cell-installed",
+      "endAnchorRef": "anc.cg.fault-reviewed",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The core and the stored fault."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.fault-reviewed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.choose",
+      "beat": "ch13-home",
+      "startAnchorRef": "anc.cg.fault-reviewed",
+      "endAnchorRef": "anc.cg.return-chosen",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The stored fault and, after the choice, the hatch."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.return-chosen"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.return",
+      "beat": "ch13-return",
+      "startAnchorRef": "anc.cg.return-chosen",
+      "endAnchorRef": "anc.cg.demonstration-opened",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The hatch, then the controls, then the audit site and W-7744."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.demonstration-opened"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.draw",
+      "beat": "ch13-survey",
+      "startAnchorRef": "anc.cg.demonstration-opened",
+      "endAnchorRef": "anc.cg.route-offered",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The trace end and the reference socket."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.route-offered"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.hold",
+      "beat": "ch13-survey",
+      "startAnchorRef": "anc.cg.specific-hold",
+      "endAnchorRef": "anc.cg.route-revised",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The last safe sample and the literal cause of the refusal."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.route-revised"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.witness",
+      "beat": "ch13-survey",
+      "startAnchorRef": "anc.cg.witness-held",
+      "endAnchorRef": "anc.cg.route-tested",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The occupied reference socket and the sampled span."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.route-tested"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.other-end",
+      "beat": "ch13-common",
+      "startAnchorRef": "anc.cg.reciprocal-reference",
+      "endAnchorRef": "anc.cg.reciprocal-crossed",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "His maintained reference and her walked common span."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.reciprocal-crossed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.his-test",
+      "beat": "ch13-common",
+      "startAnchorRef": "anc.cg.final-reference-offered",
+      "endAnchorRef": "anc.cg.independent-test",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "His traversal and her separate held reference."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.independent-test"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "shot.cg.complete",
+      "beat": "ch13-common",
+      "startAnchorRef": "anc.cg.complete",
+      "endAnchorRef": "anc.cg.handback",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: the field of view is constant at the shipped 75 degree on-foot value",
+        "focusTarget": "The arrival point and the retained route."
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "No new light source.",
+          "No new postprocessing effect.",
+          "No new overlay or reticle.",
+          "No grade change."
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.cg.handback"
+      },
+      "resetRef": "reset-camera"
     }
   ],
   "scoreCues": [
@@ -5079,6 +5872,60 @@
       "offsetMs": 0,
       "mixIntent": "The bed resumes with no click; intensity parks at a named constant. Maximum inter-sample step stays under the click threshold.",
       "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.hearth-held",
+      "type": "music",
+      "anchorRef": "anc.cg.cell-installed",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "Below the world bed; nothing in the home is required to understand the invitation.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.unreconciled",
+      "type": "music",
+      "anchorRef": "anc.cg.repeated-measure",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "Below the world bed and below the player’s own feet.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.demonstrating",
+      "type": "music",
+      "anchorRef": "anc.cg.route-offered",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "Below the world bed; the physical cause is always legible muted.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.refused",
+      "type": "music",
+      "anchorRef": "anc.cg.specific-hold",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "Below the world bed; the refusal is never a sting.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.revised",
+      "type": "music",
+      "anchorRef": "anc.cg.route-revised",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "Below the world bed.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.cg.independent-settled",
+      "type": "music",
+      "anchorRef": "anc.cg.complete",
+      "relation": "after",
+      "offsetMs": 0,
+      "mixIntent": "The release tail never owns camera, controls or progression; handback at anc.cg.handback is immediate and independent of it.",
+      "resetRef": "reset-score"
     }
   ],
   "reset": {
@@ -5226,6 +6073,51 @@
         "id": "reset-docking-gate",
         "domain": "agency",
         "resetValue": "story:station-docking-authorized is defined this run and set nowhere; story:ch10-bearing-claimed is unset until the rite is performed and durable thereafter",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-agency",
+        "domain": "agency",
+        "resetValue": "Full player authority with mandatory guidance retired.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-effect",
+        "domain": "effect",
+        "resetValue": "Transient beat presentation ownership released; saved accepted trace and persistent local tester remain under their world-scoped ownership on completion and later Origin visits.",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-quality",
+        "domain": "quality",
+        "resetValue": "The player's shipped tier selection, unmodified.",
         "triggers": [
           "beat-exit",
           "deep-link",

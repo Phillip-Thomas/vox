@@ -1,0 +1,10 @@
+{
+  "request": "continue",
+  "standingAuthority": "Owner authorized fixing blockers and finishing the chapter autonomously. This is a routine implementation-to-verification handoff correction, no further refinement or extra creative allowance.",
+  "implementation": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/11-refine/result.json",
+    "sha256": "f23431b77f999ca8056a26138f5c8f6a2b3f904ee832e2d532a304cd8e78b7b3"
+  },
+  "finding": "The completed refiner explicitly requires the queued runtime captures to resolve its outstanding audible proof. Preserve its REVISE and all findings; run verify-final and independent final reviewers. No further game edits granted. Passive trace now retains the existing unfinishedMap score/anchor snapshot added for cue correlation.",
+  "noPublishing": true
+}

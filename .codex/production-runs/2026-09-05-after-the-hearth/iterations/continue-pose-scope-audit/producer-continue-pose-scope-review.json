@@ -1,0 +1,36 @@
+{
+  "schema": "paravoxia.producerEvidenceReview.v1",
+  "at": "2026-09-06T20:42:26.868186+00:00",
+  "reportRef": "continue-pose-scope-audit.json",
+  "reportSha256": "7b707c3b586a1e725094dee70962e18f4812c3243030b2f325777ff2d5fa4c23",
+  "invocation": {
+    "role": "continue-pose-scope-audit",
+    "requestedModel": "opus",
+    "startedAt": "2026-09-06T20:35:49.040122+00:00",
+    "commissionSha256": "5b710421cbfc9d06d4c83cb8d9a972dd3001f9d645087a9747a00e710d24ad46",
+    "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sourceFilesRehashedBefore": 99,
+    "scope": "Read-only actual Continue pose load/validation/scoping causal audit, bounded CPUreplay, no GPU/game changes",
+    "exitCode": 0,
+    "finishedAt": "2026-09-06T20:41:37.063044+00:00",
+    "model": "claude-opus-5",
+    "sessionId": "ef4faa13-06f9-4760-98f2-f6ea9fb31be4",
+    "isError": false,
+    "sourceDrift": [],
+    "sourceFilesRehashedAfter": 99
+  },
+  "confirmed": [
+    ":p1 is sibling planet slot1, not actor alias; seeds differ appropriately.",
+    "Only savePlayerPose writes .player keys in examined source; no named migration copy found.",
+    "Saved pose is observed after Continue at trace107 before later changed pose at108; initial null-save/restore-failure framing is not supported.",
+    "DOMStorage76 writes old pose to sibling key, then80 writes +X pose to Origin; exact values retained."
+  ],
+  "notConfirmed": [
+    "Report asserts a transient Origin-to-Tidegarden-to-Origin excursion and changed story.beat without observing actual swap/beat/seed branch. Save callback cleanup under a prior world can also write a key; key name alone cannot prove contemporaneous scene world.",
+    "Initial exact pose telemetry does not directly intercept EfficientScene initializer or resumeIsSafe branch.",
+    "Proposed per-rAF beat/seed measurement requires actual shipped hook names and temporal coverage; no probe yet run."
+  ],
+  "sourceRepairInferred": false,
+  "nextAction": "Corrected actualContinue probe must sample copied live beat/world/terrainseed/pose across click and mount; use actual source callsites if needed, no guessed __storyBeat API or arbitrary swap suppression.",
+  "classification": "Confirmed pose change after Continue, exact causal transition unresolved. No source fix for CG011 added to eighth pass."
+}

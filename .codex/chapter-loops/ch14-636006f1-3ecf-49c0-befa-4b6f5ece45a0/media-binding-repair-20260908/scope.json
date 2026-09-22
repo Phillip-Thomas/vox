@@ -1,0 +1,10 @@
+{
+  "schema": "paravoxia.mediaPerceptionScope.v1",
+  "repo": "/home/thomasphillip/Projects/vox",
+  "run": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "stage": "compose",
+  "directory": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/media-binding-repair-20260908",
+  "model": "gemini-3.8-flash",
+  "media": [],
+  "observations": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations"
+}

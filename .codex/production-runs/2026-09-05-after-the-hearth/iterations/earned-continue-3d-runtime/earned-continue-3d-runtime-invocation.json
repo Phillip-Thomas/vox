@@ -1,0 +1,16 @@
+{
+  "role": "earned-continue-3d-runtime",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T20:14:17.809738+00:00",
+  "commissionSha256": "6a9c65b934c88db0831fb6f0b5e9d390343b1edbdd63bae811132a13072d46a1",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "One actual earnedContinue plus newaction with 3D steering/pose observations; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T20:29:31.813100+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "bdda4821-8ced-4f72-96ca-1d15c8d608df",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

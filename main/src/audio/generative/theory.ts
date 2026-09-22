@@ -24,11 +24,14 @@ export const MODE_SCALES: Record<ModeName, readonly number[]> = {
 };
 
 export type ChordQuality = 'maj' | 'min';
+/** Three upper voices plus the independent root bass; the seventh is a four-note chord. */
+export type ChordShape = 'sus2' | 'sus4' | 'quartal' | 'seventh';
 
 export interface TriadSpec {
   /** Pitch class of the root, semitones from A, 0..11. */
   rootPc: number;
   quality: ChordQuality;
+  shape?: ChordShape;
 }
 
 export const TRIAD_INTERVALS: Record<ChordQuality, readonly [number, number, number]> = {
@@ -39,12 +42,44 @@ export const TRIAD_INTERVALS: Record<ChordQuality, readonly [number, number, num
 export const pcMod = (n: number): number => ((n % 12) + 12) % 12;
 
 export function triadPcs(t: TriadSpec): [number, number, number] {
-  const iv = TRIAD_INTERVALS[t.quality];
+  const iv = t.shape === 'sus2' ? [0, 2, 7]
+    : t.shape === 'sus4' ? [0, 5, 7]
+      : t.shape === 'quartal' ? [0, 5, 10]
+        : t.shape === 'seventh' ? [t.quality === 'maj' ? 4 : 3, 7, t.quality === 'maj' ? 11 : 10]
+          : TRIAD_INTERVALS[t.quality];
   return [pcMod(t.rootPc + iv[0]), pcMod(t.rootPc + iv[1]), pcMod(t.rootPc + iv[2])];
 }
 
 export function triadId(t: TriadSpec): string {
-  return `${pcMod(t.rootPc)}:${t.quality}`;
+  // Suspensions and quartal stacks have no major/minor third: one audible
+  // pitch set has one identity, regardless of its underlying modal anchor.
+  return `${pcMod(t.rootPc)}:${t.shape && t.shape !== 'seventh' ? t.shape : t.quality + (t.shape ? ':seventh' : '')}`;
+}
+
+/** Expanded material+ vocabulary. Every added voice is in the current scale. */
+export function modeChordPool(tonicPc: number, mode: ModeName): TriadSpec[] {
+  const degrees = [...MODE_DEGREE_SETS[mode]];
+  // The lawful seventh degree was absent from several original degree sets.
+  const scale = MODE_SCALES[mode];
+  const seventh = scale[6];
+  for (const quality of ['maj', 'min'] as const) {
+    const candidate = { rootPc: pcMod(tonicPc + seventh), quality };
+    if (isDiatonic(candidate, tonicPc, mode) && !degrees.some((d) => d.root === seventh && d.quality === quality)) {
+      degrees.push({ root: seventh, quality });
+    }
+  }
+  const pool = new Map<string, TriadSpec>();
+  for (const degree of degrees) {
+    const triad = degreeTriad(tonicPc, degree);
+    pool.set(triadId(triad), triad);
+    for (const shape of ['sus2', 'sus4', 'quartal', 'seventh'] as const) {
+      // Ionian V remains triad-only; never introduce a functional V7.
+      if (mode === 'ionian' && degree.root === 7) continue;
+      const chord = { ...triad, shape };
+      if (isDiatonic(chord, tonicPc, mode)) pool.set(triadId(chord), chord);
+    }
+  }
+  return [...pool.values()];
 }
 
 export interface ModeDegree {
@@ -138,7 +173,12 @@ export function isDiatonic(t: TriadSpec, tonicPc: number, mode: ModeName): boole
 export type ChordAnchor = 'root' | 'third' | 'fifth';
 
 /** Pitch class of a chord anchor tone, semitones from A. */
-export function chordAnchorPc(rootPc: number, quality: ChordQuality, anchor: ChordAnchor): number {
+export function chordAnchorPc(rootPc: number, quality: ChordQuality, anchor: ChordAnchor, shape?: ChordShape): number {
+  if (shape && anchor !== 'root') {
+    const target = pcMod(rootPc + (anchor === 'third' ? (quality === 'maj' ? 4 : 3) : 7));
+    const pcs = triadPcs({ rootPc, quality, shape });
+    return pcs.reduce((best, pc) => Math.min(pcMod(pc - target), pcMod(target - pc)) < Math.min(pcMod(best - target), pcMod(target - best)) ? pc : best);
+  }
   switch (anchor) {
     case 'root': return pcMod(rootPc);
     case 'third': return pcMod(rootPc + (quality === 'maj' ? 4 : 3));

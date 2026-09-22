@@ -1,0 +1,87 @@
+{
+  "schema": "paravoxia.verificationInterimReport.v2",
+  "runId": "2026-09-05-after-the-hearth",
+  "phase": "world-final (post live-world/boot/Continue repair)",
+  "writtenAt": "2026-09-06T12:43:04.603620+00:00",
+  "verdict": "BLOCKED \u2014 one new reproducible blocker prevents chapter verification; two prior blockers retested with different outcomes",
+  "isChapterVerificationComplete": false,
+  "isAcceptance": false,
+  "publicationAuthorized": false,
+  "identity": {
+    "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+    "threeCreativeSignaturesOverThatSha": [
+      "chapter (approve-with-notes)",
+      "score (approve)",
+      "cinematography (approve)"
+    ],
+    "sourceManifestFileSha256": "d9e36ae314ba547a292e55376d54eecbf0ff47dc3d6710c4f9b5ae3fee96caf2",
+    "canonicalOrderedSourceSetSha256": "8a1ef53d06dc50a9ab1b55badd3f19787eb422d5db9a7037c7b82b598c5fea31",
+    "sourceFilesRehashed": 97,
+    "drift": [],
+    "engineerFinishedAt": "2026-09-06T12:19:37.406297+00:00",
+    "engineerExitCode": 0,
+    "readyTrue": true,
+    "previewUrl": "http://127.0.0.1:40131/",
+    "previewBundle": "/assets/index-D6fwfFv7.js",
+    "previewBundleSha256": "c35941dd34b59baabb5e6f1a5357d59c52d226843e64d43221d4dce023c1fbd9",
+    "previewBytesComparedToMyDist": "identical (index.html and bundle)"
+  },
+  "staticGate": {
+    "command": "npm --prefix main run verify",
+    "exitCode": 0,
+    "testFiles": 349,
+    "tests": 3091,
+    "log": "verifier/logs/world-final/verify-world-final.log",
+    "durationS": 60,
+    "buildHashCanonical": "b308b2f0a23ce7b9d3c8cb154e0ced3bb6a512a585629b277e90029297c95284"
+  },
+  "renderer": {
+    "string": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "class": "hardware",
+    "softwareFallbackUsed": false,
+    "note": "All GPU probes ran headed on real hardware under the shared flock. No hardware performance or feel claim is made beyond renderer identity; no fps or budget measurement was taken."
+  },
+  "results": {
+    "VF3-FOOTING-1": "REPAIRED and independently measured: supported:true, worldBound:true at the survey site; survey reaches phase 'drawing' with real recorded samples. Scope limited to the approach and first vertices actually walked.",
+    "VF3-AVHOME-1": "IMPROVED but NOT CLOSED: home AV anchors now populate in order (home-steady, fault-reviewed, hatch-boarded, lift-committed) in a movie-lane deep-link fixture. Live install ACK, the continuous station->home journey, manual lane and anything heard remain unmeasured.",
+    "VF4-SURVEY-STALL-1": "NEW BLOCKER, reproduced 2/2: the survey demonstration walk freezes at rail vertex 1 with bit-identical body coordinates while the rail keeps publishing action=walk, supported:true, holdReason:null. Discriminated as a navigator/controls deadzone, NOT collision and NOT ground: ordinary movement input frees it and the rail then resumes autonomously."
+  },
+  "harnessCorrections": {
+    "capturedSafety": [
+      "assertFreshOutputDir refuses ANY existing nonempty output folder before snapshot/trace writes",
+      "post-finally cleanup-receipt.json records the actual cleanup outcome; summary.cleanup labelled pre-finally"
+    ],
+    "samplerFix": "CG_DIAGNOSTIC_HOOKS never called the shipped window.__paravoxiaCommonGround.snapshot(); corrected and proven live (1286/1287 samples).",
+    "openHarnessGap": "markerCount samples 0 while frames render the marker \u2014 marker parity for the 28 anchors is UNMEASURED, not failed.",
+    "offlineGates": {
+      "cg-harness-prep-selftest": "41/41",
+      "cg-harness-selftest": "25/25"
+    },
+    "archives": "verifier/artifacts/world-final-harness-archive/{pre-edit,v2,v3} with sha256 manifests",
+    "actualCleanupOutcome": "every hardware capture recorded state 'stopped', 1 stop invocation, no cleanup error"
+  },
+  "notMeasured": [
+    "Full fixed route through all vertices, H setup, Terra 18 E->C, T/F/occupancy, W H->E2 + E->C 18 \u2014 blocked by VF4-SURVEY-STALL-1",
+    "Valid partial Continue through real WorldSave/actor/world/lifecycle before routeTested",
+    "Manual corner early-turn and recovery",
+    "Three cold focused chapters; station-departure->home-install->ch13->final with no reseed; full story movie from the beginning",
+    "All 17 new + 2 prior objective lifecycles and 28 anchors including conditional cases; label parity, work orders, one-time feedback, targetless-launch named controls",
+    "WorldSave slot limits, reference range/LOS/occupancy/gaze independence, vacancy hold, body clearance",
+    "Reset/variant matrix, desktop/mobile/reduced-motion/lowest-tier parity, cold high and low hardware handback budgets",
+    "ALL audio acceptance \u2014 nothing was heard; no live cue-sync or completion-timing claim",
+    "FPS was not measured in this phase"
+  ],
+  "evidence": {
+    "captures": [
+      "verifier/captures/world-final/smoke-home",
+      "verifier/captures/world-final/smoke-home-v2",
+      "verifier/captures/world-final/smoke-home-v3",
+      "verifier/captures/world-final/survey-1",
+      "verifier/captures/world-final/survey-2",
+      "verifier/captures/world-final/stall-discriminator"
+    ],
+    "findings": "verifier-findings.json",
+    "priorFindingsPreserved": "verifier-findings.prior-source-51b25376.json and verifier-findings.prior-source-58f275f6.json; all prior captures and reports retained unmodified"
+  },
+  "recommendation": "Route ONE bounded integration pass for VF4-SURVEY-STALL-1. It must reproduce the frozen walk BEFORE any fix and must not relax arrival radius or route-credit predicates. All remaining chapter acceptance stays unmeasured until the normal route completes."
+}

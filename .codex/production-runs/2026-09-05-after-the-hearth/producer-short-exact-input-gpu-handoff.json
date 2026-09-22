@@ -1,0 +1,28 @@
+{
+  "at": "2026-09-06T19:51:04.016337+00:00",
+  "fromRole": "arrival-common-short-runtime",
+  "toRole": "common-exact-input-runtime",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesChecked": 99,
+  "sourceDrift": [],
+  "priorCapturesCleaned": [
+    {
+      "ref": "verifier/captures/arrival-common-short-corrected/trial-1/summary.json",
+      "sha256": "188d32805d895d2fdcf53f462d51a6e5b95899d097c509052d7e668b0707caf4",
+      "cleanupAt": "2026-09-06T19:44:08.918Z"
+    },
+    {
+      "ref": "verifier/captures/arrival-common-short-corrected/trial-2/summary.json",
+      "sha256": "8417ef0c617ae7b049a035385a20c79d06ec17221c588d94f4e05c324adbcf14",
+      "cleanupAt": "2026-09-06T19:45:00.579Z"
+    },
+    {
+      "ref": "verifier/captures/arrival-common-short-corrected/trial-3/summary.json",
+      "sha256": "3708c363154f2f9cfbeac3333f1b105c14b68bf74b293298c0b7f0f54ab566c3",
+      "cleanupAt": "2026-09-06T19:45:53.891Z"
+    }
+  ],
+  "kernelExclusiveLockFree": true,
+  "priorRoleReportMayContinue": true,
+  "instruction": "SHORT capture work completed3cold; no further SHORTGPU authority. Exact-input discriminator now sole GPU role. Finale transport CPU-only. Source frozen."
+}

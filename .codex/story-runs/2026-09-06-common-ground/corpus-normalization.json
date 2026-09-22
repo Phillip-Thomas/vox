@@ -1,0 +1,17 @@
+{
+  "method": "Deterministic projection of mechanical inventory; original raw JSON retained.",
+  "removes": [
+    "internal beat keys and symbolic IDs",
+    "author-side selection notes and conditions",
+    "unverified procedural greeting fallback",
+    "author-side status annotations replaced by neutral observable context"
+  ],
+  "preserves": [
+    "actual ordered copy",
+    "speaker/display labels",
+    "marker and work-order text"
+  ],
+  "corpusSha256": "d0fe844959ccdbbcd07b8df568f659633c760dede3515d1ddcf565b94e35e53e",
+  "quotedStrings": 224,
+  "sourceFiles": 43
+}

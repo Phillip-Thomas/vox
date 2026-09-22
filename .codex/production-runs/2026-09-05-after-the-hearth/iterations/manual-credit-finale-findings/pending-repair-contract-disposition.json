@@ -1,0 +1,116 @@
+{
+  "schema": "paravoxia.repairContractDisposition.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "baseContractVersion": "scene-v3",
+  "activeContractVersion": "scene-v3",
+  "activeContractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "defectRegisterSha256": "caa7c4ebb52a6bf5fec80f86903a057958cf7711017344beef628dffa938b7d4",
+  "contractChangeRequired": false,
+  "route": "bounded-implementation-fidelity",
+  "directionRefs": [
+    "producer-common-entry-crossing-review.json",
+    "chapter-manual-corner-interpretation.json",
+    "score-observed-completion-direction.json",
+    "producer-score-observed-direction-review.json"
+  ],
+  "triadResignRequired": false,
+  "triadResignComplete": true,
+  "decidedBy": "creative-producer under explicit standing user delegation",
+  "decidedAt": "2026-09-06T20:37:25.856520+00:00",
+  "implementationDirection": {
+    "defectIds": [
+      "CG-IMPL-015",
+      "CG-IMPL-016"
+    ],
+    "contractChangeRequired": false,
+    "owner": "integration-engineer",
+    "boundedAction": "Correct proven manual post-plane route accounting and normal done token eligibility under unchanged signed scene-v3.",
+    "directionRef": "manual-credit-finale-repair-direction.json",
+    "sourceMutationAuthorizedNow": false
+  },
+  "priorImplementationDirection": {
+    "defectIds": [
+      "CG-IMPL-012",
+      "CG-IMPL-013"
+    ],
+    "contractChangeRequired": false,
+    "owner": "integration-engineer",
+    "boundedAction": "Preserve already committed Origin crossing via existing runtimeworld rule, and qualify/repair chapter-local actual standing-clear target for full CURRENT offered route plus common positioning. Reproduce missing physical footing details before patch. Preserve all signed geometry, agency, copy, physical proof, AV and shared navigation/flight safety. Producer audit review explicitly rejects faulty long-route candidate.",
+    "evidenceRefs": [
+      "producer-focused-evidence-review.json",
+      "producer-handoff-standby-audit-review.json",
+      "flight-discriminator-report.json",
+      "handoff-standby-source-audit.json"
+    ],
+    "directionRef": "handoff-standby-repair-direction.json"
+  },
+  "priorLifecycleImplementationDirection": {
+    "defectIds": [
+      "CG-IMPL-006",
+      "CG-IMPL-007",
+      "CG-IMPL-008",
+      "CG-IMPL-009"
+    ],
+    "contractChangeRequired": false,
+    "owner": "integration-engineer",
+    "boundedAction": "Repair causal entry-mode, physical coordinate and anchor eligibility integration defects under unchanged signed v2. Diagnose common fixture stall and reproduce manual steering recovery risk; correct only demonstrated in-scope failure while preserving full ordered actual18 traversal and all signed physical/agency conditions. No new creative direction.",
+    "evidenceRefs": [
+      "verification-lifecycle-interim-report.json",
+      "verifier-findings.json",
+      "chapter-manual-corner-interpretation.md",
+      "score-home-anchor-eligibility-interpretation.md",
+      "producer-manual-corner-risk.json",
+      "chapter-corner-candidate-disposition.json"
+    ],
+    "directionRef": "lifecycle-repair-direction.json"
+  },
+  "priorWorldImplementationDirection": {
+    "defectIds": [
+      "CG-IMPL-006",
+      "CG-IMPL-008"
+    ],
+    "contractChangeRequired": false,
+    "owner": "integration-engineer",
+    "boundedAction": "Reproduce and correct actual live terrain/render/support disagreement and home boot/foreground anchor loss; reproduce valid intermediate saved-survey entry through actual validator and chapter seam and fix only demonstrated failure. Preserve signedgeometry/fullphysicalproof/audioeligibility/agency/passivediagnostics and earliercontroller fixes. No newcreative direction.",
+    "evidenceRefs": [
+      "verification-world-interim-report.json",
+      "verifier-findings.json",
+      "producer-world-verification-review.json",
+      "producer-lifecycle-source-review.json",
+      "score-home-anchor-eligibility-interpretation.md"
+    ],
+    "directionRef": "world-repair-direction.json"
+  },
+  "priorNavigationImplementationDirection": {
+    "defectIds": [
+      "CG-IMPL-010",
+      "CG-IMPL-011",
+      "CG-IMPL-008"
+    ],
+    "contractChangeRequired": false,
+    "owner": "integration-engineer",
+    "boundedAction": "Fix demonstrated terminal-cell versus exact-goal navigation and actual Continue world/state loss under unchanged scene-v2. Preserve physical proof, terrain safety, actual saved actor/world/route/pose/construction, signed AV eligibility and all prior repairs. No creative changes.",
+    "evidenceRefs": [
+      "producer-world-final-review.json",
+      "verification-world-final-report.json",
+      "producer-partial-continue-review.json",
+      "verifier/captures/partial-continue/run-4/summary.json"
+    ],
+    "directionRef": "navigation-repair-direction.json"
+  },
+  "supportingInterpretationRefs": [
+    "chapter-manual-corner-interpretation.json",
+    "score-observed-completion-direction.json"
+  ],
+  "priorArrivalCommonImplementationDirection": {
+    "defectIds": [
+      "CG-IMPL-010",
+      "CG-IMPL-014"
+    ],
+    "contractChangeRequired": true,
+    "owner": "integration-engineer",
+    "boundedAction": "Exact signed v3 arrival guidance and safe private COMMON steering over unchanged original geometry and strict physical proof; final direction and contract gate complete.",
+    "directionRef": "arrival-common-repair-direction.json",
+    "sourceMutationAuthorizedNow": true
+  }
+}

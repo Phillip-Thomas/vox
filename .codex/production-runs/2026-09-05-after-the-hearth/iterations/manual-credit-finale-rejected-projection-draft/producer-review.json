@@ -1,0 +1,29 @@
+{
+  "schema": "paravoxia.producerDraftRejection.v1",
+  "at": "2026-09-06T21:07:02.166864+00:00",
+  "candidateAccepted": false,
+  "runtimeObserved": false,
+  "sameMaterialPass": 8,
+  "originalDeadline": "2026-09-06T21:27:26.895126+00:00",
+  "sourceDraftHashes": {
+    "main/src/story/commonGroundRoute.ts": "13b3974e0dd2862bdb046a9439107fa22ba948a7ab9795341fdd6e311be34864",
+    "main/src/story/commonGroundRoute.test.ts": "e2bd0e8334f637d1cf8784cc298200829c43a470f24e41e6a7c7c3dcc25f9d81",
+    "main/src/story/commonGroundDirector.ts": "73bceed58ff5f17df70d118d1c1091819e964e3ae5761af2b145956171cf0983",
+    "main/src/story/commonGroundDirector.test.ts": "54f9f76781e00325d63a3d187184827fcfaf9d444e4d98a8ec9a98356bd30023",
+    "main/src/story/StoryDirectorDriver.tsx": "85327128819f44f745f58f72300da1595a5a2e0283bcdf8777f9495e608f493c",
+    "main/src/story/StoryDirectorDriver.test.tsx": "0f10a92bf7da3b7b23977053e55b5732f68c4965b33a316fc701473b2d54584d",
+    "main/src/story/commonGroundScore.ts": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+    "main/src/story/commonGroundScore.test.ts": "70630be669128d832814a82491d23c61f56927668f085f564920f4063fa3d535"
+  },
+  "defect": "Unbounded current onLeg projection and reachedArc are maximized into credit after only positive displacement. Geometric corner crossing alone does not certify missing incoming leg coverage.",
+  "exactPredictedCpuCases": [
+    "NO_ROUTE_COVERAGE at(-42,51.05,13) withdelta0 seedsfoot; next(-42,51.05,13.01) withdelta.01 currentlycredits1.01 despiteunwalkedstart. Mustremain0untilphysicalreturn/retraversal.",
+    "Afterreference/supportgap state{units:.5,reachedVertex:0,foot:null}; first(-42,51.05,13.5) seedsfoot, next13.51 delta.01 currentlycredits1.51. Mustretain.5 withoutpayinggap.",
+    "Samegap withsavedunits.5, realfeet13.99->14.01 delta.02 crossesvertex1nearproperpoint. MustNOTmarkfullincomingleg2 orgrant2.01 becauseincomingcoveragefrontierneverreachedit."
+  ],
+  "boundedImplementationHint": "Keep existing strict per-update/frontier refusal on ordinary leg movement; do not min-clamp arbitrarylaterprojectiontowardfrontier. Permit residual normalization ONLY at a newly observed incoming-plane crossing within unchangedvertexbound AND with incominglegactuallycovered up tovertexunder existingstrictfrontier/displacement rule. Then existingcurrentoutgoingprojectionwithin thatcertifiedcorner can reconcile residual; futureordinarymovementagainstrict. No genericprojectionmax orbank.",
+  "newRequirement": false,
+  "basis": "Originalfull18/no endpoint/latelegpayment/supportreference/realretraversal clauses; actualpointmotionevidence alone insufficientfororderedcoveredprefix.",
+  "score": "PreservecurrentWIP andcomplete actualdriver lifecycle tests underoriginalscope.",
+  "acceptanceOrBudgetExpansion": false
+}

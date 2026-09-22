@@ -1,0 +1,30 @@
+{
+  "at": "2026-09-06T20:18:56.447596+00:00",
+  "reportRef": "common-physical-discriminator-report.json",
+  "reportSha256": "7d92c397d2a777f1ec250af9f34357cfd450f772e3e5d7730a8659d18f9d7d47",
+  "summaryRef": "verifier/captures/common-physical-discriminator/run2/summary.json",
+  "summarySha256": "aae666c487529c041c8bf54985e04ba76988747c527cf9da1e67b8d72affb475",
+  "isAcceptance": false,
+  "acceptedAsBoundedActualInputEvidence": true,
+  "sourceMutationAuthorized": false,
+  "counts": {
+    "callee": 146,
+    "caller": 146,
+    "positiveDisplacement": 138,
+    "creditAllZero": true,
+    "dropped": 0
+  },
+  "footAtE": [
+    -41.39181373859077,
+    50.988984337742814,
+    12.3487786909752
+  ],
+  "qualification": [
+    "Actual grounded E vicinity, worker exactly H, live reciprocal stage, four positive supported vertex crossings, exact debugger sites and zero pauses are observed. Entering the callee establishes both support/reference conjunctions reached, not a separate body-clearance predicate.",
+    "The actual run did not reproduce the prior credit-six corner plateau. It starts with credit0 and footz12.3487786909752, already .3487787 beyond E z12. E vicinity is not proof of traversing the missing first prefix. All146actual function replays returning0 do not distinguish proper refusal of skipped prefix from erroneous post-corner debt.",
+    "Additional entry-frame limitation: initial footx-41.3918 is .6082 laterally from routex-42. The current vertex gate checks along-leg overshoot and support, not full horizontal distance to each vertex. Do not equate along-plane crossing with the full .35 vertex allowance. The corrected discriminator must observe the complete actual footprint/route bounds.",
+    "Top-level verdict SHORT-HELD-REFERENCE-PROVEN applies only to prerequisite; not COMMON success. Finalcall return remains unobserved; retained pure function replay is separate from actual returned value.",
+    "Before any eighth repair, reuse this working headed driver and instrumentation, ordinarily walk to the incoming side of E, cross E under observation, require actually increasing credit through incoming legs, then measure bounded positivepostplane overshoot. Preserve early15.82/farC/realrecovery predicates."
+  ],
+  "next": "One focused corrected-entry discriminator; no new game source or interpretation needed merely to supply actually walked prefix."
+}

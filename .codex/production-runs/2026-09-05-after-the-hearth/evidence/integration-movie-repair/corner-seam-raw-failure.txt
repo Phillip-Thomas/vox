@@ -1,0 +1,35 @@
+Raw frame-by-frame evidence retained at producer request (inbox 09:33 UTC).
+
+Diagnostic run of the ch13-common rail with a WALKING stub body (4.5 u/s, dt
+0.05) and the production tickCommonGround / routeProgressUnits, taken while
+`vertexReached` still consumed a turning vertex on `distance <= arrive` measured
+to the original vertex while `railGoal` emitted the overshoot goal.
+
+Columns: frame, earned terraUnits, body x/z, emitted goal, live checkReference
+from the worker's socket, live footing support.
+
+  20 units 2.25 body -42.00 14.47 goal [-42, 51.05, 16.6] ref true sup true
+  ...
+  26 units 3.60 body -42.00 15.82 goal [-42, 51.05, 16.6] ref true sup true
+  27 units 3.82 body -42.22 15.84 goal [-44.6, 51.05, 16] ref true sup true   <-- turned at z 15.82, vertex is z 16
+  28 units 3.84 body -42.45 15.86 goal [-44.6, 51.05, 16] ref true sup true
+  29 units 3.86 body -42.67 15.87 goal [-44.6, 51.05, 16] ref true sup true
+  30 units 3.87 body -42.90 15.89 goal [-44.6, 51.05, 16] ref true sup true
+  ...
+  35 units 3.95 body -43.81 16.17 goal [-44, 51.05, 18.6] ref true sup true
+  36 units 4.00 body -43.83 16.39 goal [-44, 51.05, 18.6] ref true sup true
+  37 units 4.00 body -43.85 16.62 goal [-44, 51.05, 18.6] ref true sup true
+  ... frozen at 4.00 through frame 775, body parked past C at (-48, 11.70) ...
+
+Mechanism: the 0.18-unit early turn swings the body's own projection around the
+corner farther than it walked that frame. `routeProgressUnits` caps a frame's
+gain at that frame's displacement, so the frame is refused; every later
+projection is then further beyond the allowance than the last, and the 18-unit
+comparison can never close. The reference and footing checks were true
+throughout — nothing else was failing.
+
+After the fix (require the body to actually pass a turning vertex), the same
+diagnostic run advances continuously and the production predicate closes:
+  PROVED at frame 91  (18 units at 4.5 u/s ~= 4.0 s of walking)
+
+The predicate was not touched. The body was made to walk the corner.

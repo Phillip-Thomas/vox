@@ -1,0 +1,19 @@
+{
+  "director": "score",
+  "metadataCompletedAt": "2026-09-06T07:01:24.773942Z",
+  "createdAtMeaning": "Both note createdAt values record current metadata completion, not an inferred earlier authorship time. The preserved originals contained no authored timestamp.",
+  "changes": [
+    "Added createdAt only to each of the two score peer notes.",
+    "Added a Performance and verification heading above existing treatment verification prose."
+  ],
+  "originalSha256": {
+    "score-treatment.md": "476ab4f727876a60c8aebad9889fd9a9797653edc2fc47b2af39331ff7e18140",
+    "score-peer-notes.jsonl": "cbce58649781fd348154b153549dd9fafc0ceabffb7102965483804ba6513840"
+  },
+  "currentSha256": {
+    "score-treatment.md": "9502d84d7125fceb2d20b1ff9a318c1e0171fd1f336e6cd1d907ca03546ecaab",
+    "score-peer-notes.jsonl": "55fcffbfdc56a8e550bbc64b6fe814faceaed43454cd8485ff6beb90f6d3b052"
+  },
+  "semanticChanges": false,
+  "signatureProduced": false
+}

@@ -1,0 +1,273 @@
+{
+  "schema": "paravoxia.chapterTreatmentProposal.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "candidateVersion": "early-grid-mobile-v1",
+  "authoredBy": "chapter-director",
+  "authoredAt": "2026-09-05T18:49:25.028608+00:00",
+  "status": "ready-for-independent-peer-treatments-unsigned",
+  "sourceSha256": "1eb27bf00229c442169280f126f0f3f15bcad63d3581af76f5c0b8e4d3d0d1a8",
+  "sourceIntentRef": "story-intent.md",
+  "contractChangeRequired": true,
+  "affectedBeats": [
+    "ch1-fixed",
+    "ch1-track",
+    "ch1-raster"
+  ],
+  "adjacentContinuity": [
+    "descent",
+    "ch1-depth"
+  ],
+  "ownerDecisionRef": "owner-decisions.md",
+  "proposedRuntimeBoundary": [
+    {
+      "path": "main/src/story/beats/ch1/ch1-fixed.ts",
+      "symbol": "beatCh1Fixed",
+      "why": "Three objective stages and concise canonical action copy."
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-track.ts",
+      "symbol": "beatCh1Track",
+      "why": "Concise hold instruction; preserve timing and dramatic voice."
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-raster.ts",
+      "symbol": "beatCh1Raster",
+      "why": "Narrow required salvage to first three receipts; one action at a time; retain six fiber/four stone."
+    },
+    {
+      "path": "main/src/story/beats/ch1/rail-ch1-fixed.ts",
+      "symbol": "tick",
+      "why": "Actual pickup then actual extraction then movement-caused shared coverage transfer."
+    },
+    {
+      "path": "main/src/story/beats/ch1/rail-ch1-raster.ts",
+      "symbol": "tick",
+      "why": "Commit one required salvage target, then real yielding patches; no mixed invisible sweep."
+    },
+    {
+      "path": "main/src/story/beats/objectivePrimitives.ts",
+      "symbol": "Ch1FixedObjectiveState, StoryObjectiveGuidanceFacts, DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS",
+      "why": "Add pickup fact, preserve progression-derived stages."
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "symbol": "currentCh1FixedObjectiveState, currentCh1RasterObjectiveState, fixedTutorialProgress, quotaCollected, onBeatEntered, storyDirectorTick ch1-fixed/ch1-raster branches, syncFoundationalStoryObjective, completeFoundationalObjective",
+      "why": "Single authoritative predicates, real receipt feedback, shared transfer event, truthful entry restoration."
+    },
+    {
+      "path": "main/src/story/storyScript.ts",
+      "symbol": "CH1_FIXED_TUTORIAL",
+      "why": "One successful positive-yield harvest threshold; one actual coverage crossing (two frame visits)."
+    },
+    {
+      "path": "main/src/story/debrisSalvage.ts",
+      "symbol": "isDebrisCollected, debrisSalvageComplete, requiredDebrisSalvageComplete (proposed helper)",
+      "why": "Add a distinct first-three-receipts requirement; preserve all-physical-debris meaning of debrisSalvageComplete, collectDebris, loot and migration."
+    },
+    {
+      "path": "main/src/story/world/DebrisField.tsx",
+      "symbol": "DebrisField collectable, useFrame",
+      "why": "Real early pickup permission, pause-safe collection, current-target emphasis."
+    },
+    {
+      "path": "main/src/story/world/storyAnchorResolver.ts",
+      "symbol": "getDebrisPoses",
+      "why": "Only existing index0 placement into opening view; worldgen-owner coordination."
+    },
+    {
+      "path": "main/src/story/world/SideWorkerAvatar.tsx",
+      "symbol": "SideWorkerAvatar",
+      "why": "Visual sole alignment and grounded animation; no physics edit."
+    },
+    {
+      "path": "main/src/story/sideLens.ts",
+      "symbol": "LensRig, fixedScreenCellIndex, computeRigFrame, applySideCameraTransform",
+      "why": "Cinema-owned single viewport-aware coverage authority and geometry epoch; reject resize-as-traversal."
+    },
+    {
+      "path": "main/src/story/feed/surveyBrackets.ts",
+      "symbol": "surveyBracketMode, surveyBracketDemand, collectHarvestBracketTargets, collectSalvageBracketTargets, SURVEY_BRACKET_LIMIT",
+      "why": "Exactly one phase-matched actionable target; tool/yield/actual approach checks."
+    },
+    {
+      "path": "main/src/story/feed/SurveyBracketDriver.tsx",
+      "symbol": "SurveyBracketDriver",
+      "why": "Stable single selection, actual receipt invalidation, exact labels and real projection."
+    },
+    {
+      "path": "main/src/story/feed/regulationVoice.ts",
+      "symbol": "presentRegulationObjective, fixed/track/raster presentation",
+      "why": "Canonical imperative replaces static repeated orders; preserve tracking meaning."
+    },
+    {
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "symbol": "RegulationFeedHud work-order, feed-ledger",
+      "why": "One instruction plus essential current receipt/progress, measured desktop/mobile layout."
+    },
+    {
+      "path": "main/src/story/ux/storyHudLayout.ts",
+      "symbol": "solveStoryFeedLedgerPlacement",
+      "why": "Measured target, text, caption and touch-control non-overlap under Cinema direction."
+    },
+    {
+      "path": "main/src/story/feedRuntime.ts",
+      "symbol": "resetFeedRuntime",
+      "why": "Only if investigation identifies entry-state ownership here; preserve natural flash event."
+    },
+    {
+      "path": "main/src/story/feed/FeedOverlay.tsx",
+      "symbol": "FeedOverlay flash synchronization",
+      "why": "Only a demonstrated DOM/runtime restore mismatch; never a cosmetic mask."
+    },
+    {
+      "path": "main/src/story/storyState.ts",
+      "symbol": "seedForBeat, storyEntryPoint, reset/start/resume entry boundary",
+      "why": "Only exact cold-entry flash repair and faithful diagnostic/earned-state reconstruction."
+    },
+    {
+      "path": "main/src/story/StoryDirectorDriver.tsx",
+      "symbol": "StoryDirectorDriver marker bridge",
+      "why": "Only if existing bridge needs survey availability/readiness integration; no duplicate marker."
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "symbol": "activateGuidedStoryObjective, acknowledgeGuidedStoryProgress, acknowledgeGuidedStoryCompletion",
+      "why": "Only existing semantic receipt/restore integration; audio owner coordinates."
+    },
+    {
+      "path": "main/src/story/ux/inputGlyphs.ts",
+      "symbol": "existing feed token mapping",
+      "why": "Preserve common touch substitution; change only if new canonical wording exposes missing token."
+    },
+    {
+      "path": "main/src/story/autopilot.ts",
+      "symbol": "RailRuntime, committedDebrisTarget",
+      "why": "Expose existing required-target facts to rails without reward/progression bypass."
+    },
+    {
+      "path": "main/src/components/EfficientPlayer.tsx",
+      "symbol": "pickSideTarget",
+      "why": "Conditional shared pure read-only selection extraction so marker matches ordinary picker; no changed harvesting or physics semantics."
+    }
+  ],
+  "allowedLadderDifferences": [
+    {
+      "id": "early.fixed.action-order",
+      "beats": [
+        "ch1-fixed"
+      ],
+      "before": "3 fiber then previously visited fixed cells >=2",
+      "after": "actual debris0 receipt, fiber>=1, one fresh movement-caused coverage transfer",
+      "allowedFields": [
+        "objective.id",
+        "objective.markerLabel",
+        "objective.workOrder",
+        "objective.phase",
+        "completionPredicate",
+        "rail",
+        "ledger"
+      ],
+      "protected": "No item grants; normal extraction yields; preserve beat destination."
+    },
+    {
+      "id": "early.raster.required-set",
+      "beats": [
+        "ch1-raster"
+      ],
+      "before": "all 3-6 debris, six fiber, four stone; mixed target demand",
+      "after": "required debris indices0,1,2; six fiber/four stone unchanged; one salvage target then one yielding patch",
+      "allowedFields": [
+        "objective.workOrder",
+        "objective.markerLabel",
+        "completionPredicate",
+        "requiredTargetSet",
+        "rail",
+        "ledger"
+      ],
+      "protected": "Loot tables, optional piece count/receipt behavior, depth destination, minimum/hold timing."
+    },
+    {
+      "id": "early.shared-coverage",
+      "beats": [
+        "ch1-fixed",
+        "ch1-track"
+      ],
+      "before": "24-world-unit quantization duplicated in camera and director",
+      "after": "Cinema-owned measured viewport coverage; one event for camera and progression; resize epoch cannot award",
+      "allowedFields": [
+        "camera.followQuant",
+        "camera.coverageGeometry",
+        "camera.transferEvent",
+        "progression.coverageCount"
+      ],
+      "protected": "Single LensRig, grounded physical row, existing unbolt bundle/timing."
+    },
+    {
+      "id": "early.presentation",
+      "beats": [
+        "ch1-fixed",
+        "ch1-track",
+        "ch1-raster"
+      ],
+      "before": "multiline static Regulation paragraphs and up to four brackets",
+      "after": "canonical current imperative, single truthful target, compact essential feedback",
+      "allowedFields": [
+        "objective.markerLabel",
+        "objective.workOrder",
+        "hud.geometry",
+        "hud.surfaceVisibility",
+        "survey.targetCount",
+        "survey.selection"
+      ],
+      "protected": "Touch glyphs, journal, accessibility, pause/reset, scene voice and bare reality."
+    },
+    {
+      "id": "early.entry-grounding",
+      "beats": [
+        "ch1-fixed",
+        "ch1-track",
+        "ch1-raster",
+        "ch1-depth"
+      ],
+      "before": "floating visual soles; cold fixed retained white overlay",
+      "after": "visual sole at true capsule foot plane; entry restoration clears unowned flash",
+      "allowedFields": [
+        "avatar.visualTransform",
+        "avatar.animation",
+        "entry.flashRestore"
+      ],
+      "protected": "Physics/collider/up/support, natural descent impact, no change to later effects."
+    }
+  ],
+  "predicates": {
+    "fixedPickup": "isDebrisCollected(0)",
+    "fixedHarvest": "getItemCount(biofiber) >= 1; clean entry requires one actual positive-yield harvest; honor legitimate prior inventory",
+    "fixedTraversal": "pickup && harvest && one movement-caused shared coverage transfer after arming at current frame; stable geometry epoch",
+    "rasterSalvage": "[0,1,2].every(isDebrisCollected)",
+    "rasterComplete": "rasterSalvage && biofiber>=6 && stone>=4 && existing rasterMinimumSeconds && completionHoldSeconds",
+    "optionalSalvage": "index>=3 && index<getDebrisScattered(); remains normal collectible, never required or falsely marked",
+    "depth": "existing all-three supply pod receipts"
+  },
+  "restore": {
+    "inventoryAuthority": "existing saved inventory and story:debris:<i> receipts",
+    "newPersistence": "none proposed",
+    "outOfOrder": "honor real earned inventory; do not replay receipts for tutorial order",
+    "traversal": "transient arm on current frame after real resource predicates; reset does not award; completed track milestone remains current authority",
+    "cueRestoration": "existing objectiveRestore reason; no acquisition or completion on seed/resume"
+  },
+  "peerOpenItems": [
+    "Cinema exact initial debris0 pose, projected safe edge, shared geometry epoch and HUD layout",
+    "Score actual receipt/entry arbitration, silence and anc.track.unbolt continuity",
+    "Reconcile narrowed raster mandatory first-three set and optional-piece presentation",
+    "Identify actual cold-entry flash writer/restore race before choosing conditional files"
+  ],
+  "requiredNewEvidence": [
+    "manual desktop/portrait pickup-harvest-exit receipts and frames",
+    "manual raster required/optional outcome3/4/6 single-target lifecycle",
+    "three cold honest movie runs and minimum-salvage Ch3 continuation",
+    "stationary/moving resize, pause/focus, reduced motion, low tier, replay/deep-link/earned Continue",
+    "exact semantic cue identity/count traces; objective ready alone is insufficient",
+    "fresh UX/canon/cinema/score/cohesion reviews"
+  ],
+  "scopeStatus": "Planning lock unchanged; no runtime edits or signatures; integrator must validate exact symbols and add affected existing tests/generated views to final bounded lock."
+}

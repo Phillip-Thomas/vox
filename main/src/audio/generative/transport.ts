@@ -1,4 +1,5 @@
 import { PHRASE_BARS } from './tuning.ts';
+import { rungForQuantize, type HitQuantumRequest, type HitQuantumResult, type HitQuantumRung } from './hitSchedule.ts';
 
 // --- The transport (§8.1: ONE clock) -----------------------------------------------------------
 //
@@ -169,6 +170,42 @@ export function nextQuantumTime(
       pendingApplied = true;
     }
   }
+}
+
+/** The same cap/floor/degrade law on the bed's changing tempo and meter. */
+export function resolveTransportHitQuantum(t: TransportState, req: HitQuantumRequest): HitQuantumResult {
+  const rungs: HitQuantumRung[] = ['bar', 'beat', 'step'];
+  const start = rungs.indexOf(rungForQuantize(req.quantize));
+  const floor = Math.max(start, rungs.indexOf(req.floorRung ?? 'step'));
+  const attempts: { rung: HitQuantumRung; phrase: boolean }[] = [];
+  if (req.quantize === 'phrase') attempts.push({ rung: 'bar', phrase: true });
+  for (let i = start; i <= floor; i++) attempts.push({ rung: rungs[i], phrase: false });
+  let result: HitQuantumResult | null = null;
+  for (let index = 0; index < attempts.length; index++) {
+    const { rung, phrase } = attempts[index];
+    const projection: TransportState = { ...t, meter: { ...t.meter } };
+    let earlier: number | null = null;
+    let later: number | null = null;
+    while (later == null) {
+      const dur = barDurationSec(projection.bpm, projection.meter);
+      const eligible = !phrase || projection.barIndex % PHRASE_BARS === 0;
+      const slots = rung === 'bar' ? 1 : projection.meter.beatsPerBar * (rung === 'step' ? projection.meter.sixteenthsPerBeat / 2 : 1);
+      if (eligible) {
+        for (let slot = 0; slot < slots; slot++) {
+          const time = projection.barStartTime + dur * slot / slots;
+          if (time + 1e-9 < req.notBefore) continue;
+          if (time + 1e-9 >= req.desired) { later = time; break; }
+          earlier = time;
+        }
+      }
+      if (later == null) advanceTransportBar(projection);
+    }
+    const time = req.mayLead && earlier != null && req.desired - earlier < later - req.desired ? earlier : later;
+    const slackMs = (time - req.desired) * 1000;
+    result = { step: projection.barIndex, time, quantumLanded: rung, slackMs, fitsCap: Math.abs(slackMs) <= req.capMs + 1e-6, rungsDegraded: index };
+    if (result.fitsCap) return result;
+  }
+  return result!;
 }
 
 /**

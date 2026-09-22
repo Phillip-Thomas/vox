@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 708294,
+  "stop_reason": "end_turn",
+  "session_id": "4ca1498d-0afa-4faa-bd2d-ce22d8529c3c",
+  "total_cost_usd": 3.8140889999999996,
+  "usage": {
+    "input_tokens": 74,
+    "cache_creation_input_tokens": 115792,
+    "cache_read_input_tokens": 2399658,
+    "output_tokens": 58174,
+    "output_tokens_details": {
+      "thinking_tokens": 17107
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 115792,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1843,
+        "cache_read_input_tokens": 121511,
+        "cache_creation_input_tokens": 277,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 277
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1545,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00162,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 74,
+      "outputTokens": 58174,
+      "cacheReadInputTokens": 2399658,
+      "cacheCreationInputTokens": 115792,
+      "webSearchRequests": 0,
+      "costUSD": 3.8124689999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 17107,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 44,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: pass \u2014 both route classes found and reproducible, but degenerate; two objective defects found first.** CPU 1.19 s, one bounded run.\n\n## Answer to the commission\nSame-endpoint outer (reference-clear, no witness) and shorter (occluded, one witness) routes **exist** on the present Origin tree/shore geometry and both fit the caps. The distinction is real but **2\u20138 samples wide** and rests entirely on the hero trunk, because the arena has **no terrain relief**.\n\n## Defects (unambiguous, cause named)\n1. **`planAgentSurfaceRoute` is blind to the hero trunk collider.** It knows terrain voxels only; the unrestricted shortest tree\u2192shore route occupies cell `[-12,11]`, pose `(-24.00,51.05,22.00)` \u2014 inside the trunk box. Must be fixed before any W-7744 route near the tree is authored.\n2. **Pass-1's ray was not shipped truth.** `shouldVoxelExist` is not clipped to the rendered cube; `agentSurfaceNavigation` gates it with `insideRenderedTerrain (\u226425)`, pass 1 did not. 717 columns report solid at y=26; on 48 comparison lines pass-1 blocks 48/48, the gated DDA blocks 0/48. **Pass-1's 29.3 % terrain-occlusion census is an artifact.** Pass-1's eye 1.6 was unsourced (real: visor 1.85, chest 1.30, hand 1.25, `PLAYER_EYE_HEIGHT` 1.35); its 3.0-unit near-field exemption is unnecessary (0 self-column hits with correct DDA).\n\n## Measurements (shared endpoints `(-28.00,51.05,22.00)` \u2192 `(4.00,51.05,-10.00)`)\nFixed reference `(-30.00,51.05,32.00)`, support `[-15,25,16]`, socket 1.85 \u2192 `(-30.00,52.90,32.00)`.\n\n| | Outer (no witness) | Shorter (needs witness) | Cap |\n|---|---|---|---|\n| Length | **68.00** | **64.00** | 120 (headroom 52) |\n| Samples | **96** | **92** | 128 (headroom 32) |\n| Blocked samples | **0** | **2** (both trunk, 0 terrain) | \u2014 |\n| Occluded span | \u2014 | `(-23,51.05,20)`\u2192`(-22,51.05,20)` | \u2014 |\n\nBinding bound = **points**; neither cap approached, so this run neither confirms nor refutes the pass-1 \"120 units vs 128 samples\" concern. Caps not relaxed, no corner decimated.\n\nPlanner cross-validation: outer 34/34 edges + 10/10 corner legs, shorter 32/32 + 10/10, rejected-cell sample 26/26 agree. All `walk` / `dry-surface-path`, no water/jetpack/cross-face.\n\n## Why it's degenerate\n- **Support-height histogram = `{\"25\": 1193}`** \u2014 every walkable node is on the flat cube-face plateau. No relief can occlude a level sightline.\n- Across all 96 candidate references (30 qualifying): outer always 68.00, shorter always 64.00, detour always **+4.00 units**; occluded samples 2\u20138, **trunk in every case, terrain zero**. Widest shadow: reference `(-22.00,51.05,26.00)` \u2192 8/92 samples.\n- **981/1193 nodes (82 %)** discharge the witness requirement, including the start reference itself (walk distance 0). Stable across reference sockets 0.6/1.0/1.35/1.85.\n\n## Director packet (geometry, not proposals)\n(a) sign as-is; (b) reference at `(-22,51.05,26)` for the widest shadow this geometry offers; (c) re-pick endpoints so the pond \u2014 the only non-flat feature \u2014 lies between them (not measured; new endpoint pair is a director call); (d) reopen the bounded arena decision per CG-CIN-CH-02. Defect 1 must be fixed regardless.\n\n## Limitations\nPristine procedural terrain only (no live edits; live confirmation still needs a client + contracted debug hook). Nothing visually verified \u2014 no render/GPU/night/mobile/reduced-motion/tier/readability. Reference sweep is 96 candidates at 3\u201324 units, bounded not exhaustive. Witness cylinders/hysteresis not simulated, only the world-space line. Sockets are **measured candidates**, not canon.\n\n## Artifacts\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/geometry-pass2-probe.mts`\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/geometry-pass2.json`\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/geometry-pass2.md` (full tables, waypoint lists, hashes, reproduce command)\n\nPass-1 artifacts and all read source files hash-verified unchanged; no source, worldgen, build, server, GPU, validator or canon touched.",
+  "ttft_ms": 1465,
+  "type": "result",
+  "duration_ms": 713630,
+  "uuid": "d0eadec5-cf62-4c04-9db5-f4b1ff9e4f1a",
+  "ttft_stream_ms": 689,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 689,
+  "queued_turn_count": 0
+}

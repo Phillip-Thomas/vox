@@ -1,0 +1,130 @@
+{
+  "schema": "paravoxia.shippedVisualBaseline.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "sceneId": "common-ground",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "capturedAt": "2026-09-06T05:36:40.694Z",
+  "captureAuthority": "Current runtime before source edits; qualified SwiftShader environmental grounding only",
+  "captures": [
+    {
+      "path": "../../story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t040s.png",
+      "sha256": "10bd6b6fc98a00f80c586ada77b1c2e6d9aafe2c182899ecd392f0d3cc1cf114",
+      "bytes": 353165,
+      "kind": "still-frame",
+      "anchor": "anc.cg.repeated-measure",
+      "anchorMapping": "Pre-change environment at proposed story boundary only; the future semantic event is NOT shown.",
+      "beat": "ch4-audit",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 960,
+          "height": 540
+        },
+        "audio": null
+      },
+      "viewport": "960x540",
+      "qualityTier": "swiftshader-low",
+      "hudSuppressed": false,
+      "fixture": "debug deep-link ?story=ch4-audit (seedForBeat: ch4Arrived) + movie autopilot; NOT a natural journey",
+      "coverage": "Current player view and shore/HUD; worker hidden and installed core absent in fixture.",
+      "stateRef": "../../story-runs/2026-09-06-common-ground/evidence/targeted-baseline/targeted-baseline.json"
+    },
+    {
+      "path": "../../story-runs/2026-09-06-common-ground/evidence/targeted-baseline/tidegarden-home-core/tidegarden-home-core_t046s.png",
+      "sha256": "6b75db88597ab1be04988b5b802249c6c00376e8bf3bbd984aeddf136b877486",
+      "bytes": 371929,
+      "kind": "still-frame",
+      "anchor": "anc.cg.return-chosen",
+      "anchorMapping": "Pre-change environment at proposed story boundary only; the future semantic event is NOT shown.",
+      "beat": "ch10-cold",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 960,
+          "height": 540
+        },
+        "audio": null
+      },
+      "viewport": "960x540",
+      "qualityTier": "swiftshader-low",
+      "hudSuppressed": false,
+      "fixture": "debug deep-link ?story=ch10-cold (seedForBeat: ch9Hearth + tidegarden habitat-core-online / shelter-certified / two-world-handoff receipts); NOT a natural journey; post-station ch12 bonded-cell install has NO fixture",
+      "coverage": "Current player view and shore/HUD; worker hidden and installed core absent in fixture.",
+      "stateRef": "../../story-runs/2026-09-06-common-ground/evidence/targeted-baseline/targeted-baseline.json"
+    }
+  ],
+  "cameraStates": [
+    {
+      "anchor": "anc.cg.repeated-measure",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "measurement": "Recorded runtime camera metadata in the pre-change fixture."
+    },
+    {
+      "anchor": "anc.cg.return-chosen",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "measurement": "Recorded runtime camera metadata in the pre-change fixture."
+    }
+  ],
+  "paletteStates": [
+    {
+      "anchor": "anc.cg.repeated-measure",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ],
+      "sourceHashes": [
+        {
+          "path": "main/src/utils/planetArtDirection.ts",
+          "sha256": "7c13768085c68e175c4d0a0218a7fbe0e7a027f33012149f5742177bed3c3e50"
+        },
+        {
+          "path": "main/src/utils/planetVisualProfile.ts",
+          "sha256": "129e004e92eeeab2de473dc6697647c450cca2884bc68c13039a90009b931ab0"
+        }
+      ],
+      "measurement": "Source-derived family only; rendered grade/color values and hardware parity remain unmeasured.",
+      "realityStage": "material"
+    },
+    {
+      "anchor": "anc.cg.return-chosen",
+      "family": "planet-derived",
+      "sourceRefs": [
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts"
+      ],
+      "sourceHashes": [
+        {
+          "path": "main/src/utils/planetArtDirection.ts",
+          "sha256": "7c13768085c68e175c4d0a0218a7fbe0e7a027f33012149f5742177bed3c3e50"
+        },
+        {
+          "path": "main/src/utils/planetVisualProfile.ts",
+          "sha256": "129e004e92eeeab2de473dc6697647c450cca2884bc68c13039a90009b931ab0"
+        }
+      ],
+      "measurement": "Source-derived family only; rendered grade/color values and hardware parity remain unmeasured.",
+      "realityStage": "alive"
+    }
+  ],
+  "headedStatus": "pending",
+  "renderer": {
+    "queriedAt": "2026-09-06T05:34:04.963Z",
+    "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+    "vendor": "Google Inc. (Google)"
+  },
+  "buildManifestSha256": "4c9d71ceb6b142ad5e855e72eafc4e1325db44c77f489d8fc04aafc3a28b208e",
+  "limitations": [
+    "No worker silhouette or restored core was rendered by these fixtures.",
+    "No new ch13 event, housing, trace, route or reciprocal action is shown.",
+    "No hardware, lighting, timing, performance, listening or natural-journey acceptance."
+  ],
+  "producerStageDisposition": "Current visible baseline and explicit absent-fixture report ground bounded scene work. New physical state and apparatus blocking require post-implementation evidence; no future frame is claimed here.",
+  "independentInspectionRef": "../../story-runs/2026-09-06-common-ground/cinema-targeted-baseline.md"
+}

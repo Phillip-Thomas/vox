@@ -1,0 +1,556 @@
+{
+  "minutes": 32,
+  "planets": {
+    "5": {
+      "seed": 5,
+      "archetype": "verdant",
+      "pass": true,
+      "stats": {
+        "bars": 624,
+        "phrases": 78,
+        "chordChanges": 242,
+        "distinctChords": 22,
+        "mediants": 6,
+        "landingPivots": 1,
+        "stageBlooms": 0,
+        "modeDrifts": 12,
+        "melodyStatements": 17,
+        "distinctStatements": 17,
+        "barNovelty": 0.966,
+        "tabuBypasses": 13,
+        "barTabuBypasses": 0,
+        "sections": 12,
+        "blooms": 10,
+        "commonToneRelaxes": 0,
+        "worstSignalStep": 0.626,
+        "modes": "dorian:248 mixolydian:195 ionian:48 aeolian:133",
+        "arrangement": "BED:224 BUILD:112 BLOOM:128 EBB:96 REST:64"
+      },
+      "checks": [
+        "finite-plans:PASS:0",
+        "chord-legality:PASS:0",
+        "phrase-tabu:PASS:0",
+        "mediant-ration:PASS:0",
+        "mode-drift:PASS:0",
+        "signal-smoothness:PASS:0",
+        "no-deadlock:PASS:0",
+        "bar-tabu:PASS:0",
+        "bloom-paid:PASS:0",
+        "section-pairs:PASS:0",
+        "bloom-budget:PASS:0"
+      ],
+      "globalBarNovelty": 0.966,
+      "windowRepeats32": 19,
+      "dupByState": {
+        "BED": {
+          "bars": 224,
+          "dup": 0
+        },
+        "BUILD": {
+          "bars": 112,
+          "dup": 0
+        },
+        "BLOOM": {
+          "bars": 128,
+          "dup": 0
+        },
+        "EBB": {
+          "bars": 96,
+          "dup": 0
+        },
+        "REST": {
+          "bars": 64,
+          "dup": 21
+        }
+      },
+      "blooms": {
+        "count": 10,
+        "lengthsPhrases": [
+          2,
+          2,
+          1,
+          2,
+          2,
+          1,
+          2,
+          2,
+          1,
+          1
+        ],
+        "gapsMin": [
+          2.87,
+          4.1,
+          4.51,
+          2.05,
+          4.1,
+          2.46,
+          4.1,
+          2.87,
+          1.64
+        ]
+      },
+      "builds": {
+        "count": 10,
+        "lengthsPhrases": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          3,
+          1,
+          3,
+          1
+        ]
+      },
+      "statements": {
+        "count": 17,
+        "gapsPhrases": [
+          7,
+          1,
+          1,
+          8,
+          11,
+          2,
+          3,
+          6,
+          13,
+          2,
+          1,
+          4,
+          7,
+          1,
+          3,
+          1
+        ]
+      },
+      "sections": {
+        "count": 12,
+        "repeatedPairs": 0,
+        "pairs": [
+          "0.3|fall",
+          "2.3.4|rise",
+          "0|rise",
+          "6|plateau",
+          "2.4|plateau",
+          "2.5|fall",
+          "2.6|rise",
+          "4.5.6|fall",
+          "0.2.3|plateau",
+          "0.3|arch",
+          "0.4.5|plateau",
+          "2.3.4|arch"
+        ],
+        "bloomBudgets": [
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "withheld": [
+          "lead",
+          "lead",
+          null,
+          "lead",
+          "shimmer",
+          "percussion",
+          "percussion",
+          "shimmer",
+          "percussion",
+          "lead",
+          "percussion",
+          "shimmer"
+        ]
+      }
+    },
+    "8": {
+      "seed": 8,
+      "archetype": "frozen",
+      "pass": true,
+      "stats": {
+        "bars": 1056,
+        "phrases": 132,
+        "chordChanges": 417,
+        "distinctChords": 16,
+        "mediants": 15,
+        "landingPivots": 0,
+        "stageBlooms": 0,
+        "modeDrifts": 6,
+        "melodyStatements": 30,
+        "distinctStatements": 30,
+        "barNovelty": 0.868,
+        "tabuBypasses": 100,
+        "barTabuBypasses": 0,
+        "sections": 21,
+        "blooms": 9,
+        "commonToneRelaxes": 9,
+        "worstSignalStep": 0.688,
+        "modes": "lydian:886 ionian:120 mixolydian:48 aeolian:2",
+        "arrangement": "BED:448 BUILD:128 BLOOM:128 EBB:104 REST:248"
+      },
+      "checks": [
+        "finite-plans:PASS:0",
+        "chord-legality:PASS:0",
+        "phrase-tabu:PASS:0",
+        "mediant-ration:PASS:0",
+        "mode-drift:PASS:0",
+        "signal-smoothness:PASS:0",
+        "no-deadlock:PASS:0",
+        "bar-tabu:PASS:0",
+        "bloom-paid:PASS:0",
+        "section-pairs:PASS:0",
+        "bloom-budget:PASS:0"
+      ],
+      "globalBarNovelty": 0.868,
+      "windowRepeats32": 94,
+      "dupByState": {
+        "BED": {
+          "bars": 448,
+          "dup": 5
+        },
+        "BUILD": {
+          "bars": 128,
+          "dup": 0
+        },
+        "BLOOM": {
+          "bars": 128,
+          "dup": 0
+        },
+        "EBB": {
+          "bars": 104,
+          "dup": 1
+        },
+        "REST": {
+          "bars": 248,
+          "dup": 133
+        }
+      },
+      "blooms": {
+        "count": 9,
+        "lengthsPhrases": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          2,
+          1
+        ],
+        "gapsMin": [
+          3.15,
+          4.12,
+          5.82,
+          4.36,
+          5.58,
+          3.39,
+          2.91,
+          1.45
+        ]
+      },
+      "builds": {
+        "count": 9,
+        "lengthsPhrases": [
+          1,
+          2,
+          3,
+          2,
+          1,
+          3,
+          1,
+          1,
+          2
+        ]
+      },
+      "statements": {
+        "count": 30,
+        "gapsPhrases": [
+          3,
+          2,
+          3,
+          5,
+          3,
+          3,
+          1,
+          6,
+          4,
+          1,
+          2,
+          4,
+          8,
+          1,
+          5,
+          3,
+          1,
+          2,
+          15,
+          19,
+          4,
+          9,
+          5,
+          1,
+          6,
+          3,
+          2,
+          6,
+          1
+        ]
+      },
+      "sections": {
+        "count": 21,
+        "repeatedPairs": 0,
+        "pairs": [
+          "3.6|arch",
+          "0.3|arch",
+          "3.5.6|rise",
+          "2.3|arch",
+          "0|arch",
+          "0.4.5|fall",
+          "0.4.6|rise",
+          "0.5|rise",
+          "0.2|fall",
+          "1.4.5|fall",
+          "0.4|rise",
+          "0.5|fall",
+          "3.5|plateau",
+          "6|plateau",
+          "6|fall",
+          "0.4|plateau",
+          "2.6|arch",
+          "0.3.4|arch",
+          "5|plateau",
+          "1.3.5|plateau",
+          "3.4|plateau"
+        ],
+        "bloomBudgets": [
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        "withheld": [
+          "ostinato",
+          null,
+          "shimmer",
+          "ostinato",
+          "lead",
+          "ostinato",
+          "shimmer",
+          null,
+          null,
+          "percussion",
+          "ostinato",
+          null,
+          "shimmer",
+          null,
+          null,
+          "percussion",
+          null,
+          "ostinato",
+          null,
+          "shimmer",
+          "percussion"
+        ]
+      }
+    },
+    "10": {
+      "seed": 10,
+      "archetype": "volcanic",
+      "pass": true,
+      "stats": {
+        "bars": 664,
+        "phrases": 83,
+        "chordChanges": 264,
+        "distinctChords": 15,
+        "mediants": 4,
+        "landingPivots": 0,
+        "stageBlooms": 0,
+        "modeDrifts": 10,
+        "melodyStatements": 21,
+        "distinctStatements": 21,
+        "barNovelty": 0.928,
+        "tabuBypasses": 16,
+        "barTabuBypasses": 0,
+        "sections": 13,
+        "blooms": 8,
+        "commonToneRelaxes": 0,
+        "worstSignalStep": 0.633,
+        "modes": "aeolian:179 dorian:162 mixolydian:275 ionian:48",
+        "arrangement": "BED:296 BUILD:120 BLOOM:72 EBB:88 REST:88"
+      },
+      "checks": [
+        "finite-plans:PASS:0",
+        "chord-legality:PASS:0",
+        "phrase-tabu:PASS:0",
+        "mediant-ration:PASS:0",
+        "mode-drift:PASS:0",
+        "signal-smoothness:PASS:0",
+        "no-deadlock:PASS:0",
+        "bar-tabu:PASS:0",
+        "bloom-paid:PASS:0",
+        "section-pairs:PASS:0",
+        "bloom-budget:PASS:0"
+      ],
+      "globalBarNovelty": 0.928,
+      "windowRepeats32": 31,
+      "dupByState": {
+        "BED": {
+          "bars": 296,
+          "dup": 2
+        },
+        "BUILD": {
+          "bars": 120,
+          "dup": 0
+        },
+        "BLOOM": {
+          "bars": 72,
+          "dup": 0
+        },
+        "EBB": {
+          "bars": 88,
+          "dup": 0
+        },
+        "REST": {
+          "bars": 88,
+          "dup": 46
+        }
+      },
+      "blooms": {
+        "count": 8,
+        "lengthsPhrases": [
+          1,
+          1,
+          1,
+          1,
+          2,
+          1,
+          1,
+          1
+        ],
+        "gapsMin": [
+          5.01,
+          1.93,
+          3.86,
+          5.4,
+          3.08,
+          2.7,
+          5.78
+        ]
+      },
+      "builds": {
+        "count": 8,
+        "lengthsPhrases": [
+          1,
+          1,
+          1,
+          3,
+          1,
+          2,
+          3,
+          3
+        ]
+      },
+      "statements": {
+        "count": 21,
+        "gapsPhrases": [
+          3,
+          1,
+          3,
+          5,
+          4,
+          1,
+          2,
+          2,
+          6,
+          4,
+          9,
+          1,
+          4,
+          2,
+          13,
+          1,
+          6,
+          8,
+          1,
+          5
+        ]
+      },
+      "sections": {
+        "count": 13,
+        "repeatedPairs": 0,
+        "pairs": [
+          "0.3.4|rise",
+          "1|arch",
+          "0.4.5|rise",
+          "0.6|fall",
+          "0.4|fall",
+          "3.4|fall",
+          "1.2|rise",
+          "2.4.6|fall",
+          "3.4|arch",
+          "1.5.6|fall",
+          "4|plateau",
+          "5.6|arch",
+          "4|rise"
+        ],
+        "bloomBudgets": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        "withheld": [
+          "ostinato",
+          null,
+          "percussion",
+          "ostinato",
+          "ostinato",
+          "ostinato",
+          "percussion",
+          "lead",
+          "ostinato",
+          "ostinato",
+          null,
+          "percussion",
+          null
+        ]
+      }
+    }
+  }
+}

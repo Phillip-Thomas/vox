@@ -1,0 +1,362 @@
+{
+  "schema": "paravoxia.storyCandidateValidation.v1",
+  "checkedAt": "2026-09-06T05:04:35.398Z",
+  "passed": true,
+  "checks": [
+    {
+      "id": "three-unique-directors",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "chapter-signature-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "chapter-candidate-hash",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "chapter-decisions-hash",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "chapter-approves",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "score-signature-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "score-candidate-hash",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "score-decisions-hash",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "score-approves",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "cinematography-signature-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "cinematography-candidate-hash",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "cinematography-decisions-hash",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "cinematography-approves",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-cinematography-01-unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-cinematography-01-authorship",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-cinematography-01-recipient",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-cinematography-01-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-cinematography-01-blocking-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-cinematography-02-unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-cinematography-02-authorship",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-cinematography-02-recipient",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-cinematography-02-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-cinematography-02-blocking-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-score-01-unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-score-01-authorship",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-score-01-recipient",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-score-01-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-chapter-to-score-01-blocking-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-chapter-01-unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-chapter-01-authorship",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-chapter-01-recipient",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-chapter-01-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-chapter-01-blocking-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-chapter-02-unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-chapter-02-authorship",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-chapter-02-recipient",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-chapter-02-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-chapter-02-blocking-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-cinematography-01-unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-cinematography-01-authorship",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-cinematography-01-recipient",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-cinematography-01-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-cinematography-01-blocking-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-cinematography-02-unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-cinematography-02-authorship",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-cinematography-02-recipient",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-cinematography-02-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-score-to-cinematography-02-blocking-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-CH-01-unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-CH-01-authorship",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-CH-01-recipient",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-CH-01-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-CH-01-blocking-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-CH-02-unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-CH-02-authorship",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-CH-02-recipient",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-CH-02-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-CH-02-blocking-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-SC-01-unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-SC-01-authorship",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-SC-01-recipient",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-SC-01-lossless",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "note-CG-CIN-SC-01-blocking-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "all-six-peer-routes",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "blind-corpus-hash",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "blind-one-resource",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "blind-no-tools",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "blind-no-project-context",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "blind-report-exists",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "no-inferred-owner-decisions",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "id": "decisions-explicit",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

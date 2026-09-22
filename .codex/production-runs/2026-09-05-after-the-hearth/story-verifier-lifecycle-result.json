@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 1432912,
+  "stop_reason": "end_turn",
+  "session_id": "d93476d2-d5a8-490c-92c9-d8683af30896",
+  "total_cost_usd": 14.325334499999999,
+  "usage": {
+    "input_tokens": 278,
+    "cache_creation_input_tokens": 247849,
+    "cache_read_input_tokens": 18620903,
+    "output_tokens": 101278,
+    "output_tokens_details": {
+      "thinking_tokens": 30862
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 247849,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1660,
+        "cache_read_input_tokens": 252741,
+        "cache_creation_input_tokens": 1299,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1299
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2993,
+      "outputTokens": 12,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.003053,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 278,
+      "outputTokens": 101278,
+      "cacheReadInputTokens": 18620903,
+      "cacheCreationInputTokens": 247849,
+      "webSearchRequests": 0,
+      "costUSD": 14.322281499999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 30862,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 146,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: FAIL (interim checkpoint).** The lifecycle repair fixed both previously measured blockers, but two **new** blocking runtime defects stop ch13 before a single route sample exists, and the valid intermediate\u2011Continue case is still unproved. Finalized and ended per root control `pause` (11:42:15Z). No publication authorized.\n\n**Gate + identity (all independently rechecked)**\n- Repair invocation finished exit 0; `ready:true`; control/readiness/manifest all `51b25376\u202602c3`; **96/96 source hashes rehashed identical, 0 drift** (again after the build and again at exit).\n- Independent full `npm --prefix main run verify`: **EXIT 0, 348 files, 3068 tests, build ok**, 61 s \u2014 `verifier/logs/final-source/verify-final.log` (`53678121\u2026e16c9`). BUILD READY announced; root replaced the preview.\n- Root preview `http://127.0.0.1:45091/`: `<title>Paravoxia</title>`; index **and** bundle `index-Bquz6XRz.js` byte\u2011identical to my own `main/dist`; carries `__paravoxiaCommonGround`. Hardware headed ANGLE (NVIDIA GB10), heavy lock `flock -n` acquired/released, no owner bypassed. I started no server; none orphaned.\n\n**Confirmed fixed (measured):** ch13\u2011survey boots **on foot**; capsule\u2011centre frame reconciled (`bodyCentre` 52.789 / grounded `bodyPose` 50.989, \u03941.8 on live up; arrives 0.303 < 0.35); AV rail again accepts anchors (`repeated-measure`, `demonstration-opened`, `hatch-boarded`, `lift-committed`); ch13\u2011home review\u2192choose\u2011return\u2192ch13\u2011return at 2704 ms, 0 nudges/errors.\n\n**Blocker VF3\u2011FOOTING\u20111** \u2014 200 shipped F performs at S (`resolver-perform`, `returned`) left `survey.phase: awaiting-start`, 0 samples, prompt live, marker reading **0 m**; `supported:false` in 1501/1555 samples. Bounded jump\u2011height diagnostic: cell 25 (standing) 0/13 supported, **cell 26 59/59**, cell 27 0/14 \u2192 the queried terrain model's ground top is y=53 while the body stands at 50.99 \u2014 **one voxel cell (2 units) of disagreement**, localised (landing area agrees). Failing clause remains inferred; no cause asserted, no predicate touched. World: seed 3215739679, coord \u22121,\u22121.\n\n**Blocker VF3\u2011AVHOME\u20111** \u2014 through all of ch13\u2011home the AV runtime reported `beat: ch13-home`, `activationSequence 0`, empty history and empty pending, while the chapter had fired `home-steady`/`fault-reviewed`. Claims only non\u2011acceptance by the AV rail \u2014 **no cue/audibility claim; nothing was listened to** (root's `score.mood=restored-home` note applied).\n\n**Open proof gap VF3\u2011CG008\u20111** \u2014 isolated AV\u2011order boundary probe only (labelled as such): survey side refuses `route-offered`/`route-tested` without the final receipt; **mid\u2011common does not reproduce**. A physical partial survey was impossible because blocker 1 refuses the first sample; the engineer pass must reproduce it through the real save/driver seam.\n\n**Harness (mine only, no game source/test touched):** stall predicate never armed (`__autopilot.routeAction` = idle, 200 out\u2011of\u2011scope resets) \u2192 now leads with the chapter's rail action; `cgHoldReason` nesting fixed; pose selection leads with the published hook and pose\u2011source switches no longer count as teleports; new `cg-footing-diag.mjs` (+ its `frameStats` bug fixed, summary reconstructed offline from its own trace and labelled). Offline self\u2011tests **25/25**, `--self-test` OK.\n\n**Not measured, not claimed:** any route sample, either route class, 18 units, manual corner, common beat, completion, three cold runs, station bridge, full movie, the 28 anchors as a set, 17+2 lifecycles, reset matrix, variants, every performance figure, all audio.\n\n**Artifacts:** `verification-world-interim-report.json|.md`, `verifier-findings.json` (prior findings retained + archived), `verifier-progress.md`, `verifier/captures/final/{smoke-home,survey-movie,footing-diag}` (53 frames + traces), `verifier/logs/final-source/*`, `verifier/probes/*`, `verifier/tests/*` \u2014 all sha256\u2011inventoried in the JSON report.",
+  "ttft_ms": 1374,
+  "type": "result",
+  "duration_ms": 1702578,
+  "uuid": "0d218ccc-29c5-4dd9-ba03-ced73812b29e",
+  "ttft_stream_ms": 870,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 870,
+  "queued_turn_count": 0
+}

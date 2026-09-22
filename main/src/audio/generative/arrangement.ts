@@ -31,6 +31,11 @@ export interface ArrangementState {
   name: ArrangementStateName;
   /** Phrases spent in the current state (including the one about to play). */
   dwell: number;
+  /** Stage 5: span of the BUILD in flight (phrases) and length of the BLOOM it lands (phrases). */
+  buildSpan: number;
+  bloomPhrases: number;
+  /** The BUILD in flight was forced (warp/launch), not paid for by the section planner. */
+  forcedBuild: boolean;
 }
 
 export interface ArrangementInputs {
@@ -46,10 +51,31 @@ export interface ArrangementInputs {
   forceBuild: boolean;
   /** Warp just ended — EBB on the next boundary (§8.4). */
   forceEbb: boolean;
+  /**
+   * Stage 5: the section planner's intention for THIS phrase boundary. When
+   * present, the planner owns when a BUILD starts and how long BUILD/BLOOM
+   * last; the machine keeps its states, era caps, dwell bounds and forced
+   * gestures. Absent → the shipped one-phrase-at-a-time draws.
+   */
+  intent?: ArrangementIntent;
+}
+
+/** The planner's per-boundary intention (sectionPlanner.ts → arrangement machine). */
+export interface ArrangementIntent {
+  /** The planned BUILD begins on this phrase (BED/REST → BUILD). */
+  buildNow: boolean;
+  /** The phrase before a planned BUILD: lift REST → BED so the build has a bed to rise from. */
+  liftNow: boolean;
+  /** BUILD lasts this many phrases (1–3), then blooms. */
+  buildSpan: number;
+  /** BLOOM lasts exactly this many phrases (1–2), then EBBs. */
+  bloomPhrases: number;
+  /** The section carries no bloom budget: no stochastic BED → BUILD (forced gestures excepted). */
+  randomBuildAllowed: boolean;
 }
 
 export function createArrangement(): ArrangementState {
-  return { name: 'BED', dwell: 1 };
+  return { name: 'BED', dwell: 1, buildSpan: 1, bloomPhrases: DWELL_MAX.BLOOM, forcedBuild: false };
 }
 
 const clamp01 = (v: number): number => Math.min(1, Math.max(0, v));
@@ -73,6 +99,15 @@ export function advanceArrangementPhrase(
   const draw = musicUnit(planetSeed, SALT_ARRANGE, phraseIndex);
   const pick = musicUnit(planetSeed, SALT_ARRANGE_PICK, phraseIndex);
   const buildAllowed = !inputs.bare && inputs.era >= ERA_MATERIAL;
+  const intent = inputs.intent;
+  const beginBuild = (forced: boolean): ArrangementState => {
+    enter(state, 'BUILD');
+    // A forced gesture (warp, launch) is timed to its event: the shipped one-phrase build.
+    state.buildSpan = forced ? 1 : Math.max(1, intent?.buildSpan ?? 1);
+    state.bloomPhrases = Math.max(1, intent?.bloomPhrases ?? DWELL_MAX.BLOOM);
+    state.forcedBuild = forced;
+    return state;
+  };
 
   // Era cap: `bare` collapses the arc to the floor states.
   if (inputs.bare && state.name !== 'REST' && state.name !== 'BED') {
@@ -81,7 +116,7 @@ export function advanceArrangementPhrase(
 
   // Forced gestures take priority (warp → BUILD; warp exit → EBB).
   if (inputs.forceBuild && buildAllowed && state.name !== 'BUILD' && state.name !== 'BLOOM') {
-    return enter(state, 'BUILD');
+    return beginBuild(true);
   }
   if (inputs.forceEbb && (state.name === 'BUILD' || state.name === 'BLOOM')) {
     return enter(state, 'EBB');
@@ -89,9 +124,16 @@ export function advanceArrangementPhrase(
 
   switch (state.name) {
     case 'BUILD':
-      // Exactly one phrase; the bloom lands on the next boundary, always.
-      return enter(state, 'BLOOM');
+      // The bloom lands on the boundary the planner named (span 1 = the shipped
+      // one-phrase build), always.
+      if (state.dwell >= state.buildSpan) return enter(state, 'BLOOM');
+      break;
     case 'BLOOM': {
+      if (intent) {
+        // Planned length: the conductor pre-releases the final phrase's last bars.
+        if (state.dwell >= Math.min(DWELL_MAX.BLOOM, state.bloomPhrases)) return enter(state, 'EBB');
+        break;
+      }
       if (state.dwell >= DWELL_MAX.BLOOM || (state.dwell >= DWELL_MIN.BLOOM && draw < BLOOM_TO_EBB_P)) {
         return enter(state, 'EBB');
       }
@@ -104,11 +146,14 @@ export function advanceArrangementPhrase(
       break;
     }
     case 'BED': {
+      if (intent?.buildNow && buildAllowed) return beginBuild(false);
+      if (intent?.liftNow) break; // hold the bed under the coming build
       if (state.dwell >= DWELL_MIN.BED) {
-        const pBuild = buildAllowed
-          ? clamp01(BED_TO_BUILD_P_BASE + BED_TO_BUILD_ENERGY_BOOST * inputs.energy) *
-            clamp01(1 - inputs.restBoost)
-          : 0;
+        const pBuild =
+          buildAllowed && (intent === undefined || intent.randomBuildAllowed)
+            ? clamp01(BED_TO_BUILD_P_BASE + BED_TO_BUILD_ENERGY_BOOST * inputs.energy) *
+              clamp01(1 - inputs.restBoost)
+            : 0;
         const pRest = clamp01(
           BED_TO_REST_P_PER_PHRASE * (state.dwell - DWELL_MIN.BED + 1) + inputs.restBoost
         );
@@ -118,6 +163,10 @@ export function advanceArrangementPhrase(
       break;
     }
     case 'REST': {
+      // A planned build reached the floor: lift now so the build rises from a bed
+      // (liftNow), or begin the build directly when the lift phrase was missed.
+      if (intent?.liftNow) return enter(state, 'BED');
+      if (intent?.buildNow && buildAllowed) return beginBuild(false);
       if (state.dwell >= DWELL_MIN.REST) {
         const pLift = clamp01(
           REST_TO_BED_P_BASE +

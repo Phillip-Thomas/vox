@@ -1,0 +1,18 @@
+{
+  "role": "story-verifier",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T04:52:21.000431+00:00",
+  "safeMode": true,
+  "permissionMode": "default",
+  "tools": [
+    "Bash",
+    "Read",
+    "Grep",
+    "Glob",
+    "Write",
+    "Edit"
+  ],
+  "systemPromptSha256": "841e70187af3e597f63c83ab314b5f837a4e8b7ba99a960a4d9ace945a4bceda",
+  "commissionSha256": "910f7ec57fbccd7f18f04c7db5baf36e02710e0c1f1f28da28c384681cbe1593",
+  "scope": "run-local software diagnostic capture only; no runtime or validator edits; no hardware GPU"
+}

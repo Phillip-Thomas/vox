@@ -1,0 +1,16 @@
+{
+  "role": "common-manual-probe-closure-continuationor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T16:04:08.528830+00:00",
+  "commissionSha256": "912ba923fddbfcb7f939d042ee36fb12a1cb0676e681114b480249a705ad6308",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "Continue saved manual-probe closure with targeted patches, no game or GPU mutation, exact sourcefreeze proof",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T16:14:45.642925+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "6156ca4f-7f2b-4866-ac1b-59826d7fe8a4",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

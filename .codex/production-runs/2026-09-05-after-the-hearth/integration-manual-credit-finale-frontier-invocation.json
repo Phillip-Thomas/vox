@@ -1,0 +1,17 @@
+{
+  "role": "integration-engineer",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T21:07:02.208638+00:00",
+  "commissionSha256": "e764b6c843a3eebec1503492e5bf17d48c207a6a354e13c07b4af4fdd99ec5e7",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceManifestSha256Before": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashedBefore": 99,
+  "originalDeadline": "2026-09-06T21:27:26.895126+00:00",
+  "originalInvocationRef": "integration-manual-credit-finale-invocation.json",
+  "scope": "Same bounded eighth material repair: actual ordered manual corner accounting and final-token normal-done exception; unchanged contract, no proof relaxation, GPU or publication",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T21:14:29.270627+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "80fb066d-97bb-40f4-bcf8-e5345c08588a",
+  "isError": false
+}

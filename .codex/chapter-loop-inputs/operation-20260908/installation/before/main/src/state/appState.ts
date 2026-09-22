@@ -1,0 +1,182 @@
+import { useSyncExternalStore } from 'react';
+
+/**
+ * Top-level app shell state: which screen we're on, and whether the live world
+ * has painted cleanly enough to reveal.
+ *
+ * Like {@link ./spaceFlight.ts} this is a singleton EXTERNAL store (not React
+ * context) because BOTH the DOM shell (LandingMenu / GameHud, outside <Canvas>)
+ * AND in-Canvas probes (SceneReadyProbe, MenuCamera) must read/write it, and
+ * React context does not cross the react-three-fiber reconciler boundary.
+ *
+ *   phase:      'menu'  -> landing screen over a live cinematic render of the world
+ *               'playing' -> on foot / in the ship
+ *   sceneReady: false until the voxel mesh is populated AND a few frames have
+ *               painted — gates the loading screen and the menu's Play button so
+ *               the first-load "messed up rendering" flash is never visible.
+ */
+
+export type AppPhase = 'menu' | 'playing';
+
+export interface AppStateSnapshot {
+  phase: AppPhase;
+  sceneReady: boolean;
+}
+
+/** Frames that must paint AFTER the terrain mesh is populated before we reveal. */
+const READY_FRAMES = 8;
+
+/**
+ * Debug deep-links jump straight into the world and must SKIP the landing menu,
+ * matching the existing ?fly/?descent/?world/?agent/?overview entry points in
+ * App.tsx. Computed once from the URL at module load.
+ */
+// ?story values that stay on the MENU phase (the prologue terminal runs over it).
+// Mirrors the prologue beats in story/storyState.ts — kept literal here so this
+// low-level store doesn't import game systems at module load.
+const MENU_STORY_PARAMS = ['1', 'crawl', 'manifest', 'voyage', 'deflect', 'crash'];
+
+function computeDeepLink(): boolean {
+  if (typeof window === 'undefined') return false;
+  const p = new URLSearchParams(window.location.search);
+  const story = p.get('story');
+  return (
+    p.has('world') ||
+    p.get('fly') === '1' ||
+    p.has('descent') ||
+    p.get('agent') === '1' ||
+    p.get('overview') === '1' ||
+    // On-planet story jumps skip the menu; prologue jumps keep it (the terminal
+    // overlay runs over the menu phase — see story/storyState.ts).
+    (story !== null && !MENU_STORY_PARAMS.includes(story))
+  );
+}
+
+const DEEP_LINK = computeDeepLink();
+
+let snapshot: AppStateSnapshot = {
+  phase: DEEP_LINK ? 'playing' : 'menu',
+  sceneReady: false
+};
+
+function publishDebugSnapshot(): void {
+  if (typeof window === 'undefined') return;
+  (window as Window & { __paravoxiaAppState?: AppStateSnapshot }).__paravoxiaAppState = snapshot;
+}
+publishDebugSnapshot();
+
+// Not part of the snapshot: these mutate every frame / often and must NOT
+// trigger re-renders. We only emit when `sceneReady` actually flips.
+let terrainPopulated = false;
+let terrainWorldId: string | null = null;
+let framesPainted = 0;
+
+const listeners = new Set<() => void>();
+
+function emit(): void {
+  for (const listener of listeners) listener();
+}
+
+function setSnapshot(patch: Partial<AppStateSnapshot>): void {
+  snapshot = { ...snapshot, ...patch };
+  publishDebugSnapshot();
+  emit();
+}
+
+function subscribe(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+function getSnapshot(): AppStateSnapshot {
+  return snapshot;
+}
+
+export function useAppState(): AppStateSnapshot {
+  return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+}
+
+/** Non-hook live read for per-frame loops / event handlers. */
+export function getAppStateSnapshot(): AppStateSnapshot {
+  return snapshot;
+}
+
+/** World-scoped readiness guard for code that reads the live voxel singleton.
+ * During a React world swap the previous world's `sceneReady` snapshot can be
+ * observed by the incoming render before EfficientPlanet's layout cleanup runs;
+ * this prevents that stale frame from being treated as the new live terrain. */
+export function isSceneReadyForWorld(worldId: string): boolean {
+  return snapshot.sceneReady && terrainPopulated && terrainWorldId === worldId;
+}
+
+/** True when launched via a debug deep-link (menu skipped). */
+export function isDebugDeepLink(): boolean {
+  return DEEP_LINK;
+}
+
+// --- phase transitions ------------------------------------------------------
+
+/** Leave the landing menu and enter gameplay. The ONLY mutation "Play" triggers. */
+export function enterPlaying(): void {
+  if (snapshot.phase === 'playing') return;
+  setSnapshot({ phase: 'playing' });
+}
+
+/** Return to the landing menu (Quit to menu). */
+export function returnToMenu(): void {
+  if (snapshot.phase === 'menu') return;
+  setSnapshot({ phase: 'menu' });
+}
+
+// --- scene-ready signal -----------------------------------------------------
+
+function maybeReady(): void {
+  if (!snapshot.sceneReady && terrainPopulated && framesPainted >= READY_FRAMES) {
+    setSnapshot({ sceneReady: true });
+  }
+}
+
+/** Called once the voxel mesh is populated (EfficientPlanet populate effect). */
+export function markTerrainPopulated(worldId: string | null = null): void {
+  const changedWorld = terrainPopulated && terrainWorldId !== worldId;
+  if (!terrainPopulated || changedWorld) framesPainted = 0;
+  terrainPopulated = true;
+  terrainWorldId = worldId;
+  if (changedWorld && snapshot.sceneReady) setSnapshot({ sceneReady: false });
+  maybeReady();
+}
+
+/** Called every frame by the in-Canvas counter. Cheap until ready, then a no-op. */
+export function markFramePainted(): void {
+  if (snapshot.sceneReady || !terrainPopulated) return;
+  framesPainted++;
+  maybeReady();
+}
+
+/** Drop the ready signal on a world swap (EfficientPlanet effect cleanup). */
+export function resetSceneReady(): void {
+  terrainPopulated = false;
+  terrainWorldId = null;
+  framesPainted = 0;
+  if (snapshot.sceneReady) setSnapshot({ sceneReady: false });
+}
+
+// --- canvas handle (for pointer lock from the DOM Play button) --------------
+
+let gameCanvas: HTMLCanvasElement | null = null;
+
+/** Stash the WebGL canvas (Canvas onCreated) so DOM UI can request pointer lock. */
+export function setGameCanvas(el: HTMLCanvasElement | null): void {
+  gameCanvas = el;
+}
+
+export function getGameCanvas(): HTMLCanvasElement | null {
+  if (typeof document === 'undefined') return gameCanvas;
+  // React/R3F can replace the canvas during development remounts or a renderer
+  // recovery. Never request pointer lock on a detached element: Chromium rejects
+  // it because its root document is no longer the active document.
+  if (gameCanvas?.isConnected && gameCanvas.ownerDocument === document) return gameCanvas;
+  const liveCanvas = document.querySelector('canvas');
+  gameCanvas = liveCanvas instanceof HTMLCanvasElement ? liveCanvas : null;
+  return gameCanvas;
+}

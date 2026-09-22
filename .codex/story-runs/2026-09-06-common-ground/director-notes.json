@@ -1,0 +1,423 @@
+{
+  "compiledAt": "2026-09-06T04:59:17.532582+00:00",
+  "lossless": true,
+  "notes": [
+    {
+      "id": "chapter-to-cinematography-01",
+      "note": {
+        "id": "chapter-to-cinematography-01",
+        "from": "chapter",
+        "to": "cinematography",
+        "beat": "ch13-survey / ch13-common",
+        "anchor": "CG-05-other-end / anc.cg.independent-correction",
+        "kind": "objection",
+        "severity": "blocking",
+        "evidence": [
+          "cinematography-story-treatment.md:54-68 proposes three manufactured markers, player placement, and W-7744 moving the final marker to a different leg.",
+          "chapter-story-treatment.md, 'The playable mechanism' and 'Proposed bounded trace contract', proposes a maximum 128-sample walked trace per route, reversible tail revision, two materially different route classes, and an actual exchange of witness positions. Its reciprocal comparison is required on both solutions.",
+          "naive-reader-report.md identifies prescribed checklists as undermining the earlier claim of freedom. Replacing that with another sequence of placed pieces would weaken the principal new verb. A marker he moves is vivid, but the larger placement-plus-trace hybrid would add a second puzzle grammar."
+        ],
+        "requestedAction": "Choose the continuous walked trace with reciprocal witness as the single mechanic; retire the three-piece placement requirement and final marker-relocation act from the combined candidate. Preserve your requirements for real changed geometry, grounded body evidence, and an action Terra did not dictate: show W-7744 maintaining the far reference while Terra crosses, then independently making the final validated test. Stage proposed versus mutually tested trace states through stable, non-color-only material/shape distinctions; display only the route already walked, never an optimal preview or X-ray ribbon. If you judge this cannot make his separate contribution visibly stronger than a marker move, preserve that dissent and propose one concrete alternative within the same single mechanic rather than combining both systems.",
+        "status": "open"
+      },
+      "response": {
+        "noteId": "chapter-to-cinematography-01",
+        "by": "cinematography",
+        "status": "accepted",
+        "response": "Adopt the continuous walked trace and reciprocal witness as the sole mechanic. Retire my mandatory three-piece placement and final marker-relocation action from the candidate; the original first treatment remains immutable. Proposed trace is a sparse single broken surface stroke; mutually tested trace has a stable paired/notched stroke; a held endpoint has an open transverse stop shape. These are candidate non-color distinctions to ground in current frames, not approved final geometry. Every displayed span comes from actual recorded footsteps, stays depth-tested against the world, and reveals no unwalked solution. Reframe my proposal/refusal/revision around the real trace and safe held body. The climax is W-7744 maintaining the far reference while Terra crosses, followed by his independently initiated and completed grounded test. Keep 75-degree player-owned view, readable feet/sighting/bend and unchanged alive landscape. Any minimal reference apparatus only supports this mechanism and has no collection or placement gate. Both route classes remain complete; neither receives a superior visual reward.",
+        "evidenceRefs": [
+          "chapter-peer-notes.json#chapter-to-cinematography-01",
+          "chapter-story-treatment.md#the-playable-mechanism-a-trace-that-can-be-answered",
+          "chapter-story-treatment.md#w-7744-must-supply-something",
+          "cinematography-peer-notes.json#CG-CIN-CH-01",
+          "cinematography-story-treatment.md#proposed-scene-anchors-and-shot-constraints"
+        ],
+        "candidateAmendment": "Replace marker proposal/correction anchors with CG-03 route offer, CG-04 specific hold, CG-05 reciprocal reference, CG-06 independent-test initiation and CG-07 actual completion. Exact scene geometry remains unsigned."
+      }
+    },
+    {
+      "id": "chapter-to-cinematography-02",
+      "note": {
+        "id": "chapter-to-cinematography-02",
+        "from": "chapter",
+        "to": "cinematography",
+        "beat": "ch13-common / completed Origin free play",
+        "anchor": "CG-08-open-ground",
+        "kind": "change-request",
+        "severity": "major",
+        "evidence": [
+          "cinematography-story-treatment.md:74-76 permits the actor to retire after a safe departure or world exit, while chapter-story-treatment.md requires the accepted route to remain testable with W-7744 on later Origin visits.",
+          "cinematography-story-treatment.md:99 correctly leaves night availability undecided; chapter-story-treatment.md currently offers the encounter without a time-of-day gate.",
+          "integration-survey.md identifies chapter-local actor presence, one pose writer, world identity, safe hold state, and persisted survey state as the required ownership boundaries."
+        ],
+        "requestedAction": "Contract W-7744 as a persistent local tester in the bounded Origin work area after completion, restored at his saved safe pose on later visits. He is neither a traveling companion nor an actor who disappears permanently at world exit. Keep no new required objective after completion; optional repeat surveys reactivate only their bounded apparatus. Nominate an all-day encounter using existing lighting authority and tier-stable physical evidence. If your realization cannot support the same usable reference/footing at night, return an explicit daylight-availability proposal for joint decision before signing; do not freeze the sun or silently introduce a new light. Give the final evidence plan a completed-save revisit and a night/lowest-tier refusal-and-repair case.",
+        "status": "open"
+      },
+      "response": {
+        "noteId": "chapter-to-cinematography-02",
+        "by": "cinematography",
+        "status": "accepted",
+        "response": "Contract one persistent local tester on Origin after completion, restored from his saved safe survey pose and chapter-local state on subsequent visits. World unmount hides the representation but does not delete his presence or the repeatable exercise. Revalidate saved support against current terrain; preserve the safe hold/revision semantics rather than moving through invalid ground. He never follows Terra offworld or revives A4's pack/flight sequence. Retire my proposed farewell/departure. Completed free play has no new required objective; optional repeats activate only the bounded survey. Nominate all-day availability. Use existing night lighting and modest prewarmed material/value contrast on the trace and existing instrument, with stable shape cues and no new light, sun freeze, pulse or postprocessing dependency. Trace marks cannot substitute for actually seeing footing and actor contact. Require current source-pinned day/night geometry frames before signing exact scene layout, including the same refusal/repair on lowest tier and a completed-save revisit. Qualified software frames may establish projection, occlusion, trace geometry and HUD placement; they cannot approve night color/light quality, motion, feel or performance. Final headed hardware/tier evidence remains mandatory. If the actual nighttime footing/reference cannot be made legible within this bounded authority, return an explicit daylight-availability amendment to all peers before scene signature; do not silently introduce it.",
+        "evidenceRefs": [
+          "chapter-peer-notes.json#chapter-to-cinematography-02",
+          "chapter-story-treatment.md#agency-holds-retry-and-durable-state",
+          "chapter-story-treatment.md#optional-exploration-that-earns-its-space",
+          "integration-survey.md#w-7744-and-terrain-navigation",
+          "implementation-acceptance.md",
+          "cinematography-grounding.md#necessary-pre-change-baseline-capture-specification"
+        ],
+        "candidateAmendment": "Persistent Origin actor and repeatable saved route; all-day encounter nominated; source-pinned geometry baseline required for final blocking, with hardware approval explicitly deferred."
+      }
+    },
+    {
+      "id": "chapter-to-score-01",
+      "note": {
+        "id": "chapter-to-score-01",
+        "from": "chapter",
+        "to": "score",
+        "beat": "ch13-survey / ch13-common",
+        "anchor": "CG-05-other-end / CG-07-model-incomplete / CG-08-open-ground",
+        "kind": "change-request",
+        "severity": "major",
+        "evidence": [
+          "score-story-treatment.md:50-61 correctly separates live install, restored entry, route offer, contingent refusal, independent action, and handback, but has no explicit mapping for W-7744 holding the reciprocal reference while Terra crosses.",
+          "score-story-treatment.md:76-83 makes altered fifth spacing the principal audible difference, acknowledges dropped attacks, and uses state-edge selection; score-story-treatment.md:91 then correctly lets fast success supersede previous textures.",
+          "chapter-story-treatment.md, 'W-7744 must supply something' and candidate anchors CG-05 through CG-08, requires reciprocal usefulness before his final test and restores free play immediately after the committed outcome."
+        ],
+        "requestedAction": "Retain The Unrepeated Order and its non-rewarding dynamics. Map the reciprocal-reference action explicitly, preferably to an existing restrained demonstrating texture, so it supplies audible room for his actual contribution without spending the later final-action change. Bind the changed phrase to actual final traversal completion, not reference acquisition, route validity, or an anticipatory footfall. Specify how its changed spacing remains available to hear during an immediate control handback without imposing a listening dwell, postponing progression, or raising intensity to defeat note dropping; you may use the existing bounded audio handoff while free play is already live. The route that succeeds first try skips refusal/revised music honestly. Preserve the quiet installed-versus-restored distinction and zero new quantized hits.",
+        "status": "open"
+      },
+      "response": {
+        "noteId": "chapter-to-score-01",
+        "by": "score",
+        "status": "accepted",
+        "response": "Accept. CG-05-other-end selects the restrained demonstrating texture once when W-7744 establishes the useful reciprocal reference and Terra starts crossing; it adds no melody, hit or warmth. CG-06-his-test keeps that texture. Only CG-07-model-incomplete, after actual final arrival plus reciprocal proof, selects independent-action-settled with its changed fifth spacing. Both route classes receive the same treatment; first-try success skips refusal and revision variants. Amend my immediate score-clear proposal as follows: logical completion, required-guidance retirement and full free-play controls occur immediately, while one live-completion-only final texture may continue for at most CG_FINAL_TEXTURE_MAX_S = 5 seconds, then release through the existing 4.5-second story/bed crossfade. This permits a cell to occur without guaranteeing a dropped attack. Do not add the separate-accounts mood change as another compulsory coda. This is a finite presentation allowance, never a story dwell, advancement predicate or repeated free-play score. Cancel it early on a new story/optional-survey action, actor/world change, reset, exit, pause, visibility loss, mute or unavailable audio; do not defer or replay it. Hydration of completion never starts it. Current storyDirector deactivation immediately clears score, so this allowance needs an explicit chapter-local transient integration through the existing storyScore authority; it is not already shipped behavior. Preserve one graph, one scheduler, edge-only mood selection and zero new quantized hits. A release deadline changes intent only and never schedules notes. If the live allowance is missed or cancelled, preserve immediate handback and accept the absent phrase rather than hold the player or raise intensity.",
+        "evidenceRefs": [
+          "chapter-peer-notes.json#chapter-to-score-01",
+          "chapter-story-treatment.md#candidate-shared-semantic-anchors",
+          "score-story-treatment.md#harmonic-and-rhythmic-realization",
+          "main/src/story/storyDirector.ts:1217",
+          "main/src/audio/scoreEngine.ts:123",
+          "main/src/audio/scoreEngine.ts:1712"
+        ],
+        "acceptance": "Later tests/capture must show full controls and retired guidance at completion; at most one live final texture; release no later than five seconds after its live start, with the existing fade then ending; immediate cancellation on listed transitions; no tail or completion cue after reload or optional repeat survey. Combined listening must assess the phrase and handoff without claiming every final fifth sounds. No such evidence has been produced yet."
+      }
+    },
+    {
+      "id": "score-to-chapter-01",
+      "note": {
+        "id": "score-to-chapter-01",
+        "from": "score",
+        "to": "chapter",
+        "beat": "ch13-common",
+        "anchor": "CG-05-other-end / CG-06-his-test / CG-07-model-incomplete",
+        "kind": "anchor-contract",
+        "severity": "high",
+        "evidence": [
+          "chapter-story-treatment.md: Two solutions with different persistence; CG-05, CG-06 and CG-07 distinguish reciprocal usefulness, test initiation and actual completion.",
+          "score-story-treatment.md: The Unrepeated Order changes phrase spacing after an independently completed physical act; its score never proves acceptance."
+        ],
+        "requestedAction": "Adopt the continuous walked trace and reciprocal witness mechanism. Keep both route classes equally complete and musically unranked. In the candidate, distinguish holding the other end, starting his final test and completing that test as separate physical facts. Bind the changed audit phrase to CG-07 actual arrival plus reciprocal proof, not CG-06 clearance or motion initiation. The reciprocal passage itself remains playable over the restrained demonstration texture; no new duet or cooperation-success cue.",
+        "status": "open"
+      },
+      "response": {
+        "noteId": "score-to-chapter-01",
+        "by": "chapter",
+        "status": "accepted",
+        "response": "Select the continuous walked trace and exchanged witness as the single mechanic. Both route classes are equally complete; length and witness dependence persist without a narrative or musical ranking. Keep CG-05 reciprocal-reference establishment, CG-06 independent-test initiation, and CG-07 completed test as distinct facts. CG-05 requires W-7744 at the validated stable reference and the player's actual reciprocal passage; CG-06 requires that evidence plus physical clearance for his final span; CG-07 requires his actual grounded arrival and the retained reciprocal proof. Neither clearance nor starting to walk commits completion. The changed audit phrase belongs only to CG-07. The reciprocal passage uses the restrained demonstration texture, with no duet, cooperation meter, or success cue. Score owns its exact realization and handoff; music cannot delay any predicate or the return of free play.",
+        "evidenceRefs": [
+          "score-peer-notes.json#score-to-chapter-01",
+          "chapter-story-treatment.md#w-7744-must-supply-something",
+          "chapter-story-treatment.md#candidate-shared-semantic-anchors",
+          "score-story-treatment.md#proposed-form-and-semantic-anchors"
+        ],
+        "candidateAmendments": {
+          "selectedMechanic": "continuous-walked-trace-with-reciprocal-witness",
+          "routeClasses": [
+            "longer-independently-repeatable",
+            "shorter-intermediate-witness-required"
+          ],
+          "independentPhraseTrigger": "CG-07-model-incomplete only",
+          "presentationIsProgressAuthority": false
+        }
+      }
+    },
+    {
+      "id": "score-to-chapter-02",
+      "note": {
+        "id": "score-to-chapter-02",
+        "from": "score",
+        "to": "chapter",
+        "beat": "ch13-home",
+        "anchor": "CG-B0-hearth-holds / CG-01-return-chosen",
+        "kind": "reveal-and-lifecycle",
+        "severity": "medium",
+        "evidence": [
+          "chapter-story-treatment.md: home review reuses the stored A4 fault and explicitly rejects an incoming summons.",
+          "score-story-treatment.md: live restoration and already-restored entry have different transient behavior; the audit figure enters only after visible renewed inspection."
+        ],
+        "requestedAction": "Keep the archived fault review under settled home/world sound, with ordinary once-per-objective entry feedback only. Do not give the stored record a transmission sound or bring back the audit theme at home. Retire the live install acknowledgement before publishing the invitation; on restored saves omit the completion transient entirely. The audit reprise begins at the actual Origin inspection, preserving the voluntary departure and excluding a musical summons.",
+        "status": "open"
+      },
+      "response": {
+        "noteId": "score-to-chapter-02",
+        "by": "chapter",
+        "status": "accepted",
+        "response": "The home review is an archived suit record under settled home/world sound. It has only the ordinary once-per-objective entry acknowledgement: no transmission, audit-theme reprise, unseen presence cue, or implication that W-7744 contacted Terra. In live play, the real install transaction clears its return objective and owns one bounded restoration acknowledgement; the new invitation publishes only after that acknowledgement's presentation ownership retires. Retirement is a UI/feedback boundary, not an audio-clock or player-listening prerequisite. A restored save derives the steady home state and omits the installation transient entirely. The audit reprise begins only at the actual renewed Origin inspection. The player can move, build, or leave the home offer pending throughout.",
+        "evidenceRefs": [
+          "score-peer-notes.json#score-to-chapter-02",
+          "chapter-story-treatment.md#bridge-and-affected-movements",
+          "chapter-story-treatment.md#candidate-copy-and-reveal-discipline",
+          "score-story-treatment.md#proposed-form-and-semantic-anchors"
+        ],
+        "candidateAmendments": {
+          "homeFaultRecordKind": "archived-local-record",
+          "homeAuditReprise": false,
+          "restoredSaveInstallTransient": false,
+          "invitationPublicationBoundary": "prior-install-objective-and-acknowledgement-presentation-retired"
+        }
+      }
+    },
+    {
+      "id": "score-to-cinematography-01",
+      "note": {
+        "id": "score-to-cinematography-01",
+        "from": "score",
+        "to": "cinematography",
+        "beat": "ch13-survey / ch13-common",
+        "anchor": "anc.cg.route-proposed / anc.cg.independent-correction",
+        "kind": "substantive-direction-objection",
+        "severity": "high",
+        "evidence": [
+          "cinematography-story-treatment.md: selected direction requires three manufactured markers and an independently moved final marker.",
+          "chapter-story-treatment.md: recommendation replaces placed apparatus with a continuous bodily trace and exchanged witness positions; the reciprocal comparison occurs on both route classes.",
+          "score-story-treatment.md: the dramatic mechanism is making room for another's act, not rewarding sequential placements."
+        ],
+        "requestedAction": "Choose Chapter's walked trace and reciprocal bodies as the scene's mechanism and climax. Reframe the proposal/refusal/revision around actual trace geometry and the maintained witness position; replace the mandatory marker-handling hero action with W-7744 maintaining Terra's reference and then completing his own grounded test. Keep your clear feet, sighting direction, failure locus and unchanged living landscape. Do not average the proposals by adding three marker placements ahead of the trace. Any minimal reference apparatus must serve this chosen mechanism, without its own collection or placement gate.",
+        "status": "open"
+      },
+      "response": {
+        "noteId": "score-to-cinematography-01",
+        "by": "cinematography",
+        "status": "accepted",
+        "response": "Choose Chapter's walked trace and reciprocal bodies. The independent moved-marker hero action and three placed pieces are withdrawn from the combined candidate. W-7744's maintained reference must be visibly useful while Terra is the moving body; then his final test is his separate action. Preserve actual route geometry, grounded feet, sighting direction, precise failure locus and the living landscape in Terra's single embodied view. A reference prop may make an endpoint readable, but carries no independent puzzle, item gate or alternate-vision display. Holding the other end, beginning his test and completing it are distinct physical anchors; cinema does not visually announce completed agreement at either earlier anchor.",
+        "evidenceRefs": [
+          "score-peer-notes.json#score-to-cinematography-01",
+          "chapter-story-treatment.md#w-7744-must-supply-something",
+          "score-story-treatment.md#proposed-form-and-semantic-anchors",
+          "cinematography-peer-notes.json#CG-CIN-CH-01"
+        ],
+        "candidateAmendment": "Use CG-05, CG-06 and CG-07 as distinct reciprocal-reference, independent-initiation and real-completion facts; no placement-plus-trace hybrid."
+      }
+    },
+    {
+      "id": "score-to-cinematography-02",
+      "note": {
+        "id": "score-to-cinematography-02",
+        "from": "score",
+        "to": "cinematography",
+        "beat": "ch13-common / completed Origin free play",
+        "anchor": "anc.cg.shared-route-tested / CG-08-open-ground",
+        "kind": "aftermath-and-timing",
+        "severity": "medium",
+        "evidence": [
+          "cinematography-story-treatment.md: aftermath permits a safe departure toward the work area and eventual retirement.",
+          "chapter-story-treatment.md: completed route and a bounded local repeat interaction remain available on Origin.",
+          "score-story-treatment.md: current scheduler can omit a calm ostinato attack; musical phrase change cannot guarantee an instantaneous audible punctuation."
+        ],
+        "requestedAction": "Prefer Chapter's locally repeatable aftermath: retain the one actor at a safe Origin test position with optional repeat interaction, without a farewell shot or retirement that removes the promised experiment. Show the completed route and separate accounts as persistent evidence. Do not hold camera or player control waiting for the changed fifth; the physical completion must read with that attack absent. Clear transient scene/score ownership at handback and let ordinary world sound continue.",
+        "status": "open"
+      },
+      "response": {
+        "noteId": "score-to-cinematography-02",
+        "by": "cinematography",
+        "status": "accepted",
+        "response": "Retain the actor and completed route as a repeatable local Origin consequence, with no farewell shot or permanent retirement on world exit. The stable changed trace and W-7744's own grounded completion must carry the outcome even with music muted or the fifth omitted. No camera hold, movement restriction, completion delay or second acknowledgement waits for the phrase. At CG-08 clear required chapter guidance and transient camera/render/score authority; ordinary world sound and player control continue. Any existing bounded audio release is Score's presentation detail and cannot govern when free play begins. Persistent actor/route state is world consequence, not a lingering cinematic owner.",
+        "evidenceRefs": [
+          "score-peer-notes.json#score-to-cinematography-02",
+          "chapter-story-treatment.md#optional-exploration-that-earns-its-space",
+          "score-story-treatment.md#agency-indefinite-duration-and-lifecycle",
+          "cinematography-story-treatment.md#capture-and-review-plan"
+        ],
+        "candidateAmendment": "Immediate physical handback; persistent separate accounts and optional local survey; no listening dwell."
+      }
+    },
+    {
+      "id": "CG-CIN-CH-01",
+      "note": {
+        "id": "CG-CIN-CH-01",
+        "from": "cinematography",
+        "to": "chapter",
+        "beat": "ch13-survey / ch13-common",
+        "anchor": "CG-03-route-offered / CG-05-other-end / CG-06-his-test",
+        "kind": "proposal",
+        "severity": "medium",
+        "statement": "Choose Chapter's continuous walked trace and exchanged witness as the single mechanic. It makes bodily demonstration and the other's maintained position useful before the climax, answering the blind reader more strongly than my manufactured-stake proposal. I withdraw three placeable stakes and the independent marker relocation as required cinema direction. Retain my player-owned 75-degree view, actual grounded action, specific refusal and persistent aftermath. Accept Chapter's bounded repeatable W-7744 presence at Origin rather than adding my suggested departure sequence.",
+        "evidence": [
+          "chapter-story-treatment.md#the-playable-mechanism-a-trace-that-can-be-answered",
+          "chapter-story-treatment.md#w-7744-must-supply-something",
+          "cinematography-story-treatment.md#two-materially-different-directions",
+          "naive-reader-report.md#3-coherence-problems"
+        ],
+        "requestedAction": "Confirm the walked trace/exchanged witness as the reconciled mechanic, preserve both route classes and W-7744's necessary reciprocal contribution, and exclude a second marker-placement puzzle. Keep the original treatments unchanged as authored alternatives; record this selection in the candidate and later cinema reconciliation.",
+        "status": "open"
+      },
+      "response": {
+        "noteId": "CG-CIN-CH-01",
+        "by": "chapter",
+        "status": "accepted",
+        "response": "Confirm the walked trace and exchanged witness. Exclude a second marker-placement puzzle and exclude an independent marker-relocation climax. A minimal fixed reference/sighting apparatus may make the selected mechanic legible; it supplies no collection, carry, placement, or separate calibration gate. Retain the player's embodied view and camera/movement ownership, actual grounded tests, specific local refusal, both persistent route classes, and the required reciprocal comparison before W-7744's final independent traversal. W-7744 remains one bounded local tester on Origin after completion and on later visits; there is no farewell sequence or permanent retirement that removes the optional repeat experiment. Treatments remain immutable; this response records the selected candidate amendment, not a rewrite of the alternatives or closure of my outgoing objections.",
+        "evidenceRefs": [
+          "cinematography-peer-notes.json#CG-CIN-CH-01",
+          "chapter-story-treatment.md#the-playable-mechanism-a-trace-that-can-be-answered",
+          "chapter-story-treatment.md#agency-holds-retry-and-durable-state",
+          "cinematography-story-treatment.md#two-materially-different-directions"
+        ],
+        "candidateAmendments": {
+          "placeableMarkerPuzzle": false,
+          "independentMarkerRelocation": false,
+          "actorAftermath": "persistent-Origin-local-tester-with-optional-repeat-survey",
+          "cameraPolicy": "existing-player-owned-embodied-view; vehicle-phases-inherit-existing-rig"
+        }
+      }
+    },
+    {
+      "id": "CG-CIN-CH-02",
+      "note": {
+        "id": "CG-CIN-CH-02",
+        "from": "cinematography",
+        "to": "chapter",
+        "beat": "ch13-survey / ch13-common",
+        "anchor": "CG-04-specific-hold / CG-05-other-end",
+        "kind": "constraint",
+        "severity": "high",
+        "statement": "Witness continuity must be a legible world relation, not a camera-reticle or hidden dwell test. Use actor/reference positions, actual stable terrain or persistent trunk geometry, and an explicit offered/occupied reference state. Optional grass/canopy density cannot decide success. The held worker, last tested trace end and relevant bend must be inspectable together without a forced camera; HUD-free frames must distinguish proposed and mutually tested spans by stable shape/value. The trace records only walked ground and must not reveal a correct route beyond an unvisited corner. A watcher looking elsewhere must not silently invalidate proof merely because the render camera turned.",
+        "evidence": [
+          "chapter-story-treatment.md#arena-and-the-initial-contradiction",
+          "chapter-story-treatment.md#two-solutions-with-different-persistence",
+          "chapter-story-treatment.md#proposed-bounded-trace-contract",
+          "cinematography-story-treatment.md#device-motion-and-tier-equivalence",
+          "implementation-acceptance.md:4-8",
+          "main/src/config/graphicsSettings.ts:80-159"
+        ],
+        "requestedAction": "Specify the witness predicate and specific hold/recovery semantics in the candidate with these constraints. Require both actual route classes and the worker/reference/bend composition to be demonstrated before the scene contract signs exact geometry; qualified software frames may ground geometry only, with final headed hardware/tier proof unchanged. If current Origin geometry cannot support both routes, reopen the bounded arena decision rather than manufacture an invisible obstacle or an automatic solution.",
+        "status": "open"
+      },
+      "response": {
+        "noteId": "CG-CIN-CH-02",
+        "by": "chapter",
+        "status": "accepted",
+        "response": "Witness continuity is a world-space predicate. It never reads camera quaternion, screen visibility, reticle alignment, player look direction, a gaze dwell, music time, or optional foliage density. An offered intermediate reference records a grounded world position and identity. F offers it while the player occupies its inner cylinder. The player remains its witness while grounded in the same world inside the release cylinder and while the relevant worker-to-reference segment is clear against signed, tier-stable solid terrain/trunk geometry. The longer route uses the established fixed survey reference; the shorter route needs the offered occupied intermediate reference through its occluded bend. A newly drawn untested endpoint cannot silently become a replacement fixed reference and erase that distinction. W-7744's reciprocal reference is the corresponding actor-owned state: a validated safe pose, an explicitly established reference, and an unobstructed relation during the player's actual passage. Actor/instrument orientation presents that relation but render-camera orientation never decides it. Looking away changes nothing. Leaving the witness cylinder safely holds the worker at his last supported sample and preserves tested proof; returning to the inner cylinder resumes when the same offered reference and unwalked span are valid. Missing reference and invalid footing have different repair paths. All geometry values remain candidate values until actual route feasibility is demonstrated; signing the narrative candidate does not certify an unmeasured arena.",
+        "evidenceRefs": [
+          "cinematography-peer-notes.json#CG-CIN-CH-02",
+          "chapter-story-treatment.md#proposed-bounded-trace-contract",
+          "chapter-story-treatment.md#objective-lifecycle-proposal",
+          "integration-survey.md#W-7744-and-terrain-navigation",
+          "implementation-acceptance.md"
+        ],
+        "candidateAmendments": {
+          "witnessPredicate": {
+            "authority": "validated-world-and-actor-state",
+            "offer": "rising F edge at the actual offered reference; same world and grounded inside inner cylinder",
+            "innerHorizontalRadiusWorldUnits": 1.25,
+            "releaseHorizontalRadiusWorldUnits": 1.75,
+            "innerVerticalToleranceWorldUnits": 0.6,
+            "releaseVerticalToleranceWorldUnits": 0.9,
+            "hysteresis": "first offer or resume uses the inner cylinder; an active witness holds until outside the release cylinder or grounding/world/reference validity is lost",
+            "lineOfReference": "segment between the actor's signed instrument-reference socket and the offered reference's signed target socket, tested only against the signed tier-stable solid terrain/trunk set",
+            "excludedInputs": [
+              "render-camera-orientation",
+              "reticle",
+              "screen-visibility",
+              "gaze-duration",
+              "music-time",
+              "optional-grass-or-canopy-density"
+            ],
+            "elapsedTimeCanSatisfy": false
+          },
+          "holdAndRecovery": [
+            {
+              "reason": "reference-vacated",
+              "behavior": "hold before the next unsupported movement sample; retain the accepted trace and offered reference",
+              "recovery": "return grounded to the inner cylinder; resume only after world-reference and remaining-ground validation"
+            },
+            {
+              "reason": "reference-occluded",
+              "behavior": "hold at last supported sample; mark the precise break without exposing an unwalked solution",
+              "recovery": "offer the valid intermediate witness reference, or reopen and redraw the unverified tail"
+            },
+            {
+              "reason": "footing-invalid",
+              "behavior": "hold before unsafe ground; a new witness cannot certify missing support",
+              "recovery": "return to the last tested point and redraw the invalid tail on actual valid ground"
+            }
+          ],
+          "guidanceReplacements": [
+            {
+              "objectiveId": "ch13:survey:test",
+              "markerLabel": "W-7744 \u00b7 test in progress",
+              "workOrder": "W-7744 is testing the offered route. Follow his progress, or return to the last tested point to revise.",
+              "reason": "replaces the ambiguous 'Keep the current reference in view'; looking away does not hold or invalidate a test"
+            },
+            {
+              "objectiveId": "ch13:survey:witness",
+              "markerLabel": "Witness point \u00b7 hold this end",
+              "workOrder": "Stand at the marked reference. [F] Offer this end, then remain here while W-7744 tests the bend. Looking around is free.",
+              "reason": "F establishes the world reference; occupancy, not gaze, maintains it"
+            },
+            {
+              "objectiveId": "ch13:survey:witness-return",
+              "markerLabel": "Witness point \u00b7 resume the test",
+              "workOrder": "Return to the marked reference to resume the test. To change the route, return to the last tested point.",
+              "reason": "publishes the actual vacant-reference target; does not repeat F or imply a new refusal decision"
+            },
+            {
+              "objectiveId": "ch13:common:reciprocal",
+              "markerLabel": "Far reference \u00b7 take the other end",
+              "workOrder": "W-7744 is holding this end. Walk the traced span to the far reference for the comparison.",
+              "reason": "makes the other body's active contribution and the player's concrete passage explicit"
+            }
+          ],
+          "geometryApprovalBoundary": "Before signing exact scene geometry, demonstrate both route classes, distinct reference/footing refusals, and the held worker plus last tested end plus relevant bend in an inspectable player-owned composition. Qualified software frames can ground geometry only; they do not replace final headed hardware, lowest-tier, mobile, night and reduced-motion evidence. If either route is infeasible, reopen the arena decision rather than insert invisible obstacles, future-path previews or an automatic successful route.",
+          "proposedAvailability": "all-day under existing lighting authority; any necessary daylight-only hold must be explicitly reconciled before the scene geometry is signed"
+        }
+      }
+    },
+    {
+      "id": "CG-CIN-SC-01",
+      "note": {
+        "id": "CG-CIN-SC-01",
+        "from": "cinematography",
+        "to": "score",
+        "beat": "ch13-survey / ch13-common",
+        "anchor": "CG-04-specific-hold / CG-05-other-end / CG-06-his-test / CG-07-model-incomplete",
+        "kind": "constraint",
+        "severity": "medium",
+        "statement": "Support The Unrepeated Order and its unchanged square/tension after the independent action. With the selected walked trace, distinguish an invalid physical leg, a temporary witness-position hold, and W-7744's final independent test. Releasing/retaking a witness position may happen repeatedly inside one good route; it must not repeatedly stage a dramatic musical refusal. At the role exchange, let visible feet, instrument orientation and the newly useful reference establish causality. The changed phrase spacing belongs after the independently committed test, not at Terra's final trace sample or at the moment W-7744 offers to hold the other end.",
+        "evidence": [
+          "score-story-treatment.md#proposed-form-and-semantic-anchors",
+          "score-story-treatment.md#harmonic-and-rhythmic-realization",
+          "score-story-treatment.md#agency-indefinite-duration-and-lifecycle",
+          "chapter-story-treatment.md#w-7744-must-supply-something",
+          "chapter-story-treatment.md#candidate-shared-semantic-anchors"
+        ],
+        "requestedAction": "Confirm an explicit mapping for physical refusal versus transient witness hold/resume and for reciprocal reference versus final independent-test completion. Preserve event-driven state changes, quiet repeated holds, audible space for action, and no phrase timing that delays the player's movement. Harmony and exact realization remain Score's authority; no second musical motif or extra cue is requested.",
+        "status": "open"
+      },
+      "response": {
+        "noteId": "CG-CIN-SC-01",
+        "by": "score",
+        "status": "accepted",
+        "response": "Accept. Distinguish three facts. An actually invalid offered span requiring redrawing enters refused-hold once on that semantic state edge, preserving the unresolved low floor and no punitive sting. Temporary loss of an occupied/offered witness position inside an otherwise valid route keeps the current demonstrating/revised texture unchanged; repeated release/retake neither reselects a mood nor restarts a dramatic refusal. The worker's stopped/resumed body, specific guidance and ordinary interaction feedback carry that reversible hold. Camera direction and musical phase cannot affect witness validity. At reciprocal usefulness CG-05, select the existing quiet demonstrating texture once; the reference acquisition is not final success. CG-06 final-test initiation remains there. The changed audit spacing follows CG-07 actual independent traversal completion only, using the bounded live-only ending allowance specified in my response to chapter-to-score-01. Feet, instrument direction and maintained reference lead the image and sound. No musical deadline delays movement; no added motif, hit, tempo increase or guaranteed attack. Extended holds remain quiet without a tension ramp, and a valid first attempt is not forced through refusal music.",
+        "evidenceRefs": [
+          "cinematography-peer-notes.json#CG-CIN-SC-01",
+          "cinematography-peer-notes.json#CG-CIN-CH-02",
+          "chapter-story-treatment.md#two-solutions-with-different-persistence",
+          "score-story-treatment.md#agency-indefinite-duration-and-lifecycle",
+          "score-reconciliation.json#chapter-to-score-01"
+        ],
+        "acceptance": "Verify one real invalid-span refusal separately from repeated temporary witness loss/resumption, then reciprocal usefulness and final completion. Trace mood selections to semantic state edges; temporary witness holds must produce no repeated refused-hold entry. Muted presentation must preserve the same cause, repair and completion."
+      }
+    }
+  ]
+}

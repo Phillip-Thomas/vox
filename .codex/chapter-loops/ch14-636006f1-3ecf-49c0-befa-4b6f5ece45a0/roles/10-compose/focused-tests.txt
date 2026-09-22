@@ -1,0 +1,11 @@
+
+ RUN  v3.2.4 /home/thomasphillip/Projects/vox/main
+
+ ✓ src/story/storyScore.test.ts (7 tests) 4ms
+ ✓ src/story/storyScore.stage3.test.ts (41 tests) 11ms
+
+ Test Files  2 passed (2)
+      Tests  48 passed (48)
+   Start at  18:24:26
+   Duration  2.77s (transform 1.64s, setup 0ms, collect 2.58s, tests 15ms, environment 0ms, prepare 93ms)
+

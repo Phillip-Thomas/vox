@@ -1,0 +1,100 @@
+{
+  "schema": "paravoxia.producer.confirmedAuthorityReview.v1",
+  "reviewedAt": "2026-09-06T22:53:29.133135+00:00",
+  "disposition": "Actual built/running audio authority release observed promptly; no additional score-authority repair established. Separate adapter lifecycle and interruption remain open.",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "rawEvidenceRef": "verifier/captures/manual-credit-finale/authority-seam-confirmed-20260906T224646Z",
+  "hashes": {
+    "seam-events.json": "97e82ccbdc0d94fe2a45ec2195570cac5a640d4200bf8ba7f09475ed5b72ce2d",
+    "runtime-record.json": "d86aeb5744124398acaf2581b547c64afd2a38a4769f62c291a607e117231353",
+    "window.ndjson": "22838efd2a745c9dc9758ce649d2a4d149893a7453b8d32c4fcc95fe9a4585f8",
+    "owned-sink.wav": "d8731928afd92cf1d66eaf5fc2fda96704c1cdb1c04c401b1101e756100fc373",
+    "cleanup-receipt.json": "841becf3e2fc2d0b675730d9bfe6cb87c21e1802243d5405dd2099ad3223bcdc"
+  },
+  "events": {
+    "count": 54,
+    "stats": {
+      "count": 54,
+      "cap": 4000,
+      "capDrop": 0,
+      "dropped": {},
+      "skipTotal": 4179,
+      "skipped": {
+        "deadline": 4179
+      },
+      "seen": {
+        "authority-entry": 5,
+        "authority-tail": 5,
+        "bed-callback": 5,
+        "cancel": 2,
+        "deadline": 14,
+        "mood-entry": 7,
+        "mood-ctx": 7,
+        "mood-calls-mma": 7,
+        "begin": 1,
+        "release": 1
+      },
+      "evaluationErrors": 0
+    },
+    "tokenStartedAtMs": 63945.89999997616,
+    "authorityEntrySeq": 34,
+    "authorityEntryMono": 63946.299999952316,
+    "millisecondsAfterActualCreation": 0.3999999761581421,
+    "actualContextTime": 62.408,
+    "existingCrossfadeSeconds": 4.5,
+    "scheduledFadeEndAt": 66.908,
+    "finalReleaseHasBuiltRunningContext": true,
+    "postExpiryAuthorityTransition": false,
+    "noSecondAuthorityEntryAfterSeq34": true
+  },
+  "qualifications": [
+    "Begin function entry at 63939.1 is not actual token creation at 63945.9. Actual authority function entry is 63946.3: about 0.4 ms later. Role report mixes earlier callsite and function-entry times.",
+    "Bed callback present at callsite and scheduled endpoints are observed; bedCallbackInvoked derives from presence there. Neither physical gain endpoints nor PCM/listening were independently measured. Role claim that endpoints completed is stronger than retained scheduling evidence.",
+    "Instrumented token age 5.0731 is CDP-perturbed. Earlier noninstrumented 5.0024 remains a distinct residual live-flag discrepancy; no five-seconds-plus-frame tolerance granted.",
+    "4193 deadline hits cover the observation, not independently shown to all occur in the five-second token window. Do not use the report hit-rate assumption as performance evidence.",
+    "Trusted gesture, user activation and built/running context observed. Pointer lock stayed false; actual pause remains unproved."
+  ],
+  "wav": {
+    "channels": 2,
+    "sampleWidthBytes": 2,
+    "sampleRateHz": 44100,
+    "frames": 3293184,
+    "durationSeconds": 74.67537414965986
+  },
+  "recorderWallDurationSeconds": 76.729,
+  "audioAlignmentQualification": "Python wave metadata yields 74.67537414965986 s, not role report 68.608 s. Recorder wall interval is 76.729 s; 2.05362585034014 s discrepancy remains. Wall coverage is complete; this alone does not establish sample-aligned PCM coverage. No listening/taste claim.",
+  "windowRecords": 852,
+  "wallCoverage": {
+    "sampleCount": 852,
+    "edgeWallMs": 1788734878462,
+    "recorderStartWallMs": 1788734816535,
+    "recorderStopWallMs": 1788734893264,
+    "requiredFromWallMs": 1788734875462,
+    "requiredToWallMs": 1788734889962,
+    "preEdgeCoveredMs": 61927,
+    "postEdgeCoveredMs": 14802,
+    "complete": true,
+    "reason": "recorder-interval-covers-3000ms-pre-edge-through-11500ms-post-edge"
+  },
+  "cleanup": {
+    "browser": true,
+    "sink": {
+      "moduleId": "536870913",
+      "unloaded": true,
+      "verifiedGone": true,
+      "afterProbeExit": true
+    },
+    "defaultSinkUnchanged": true,
+    "complete": true
+  },
+  "scoreDirectorInterpretation": {
+    "ref": "score-confirmed-authority-interpretation.json",
+    "sha256": "8bc073797bc0a65616c1f4b5cd22113811bc12c4c28ac3b3b914545a70c1b6ad",
+    "consumed": true,
+    "disposition": "No forced minimum hold or new score-authority repair; retain separate adapter bookkeeping."
+  },
+  "newSourceRepairAuthorized": false,
+  "defectClosure": false,
+  "chapterAcceptance": false,
+  "publishingAuthorized": false
+}

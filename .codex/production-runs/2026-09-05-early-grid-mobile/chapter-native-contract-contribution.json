@@ -1,0 +1,1083 @@
+{
+  "schema": "paravoxia.chapterNativeContractContribution.v1",
+  "status": "proposed-fields-awaiting-peer-response-and-native-target-schema-extension",
+  "runId": "2026-09-05-early-grid-mobile",
+  "proposalVersion": "early-chapter-stage3-v1",
+  "contractVersion": null,
+  "contractSha256": null,
+  "authoredAt": "2026-09-05T19:57:45.761641+00:00",
+  "story": {
+    "intentRef": "story-intent.md",
+    "purpose": "Ground the worker and make real pickup, extraction and camera traversal legible with one current action.",
+    "emotionalBefore": "The monochrome work order and unresponsive-looking debris obscure action.",
+    "emotionalAfter": "Each real act has a clear consequence, and the camera chooses to stay.",
+    "intendedAmbiguity": "Institutional coverage and emerging attention remain simultaneously plausible.",
+    "nonNegotiableCanon": [
+      "Bare reality; no unearned color/material or embodiment.",
+      "Pre-lift watcher remains parenthetical/impersonal and silent.",
+      "Worker and Terra identities/consciousness questions remain protected.",
+      "No grants, teleports, forced advances, loot/recipe rewrite or new later resource gate.",
+      "Existing track/descent jump and mining permissions remain; horizontal hold is not blanket input suppression."
+    ],
+    "realityStageCeiling": "bare",
+    "characterDynamics": [
+      {
+        "id": "character.early.worker",
+        "characterRef": "Worker9",
+        "desire": "Recover after impact and perform comprehensible work.",
+        "opposition": "The monochrome feed hides real affordances.",
+        "tactic": "Walk over actual debris, harvest yielding ground, walk to next camera.",
+        "beliefBefore": "The next action is uncertain.",
+        "beliefAfter": "Actions produce trustworthy consequences.",
+        "playerVisibleEvidenceRefs": [
+          "early.pickup.receipt",
+          "early.harvest.receipt",
+          "early.coverage.transfer"
+        ],
+        "revealRefs": [
+          "reveal.early.attention"
+        ]
+      },
+      {
+        "id": "character.early.terra",
+        "characterRef": "Terra",
+        "desire": "Keep this worker in view.",
+        "opposition": "Fixed coverage interrupts observation.",
+        "tactic": "Transfer once, then suspend handoff through the existing unbolt.",
+        "beliefBefore": "Coverage cells are interchangeable.",
+        "beliefAfter": "This one merits continuity.",
+        "playerVisibleEvidenceRefs": [
+          "anc.track.unbolt",
+          "early.track.attention"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ]
+      }
+    ],
+    "revealLedger": [
+      {
+        "id": "reveal.early.attention",
+        "subject": "Coverage can read as nascent attention.",
+        "levelBefore": "player-inference",
+        "levelAfter": "player-inference",
+        "setupRefs": [
+          "early.coverage.transfer"
+        ],
+        "payoffRefs": [
+          "anc.track.unbolt",
+          "early.track.attention"
+        ],
+        "playerEvidence": "Existing camera keeps watching and unchanged parenthetical, now deliberately shown once.",
+        "protectedQuestion": false
+      },
+      {
+        "id": "reveal.early.identity-open",
+        "subject": "Identity of the watcher, player and later consciousness relationship.",
+        "levelBefore": "protected-open",
+        "levelAfter": "protected-open",
+        "setupRefs": [],
+        "payoffRefs": [],
+        "playerEvidence": "No explicit identity or embodiment assertion is added.",
+        "protectedQuestion": true
+      }
+    ],
+    "events": [
+      {
+        "id": "event.early.descent-impact",
+        "beat": "descent",
+        "anchorRef": "anc.descent.impact",
+        "event": "Existing actual descent-impact bundle fires",
+        "playerAction": "Observe or act under current beat permissions.",
+        "stateBeforeRefs": [
+          "story:beat:descent"
+        ],
+        "stateAfterRefs": [
+          "event:anc.descent.impact"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Preserve current predecessor/handback behavior, no new reward and no unearned perception."
+      },
+      {
+        "id": "event.early.fixed-ready",
+        "beat": "ch1-fixed",
+        "anchorRef": "early.fixed.ready",
+        "event": "Settled supported worker and correct one-target first action",
+        "playerAction": "Observe or act under current beat permissions.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-fixed"
+        ],
+        "stateAfterRefs": [
+          "event:early.fixed.ready"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Preserve current predecessor/handback behavior, no new reward and no unearned perception."
+      },
+      {
+        "id": "event.early.pickup-receipt",
+        "beat": "ch1-fixed",
+        "anchorRef": "early.pickup.receipt",
+        "event": "Actual collectDebris(0) idempotent receipt",
+        "playerAction": "Walk over existing debris0.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-fixed"
+        ],
+        "stateAfterRefs": [
+          "event:early.pickup.receipt"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "One after-all-loot receipt; wood2/stone2 unchanged; no seed/backfill event; clear DEBRIS within two presented frames."
+      },
+      {
+        "id": "event.early.harvest-receipt",
+        "beat": "ch1-fixed",
+        "anchorRef": "early.harvest.receipt",
+        "event": "Real positive-yield extraction satisfies biofiber>=1",
+        "playerAction": "Hold existing extraction input at the actual yielding patch.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-fixed"
+        ],
+        "stateAfterRefs": [
+          "event:early.harvest.receipt"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Finalized local positive biofiber transaction; one completion; no event for already-earned state."
+      },
+      {
+        "id": "event.early.coverage-transfer",
+        "beat": "ch1-fixed",
+        "anchorRef": "early.coverage.transfer",
+        "event": "Actual player-traversal under unchanged valid geometry epoch crosses body-safe coverage",
+        "playerAction": "Walk across shared viewport-safe frame boundary after resource predicates.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-fixed"
+        ],
+        "stateAfterRefs": [
+          "event:early.coverage.transfer"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "One player-traversal event in unchanged geometry epoch after arming; destination fixed frame actually presented before unbolt; no resize/rebase credit."
+      },
+      {
+        "id": "event.early.track-unbolt",
+        "beat": "ch1-track",
+        "anchorRef": "anc.track.unbolt",
+        "event": "Existing armed bundle fires at its current authoritative target",
+        "playerAction": "Observe the existing rig release; current jump/mine policy remains available.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-track"
+        ],
+        "stateAfterRefs": [
+          "event:anc.track.unbolt"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Preserve inherited bundle/music/grid cap/6500ms rig/7000ms envelope. Show original first Regulation sentence through current system channel for2800ms exactly once; no hidden work-order voice."
+      },
+      {
+        "id": "event.early.track-attention",
+        "beat": "ch1-track",
+        "anchorRef": "early.track.attention",
+        "event": "Existing silent parenthetical is actually shown at fired unbolt origin+3250ms for3200ms; newly declared presentation event, not a new revelation.",
+        "playerAction": "Observe without another required input.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-track"
+        ],
+        "stateAfterRefs": [
+          "event:early.track.attention"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "At actual bundle origin+3250ms show unchanged parenthetical for3200ms through silent caption lane; cancel on exit/restore; never voice it."
+      },
+      {
+        "id": "event.early.raster-ready",
+        "beat": "ch1-raster",
+        "anchorRef": "early.raster.ready",
+        "event": "Existing seven-second unbolt completes and releases raster input",
+        "playerAction": "Observe or act under current beat permissions.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-raster"
+        ],
+        "stateAfterRefs": [
+          "event:early.raster.ready"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Preserve current predecessor/handback behavior, no new reward and no unearned perception."
+      },
+      {
+        "id": "event.early.raster-receipt",
+        "beat": "ch1-raster",
+        "anchorRef": "early.raster.receipt",
+        "event": "Each actual required debris or yielding fiber transaction",
+        "playerAction": "Walk over current required debris or harvest current yielding patch.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-raster"
+        ],
+        "stateAfterRefs": [
+          "event:early.raster.receipt"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Post-commit native transaction/event ID, local actor, relevant active phase, partial progress OR terminal completion; optional excess has no mandatory-progress claim."
+      },
+      {
+        "id": "event.early.raster-salvage-complete",
+        "beat": "ch1-raster",
+        "anchorRef": "early.raster.salvage-complete",
+        "event": "Actual receipts for indices 0,1,2 are satisfied",
+        "playerAction": "Recover required pieces0/1/2 through ordinary proximity.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-raster"
+        ],
+        "stateAfterRefs": [
+          "event:early.raster.salvage-complete"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Required set satisfied by real receipts, not all physical optional pieces. Skip already satisfied fiber objective silently."
+      },
+      {
+        "id": "event.early.raster-quota-complete",
+        "beat": "ch1-raster",
+        "anchorRef": "early.raster.quota-complete",
+        "event": "Real required salvage/fiber/stone conjunction becomes satisfied; old action clears before inherited completion hold.",
+        "playerAction": "Complete the last real required salvage/fiber transaction.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-raster"
+        ],
+        "stateAfterRefs": [
+          "event:early.raster.quota-complete"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Required receipts0..2 && fiber6 && stone4 edge clears action within two presented frames. Existing minimum/2.5s hold remain; no repeat completion at hold expiry."
+      },
+      {
+        "id": "event.early.depth-handoff",
+        "beat": "ch1-depth",
+        "anchorRef": "early.depth.handoff",
+        "event": "Required salvage, fiber6, stone4, six-second minimum and 2.5-second hold all met",
+        "playerAction": "Continue ordinary play after the earned hold.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-depth"
+        ],
+        "stateAfterRefs": [
+          "event:early.depth.handoff"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Only existing six-second minimum and2.5s earned completion hold; canonical active depth workOrder preserved, one SUPPLY POD marker, no pod grant."
+      },
+      {
+        "id": "event.early.depth-settled",
+        "beat": "ch1-depth",
+        "anchorRef": "early.depth.settled",
+        "event": "Existing distance-18 rig transition settles after 2.5 seconds",
+        "playerAction": "Observe or act under current beat permissions.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-depth"
+        ],
+        "stateAfterRefs": [
+          "event:early.depth.settled"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Preserve current predecessor/handback behavior, no new reward and no unearned perception."
+      },
+      {
+        "id": "event.early.entry-restored",
+        "beat": "ch1-fixed",
+        "anchorRef": "early.entry.restored",
+        "event": "Actual cold-entry/earned Continue reconstruction completes",
+        "playerAction": "Use cold diagnostic or actual earned Continue.",
+        "stateBeforeRefs": [
+          "story:beat:ch1-fixed"
+        ],
+        "stateAfterRefs": [
+          "event:early.entry.restored"
+        ],
+        "causeRefs": [
+          "source:main/src/story/storyDirector.ts"
+        ],
+        "payoffRefs": [
+          "story-intent.md"
+        ],
+        "revealRefs": [
+          "reveal.early.attention",
+          "reveal.early.identity-open"
+        ],
+        "informationRevealed": "The real worker action becomes understandable; existing attention turn remains an implication, no identity reveal.",
+        "acceptanceCriterion": "Conditional restoration branch; real saved facts determine current stage; no invented receipt, camera cut, historical caption or retained unowned white flash."
+      }
+    ],
+    "agencyWindows": [
+      {
+        "id": "agency.early.descent",
+        "startAnchorRef": "anc.descent.impact",
+        "endAnchorRef": "early.fixed.ready",
+        "movement": "blended",
+        "look": "director",
+        "interaction": "player",
+        "agencyType": "observation",
+        "mandatoryPath": "Existing watched arrival; no invented action. Preserve exact rasterPolicy permissions: horizontal moveSpeedScale0, existing allowJump and allowMine semantics unchanged.",
+        "fallbackAllowed": false,
+        "fallbackSemantics": "No fabricated inventory, phantom target or reduced evidence route. Planted no-bob visual fallback preserves every action.",
+        "fallbackCountsAsNarrativeAcceptance": false,
+        "rescueAllowed": false,
+        "rescueSemantics": "Timeout, scripted reward or autopilot rescue is not authorized as story acceptance.",
+        "rescueCountsAsNarrativeAcceptance": false,
+        "motivation": "The worker earns the same camera learning to follow through visible real actions.",
+        "handBack": "Preserve current input policy and the actual existing raster release; no focus snap or new movement hold.",
+        "pauseBehavior": "Freeze animation/holds/receipt UI and transfer sampling; rebase geometry without an event.",
+        "focusLossBehavior": "Freeze foreground state; resume with a fresh player sample; no cut or receipt replay.",
+        "replayBehavior": "Derive from actual new-run state; clear target/epoch/transfer history.",
+        "mobileBehavior": "Existing D-pad/action labels via inputGlyphs; measured projection and control rectangles.",
+        "reducedMotionBehavior": "Planted avatar, static marker; retain causal hard coverage change and inherited continuous unbolt timing without optional shake/flash."
+      },
+      {
+        "id": "agency.early.fixed",
+        "startAnchorRef": "early.fixed.ready",
+        "endAnchorRef": "early.coverage.transfer",
+        "movement": "player",
+        "look": "director",
+        "interaction": "player",
+        "agencyType": "mandatory-action",
+        "mandatoryPath": "Actual debris0 receipt, positive fiber harvest, then new player-traversal event; preserve legal row and ordinary inputs.",
+        "fallbackAllowed": false,
+        "fallbackSemantics": "No fabricated inventory, phantom target or reduced evidence route. Planted no-bob visual fallback preserves every action.",
+        "fallbackCountsAsNarrativeAcceptance": false,
+        "rescueAllowed": false,
+        "rescueSemantics": "Timeout, scripted reward or autopilot rescue is not authorized as story acceptance.",
+        "rescueCountsAsNarrativeAcceptance": false,
+        "motivation": "The worker earns the same camera learning to follow through visible real actions.",
+        "handBack": "Preserve current input policy and the actual existing raster release; no focus snap or new movement hold.",
+        "pauseBehavior": "Freeze animation/holds/receipt UI and transfer sampling; rebase geometry without an event.",
+        "focusLossBehavior": "Freeze foreground state; resume with a fresh player sample; no cut or receipt replay.",
+        "replayBehavior": "Derive from actual new-run state; clear target/epoch/transfer history.",
+        "mobileBehavior": "Existing D-pad/action labels via inputGlyphs; measured projection and control rectangles.",
+        "reducedMotionBehavior": "Planted avatar, static marker; retain causal hard coverage change and inherited continuous unbolt timing without optional shake/flash."
+      },
+      {
+        "id": "agency.early.track",
+        "startAnchorRef": "early.coverage.transfer",
+        "endAnchorRef": "early.raster.ready",
+        "movement": "blended",
+        "look": "director",
+        "interaction": "player",
+        "agencyType": "observation",
+        "mandatoryPath": "Existing tracking hold; no extra work or time gate. Preserve exact rasterPolicy permissions: horizontal moveSpeedScale0, existing allowJump and allowMine semantics unchanged.",
+        "fallbackAllowed": false,
+        "fallbackSemantics": "No fabricated inventory, phantom target or reduced evidence route. Planted no-bob visual fallback preserves every action.",
+        "fallbackCountsAsNarrativeAcceptance": false,
+        "rescueAllowed": false,
+        "rescueSemantics": "Timeout, scripted reward or autopilot rescue is not authorized as story acceptance.",
+        "rescueCountsAsNarrativeAcceptance": false,
+        "motivation": "The worker earns the same camera learning to follow through visible real actions.",
+        "handBack": "Preserve current input policy and the actual existing raster release; no focus snap or new movement hold.",
+        "pauseBehavior": "Freeze animation/holds/receipt UI and transfer sampling; rebase geometry without an event.",
+        "focusLossBehavior": "Freeze foreground state; resume with a fresh player sample; no cut or receipt replay.",
+        "replayBehavior": "Derive from actual new-run state; clear target/epoch/transfer history.",
+        "mobileBehavior": "Existing D-pad/action labels via inputGlyphs; measured projection and control rectangles.",
+        "reducedMotionBehavior": "Planted avatar, static marker; retain causal hard coverage change and inherited continuous unbolt timing without optional shake/flash."
+      },
+      {
+        "id": "agency.early.raster",
+        "startAnchorRef": "early.raster.ready",
+        "endAnchorRef": "early.depth.handoff",
+        "movement": "player",
+        "look": "director",
+        "interaction": "player",
+        "agencyType": "mandatory-action",
+        "mandatoryPath": "First-three real debris receipts, existing total six fiber/four stone; optional excess not required.",
+        "fallbackAllowed": false,
+        "fallbackSemantics": "No fabricated inventory, phantom target or reduced evidence route. Planted no-bob visual fallback preserves every action.",
+        "fallbackCountsAsNarrativeAcceptance": false,
+        "rescueAllowed": false,
+        "rescueSemantics": "Timeout, scripted reward or autopilot rescue is not authorized as story acceptance.",
+        "rescueCountsAsNarrativeAcceptance": false,
+        "motivation": "The worker earns the same camera learning to follow through visible real actions.",
+        "handBack": "Preserve current input policy and the actual existing raster release; no focus snap or new movement hold.",
+        "pauseBehavior": "Freeze animation/holds/receipt UI and transfer sampling; rebase geometry without an event.",
+        "focusLossBehavior": "Freeze foreground state; resume with a fresh player sample; no cut or receipt replay.",
+        "replayBehavior": "Derive from actual new-run state; clear target/epoch/transfer history.",
+        "mobileBehavior": "Existing D-pad/action labels via inputGlyphs; measured projection and control rectangles.",
+        "reducedMotionBehavior": "Planted avatar, static marker; retain causal hard coverage change and inherited continuous unbolt timing without optional shake/flash."
+      },
+      {
+        "id": "agency.early.depth",
+        "startAnchorRef": "early.depth.handoff",
+        "endAnchorRef": "early.depth.settled",
+        "movement": "player",
+        "look": "director",
+        "interaction": "player",
+        "agencyType": "mandatory-action",
+        "mandatoryPath": "Existing legal supply-pod collection row; no new controls or grant.",
+        "fallbackAllowed": false,
+        "fallbackSemantics": "No fabricated inventory, phantom target or reduced evidence route. Planted no-bob visual fallback preserves every action.",
+        "fallbackCountsAsNarrativeAcceptance": false,
+        "rescueAllowed": false,
+        "rescueSemantics": "Timeout, scripted reward or autopilot rescue is not authorized as story acceptance.",
+        "rescueCountsAsNarrativeAcceptance": false,
+        "motivation": "The worker earns the same camera learning to follow through visible real actions.",
+        "handBack": "Preserve current input policy and the actual existing raster release; no focus snap or new movement hold.",
+        "pauseBehavior": "Freeze animation/holds/receipt UI and transfer sampling; rebase geometry without an event.",
+        "focusLossBehavior": "Freeze foreground state; resume with a fresh player sample; no cut or receipt replay.",
+        "replayBehavior": "Derive from actual new-run state; clear target/epoch/transfer history.",
+        "mobileBehavior": "Existing D-pad/action labels via inputGlyphs; measured projection and control rectangles.",
+        "reducedMotionBehavior": "Planted avatar, static marker; retain causal hard coverage change and inherited continuous unbolt timing without optional shake/flash."
+      }
+    ]
+  },
+  "guidance": {
+    "baselineArtifact": "shipped-ux-baseline.json",
+    "lifecycleEvidenceArtifact": "objective-lifecycle-evidence.json",
+    "auditArtifact": "ux-audit.md",
+    "objectives": [
+      {
+        "id": "ch1:fixed:recover-first-debris",
+        "enterAnchorRef": "early.fixed.ready",
+        "markerLabel": "DEBRIS",
+        "requiresMarker": false,
+        "workOrder": [
+          "WALK OVER THE DEBRIS TO RECOVER IT."
+        ],
+        "agencyWindowRef": "agency.early.fixed",
+        "kind": "interact",
+        "clearAnchorRef": "early.pickup.receipt",
+        "feedback": {
+          "eventType": "objective-enter",
+          "presentationOnly": true,
+          "advancesProgression": false,
+          "emissionsPerEntry": 1,
+          "intent": "One semantic entry per actually entered stage; receipt-correlated successor sound is coalesced; seed/Continue reconstruction is silent. Completion comes only from the real receipt, with no progress/completion double emission."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "variantIntent": "Same real action, exact label, one survey target or no designation as declared, common touch glyphs, no audio-only information.",
+        "resetRef": "reset.early.guidance",
+        "resetTriggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "resetIntent": "Clear stale selection/receipt intent; preserve real milestones and inventory; pause freezes live clocks; restore does not replay earned actions or award coverage.",
+        "acceptanceCriterion": "isDebrisCollected(0) after actual collectDebris post-commit. Obsolete imperative/target clears within two presented frames; actual source-bound per-mode evidence required.",
+        "targetMode": "survey-bracket",
+        "targetContract": {
+          "ownerRef": "main/src/story/world/DebrisField.tsx#DebrisField",
+          "selectionRef": "main/src/story/feed/SurveyBracketDriver.tsx#SurveyBracketDriver",
+          "readinessCriterion": "one phase-matched real reachable target; actual highlighted patch matches ordinary picker at extraction",
+          "completionCriterion": "isDebrisCollected(0) after actual collectDebris post-commit",
+          "maxVisibleTargets": 1,
+          "evidenceFields": [
+            "targetId",
+            "targetLabel",
+            "objectiveId",
+            "worldPosition",
+            "projectedRect",
+            "labelRect",
+            "visible",
+            "actionable",
+            "localActorId",
+            "inputMode",
+            "qualityTier",
+            "geometryEpoch",
+            "playerSampleId",
+            "receiptId",
+            "receiptCommitted",
+            "receiptItemDeltas",
+            "sourceRevision",
+            "contractSha256"
+          ]
+        }
+      },
+      {
+        "id": "ch1:fixed:calibrate-extractor",
+        "enterAnchorRef": "early.pickup.receipt",
+        "markerLabel": "BIOFIBER",
+        "requiresMarker": false,
+        "workOrder": [
+          "HOLD [E] TO HARVEST BIOFIBER."
+        ],
+        "agencyWindowRef": "agency.early.fixed",
+        "kind": "interact",
+        "clearAnchorRef": "early.harvest.receipt",
+        "feedback": {
+          "eventType": "objective-enter",
+          "presentationOnly": true,
+          "advancesProgression": false,
+          "emissionsPerEntry": 1,
+          "intent": "One semantic entry per actually entered stage; receipt-correlated successor sound is coalesced; seed/Continue reconstruction is silent. Completion comes only from the real receipt, with no progress/completion double emission."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "variantIntent": "Same real action, exact label, one survey target or no designation as declared, common touch glyphs, no audio-only information.",
+        "resetRef": "reset.early.guidance",
+        "resetTriggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "resetIntent": "Clear stale selection/receipt intent; preserve real milestones and inventory; pause freezes live clocks; restore does not replay earned actions or award coverage.",
+        "acceptanceCriterion": "getItemCount(biofiber)>=1 after real positive-yield transaction; honor already earned inventory. Obsolete imperative/target clears within two presented frames; actual source-bound per-mode evidence required.",
+        "targetMode": "survey-bracket",
+        "targetContract": {
+          "ownerRef": "main/src/components/EfficientPlayer.tsx#pickSideTarget",
+          "selectionRef": "main/src/story/feed/SurveyBracketDriver.tsx#SurveyBracketDriver",
+          "readinessCriterion": "one phase-matched real reachable target; actual highlighted patch matches ordinary picker at extraction",
+          "completionCriterion": "getItemCount(biofiber)>=1 after real positive-yield transaction; honor already earned inventory",
+          "maxVisibleTargets": 1,
+          "evidenceFields": [
+            "targetId",
+            "targetLabel",
+            "objectiveId",
+            "worldPosition",
+            "projectedRect",
+            "labelRect",
+            "visible",
+            "actionable",
+            "localActorId",
+            "inputMode",
+            "qualityTier",
+            "geometryEpoch",
+            "playerSampleId",
+            "receiptId",
+            "receiptCommitted",
+            "receiptItemDeltas",
+            "sourceRevision",
+            "contractSha256"
+          ]
+        }
+      },
+      {
+        "id": "ch1:fixed:cross-camera-cell",
+        "enterAnchorRef": "early.harvest.receipt",
+        "markerLabel": "NEXT CAMERA",
+        "requiresMarker": false,
+        "workOrder": [
+          "WALK [A]/[D] TO THE NEXT CAMERA."
+        ],
+        "agencyWindowRef": "agency.early.fixed",
+        "kind": "travel",
+        "clearAnchorRef": "early.coverage.transfer",
+        "feedback": {
+          "eventType": "objective-enter",
+          "presentationOnly": true,
+          "advancesProgression": false,
+          "emissionsPerEntry": 1,
+          "intent": "One semantic entry per actually entered stage; receipt-correlated successor sound is coalesced; seed/Continue reconstruction is silent. Completion comes only from the real receipt, with no progress/completion double emission."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "variantIntent": "Same real action, exact label, one survey target or no designation as declared, common touch glyphs, no audio-only information.",
+        "resetRef": "reset.early.guidance",
+        "resetTriggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "resetIntent": "Clear stale selection/receipt intent; preserve real milestones and inventory; pause freezes live clocks; restore does not replay earned actions or award coverage.",
+        "acceptanceCriterion": "fresh player-traversal event after arming, under stable valid geometry epoch. Obsolete imperative/target clears within two presented frames; actual source-bound per-mode evidence required.",
+        "targetMode": "none",
+        "targetContract": {
+          "ownerRef": "main/src/story/sideLens.ts#sampleFixedScreenCoverage",
+          "selectionRef": "main/src/story/sideLens.ts#sampleFixedScreenCoverage",
+          "readinessCriterion": "valid shared coverage geometry and armed resource predicates",
+          "completionCriterion": "fresh player-traversal event after arming, under stable valid geometry epoch",
+          "maxVisibleTargets": 0,
+          "evidenceFields": [
+            "objectiveId",
+            "targetCount",
+            "directionalMarkerCount",
+            "geometryEpoch",
+            "playerSampleId",
+            "transferSequence",
+            "transferReason",
+            "bundleOrigin",
+            "presentedFrameId",
+            "sourceRevision",
+            "contractSha256"
+          ]
+        }
+      },
+      {
+        "id": "ch1:track:tracking-transfer",
+        "enterAnchorRef": "early.coverage.transfer",
+        "markerLabel": "TRACKING VIEW",
+        "requiresMarker": false,
+        "workOrder": [
+          "HOLD POSITION."
+        ],
+        "agencyWindowRef": "agency.early.track",
+        "kind": "wait",
+        "clearAnchorRef": "early.raster.ready",
+        "feedback": {
+          "eventType": "objective-enter",
+          "presentationOnly": true,
+          "advancesProgression": false,
+          "emissionsPerEntry": 1,
+          "intent": "One semantic entry per actually entered stage; receipt-correlated successor sound is coalesced; seed/Continue reconstruction is silent. Completion comes only from the real receipt, with no progress/completion double emission."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "variantIntent": "Same real action, exact label, one survey target or no designation as declared, common touch glyphs, no audio-only information.",
+        "resetRef": "reset.early.guidance",
+        "resetTriggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "resetIntent": "Clear stale selection/receipt intent; preserve real milestones and inventory; pause freezes live clocks; restore does not replay earned actions or award coverage.",
+        "acceptanceCriterion": "existing actual unbolt origin plus7000ms, preserving current input hold/jump/mine permissions. Obsolete imperative/target clears within two presented frames; actual source-bound per-mode evidence required.",
+        "targetMode": "none",
+        "targetContract": {
+          "ownerRef": "main/src/story/storyDirector.ts#tickTrackUnlock",
+          "selectionRef": "main/src/story/storyDirector.ts#tickTrackUnlock",
+          "readinessCriterion": "existing armed unbolt bundle and ordinary inherited hold",
+          "completionCriterion": "existing actual unbolt origin plus7000ms, preserving current input hold/jump/mine permissions",
+          "maxVisibleTargets": 0,
+          "evidenceFields": [
+            "objectiveId",
+            "targetCount",
+            "directionalMarkerCount",
+            "geometryEpoch",
+            "playerSampleId",
+            "transferSequence",
+            "transferReason",
+            "bundleOrigin",
+            "presentedFrameId",
+            "sourceRevision",
+            "contractSha256"
+          ]
+        }
+      },
+      {
+        "id": "ch1:raster:recover-quota",
+        "enterAnchorRef": "early.raster.ready",
+        "markerLabel": "DEBRIS",
+        "requiresMarker": false,
+        "workOrder": [
+          "WALK OVER THE DEBRIS TO RECOVER IT."
+        ],
+        "agencyWindowRef": "agency.early.raster",
+        "kind": "interact",
+        "clearAnchorRef": "early.raster.salvage-complete",
+        "feedback": {
+          "eventType": "objective-enter",
+          "presentationOnly": true,
+          "advancesProgression": false,
+          "emissionsPerEntry": 1,
+          "intent": "One semantic entry per actually entered stage; receipt-correlated successor sound is coalesced; seed/Continue reconstruction is silent. Completion comes only from the real receipt, with no progress/completion double emission."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "variantIntent": "Same real action, exact label, one survey target or no designation as declared, common touch glyphs, no audio-only information.",
+        "resetRef": "reset.early.guidance",
+        "resetTriggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "resetIntent": "Clear stale selection/receipt intent; preserve real milestones and inventory; pause freezes live clocks; restore does not replay earned actions or award coverage.",
+        "acceptanceCriterion": "[0,1,2].every(isDebrisCollected) after original real commits. Obsolete imperative/target clears within two presented frames; actual source-bound per-mode evidence required.",
+        "targetMode": "survey-bracket",
+        "targetContract": {
+          "ownerRef": "main/src/story/world/DebrisField.tsx#DebrisField",
+          "selectionRef": "main/src/story/feed/SurveyBracketDriver.tsx#SurveyBracketDriver",
+          "readinessCriterion": "one phase-matched real reachable target; actual highlighted patch matches ordinary picker at extraction",
+          "completionCriterion": "[0,1,2].every(isDebrisCollected) after original real commits",
+          "maxVisibleTargets": 1,
+          "evidenceFields": [
+            "targetId",
+            "targetLabel",
+            "objectiveId",
+            "worldPosition",
+            "projectedRect",
+            "labelRect",
+            "visible",
+            "actionable",
+            "localActorId",
+            "inputMode",
+            "qualityTier",
+            "geometryEpoch",
+            "playerSampleId",
+            "receiptId",
+            "receiptCommitted",
+            "receiptItemDeltas",
+            "sourceRevision",
+            "contractSha256"
+          ]
+        }
+      },
+      {
+        "id": "ch1:raster:extract-fiber-quota",
+        "enterAnchorRef": "early.raster.salvage-complete",
+        "markerLabel": "BIOFIBER",
+        "requiresMarker": false,
+        "workOrder": [
+          "HOLD [E] AT BIOFIBER. MOVE TO THE NEXT PATCH."
+        ],
+        "agencyWindowRef": "agency.early.raster",
+        "kind": "interact",
+        "clearAnchorRef": "early.raster.quota-complete",
+        "feedback": {
+          "eventType": "objective-enter",
+          "presentationOnly": true,
+          "advancesProgression": false,
+          "emissionsPerEntry": 1,
+          "intent": "One semantic entry per actually entered stage; receipt-correlated successor sound is coalesced; seed/Continue reconstruction is silent. Completion comes only from the real receipt, with no progress/completion double emission."
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "variantIntent": "Same real action, exact label, one survey target or no designation as declared, common touch glyphs, no audio-only information.",
+        "resetRef": "reset.early.guidance",
+        "resetTriggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "resetIntent": "Clear stale selection/receipt intent; preserve real milestones and inventory; pause freezes live clocks; restore does not replay earned actions or award coverage.",
+        "acceptanceCriterion": "required receipts0/1/2 AND biofiber>=6 AND stone>=4; clear immediately, retain existing subsequent hold. Obsolete imperative/target clears within two presented frames; actual source-bound per-mode evidence required.",
+        "targetMode": "survey-bracket",
+        "targetContract": {
+          "ownerRef": "main/src/components/EfficientPlayer.tsx#pickSideTarget",
+          "selectionRef": "main/src/story/feed/SurveyBracketDriver.tsx#SurveyBracketDriver",
+          "readinessCriterion": "one phase-matched real reachable target; actual highlighted patch matches ordinary picker at extraction",
+          "completionCriterion": "required receipts0/1/2 AND biofiber>=6 AND stone>=4; clear immediately, retain existing subsequent hold",
+          "maxVisibleTargets": 1,
+          "evidenceFields": [
+            "targetId",
+            "targetLabel",
+            "objectiveId",
+            "worldPosition",
+            "projectedRect",
+            "labelRect",
+            "visible",
+            "actionable",
+            "localActorId",
+            "inputMode",
+            "qualityTier",
+            "geometryEpoch",
+            "playerSampleId",
+            "receiptId",
+            "receiptCommitted",
+            "receiptItemDeltas",
+            "sourceRevision",
+            "contractSha256"
+          ]
+        }
+      }
+    ]
+  },
+  "syncAnchorEventMap": [
+    {
+      "id": "anc.descent.impact",
+      "eventRef": "event.early.descent-impact",
+      "beat": "descent",
+      "event": "Existing actual descent-impact bundle fires"
+    },
+    {
+      "id": "early.fixed.ready",
+      "eventRef": "event.early.fixed-ready",
+      "beat": "ch1-fixed",
+      "event": "Settled supported worker and correct one-target first action"
+    },
+    {
+      "id": "early.pickup.receipt",
+      "eventRef": "event.early.pickup-receipt",
+      "beat": "ch1-fixed",
+      "event": "Actual collectDebris(0) idempotent receipt"
+    },
+    {
+      "id": "early.harvest.receipt",
+      "eventRef": "event.early.harvest-receipt",
+      "beat": "ch1-fixed",
+      "event": "Real positive-yield extraction satisfies biofiber>=1"
+    },
+    {
+      "id": "early.coverage.transfer",
+      "eventRef": "event.early.coverage-transfer",
+      "beat": "ch1-fixed",
+      "event": "Actual player-traversal under unchanged valid geometry epoch crosses body-safe coverage"
+    },
+    {
+      "id": "anc.track.unbolt",
+      "eventRef": "event.early.track-unbolt",
+      "beat": "ch1-track",
+      "event": "Existing armed bundle fires at its current authoritative target"
+    },
+    {
+      "id": "early.track.attention",
+      "eventRef": "event.early.track-attention",
+      "beat": "ch1-track",
+      "event": "Existing silent parenthetical is actually shown at fired unbolt origin+3250ms for3200ms; newly declared presentation event, not a new revelation."
+    },
+    {
+      "id": "early.raster.ready",
+      "eventRef": "event.early.raster-ready",
+      "beat": "ch1-raster",
+      "event": "Existing seven-second unbolt completes and releases raster input"
+    },
+    {
+      "id": "early.raster.receipt",
+      "eventRef": "event.early.raster-receipt",
+      "beat": "ch1-raster",
+      "event": "Each actual required debris or yielding fiber transaction"
+    },
+    {
+      "id": "early.raster.salvage-complete",
+      "eventRef": "event.early.raster-salvage-complete",
+      "beat": "ch1-raster",
+      "event": "Actual receipts for indices 0,1,2 are satisfied"
+    },
+    {
+      "id": "early.raster.quota-complete",
+      "eventRef": "event.early.raster-quota-complete",
+      "beat": "ch1-raster",
+      "event": "Real required salvage/fiber/stone conjunction becomes satisfied; old action clears before inherited completion hold."
+    },
+    {
+      "id": "early.depth.handoff",
+      "eventRef": "event.early.depth-handoff",
+      "beat": "ch1-depth",
+      "event": "Required salvage, fiber6, stone4, six-second minimum and 2.5-second hold all met"
+    },
+    {
+      "id": "early.depth.settled",
+      "eventRef": "event.early.depth-settled",
+      "beat": "ch1-depth",
+      "event": "Existing distance-18 rig transition settles after 2.5 seconds"
+    },
+    {
+      "id": "early.entry.restored",
+      "eventRef": "event.early.entry-restored",
+      "beat": "ch1-fixed",
+      "event": "Actual cold-entry/earned Continue reconstruction completes"
+    }
+  ],
+  "anchorAdditions": [
+    {
+      "id": "early.track.attention",
+      "beat": "ch1-track",
+      "source": "timeline",
+      "relationTo": "anc.track.unbolt",
+      "offsetMs": 3250,
+      "eventRef": "event.early.track-attention",
+      "cinematographyShotRef": "shot.early.track-unbolt",
+      "scoreIntent": "silent lowercase caption; no cue"
+    },
+    {
+      "id": "early.raster.quota-complete",
+      "beat": "ch1-raster",
+      "source": "runtime-event",
+      "relationTo": "early.raster.receipt",
+      "offsetMs": 0,
+      "eventRef": "event.early.raster-quota-complete",
+      "cinematographyShotRef": "shot.early.raster-fiber",
+      "scoreIntent": "same final native transaction gets one completion; inherited hold never repeats it"
+    }
+  ],
+  "mergeInstructions": [
+    "Merge Chapter story/events and Cinema five agency windows; preserve Cinema shots/palette/variants/reset/captures.",
+    "Renumber anchor order consistently; entry.restored is a conditional branch, raster.receipt repeats by real identity.",
+    "Quota-complete can coincide with salvage-complete when fiber already earned; no zero-length objective publication.",
+    "Scene score arrays/cue fields remain Score-owned; no native scene validity or final hash asserted here."
+  ]
+}

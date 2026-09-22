@@ -1,0 +1,43 @@
+{
+  "schema": "paravoxia.diagnosticCheckpoint.v1",
+  "noncertifying": true,
+  "wallMs": 1790045643387,
+  "url": "http://127.0.0.1:39685/?story=1&movie=1&journeyprobe=1&journeylane=continuous&journeymode=movie&profile=HIGH",
+  "story": {
+    "active": true,
+    "chapter": "ch3",
+    "beat": "ch3-dusk",
+    "runId": 1
+  },
+  "objective": {
+    "id": null,
+    "health": "idle",
+    "revision": 40
+  },
+  "storageState": {
+    "cookies": [],
+    "origins": [
+      {
+        "origin": "http://127.0.0.1:39685",
+        "localStorage": [
+          {
+            "name": "pvx.v1.world.-1,-1",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"structures\":[],\"campfires\":[{\"pos\":[-23.925484161852214,51.688974761968026,17.191592996743985],\"up\":[-0.0000030513257574594883,0.9999999999953324,1.576563929254091e-7],\"ownerId\":\"local\",\"placedBy\":\"local\"}],\"trees\":[],\"stones\":[[-8,25,-3],[-10,25,-3],[15,25,-4],[11,25,-5],[23,25,-10],[23,25,-6],[21,25,-7],[20,25,-6],[19,25,-6],[18,25,-6],[16,25,-6],[11,25,-8],[10,25,-7],[-3,25,-5],[-5,25,-1],[-9,25,1],[-11,25,5]],\"forage\":[],\"flora\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.voxels",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"generationSchemaVersion\":1,\"fingerprint\":115629,\"removed\":[[6,25,-2],[-5,25,-2],[-6,25,-2]],\"added\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.player",
+            "value": "{\"pos\":[-23.925487518310547,52.78897476196289,17.191593170166016],\"forward\":[-0.015491956082545146,-2.0490847759660647e-7,0.999879992447441],\"pitch\":0.4887822031707849}"
+          },
+          {
+            "name": "pvx.v1.global",
+            "value": "{\"inventory\":{\"berry\":2,\"faulty_maw\":1,\"wood\":1,\"stone\":30,\"biofiber\":6},\"mawCharge\":100,\"era\":\"primitive\",\"milestones\":[\"story:started\",\"story:choice:dispenser:unlock\",\"story:choice:readings:trust\",\"story:choice:question:unknown\",\"story:name:moss\",\"story:choice:light:blinds\",\"story:choice:hum:ignore\",\"story:choice:diagnostic:replay\",\"story:choice:replay2:remember\",\"story:choice:thermal:hold\",\"story:choice:anomaly:ack\",\"story:debris-scattered:3\",\"story:tone:low\",\"story:cell:100\",\"story:prologue-seen\",\"story:debris:0\",\"story:debris:1\",\"story:ch1:track\",\"story:debris-stone-backfill:v2\",\"story:debris:2\",\"story:ch1:quota\",\"story:pod:0\",\"story:pod:1\",\"story:pod:2\",\"story:ch1:depth\",\"story:ch1:nav\",\"story:ch1:iso\",\"story:a1\",\"story:a2\",\"story:sense:health\",\"story:sense:inventory\",\"story:sense:temp\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1\",\"dayPhase\":0.2500000983799411,\"vitals\":{\"health\":100,\"hunger\":28.947699999998292,\"thirst\":25.271549999994388,\"warmth\":99.05159499999365,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":\"-1,-1\",\"currentWorldId\":\"-1,-1\",\"parkedPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16]},\"systemPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16],\"velocity\":[0,0,0]},\"locationMode\":\"surface\",\"repairHistory\":[]}}"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "9728c899035272cf4d5df07a5367a587b1302d6be2e3fa0ce7a529f1ee1044aa",
+  "kind": "continuity",
+  "chapter": "ch14",
+  "proof": {
+    "earnedEntry": false,
+    "earnedExit": false,
+    "chapterWindowComplete": false,
+    "noFixtures": true,
+    "priorIndex": -1,
+    "entryIndex": -1,
+    "beatIndices": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "exitIndex": -1,
+    "sampleCount": 3364,
+    "hardware": true,
+    "cleanup": false,
+    "videoDecodes": false,
+    "audioDecodes": false,
+    "framesNonblank": false
+  },
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continuity/raw/cleanup.json",
+      "sha256": "0a1cd3eeef0484d316fb8d3575dfe92d58236a2dd0997a51ff8f95b40f7ac892"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continuity/raw/media-proof.json",
+      "sha256": "77de37237bc2c10ac3749c5e1bc7d31e40d4f604b5190d386858172c8f43a02b"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continuity/raw/provenance.json",
+      "sha256": "18397a8da67278256d2e3c6b329b3bdfaefbb7e09d24d5046f4af2f7dedf7677"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/continuity/raw/trace.ndjson",
+      "sha256": "266aa14faae75ab45ac2ceb86c37a70a9cb59b8d327a98b1a87447faa4d3fd5d"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "Capture interrupted by SIGTERM",
+    "Chapter video: Chapter-ready video window was not observed"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "1d9b0c751ef1d464b9693dc471d1ef058213be91974fec93969f59ab50437d4f",
+    "buildSha256": "646ffd729782e01c81c0018dcb14bc02a86afd9c6829c319c2fbfb43245c4c7e",
+    "transportSha256": "eb547dcc7d73478b95545a09f2c01eaeb154c1b7ea47b8d73e6e70944e9868dc"
+  }
+}

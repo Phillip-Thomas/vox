@@ -1,0 +1,92 @@
+# Early grid and mobile — Chapter intent
+
+Author: fresh Chapter Director. Status: **ready for independent Score and Cinematography treatments; unsigned**. Candidate: `early-grid-mobile-v1`. This is documentation, not runtime authorization or acceptance.
+
+The opening should teach one ground pickup, one successful harvest, and one walk into the next camera. The camera then chooses to keep watching. The worker's real actions earn that attention; no new revelation is added.
+
+## Grounding and authority
+
+The current owner instruction is recorded in `owner-decisions.md` and `/home/thomasphillip/Projects/recovery/2026-09-05-claude/story-harness-plan.md`, “Owner addition”. It already authorizes the sequence, grounding, viewport response and concise copy. `production-lock.json` currently permits planning only. A reconciled same-hash triad contract and a concretized implementation lock remain required; ordinary choices in this authorized scope do not need another owner question.
+
+Both shipped baselines bind actual archived candidate `1eb27bf00229c442169280f126f0f3f15bcad63d3581af76f5c0b8e4d3d0d1a8`. Inspected full-page frames under `/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/`: `desktop-natural-boundary-0090-ch1-fixed.png`, `portrait-natural-boundary-0088-ch1-fixed.png`, and `portrait-natural-boundary-0107-ch1-fixed.png`. Also inspected `desktop-movie-0071-ch1-raster.png` and `portrait-movie-0076-ch1-raster.png`: the raster instruction stack retains the same portrait-height problem, while survey brackets are deliberately absent in movie mode. The portrait instruction column occupies most of the play height; four BIOFIBER brackets compete with it. Natural boundary traces measure sole clearance about 0.839–0.980 world units, 31 portrait samples with the entire body outside the viewport at 14.985–18.990s, and zero equivalent desktop samples. Movie completion to depth is real flow evidence, but movie suppresses survey brackets and cannot prove manual guidance.
+
+The entry-parity report cited by both baselines separates cold `ch1-fixed` full-page white flash from natural descent and an earned menu Continue, which do not retain that flash. Repair the entry-state owner/reset boundary; never hide the defective overlay with CSS, remove the natural impact, or count a diagnostic deep link as predecessor continuity. Orientation, reduced motion, exact semantic cue counts, and the full reset/lifecycle matrix remain unproved. The added earned-Continue sample does not complete that matrix.
+
+Current runtime: `ch1-fixed` requires 3 biofiber and two distinct cells (opening cell plus one crossing); `ch1-track` is the existing approximately seven-second unbolt; `ch1-raster` requires 6 biofiber, 4 stone, and **all** 3–6 scattered pieces. `DebrisField.collectable` is raster-only, so visible hull debris in fixed really cannot be picked up. `surveyBracketDemand` can request harvest and salvage simultaneously, and the movie raster rail extracts while moving toward debris. These are the actual confusion sources.
+
+Canon: Story Bible “Fixed site cameras” through “Raster side-scroller”; `main/STORY.md` monochrome ladder; Cinematography Bible fixed→tracking→raster lineage. The Bible's depth description is older than current locked-row pod runtime: this pass preserves the current row and three actual pod receipts. Reality remains **bare**, Regulation uses procedural capitals, and the watcher remains parenthetical and impersonal until the existing lift.
+
+## Character, agency, and causal turn
+
+| Presence | Desire / opposition / tactic | Belief before → after | Visible / withheld |
+| --- | --- | --- | --- |
+| Worker | Recover useful material after impact; the monochrome feed hides affordances; walk to a named piece, extract once, continue. | Work is unreadable → each deliberate action has a legible consequence. | Real recovered inventory and ground yield. No claim about the player's identity. |
+| Terra / watcher | Maintain coverage; fixed cameras interrupt observation; hand off once, then hold one view. | Coverage is interchangeable → this worker merits continuity. | Existing unbolt and `(simpler to keep watching this one.)`. Its AI identity, embodiment and later consciousness truths stay author-only. |
+| Authority | Resume counted work despite the crash; orders reduce recovery to procedure. | Survival is a directive → recovery is logged work. | Short Regulation imperatives and authentic receipts; no added lore or joke competing with the action. |
+
+All collection/extraction/traversal is mandatory-path, player-performed agency. Movement, pause, journal, existing accessibility controls and legal backtracking remain available. Guided order is not confiscation of legitimately earned inventory: out-of-order extraction or an older save can already satisfy the harvest predicate, and must not be replayed or rewarded twice. An ordinary fresh run following the sole target must demonstrate pickup→harvest→crossing in that order. No timer, movie rescue, target disappearance, sound or camera resize can complete an action.
+
+## Proposed action sequence
+
+| Beat / objective ID | Standing imperative / exact target label | Real completion and next state |
+| --- | --- | --- |
+| fixed: `ch1:fixed:recover-first-debris` | `WALK OVER THE DEBRIS.` / `DEBRIS` | `isDebrisCollected(0)`, written only by actual proximity collection. Existing piece 0 pays its unchanged 2 wood + 2 stone once. Replace with harvest. |
+| fixed: `ch1:fixed:calibrate-extractor` | `HOLD [E] TO HARVEST BIOFIBER.` / `BIOFIBER` | `getItemCount('biofiber') >= 1`. Fresh zero-inventory entry therefore needs one successful positive-yield transaction, irrespective of normal yield quantity. Replace with traversal; do not clamp rewards. |
+| fixed: `ch1:fixed:cross-camera-cell` | `WALK [A]/[D] TO THE NEXT CAMERA.` / logical label `NEXT CAMERA` | After both receipts are satisfied, arm at the current coverage frame. One actual movement-caused coverage transfer in the shared lens authority completes fixed and enters existing track. No world collection bracket in this state. |
+| track: `ch1:track:tracking-transfer` | `HOLD POSITION.` / logical label `TRACKING VIEW` | Existing `anc.track.unbolt` bundle, move hold and transfer into raster. Preserve existing meaningful voice and approximately 6.5-second lens blend; no additional collection task. |
+| raster: `ch1:raster:recover-quota` | `WALK OVER THE DEBRIS.` / `DEBRIS` | Designate one still-uncollected **required** piece from indices 0,1,2, normally 1 then 2 because 0 was earned in fixed. After all three receipts, replace with fiber if needed. |
+| raster: `ch1:raster:extract-fiber-quota` | `HOLD [E] AT BIOFIBER. MOVE TO THE NEXT PATCH.` / `BIOFIBER` | One actionable yielding patch at a time until the existing **total** 6 biofiber. Existing total 4 stone and required three debris receipts must also hold. Existing minimum beat time and completion hold then enter depth. |
+| depth continuity | Existing current `SUPPLY POD` objective and one marker | All three real pod transactions and current legal row preserved. No new quota, resource grant or reveal. |
+
+This narrows the confusing raster loop too: remove its outcome-dependent collect-every-piece condition and mixed salvage/extract designation. Three original receipts guarantee the same minimum salvage as the current three-piece voyage outcome: **3 wood, 1 flint, 4 stone**. Pieces 3–5 supply optional excess flint/wood, so they need not block the next era. Keep their positions, normal loot and actual walk-over capability; suppress required-target designators and special collection blink when they are not current. They are optional salvage, not falsely described decoration. Non-interactive wreck scenery has no collection wording or matching emphasis.
+
+The later pods still earn 1 biofuel, 1 flint and 1 wood. This is **not** a claim that these receipts buy every Ch3 recipe outright: the real economy charges wood2/fiber2/stone1 for the hatchet, wood2/fiber1/stone2 for the pickaxe, and flint2/fuel1/wood3 for the campfire. Existing Ch3 gathering and its earned-flint branch supply remaining needs through actual play. Retaining the original minimum salvage and 6-fiber/4-stone quotas avoids shifting new compulsory material hunts into later chapters. Collapsing all raster needs into the first piece would require an unearned bundle or a broader economy change and is outside this proposal. The owner's three-action lesson is complete in fixed; raster practices it with two remaining individually designated receipts and the existing fiber total.
+
+## Placement, target lifecycle, and presentation
+
+Piece 0 must be visible in the first settled portrait and desktop frame, outside the current 2.8-unit pickup radius at spawn, on the legal dry task row, and reachable without a preliminary camera cut. Proposed bounded staging is the existing first pose near +2 voxel offsets (+4 world units) along the row instead of -9; Cinema must validate or retune that single existing pose against its opening frame. Keep original identity, quantity, save receipt and loot. Coordinate `storyAnchorResolver.getDebrisPoses` with the worldgen owner and regenerate/validate prepared anchors; do not move the avatar or terrain.
+
+Enable actual collection for visible finite debris during fixed and raster through `DebrisField`, preserving `collectDebris` idempotence. Exactly one **current** collection target uses the existing survey bracket. Selection follows the objective phase, commits a stable target, and refreshes immediately on its real receipt/depletion rather than waiting for the 6Hz candidate scan. Harvest candidates must pass the ordinary tool-tier and yield rules and have a reachable same-row approach; when extracting, the highlighted patch must match the ordinary side-harvest picker. Never mark a cell that only the movie can harvest or destroy the walked support row. If no valid target exists, repair/diagnose placement and report honest stuck state; do not fabricate success or show `ready` as proof of actionability.
+
+Early bracket labels become exactly `DEBRIS` and `BIOFIBER` in the declaration and renderer. The existing no-directional-marker contract remains explicit; introduce no second marker renderer. Survey target identity/availability must be present in lifecycle evidence even though `requiresMarker:false` currently reports `ready` without proving a target. A required target is never a cosmetic bracket clamped onto empty/offscreen ground. Raster selection may choose the nearest reachable required piece, retain it while useful, and reselect an in-frame actionable one after a genuine camera change; target churn must not emit another objective entry.
+
+Use canonical `objective.workOrder` through `presentRegulationObjective` and existing `inputGlyphs`. One current imperative is persistent; one compact receipt response replaces it briefly or sits within the same existing work-order/ledger surface. Proposed responses: `DEBRIS RECOVERED.`, `BIOFIBER LOGGED.`, and existing camera ID change. Raster may show a compact current-action count, never three simultaneous outstanding orders. Do not stack the full static Regulation paragraph, prologue echo, duplicate objective title, extractor meter and quota table on mobile. Retain narrative flavor in the existing journal/caption lanes without introducing another guidance system; do not erase the tracking voice or change its revelation. Cinema owns geometry, safe areas, glyph sizing and exact placement.
+
+On receipt: clear the previous bracket and obsolete imperative within two rendered frames; emit one receipt acknowledgement and one next-objective entry under the existing restore intent. Partial raster receipts emit deduplicated progress, not repeated completion. Pause/focus cannot collect, advance a hold, award a camera crossing or duplicate feedback. Resume re-derives stages from real milestones/inventory; earned stages show no new acquisition celebration. Cold dev seeding remains diagnostic and declared. Quit, replay and sandbox clear all temporary targets, pending feedback, traversal geometry epochs and feed presentation.
+
+## Shared anchors and peer constraints
+
+- `early.fixed.ready`: settled support, correct entry state and the single real pickup target; sole aligned to capsule foot plane by avatar visuals only. Preserve physical capsule, legal row and world seed.
+- `early.pickup.receipt`: actual first piece transaction; clear its target immediately. Score owns restrained non-authoritative audible response.
+- `early.harvest.receipt`: actual positive-yield transaction makes the one-fiber predicate true; arm traversal from the current frame, not historical explored cells.
+- `early.coverage.transfer`: shared camera authority reports a movement-caused edge crossing under unchanged geometry epoch. Cinema defines viewport/frustum/body-safe threshold; both camera and progression consume it. Orientation/FOV/layout changes may reframe but cannot award this anchor. No fully offscreen handoff, no parallel follow system.
+- `anc.track.unbolt`: preserve the existing musical/visual bundle as the emotional release. Receipt UI may not cover or duplicate its narrative voice. Neither music availability nor grid delay gates inventory/agency.
+- `early.raster.receipt`: each actual required salvage/fiber event; one current target and compact feedback, then existing depth handoff after its real conjunction.
+- `early.entry.restored`: cold fixed/deep-link reset owns a zero residual impact flash; natural descent retains its authored impact and decay. Diagnose actual writer/restore order; do not add an overlay mask or replay the crash on Continue.
+
+Score is asked to author the least additional sound that distinguishes a real receipt from instruction entry while preserving the attention turn and current audio ownership. Cinema is asked to stage the first piece, define visible edge/resize behavior, maintain sole contact and the single-subject mobile layout. These are unanswered peer craft decisions, not owner-only questions.
+
+## Allowed differences and acceptance
+
+`chapter-treatment.json` gives exact proposed ownership and ladder differences. Preserve the immutable `807707ac2d5da57f` legacy trace and captured candidate; classify the authorized differences rather than rebaseline them away. No changes to beat order, later revelation, legal movement plane, physical capsule, recipes, loot tables, supply-pod total, fixed→track unbolt intent or protected audio implementation are authorized by this Chapter draft.
+
+The verifier must capture natural descent→fixed→track→raster→depth on manual desktop and portrait, and three honest movie runs; capture real first pickup, first extraction, movement edge and every target enter/replace/clear with milestone/item deltas. Include optional-outcome debris3/4/6, no-yield/wrong-tier rejection, depleted patch, all-required-receipts state, minimum salvage Ch3 continuation, resize while stationary and moving, pause/focus, reduced motion, low tier, replay, deep-link and earned Continue. Assert zero offscreen body samples around transfer, no phase/receipt earned by resize, truthful manual targeting, no sandbox change, and current source/contract hashes. All are requested checks, not passes. Fresh Player Experience Auditor and independent creative review remain required.
+
+## Routed decisions
+
+`decision-brief.json` records the already answered creative, boundary and release scope. No new owner-only choice is needed. The physical placement proposal, narrowed raster predicate, presentation details and exact boundary remain open to fresh peer challenge. **No director signoff has been written.**
+
+Preparatory notes for the two peer commissions are in `chapter-preparatory-notes.jsonl`; `chapter-peer-notes.preparatory-original.jsonl` preserves the original draft. Neither is canonical Stage 3 first-wave evidence. After both independent treatments and a real contract candidate exist, Chapter must write exactly two canonical `chapter-peer-notes.jsonl` records, respond to incoming notes, and only then consider a same-hash signoff.
+
+## Stage 3 Chapter amendments — pending peer response
+
+The source-grounded corrections and exact proposed field changes in `chapter-stage3-proposal.md`/`.json` supersede conflicting Stage1 assumptions for the next candidate: after-all-loot receipt acknowledgement; real quota-complete clear before the unchanged hold; explicit new delivery of the original track first sentence and silent parenthetical; no invented existing early journal/caption; canonical active depth work-order projection; truthful survey/no-target native schema branches. Pickup copy becomes `WALK OVER THE DEBRIS TO RECOVER IT.`. `chapter-native-contract-contribution.json` supplies14 event records and six guidance rows. All are proposals requiring authentic peer responses and a real same-hash contract, not runtime changes or signatures.
+
+
+## Native section index — mechanical packaging
+
+Exact authored original: assembly/originals/story-intent.md; SHA-256 63eca86bd673e0e26f68d18a48054f98ac7a6286e56d0bdf1bd34abcbc4582a2. This index maps native section names to unchanged authored passages; it adds no creative position or approval. The original treatment date/status belongs to its historical stage.
+
+### Dramatic contract
+
+See the authored Character, agency, and causal turn; Proposed action sequence sections above.

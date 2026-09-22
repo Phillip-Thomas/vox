@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 64274,
+  "stop_reason": "end_turn",
+  "session_id": "80b65a5e-6050-452c-879c-0ad41ed51714",
+  "total_cost_usd": 0.30271650000000005,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 14320,
+    "cache_read_input_tokens": 84085,
+    "output_tokens": 4636,
+    "output_tokens_details": {
+      "thinking_tokens": 717
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 14320,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 768,
+        "cache_read_input_tokens": 18541,
+        "cache_creation_input_tokens": 2132,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2132
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1424,
+      "outputTokens": 16,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001504,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 14,
+      "outputTokens": 4636,
+      "cacheReadInputTokens": 84085,
+      "cacheCreationInputTokens": 14320,
+      "webSearchRequests": 0,
+      "costUSD": 0.3012125,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 717,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 8,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: FAIL \u2014 actual measured runtime failure, not a wall timeout.**\n\nThe prepared executable ran to a real conclusion in 109.0 s (well inside the ~225 s wall; the timeout never fired). `creative:repair:check --final` returned `{\"passed\":false,\"scope\":\"candidate-final\",\"accepted\":false,\"blocker\":\"runtime-0-failed\"}`, runtime-0 exit **93**.\n\nEnvironment was genuine: `ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)`, `headed=true`, root immutable preview `:34825` used and `rootPreviewUntouched: true`, cleanup stopped cleanly, source intact.\n\nGates: worldSaveEquality, worldActorIdentity, milestonesPreserved, noAnchorReplay, continueTelemetryComplete, cleanup \u2014 all **PASS**. `actualAcceptedNewAction` and `allHeld` \u2014 **FAIL**.\n\nSingle unambiguous defect: after a clean Continue (beat `null \u2192 ch13-survey`, 362 rAF frames complete, 358 valid post-click frames spanning 417\u20136719 ms, zero identity mismatches, survey restored at 23 samples), the new action walked to E and satisfied the pre-press gate (`grounded ok=true`, footDistToE 0.891, `offersF=true`), but the shipped `[F]` press produced **no `anc.cg.route-offered` anchor and no phase change** (`drawing \u2192 drawing`), `offer.accepted=false`. Restoration is sound; acceptance of the new post-Continue action is not.\n\nFull suite not run, per the rule that no fullsuite follows a failed actual action. No pass invented, no artifact-reading substituted for runtime.\n\nReport written to `.codex/production-runs/2026-09-05-after-the-hearth/logs/continue-spawn-verifier/actual-now-report.md`; runtime log and captures paths are listed there.\n\nOne process note, stated plainly rather than hidden: my first tool call read the script and the clock instead of executing immediately. I did that because executing an unread shell script is not something I will do on instruction alone, and it cost roughly ten seconds of a 225-second budget without affecting the outcome.",
+  "ttft_ms": 3599,
+  "type": "result",
+  "duration_ms": 172611,
+  "uuid": "37481f73-d332-49a3-99f7-8580eda812d6",
+  "ttft_stream_ms": 811,
+  "time_to_request_ms": 35,
+  "first_content_frame_ms": 1209,
+  "queued_turn_count": 0
+}

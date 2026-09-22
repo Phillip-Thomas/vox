@@ -1,0 +1,3633 @@
+{
+  "probe": "common-ground bounded instrument-repair feasibility (EXACT creative-nominated layouts)",
+  "generatedAt": "2026-09-06T05:57:49.142Z",
+  "status": "PREPRODUCTION MEASUREMENT — proposed apparatus and proposed finite range, not shipped behaviour",
+  "evaluates": [
+    "arena-instrument-repair-cinema.md (range 24 rigid layout)",
+    "arena-instrument-repair-cinema.md ADDENDUM (range 12 rigid layout, planar x0.5)",
+    "arena-instrument-repair-chapter.md (bounded proof requirements)",
+    "arena-instrument-repair-score.md (no new cue; no threshold relaxation)"
+  ],
+  "selectsWinner": false,
+  "ownGeometryProposed": false,
+  "conventionsInheritedFrom": "geometry-arena-probe.mts / geometry-pass2-probe.mts (rendered-cube gate + Amanatides-Woo DDA + measured sockets + trunk collider + undecimated 1.0/0.25 sampling)",
+  "world": {
+    "planetSize": 50,
+    "radiusCells": 25,
+    "storyCoordinate": {
+      "x": -1,
+      "y": -1
+    },
+    "storySeed": 3215739679,
+    "worldId": "-1,-1",
+    "voxelScale": 2,
+    "voxelCount": 115629,
+    "heroTree": {
+      "x": -24,
+      "y": 50.95,
+      "z": 22
+    },
+    "pondSearchOrigin": {
+      "x": 6,
+      "y": 50.5,
+      "z": -12
+    },
+    "boundedTopFaceMaxCell": 24,
+    "dryWalkableNodesOnBoundedTopFace": 1524,
+    "trunkGuardedNodes": 1
+  },
+  "apparatusLocalFrame": {
+    "socketLocal": {
+      "x": 0,
+      "y": 1.3,
+      "z": 0
+    },
+    "backingCenterLocal": {
+      "x": -0.9,
+      "y": 1.3,
+      "z": 0
+    },
+    "backingSize": {
+      "x": 0.12,
+      "y": 2,
+      "z": 1.6
+    },
+    "backingLocalBox": {
+      "lo": {
+        "x": -0.96,
+        "y": 0.30000000000000004,
+        "z": -0.8
+      },
+      "hi": {
+        "x": -0.8400000000000001,
+        "y": 2.3,
+        "z": 0.8
+      }
+    },
+    "identicalVisibleCollisionAndOcclusionGeometry": true,
+    "invisibleConeUsed": false,
+    "walkingColliderInflation": "body radius 0.5 only (no unseen wall)",
+    "bracketAndStand": "modelled for footing/collision only; NOT treated as a ray occluder (conservative: fewer occluders cannot manufacture blindness)",
+    "rayExemptions": "actor support column and the apparatus support column only; the backing is NEVER exempt"
+  },
+  "sockets": {
+    "fixedApparatusPlate": 1.3,
+    "workerVisor": 1.85,
+    "playerEye": 1.35,
+    "workerBodyHeight": 2.01,
+    "playerBodyHeight": 3.6,
+    "bodyRadius": 0.5
+  },
+  "thresholds": {
+    "minExtraUnits": 12,
+    "minLengthRatio": 1.25,
+    "minUnsupportedShortSpanUnits": 6,
+    "commonSpanThreshold": "nonzero only — the six-unit rule applies to the unsupported SHORT survey span, not to the E->C common comparison",
+    "terraLateralMinUnits": 2,
+    "occupancyCylinder": {
+      "radius": 1.25,
+      "vertical": 0.6
+    },
+    "releaseCylinder": {
+      "radius": 1.75,
+      "vertical": 0.9
+    },
+    "relaxationsApplied": "none"
+  },
+  "ranges": [
+    {
+      "range": 12,
+      "layoutLocalOffsets": {
+        "S": [
+          -8,
+          -8
+        ],
+        "E": [
+          -8,
+          8
+        ],
+        "W": [
+          -9,
+          0
+        ],
+        "C": [
+          -8,
+          14
+        ]
+      },
+      "candidatesEvaluated": 1200,
+      "candidateBudget": 1200,
+      "passingLayouts": 570,
+      "deepestStageReached": "qualified",
+      "bestObserved": {
+        "maxExtraUnits": 16,
+        "maxLengthRatio": 2,
+        "maxUnsupportedShortSpanUnits": 26,
+        "maxCommonSpanUnits": 8
+      },
+      "rejections": {
+        "terrainFitR": 0,
+        "terrainFitS": 155,
+        "terrainFitE": 130,
+        "terrainFitW": 35,
+        "terrainFitC": 151,
+        "bodyClearance": 8,
+        "apparatusFooting": 0,
+        "endpointNotFixedValid": 21,
+        "noShortRoute": 0,
+        "shortCaps": 3,
+        "noSupportedLongRoute": 66,
+        "longNotLongerEnoughUnits": 0,
+        "longNotLongerEnoughRatio": 0,
+        "longCaps": 0,
+        "longSampleUnsupported": 0,
+        "unsupportedSpanTooShort": 0,
+        "spanNotCausedByBacking": 55,
+        "endpointWitnessesWholeSpan": 0,
+        "witnessFailsSpan": 6,
+        "witnessBodyOverlap": 0,
+        "witnessUnreachable": 0,
+        "noCommonSpan": 0,
+        "noTerraWitness": 0
+      },
+      "top3": [
+        {
+          "range": 12,
+          "centre": {
+            "world": {
+              "x": -34,
+              "y": 51.05,
+              "z": 20
+            },
+            "cell": [
+              -17,
+              25,
+              10
+            ]
+          },
+          "quarterTurns": 1,
+          "yawDegrees": 90,
+          "distanceToHeroTree": 10.2,
+          "distanceToPondSearchOrigin": 51.22,
+          "apparatus": {
+            "groundedPose": {
+              "x": -34,
+              "y": 51.05,
+              "z": 20
+            },
+            "socketWorld": {
+              "x": -34,
+              "y": 52.35,
+              "z": 20
+            },
+            "socketHeightAboveGroundedPose": 1.3,
+            "backingBoxWorld": {
+              "lo": {
+                "x": -34.8,
+                "y": 51.35,
+                "z": 19.04
+              },
+              "hi": {
+                "x": -33.2,
+                "y": 53.35,
+                "z": 19.16
+              }
+            },
+            "backingSize": {
+              "x": 0.12,
+              "y": 2,
+              "z": 1.6
+            },
+            "socketToBackingNearFaceUnits": 0.8,
+            "raysStartOutsideOwnSurface": true,
+            "backingExemptFromRays": false,
+            "footprintColumnsUniformHeight": true
+          },
+          "poses": {
+            "R": {
+              "world": {
+                "x": -34,
+                "y": 51.05,
+                "z": 20
+              },
+              "supportVoxel": [
+                -17,
+                25,
+                10
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -34,
+                "y": 52.9,
+                "z": 20
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "S": {
+              "world": {
+                "x": -26,
+                "y": 51.05,
+                "z": 12
+              },
+              "supportVoxel": [
+                -13,
+                25,
+                6
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -26,
+                "y": 52.9,
+                "z": 12
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "E": {
+              "world": {
+                "x": -42,
+                "y": 51.05,
+                "z": 12
+              },
+              "supportVoxel": [
+                -21,
+                25,
+                6
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -42,
+                "y": 52.9,
+                "z": 12
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "W": {
+              "world": {
+                "x": -34,
+                "y": 51.05,
+                "z": 11
+              },
+              "supportVoxel": [
+                -17,
+                25,
+                6
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 3.6,
+              "socketWorld": {
+                "x": -34,
+                "y": 52.4,
+                "z": 11
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "C": {
+              "world": {
+                "x": -48,
+                "y": 51.05,
+                "z": 12
+              },
+              "supportVoxel": [
+                -24,
+                25,
+                6
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -48,
+                "y": 52.9,
+                "z": 12
+              },
+              "groundClearanceUsed": 1.05
+            }
+          },
+          "fixedValidEndpoints": {
+            "S": {
+              "distance": 11.33,
+              "rangeMargin": 0.67,
+              "supported": true
+            },
+            "E": {
+              "distance": 11.33,
+              "rangeMargin": 0.67,
+              "supported": true
+            }
+          },
+          "surveyRouteShort": {
+            "walkedUnits": 16,
+            "sampleCount": 17,
+            "vertices": [
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -30,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -34,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -36,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -38,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -40,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -42,
+                "y": 51.05,
+                "z": 12
+              }
+            ],
+            "unsupportedSpanUnits": 14,
+            "unsupportedSpanSamples": 15,
+            "spanStart": {
+              "x": -27,
+              "y": 51.05,
+              "z": 12
+            },
+            "spanEnd": {
+              "x": -41,
+              "y": 51.05,
+              "z": 12
+            },
+            "spanBlockedByBacking": true,
+            "spanBlockReasons": [
+              "backing"
+            ]
+          },
+          "surveyRouteLong": {
+            "walkedUnits": 32,
+            "sampleCount": 57,
+            "vertices": [
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": -30,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": -30,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -34,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -36,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -38,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -40,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -42,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -42,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": -42,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": -42,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -42,
+                "y": 51.05,
+                "z": 12
+              }
+            ],
+            "extraUnits": 16,
+            "lengthRatio": 2,
+            "minRangeMarginUnits": 0.67,
+            "everySampleSupported": true,
+            "passesThroughBackingOrTrunk": false
+          },
+          "witnessW": {
+            "position": {
+              "x": -34,
+              "y": 51.05,
+              "z": 11
+            },
+            "supportVoxel": [
+              -17,
+              25,
+              6
+            ],
+            "coversWholeUnsupportedSpan": true,
+            "maxLineOfReferenceDistance": 7.09,
+            "rangeMarginUnits": 4.91,
+            "bodyClearanceFromSurveyRoute": 1,
+            "occupancyCylinderMarginUnits": -0.25,
+            "releaseCylinderMarginUnits": -0.75,
+            "releaseCylinderOverlapsRoute": true,
+            "holdCondition": "W release cylinder overlaps the survey corridor: layout NOT rejected; the contract holds only if a body is actually inside it",
+            "startWitnessesWholeSpan": false,
+            "endWitnessesWholeSpan": false
+          },
+          "commonComparison": {
+            "routeEtoC": {
+              "walkedUnits": 18,
+              "sampleCount": 31,
+              "vertices": [
+                {
+                  "x": -42,
+                  "y": 51.05,
+                  "z": 12
+                },
+                {
+                  "x": -42,
+                  "y": 51.05,
+                  "z": 14
+                },
+                {
+                  "x": -42,
+                  "y": 51.05,
+                  "z": 16
+                },
+                {
+                  "x": -44,
+                  "y": 51.05,
+                  "z": 16
+                },
+                {
+                  "x": -44,
+                  "y": 51.05,
+                  "z": 18
+                },
+                {
+                  "x": -46,
+                  "y": 51.05,
+                  "z": 18
+                },
+                {
+                  "x": -48,
+                  "y": 51.05,
+                  "z": 18
+                },
+                {
+                  "x": -48,
+                  "y": 51.05,
+                  "z": 16
+                },
+                {
+                  "x": -48,
+                  "y": 51.05,
+                  "z": 14
+                },
+                {
+                  "x": -48,
+                  "y": 51.05,
+                  "z": 12
+                }
+              ]
+            },
+            "heldReferenceAtE": {
+              "socketWorld": {
+                "x": -42,
+                "y": 52.9,
+                "z": 12
+              },
+              "socketHeight": 1.85
+            },
+            "totalUnitsOutsideFixedReference": 8.25,
+            "contiguousCommonSpanUnits": 8,
+            "commonSpanStart": {
+              "x": -46,
+              "y": 51.05,
+              "z": 18
+            },
+            "commonSpanEnd": {
+              "x": -48,
+              "y": 51.05,
+              "z": 12
+            },
+            "commonSpanFractionOfPassage": 0.444,
+            "sixUnitThresholdApplied": false
+          },
+          "terraFinalWitness": {
+            "position": {
+              "x": -44,
+              "y": 51.05,
+              "z": 12
+            },
+            "supportVoxel": [
+              -22,
+              25,
+              6
+            ],
+            "socketWorld": {
+              "x": -44,
+              "y": 52.4,
+              "z": 12
+            },
+            "socketHeight": 1.35,
+            "lateralOffsetFromC": 4,
+            "maxLineOfReferenceDistance": 7.23,
+            "rangeMarginUnits": 4.77,
+            "bodyClearanceFromWorkerFinalRoute": 2,
+            "occupancyCylinderMarginUnits": 0.75,
+            "releaseCylinderMarginUnits": 0.25,
+            "releaseCylinderOverlapsRoute": false,
+            "verticalDeltaToC": 0,
+            "occupancyVerticalTolerance": 0.6,
+            "releaseVerticalTolerance": 0.9,
+            "holdCondition": "no hold required at the nominated pose"
+          },
+          "routeClasses": {
+            "bankOrSurvey": "survey route S->E (dry arena, not at water)",
+            "common": "E->C comparison"
+          },
+          "caps": {
+            "maxTracePoints": 128,
+            "maxTraceLength": 120,
+            "sampleSpacing": 1,
+            "cornerSpacing": 0.25
+          }
+        },
+        {
+          "range": 12,
+          "centre": {
+            "world": {
+              "x": -36,
+              "y": 51.05,
+              "z": 14
+            },
+            "cell": [
+              -18,
+              25,
+              7
+            ]
+          },
+          "quarterTurns": 3,
+          "yawDegrees": 270,
+          "distanceToHeroTree": 14.42,
+          "distanceToPondSearchOrigin": 49.4,
+          "apparatus": {
+            "groundedPose": {
+              "x": -36,
+              "y": 51.05,
+              "z": 14
+            },
+            "socketWorld": {
+              "x": -36,
+              "y": 52.35,
+              "z": 14
+            },
+            "socketHeightAboveGroundedPose": 1.3,
+            "backingBoxWorld": {
+              "lo": {
+                "x": -36.8,
+                "y": 51.35,
+                "z": 14.84
+              },
+              "hi": {
+                "x": -35.2,
+                "y": 53.35,
+                "z": 14.96
+              }
+            },
+            "backingSize": {
+              "x": 0.12,
+              "y": 2,
+              "z": 1.6
+            },
+            "socketToBackingNearFaceUnits": 0.8,
+            "raysStartOutsideOwnSurface": true,
+            "backingExemptFromRays": false,
+            "footprintColumnsUniformHeight": true
+          },
+          "poses": {
+            "R": {
+              "world": {
+                "x": -36,
+                "y": 51.05,
+                "z": 14
+              },
+              "supportVoxel": [
+                -18,
+                25,
+                7
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -36,
+                "y": 52.9,
+                "z": 14
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "S": {
+              "world": {
+                "x": -44,
+                "y": 51.05,
+                "z": 22
+              },
+              "supportVoxel": [
+                -22,
+                25,
+                11
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -44,
+                "y": 52.9,
+                "z": 22
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "E": {
+              "world": {
+                "x": -28,
+                "y": 51.05,
+                "z": 22
+              },
+              "supportVoxel": [
+                -14,
+                25,
+                11
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -28,
+                "y": 52.9,
+                "z": 22
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "W": {
+              "world": {
+                "x": -36,
+                "y": 51.05,
+                "z": 23
+              },
+              "supportVoxel": [
+                -18,
+                25,
+                12
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 3.6,
+              "socketWorld": {
+                "x": -36,
+                "y": 52.4,
+                "z": 23
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "C": {
+              "world": {
+                "x": -22,
+                "y": 51.05,
+                "z": 22
+              },
+              "supportVoxel": [
+                -11,
+                25,
+                11
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -22,
+                "y": 52.9,
+                "z": 22
+              },
+              "groundClearanceUsed": 1.05
+            }
+          },
+          "fixedValidEndpoints": {
+            "S": {
+              "distance": 11.33,
+              "rangeMargin": 0.67,
+              "supported": true
+            },
+            "E": {
+              "distance": 11.33,
+              "rangeMargin": 0.67,
+              "supported": true
+            }
+          },
+          "surveyRouteShort": {
+            "walkedUnits": 16,
+            "sampleCount": 17,
+            "vertices": [
+              {
+                "x": -44,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -42,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -40,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -38,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -36,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -34,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -30,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 22
+              }
+            ],
+            "unsupportedSpanUnits": 14,
+            "unsupportedSpanSamples": 15,
+            "spanStart": {
+              "x": -43,
+              "y": 51.05,
+              "z": 22
+            },
+            "spanEnd": {
+              "x": -29,
+              "y": 51.05,
+              "z": 22
+            },
+            "spanBlockedByBacking": true,
+            "spanBlockReasons": [
+              "backing"
+            ]
+          },
+          "surveyRouteLong": {
+            "walkedUnits": 32,
+            "sampleCount": 57,
+            "vertices": [
+              {
+                "x": -44,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -44,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -42,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -42,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": -40,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": -40,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": -38,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": -38,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -36,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -34,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -30,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 22
+              }
+            ],
+            "extraUnits": 16,
+            "lengthRatio": 2,
+            "minRangeMarginUnits": 0.67,
+            "everySampleSupported": true,
+            "passesThroughBackingOrTrunk": false
+          },
+          "witnessW": {
+            "position": {
+              "x": -36,
+              "y": 51.05,
+              "z": 23
+            },
+            "supportVoxel": [
+              -18,
+              25,
+              12
+            ],
+            "coversWholeUnsupportedSpan": true,
+            "maxLineOfReferenceDistance": 7.09,
+            "rangeMarginUnits": 4.91,
+            "bodyClearanceFromSurveyRoute": 1,
+            "occupancyCylinderMarginUnits": -0.25,
+            "releaseCylinderMarginUnits": -0.75,
+            "releaseCylinderOverlapsRoute": true,
+            "holdCondition": "W release cylinder overlaps the survey corridor: layout NOT rejected; the contract holds only if a body is actually inside it",
+            "startWitnessesWholeSpan": false,
+            "endWitnessesWholeSpan": false
+          },
+          "commonComparison": {
+            "routeEtoC": {
+              "walkedUnits": 10,
+              "sampleCount": 20,
+              "vertices": [
+                {
+                  "x": -28,
+                  "y": 51.05,
+                  "z": 22
+                },
+                {
+                  "x": -26,
+                  "y": 51.05,
+                  "z": 22
+                },
+                {
+                  "x": -26,
+                  "y": 51.05,
+                  "z": 24
+                },
+                {
+                  "x": -24,
+                  "y": 51.05,
+                  "z": 24
+                },
+                {
+                  "x": -22,
+                  "y": 51.05,
+                  "z": 24
+                },
+                {
+                  "x": -22,
+                  "y": 51.05,
+                  "z": 22
+                }
+              ]
+            },
+            "heldReferenceAtE": {
+              "socketWorld": {
+                "x": -28,
+                "y": 52.9,
+                "z": 22
+              },
+              "socketHeight": 1.85
+            },
+            "totalUnitsOutsideFixedReference": 10,
+            "contiguousCommonSpanUnits": 8,
+            "commonSpanStart": {
+              "x": -27,
+              "y": 51.05,
+              "z": 22
+            },
+            "commonSpanEnd": {
+              "x": -22,
+              "y": 51.05,
+              "z": 23
+            },
+            "commonSpanFractionOfPassage": 0.8,
+            "sixUnitThresholdApplied": false
+          },
+          "terraFinalWitness": {
+            "position": {
+              "x": -22,
+              "y": 51.05,
+              "z": 26
+            },
+            "supportVoxel": [
+              -11,
+              25,
+              13
+            ],
+            "socketWorld": {
+              "x": -22,
+              "y": 52.4,
+              "z": 26
+            },
+            "socketHeight": 1.35,
+            "lateralOffsetFromC": 4,
+            "maxLineOfReferenceDistance": 7.23,
+            "rangeMarginUnits": 4.77,
+            "bodyClearanceFromWorkerFinalRoute": 2,
+            "occupancyCylinderMarginUnits": 0.75,
+            "releaseCylinderMarginUnits": 0.25,
+            "releaseCylinderOverlapsRoute": false,
+            "verticalDeltaToC": 0,
+            "occupancyVerticalTolerance": 0.6,
+            "releaseVerticalTolerance": 0.9,
+            "holdCondition": "no hold required at the nominated pose"
+          },
+          "routeClasses": {
+            "bankOrSurvey": "survey route S->E (dry arena, not at water)",
+            "common": "E->C comparison"
+          },
+          "caps": {
+            "maxTracePoints": 128,
+            "maxTraceLength": 120,
+            "sampleSpacing": 1,
+            "cornerSpacing": 0.25
+          }
+        },
+        {
+          "range": 12,
+          "centre": {
+            "world": {
+              "x": -32,
+              "y": 51.05,
+              "z": 34
+            },
+            "cell": [
+              -16,
+              25,
+              17
+            ]
+          },
+          "quarterTurns": 2,
+          "yawDegrees": 180,
+          "distanceToHeroTree": 14.42,
+          "distanceToPondSearchOrigin": 59.67,
+          "apparatus": {
+            "groundedPose": {
+              "x": -32,
+              "y": 51.05,
+              "z": 34
+            },
+            "socketWorld": {
+              "x": -32,
+              "y": 52.35,
+              "z": 34
+            },
+            "socketHeightAboveGroundedPose": 1.3,
+            "backingBoxWorld": {
+              "lo": {
+                "x": -31.16,
+                "y": 51.35,
+                "z": 33.2
+              },
+              "hi": {
+                "x": -31.04,
+                "y": 53.35,
+                "z": 34.8
+              }
+            },
+            "backingSize": {
+              "x": 0.12,
+              "y": 2,
+              "z": 1.6
+            },
+            "socketToBackingNearFaceUnits": 0.8,
+            "raysStartOutsideOwnSurface": true,
+            "backingExemptFromRays": false,
+            "footprintColumnsUniformHeight": true
+          },
+          "poses": {
+            "R": {
+              "world": {
+                "x": -32,
+                "y": 51.05,
+                "z": 34
+              },
+              "supportVoxel": [
+                -16,
+                25,
+                17
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -32,
+                "y": 52.9,
+                "z": 34
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "S": {
+              "world": {
+                "x": -24,
+                "y": 51.05,
+                "z": 42
+              },
+              "supportVoxel": [
+                -12,
+                25,
+                21
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -24,
+                "y": 52.9,
+                "z": 42
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "E": {
+              "world": {
+                "x": -24,
+                "y": 51.05,
+                "z": 26
+              },
+              "supportVoxel": [
+                -12,
+                25,
+                13
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -24,
+                "y": 52.9,
+                "z": 26
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "W": {
+              "world": {
+                "x": -23,
+                "y": 51.05,
+                "z": 34
+              },
+              "supportVoxel": [
+                -11,
+                25,
+                17
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 3.6,
+              "socketWorld": {
+                "x": -23,
+                "y": 52.4,
+                "z": 34
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "C": {
+              "world": {
+                "x": -24,
+                "y": 51.05,
+                "z": 20
+              },
+              "supportVoxel": [
+                -12,
+                25,
+                10
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -24,
+                "y": 52.9,
+                "z": 20
+              },
+              "groundClearanceUsed": 1.05
+            }
+          },
+          "fixedValidEndpoints": {
+            "S": {
+              "distance": 11.33,
+              "rangeMargin": 0.67,
+              "supported": true
+            },
+            "E": {
+              "distance": 11.33,
+              "rangeMargin": 0.67,
+              "supported": true
+            }
+          },
+          "surveyRouteShort": {
+            "walkedUnits": 16,
+            "sampleCount": 17,
+            "vertices": [
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 42
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 40
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 38
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 34
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 32
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 30
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 28
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 26
+              }
+            ],
+            "unsupportedSpanUnits": 14,
+            "unsupportedSpanSamples": 15,
+            "spanStart": {
+              "x": -24,
+              "y": 51.05,
+              "z": 41
+            },
+            "spanEnd": {
+              "x": -24,
+              "y": 51.05,
+              "z": 27
+            },
+            "spanBlockedByBacking": true,
+            "spanBlockReasons": [
+              "backing"
+            ]
+          },
+          "surveyRouteLong": {
+            "walkedUnits": 32,
+            "sampleCount": 57,
+            "vertices": [
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 42
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 42
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 42
+              },
+              {
+                "x": -30,
+                "y": 51.05,
+                "z": 42
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 42
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 40
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 38
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 34
+              },
+              {
+                "x": -32,
+                "y": 51.05,
+                "z": 32
+              },
+              {
+                "x": -30,
+                "y": 51.05,
+                "z": 32
+              },
+              {
+                "x": -30,
+                "y": 51.05,
+                "z": 30
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 30
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 28
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 28
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 26
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 26
+              }
+            ],
+            "extraUnits": 16,
+            "lengthRatio": 2,
+            "minRangeMarginUnits": 0.67,
+            "everySampleSupported": true,
+            "passesThroughBackingOrTrunk": false
+          },
+          "witnessW": {
+            "position": {
+              "x": -23,
+              "y": 51.05,
+              "z": 34
+            },
+            "supportVoxel": [
+              -11,
+              25,
+              17
+            ],
+            "coversWholeUnsupportedSpan": true,
+            "maxLineOfReferenceDistance": 7.09,
+            "rangeMarginUnits": 4.91,
+            "bodyClearanceFromSurveyRoute": 1,
+            "occupancyCylinderMarginUnits": -0.25,
+            "releaseCylinderMarginUnits": -0.75,
+            "releaseCylinderOverlapsRoute": true,
+            "holdCondition": "W release cylinder overlaps the survey corridor: layout NOT rejected; the contract holds only if a body is actually inside it",
+            "startWitnessesWholeSpan": false,
+            "endWitnessesWholeSpan": false
+          },
+          "commonComparison": {
+            "routeEtoC": {
+              "walkedUnits": 10,
+              "sampleCount": 17,
+              "vertices": [
+                {
+                  "x": -24,
+                  "y": 51.05,
+                  "z": 26
+                },
+                {
+                  "x": -22,
+                  "y": 51.05,
+                  "z": 26
+                },
+                {
+                  "x": -22,
+                  "y": 51.05,
+                  "z": 24
+                },
+                {
+                  "x": -22,
+                  "y": 51.05,
+                  "z": 22
+                },
+                {
+                  "x": -22,
+                  "y": 51.05,
+                  "z": 20
+                },
+                {
+                  "x": -24,
+                  "y": 51.05,
+                  "z": 20
+                }
+              ]
+            },
+            "heldReferenceAtE": {
+              "socketWorld": {
+                "x": -24,
+                "y": 52.9,
+                "z": 26
+              },
+              "socketHeight": 1.85
+            },
+            "totalUnitsOutsideFixedReference": 10,
+            "contiguousCommonSpanUnits": 8,
+            "commonSpanStart": {
+              "x": -23,
+              "y": 51.05,
+              "z": 26
+            },
+            "commonSpanEnd": {
+              "x": -23,
+              "y": 51.05,
+              "z": 20
+            },
+            "commonSpanFractionOfPassage": 0.8,
+            "sixUnitThresholdApplied": false
+          },
+          "terraFinalWitness": {
+            "position": {
+              "x": -22,
+              "y": 51.05,
+              "z": 18
+            },
+            "supportVoxel": [
+              -11,
+              25,
+              9
+            ],
+            "socketWorld": {
+              "x": -22,
+              "y": 52.4,
+              "z": 18
+            },
+            "socketHeight": 1.35,
+            "lateralOffsetFromC": 2.83,
+            "maxLineOfReferenceDistance": 8.26,
+            "rangeMarginUnits": 3.74,
+            "bodyClearanceFromWorkerFinalRoute": 2,
+            "occupancyCylinderMarginUnits": 0.75,
+            "releaseCylinderMarginUnits": 0.25,
+            "releaseCylinderOverlapsRoute": false,
+            "verticalDeltaToC": 0,
+            "occupancyVerticalTolerance": 0.6,
+            "releaseVerticalTolerance": 0.9,
+            "holdCondition": "no hold required at the nominated pose"
+          },
+          "routeClasses": {
+            "bankOrSurvey": "survey route S->E (dry arena, not at water)",
+            "common": "E->C comparison"
+          },
+          "caps": {
+            "maxTracePoints": 128,
+            "maxTraceLength": 120,
+            "sampleSpacing": 1,
+            "cornerSpacing": 0.25
+          }
+        }
+      ]
+    },
+    {
+      "range": 24,
+      "layoutLocalOffsets": {
+        "S": [
+          -16,
+          -16
+        ],
+        "E": [
+          -16,
+          16
+        ],
+        "W": [
+          -18,
+          0
+        ],
+        "C": [
+          -16,
+          28
+        ]
+      },
+      "candidatesEvaluated": 1200,
+      "candidateBudget": 1200,
+      "passingLayouts": 58,
+      "deepestStageReached": "qualified",
+      "bestObserved": {
+        "maxExtraUnits": 68,
+        "maxLengthRatio": 3.125,
+        "maxUnsupportedShortSpanUnits": 62,
+        "maxCommonSpanUnits": 10
+      },
+      "rejections": {
+        "terrainFitR": 0,
+        "terrainFitS": 426,
+        "terrainFitE": 268,
+        "terrainFitW": 50,
+        "terrainFitC": 207,
+        "bodyClearance": 0,
+        "apparatusFooting": 0,
+        "endpointNotFixedValid": 13,
+        "noShortRoute": 0,
+        "shortCaps": 0,
+        "noSupportedLongRoute": 53,
+        "longNotLongerEnoughUnits": 9,
+        "longNotLongerEnoughRatio": 2,
+        "longCaps": 23,
+        "longSampleUnsupported": 0,
+        "unsupportedSpanTooShort": 0,
+        "spanNotCausedByBacking": 77,
+        "endpointWitnessesWholeSpan": 0,
+        "witnessFailsSpan": 11,
+        "witnessBodyOverlap": 3,
+        "witnessUnreachable": 0,
+        "noCommonSpan": 0,
+        "noTerraWitness": 0
+      },
+      "top3": [
+        {
+          "range": 24,
+          "centre": {
+            "world": {
+              "x": -12,
+              "y": 51.05,
+              "z": 24
+            },
+            "cell": [
+              -6,
+              25,
+              12
+            ]
+          },
+          "quarterTurns": 1,
+          "yawDegrees": 90,
+          "distanceToHeroTree": 12.17,
+          "distanceToPondSearchOrigin": 40.25,
+          "apparatus": {
+            "groundedPose": {
+              "x": -12,
+              "y": 51.05,
+              "z": 24
+            },
+            "socketWorld": {
+              "x": -12,
+              "y": 52.35,
+              "z": 24
+            },
+            "socketHeightAboveGroundedPose": 1.3,
+            "backingBoxWorld": {
+              "lo": {
+                "x": -12.8,
+                "y": 51.35,
+                "z": 23.04
+              },
+              "hi": {
+                "x": -11.2,
+                "y": 53.35,
+                "z": 23.16
+              }
+            },
+            "backingSize": {
+              "x": 0.12,
+              "y": 2,
+              "z": 1.6
+            },
+            "socketToBackingNearFaceUnits": 0.8,
+            "raysStartOutsideOwnSurface": true,
+            "backingExemptFromRays": false,
+            "footprintColumnsUniformHeight": true
+          },
+          "poses": {
+            "R": {
+              "world": {
+                "x": -12,
+                "y": 51.05,
+                "z": 24
+              },
+              "supportVoxel": [
+                -6,
+                25,
+                12
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -12,
+                "y": 52.9,
+                "z": 24
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "S": {
+              "world": {
+                "x": 4,
+                "y": 51.05,
+                "z": 8
+              },
+              "supportVoxel": [
+                2,
+                25,
+                4
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": 4,
+                "y": 52.9,
+                "z": 8
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "E": {
+              "world": {
+                "x": -28,
+                "y": 51.05,
+                "z": 8
+              },
+              "supportVoxel": [
+                -14,
+                25,
+                4
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -28,
+                "y": 52.9,
+                "z": 8
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "W": {
+              "world": {
+                "x": -12,
+                "y": 51.05,
+                "z": 6
+              },
+              "supportVoxel": [
+                -6,
+                25,
+                3
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 3.6,
+              "socketWorld": {
+                "x": -12,
+                "y": 52.4,
+                "z": 6
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "C": {
+              "world": {
+                "x": -40,
+                "y": 51.05,
+                "z": 8
+              },
+              "supportVoxel": [
+                -20,
+                25,
+                4
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -40,
+                "y": 52.9,
+                "z": 8
+              },
+              "groundClearanceUsed": 1.05
+            }
+          },
+          "fixedValidEndpoints": {
+            "S": {
+              "distance": 22.63,
+              "rangeMargin": 1.37,
+              "supported": true
+            },
+            "E": {
+              "distance": 22.63,
+              "rangeMargin": 1.37,
+              "supported": true
+            }
+          },
+          "surveyRouteShort": {
+            "walkedUnits": 32,
+            "sampleCount": 33,
+            "vertices": [
+              {
+                "x": 4,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -2,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -4,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -6,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -8,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -10,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -12,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -14,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -16,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -18,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -20,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 8
+              }
+            ],
+            "unsupportedSpanUnits": 30,
+            "unsupportedSpanSamples": 31,
+            "spanStart": {
+              "x": 3,
+              "y": 51.05,
+              "z": 8
+            },
+            "spanEnd": {
+              "x": -27,
+              "y": 51.05,
+              "z": 8
+            },
+            "spanBlockedByBacking": true,
+            "spanBlockReasons": [
+              "backing"
+            ]
+          },
+          "surveyRouteLong": {
+            "walkedUnits": 92,
+            "sampleCount": 123,
+            "vertices": [
+              {
+                "x": 4,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": 4,
+                "y": 51.05,
+                "z": 10
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 10
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": 4,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 24
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 26
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 28
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 30
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 32
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 34
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -2,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -4,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -6,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -8,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -10,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -12,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -14,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -16,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -18,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -20,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 34
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 32
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 30
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 28
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 26
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 24
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 10
+              },
+              {
+                "x": -28,
+                "y": 51.05,
+                "z": 8
+              }
+            ],
+            "extraUnits": 60,
+            "lengthRatio": 2.875,
+            "minRangeMarginUnits": 1.19,
+            "everySampleSupported": true,
+            "passesThroughBackingOrTrunk": false
+          },
+          "witnessW": {
+            "position": {
+              "x": -12,
+              "y": 51.05,
+              "z": 6
+            },
+            "supportVoxel": [
+              -6,
+              25,
+              3
+            ],
+            "coversWholeUnsupportedSpan": true,
+            "maxLineOfReferenceDistance": 15.14,
+            "rangeMarginUnits": 8.86,
+            "bodyClearanceFromSurveyRoute": 2,
+            "occupancyCylinderMarginUnits": 0.75,
+            "releaseCylinderMarginUnits": 0.25,
+            "releaseCylinderOverlapsRoute": false,
+            "holdCondition": "no overlap at the nominated pose",
+            "startWitnessesWholeSpan": false,
+            "endWitnessesWholeSpan": false
+          },
+          "commonComparison": {
+            "routeEtoC": {
+              "walkedUnits": 12,
+              "sampleCount": 13,
+              "vertices": [
+                {
+                  "x": -28,
+                  "y": 51.05,
+                  "z": 8
+                },
+                {
+                  "x": -30,
+                  "y": 51.05,
+                  "z": 8
+                },
+                {
+                  "x": -32,
+                  "y": 51.05,
+                  "z": 8
+                },
+                {
+                  "x": -34,
+                  "y": 51.05,
+                  "z": 8
+                },
+                {
+                  "x": -36,
+                  "y": 51.05,
+                  "z": 8
+                },
+                {
+                  "x": -38,
+                  "y": 51.05,
+                  "z": 8
+                },
+                {
+                  "x": -40,
+                  "y": 51.05,
+                  "z": 8
+                }
+              ]
+            },
+            "heldReferenceAtE": {
+              "socketWorld": {
+                "x": -28,
+                "y": 52.9,
+                "z": 8
+              },
+              "socketHeight": 1.85
+            },
+            "totalUnitsOutsideFixedReference": 11,
+            "contiguousCommonSpanUnits": 10,
+            "commonSpanStart": {
+              "x": -30,
+              "y": 51.05,
+              "z": 8
+            },
+            "commonSpanEnd": {
+              "x": -40,
+              "y": 51.05,
+              "z": 8
+            },
+            "commonSpanFractionOfPassage": 0.833,
+            "sixUnitThresholdApplied": false
+          },
+          "terraFinalWitness": {
+            "position": {
+              "x": -40,
+              "y": 51.05,
+              "z": 10
+            },
+            "supportVoxel": [
+              -20,
+              25,
+              5
+            ],
+            "socketWorld": {
+              "x": -40,
+              "y": 52.4,
+              "z": 10
+            },
+            "socketHeight": 1.35,
+            "lateralOffsetFromC": 2,
+            "maxLineOfReferenceDistance": 12.18,
+            "rangeMarginUnits": 11.82,
+            "bodyClearanceFromWorkerFinalRoute": 2,
+            "occupancyCylinderMarginUnits": 0.75,
+            "releaseCylinderMarginUnits": 0.25,
+            "releaseCylinderOverlapsRoute": false,
+            "verticalDeltaToC": 0,
+            "occupancyVerticalTolerance": 0.6,
+            "releaseVerticalTolerance": 0.9,
+            "holdCondition": "no hold required at the nominated pose"
+          },
+          "routeClasses": {
+            "bankOrSurvey": "survey route S->E (dry arena, not at water)",
+            "common": "E->C comparison"
+          },
+          "caps": {
+            "maxTracePoints": 128,
+            "maxTraceLength": 120,
+            "sampleSpacing": 1,
+            "cornerSpacing": 0.25
+          }
+        },
+        {
+          "range": 24,
+          "centre": {
+            "world": {
+              "x": -10,
+              "y": 51.05,
+              "z": 22
+            },
+            "cell": [
+              -5,
+              25,
+              11
+            ]
+          },
+          "quarterTurns": 1,
+          "yawDegrees": 90,
+          "distanceToHeroTree": 14,
+          "distanceToPondSearchOrigin": 37.58,
+          "apparatus": {
+            "groundedPose": {
+              "x": -10,
+              "y": 51.05,
+              "z": 22
+            },
+            "socketWorld": {
+              "x": -10,
+              "y": 52.35,
+              "z": 22
+            },
+            "socketHeightAboveGroundedPose": 1.3,
+            "backingBoxWorld": {
+              "lo": {
+                "x": -10.8,
+                "y": 51.35,
+                "z": 21.04
+              },
+              "hi": {
+                "x": -9.2,
+                "y": 53.35,
+                "z": 21.16
+              }
+            },
+            "backingSize": {
+              "x": 0.12,
+              "y": 2,
+              "z": 1.6
+            },
+            "socketToBackingNearFaceUnits": 0.8,
+            "raysStartOutsideOwnSurface": true,
+            "backingExemptFromRays": false,
+            "footprintColumnsUniformHeight": true
+          },
+          "poses": {
+            "R": {
+              "world": {
+                "x": -10,
+                "y": 51.05,
+                "z": 22
+              },
+              "supportVoxel": [
+                -5,
+                25,
+                11
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -10,
+                "y": 52.9,
+                "z": 22
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "S": {
+              "world": {
+                "x": 6,
+                "y": 51.05,
+                "z": 6
+              },
+              "supportVoxel": [
+                3,
+                25,
+                3
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": 6,
+                "y": 52.9,
+                "z": 6
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "E": {
+              "world": {
+                "x": -26,
+                "y": 51.05,
+                "z": 6
+              },
+              "supportVoxel": [
+                -13,
+                25,
+                3
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -26,
+                "y": 52.9,
+                "z": 6
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "W": {
+              "world": {
+                "x": -10,
+                "y": 51.05,
+                "z": 4
+              },
+              "supportVoxel": [
+                -5,
+                25,
+                2
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 3.6,
+              "socketWorld": {
+                "x": -10,
+                "y": 52.4,
+                "z": 4
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "C": {
+              "world": {
+                "x": -38,
+                "y": 51.05,
+                "z": 6
+              },
+              "supportVoxel": [
+                -19,
+                25,
+                3
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -38,
+                "y": 52.9,
+                "z": 6
+              },
+              "groundClearanceUsed": 1.05
+            }
+          },
+          "fixedValidEndpoints": {
+            "S": {
+              "distance": 22.63,
+              "rangeMargin": 1.37,
+              "supported": true
+            },
+            "E": {
+              "distance": 22.63,
+              "rangeMargin": 1.37,
+              "supported": true
+            }
+          },
+          "surveyRouteShort": {
+            "walkedUnits": 32,
+            "sampleCount": 33,
+            "vertices": [
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": 4,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -2,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -4,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -6,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -8,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -10,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -12,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -14,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -16,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -18,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -20,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 6
+              }
+            ],
+            "unsupportedSpanUnits": 30,
+            "unsupportedSpanSamples": 31,
+            "spanStart": {
+              "x": 5,
+              "y": 51.05,
+              "z": 6
+            },
+            "spanEnd": {
+              "x": -25,
+              "y": 51.05,
+              "z": 6
+            },
+            "spanBlockedByBacking": true,
+            "spanBlockReasons": [
+              "backing"
+            ]
+          },
+          "surveyRouteLong": {
+            "walkedUnits": 92,
+            "sampleCount": 117,
+            "vertices": [
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 10
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": 4,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 24
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 26
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 28
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 30
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 32
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 34
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -2,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -4,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -6,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -8,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -10,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -12,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -14,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -16,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -18,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -20,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 34
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 32
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 30
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 28
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 26
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 24
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 10
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -26,
+                "y": 51.05,
+                "z": 6
+              }
+            ],
+            "extraUnits": 60,
+            "lengthRatio": 2.875,
+            "minRangeMarginUnits": 1.37,
+            "everySampleSupported": true,
+            "passesThroughBackingOrTrunk": false
+          },
+          "witnessW": {
+            "position": {
+              "x": -10,
+              "y": 51.05,
+              "z": 4
+            },
+            "supportVoxel": [
+              -5,
+              25,
+              2
+            ],
+            "coversWholeUnsupportedSpan": true,
+            "maxLineOfReferenceDistance": 15.14,
+            "rangeMarginUnits": 8.86,
+            "bodyClearanceFromSurveyRoute": 2,
+            "occupancyCylinderMarginUnits": 0.75,
+            "releaseCylinderMarginUnits": 0.25,
+            "releaseCylinderOverlapsRoute": false,
+            "holdCondition": "no overlap at the nominated pose",
+            "startWitnessesWholeSpan": false,
+            "endWitnessesWholeSpan": false
+          },
+          "commonComparison": {
+            "routeEtoC": {
+              "walkedUnits": 12,
+              "sampleCount": 13,
+              "vertices": [
+                {
+                  "x": -26,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -28,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -30,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -32,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -34,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -36,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -38,
+                  "y": 51.05,
+                  "z": 6
+                }
+              ]
+            },
+            "heldReferenceAtE": {
+              "socketWorld": {
+                "x": -26,
+                "y": 52.9,
+                "z": 6
+              },
+              "socketHeight": 1.85
+            },
+            "totalUnitsOutsideFixedReference": 11,
+            "contiguousCommonSpanUnits": 10,
+            "commonSpanStart": {
+              "x": -28,
+              "y": 51.05,
+              "z": 6
+            },
+            "commonSpanEnd": {
+              "x": -38,
+              "y": 51.05,
+              "z": 6
+            },
+            "commonSpanFractionOfPassage": 0.833,
+            "sixUnitThresholdApplied": false
+          },
+          "terraFinalWitness": {
+            "position": {
+              "x": -38,
+              "y": 51.05,
+              "z": 8
+            },
+            "supportVoxel": [
+              -19,
+              25,
+              4
+            ],
+            "socketWorld": {
+              "x": -38,
+              "y": 52.4,
+              "z": 8
+            },
+            "socketHeight": 1.35,
+            "lateralOffsetFromC": 2,
+            "maxLineOfReferenceDistance": 12.18,
+            "rangeMarginUnits": 11.82,
+            "bodyClearanceFromWorkerFinalRoute": 2,
+            "occupancyCylinderMarginUnits": 0.75,
+            "releaseCylinderMarginUnits": 0.25,
+            "releaseCylinderOverlapsRoute": false,
+            "verticalDeltaToC": 0,
+            "occupancyVerticalTolerance": 0.6,
+            "releaseVerticalTolerance": 0.9,
+            "holdCondition": "no hold required at the nominated pose"
+          },
+          "routeClasses": {
+            "bankOrSurvey": "survey route S->E (dry arena, not at water)",
+            "common": "E->C comparison"
+          },
+          "caps": {
+            "maxTracePoints": 128,
+            "maxTraceLength": 120,
+            "sampleSpacing": 1,
+            "cornerSpacing": 0.25
+          }
+        },
+        {
+          "range": 24,
+          "centre": {
+            "world": {
+              "x": -8,
+              "y": 51.05,
+              "z": 22
+            },
+            "cell": [
+              -4,
+              25,
+              11
+            ]
+          },
+          "quarterTurns": 1,
+          "yawDegrees": 90,
+          "distanceToHeroTree": 16,
+          "distanceToPondSearchOrigin": 36.77,
+          "apparatus": {
+            "groundedPose": {
+              "x": -8,
+              "y": 51.05,
+              "z": 22
+            },
+            "socketWorld": {
+              "x": -8,
+              "y": 52.35,
+              "z": 22
+            },
+            "socketHeightAboveGroundedPose": 1.3,
+            "backingBoxWorld": {
+              "lo": {
+                "x": -8.8,
+                "y": 51.35,
+                "z": 21.04
+              },
+              "hi": {
+                "x": -7.2,
+                "y": 53.35,
+                "z": 21.16
+              }
+            },
+            "backingSize": {
+              "x": 0.12,
+              "y": 2,
+              "z": 1.6
+            },
+            "socketToBackingNearFaceUnits": 0.8,
+            "raysStartOutsideOwnSurface": true,
+            "backingExemptFromRays": false,
+            "footprintColumnsUniformHeight": true
+          },
+          "poses": {
+            "R": {
+              "world": {
+                "x": -8,
+                "y": 51.05,
+                "z": 22
+              },
+              "supportVoxel": [
+                -4,
+                25,
+                11
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -8,
+                "y": 52.9,
+                "z": 22
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "S": {
+              "world": {
+                "x": 8,
+                "y": 51.05,
+                "z": 6
+              },
+              "supportVoxel": [
+                4,
+                25,
+                3
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": 8,
+                "y": 52.9,
+                "z": 6
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "E": {
+              "world": {
+                "x": -24,
+                "y": 51.05,
+                "z": 6
+              },
+              "supportVoxel": [
+                -12,
+                25,
+                3
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -24,
+                "y": 52.9,
+                "z": 6
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "W": {
+              "world": {
+                "x": -8,
+                "y": 51.05,
+                "z": 4
+              },
+              "supportVoxel": [
+                -4,
+                25,
+                2
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 3.6,
+              "socketWorld": {
+                "x": -8,
+                "y": 52.4,
+                "z": 4
+              },
+              "groundClearanceUsed": 1.05
+            },
+            "C": {
+              "world": {
+                "x": -36,
+                "y": 51.05,
+                "z": 6
+              },
+              "supportVoxel": [
+                -18,
+                25,
+                3
+              ],
+              "bodyRadius": 0.5,
+              "bodyHeight": 2.01,
+              "socketWorld": {
+                "x": -36,
+                "y": 52.9,
+                "z": 6
+              },
+              "groundClearanceUsed": 1.05
+            }
+          },
+          "fixedValidEndpoints": {
+            "S": {
+              "distance": 22.63,
+              "rangeMargin": 1.37,
+              "supported": true
+            },
+            "E": {
+              "distance": 22.63,
+              "rangeMargin": 1.37,
+              "supported": true
+            }
+          },
+          "surveyRouteShort": {
+            "walkedUnits": 32,
+            "sampleCount": 33,
+            "vertices": [
+              {
+                "x": 8,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": 4,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -2,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -4,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -6,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -8,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -10,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -12,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -14,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -16,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -18,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -20,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 6
+              }
+            ],
+            "unsupportedSpanUnits": 30,
+            "unsupportedSpanSamples": 31,
+            "spanStart": {
+              "x": 7,
+              "y": 51.05,
+              "z": 6
+            },
+            "spanEnd": {
+              "x": -23,
+              "y": 51.05,
+              "z": 6
+            },
+            "spanBlockedByBacking": true,
+            "spanBlockReasons": [
+              "backing"
+            ]
+          },
+          "surveyRouteLong": {
+            "walkedUnits": 92,
+            "sampleCount": 123,
+            "vertices": [
+              {
+                "x": 8,
+                "y": 51.05,
+                "z": 6
+              },
+              {
+                "x": 8,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 10
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": 6,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": 4,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": 2,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 24
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 26
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 28
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 30
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 32
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 34
+              },
+              {
+                "x": 0,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -2,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -4,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -6,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -8,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -10,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -12,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -14,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -16,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -18,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -20,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 36
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 34
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 32
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 30
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 28
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 26
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 24
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 22
+              },
+              {
+                "x": -22,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 20
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 18
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 16
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 14
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 12
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 10
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 8
+              },
+              {
+                "x": -24,
+                "y": 51.05,
+                "z": 6
+              }
+            ],
+            "extraUnits": 60,
+            "lengthRatio": 2.875,
+            "minRangeMarginUnits": 1.37,
+            "everySampleSupported": true,
+            "passesThroughBackingOrTrunk": false
+          },
+          "witnessW": {
+            "position": {
+              "x": -8,
+              "y": 51.05,
+              "z": 4
+            },
+            "supportVoxel": [
+              -4,
+              25,
+              2
+            ],
+            "coversWholeUnsupportedSpan": true,
+            "maxLineOfReferenceDistance": 15.14,
+            "rangeMarginUnits": 8.86,
+            "bodyClearanceFromSurveyRoute": 2,
+            "occupancyCylinderMarginUnits": 0.75,
+            "releaseCylinderMarginUnits": 0.25,
+            "releaseCylinderOverlapsRoute": false,
+            "holdCondition": "no overlap at the nominated pose",
+            "startWitnessesWholeSpan": false,
+            "endWitnessesWholeSpan": false
+          },
+          "commonComparison": {
+            "routeEtoC": {
+              "walkedUnits": 12,
+              "sampleCount": 13,
+              "vertices": [
+                {
+                  "x": -24,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -26,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -28,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -30,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -32,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -34,
+                  "y": 51.05,
+                  "z": 6
+                },
+                {
+                  "x": -36,
+                  "y": 51.05,
+                  "z": 6
+                }
+              ]
+            },
+            "heldReferenceAtE": {
+              "socketWorld": {
+                "x": -24,
+                "y": 52.9,
+                "z": 6
+              },
+              "socketHeight": 1.85
+            },
+            "totalUnitsOutsideFixedReference": 11,
+            "contiguousCommonSpanUnits": 10,
+            "commonSpanStart": {
+              "x": -26,
+              "y": 51.05,
+              "z": 6
+            },
+            "commonSpanEnd": {
+              "x": -36,
+              "y": 51.05,
+              "z": 6
+            },
+            "commonSpanFractionOfPassage": 0.833,
+            "sixUnitThresholdApplied": false
+          },
+          "terraFinalWitness": {
+            "position": {
+              "x": -36,
+              "y": 51.05,
+              "z": 8
+            },
+            "supportVoxel": [
+              -18,
+              25,
+              4
+            ],
+            "socketWorld": {
+              "x": -36,
+              "y": 52.4,
+              "z": 8
+            },
+            "socketHeight": 1.35,
+            "lateralOffsetFromC": 2,
+            "maxLineOfReferenceDistance": 12.18,
+            "rangeMarginUnits": 11.82,
+            "bodyClearanceFromWorkerFinalRoute": 2,
+            "occupancyCylinderMarginUnits": 0.75,
+            "releaseCylinderMarginUnits": 0.25,
+            "releaseCylinderOverlapsRoute": false,
+            "verticalDeltaToC": 0,
+            "occupancyVerticalTolerance": 0.6,
+            "releaseVerticalTolerance": 0.9,
+            "holdCondition": "no hold required at the nominated pose"
+          },
+          "routeClasses": {
+            "bankOrSurvey": "survey route S->E (dry arena, not at water)",
+            "common": "E->C comparison"
+          },
+          "caps": {
+            "maxTracePoints": 128,
+            "maxTraceLength": 120,
+            "sampleSpacing": 1,
+            "cornerSpacing": 0.25
+          }
+        }
+      ]
+    }
+  ],
+  "crossValidation": [
+    {
+      "range": 12,
+      "positiveEdgeSurvey": {
+        "edge": "S -> E survey route",
+        "shippedPlanner": {
+          "mode": "walk",
+          "reason": "dry-surface-path",
+          "waypoints": 9,
+          "visitedCells": 9
+        },
+        "probeRouteExists": true,
+        "agree": true
+      },
+      "positiveEdgeCommon": {
+        "edge": "E -> C common comparison",
+        "shippedPlanner": {
+          "mode": "walk",
+          "reason": "dry-surface-path",
+          "waypoints": 10,
+          "visitedCells": 15
+        },
+        "probeRouteExists": true,
+        "agree": true
+      },
+      "negativeEdgeTerrain": {
+        "edge": "S -> wet column inside the connected water footprint",
+        "shippedPlanner": {
+          "mode": "walk",
+          "reason": "wet-goal-resolved-to-dry-approach",
+          "waypoints": 27,
+          "visitedCells": 33
+        },
+        "probeWalkable": false,
+        "agree": true
+      },
+      "negativeEdgeProp": {
+        "edge": "S -> centre of the opaque backing footprint",
+        "shippedPlanner": {
+          "mode": "walk",
+          "reason": "dry-surface-path",
+          "waypoints": 9,
+          "visitedCells": 9
+        },
+        "probeWalkableTerrainOnly": true,
+        "probeBlockedByBackingCollider": true,
+        "agree": false,
+        "plannerPropBlindness": "the shipped planner knows neither the proposed backing collider nor the hero trunk collider; the probe supplements both as explicit boxes on the node mask AND on the walked segments"
+      }
+    },
+    {
+      "range": 24,
+      "positiveEdgeSurvey": {
+        "edge": "S -> E survey route",
+        "shippedPlanner": {
+          "mode": "walk",
+          "reason": "dry-surface-path",
+          "waypoints": 17,
+          "visitedCells": 17
+        },
+        "probeRouteExists": true,
+        "agree": true
+      },
+      "positiveEdgeCommon": {
+        "edge": "E -> C common comparison",
+        "shippedPlanner": {
+          "mode": "walk",
+          "reason": "dry-surface-path",
+          "waypoints": 7,
+          "visitedCells": 7
+        },
+        "probeRouteExists": true,
+        "agree": true
+      },
+      "negativeEdgeTerrain": {
+        "edge": "S -> wet column inside the connected water footprint",
+        "shippedPlanner": {
+          "mode": "walk",
+          "reason": "wet-goal-resolved-to-dry-approach",
+          "waypoints": 14,
+          "visitedCells": 14
+        },
+        "probeWalkable": false,
+        "agree": true
+      },
+      "negativeEdgeProp": {
+        "edge": "S -> centre of the opaque backing footprint",
+        "shippedPlanner": {
+          "mode": "walk",
+          "reason": "dry-surface-path",
+          "waypoints": 17,
+          "visitedCells": 17
+        },
+        "probeWalkableTerrainOnly": true,
+        "probeBlockedByBackingCollider": true,
+        "agree": false,
+        "plannerPropBlindness": "the shipped planner knows neither the proposed backing collider nor the hero trunk collider; the probe supplements both as explicit boxes on the node mask AND on the walked segments"
+      }
+    }
+  ],
+  "aborted": null,
+  "cpuSeconds": 1.84,
+  "limits": {
+    "proposedNotShipped": "finite reference range and the opaque backing do not exist in the runtime",
+    "hysteresisNotSimulated": "offer/occupancy hysteresis, hold/recovery timing and render tiers are not simulated; only world-space geometry, socket distance and solid line are tested",
+    "noRenderOrGpu": true
+  }
+}

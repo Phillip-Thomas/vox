@@ -1,0 +1,236 @@
+{
+  "baseContractSha256": "ecce3e98270a9041b071e3c627090b228cfaab8a34e6c847296bd775baac3a74",
+  "candidateContractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "status": "promoted exact scene-v2; three fresh signatures and contract gate pending",
+  "changes": [
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/story/events/21/playerAction",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/story/agencyWindows/3/mandatoryPath",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/guidance/objectives/13/workOrder",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/guidance/objectives/13/acceptanceCriterion",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/guidance/objectives/9/markerLabel",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/guidance/objectives/9/variantIntent",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/guidance/objectives/9/feedback/intent",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/guidance/objectives/9/acceptanceCriterion",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/guidance/objectives/13/enterAnchorRef",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/guidance/objectives/13/variantIntent",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/guidance/objectives/13/feedback/intent",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/guidance/objectives/13/acceptanceCriterion",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/story/events/20/acceptanceCriterion",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-contract.json",
+      "path": "/syncAnchors/20/acceptanceCriterion",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-cinema-lane.json",
+      "path": "/objectiveBindings/13/standingWorkOrder",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-cinema-lane.json",
+      "path": "/objectiveBindings/9/markerLabel",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-cinema-lane.json",
+      "path": "/objectiveBindings/9/realTransition",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "scene-cinema-lane.json",
+      "path": "/objectiveBindings/13/realTransition",
+      "op": "replace"
+    },
+    {
+      "author": "Chapter",
+      "file": "story-intent.md",
+      "textReplacement": "Walk the traced span to check your route from this end."
+    },
+    {
+      "author": "Chapter",
+      "file": "story-intent.md",
+      "textReplacement": "Proposed/tested trace differs by stable shape/value, remains depth-tested and depicts walked ground only."
+    },
+    {
+      "author": "Chapter",
+      "file": "story-intent.md",
+      "textReplacement": "W-7744 \u00b7 test in progress"
+    },
+    {
+      "author": "Chapter",
+      "file": "story-intent.md",
+      "textReplacement": "Ready only after physical E\u2192H; actual full 18-unit passage E\u2192C under H records Terra's comparison"
+    },
+    {
+      "author": "Chapter",
+      "file": "story-intent.md",
+      "textReplacement": "Draw targets the survey destination; offer-span replaces it with the actual trace end when that is the actionable target. Never change a marker behind an unchanged objective. Continuous walking retains one quiet work order: no sample/turn prompt, chime or congratulatory microstep. Witness vacancy publishes the appropriate survey or final reference-return objective; missing footing publishes revision because occupancy cannot repair ground. Alternative nearby actions use the same resolver without competing required markers."
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-contract.json",
+      "path": "/palette/semanticRoles/2/usage",
+      "op": "replace"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-contract.json",
+      "path": "/palette/semanticRoles/-",
+      "op": "add"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-contract.json",
+      "path": "/shots/6/focalHierarchy/secondary",
+      "op": "replace"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-contract.json",
+      "path": "/shots/6/framing/blocking",
+      "op": "replace"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-contract.json",
+      "path": "/shots/6/framing/exitComposition",
+      "op": "replace"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-contract.json",
+      "path": "/syncAnchors/20/cinematography/0/visualIntent",
+      "op": "replace"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-contract.json",
+      "path": "/syncAnchors/21/cinematography/0/visualIntent",
+      "op": "replace"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-contract.json",
+      "path": "/evidence/acceptanceCriteria/-",
+      "op": "add"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-cinema-lane.json",
+      "path": "/trace/scope",
+      "op": "add"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-cinema-lane.json",
+      "path": "/trace/futurePathPreviewExceptionRef",
+      "op": "add"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-cinema-lane.json",
+      "path": "/commonGuide",
+      "op": "add"
+    },
+    {
+      "author": "Cinematography",
+      "file": "scene-cinema-lane.json",
+      "path": "/trace/glyphRealization",
+      "op": "add"
+    },
+    {
+      "author": "Cinematography",
+      "file": "cinematography-treatment.md",
+      "textReplacement": "Proposed trace: single broken stroke; tested: paired/notched stroke; held endpoint: open transverse stop. Depth-test every mark, follow actual support, never reveal future corners or rely on glow/color. One static scale plus literal failure text suffices."
+    }
+  ],
+  "files": {
+    "scene-cinema-lane.json": {
+      "before": "98469417bad4389f287a7bd7f883da068ecfa5bd9509101c4902e0aa844a8d35",
+      "after": "38fb1b5b520a50db80a531b56f12a801ea59225c4989854568f3d4e13287d032"
+    },
+    "story-intent.md": {
+      "before": "55c0ce529a8dade83d145261f0984ad15f7a5eba78f408a3ee410977ce16984d",
+      "after": "931bae21406ae0c61499a4131cd7f5be5c16084242f7e696d13bac5d7d19fd2f"
+    },
+    "cinematography-treatment.md": {
+      "before": "4bc74306575fecde7f4c5fa8115057bb40c0c6052d694fd2f7d749e2cc7cdf16",
+      "after": "58ef25ddda07a508611bb2be1c1c50daddbbdf5be7ef5c775616ea9296e386ae"
+    },
+    "scene-contract.json": {
+      "before": "ecce3e98270a9041b071e3c627090b228cfaab8a34e6c847296bd775baac3a74",
+      "after": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e"
+    }
+  },
+  "promotedAt": "2026-09-06T08:18:47.336480+00:00"
+}

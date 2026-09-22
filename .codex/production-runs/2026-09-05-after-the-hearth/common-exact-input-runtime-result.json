@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 382941,
+  "stop_reason": "end_turn",
+  "session_id": "2e090b09-c91a-42e0-b98c-27563a6252ae",
+  "total_cost_usd": 2.132790499999999,
+  "usage": {
+    "input_tokens": 60,
+    "cache_creation_input_tokens": 73198,
+    "cache_read_input_tokens": 1353869,
+    "output_tokens": 28841,
+    "output_tokens_details": {
+      "thinking_tokens": 6440
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 73198,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1920,
+        "cache_read_input_tokens": 78215,
+        "cache_creation_input_tokens": 1174,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1174
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2466,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002551,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 60,
+      "outputTokens": 28841,
+      "cacheReadInputTokens": 1353869,
+      "cacheCreationInputTokens": 73198,
+      "webSearchRequests": 0,
+      "costUSD": 2.130239499999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 6440,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 37,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Prep-owned probe files byte-identical to the prep report's hashes; the `git status` modifications are pre-existing relative to HEAD, and the authoritative freeze check (99-file manifest rehash) showed **0 drift before and after**.\n\n---\n\n## VERDICT\n\n**Instrumentation gate PASSED at runtime on the exact immutable bundle. The discriminator itself was NOT run. No accounting verdict. Not acceptance.**\n\n## Measurements\n\n| Gate (all observed, not inferred) | Result |\n|---|---|\n| served bundle = root-published immutable bundle | PASS `efc87feb\u20269a068`, 5 667 345 B |\n| callee first-statement column `7839:193729` | PASS |\n| caller guarded-credit statement column `7839:219885` | PASS |\n| `bodiesClear` (`TKA`) absent from credit guard | PASS \u2014 reported absent, never fabricated true |\n| bundle script parsed exactly once | PASS \u2014 scriptId 7, no source map |\n| `193729` an **actual** `getPossibleBreakpoints` location | PASS |\n| `219885` an **actual** `getPossibleBreakpoints` location | PASS |\n| LP-A resolved, **no relocation** | PASS 7839:193729 |\n| LP-B resolved, **no relocation** | PASS 7839:219885 |\n| logpoints never paused | PASS \u2014 0 pauses |\n\nSource freeze: 99 files, manifest `6ef957c3\u2026fee5d6`, **0 drift before and after**. Bundle sha unchanged after instrumentation. CDP `scriptParsed` hash equals the served sha256.\n\nRoot's `7839:219956` is the `t.terraUnits=pwe(\u2026)` assignment \u2014 confirmed byte-for-byte. I bound LP-B one step earlier at `219885`, the start of the whole guarded statement, so `g`/`i`/`I`/stage/old-credit are live and the guard is not yet evaluated. I did not assume the columns survived resolution; the debugger offered both.\n\n## Prior-call point: location AVAILABLE, scope retention UNPROVEN\n\nThe site **resolves**. Whether `g`/`i`/`I` are actually *retained* there is **not proved** \u2014 the sink captured **0 records**, because the credit call only runs in COMMON at stage `holding-h`, which this session never reached. Claim limited accordingly; no adjacent eligible call across skipped updates was substituted.\n\n## Not run, stated plainly\n\n- **Grounded E not achieved; held H not achieved** \u2014 neither attempted. Reporting the actual prerequisite, not diagnosing accounting.\n- **D1 positive post-plane overshoot (vertex 2\u21923\u21924): NOT RUN.**\n- Control C1 not run and **not silently substituted**; the exact **z15.82 before-plane refusal was not retested** and is unchanged.\n- Cause: the 20-minute cap went to mandatory prerequisite reading, exact static site derivation, and the gate plus its one authorized retry. The survey\u2192E\u2192`holding-h` chain costs ~80 s of ordinary play and was never started.\n\n**Accounting: projection debt at vertex 3 is NEITHER PROVED NOR FALSIFIED.** No records, nothing inferred, no repair recommended, no patch made.\n\n`refusedByCeiling` renamed to **`zeroGainWithPositiveDisplacement_causeUnattributed`** \u2014 `gain==0 && displacement>0` is also satisfied by backwards motion or an out-of-corridor body. Attribution requires replaying `routeProgressUnits` from exact captured arguments; impossible without records. Not applied.\n\n## Failures kept\n\n`attempt-1` failed `ERR_MODULE_NOT_FOUND` (playwright-core under `main/node_modules`). One retry used for that concrete harness failure; empty `attempt-1` retained. Pulse false-stall not reused; original probe files unmodified.\n\n## Limitations\n\n- **Heavy-lock contention probe was malformed** (`flock` fd-form rejects `-c`); its `UNEXPECTEDLY-ACQUIRED` output is **not** evidence the lock was free. The `flock -w 60 -x 9` itself succeeded and held throughout; contention **unproven**.\n- **Hardware adapter not recorded** \u2014 page not queried for renderer before close.\n- No ordinary keys pressed, no screenshots (no critical corner existed).\n- Deopt/re-JIT can shift displacement *distribution*; untested here.\n\n## Hygiene\n\nOne probe-owned browser in `try/finally`, closed (`cleanupCompleted: true`). Root preview never stopped. All 18 surviving Chromium processes far outlive this ~15 s session \u2014 **foreign, none killed**. Prep-owned `creditCallLogpoints.mjs`/`selftest.mjs`/`invocation.json` byte-identical.\n\n## Artifacts\n\n- `\u2026/verifier/captures/common-exact-input/attempt-2/location-resolution.json`\n- `\u2026/verifier/captures/common-exact-input/attempt-1/` (preserved failure)\n- `\u2026/verifier/probes/common-exact-input/resolveLocations.mjs`\n- `\u2026/common-exact-input-runtime-report.json` / `.md`\n\n**Observed vs inferred:** everything above is observed. No chapter acceptance.",
+  "ttft_ms": 1272,
+  "type": "result",
+  "duration_ms": 399403,
+  "uuid": "f11070fd-bd17-4312-8a1f-9744bfc96765",
+  "ttft_stream_ms": 824,
+  "time_to_request_ms": 15,
+  "first_content_frame_ms": 825,
+  "queued_turn_count": 0
+}

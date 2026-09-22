@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 429450,
+  "stop_reason": "end_turn",
+  "session_id": "67763bba-9350-484f-a440-51e9af0f5085",
+  "total_cost_usd": 2.6805730000000008,
+  "usage": {
+    "input_tokens": 80,
+    "cache_creation_input_tokens": 80756,
+    "cache_read_input_tokens": 2006076,
+    "output_tokens": 34706,
+    "output_tokens_details": {
+      "thinking_tokens": 8536
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 80756,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1140,
+        "cache_read_input_tokens": 84388,
+        "cache_creation_input_tokens": 435,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 435
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1830,
+      "outputTokens": 19,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001925,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 80,
+      "outputTokens": 34706,
+      "cacheReadInputTokens": 2006076,
+      "cacheCreationInputTokens": 80756,
+      "webSearchRequests": 0,
+      "costUSD": 2.678648000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 8536,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 49,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done. Summary:\n\n## What I fixed\n\n`EfficientScene.tsx` computed the on-foot spawn as:\n\n```ts\nlandedShipPos ? landedPlayerEgress ?? arrivalFallback : initialPlayerPosition\n```\n\n`landedShipPos` is seeded at mount from the **validated persisted parked ship**, so any Continue with a parked ship silently discarded the correctly loaded saved pose `H` before `EfficientPlayer` hydrated \u2014 exactly matching the capture (selector chose `FA [53.85,21.5,-24]`, mount received it at +762 ms, rAF centre followed).\n\nThe repair scopes precedence by **provenance** rather than \"save beats ship\". Three inputs \u2014 how the initial position was obtained, whether the ship pose was *rehydrated* or *earned this session*, and a monotonic `shipEgressClaimed` flag set the moment the player takes the ship. A safety-validated saved pose wins only when all three align; everything else resolves exactly as before.\n\nBecause the latch is spent on boarding and never clears, a real board\u2192fly\u2192land\u2192disembark after the restored session uses its current lawful egress (`EfficientPlayer` unmounts in flight and remounts with the fresh egress).\n\n## Boundary held\n\n- Touched only 3 of the 4 allowed paths (`EfficientScene.test.tsx` allowed but unused). `EfficientPlayer.tsx` hash unchanged; the large pre-existing dirty tree preserved untouched.\n- Verified live pre-implementation bytes matched the recorded baseline `ab95dfe4\u2026` before mutating, and confirmed the verifier-cleanup gate in the closure receipt.\n- No forced top-face, no pose projection, no safety-predicate change. Ship pose/hatch/rendering/persistence untouched. `resetPosition` preserved byte-equivalently. Unsafe saves degrade to `'arrival'` and deliberately carry **no** precedence.\n\n## Checks\n\n`tsc` exit 0; 8 focused vitest files, **101 passed**. Counterfactual: reverting the rule yields **4 failed / 11 passed**, then restored with sha256 verified identical. No verify/build/browser/full-suite run.\n\n## Two things worth your attention\n\n1. **The main gap (medium):** the decision is proven at the selection seam, not by mounting `EfficientScene` \u2014 nothing test-asserts the scene *wires* provenance correctly. Mounting it needs Physics plus ~50 mocks, which within the 20-minute bound would have been a fragile, largely artificial fixture. I judged that worse than an honest gap, but it means **the verifier's real-browser Continue is the binding proof of the wiring**, not my receipts.\n2. I treated authored Chapter 6 dive recovery as carrying *no* new precedence (behavior unchanged). That was a conservative reading of \"on-foot\"; flagging it in case you intended otherwise.\n\nReports at `integration-continue-spawn-report.{json,md}` and `logs/integration-continue-spawn/`. No defect closure, acceptance or publication claimed \u2014 and the 3192 figure is recorded as baseline, not proof.",
+  "ttft_ms": 1421,
+  "type": "result",
+  "duration_ms": 479625,
+  "uuid": "858f605b-bc9c-44c8-b675-6073a5111f65",
+  "ttft_stream_ms": 670,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 670,
+  "queued_turn_count": 0
+}

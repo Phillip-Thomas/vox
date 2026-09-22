@@ -1,0 +1,31 @@
+{
+  "role": "verifier-harness-preparer",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T10:51:49.050614+00:00",
+  "safeMode": true,
+  "permissionMode": "default",
+  "tools": [
+    "Bash",
+    "Read",
+    "Grep",
+    "Glob",
+    "Write",
+    "Edit"
+  ],
+  "systemPromptSha256": "2b559aff45bb0c5d182672671bd8c4b31b2f7e14a49793e1fd025e616d4648a0",
+  "commissionSha256": "44189d729d556eadd40ec45cd518e216f944abf25f7728759ef6ec13bbecf35e",
+  "scope": "Run-local harness provenance/diagnostics/stall preparation only, while game writer is active; no game source edit, browser, build or GPU",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T11:07:11.463951+00:00",
+  "sessionId": "3df1f0fe-5a1b-433b-9614-a79c644233b7",
+  "model": "claude-opus-5",
+  "actualTools": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+  ],
+  "isError": false
+}

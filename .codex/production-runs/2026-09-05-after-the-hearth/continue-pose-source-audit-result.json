@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 130605,
+  "stop_reason": "end_turn",
+  "session_id": "a2454b90-77bc-4cac-8adc-6c6b9bfab824",
+  "total_cost_usd": 0.689746,
+  "usage": {
+    "input_tokens": 22,
+    "cache_creation_input_tokens": 32507,
+    "cache_read_input_tokens": 249472,
+    "output_tokens": 9506,
+    "output_tokens_details": {
+      "thinking_tokens": 2869
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 32507,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1437,
+        "cache_read_input_tokens": 34096,
+        "cache_creation_input_tokens": 2478,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2478
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2120,
+      "outputTokens": 12,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00218,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 22,
+      "outputTokens": 9506,
+      "cacheReadInputTokens": 249472,
+      "cacheCreationInputTokens": 32507,
+      "webSearchRequests": 0,
+      "costUSD": 0.687566,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2869,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 15,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: fail-to-confirm \u2014 the verifier's route-blocking \"pose finding\" is an observation, not a cause. I falsified the leading cause hypothesis by causal CPU replay and did not reach a proven branch inside the 12-minute budget (20:31:08Z \u2192 20:42:40Z).\n\n**Measurements**\n\n| Check | Method | Result |\n|---|---|---|\n| `isDryClearResumePosition(exit)` @ size 50/48/32 | real shipped fn + real `getWorldGen(seed 3215739679, '-1,-1')` | **true (SAFE)** |\n| `findValidSpawnSite` | n/a \u2014 never entered | not called |\n| `isDryClearResumePosition(earlier autosave)` | same | true |\n| `isDryClearResumePosition(after-continue pose)` | same | true |\n| size 64 (out of in-tree scope) | same | false \u2192 `[-32.0, 67.85, 22.0]` |\n| exit-pose radius | captured bytes | 65.34 |\n| post-Continue radius | captured bytes | 57.16 (different shell, +X) |\n\n**What the bytes establish**\n- Base `pvx.v1.world.-1,-1.player` moves `[-26.54,52.79,12.60]` \u2192 `[-31.99,52.79,21.42]` at beforeunload, then is **byte-identical** (`fec3227f\u2026`) through menu boot and immediately before Continue. No pre-Continue menu overwrite.\n- After Continue: base becomes `[53.75,13.5,-14]` (+X arrival shell); the exit pose is copied intact to `\u2026-1,-1:p1.player`. Both scopes retained.\n\n**Falsified**\n1. *Validator/rescue path* \u2014 the earned +Y pose is genuinely dry/clear for the same terrain and body dimensions; `EfficientScene.tsx:367` would take `resumeIsSafe = true` and return `savedPosition` verbatim. The unsafe-spawn recovery is **not** firing. (Bool causal replay, not inference.)\n2. *`storyAnchoredSpawn`* \u2014 `storyState.ts:1132-1137` returns true only for `prologue` or ch1 \u2264 `ch1-lift`; default snapshot `{active:false, chapter:'none'}` also returns false. ch13 cannot take it unless story state is mis-restored at mount.\n\n**Precise missing state (unproven, ranked)**\n1. `savePlayerPose` writes **only** `scopedWorldKey(...).primary` (`persistence.ts:451`), while `loadPlayerPose` uses `readScoped` with a legacy fallback (`:464`). If `commandContext.world.worldId` at Continue boot is not the identical string that produced `pvx.v1.world.-1,-1.player`, `saved` is `null` \u2192 `arrivalPose.playerSurfacePosition` \u2192 exactly the observed +X write-back.\n2. Ordering of the actor/world snapshot promotion (base \u2192 `:p1`) relative to the `useState` initializer read.\n3. `arrivalMode==='approach'` / flight-restore returns at `EfficientScene.tsx:323-329`, which precede the saved-pose branch entirely.\n\n**No correction candidate proposed.** No fidelity defect is confirmed; patching the validator or the fallback now would remove legitimate unsafe-spawn recovery that the replay proves is not involved.\n\n**Required next (before any eighth material repair decision)**: instrumented trace of the literal `worldId` string in `commandContext.world` at autosave vs. at Continue boot, and the promotion ordering around the base key during the Continue click.\n\n**Artifacts**\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/continue-pose-source-audit.json`\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/logs/continue-pose-source-audit/`\n\n**Integrity**: no browser, build, or full suite run; no game/producer/probe/prior-report file edited. Scratch replay test `main/src/__continue_pose_audit.replay.test.ts` was created and removed; `git status` shows no new or modified source under `main/`.",
+  "ttft_ms": 1485,
+  "type": "result",
+  "duration_ms": 133576,
+  "uuid": "b98f2b17-e561-4ae9-b2e0-5c067e7003ce",
+  "ttft_stream_ms": 731,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 731,
+  "queued_turn_count": 0
+}

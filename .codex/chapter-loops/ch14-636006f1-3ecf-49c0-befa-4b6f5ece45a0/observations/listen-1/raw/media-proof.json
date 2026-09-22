@@ -1,0 +1,750 @@
+{
+  "video": {
+    "decoded": true,
+    "frames": 375,
+    "durationSeconds": 15,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "nb_read_frames": "375"
+        }
+      ],
+      "format": {
+        "duration": "15.000000"
+      }
+    }
+  },
+  "audio": {
+    "decoded": true,
+    "durationSeconds": 12.288,
+    "rms": 0.14281588339281714,
+    "peak": 0.4218355715274811,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "pcm_s16le",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "format": {
+        "duration": "12.288000"
+      }
+    }
+  },
+  "decodedFrames": [
+    {
+      "path": "raw/decoded-0.png",
+      "drawCalls": null,
+      "brightRatio": 0.9418,
+      "meanLuma": 0.4506,
+      "maxLuma": 1,
+      "contrast": 0.2618,
+      "clipped": 0.00135,
+      "nearBlack": 0.0021,
+      "colorfulness": 0.2995,
+      "blank": false,
+      "meanLuma255": 114.92
+    },
+    {
+      "path": "raw/decoded-1.png",
+      "drawCalls": null,
+      "brightRatio": 0.8788,
+      "meanLuma": 0.4318,
+      "maxLuma": 1,
+      "contrast": 0.2719,
+      "clipped": 0.00152,
+      "nearBlack": 0.0042,
+      "colorfulness": 0.2292,
+      "blank": false,
+      "meanLuma255": 110.1
+    },
+    {
+      "path": "raw/decoded-2.png",
+      "drawCalls": null,
+      "brightRatio": 0.8884,
+      "meanLuma": 0.4415,
+      "maxLuma": 1,
+      "contrast": 0.2852,
+      "clipped": 0.00119,
+      "nearBlack": 0.0132,
+      "colorfulness": 0.2222,
+      "blank": false,
+      "meanLuma255": 112.59
+    }
+  ],
+  "frames": [
+    {
+      "wallMs": 1788904997646,
+      "beat": "ch14-record",
+      "path": "raw/frame-0.png",
+      "drawCalls": null,
+      "brightRatio": 0.8419,
+      "meanLuma": 0.3935,
+      "maxLuma": 0.9159,
+      "contrast": 0.2698,
+      "clipped": 0,
+      "nearBlack": 0.0096,
+      "colorfulness": 0.3694,
+      "blank": false,
+      "meanLuma255": 100.35
+    },
+    {
+      "wallMs": 1788905001130,
+      "beat": "ch14-scar",
+      "path": "raw/frame-1.png",
+      "drawCalls": null,
+      "brightRatio": 0.8833,
+      "meanLuma": 0.4981,
+      "maxLuma": 0.9182,
+      "contrast": 0.2781,
+      "clipped": 0,
+      "nearBlack": 0.0207,
+      "colorfulness": 0.2899,
+      "blank": false,
+      "meanLuma255": 127.02
+    },
+    {
+      "wallMs": 1788905004693,
+      "beat": "ch14-scar",
+      "path": "raw/frame-2.png",
+      "drawCalls": null,
+      "brightRatio": 0.8671,
+      "meanLuma": 0.4577,
+      "maxLuma": 0.9185,
+      "contrast": 0.2772,
+      "clipped": 0,
+      "nearBlack": 0.0077,
+      "colorfulness": 0.2888,
+      "blank": false,
+      "meanLuma255": 116.71
+    },
+    {
+      "wallMs": 1788905008235,
+      "beat": "ch14-scar",
+      "path": "raw/frame-3.png",
+      "drawCalls": null,
+      "brightRatio": 0.726,
+      "meanLuma": 0.3497,
+      "maxLuma": 0.9146,
+      "contrast": 0.2883,
+      "clipped": 0,
+      "nearBlack": 0.029,
+      "colorfulness": 0.3751,
+      "blank": false,
+      "meanLuma255": 89.16
+    },
+    {
+      "wallMs": 1788905011664,
+      "beat": "ch14-return",
+      "path": "raw/frame-4.png",
+      "drawCalls": null,
+      "brightRatio": 0.9003,
+      "meanLuma": 0.5657,
+      "maxLuma": 0.9263,
+      "contrast": 0.273,
+      "clipped": 0,
+      "nearBlack": 0.0259,
+      "colorfulness": 0.2063,
+      "blank": false,
+      "meanLuma255": 144.26
+    }
+  ],
+  "isolation": [
+    {
+      "wallMs": 1788904997714,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788904997993,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788904998256,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788904998514,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788904998788,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788904999050,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788904999308,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788904999564,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788904999835,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905000091,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905000356,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905000614,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905001199,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905001457,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905001712,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905001972,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905002245,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905002506,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905002768,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905003023,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905003299,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905003559,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905003816,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905004077,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905004770,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905005039,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905005298,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905005559,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905005831,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905006090,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905006344,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905006653,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905006928,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905007183,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905007443,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905007700,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905008292,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905008553,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905008811,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905009069,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905009341,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905009598,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905009854,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905010114,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905010387,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905010647,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905010903,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905011161,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788905011712,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18114,
+          "sink": 18101,
+          "pid": "3858258"
+        }
+      ]
+    }
+  ],
+  "pageErrors": [],
+  "errors": []
+}

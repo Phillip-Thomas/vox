@@ -68,10 +68,10 @@ async function runStance(stance) {
   await page.goto(url, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => {
     if (window.__paravoxiaAppState?.phase === 'playing') return true;
-    return [...document.querySelectorAll('button')].some(b => b.textContent?.includes('Play Now') && !b.disabled);
+    return [...document.querySelectorAll('button')].some(b => b.textContent?.includes('Free Play') && !b.disabled);
   }, undefined, { timeout: 60000 }).catch(() => {});
   if (!(await page.evaluate(() => window.__paravoxiaAppState?.phase === 'playing').catch(() => false)))
-    await page.getByRole('button', { name: /Play Now/i }).click({ force: true }).catch(() => {});
+    await page.getByRole('button', { name: /Free Play/i }).click({ force: true }).catch(() => {});
   await page.waitForFunction(() => window.__paravoxiaAppState?.phase === 'playing', undefined, { timeout: 30000 }).catch(() => {});
   await new Promise(r => setTimeout(r, 3500));
 

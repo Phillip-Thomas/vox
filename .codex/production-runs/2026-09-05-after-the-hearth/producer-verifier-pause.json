@@ -1,0 +1,16 @@
+{
+  "requestedAt": "2026-09-06T09:16:54.191024+00:00",
+  "action": "SIGINT to owned verifier CLI after completed hardware home/control probes",
+  "runnerPid": 441692,
+  "cliPid": 441697,
+  "reason": "Proven chapter13 movie stagnation plus source-observed double cadence and stateless waypoint defects require bounded integration repair. Further old-build journeys cannot pass. Another job owns hardware lock. Preserve all raw evidence; resume independent verification after repair.",
+  "sourceMutated": false,
+  "evidenceRefs": [
+    "verifier/logs/verify.log",
+    "verifier/captures/home-movie-1/summary.json",
+    "verifier/captures/control-ch10-cold/summary.json",
+    "producer-movie-interaction-finding.json",
+    "producer-movie-waypoint-finding.json"
+  ],
+  "publicationAuthorized": false
+}

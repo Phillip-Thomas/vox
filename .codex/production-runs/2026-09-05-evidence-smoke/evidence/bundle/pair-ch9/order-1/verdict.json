@@ -1,0 +1,43 @@
+{
+  "schema": "judge-verdict-pairwise-v1",
+  "rubricId": "paravoxia-chapter-v1",
+  "bundleShaX": "e61b4fa963c3f8c3f014ba22ccccffbe3921e23dfef394c4198ff645392f90a8",
+  "bundleShaY": "d925f5d0b74219018dffc97000738b332fba9c0387e82ccb019f14038bb8f3e7",
+  "dimensions": {
+    "audiovisual_emotional_alignment": { "pX": 0.55, "pY": 0.2, "pTie": 0.25 },
+    "narrative_and_player_causality": { "pX": 0.6, "pY": 0.15, "pTie": 0.25 },
+    "cinematic_composition_and_lens": { "pX": 0.4, "pY": 0.35, "pTie": 0.25 },
+    "score_coherence_and_sync": { "pX": 0.35, "pY": 0.3, "pTie": 0.35 },
+    "palette_light_and_render_cohesion": { "pX": 0.45, "pY": 0.25, "pTie": 0.3 },
+    "transition_and_state_integrity": { "pX": 0.4, "pY": 0.25, "pTie": 0.35 },
+    "creative_ambition_and_specificity": { "pX": 0.45, "pY": 0.3, "pTie": 0.25 }
+  },
+  "overall": { "pX": 0.55, "pY": 0.25, "pTie": 0.2 },
+  "decisiveEvidence": [
+    {
+      "frames": [1, 2],
+      "observation": "X: the objective change at t=14.40s (station:return:landfall) coincides with a voxel planet filling the cockpit window, and the bearing-claim anchor at t=25.80s lands on a ground-level frame with a cross-shaped stake in the foreground among deer and palms. The digest's objective/caption/anchor timeline and the frames of record describe the same visible turns: approach, landfall, claim, then transit."
+    },
+    {
+      "frames": [1],
+      "observation": "Y: the milestone keyframe at t=8.60s (habitat-core-online, anchor shelter-certified at 8.60s) renders as the interior of a featureless brown box - flat striped walls, contrast 0.05-0.09, maxLuma ~0.43. Per the digest, frames 2-8 (t=8.60-14.00s), which cover shelter-certified, caption-first, objective-change and the ch9:settled milestone, all sit in this box. The chapter's central milestones have no nameable subject on screen."
+    },
+    {
+      "frames": [0, 2, 3],
+      "observation": "Y's meadow frames (opening at 6.90s with deer, fruit trees, cyan cacti and a ground ring; hearth opening at 21.50s and the 110.50s frame with deer and sheep beside water) are coherent, specific and hold up as stills better than X's cockpit opening, whose centred subject is a small green cube in a starfield behind heavy cockpit furniture. This is why composition is close rather than a clear X win."
+    },
+    {
+      "frames": [0, 3],
+      "observation": "X: meanLuma is flat at ~0.070 from t=36.70s to 61.10s (frames 16-22) and the exit milestone was not reached; the 52.90s seam-of-light anchor produces no visible luminance turn (0.0698 vs 0.0704 before). Y: meanLuma is flat at ~0.52 from 21.50s to 110.50s for 24 consecutive strips and the hearth exit milestone was not reached; both works hold a near-static tail."
+    },
+    {
+      "frames": [],
+      "observation": "Smoothness: X's single burst at t=30.60s reads flickerRatio=2.6, signFlips=0.75 (producer flags FLICKER) but meanAdjDelta=0.0023 and changed=0.01, so it is a low-amplitude oscillation on an otherwise static shot, pops=0. Y captured no bursts, so its smoothness is unmeasured; Y also shows a luma snap 0.50 -> 0.20 at the 8.60s cut into the box, and X shows cuts of 0.23 -> 0.48 at 25.80s and 0.30 -> 0.07 at 36.70s. Neither has blank frames."
+    },
+    {
+      "frames": [],
+      "observation": "Sync: X's three anchors (25.80s bearing-claimed, 30.20s transit-ignite, 52.90s seam-of-light) each coincide with an objective change; the first two also coincide with visible scene changes, the third does not. Y's anchors at 6.90s and 8.60s coincide with the beat start and a milestone cut; its 21.50s objective change carries anchor=none. Both are partially landed; scored near tie."
+    }
+  ],
+  "injectionFlag": false
+}

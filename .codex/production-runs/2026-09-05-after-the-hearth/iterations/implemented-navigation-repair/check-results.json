@@ -1,0 +1,68 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "compiledAt": "2026-09-06T14:10:42.806214+00:00",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "productionScope": {
+    "status": "passed",
+    "evidenceRefs": [
+      "implementation.diff",
+      "implementation-source-manifest.json",
+      "production-lock.json",
+      "producer-boundary-completion.json"
+    ]
+  },
+  "creativeContract": {
+    "status": "passed",
+    "evidenceRefs": [
+      "contract-gate-pass.json",
+      "scene-v2-contract-gate.log",
+      "director-signoffs.json"
+    ]
+  },
+  "typecheck": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/navigation-wording/verify.log"
+    ]
+  },
+  "tests": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/navigation-wording/verify.log"
+    ]
+  },
+  "build": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/navigation-wording/verify.log"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npm run verify",
+      "commandAsReported": "npm run verify",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/navigation-wording/verify.log",
+      "evidenceSha256": "cf45406a988047111eddf84391ccda91e3e0340b42b8feb71e4dcf718c98dc99",
+      "componentScriptSource": "main/package.json#scripts.verify",
+      "componentScript": "npm run catalog:check && npm run scene:av:check && npm run creative:workflow:check && npm run chapter:registry:check && npm run chapter:journey:check && npm run typecheck && npm run preview:check && npm run audio:diagnostic-check && npm run story:ladder:check && npm run guidance:target-check && npm run story:authority && npm run test && npm run audio:check && npm run build",
+      "componentScriptSourceSha256": "2972e52e1c61e8c61034dfc1161f071ae04f27787b80fc5c3e83200523069a68"
+    },
+    {
+      "command": "npm run story:ux:check",
+      "commandAsReported": "npm run story:ux:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/navigation-wording/story-ux-check.log",
+      "evidenceSha256": "f6389f56b462d9c30b430e2b9862ba5624cd3a251755a90f7c2af40915f0ac73"
+    }
+  ],
+  "scope": "Final navigation-repair implementation checks. Independent full verify, actual manual/movie/AV/hardware evidence and creative acceptance remain pending."
+}

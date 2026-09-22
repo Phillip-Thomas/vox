@@ -1,0 +1,16 @@
+{
+  "role": "common-terminal-source-auditor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T16:12:46.919407+00:00",
+  "commissionSha256": "14bebaab7ceaf9dbcfd56219d4130445098c25b58dfda44402da03efc9616050",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "Read-only causal source diagnosis for repeated COMMON exact terminal stall; no game edits GPU or acceptance",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T16:20:42.140664+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "054fddde-db81-483d-a5af-78eff6497a30",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

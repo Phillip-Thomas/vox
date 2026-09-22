@@ -1,0 +1,483 @@
+{
+  "label": "baseline",
+  "url": "http://127.0.0.1:34825/?story=crash&movie=1&journeyprobe=1&profile=HIGH",
+  "kind": "diagnostic-transition-only",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "errors": [
+    {
+      "message": "The root document of this element is not valid for pointer lock.",
+      "stack": ""
+    }
+  ],
+  "trace": [
+    {
+      "at": 1788827246699,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827246952,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827247203,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827247455,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827247709,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827247964,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827248217,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827248469,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827248722,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827248979,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827249231,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827249483,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827249736,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827250023,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827250301,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827252320,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827252574,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": false
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827252826,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827253078,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827253330,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827253581,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827253834,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827254087,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827254464,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827254716,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827254968,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827255221,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827255474,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827255815,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827256068,
+      "story": {
+        "active": true,
+        "chapter": "prologue",
+        "beat": "crash",
+        "runId": 1
+      },
+      "app": {
+        "phase": "menu",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    },
+    {
+      "at": 1788827256351,
+      "story": {
+        "active": true,
+        "chapter": "ch1",
+        "beat": "descent",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "autopilot": null,
+      "pointerLocked": false
+    }
+  ],
+  "descentObserved": true,
+  "success": true,
+  "earnedContinuity": false,
+  "contextClosed": true
+}

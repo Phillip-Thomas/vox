@@ -1,0 +1,254 @@
+{
+  "schema": "paravoxia.verifier.runtimeReady.v1",
+  "role": "earned-continue-3d-runtime",
+  "status": "READY-WAITING-FOR-GPU-HANDOFF",
+  "publishedAt": "2026-09-06T20:22:07Z",
+  "actualStartedAt": "2026-09-06T20:14:21Z",
+  "budgetDeadlineUtc": "2026-09-06T20:34:21Z",
+  "clockSource": "date -u on this host; no minute was inferred from token count or turn count",
+  "isAcceptance": false,
+  "isChapterVerification": false,
+  "runtimeClaim": null,
+  "acceptedActionClaim": null,
+  "gpu": {
+    "touched": false,
+    "browserLaunched": false,
+    "heavyLockOpened": false,
+    "controlActiveRoleAtPublish": "finale-window-runtime",
+    "handoffFilePresent": false,
+    "waitRule": "no browser/lock/audio until activeRole=earned-continue-3d-runtime AND producer-common-physical-continue-gpu-handoff.json exists"
+  },
+  "preGpuCorrectionsApplied": [
+    {
+      "id": "EC3D-FIX-GROUND-FRAME",
+      "producerFinding": "walkTowards 469/482/489/519 and newAction 1055/1063 compared bodyCENTRE with ground target E at radius 1.2; the ~1.8 normal offset made lawful arrival impossible.",
+      "evidence": {
+        "shippedSource": "main/src/story/commonGroundDirector.ts:782 CG_PLAYER_GROUND_OFFSET = PLAYER_CAPSULE_HALF_HEIGHT + PLAYER_CAPSULE_RADIUS; :795-797 foot = centre - up*offset; :1891 bodyPose published beside bodyCentre",
+        "measuredInEarned1": {
+          "bodyCentre": [
+            52.78897476196289,
+            17.5,
+            -20
+          ],
+          "bodyPose": [
+            50.98897476196318,
+            17.499999674973967,
+            -19.99999902356783
+          ],
+          "offsetUnits": 1.8,
+          "face": "+X",
+          "offsetLiesAlongLiveUp": true
+        },
+        "earnPhaseFootY": 50.9899017336811,
+        "groundTargetEy": 51.05,
+        "conclusion": "E is a FOOT/ground target. Centre-vs-E for a correctly standing player is ~1.8u > 1.2u radius."
+      },
+      "fix": "All ground-target arrival, steering, per-burst progress, stall telemetry and pre-[F] authorization now use the published FOOT (bodyPose). bodyCentre retained separately as *_diagnosticOnly. Radius UNCHANGED at 1.2. Full XYZ and live-up tangents retained; no Y dropped.",
+      "radiusWidened": false,
+      "yDropped": false
+    },
+    {
+      "id": "EC3D-FIX-GROUNDED-F-GATE",
+      "fix": "New tangentSteering3d.groundedActionGate requires, on CURRENT readings before [F]: foot within the existing 1.2u of E; centre->foot offset actually along the published up (frames match); CURRENT beat ch13-survey (stale beat refuses); grounding via physics flag if published, else audit support where the body is ON the audited plane; and the shipped prompt actually offering [F].",
+      "crossFaceRule": "Off the audited plane, auditSupported=false is reported as UNVERIFIABLE grounding \u2014 neither accepted as grounded nor asserted as broken game physics."
+    },
+    {
+      "id": "EC3D-FIX-CURRENT-BEAT",
+      "fix": "pre-[F] beat is re-read immediately before the press; the post-Continue contSt reading would be stale by the length of the walk."
+    },
+    {
+      "id": "EC3D-FIX-CALIBRATION-FRAME",
+      "fix": "Key calibration measures FOOT displacement (the target frame). Centre displacement retained beside it with upStableDuringSample/centreEquivalentToFootHere, so centre is only ever read as equivalent when consistent with the actual up."
+    },
+    {
+      "id": "EC3D-ADAPTIVE-PULSE",
+      "fix": "Ordinary key pulse shortens to 220ms under 8u and 120ms under 3u of the foot target, to avoid overshooting the last approach. Ordinary key down/up only \u2014 no sub-frame control, no geometry change, no injected key state."
+    },
+    {
+      "id": "EC3D-FIX-FOOT-REFUSAL",
+      "fix": "If bodyPose is unpublished the walk and the gate REFUSE rather than silently substituting bodyCentre."
+    }
+  ],
+  "focusedHelperTest": {
+    "path": "verifier/probes/earned-continue-3d/groundFrame.selftest.mjs",
+    "sha256": "f30ae2947fc6e8c991c2ab49d6bf5a9957d07e78e0ba5d08d32859661bd803ec",
+    "command": "node verifier/probes/earned-continue-3d/groundFrame.selftest.mjs",
+    "exit": 0,
+    "checks": 25,
+    "failed": 0,
+    "importsSameBytesAsProbe": true,
+    "mandatedCases": {
+      "centre[-42,52.85,12]+foot[-42,51.05,12]+up[0,1,0] arrives at E": "PASS",
+      "same case: centre distance 1.8 > radius 1.2 (the impossible prepared gate)": "PASS",
+      "wrong foot does not authorize F": "PASS",
+      "unsupported does not authorize F": "PASS",
+      "stale beat does not authorize F": "PASS",
+      "no shipped [F] prompt does not authorize F": "PASS",
+      "missing foot pose refuses instead of falling back to centre": "PASS",
+      "off-audit-plane is a declared gap, not a physics verdict": "PASS",
+      "earned-1 +X-face body: offset 1.8 along live up": "PASS",
+      "frames not matching (offset off-axis) is flagged": "PASS"
+    },
+    "log": "logs/earned-continue-3d-runtime/groundFrame-selftest.log"
+  },
+  "callerUsesTestedHelper": {
+    "verified": true,
+    "walkArrival": "groundTargetArrival (foot)",
+    "preFPress": "groundedActionGate",
+    "residualCentreUses": "reporting only, all suffixed _diagnosticOnly"
+  },
+  "cpuChecksRerun": [
+    {
+      "command": "node --check verifier/probes/earned-continue-3d/earned-continue-3d-probe.mjs",
+      "exit": 0
+    },
+    {
+      "command": "node --check verifier/probes/earned-continue-3d/tangentSteering3d.mjs",
+      "exit": 0
+    },
+    {
+      "command": "node verifier/probes/earned-continue-3d/groundFrame.selftest.mjs",
+      "exit": 0,
+      "result": "25 checks, 0 failed"
+    },
+    {
+      "command": "node verifier/probes/earned-continue-3d/tangentSteering3d.selftest.mjs",
+      "exit": 0,
+      "result": "all CPU cases passed (regression after append)"
+    },
+    {
+      "command": "node verifier/probes/earned-continue-3d/selftest.mjs",
+      "exit": 0,
+      "result": "108/108 checks passed"
+    },
+    {
+      "command": "node verifier/probes/earned-continue-3d/earned-continue-3d-probe.mjs --self-test",
+      "exit": 0,
+      "result": "OK"
+    }
+  ],
+  "heavyLockShapeVerified": {
+    "requiredForm": "exec 9<>\"$LOCK\"; flock -w 60 -x 9; node probe --heavy-lock \"$LOCK\" --heavy-lock-fd 9",
+    "preparedPathFormRejected": "the prep's `flock -x <path> -c ...` does not establish an INHERITED descriptor; heavyLockOwnership fstat(9) would fail",
+    "checkerExport": "heavyLockOwnership in verifier/probes/earned-continue-3d/pinned/commonPassageLogic.pinned.mjs:380",
+    "scratchValidation": {
+      "note": "validated against a /tmp scratch lock; the REAL shared heavy lock was NOT opened",
+      "owned": true,
+      "procLock": {
+        "kind": "FLOCK",
+        "scope": "ADVISORY",
+        "mode": "WRITE"
+      },
+      "problems": [],
+      "log": "logs/earned-continue-3d-runtime/fd9-lock-shape-check.log"
+    }
+  },
+  "preparedFiles": [
+    {
+      "path": "verifier/probes/earned-continue-3d/cgContract.pinned.mjs",
+      "sha256": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5",
+      "preparedSha256": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5",
+      "changed": false,
+      "newInThisCorrection": false
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/earned-continue-3d-probe.mjs",
+      "sha256": "2a9c9a542812952528875b4fde248c721f07a9f6b4a59fa86572799fd836b082",
+      "preparedSha256": "f0cf8172384b72b690fc1af32dce64ad2e36f1e28d4207bca68aef9ec720a1c9",
+      "changed": true,
+      "newInThisCorrection": false
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/earnedContinueLogic.mjs",
+      "sha256": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1",
+      "preparedSha256": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1",
+      "changed": false,
+      "newInThisCorrection": false
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/entryObservation.mjs",
+      "sha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+      "preparedSha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+      "changed": false,
+      "newInThisCorrection": false
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/groundFrame.selftest.mjs",
+      "sha256": "f30ae2947fc6e8c991c2ab49d6bf5a9957d07e78e0ba5d08d32859661bd803ec",
+      "preparedSha256": null,
+      "changed": false,
+      "newInThisCorrection": true
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/ownedSession.pinned.mjs",
+      "sha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "preparedSha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "changed": false,
+      "newInThisCorrection": false
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/poseObservation.mjs",
+      "sha256": "35d26b067c154c17af834721e424c700d28f6ea4c17fb88ec24025c7823bccc8",
+      "preparedSha256": "35d26b067c154c17af834721e424c700d28f6ea4c17fb88ec24025c7823bccc8",
+      "changed": false,
+      "newInThisCorrection": false
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/selftest.mjs",
+      "sha256": "f48e843bcac75def449fb17b0c4fefcba70f346ba2fa51a504f54e067556d9c6",
+      "preparedSha256": "f48e843bcac75def449fb17b0c4fefcba70f346ba2fa51a504f54e067556d9c6",
+      "changed": false,
+      "newInThisCorrection": false
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/sourceSnapshot.pinned.mjs",
+      "sha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "preparedSha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "changed": false,
+      "newInThisCorrection": false
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/tangentSteering3d.mjs",
+      "sha256": "26c63b7dd602bfe926cd236e156d88c649795ffd5470aa52f4ef8c1a45d30d30",
+      "preparedSha256": "1c1523c4480b1b290849a62102873d29f1d578f07052335943d0c8702ee65b6c",
+      "changed": true,
+      "newInThisCorrection": false
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/tangentSteering3d.selftest.mjs",
+      "sha256": "2e90fb4e4ceaa1abf1e275bbea2420b4684a2a9607df59ebd0044be5ec5ad01d",
+      "preparedSha256": "2e90fb4e4ceaa1abf1e275bbea2420b4684a2a9607df59ebd0044be5ec5ad01d",
+      "changed": false,
+      "newInThisCorrection": false
+    }
+  ],
+  "originalsPreserved": {
+    "logs/earned-continue-3d-runtime/earned-continue-3d-probe.PRE-CORRECTION.mjs": "f0cf8172384b72b690fc1af32dce64ad2e36f1e28d4207bca68aef9ec720a1c9",
+    "logs/earned-continue-3d-runtime/tangentSteering3d.PRE-CORRECTION.mjs": "1c1523c4480b1b290849a62102873d29f1d578f07052335943d0c8702ee65b6c"
+  },
+  "notModified": {
+    "gameSource": true,
+    "contract": true,
+    "build": true,
+    "producerControl": true,
+    "producerInvocationOrReceipts": true,
+    "preview": true,
+    "otherRolesArtifacts": true
+  },
+  "carriedForward": {
+    "savedPrefixExactlyEqual": true,
+    "note": "the original 18-point WorldSave prefix matches the later 19-point snapshot EXACTLY; the extra sample is OBSERVED growth, not lost data, and sample-count-only comparison remains insufficient",
+    "poseGap": "pvx.v1.world.-1,-1.player bytes still have no runtime proof; retention at 4 lifecycle points is prepared but UNRUN",
+    "newActionProved": false
+  },
+  "runtimeCommandAwaitingRootValues": {
+    "shape": "exec 9<>\"$HEAVY_LOCK\"; flock -w 60 -x 9; node verifier/probes/earned-continue-3d/earned-continue-3d-probe.mjs --url http://127.0.0.1:34413/ --expect-source-manifest 6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6 --heavy-lock \"$HEAVY_LOCK\" --heavy-lock-fd 9 --role earned-continue-3d-runtime --out <FRESH_ATTEMPT_DIR>",
+    "pinsVerifiedBeforeGpu": {
+      "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+      "indexSha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207",
+      "buildHash": "aa52b0341b78d0931a5c91d431d9ba0ce81b5edde12b9b5b54449a5ee1c20d74",
+      "previewUrl": "http://127.0.0.1:34413/",
+      "httpTitleIndexBundleCheckedInProbeBeforeLaunch": true
+    }
+  }
+}

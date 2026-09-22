@@ -1,0 +1,56 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "bd403458193686852e44199556ca9f04a09788f5ed9b0226efd6a1c758b62e10",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": false,
+    "acceptedAction": 0,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [
+    "ordinaryControls",
+    "acceptedAction",
+    "completePath"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-4/raw/cleanup.json",
+      "sha256": "c39827253898cc132ea5f88364a3cc707cfb8c6076ef83b47e5dc8d48bc46493"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-4/raw/observations.json",
+      "sha256": "c355186af02008cbe32adc15c683645a932cdc6aa661c2d3dc3fb481dc6600bb"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-4/raw/provenance.json",
+      "sha256": "4d3119f96dd837aa3a0d42a8ecef1438e173547ffd9896fe23fd241a54efee5e"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-4/raw/trace.ndjson",
+      "sha256": "dac623d133ea74554c728bf33f51e1a1e715ed8923482edfc6772633bff08c4a"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "Calibrated movement cannot approach the target"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "003a7f53a510ca3dec4acf4906611e4a76c5ffa0b883faaca37f1c449cf8256b",
+    "buildSha256": "49121a99be35e380cdb347e2abee762ef8d12e4f377cb4bffd85a6fa74cadf4b",
+    "transportSha256": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820"
+  }
+}

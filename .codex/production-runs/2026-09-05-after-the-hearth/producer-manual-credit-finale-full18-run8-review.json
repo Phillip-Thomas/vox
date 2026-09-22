@@ -1,0 +1,52 @@
+{
+  "at": "2026-09-06T21:45:12.247704+00:00",
+  "captureRef": "verifier/captures/manual-credit-finale/full18-run8/summary.json",
+  "captureSha256": "31226ddd5a0d167ae05ac86f90b0675354ef16d61dd9bef464aeaac0ac640e4d",
+  "classification": "Repeated actual manual full18/18 reciprocal completion, all recorded gates passed",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "gateCount": 44,
+  "finalCommon": {
+    "stage": "arrived",
+    "terraUnits": 18,
+    "comparisonProved": true,
+    "finalReferenceOffered": true,
+    "finalReferenceOccupied": false,
+    "workerUnits": 18,
+    "committed": true
+  },
+  "actualFinalAnchors": [
+    "anc.cg.complete",
+    "anc.cg.handback"
+  ],
+  "actualF": {
+    "name": "offer-the-far-reference",
+    "at": "2026-09-06T21:43:55.665Z",
+    "expectedObjectiveId": "ch13:common:offer-final-reference",
+    "verb": "/offer this end|far reference/i",
+    "objectiveId": "ch13:common:offer-final-reference",
+    "prompts": [
+      "F | Offer this end"
+    ],
+    "may": {
+      "ok": true,
+      "why": null,
+      "prompt": "F | Offer this end"
+    },
+    "pressed": true
+  },
+  "closing": {
+    "ok": true,
+    "problems": []
+  },
+  "limits": [
+    "H-toE uncredited assertion compares final/max observed credited18 with20, rather than densely observing the initial approach. It does not alone prove each frame of the2unit uncredited leg.",
+    "Guidance empty is measured; immediate control feel/timing requires lifecycle evidence.",
+    "Known-route scripted ordinary controls are not naiveUX/continuousstation journey. Negative/recovery,3coldCOMMON,finale/Continue and broader acceptance remain."
+  ],
+  "publicationAuthorized": false,
+  "rootFrameInspection": {
+    "path": "verifier/captures/manual-credit-finale/full18-run8/worker-reciprocal-end.png",
+    "sha256": "e81c799e33900649d44918acbc7965d2db88f6513630d84168fc8877cdde90fe",
+    "observation": "Actual1280x720 Origin frame rendered; former objective/marker cleared; debug panels open. No visual taste or immediate-control-feel verdict."
+  }
+}

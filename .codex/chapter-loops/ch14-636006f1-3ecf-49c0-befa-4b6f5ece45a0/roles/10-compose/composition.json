@@ -1,0 +1,48 @@
+{
+  "summary": "Added chapter-local music-bus subtraction and protected the return statement across same-frame story cleanup. TypeScript and 48 existing score tests pass. Two listen cycles completed; no further polish/capture.",
+  "commands": {
+    "observe": "node /home/thomasphillip/Projects/vox/main/tools/chapter-loop.mjs observe --run /home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0 --kind listen",
+    "outcome": "Both invocations exited 2; both internal reports passed. command.log retains PROBE-ERROR-INCONCLUSIVE: fetch failed. This is transport uncertainty, not an established game defect."
+  },
+  "observations": [
+    "First native listen: continuous synth score, no distinct return statement. Second native listen: reduced active instrumentation in the middle, low tonal bed remains, separated pitches reported around audio 18-26s. This does not establish the signed arrival-locked statement; audio and video have different durations and the perceptual time estimates are approximate.",
+    "Final trace: completion 90.882s, trace end 94.095s. A 3.213-second post-completion trace cannot prove the entire scheduled four-second statement plus two-second release.",
+    "Native video: panel preserves world view; hull seams and question visible. Final return retires objective, displays receipt and keeps first-person view. Pause, Resume and Continue are not demonstrated.",
+    "AV diagnostic predecessor coverage is not fresh continuity; report earnedEntry/earnedExit/noFixtures are false. Independent review and full continuity remain separate."
+  ],
+  "next": "Retain the current concrete score repair and successful staging. Establish precise audio/event alignment and full release, then interruption/reentry proof in the authorized verification stage; do not infer acceptance from internal capture status.",
+  "evidence": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/audio.wav",
+      "sha256": "13496f96f86a70da1525f076babb785ab0d837e957f45a309b2ff8b9296047ae"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/video.webm",
+      "sha256": "2412e48721055ee3be261cf9655cb9901f880ee3955f6ec33717ab9924f3913e"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/report.json",
+      "sha256": "4e44281095cfe161fbd1ad115f488e7f7e2fde91275ebf3096a2c71045b148d4"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/command.log",
+      "sha256": "cf1b635f132d1848f7358905731b89f4f8280b426a4cbfc784d45b3ea6e490e3"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/changes.json",
+      "sha256": "0d83a8a7898caef1449aff959564cdb0e5ea30b7e01c994197fb1aefca30659b"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/runtime-timing.json",
+      "sha256": "1fbcbf52af7099456fcc1cbef9f3bd6e58462a1d641ee798ef93b8c179ba3172"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/perception/5798db1a-eea9-4a30-9b46-b01f9a82a862.json",
+      "sha256": "a38d751460e020bc5d4270b7c19eae62f2e74ca77cf119b74436bed2d0c7e6d0"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/perception/98f1e3d5-1b3d-40e8-b593-a09805d0aebc.json",
+      "sha256": "1e8f017bd6bf9847300869eb913939ec2c2fd5670e18724ff442faadc610df69"
+    }
+  ]
+}

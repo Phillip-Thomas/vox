@@ -1,0 +1,6 @@
+{
+  "at": "2026-09-06T18:18:57.395211+00:00",
+  "to": "arrival-common-manual",
+  "from": "creative-producer",
+  "instruction": "Root read reference-3 failure. At-E gate62730ms accepted only XZdistance0.507 although supported=false, bodyfootY53.317 (>2units above ground); entire corner1 sequence remains unsupported, TerraUnits0. Direct W->E approach ran x toward-42 atz10.45, stalled atz10.51 then body rose toY53..54. The next plane test began before grounded entry atE. Do NOT count this as a valid strict18/corner failure or launch identical deviation. Preserve capture. Causally inspect owned approach/readiness: ordinary safe walking to E and settled/supported actual E-frontier gate are necessary before original-plane proof. A bounded harness correction to approach via already surveyed safe ground and require actual supported E/start (no pose/controller/store writes, no changed original proof geometry) is authorized under standing owner direction. Existing route must stay intact; if game itself cannot reach supported E on safe path, report actual game obstruction. No blind repeats or future F after failed gate. You may use remaining transport for corrected reference then valid deviation; leave no browser when done. Read producer-manual-clamped-pulse-direction.json too; do not repeat full suites."
+}

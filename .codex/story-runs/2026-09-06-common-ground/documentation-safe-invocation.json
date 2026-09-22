@@ -1,0 +1,23 @@
+{
+  "role": "documentation",
+  "agent": "story-canon-auditor",
+  "startedAt": "2026-09-06T05:06:22.696295+00:00",
+  "tools": [
+    "Read",
+    "Grep",
+    "Glob"
+  ],
+  "safeMode": true,
+  "systemPromptSha256": "5882b03cb7c3fb3509c4405a81876b556075a28ec2ad27a868a141b5a640b4b6",
+  "commissionSha256": "529ca27950ce09b1dc10d16c3c9b0eaf723765fb7fa524a5165939b77b71300b",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T05:11:05.548760+00:00",
+  "sessionId": "1d6d0276-6b95-4f53-b390-c5ba1d48976e",
+  "model": "claude-opus-5",
+  "actualTools": [
+    "Glob",
+    "Grep",
+    "Read"
+  ],
+  "isError": false
+}

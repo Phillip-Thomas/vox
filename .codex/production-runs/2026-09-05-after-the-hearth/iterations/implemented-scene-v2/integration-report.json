@@ -1,0 +1,586 @@
+{
+  "schema": "paravoxia.integrationReport.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "sceneId": "common-ground",
+  "implementedContractRevision": "scene-v2",
+  "implementedContractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "gateReceiptVerifiedBeforeFirstEdit": {
+    "path": ".codex/production-runs/2026-09-05-after-the-hearth/contract-gate-pass.json",
+    "passed": true,
+    "phase": "contract",
+    "checkCount": 1668,
+    "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+    "liveContractHashAtVerification": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+    "directorSignoffsSameRevision": true,
+    "signatures": {
+      "chapter": "approve-with-notes (Codex chapter_intent \u2014 Chapter Director, 2026-09-06T08:21:18Z)",
+      "score": "approve (Score Director /root/score_director, 2026-09-06T08:22:48Z)",
+      "cinematography": "approve (Cinematography Director /root/cinematography_director, 2026-09-06T08:24:47Z)"
+    },
+    "priorRevisionReceipt": {
+      "revision": "scene-v1",
+      "sha256": "ecce3e98270a9041b071e3c627090b228cfaab8a34e6c847296bd775baac3a74",
+      "checkCount": 1712,
+      "note": "Verified before the first edit of the archived scene-v1 pass; retained citation."
+    },
+    "v1SnapshotRehashedBeforeFirstV2Edit": "iterations/implemented-scene-v1-before-v2/source-manifest.json \u2014 96 files, 0 drift"
+  },
+  "blocking": {
+    "status": "RESOLVED",
+    "wasBlockedOn": "scene-contract.json was replaced in place with an unsigned scene-v2 (4dbf722b\u2026fddff88e) while the scene-v1 implementation was under way; contract-gate-pass.json and director-signoffs.json were still scene-v1. The runtime pins were deliberately NOT moved to an unsigned revision, so five contract-identity gates failed.",
+    "resolvedBy": "Root posted the three scene-v2 signatures and a fresh passing contract gate (1668 checks, zero warnings/failures). The pins were then moved to the signed bytes through the normal generators.",
+    "gatesNowPassing": [
+      "chapter:registry:check",
+      "chapter:registry:smoke",
+      "scene:av:check",
+      "story:authority",
+      "story:authority:smoke"
+    ],
+    "archivedDetail": "iterations/implemented-scene-v1-before-v2/integration-report.md"
+  },
+  "publication": {
+    "publishAllowed": false,
+    "deployed": false,
+    "releaseStoryCeiling": "ch4-arrival (unchanged)",
+    "runtimeStoryCeiling": "ch13-common (advanced, gated)",
+    "publicationAuthorized": false
+  },
+  "newRuntimeFiles": [
+    {
+      "path": "main/src/story/commonGroundState.ts",
+      "sha256": "4bfcaf0d559bb690a9a58fcac637ddbcef200dcaadec7098a48242b27d3b1e85"
+    },
+    {
+      "path": "main/src/story/commonGroundState.test.ts",
+      "sha256": "99c3704acad24d542768327fd7d64ef71e40559dd51ad0764be8bd39086ae092"
+    },
+    {
+      "path": "main/src/story/commonGroundRoute.ts",
+      "sha256": "e28c4dd2fa03dad23a82eca2bfa12d01e7526c298a926985aef008b9f4e4fddf"
+    },
+    {
+      "path": "main/src/story/commonGroundRoute.test.ts",
+      "sha256": "fb001cb24e37c5b288314cf9cc2262090912524937e1b88eab32c62cef0582da"
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.ts",
+      "sha256": "a2f76fc2ccd99c213b91d7b1e414a4023e1a667d888a311438c982d7d08b2938"
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.test.ts",
+      "sha256": "e5f782df2e4a255823e439c136ecf96448b014e7e601338a478fa6f96c1bf559"
+    },
+    {
+      "path": "main/src/story/commonGroundActor.ts",
+      "sha256": "2592bc115e043ad2f17d00a72af1cd9c977e46dd4422c5839efbd02c4a3406bb"
+    },
+    {
+      "path": "main/src/story/commonGroundScore.ts",
+      "sha256": "9030026aaec2436c897282987bb9dd74bb85bd8890d6f841eded69d4a196e0a5"
+    },
+    {
+      "path": "main/src/story/commonGroundScore.test.ts",
+      "sha256": "73cc5e9eb036933dc7d60298039524c782108f2c4b337843fb318215e141f313"
+    },
+    {
+      "path": "main/src/story/world/CommonGroundWorld.tsx",
+      "sha256": "517b57788f61fce2eb78fbec74467dbd2435a68d32f9a03d33a43e790dcabc73"
+    },
+    {
+      "path": "main/src/story/beats/ch13/ch13-home.ts",
+      "sha256": "5d97e8cea9f3a3e0307d9c7e16a4ce45e4470b9f75c5186bc9aca888630d374b"
+    },
+    {
+      "path": "main/src/story/beats/ch13/ch13-return.ts",
+      "sha256": "f0710d49683de2cd632853bd9db8cee95e5ee92d4c26f3a5c7bccd15626196e5"
+    },
+    {
+      "path": "main/src/story/beats/ch13/ch13-survey.ts",
+      "sha256": "08f9d635212be77a4b3f4fa4dbdb5797f09fea77fbea4a5acf9e57615ae8b1d1"
+    },
+    {
+      "path": "main/src/story/beats/ch13/ch13-common.ts",
+      "sha256": "153e5c84bca77171cc0ce8f04151ccb0e98afb62f365eb839336bfd275535368"
+    },
+    {
+      "path": "main/src/story/beats/ch13/index.ts",
+      "sha256": "dc144cd8c9bcb8a5003a0685a8947df39d5143fc494bb5a3e93b7256c86d4488"
+    },
+    {
+      "path": "main/src/story/autopilot/rail-ch13-home.ts",
+      "sha256": "c8fea24cd23827663955fcde41dadea2b609a770c22ab5af91cc48741b4b8893"
+    },
+    {
+      "path": "main/src/story/autopilot/rail-ch13-return.ts",
+      "sha256": "a1e04dc73e687b8c0ce68aca78aac653e8109bf69849e591229ce98b9ab82376"
+    },
+    {
+      "path": "main/src/story/autopilot/rail-ch13-survey.ts",
+      "sha256": "4717372fccda26c8e808779f51c727aa61e4b2c7b6307b34b26edce579441a2d"
+    },
+    {
+      "path": "main/src/story/autopilot/rail-ch13-common.ts",
+      "sha256": "9df20c7dc5600da6ca4ce4ab677088b4944a32198c956fe64e92fdbc8f7a24ac"
+    }
+  ],
+  "modifiedRuntimeFiles": [
+    {
+      "path": "main/src/story/storyState.ts",
+      "sha256": "7d66ff3ed42ca18e0849af8ef2df8cc057fdcfa37c7bf0c9760081461d70d535"
+    },
+    {
+      "path": "main/src/story/storyState.test.ts",
+      "sha256": "d5e109296dc4603047b86a1e13e1df1a38ae9e261e7cf08c3741372c8aaf43a3"
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "sha256": "82fe1ca596ab6322aeb61c2f33ebed018b1ac1fc22a8fd10d3b2377aa2bf385b"
+    },
+    {
+      "path": "main/src/story/storyDirector.test.ts",
+      "sha256": "15b9dc1f6a4082b5f0b7a0fec939724917945cdbfe63bae2133e4210f85ef161"
+    },
+    {
+      "path": "main/src/story/StoryDirectorDriver.tsx",
+      "sha256": "602f4a59b06ea4caf13afd59f0545e5aede0d587e0e1820db168cb8e94310005"
+    },
+    {
+      "path": "main/src/story/emergentStoryDirector.ts",
+      "sha256": "022d8609c651f3049b47eea6ed203d11de4a90eb7e6f6bafa284b3b5f3055737"
+    },
+    {
+      "path": "main/src/story/emergentStoryDirector.test.ts",
+      "sha256": "d0d0ba557ee2db86c2a11a1d58de0bd22b9d575f4113242a38a44c8261cc1e01"
+    },
+    {
+      "path": "main/src/story/storyObjectiveGuidance.test.ts",
+      "sha256": "8fe8e902bb636b59f0d1667a20c5955ef8f9fc3c0ec47f89867f5b7510446643"
+    },
+    {
+      "path": "main/src/story/storyInteractions.ts",
+      "sha256": "420646181820e2794914a944480adac214770fdd846906278576851d09384ee6"
+    },
+    {
+      "path": "main/src/story/storyWorldHandles.ts",
+      "sha256": "6f6dd706168112ab18f8e13beb1e134249ebdc2b60eef23a7bca4e18084c4d9f"
+    },
+    {
+      "path": "main/src/story/storyBoundaryTelemetry.ts",
+      "sha256": "4da721807ff6d9215e748e925d70020d881f115d17bde04494e81b1379fc549f"
+    },
+    {
+      "path": "main/src/story/storyBoundaryTelemetry.test.ts",
+      "sha256": "6f5b79019391ffe5edabbff9a81726a63adfe9ceed635cf862b3e536ee0c2c5d"
+    },
+    {
+      "path": "main/src/story/auditWorkerPresence.ts",
+      "sha256": "dfd53eda5841ad4383191c9828b08d9a0f213663cbc09c8d2d2aa3251ae5932e"
+    },
+    {
+      "path": "main/src/story/signedSceneAvRuntime.ts",
+      "sha256": "51f5802432708649fe39773079e5d4a193d469e226ec7fb2a6ef2192b4ae6a7c"
+    },
+    {
+      "path": "main/src/story/signedSceneAvRuntime.test.ts",
+      "sha256": "4cf597db1e8629e60b166a6621b64e6862aa045c11b40e15f04bd0bf5676f728"
+    },
+    {
+      "path": "main/src/story/generatedSceneAvRuntime.json",
+      "sha256": "6d90018cbf7acbb2776f30c13d01f7463f62053ecf7cebc13b3e3933d90d67fd"
+    },
+    {
+      "path": "main/src/story/tidegardenRoute.ts",
+      "sha256": "e7237efcf339efb599222a171a22b0c4b118712025f3f777030c08482b7e103e"
+    },
+    {
+      "path": "main/src/story/StoryDebugPanel.tsx",
+      "sha256": "875443375da39429f91cb3ddf100a7fbae34400397ee4fb0d57f9cc9cdc9d8d1"
+    },
+    {
+      "path": "main/src/story/beats/objectivePrimitives.ts",
+      "sha256": "46025fa3b0337bdcb755644a2f9b3f03f3013616430a3a9fa2b4e6f62a1659a8"
+    },
+    {
+      "path": "main/src/story/beats/definitions.ts",
+      "sha256": "8da5464972a4eb33ba90b632d2e7688e24916e0cd30070f7ab675200ea7fffb8"
+    },
+    {
+      "path": "main/src/story/beats/index.ts",
+      "sha256": "f2df41b8e819ce3cffb11e85ea0fac95c92230c832ecf2341112de0d3d8f7884"
+    },
+    {
+      "path": "main/src/story/beats/worldHandles.ts",
+      "sha256": "5a4aac0f7ca7a5244f32ceae341458abd844e9f95307f369c195ab0942bd4d64"
+    },
+    {
+      "path": "main/src/story/beats/metadata.generated.ts",
+      "sha256": "d3b97f03f7711c5b12ddf282fcaff5405c91c43c038a09439ced5ce47b460d76"
+    },
+    {
+      "path": "main/src/story/beats/allContracts.test.ts",
+      "sha256": "5c2075682c806e21f2a276c0e745d8204400b5c3b0496c9ef7796344837272eb"
+    },
+    {
+      "path": "main/src/story/beats/screeningParity.test.ts",
+      "sha256": "6e866c31ec27d7da0c1592d2bb003aa34834777f2ec1de93a988f73f73073905"
+    },
+    {
+      "path": "main/src/story/autopilot/primitives.ts",
+      "sha256": "4cce7261ba455e28a31d77f300e339d5dd907c00c691208b824a058f723313ca"
+    },
+    {
+      "path": "main/src/story/world/StoryWorldProps.tsx",
+      "sha256": "61ea2827b14bc0fe6a5bcc75604f01175462e0899d8562292b46cda6ad850cba"
+    },
+    {
+      "path": "main/src/game/systems/interactionSystem.ts",
+      "sha256": "4367379dbd226d98d2f40138bec0fd88f1a0aa44827ec2827efcae14a0db97ab"
+    },
+    {
+      "path": "main/src/game/systems/persistence.ts",
+      "sha256": "c8d51b1d6055ba221cb910f3eb4cb28c943ac1dd037581a8c1acfa97a0765404"
+    },
+    {
+      "path": "main/src/components/spaceStation/StationScreeningDriver.tsx",
+      "sha256": "0720e6fc0d25498e41026ef6b5a911f6c64b892cb4b88604283309fbe61365c5"
+    },
+    {
+      "path": "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+      "sha256": "82a255d626326fab8a5986bf219caff70fcab43d94f201675198abccd0dea0af"
+    },
+    {
+      "path": "main/chapter-registry.json",
+      "sha256": "3f50e021660b1c29982ead12ae523b91c4ebae17c03e9331908e49e2ed16aca0"
+    },
+    {
+      "path": "main/chapter-journey-contract.json",
+      "sha256": "a3ac054421ed13373079fe033551102601cc5bb646a63cd46032493e13a7352a"
+    },
+    {
+      "path": "main/story-authority.json",
+      "sha256": "044da1aad2dc9823f42227be74e7043775ae2116bea480e96aac771b19e02b6e"
+    },
+    {
+      "path": "main/tools/chapter-registry-gate.mjs",
+      "sha256": "cb50ef45eae4be5293bfb25bec16046b24050c5ac4388c9d83e57a7b3a6680bc"
+    },
+    {
+      "path": "main/tools/story-authority-gate.mjs",
+      "sha256": "c45f206602cf21000883b8475439a5303b74e2ddfae40616af4249268afc8664"
+    },
+    {
+      "path": "main/tools/generate-scene-av-runtime.mjs",
+      "sha256": "f4f886fafcee4f8994e0052c1dba495af496227d48476f626dad8dbf243adefc"
+    },
+    {
+      "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-registry.schema.json",
+      "sha256": "9a5546cb31b5585cf5d25487f3fe8c71dd6ea9640dad39b4aa93e50a8fd4f626"
+    },
+    {
+      "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+      "sha256": "403fe9bddccfd7095efa29208390beb6807979693b45c4b9f13fa3bd89abce21"
+    }
+  ],
+  "commands": [
+    {
+      "command": "npx tsc --noEmit -p tsconfig.json",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "clean",
+      "log": "evidence/integration-v2/typecheck.log"
+    },
+    {
+      "command": "npm run test",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "348 files / 3018 tests pass",
+      "log": "evidence/integration-v2/test.log",
+      "note": "The pre-v2 baseline was 348 files / 2972 tests and is NOT presented as new proof; this run adds 46 tests, of which 27 are the new scene-v2 regressions."
+    },
+    {
+      "command": "npm run build",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "built in 5.83s",
+      "log": "evidence/integration-v2/build.log"
+    },
+    {
+      "command": "npm run chapter:registry:generate",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "47 beat declarations; registry and journey generated"
+    },
+    {
+      "command": "node tools/generate-scene-av-runtime.mjs",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "wrote src/story/generatedSceneAvRuntime.json"
+    },
+    {
+      "command": "npm run chapter:registry:check",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "registry and journey match; gate passed 4285 checks",
+      "log": "evidence/integration-v2/chapter-registry-check.log"
+    },
+    {
+      "command": "npm run chapter:registry:smoke",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "live 4285 checks; 25 invalid cases rejected",
+      "log": "evidence/integration-v2/chapter-registry-smoke.log"
+    },
+    {
+      "command": "npm run chapter:journey:check",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "0 issues",
+      "log": "evidence/integration-v2/chapter-journey-check.log"
+    },
+    {
+      "command": "npm run scene:av:check",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "104 anchors from 3 signed contracts (3367b94f9f0f, 0336a4f28bfa, 4dbf722b308b) \u2014 current",
+      "log": "evidence/integration-v2/scene-av-check.log"
+    },
+    {
+      "command": "npm run story:authority",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "1039 checks pass",
+      "log": "evidence/integration-v2/story-authority.log"
+    },
+    {
+      "command": "npm run story:authority:smoke",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "1039 live checks plus release-gate drift rejection",
+      "log": "evidence/integration-v2/story-authority-smoke.log",
+      "note": "This self-test exercises the restored strict release-gate equality."
+    },
+    {
+      "command": "npm run creative:smoke",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "1727 final checks",
+      "log": "evidence/integration-v2/creative-smoke.log"
+    },
+    {
+      "command": "npm run creative:workflow:check",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "185 checks",
+      "log": "evidence/integration-v2/creative-workflow-check.log"
+    },
+    {
+      "command": "npm run guidance:target-check",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "pass",
+      "log": "evidence/integration-v2/guidance-target-check.log"
+    },
+    {
+      "command": "npm run story:ladder:check",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "pass",
+      "log": "evidence/integration-v2/story-ladder-check.log"
+    },
+    {
+      "command": "npm run preview:check",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "pass",
+      "log": "evidence/integration-v2/preview-check.log"
+    },
+    {
+      "command": "npm run catalog:check",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "pass",
+      "log": "evidence/integration-v2/catalog-check.log"
+    },
+    {
+      "command": "npx vitest run src/story/commonGround src/story/emergentStoryDirector.test.ts src/story/beats src/story/storyState.test.ts src/game/systems/persistence.test.ts src/story/world",
+      "cwd": "main",
+      "exitCode": 0,
+      "result": "19 files / 344 tests pass",
+      "log": "evidence/integration-v2/focused-tests.log"
+    }
+  ],
+  "notRun": [
+    {
+      "command": "npm run verify",
+      "reason": "Full verification belongs to the independent story-verifier, per the commission."
+    },
+    {
+      "command": "npm run verify:visual, chapter:journey:probe, story:objective-hud:probe, any headed Chromium",
+      "reason": "Headed GPU and browser work is the verifier role. No GPU or browser was started in this pass."
+    },
+    {
+      "command": "any audio probe, offline render or excerpt",
+      "reason": "Listening acceptance is not an integration-engineer result."
+    }
+  ],
+  "honestLimitations": [
+    "IMPLEMENTED means source, tests and bindings. It does not mean accepted. Nothing in this report is independent, full-verify, browser, rendered, listened-to or hardware acceptance.",
+    "No render, resource, draw-call, program, GPU-storage or frame-time budget is measured. The 512-instance ceiling and the two-glyph-per-sample grammar are proved arithmetically over the real layout functions in commonGroundRoute.test.ts; that is a bound on instance COUNT, not a measurement of cost.",
+    "The guide, the glyph shapes and the paired completed comparison have never been rendered. Shape-carries-state is asserted by geometry tests (count, orientation, separation), not by a camera. Night, mobile, reduced-motion and lowest-tier readability are unverified.",
+    "No audio was heard. The monotonic deadline, the retention set, the release ordering and the single completion door are proved by unit tests over the existing storyScore facade; no listening result is claimed and main/src/audio/ is untouched.",
+    "No manual first-time traversal exists. Whether a player actually discovers and follows the guide from E to C without private route knowledge is exactly the acceptance Chapter reserved, and it is unverified.",
+    "No cold journey, movie run, screenshot or player-experience report was produced. The movie bridge from the archived pass is unchanged and still has not been run headed.",
+    "The pre-v2 suite (348 files / 2972 tests), typecheck and build passed BEFORE this continuation and are not presented as new proof of the v2 work. The new number is 3018; the delta is what this pass added.",
+    "The completion-texture director tests mock only ../audio/audioCore.ts (isMusicMuted, peekAudioContext), because a node test cannot supply a real audio output. Everything else on that path \u2014 the completion edge, the settings mute, every cancellation \u2014 is the production code path.",
+    "The story-authority gate still derives the active production identity structurally rather than from a frozen literal (dated run id, its own lock path, frozen contract identity, contiguous implemented beats, gated-unpublished, publishAllowed false). That was introduced in the archived pass and is unchanged here. The one genuine relaxation it previously carried \u2014 production.release-gates \u2014 has been RESTORED to strict equality this pass, per producer-release-gates-correction.json.",
+    "CORRECTION, carried forward per integration-report-v1-erratum.json and producer-boundary-completion.json: the archived scene-v1 report stated that StoryDebugPanel.tsx and tidegardenRoute.ts were reported as outside the boundary BEFORE being edited. That is incorrect. Those edits, and the generator rewrite of beats/definitions.ts, were observed before the boundary report; root recorded the late report and then moved the paths into the boundary under standing delegation. No approval is retroactively claimed for them.",
+    "Directors signed the contract, not this implementation. chapter-repair-direction.json and cinematography-repair-direction.json both state their signature does not claim the repair is implemented or that manual, rendered, hardware, performance or audio acceptance has passed. CG-IMPL-001, CG-IMPL-002 and CG-IMPL-003 are not closed by this report."
+  ],
+  "dirtyWorkPreserved": {
+    "resetStashCheckoutRun": false,
+    "worktreeEntriesAtFinish": 322,
+    "v1SnapshotRecheckedAtStart": "96 hashes, 0 drift",
+    "changedSinceV1Snapshot": 20,
+    "note": "No git reset, stash, checkout, commit or push was run at any point. Every pre-existing dirty and untracked path is preserved. Root gate/checkpoint/lock/inbox artifacts were not edited."
+  },
+  "supersedesReport": {
+    "archived": "iterations/implemented-scene-v1-before-v2/integration-report.json",
+    "note": "This is the combined final truth for the run. The scene-v1 pass is archived intact and its citations are retained below."
+  },
+  "sceneV2BoundedItems": [
+    {
+      "item": "1 \u2014 common-only planned/unverified guide, and the real survey glyph grammar",
+      "implemented": [
+        "commonGroundState.ts: commonGroundReferenceHeld(snapshot, workerAt) requires stage holding-h AND a real recorded/live pose within 0.25 units of H; commonGroundCommonDisplay returns none | planned-guide | tested-common. Both are pure reads that write nothing.",
+        "The guide starts at ACTUAL H arrival only. It stays planned through Terra passage and through the worker test (stages positioning-to-e and testing), and only common.committed \u2014 his actual final arrival after all eighteen units, with her reciprocal passage already proved \u2014 promotes it to paired tested geometry.",
+        "commonGroundRoute.ts: pure traceGlyphs / commonGuideGlyphs / commonTestedGlyphs / sampleRouteEvenly. Proposed = one short bar along the recorded local segment; tested = two parallel bars with a visible gap; a held endpoint REPLACES its pair with two separated transverse half-bars around an open centre; the guide is one thin continuous bar per existing polyline segment.",
+        "Corner bars bisect the actual recorded incoming/outgoing segments and are clamped to real local spacing (never an enlarged axis-aligned square). Every recorded sample is represented; nothing is decimated.",
+        "CommonGroundWorld.tsx: the whole 512-instance matrix buffer is written and uploaded at MOUNT with instances parked at zero scale, so no verb frame first-uses an instance. The layout is recomputed only when a sample, tested prefix, real hold, display state or live terrain revision actually changed \u2014 a resting frame does no work and allocates nothing.",
+        "Allocation: accepted survey and working proposal are drawn TOGETHER (128 samples x 2 glyphs each = 512 exactly). The common display uses the RELEASED working allocation and is drawn only while no proposal owns it, so an optional repeat takes the allocation back without losing accepted facts.",
+        "The guide is grounded live: firstUnsupportedSegment over the same footing and solids the director uses truncates it at the first genuinely unsupported segment and terminates it with the open transverse stop, rather than floating over an edited hole or replanning around one.",
+        "No new resource, route, save slot, objective, anchor or cue was added. Geometry, material, program and light budgets are unchanged (one instanced mesh, one prewarmed material, depth test on)."
+      ],
+      "notClaimed": "No rendered, night, mobile, reduced-motion, lowest-tier or hardware readability evidence. No measured draw/program/storage delta."
+    },
+    {
+      "item": "2 \u2014 exact v2 objective lifecycle and copy",
+      "implemented": [
+        "ch13:survey:test carries the neutral markerLabel \"W-7744 \u00b7 offered route\" in BOTH states, under the one signed id. The old \"test in progress\" label asserted progress the preparing state does not have.",
+        "Preparing workOrder is exactly [\"W-7744 is preparing to test the offered route.\", \"Keep his approach clear. Follow his progress, or return to the last tested point to revise.\"]; the testing workOrder is the signed base copy.",
+        "A body-clearance suspension DURING the approach now keeps the preparing copy (survey.approached decides), exactly as the v2 variantIntent names it. It recovers when she moves, with no new [F], no forced displacement and no proof.",
+        "ch13:common:reciprocal enters at anc.cg.route-tested with [\"W-7744 is taking up the reference position.\", \"Give him room to reach it. When the guide appears, follow it from the survey end.\"], and switches in place at actual H arrival to [\"W-7744 is holding the reference.\", \"Walk the guide line to check your route from this end.\"].",
+        "The readiness swap is silent: the same objective id is republished through the existing emergentStoryDirector seam, and objectiveDirector.enteredIds suppresses a second objective-enter cue. Marker stays C throughout; no clearance target, [F] or guide appears during preparation. No score event is produced by either transition.",
+        "ch13-common.ts capability text replaced: \"a span she already traced\" was false and is now \"Following the visible common guide\u2026\".",
+        "Exact variantIntent, acceptanceCriterion and workOrder were read from the signed contract at /guidance/objectives/9 and /13. No new field and no new objective was introduced; the 17 signed ids are unchanged."
+      ],
+      "notClaimed": "No manual first-time play, no rendered HUD capture, no player-experience review."
+    },
+    {
+      "item": "3 \u2014 Score Director unchanged-intent corrections",
+      "implemented": [
+        "anc.cg.return-chosen now RELEASES through releaseCommonGroundMood: setScoreBeat(null) BEFORE clearStoryScoreMoodOverride(beat). Clearing first would retune the instrument to the beat mood for a frame \u2014 an audible reassertion of the texture being released.",
+        "anc.cg.hatch-boarded, anc.cg.lift-committed and anc.cg.origin-landed are no-ops under the world conductor. They keep their signed restored-home binding in CG_ANCHOR_MOOD, which is now explicitly a binding table and not a publication authority.",
+        "CG_RETAINING_ANCHORS retains whatever variant is CURRENT for revision-ready, tail-reopened, witness-held, witness-vacated, test-resumed, reference-vacated and reference-resumed. Same-mood de-duplication alone was insufficient: a real refusal followed by revision-readiness would otherwise have published a convenient demonstrating.",
+        "Actual changed-tail (anc.cg.route-revised), the real new offer, the real unsupported-span refusal and the actual reciprocal events keep their signed cue semantics.",
+        "signedSceneAvRuntime.scoreIntensityFor returns null for every ch13 anchor, so the generic anchor-index intensity ladder cannot turn the silent guide/copy/readiness transitions into a rise in intensity.",
+        "Completion still has ONE eligibility door at the actual completion EDGE with output available; a save resumed mid-chapter can still earn its first real completion; a restored completion cannot. anc.cg.handback cannot publish or restart the settled mood when the token was refused.",
+        "The five-second deadline is MONOTONIC elapsed time (performance.now, Date.now fallback), independent of gameplay deltas, then the existing 4.5-second release. It keeps ticking on the inactive done frames after the handback, because the beat is gone by then.",
+        "tickCommonGroundScore re-checks availability CONTINUOUSLY and cancels the live token mid-flight on mute or an unavailable/suspended output; a cancelled token never re-arms when audio returns.",
+        "No audio engine, graph, node, motif, bundle or scheduler was added or edited. main/src/audio/ is untouched."
+      ],
+      "notClaimed": "Nothing was heard. No audio probe, excerpt, offline render or listening result is claimed."
+    },
+    {
+      "item": "4 \u2014 bindings, registry, authority and the release-gate correction",
+      "implemented": [
+        "ch13 is pinned to the signed scene-v2 bytes (4dbf722b\u2026fddff88e) in tools/generate-scene-av-runtime.mjs, src/story/signedSceneAvRuntime.ts, chapter-registry.json (19 common-ground@scene-v2 refs plus the contract identity), story-authority.json and the story-authority schema activeProduction const.",
+        "Regenerated through the NORMAL generators: npm run chapter:registry:generate and node tools/generate-scene-av-runtime.mjs. 104 anchors from 3 signed contracts; 47 beat declarations.",
+        "tools/story-authority-gate.mjs production.release-gates is back to strict equality between the active lock openGateRefs and the protected machine ladder, exactly as it read at HEAD. The relaxed arbitrary-nonempty-list acceptance is gone. EXPECTED_OPEN_RELEASE_GATES is byte-identical and unchanged. Root corrected the lock to the nine exact gate names, so equality holds without touching the ladder.",
+        "No other assertion in that gate, or any other gate, was weakened."
+      ],
+      "notClaimed": "Gate passes are machine checks over declarations; they are not runtime, rendered or hardware acceptance."
+    }
+  ],
+  "priorInboxFixesRechecked": [
+    {
+      "item": "actual walked segment uses the PREVIOUS body pose",
+      "holds": true,
+      "evidence": "tickCommon captures previousBody before playerDisplacement overwrites runtime.lastPlayer; covered by \"records the passage only when she actually walks the traced span\"."
+    },
+    {
+      "item": "fractional save/load leg continuation",
+      "holds": true,
+      "evidence": "\"Continue resumes a body, not a checkpoint\" \u2014 fractional survey leg, E\u2192H, and the final E\u2192C."
+    },
+    {
+      "item": "no backwards transient-hold teleport",
+      "holds": true,
+      "evidence": "\"freezes his pose when she leaves, and never rewinds what he walked\"."
+    },
+    {
+      "item": "exact full-18 arrival",
+      "holds": true,
+      "evidence": "\"does not commit a hair short of the full eighteen units\" and \"commits only at the full span\"."
+    },
+    {
+      "item": "missing world fails CLOSED",
+      "holds": true,
+      "evidence": "\"earns nothing at all while the world is not mounted\"."
+    },
+    {
+      "item": "actual arbitrary qualified witness (W is an example, not a station)",
+      "holds": true,
+      "evidence": "\"accepts a held end at a qualified pose that is not the marked example\"."
+    },
+    {
+      "item": "persistent completed local tester + optional repeat",
+      "holds": true,
+      "evidence": "NEW this pass: \"the completed site keeps a local tester and an optional repeat\" \u2014 three regressions driven through the real handback (completeChapter13) with the flight state actually at Origin. There was no coverage of this before."
+    },
+    {
+      "item": "accepted slot preserved across a repeat",
+      "holds": true,
+      "evidence": "NEW this pass: \"a repeat reuses the working slot and NEVER spends the accepted proof\"; mutation-verified by nulling accepted in commitCommonGroundRepeatSurvey."
+    }
+  ],
+  "mutationChecksOnNewTests": [
+    "Removed the same-id republish in emergentStoryDirector \u2192 the preparing-to-ready swap test fails.",
+    "Disabled CG_RETAINING_ANCHORS / CG_WORLD_CONDUCTOR_ANCHORS \u2192 both score-retention tests fail.",
+    "Dropped setScoreBeat(null)/clearStoryScoreMoodOverride from releaseCommonGroundMood \u2192 the return-choice release test fails.",
+    "Swapped the two release calls into the wrong order \u2192 the ordering test fails.",
+    "Routed anc.cg.handback into the generic publisher \u2192 the handback-bypass test fails.",
+    "Removed the continuous availability check \u2192 the mid-token cancellation test fails.",
+    "Nulled the accepted slot in commitCommonGroundRepeatSurvey \u2192 the repeat/accepted-proof test fails.",
+    "Every mutated file was restored and re-verified byte-identical against iterations/implemented-scene-v1-before-v2/source-manifest.json or by rerunning the full suite."
+  ],
+  "changedPaths": {
+    "count": 20,
+    "allInsideAllowedPaths": true,
+    "noneProtected": true,
+    "verifiedAgainst": "production-lock.json#/allowedPaths and #/protectedPaths",
+    "paths": [
+      "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+      "main/chapter-journey-contract.json",
+      "main/chapter-registry.json",
+      "main/src/story/beats/ch13/ch13-common.ts",
+      "main/src/story/beats/objectivePrimitives.ts",
+      "main/src/story/commonGroundDirector.test.ts",
+      "main/src/story/commonGroundDirector.ts",
+      "main/src/story/commonGroundRoute.test.ts",
+      "main/src/story/commonGroundRoute.ts",
+      "main/src/story/commonGroundScore.test.ts",
+      "main/src/story/commonGroundScore.ts",
+      "main/src/story/commonGroundState.test.ts",
+      "main/src/story/commonGroundState.ts",
+      "main/src/story/emergentStoryDirector.test.ts",
+      "main/src/story/generatedSceneAvRuntime.json",
+      "main/src/story/signedSceneAvRuntime.ts",
+      "main/src/story/world/CommonGroundWorld.tsx",
+      "main/story-authority.json",
+      "main/tools/generate-scene-av-runtime.mjs",
+      "main/tools/story-authority-gate.mjs"
+    ],
+    "newMissingPathsNeeded": "None. Every path this pass needed was already inside the boundary; no path was edited before being reported."
+  },
+  "updatedAt": "2026-09-06T08:58:56.127964+00:00"
+}

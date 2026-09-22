@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MANIFEST_LINES } from '../storyScript.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
+import { voiceVisibleText } from '../../audio/voice/voicePresentation.ts';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
 import { presentInputGlyphs } from '../ux/inputGlyphs.ts';
 import { PHOSPHOR, PHOSPHOR_DIM, PHOSPHOR_FAINT } from './TerminalPrologue.tsx';
@@ -33,7 +34,8 @@ const ManifestScreen: React.FC<{ onDone: () => void }> = ({ onDone }) => {
       return () => clearTimeout(hold);
     }
     const timer = setTimeout(() => {
-      if (MANIFEST_LINES[visibleLines]?.trim()) playSfx('terminalKey');
+      const line = MANIFEST_LINES[visibleLines];
+      if (line?.trim()) { playSfx('terminalKey'); voiceVisibleText(`manifest:${visibleLines}`, line, line.length, 'terminal'); }
       setVisibleLines(n => n + 1);
     }, MANIFEST_LINES[visibleLines]?.trim() ? LINE_MS : LINE_MS * 0.35);
     return () => clearTimeout(timer);

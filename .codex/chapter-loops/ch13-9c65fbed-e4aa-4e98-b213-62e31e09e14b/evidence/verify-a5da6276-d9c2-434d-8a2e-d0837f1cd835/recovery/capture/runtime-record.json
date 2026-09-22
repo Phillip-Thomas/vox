@@ -1,0 +1,235 @@
+{
+ "schema": "paravoxia.verifier.finaleWindowRuntime.v2",
+ "startedAt": "2026-09-07T01:02:53.844Z",
+ "outcome": "CAPTURED-NO-VERDICT",
+ "outcomeIsAcceptance": false,
+ "audibleClaim": "none — this wrapper records bytes; it makes no audible, causal or acceptance claim",
+ "actualOrder": "lock-fd validated -> sink created -> sink index resolved -> browser child -> ownership verified -> recorder started -> probe waited -> probe stopped+reaped -> sink unloaded",
+ "sessionStartMs": 1788742973844,
+ "sessionDeadlineMs": 1788743078844,
+ "maxSessionS": 105,
+ "sinkName": "paravoxia_finale_window",
+ "sinkIndex": 16762,
+ "moduleId": "536870913",
+ "browserPid": 2526504,
+ "defaultSinkBefore": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+ "defaultSinkAfter": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+ "heavyLock": {
+  "fd": 3,
+  "lockPath": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "ok": true,
+  "problems": [],
+  "fdTarget": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock"
+ },
+ "ownership": {
+  "ok": true,
+  "reason": "all-streams-in-probe-browser-process-tree",
+  "streams": [
+   {
+    "id": 16772,
+    "sink": "16762",
+    "pid": 2526861,
+    "binary": "chrome",
+    "appName": "Chromium"
+   }
+  ]
+ },
+ "ownershipRecheck": {
+  "ok": true,
+  "reason": "all-streams-in-probe-browser-process-tree",
+  "streams": [
+   {
+    "id": 16772,
+    "sink": "16762",
+    "pid": 2526861,
+    "binary": "chrome",
+    "appName": "Chromium"
+   }
+  ],
+  "atMs": 1788743052014
+ },
+ "recorder": {
+  "pid": 2526884,
+  "device": "paravoxia_finale_window.monitor",
+  "startedAtWallMs": 1788742976896,
+  "startedAtMs": 1788742976896,
+  "isMicrophone": false,
+  "isDefaultMonitor": false,
+  "stopReason": "finally",
+  "stoppedAtWallMs": 1788743053122,
+  "stoppedAtMs": 1788743053122,
+  "exitCode": 0,
+  "bytes": 13107244,
+  "file": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/recovery/capture/owned-sink.wav",
+  "preserved": true,
+  "note": "The recording is kept on EVERY path, including a failed game criterion, so failure audio is never destroyed."
+ },
+ "probe": {
+  "exitCode": 0,
+  "timedOut": false,
+  "elapsedS": 76.125,
+  "log": "[finale-window] owned browser pid 2526504 (via owned CDP SystemInfo.getProcessInfo)\n[finale-window] [gl] renderer: ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)\n[finale-window] seam attached: 10/10 resolved\n[finale-window] seam gesture: click@640,360 focus=true lock=false activation=true\n[finale-window] sampler armed: {\"__paravoxiaCommonGround\":\"object\",\"commonGround.snapshot\":\"function\",\"commonGround.scoreDiagnostic\":\"undefined\",\"__paravoxiaJourneyProbe\":\"object\",\"journeyProbe.getSnapshot\":\"function\",\"journeyProbe.getCommonGroundScoreDiagnostic\":\"undefined\",\"__voxBundleDiag\":\"function\",\"__voxAudioDiag\":\"function\",\"__storyBeat\":\"string\",\"__autopilot\":\"undefined\",\"__auditWorker\":\"undefined\",\"__game\":\"undefined\"}\n[finale-window] seam: HUD pause button \"Pause and open star map\" clicked at token age ~1328ms; paused=null starMap=true resume=true inconclusive=false\n[finale-window] finale-window owned session: stopped the probe-owned browser session (reason=run-guarded-finally); the root-owned preview was not touched\n[finale-window] window sealed (window-complete) with 838 atomic samples -> /home/thomasphillip/Projects/vox/.codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/recovery/capture\n"
+ },
+ "probeTeardown": {
+  "reason": "finally",
+  "requestedAtMs": 1788743053122,
+  "stopFileWritten": true,
+  "signals": [],
+  "exitCode": 0,
+  "signalCode": null,
+  "waitedMs": 0,
+  "receipt": {
+   "schema": "paravoxia.verifier.ownedSessionGuard.v1",
+   "probe": "finale-window-probe.mjs",
+   "writtenAt": "2026-09-07T01:04:12.660Z",
+   "phase": "post-finally",
+   "supersedesForCleanupState": "summary.json .cleanup (captured pre-finally; its sessionStopped is a pre-cleanup value, not the outcome)",
+   "state": "stopped",
+   "cleanupCompleted": true,
+   "label": "finale-window owned session",
+   "adopted": true,
+   "adoptedAtMs": 1788742974705,
+   "cleanupRequests": 1,
+   "sessionStopInvocations": 1,
+   "sessionStopped": true,
+   "cleanupError": null,
+   "cleanupReason": "run-guarded-finally",
+   "stopsOnlyProbeOwnedSession": true,
+   "stopsRootPreview": false,
+   "killsProcesses": false,
+   "hidesFailureExitCode": false,
+   "note": "Recorded AFTER the finally block ran. This is the actual cleanup outcome of the browser session this probe owned. A stop-failed or never-requested state is reported honestly and does NOT alter the capture outcome, the retained evidence, or the process exit code. It says nothing about the game.",
+   "outcomeUnchanged": true
+  },
+  "forced": false,
+  "receiptState": "stopped",
+  "receiptCleanupCompleted": true,
+  "receiptSessionStopped": true,
+  "receiptCleanupError": null,
+  "receiptProven": true,
+  "browserTeardownProven": true,
+  "probeConsoleBytes": 1280,
+  "probeLogTail": "[finale-window] owned browser pid 2526504 (via owned CDP SystemInfo.getProcessInfo)\n[finale-window] [gl] renderer: ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)\n[finale-window] seam attached: 10/10 resolved\n[finale-window] seam gesture: click@640,360 focus=true lock=false activation=true\n[finale-window] sampler armed: {\"__paravoxiaCommonGround\":\"object\",\"commonGround.snapshot\":\"function\",\"commonGround.scoreDiagnostic\":\"undefined\",\"__paravoxiaJourneyProbe\":\"object\",\"journeyProbe.getSnapshot\":\"function\",\"journeyProbe.getCommonGroundScoreDiagnostic\":\"undefined\",\"__voxBundleDiag\":\"function\",\"__voxAudioDiag\":\"function\",\"__storyBeat\":\"string\",\"__autopilot\":\"undefined\",\"__auditWorker\":\"undefined\",\"__game\":\"undefined\"}\n[finale-window] seam: HUD pause button \"Pause and open star map\" clicked at token age ~1328ms; paused=null starMap=true resume=true inconclusive=false\n[finale-window] finale-window owned session: stopped the probe-owned browser session (reason=run-guarded-finally); the root-owned preview was not touched\n[finale-window] window sealed (window-complete) with 838 atomic samples -> /home/thomasphillip/Projects/vox/.codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/recovery/capture\n"
+ },
+ "coverage": {
+  "sampleCount": 838,
+  "edgeWallMs": 1788743038280,
+  "recorderStartWallMs": 1788742976896,
+  "recorderStopWallMs": 1788743053122,
+  "requiredFromWallMs": 1788743035280,
+  "requiredToWallMs": 1788743049780,
+  "preEdgeCoveredMs": 61384,
+  "postEdgeCoveredMs": 14842,
+  "complete": true,
+  "reason": "recorder-interval-covers-3000ms-pre-edge-through-11500ms-post-edge"
+ },
+ "phases": [
+  {
+   "name": "heavy-lock-fd-validated",
+   "atMs": 1788742973845,
+   "sinceStartMs": 1,
+   "fd": 3,
+   "childFd": 3,
+   "target": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock"
+  },
+  {
+   "name": "default-sink-read",
+   "atMs": 1788742973853,
+   "sinceStartMs": 9,
+   "defaultSink": "alsa_output.platform-NVDA2014_00.hdmi-stereo"
+  },
+  {
+   "name": "owned-sink-created",
+   "atMs": 1788742973860,
+   "sinceStartMs": 16,
+   "moduleId": "536870913"
+  },
+  {
+   "name": "owned-sink-index-resolved",
+   "atMs": 1788742973864,
+   "sinceStartMs": 20,
+   "sinkIndex": 16762
+  },
+  {
+   "name": "probe-launched",
+   "atMs": 1788742973866,
+   "sinceStartMs": 22,
+   "probePid": 2526476,
+   "childLockFd": 3
+  },
+  {
+   "name": "browser-pid-observed",
+   "atMs": 1788742974868,
+   "sinceStartMs": 1024,
+   "browserPid": 2526504
+  },
+  {
+   "name": "ownership-verified",
+   "atMs": 1788742976893,
+   "sinceStartMs": 3049,
+   "streams": 1,
+   "sinkIndex": 16762
+  },
+  {
+   "name": "recorder-started",
+   "atMs": 1788742976896,
+   "sinceStartMs": 3052,
+   "device": "paravoxia_finale_window.monitor",
+   "pid": 2526884
+  },
+  {
+   "name": "recorder-stopped",
+   "atMs": 1788743053122,
+   "sinceStartMs": 79278,
+   "reason": "finally",
+   "bytes": 13107244
+  },
+  {
+   "name": "probe-stopped",
+   "atMs": 1788743053123,
+   "sinceStartMs": 79279,
+   "reason": "finally",
+   "exitCode": 0,
+   "signalCode": null,
+   "forced": false,
+   "browserTeardownProven": true
+  }
+ ],
+ "spawnErrors": [],
+ "teardownErrors": [],
+ "incompleteCleanup": [],
+ "errors": [],
+ "sinkIndexResolution": {
+  "ok": true,
+  "index": 16762,
+  "reason": "resolved-exact-numeric-index",
+  "name": "paravoxia_finale_window"
+ },
+ "childCommand": {
+  "execPath": "/home/linuxbrew/.linuxbrew/Cellar/node/25.6.1/bin/node",
+  "args": [
+   "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/finale-window-probe.mjs",
+   "--out",
+   "../../../../chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/recovery/capture",
+   "--unmuted",
+   "--pulse-sink",
+   "paravoxia_finale_window",
+   "--heavy-lock",
+   "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+   "--heavy-lock-fd",
+   "3"
+  ],
+  "childLockFd": 3,
+  "parentLockFd": 3
+ },
+ "sinkTeardown": {
+  "moduleId": "536870913",
+  "unloaded": true,
+  "verifiedGone": true,
+  "afterProbeExit": true
+ },
+ "defaultSinkUnchanged": true,
+ "cleanupComplete": true,
+ "endedAt": "2026-09-07T01:04:13.152Z",
+ "wholeSessionS": 79.308
+}

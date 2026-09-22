@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 716713,
+  "stop_reason": "end_turn",
+  "session_id": "0cff3889-4cc0-4f8e-bec0-933f74f03562",
+  "total_cost_usd": 5.1888190000000005,
+  "usage": {
+    "input_tokens": 144,
+    "cache_creation_input_tokens": 132259,
+    "cache_read_input_tokens": 4786490,
+    "output_tokens": 58779,
+    "output_tokens_details": {
+      "thinking_tokens": 9314
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 132259,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1814,
+        "cache_read_input_tokens": 136135,
+        "cache_creation_input_tokens": 1107,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1107
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2714,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002789,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 144,
+      "outputTokens": 58779,
+      "cacheReadInputTokens": 4786490,
+      "cacheCreationInputTokens": 132259,
+      "webSearchRequests": 0,
+      "costUSD": 5.186030000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 9314,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 79,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: PASS \u2014 ordinary manual play at ch13-survey works on this source, and the full survey (including an early corner deviation with ordinary recovery, and W\u20117744's actual route test) completes. The prior manual failures were a harness bug in this repo's probes, not a game input defect.**\n\n**Identity / integrity (verified before trusting any data)**\n- Source rehash 98/98 manifest files match `1a50c19f26ef\u2026`, before 15:11:56Z and after 15:25:46Z, node exit 0 (`logs/manual-focused/rehash-before.json` / `rehash-after.json`). No source, build, contract, defect, canonical-report, ownership or shared-probe edits.\n- Preview `http://127.0.0.1:38803/` served index `ca7b448b72cc\u2026` (matches ownership); root daemon pid 1290230 alive, never started/stopped by me.\n- Every capture: **ANGLE (NVIDIA GB10/PCIe, OpenGL 4.5.0), headed**, no software fallback. All six sessions ran under exclusive `flock` on the shared heavy lock, one owned browser at a time; each `summary.json .cleanup` = `state=stopped, cleanupCompleted=true, stopsRootPreview=false`. No owned processes in flight.\n\n**Root cause of manual\u20111..5** \u2014 `EfficientPlayer.tsx:1565` gates all movement on `active`, which follows **pointer lock**; `CameraControls.tsx:100\u2011114` grants lock only for a real click on the canvas. Prior probes never clicked, so the shipped controller discarded every key; their residual displacement was spawn settling. One real click acquired lock in 6 ms.\n\n**Measurements (actual)**\n| step | value |\n|---|---|\n| settle before any key | spread 0.00297 u, supported/worldBound true, body [8, 52.789, \u22126] |\n| KeyW 1.5 s hold | **7.722 u** horiz / \u22120.776 u vert; KeyD **7.816 u**, 90.0\u00b0 apart |\n| key\u2011up coast (0.9 s) | 0.053 u / 0.027 u; window key receipts 0\u21921\u21922 |\n| walk to W | 55.96 u travelled, arrival 1.17 u, 15.2 s \u2192 prompt \u201cF | Offer to demonstrate a route\u201d |\n| F at W \u2192 S \u2192 F | `ch13:survey:offer`\u2192`start`\u2192 `anc.cg.survey-started`, phase `drawing` |\n| **early corner deviation** | 4.36 u off-leg (KeyA, waypoint 2); ordinary return to frontier within **0.236 u**, no new F/teleport/grant |\n| earned prefix across deviation | samples 4\u219211, lengthUnits 2.672\u21929.958 (monotonic); resumed to 42 samples / 39.27 u |\n| hold observed | **`reference-occluded-survey-housing`** (not body-clearance) with authored objective \u201cWitness point \u00b7 hold this end\u201d |\n| authored witness verb at CG_POSES.W (arrival 0.673 u) | W travelled **32.10 u**, witnessOffered/Occupied true, acceptedSamples 42, **`anc.cg.route-tested`** +22.9 s \u2192 `ch13:common:reciprocal` |\n| contrast (witness\u20111) | stand-clear only (1.03 u clearance, previously-walked ground, **not** an E.z\u20113/\u20114 label): hold **not** released in 76.3 s, W moved 2.70 u |\n\n**Artifacts** \u2014 `verifier/captures/manual-focused/{input-gate-1, route-1, corner-1, corner-2, witness-1, witness-2}` (summary.json + summary.sha256 + trace.ndjson + source-snapshot + stamped PNGs); probes in `verifier/probes/manual-focused/`; logs in `logs/manual-focused/`; reports `manual-focused-report.json` (`c453c827\u2026`), `manual-focused-report.md` (`f50c6f18\u2026`), `manual-focused-progress.md`. Frames render world+HUD; no blank/black frames. corner\u20111 stopped honestly (node exit 2) on a newly observed harness issue \u2014 the rail is a movie-lane instruction and publishes no manual target \u2014 which the next attempt addressed.\n\n**Limitations (unattempted, not proved impossible)** \u2014 beat fixture `?story=ch13-survey` only: no full story, no ch13-return flight/landing, no earned-return Continue, no fps/AV/variant/reset-matrix. The 18-unit common route E\u2192C and both reciprocal traversals were **not** walked, so CG\u2011IMPL\u2011009's corner question on the *common* route remains unmeasured (this proves recovery inside the *survey* drawing). Walk targets came from frozen source, so this is not a no-private-knowledge objective\u201113 test. `debug=1` panels appear in frames (probe fixture). No audio judged; no acceptance, score, defect-closure or publishing decision made.\n\n**Minimal next step** \u2014 extend this same guarded harness past `anc.cg.reciprocal-reference` through the common passage and both reciprocal traversals with one mid-passage deviation.",
+  "ttft_ms": 1609,
+  "type": "result",
+  "duration_ms": 1111022,
+  "uuid": "08c50aa2-b6c8-49a0-b674-48d7feb132f8",
+  "ttft_stream_ms": 791,
+  "time_to_request_ms": 33,
+  "first_content_frame_ms": 792,
+  "queued_turn_count": 0
+}

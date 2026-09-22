@@ -1,0 +1,16 @@
+{
+  "role": "finale-authority-seam-live-audio",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T22:42:46.152326+00:00",
+  "commissionSha256": "212746d6042cc594eb746a906e1aee0d53ad2f3519bfa2b93097c861259d2896",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "sourceFilesRehashedBefore": 100,
+  "scope": "Actual normal expiry and pause audio-authority seam observation after incomplete CPU prep; no game mutation",
+  "exitCode": 124,
+  "transportTimeout": true,
+  "finishedAt": "2026-09-06T22:45:48.172102+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "5a7e6bd7-72e0-4a34-b256-f280322996c2",
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 100
+}

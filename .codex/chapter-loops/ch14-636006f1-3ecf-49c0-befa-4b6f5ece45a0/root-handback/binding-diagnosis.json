@@ -1,0 +1,75 @@
+{
+  "at": "2026-09-08T02:58:21.282Z",
+  "source": {
+    "path": "main/chapter-ch14-controls.json",
+    "sha256": "fc6d5d57222f49bd551f04607ff83ec8a3271c0bf941502c80eb4d31f83608f6"
+  },
+  "validation": [
+    {
+      "kind": "manual",
+      "valid": false,
+      "errors": [
+        "steps[0]: wait timeoutMs must be a bounded integer <= 30000",
+        "steps[2]: wait timeoutMs must be a bounded integer <= 30000",
+        "steps[5]: wait timeoutMs must be a bounded integer <= 30000",
+        "steps[7]: wait timeoutMs must be a bounded integer <= 30000",
+        "steps[14]: wait timeoutMs must be a bounded integer <= 30000",
+        "steps[16]: wait timeoutMs must be a bounded integer <= 30000"
+      ]
+    },
+    {
+      "kind": "recovery",
+      "valid": false,
+      "errors": [
+        "Unknown control config key \"pausedPointer\"",
+        "steps[0]: wait timeoutMs must be a bounded integer <= 30000",
+        "steps[2]: wait timeoutMs must be a bounded integer <= 30000",
+        "steps[5]: wait timeoutMs must be a bounded integer <= 30000",
+        "newActionSteps[1]: wait timeoutMs must be a bounded integer <= 30000",
+        "newActionSteps[3]: wait timeoutMs must be a bounded integer <= 30000",
+        "newActionSteps[10]: wait timeoutMs must be a bounded integer <= 30000",
+        "newActionSteps[12]: wait timeoutMs must be a bounded integer <= 30000"
+      ]
+    },
+    {
+      "kind": "continue",
+      "valid": false,
+      "errors": [
+        "Unknown control config key \"checkpointPointer\"",
+        "steps[0]: wait timeoutMs must be a bounded integer <= 30000",
+        "steps[2]: wait timeoutMs must be a bounded integer <= 30000",
+        "newActionSteps[1]: wait timeoutMs must be a bounded integer <= 30000",
+        "newActionSteps[3]: wait timeoutMs must be a bounded integer <= 30000",
+        "newActionSteps[10]: wait timeoutMs must be a bounded integer <= 30000",
+        "newActionSteps[12]: wait timeoutMs must be a bounded integer <= 30000"
+      ]
+    }
+  ],
+  "observedFailure": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-2/command.log",
+    "sha256": "205e4ff1d999568738b6fdc4bf1c0e6a33b122f4785c987fc43be47082b20bb3"
+  },
+  "currentSourceMatchesLastArchivedBuild": false,
+  "sourceDrift": [
+    "main/src/story/tidegardenRoute.ts"
+  ],
+  "inferences": [
+    {
+      "finding": "The control config assumes a prior earned Common Ground save, while captureControls creates a fresh browser context and has no existing-save binding. Fixing wait bounds alone cannot establish the required entry.",
+      "source": {
+        "path": "main/tools/chapter-loop/control-capture.mjs",
+        "sha256": "00ebccf2862b2cffa4b97ff3ded0bfb559e65ac479e1bc1d64cecd02233fec0c"
+      }
+    },
+    {
+      "finding": "Walking steps hold one key for 600 ms then wait for reach; no rendered traversal supports these provisional routes.",
+      "source": {
+        "path": "main/chapter-ch14-controls.json",
+        "sha256": "fc6d5d57222f49bd551f04607ff83ec8a3271c0bf941502c80eb4d31f83608f6"
+      }
+    }
+  ],
+  "runtimeAccepted": false,
+  "modelReplayed": false,
+  "gameFilesChanged": false
+}

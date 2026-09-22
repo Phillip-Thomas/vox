@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 805497,
+  "stop_reason": "end_turn",
+  "session_id": "3291cd72-1f08-4bf1-8bef-96ac3249c30a",
+  "total_cost_usd": 5.156658999999999,
+  "usage": {
+    "input_tokens": 72,
+    "cache_creation_input_tokens": 173633,
+    "cache_read_input_tokens": 3435454,
+    "output_tokens": 68016,
+    "output_tokens_details": {
+      "thinking_tokens": 22505
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 173633,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1366,
+        "cache_read_input_tokens": 178982,
+        "cache_creation_input_tokens": 647,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 647
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1752,
+      "outputTokens": 18,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001842,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 72,
+      "outputTokens": 68016,
+      "cacheReadInputTokens": 3435454,
+      "cacheCreationInputTokens": 173633,
+      "webSearchRequests": 0,
+      "costUSD": 5.1548169999999995,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 22505,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 40,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: draft assembly file produced and schema-valid; 1 known gate conflict left unbound for lane review.\n\n**Artifacts**\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/scene-contract.assembly.json` (4267 lines)\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/scene-contract.assembly-notes.md` (260 words)\n- Probe scripts (scratch): `/tmp/cgasm/gen.py`, `/tmp/cgasm/validate.mjs`\n\nOnly those two files were written. No browser, build, GPU or test run; no agents launched.\n\n**Validation** \u2014 Ajv is not installed (`node_modules/ajv` absent in root and `main/`). Checked with a local draft-subset validator against `paravoxia-scene-contract.schema.json`, plus a mirror of the gate's structural/ref/lifecycle/placeholder/band-prose checks and the real `main/tools/lib/guidanceTargets.mjs`.\n- Schema errors: **0**\n- Gate-mirror failures: **1** \u2014 `ux.contract-work-order` for `station:return:tidegarden`: exact shipped last line \"DELIVER THE BONDED CELL TO THE SECOND HEARTH.\" matches no verb in the gate's `travel` lexicon. Copy preserved, not rewritten.\n- All `evidenceRefs`/`priorEvidenceRefs`, authority, cut, palette and probe paths resolve on disk today.\n\n**Contents** \u2014 `status: draft`, `contractVersion: scene-v1`, `sceneId: common-ground`, `mode: chapter`. 26 ordered anchors (incl. stable `anc.cg.repeated-measure`, `anc.cg.return-chosen` matching the normalized visual baseline), 26 story events, 18 guidance objectives with exact intent labels/work orders, 6 agency windows, 6 shots (player-camera, FOV 75/75, no new light/postfx, immediate handback), 11 cues (live-only \u22645 s final texture then existing 4.5 s release), 4 experience/quality variant sets, 9 reset states over all 8 triggers, 9 captures + 15 mechanical checks all `planned` (no fabricated capture/listening/signature). Four formal beats `ch13-home/return/survey/common`; ch12 restoration carried as `second-hearth-restored` continuity outside the formal beat list. Contingent holds/resumes use equivalent-order anchor slots, so no route is implied to fail. `allowedPaths` 65 (decision-brief path arrays + run folder + tests + generated seams); `protectedPaths` 194 (lock entries + every unrelated dirty path, non-overlapping with allowed).\n\n**Exact unbound / conflicting fields** (also in the notes): the `station:return:tidegarden` work-order lexicon conflict; `ch13:return:launch` bound as `wait`/`targetMode: none` because \"[Space]\" is not a single-letter bracket token; `performance` draw-call/shader/GPU-memory budgets are unbound fail-safe zeros; `mutationBoundary: bounded-runtime` does not yet match the planning-only lock; `canonicalPreviewUrl` provisional `http://localhost:5174` (lock value was null, no running preview claimed); `evidence.headedTaste.required: true`; geometry recorded only as producer-nominated range 12 from `geometry-instrument.json` `ranges[0].top3[0]` (R (-34, 51.05, 20), yaw 90, socket 1.30, exact backing, short 16 / long 32 / common 18, witness nomination (-34, 51.05, 10), Terra final (-44, 51.05, 12)) with `selected-geometry-qualification.json` still running and no pass claimed.",
+  "ttft_ms": 1386,
+  "type": "result",
+  "duration_ms": 805257,
+  "uuid": "cb2aa405-ec24-421f-94de-ff93e9497439",
+  "ttft_stream_ms": 737,
+  "time_to_request_ms": 34,
+  "first_content_frame_ms": 738,
+  "queued_turn_count": 0
+}

@@ -1,0 +1,20 @@
+{
+  "role": "common-manual-probe-prepor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T15:36:52.133226+00:00",
+  "commissionSha256": "412331fabeaab60212df91e7c1dfc3d6a0e0a89ec6ece3ad2e7c2c1f9316ca8d",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "sourceFilesRehashedBefore": 98,
+  "scope": "Prepare bounded manual COMMON18-unit recovery probe without game edits or GPU; concurrent source integrator, no freeze or acceptance claim",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T15:46:10.022573+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "1212c589-eb63-4882-91d4-96ae765fe23f",
+  "isError": false,
+  "concurrentSourceChangesObserved": [
+    "main/src/story/commonGroundDirector.ts",
+    "main/src/story/tidegardenRoute.ts"
+  ],
+  "isSourceFreezeProof": false,
+  "sourceFilesRehashedAfter": 98
+}

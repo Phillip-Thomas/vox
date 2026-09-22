@@ -1,0 +1,27 @@
+{
+  "schema": "paravoxia.directorSignoffs.v1",
+  "contractRevision": "draft-v1",
+  "contractSha256": "291e75b0c19294f68d00add730b8fedf9ae232288b5ecb744ff2f39d6a969cc1",
+  "chapter": {
+    "disposition": "approve-with-notes",
+    "revision": "draft-v1",
+    "contractSha256": "291e75b0c19294f68d00add730b8fedf9ae232288b5ecb744ff2f39d6a969cc1",
+    "signedBy": "Chapter Director (Fable 5.1)",
+    "signedAt": "2026-09-04T22:27:27-04:00"
+  },
+  "score": {
+    "disposition": "approve-with-notes",
+    "revision": "draft-v1",
+    "contractSha256": "291e75b0c19294f68d00add730b8fedf9ae232288b5ecb744ff2f39d6a969cc1",
+    "signedBy": "Score Director (Fable 5.1)",
+    "signedAt": "2026-09-04T22:28:09-04:00"
+  },
+  "cinematography": {
+    "disposition": "approve-with-notes",
+    "revision": "draft-v1",
+    "contractSha256": "291e75b0c19294f68d00add730b8fedf9ae232288b5ecb744ff2f39d6a969cc1",
+    "signedBy": "Cinematography Director (Fable 5.1)",
+    "signedAt": "2026-09-05T09:45:00-04:00"
+  },
+  "sameRevision": true
+}

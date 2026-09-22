@@ -15,6 +15,7 @@ import {
   shipParkedOrientation,
   shipSurfaceUp
 } from './shipDesign.ts';
+import { createCockpitScreenGeometry } from './cockpitScreens.ts';
 
 function bounds(geo: THREE.BufferGeometry): THREE.Box3 {
   geo.computeBoundingBox();
@@ -134,6 +135,76 @@ describe('shipDesign', () => {
       const inCenter = Math.abs(x) < 0.5 && Math.abs(y) < 0.45;
       expect(inCenter).toBe(false);
     }
+    geo.dispose();
+  });
+
+  it('authors a surface channel and bakes contact occlusion into the cabin', () => {
+    const colors = shipHullColors(shipAccentColor(12345));
+    const interior = createCockpitInteriorGeometry(colors);
+    const frame = createCockpitFrameGeometry(colors);
+
+    for (const geo of [interior, frame]) {
+      const surface = geo.attributes.aSurf;
+      expect(surface).toBeDefined();
+      expect(surface.itemSize).toBe(4);
+      expect(surface.count).toBe(geo.attributes.position.count);
+
+      let minAo = 1;
+      let maxAo = 0;
+      const materials = new Set<number>();
+      for (let i = 0; i < surface.count; i++) {
+        const material = surface.getX(i);
+        const ao = surface.getY(i);
+        materials.add(material);
+        // Every part declares a real material id and a non-zero detail scale.
+        expect(material).toBeGreaterThanOrEqual(0);
+        expect(material).toBeLessThanOrEqual(4);
+        expect(surface.getW(i)).toBeGreaterThan(0);
+        minAo = Math.min(minAo, ao);
+        maxAo = Math.max(maxAo, ao);
+      }
+      // More than one material, and the bake actually found both open surfaces
+      // and occluded ones — a uniform result means it silently did nothing.
+      expect(materials.size).toBeGreaterThan(1);
+      expect(maxAo).toBeGreaterThan(0.9);
+      expect(minAo).toBeLessThan(0.6);
+    }
+    interior.dispose();
+    frame.dispose();
+  });
+
+  it('builds the same cabin twice for the same seed', () => {
+    const colors = shipHullColors(shipAccentColor(12345));
+    const a = createCockpitInteriorGeometry(colors);
+    const b = createCockpitInteriorGeometry(colors);
+    expect(Array.from(a.attributes.aSurf.array))
+      .toEqual(Array.from(b.attributes.aSurf.array));
+    a.dispose();
+    b.dispose();
+  });
+
+  it('keeps every display panel inside the cabin and off the boresight', () => {
+    const geo = createCockpitScreenGeometry();
+    const position = geo.attributes.position;
+    const screen = geo.attributes.aScreen;
+    expect(position.count).toBeGreaterThan(0);
+    expect(screen.count).toBe(position.count);
+
+    const ids = new Set<number>();
+    for (let i = 0; i < position.count; i++) {
+      const z = position.getZ(i);
+      // In front of the pilot and beyond the flight camera's near plane at 1.
+      expect(z).toBeLessThan(-1.2);
+      expect(z).toBeGreaterThan(-4.2);
+      // Never in the forward flight aperture: the displays flank the view.
+      const inAperture = Math.abs(position.getX(i)) < 0.45
+        && Math.abs(position.getY(i)) < 0.4;
+      expect(inAperture).toBe(false);
+      ids.add(Math.floor(screen.getX(i) + 0.5));
+    }
+    // Attitude, power and nav are all present; an MFD wall showing one program
+    // is a texture, not an instrument panel.
+    expect(ids.size).toBeGreaterThanOrEqual(4);
     geo.dispose();
   });
 

@@ -1,0 +1,2285 @@
+{
+  "runId": "2026-09-05-early-grid-mobile",
+  "sceneId": "early-grid-mobile",
+  "sourceRevision": "working-tree:1eb27bf00229c442169280f126f0f3f15bcad63d3581af76f5c0b8e4d3d0d1a8",
+  "capturedAt": "2026-09-05T18:38:17.787694+00:00",
+  "sourceManifest": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/evidence/runtime-candidate2-build/source-before.json",
+  "sourceArchive": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/evidence/runtime-candidate2-build/source.tar.gz",
+  "captureAuthority": "Current archived runtime before any early-grid-mobile implementation; actual application controls and camera.",
+  "implementationMutated": false,
+  "schema": "paravoxia.shippedUxBaseline.v1",
+  "contextRef": "main/src/story/ux/README.md",
+  "sourceFiles": [
+    {
+      "path": "main/src/components/EfficientPlayer.tsx",
+      "sha256": "e2742c6516db572c6493d4e377792550ac75631ac26a39e0acb96157baa36cba",
+      "snapshotPath": "baseline-source/main/src/components/EfficientPlayer.tsx"
+    },
+    {
+      "path": "main/src/components/mobile/TouchControls.tsx",
+      "sha256": "d84363940b939616a4b9587469efa4ddc9f06f33d9774018730da380b700dcb9",
+      "snapshotPath": "baseline-source/main/src/components/mobile/TouchControls.tsx"
+    },
+    {
+      "path": "main/src/story/beats/ch1/a1-ramp.ts",
+      "sha256": "4ba6d871c7d512f9358e1aa896525c606d2edd178fa909295286ee3b11158173",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/a1-ramp.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-anomaly.ts",
+      "sha256": "a8656ffb6d5b9c3c56b722c3e1b6fc1bd2420dddd7a0f2a398098a8cd7f82cf0",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/ch1-anomaly.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-depth.ts",
+      "sha256": "9e48438b273cb8e421b06b852be1e3f8c5c3fe917162185a03d3e852beb46971",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/ch1-depth.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-fixed.ts",
+      "sha256": "f25bea6ca7ca18e54bc0c918f39b3dc1ba46da2fcc83711de7d09c93d4c50474",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/ch1-fixed.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-iso.ts",
+      "sha256": "50a059ab2070550723f87bff4a6cad161e2db78e3192d5b74fdcf55056053ee3",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/ch1-iso.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-lift.ts",
+      "sha256": "3ced51796a5ac4d0387f9a5ad643a6fde67c60d9a68a14b932d4a71f401dea44",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/ch1-lift.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-nav.ts",
+      "sha256": "351b495b0b4b8fd68a8fdfbcc79fbc933f28c0ce380eb7b7a1deb3f0c022c258",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/ch1-nav.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-raster.ts",
+      "sha256": "bcf3f28a258ecc367adf24cfcd25a0e497ab5010ecba9fd80d3e5a4ac5395e99",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/ch1-raster.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1-track.ts",
+      "sha256": "fb165e6e613bf8953cabe99dbe9d40e0fd4bdce833e5ce81c807f4900c3a3133",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/ch1-track.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/ch1Contracts.test.ts",
+      "sha256": "669f4fe25e92ad7b00b399e1d21b614112aede071bda02709f3d64df162be9d3",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/ch1Contracts.test.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/descent.ts",
+      "sha256": "e62adf389007bfc33aea415bab73863aba0b471505825c82db1d05e3500728d6",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/descent.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/index.ts",
+      "sha256": "26db5e74fada52ea0705290217f064c6f8c4628f226d627baec876853bad2d31",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/index.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/rail-ch1-anomaly.ts",
+      "sha256": "0cd7ddd2e13eb83d8887bd853c2a2773e8e2324a65561f7cd8d064bd18b5d190",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-anomaly.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/rail-ch1-depth.ts",
+      "sha256": "c28730ed618d05229ec6321aed8c52c57c733e2b919bd312ea439ac6930dd9d4",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-depth.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/rail-ch1-fixed.ts",
+      "sha256": "742ec193204c80c9613d61e689e9416baaca4552b646404ad2c805ec80f3da3c",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-fixed.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/rail-ch1-iso.ts",
+      "sha256": "6fa34978fab70eda127ae86abf3ef9914a3ccbe6ce7f1c3b9ca7635faa07e461",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-iso.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/rail-ch1-nav.ts",
+      "sha256": "37a8aff21aeec7f4dcefcd52ee0ab03a0e52fd755c98e00920d8c258bfc6d358",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-nav.ts"
+    },
+    {
+      "path": "main/src/story/beats/ch1/rail-ch1-raster.ts",
+      "sha256": "d5bbfdb5803b6f237a1637e1d7a391f2253b74d0b7eb3b2cb0d519c6b2983889",
+      "snapshotPath": "baseline-source/main/src/story/beats/ch1/rail-ch1-raster.ts"
+    },
+    {
+      "path": "main/src/story/feed/FeedOverlay.tsx",
+      "sha256": "971632e2a0c0b97780d66215da8a2d4f8e40d8269f7ba1f240dbdef559c47450",
+      "snapshotPath": "baseline-source/main/src/story/feed/FeedOverlay.tsx"
+    },
+    {
+      "path": "main/src/story/feed/RegulationFeedHud.test.tsx",
+      "sha256": "5a9301b25b85641ffeb77ef8555f00284e97019ac87f67af764a67d287569c5a",
+      "snapshotPath": "baseline-source/main/src/story/feed/RegulationFeedHud.test.tsx"
+    },
+    {
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "sha256": "80188c72ea6603bfd03758c577a886c6b54d0b00fece4f51a782f297a929bbb0",
+      "snapshotPath": "baseline-source/main/src/story/feed/RegulationFeedHud.tsx"
+    },
+    {
+      "path": "main/src/story/feed/SurveyBracketDriver.tsx",
+      "sha256": "cc7095b17df6b2e0cf8bb13da4e5ee77af6c864861c471bf410d70085ca35bdb",
+      "snapshotPath": "baseline-source/main/src/story/feed/SurveyBracketDriver.tsx"
+    },
+    {
+      "path": "main/src/story/feed/SurveyBracketOverlay.tsx",
+      "sha256": "554c2f1b7ecf0fe503f825101b5849af4af5bb4bfe1933d43274c8f9ebfcd6fc",
+      "snapshotPath": "baseline-source/main/src/story/feed/SurveyBracketOverlay.tsx"
+    },
+    {
+      "path": "main/src/story/feed/regulationVoice.ts",
+      "sha256": "8306b3ddc0b1bac1dd321cb6830db1c9cdc28380fe720c0db9d0368ab9e12182",
+      "snapshotPath": "baseline-source/main/src/story/feed/regulationVoice.ts"
+    },
+    {
+      "path": "main/src/story/feed/surveyBrackets.test.ts",
+      "sha256": "67a3f44ac4276e98cac59960dba2e1ed5e26e93718cd90d612635b21f80692d4",
+      "snapshotPath": "baseline-source/main/src/story/feed/surveyBrackets.test.ts"
+    },
+    {
+      "path": "main/src/story/feed/surveyBrackets.ts",
+      "sha256": "63472544657dee31e7f4922d089135b1eac9c3b91e1a6c132631bd7447702124",
+      "snapshotPath": "baseline-source/main/src/story/feed/surveyBrackets.ts"
+    },
+    {
+      "path": "main/src/story/sideLens.ts",
+      "sha256": "fc7df685de532005cefaeb2c94f57c1d2575740c8ce6a8f381dfe9cc9e06f10b",
+      "snapshotPath": "baseline-source/main/src/story/sideLens.ts"
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "sha256": "2b4e84770cd6ff0f986ad0e6c9a835d441b6696897de543d15da1aaa99d91e1b",
+      "snapshotPath": "baseline-source/main/src/story/storyDirector.ts"
+    },
+    {
+      "path": "main/src/story/storyInputPolicy.ts",
+      "sha256": "0f80bb1b9d2b75875e4602173e91b4afda90c20523506ef109575c6e25bbc888",
+      "snapshotPath": "baseline-source/main/src/story/storyInputPolicy.ts"
+    },
+    {
+      "path": "main/src/story/ux/README.md",
+      "sha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85",
+      "snapshotPath": "baseline-source/main/src/story/ux/README.md"
+    },
+    {
+      "path": "main/src/story/ux/StoryGuidanceHud.test.tsx",
+      "sha256": "509fa6d6118dee60a49d5b46dcc87f728eeb952c69fff1548e919dfaf4438b21",
+      "snapshotPath": "baseline-source/main/src/story/ux/StoryGuidanceHud.test.tsx"
+    },
+    {
+      "path": "main/src/story/ux/StoryGuidanceHud.tsx",
+      "sha256": "933db268e6f6a34c1d22d3dcebbba3296b6cf4f94def89e1ef47fbb2da225aca",
+      "snapshotPath": "baseline-source/main/src/story/ux/StoryGuidanceHud.tsx"
+    },
+    {
+      "path": "main/src/story/ux/cinematicHud.test.ts",
+      "sha256": "f6226a18249facab177c28a3534d9d9a9432c72a01fedf78f2c316864ccafefe",
+      "snapshotPath": "baseline-source/main/src/story/ux/cinematicHud.test.ts"
+    },
+    {
+      "path": "main/src/story/ux/cinematicHud.ts",
+      "sha256": "39e1d327b2296d33b0fe64d593a89b60a4e1a8177d85d3078b60d5a66ea3ae67",
+      "snapshotPath": "baseline-source/main/src/story/ux/cinematicHud.ts"
+    },
+    {
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "sha256": "df0f070c7bced43d28dbb54709d9445e5f3329b6a4f9d548b361f5ee81751fb5",
+      "snapshotPath": "baseline-source/main/src/story/ux/feedbackCues.ts"
+    },
+    {
+      "path": "main/src/story/ux/inputGlyphs.test.ts",
+      "sha256": "e49d444e408eea33e2f450829ee2b5eed90917514c03b99d6e0b19475d71d363",
+      "snapshotPath": "baseline-source/main/src/story/ux/inputGlyphs.test.ts"
+    },
+    {
+      "path": "main/src/story/ux/inputGlyphs.ts",
+      "sha256": "a11df2f1fc1b9f8fb3e1cf143205c4fab8b5fa29fd420a9eb683474875338187",
+      "snapshotPath": "baseline-source/main/src/story/ux/inputGlyphs.ts"
+    },
+    {
+      "path": "main/src/story/ux/objectiveCommandFeedback.test.ts",
+      "sha256": "aead2da542a65afc7e1c5a0187b1657e8f38d5f93d4943208eea462edccfd822",
+      "snapshotPath": "baseline-source/main/src/story/ux/objectiveCommandFeedback.test.ts"
+    },
+    {
+      "path": "main/src/story/ux/objectiveCommandFeedback.ts",
+      "sha256": "15886ed4d3d3184824016faf75a2902ff176e9a5ea8b41a6b306f99893c43108",
+      "snapshotPath": "baseline-source/main/src/story/ux/objectiveCommandFeedback.ts"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.test.ts",
+      "sha256": "003229e3832a52f27f1036510e26fe130b31ffe9214d3f69cbb42fa169cb5324",
+      "snapshotPath": "baseline-source/main/src/story/ux/objectiveDirector.test.ts"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "sha256": "0e9dc3058f1fb1d405b0e565767de319790ed794eb2dd597beaa82d48dc39b05",
+      "snapshotPath": "baseline-source/main/src/story/ux/objectiveDirector.ts"
+    },
+    {
+      "path": "main/src/story/ux/objectiveEventFeedback.test.ts",
+      "sha256": "0d60b23182b09db70e7f1b57b213c954f5a9a927831825da918ace3b720c4fd2",
+      "snapshotPath": "baseline-source/main/src/story/ux/objectiveEventFeedback.test.ts"
+    },
+    {
+      "path": "main/src/story/ux/objectiveEventFeedback.ts",
+      "sha256": "5d5ff442b660a7bc0d89b52f9cc5ac77fcd693108a6b5d5d6ee7fc74877165f3",
+      "snapshotPath": "baseline-source/main/src/story/ux/objectiveEventFeedback.ts"
+    },
+    {
+      "path": "main/src/story/ux/objectiveRestore.ts",
+      "sha256": "681a2de6ce4ea93f22be99984767b5d9dcd1b8ca0f8e336462cc02b879628d79",
+      "snapshotPath": "baseline-source/main/src/story/ux/objectiveRestore.ts"
+    },
+    {
+      "path": "main/src/story/ux/storyGuidancePresentation.test.ts",
+      "sha256": "86841e018a5f9e77c2385f0d2cd1a4ca0e44797d4d6a60290bdd656a190464eb",
+      "snapshotPath": "baseline-source/main/src/story/ux/storyGuidancePresentation.test.ts"
+    },
+    {
+      "path": "main/src/story/ux/storyGuidancePresentation.ts",
+      "sha256": "a6418424dd01bcb799c93a3dcd1010d7782750e2f6da7340916d3de1ddc7c46e",
+      "snapshotPath": "baseline-source/main/src/story/ux/storyGuidancePresentation.ts"
+    },
+    {
+      "path": "main/src/story/ux/storyHudLayout.test.ts",
+      "sha256": "42a3cebfd57e54286c6b12ba8578e79d568eb3a499010e22b21631809a70ec6a",
+      "snapshotPath": "baseline-source/main/src/story/ux/storyHudLayout.test.ts"
+    },
+    {
+      "path": "main/src/story/ux/storyHudLayout.ts",
+      "sha256": "6e7e124158e01a38ccb070eed4e872177b47063e57347437b2d82259a53c05af",
+      "snapshotPath": "baseline-source/main/src/story/ux/storyHudLayout.ts"
+    },
+    {
+      "path": "main/src/story/world/SideWorkerAvatar.tsx",
+      "sha256": "c0b0c82a351c3db3e04bbe602986175cce3fa263407691c421a694b7f83c106f",
+      "snapshotPath": "baseline-source/main/src/story/world/SideWorkerAvatar.tsx"
+    },
+    {
+      "path": "main/src/utils/cubeGravityConstants.ts",
+      "sha256": "c0a71ab046b5d5324a7a0562b4a7b0db720cba4451ac51aabd9336f5a133c399",
+      "snapshotPath": "baseline-source/main/src/utils/cubeGravityConstants.ts"
+    }
+  ],
+  "objectiveContract": {
+    "sourceRef": "main/src/story/ux/objectiveDirector.ts",
+    "stableObjectiveIds": true,
+    "markerMatching": "exact",
+    "requiresActionableWorkOrder": true,
+    "feedbackPresentationOnly": true,
+    "feedbackAdvancesProgression": false,
+    "feedbackEmissionsPerEntry": 1,
+    "healthStates": [
+      "idle",
+      "ready",
+      "missing-marker"
+    ],
+    "authority": "Source contract; runtime emission count is not independently proved by the objective mirror."
+  },
+  "markerAndWorkOrderMap": [
+    {
+      "objectiveId": "ch1:fixed:calibrate-extractor",
+      "kind": "interact",
+      "markerLabel": "BIOFIBER \u00b7 CALIBRATE EXTRACTOR",
+      "workOrder": [
+        "HARVEST BIOFIBER FROM THE BRACKETED GROUND.",
+        "HOLD [E] TO EXTRACT."
+      ],
+      "health": "ready"
+    },
+    {
+      "objectiveId": "ch1:fixed:cross-camera-cell",
+      "kind": "travel",
+      "markerLabel": "CAMERA HAND-OFF \u00b7 LEAVE THIS FRAME",
+      "workOrder": [
+        "EXTRACTOR CALIBRATED. COVERAGE CHECK OUTSTANDING.",
+        "WALK [A]/[D] UNTIL THE CAMERA CUTS."
+      ],
+      "health": "ready"
+    },
+    {
+      "objectiveId": "ch1:track:tracking-transfer",
+      "kind": "wait",
+      "markerLabel": "TRACKING VIEW \u00b7 CALIBRATING",
+      "workOrder": [
+        "TRACKING VIEW IS REASSIGNING.",
+        "HOLD POSITION."
+      ],
+      "health": "ready"
+    },
+    {
+      "objectiveId": "ch1:raster:recover-quota",
+      "kind": "interact",
+      "markerLabel": "SITE QUOTA \u00b7 RECOVER MATERIALS",
+      "workOrder": [
+        "RECOVER EVERY BRACKETED PIECE OF HULL DEBRIS.",
+        "WALK OVER EACH PIECE TO RECOVER IT."
+      ],
+      "health": "ready"
+    },
+    {
+      "objectiveId": "ch1:raster:extract-fiber-quota",
+      "kind": "interact",
+      "markerLabel": "SITE QUOTA \u00b7 BIOFIBER OUTSTANDING",
+      "workOrder": [
+        "HULL DEBRIS RECOVERED. BIOFIBER QUOTA OUTSTANDING.",
+        "A CELL YIELDS ONCE. HOLD [E] AND WALK [A]/[D] ALONG THE STRIP."
+      ],
+      "health": "ready"
+    },
+    {
+      "objectiveId": "ch1:depth:recover-supply-pods",
+      "kind": "interact",
+      "markerLabel": "SUPPLY POD",
+      "workOrder": [
+        "FOLLOW THE NEXT SUPPLY POD MARKER.",
+        "RECOVER THE SUPPLY POD."
+      ],
+      "health": "ready"
+    }
+  ],
+  "observedLifecycle": [
+    {
+      "case": "desktop-boundary-v2",
+      "t": 442.1999999284744,
+      "seconds": 0.452,
+      "beat": "ch1-fixed",
+      "type": "enter",
+      "objective": {
+        "id": "ch1:fixed:calibrate-extractor",
+        "kind": "interact",
+        "markerLabel": "BIOFIBER \u00b7 CALIBRATE EXTRACTOR",
+        "workOrder": [
+          "HARVEST BIOFIBER FROM THE BRACKETED GROUND.",
+          "HOLD [E] TO EXTRACT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2.json",
+      "sampleIndex": 0,
+      "sfxDiagnostic": "sfx-rate: quiet (last 3s)"
+    },
+    {
+      "case": "desktop-movie",
+      "t": 425.60000002384186,
+      "seconds": 0.431,
+      "beat": "ch1-fixed",
+      "type": "enter",
+      "objective": {
+        "id": "ch1:fixed:calibrate-extractor",
+        "kind": "interact",
+        "markerLabel": "BIOFIBER \u00b7 CALIBRATE EXTRACTOR",
+        "workOrder": [
+          "HARVEST BIOFIBER FROM THE BRACKETED GROUND.",
+          "HOLD [E] TO EXTRACT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie.json",
+      "sampleIndex": 0,
+      "sfxDiagnostic": "sfx-rate: quiet (last 3s)"
+    },
+    {
+      "case": "desktop-movie",
+      "t": 5966.699999928474,
+      "seconds": 5.999,
+      "beat": "ch1-fixed",
+      "type": "change",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "CAMERA HAND-OFF \u00b7 LEAVE THIS FRAME",
+        "workOrder": [
+          "EXTRACTOR CALIBRATED. COVERAGE CHECK OUTSTANDING.",
+          "WALK [A]/[D] UNTIL THE CAMERA CUTS."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie.json",
+      "sampleIndex": 18,
+      "sfxDiagnostic": "sfx-rate (last 3s): mine 5\u2713/0\u2717 | objectiveProgress 1\u2713/0\u2717 | objectiveEnter 1\u2713/0\u2717"
+    },
+    {
+      "case": "desktop-movie",
+      "t": 10528.600000023842,
+      "seconds": 10.557,
+      "beat": "ch1-track",
+      "type": "change",
+      "objective": {
+        "id": "ch1:track:tracking-transfer",
+        "kind": "wait",
+        "markerLabel": "TRACKING VIEW \u00b7 CALIBRATING",
+        "workOrder": [
+          "TRACKING VIEW IS REASSIGNING.",
+          "HOLD POSITION."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie.json",
+      "sampleIndex": 33,
+      "sfxDiagnostic": "sfx-rate (last 3s): objectiveEnter 1\u2713/0\u2717 | storyGlitch 1\u2713/0\u2717 | objectiveComplete 1\u2713/0\u2717 | storyAwaken 1\u2713/0\u2717"
+    },
+    {
+      "case": "desktop-movie",
+      "t": 17275.299999952316,
+      "seconds": 17.31,
+      "beat": "ch1-raster",
+      "type": "change",
+      "objective": {
+        "id": "ch1:raster:recover-quota",
+        "kind": "interact",
+        "markerLabel": "SITE QUOTA \u00b7 RECOVER MATERIALS",
+        "workOrder": [
+          "RECOVER EVERY BRACKETED PIECE OF HULL DEBRIS.",
+          "WALK OVER EACH PIECE TO RECOVER IT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie.json",
+      "sampleIndex": 56,
+      "sfxDiagnostic": "sfx-rate (last 3s): mine 1\u2713/0\u2717 | objectiveEnter 1\u2713/0\u2717 | terminalKey 1\u2713/0\u2717"
+    },
+    {
+      "case": "desktop-movie",
+      "t": 39614.199999928474,
+      "seconds": 39.631,
+      "beat": "ch1-raster",
+      "type": "change",
+      "objective": {
+        "id": "ch1:raster:extract-fiber-quota",
+        "kind": "interact",
+        "markerLabel": "SITE QUOTA \u00b7 BIOFIBER OUTSTANDING",
+        "workOrder": [
+          "HULL DEBRIS RECOVERED. BIOFIBER QUOTA OUTSTANDING.",
+          "A CELL YIELDS ONCE. HOLD [E] AND WALK [A]/[D] ALONG THE STRIP."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie.json",
+      "sampleIndex": 135,
+      "sfxDiagnostic": "sfx-rate (last 3s): mine 1\u2713/0\u2717 | objectiveProgress 1\u2713/0\u2717 | objectiveEnter 1\u2713/0\u2717 | terminalKey 1\u2713/0\u2717 | inventoryAcquire 1\u2713/0\u2717"
+    },
+    {
+      "case": "desktop-movie",
+      "t": 42278.299999952316,
+      "seconds": 42.297,
+      "beat": "ch1-depth",
+      "type": "change",
+      "objective": {
+        "id": "ch1:depth:recover-supply-pods",
+        "kind": "interact",
+        "markerLabel": "SUPPLY POD",
+        "workOrder": [
+          "FOLLOW THE NEXT SUPPLY POD MARKER.",
+          "RECOVER THE SUPPLY POD."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie.json",
+      "sampleIndex": 144,
+      "sfxDiagnostic": "sfx-rate (last 3s): mine 9\u2713/0\u2717 | objectiveProgress 1\u2713/0\u2717 | objectiveEnter 2\u2713/0\u2717 | objectiveComplete 1\u2713/0\u2717 | terminalKey 2\u2713/0\u2717 | markerAcquired 1\u2713/0\u2717"
+    },
+    {
+      "case": "desktop-natural-boundary",
+      "t": 441.2999999523163,
+      "seconds": 0.446,
+      "beat": "descent",
+      "type": "clear",
+      "objective": null,
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary.json",
+      "sampleIndex": 0,
+      "sfxDiagnostic": "sfx-rate: quiet (last 3s)"
+    },
+    {
+      "case": "desktop-natural-boundary",
+      "t": 12448.699999928474,
+      "seconds": 12.466,
+      "beat": "ch1-fixed",
+      "type": "enter",
+      "objective": {
+        "id": "ch1:fixed:calibrate-extractor",
+        "kind": "interact",
+        "markerLabel": "BIOFIBER \u00b7 CALIBRATE EXTRACTOR",
+        "workOrder": [
+          "HARVEST BIOFIBER FROM THE BRACKETED GROUND.",
+          "HOLD [E] TO EXTRACT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary.json",
+      "sampleIndex": 89,
+      "sfxDiagnostic": "sfx-rate: quiet (last 3s)"
+    },
+    {
+      "case": "portrait-boundary-v2",
+      "t": 401.1999999284744,
+      "seconds": 0.407,
+      "beat": "ch1-fixed",
+      "type": "enter",
+      "objective": {
+        "id": "ch1:fixed:calibrate-extractor",
+        "kind": "interact",
+        "markerLabel": "BIOFIBER \u00b7 CALIBRATE EXTRACTOR",
+        "workOrder": [
+          "HARVEST BIOFIBER FROM THE BRACKETED GROUND.",
+          "HOLD [E] TO EXTRACT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2.json",
+      "sampleIndex": 0,
+      "sfxDiagnostic": "sfx-rate: quiet (last 3s)"
+    },
+    {
+      "case": "portrait-movie",
+      "t": 431.2000000476837,
+      "seconds": 0.438,
+      "beat": "ch1-fixed",
+      "type": "enter",
+      "objective": {
+        "id": "ch1:fixed:calibrate-extractor",
+        "kind": "interact",
+        "markerLabel": "BIOFIBER \u00b7 CALIBRATE EXTRACTOR",
+        "workOrder": [
+          "HARVEST BIOFIBER FROM THE BRACKETED GROUND.",
+          "HOLD [E] TO EXTRACT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie.json",
+      "sampleIndex": 0,
+      "sfxDiagnostic": "sfx-rate: quiet (last 3s)"
+    },
+    {
+      "case": "portrait-movie",
+      "t": 5981.100000023842,
+      "seconds": 5.993,
+      "beat": "ch1-fixed",
+      "type": "change",
+      "objective": {
+        "id": "ch1:fixed:cross-camera-cell",
+        "kind": "travel",
+        "markerLabel": "CAMERA HAND-OFF \u00b7 LEAVE THIS FRAME",
+        "workOrder": [
+          "EXTRACTOR CALIBRATED. COVERAGE CHECK OUTSTANDING.",
+          "WALK [A]/[D] UNTIL THE CAMERA CUTS."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie.json",
+      "sampleIndex": 19,
+      "sfxDiagnostic": "sfx-rate (last 3s): mine 5\u2713/0\u2717 | objectiveProgress 1\u2713/0\u2717 | objectiveEnter 1\u2713/0\u2717"
+    },
+    {
+      "case": "portrait-movie",
+      "t": 10294.700000047684,
+      "seconds": 10.306,
+      "beat": "ch1-track",
+      "type": "change",
+      "objective": {
+        "id": "ch1:track:tracking-transfer",
+        "kind": "wait",
+        "markerLabel": "TRACKING VIEW \u00b7 CALIBRATING",
+        "workOrder": [
+          "TRACKING VIEW IS REASSIGNING.",
+          "HOLD POSITION."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie.json",
+      "sampleIndex": 35,
+      "sfxDiagnostic": "sfx-rate (last 3s): objectiveEnter 1\u2713/0\u2717 | storyGlitch 2\u2713/0\u2717 | jump 1\u2713/0\u2717 | land 1\u2713/0\u2717 | objectiveComplete 1\u2713/0\u2717 | storyAwaken 1\u2713/0\u2717"
+    },
+    {
+      "case": "portrait-movie",
+      "t": 17217.300000071526,
+      "seconds": 17.252,
+      "beat": "ch1-raster",
+      "type": "change",
+      "objective": {
+        "id": "ch1:raster:recover-quota",
+        "kind": "interact",
+        "markerLabel": "SITE QUOTA \u00b7 RECOVER MATERIALS",
+        "workOrder": [
+          "RECOVER EVERY BRACKETED PIECE OF HULL DEBRIS.",
+          "WALK OVER EACH PIECE TO RECOVER IT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie.json",
+      "sampleIndex": 60,
+      "sfxDiagnostic": "sfx-rate (last 3s): mine 1\u2713/0\u2717 | objectiveEnter 1\u2713/0\u2717"
+    },
+    {
+      "case": "portrait-movie",
+      "t": 39762.700000047684,
+      "seconds": 39.779,
+      "beat": "ch1-raster",
+      "type": "change",
+      "objective": {
+        "id": "ch1:raster:extract-fiber-quota",
+        "kind": "interact",
+        "markerLabel": "SITE QUOTA \u00b7 BIOFIBER OUTSTANDING",
+        "workOrder": [
+          "HULL DEBRIS RECOVERED. BIOFIBER QUOTA OUTSTANDING.",
+          "A CELL YIELDS ONCE. HOLD [E] AND WALK [A]/[D] ALONG THE STRIP."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie.json",
+      "sampleIndex": 140,
+      "sfxDiagnostic": "sfx-rate (last 3s): mine 1\u2713/0\u2717 | objectiveProgress 2\u2713/0\u2717 | objectiveEnter 1\u2713/0\u2717 | terminalKey 1\u2713/0\u2717 | inventoryAcquire 2\u2713/0\u2717"
+    },
+    {
+      "case": "portrait-movie",
+      "t": 42364.10000002384,
+      "seconds": 42.395,
+      "beat": "ch1-depth",
+      "type": "change",
+      "objective": {
+        "id": "ch1:depth:recover-supply-pods",
+        "kind": "interact",
+        "markerLabel": "SUPPLY POD",
+        "workOrder": [
+          "FOLLOW THE NEXT SUPPLY POD MARKER.",
+          "RECOVER THE SUPPLY POD."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie.json",
+      "sampleIndex": 149,
+      "sfxDiagnostic": "sfx-rate (last 3s): mine 8\u2713/0\u2717 | objectiveProgress 2\u2713/0\u2717 | objectiveEnter 2\u2713/0\u2717 | objectiveComplete 1\u2713/0\u2717 | terminalKey 2\u2713/0\u2717 | inventoryAcquire 1\u2713/0\u2717 | markerAcquired 1\u2713/0\u2717"
+    },
+    {
+      "case": "portrait-natural-boundary",
+      "t": 429.7000000476837,
+      "seconds": 0.434,
+      "beat": "descent",
+      "type": "clear",
+      "objective": null,
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary.json",
+      "sampleIndex": 0,
+      "sfxDiagnostic": "sfx-rate: quiet (last 3s)"
+    },
+    {
+      "case": "portrait-natural-boundary",
+      "t": 12168.600000023842,
+      "seconds": 12.2,
+      "beat": "ch1-fixed",
+      "type": "enter",
+      "objective": {
+        "id": "ch1:fixed:calibrate-extractor",
+        "kind": "interact",
+        "markerLabel": "BIOFIBER \u00b7 CALIBRATE EXTRACTOR",
+        "workOrder": [
+          "HARVEST BIOFIBER FROM THE BRACKETED GROUND.",
+          "HOLD [E] TO EXTRACT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary.json",
+      "sampleIndex": 87,
+      "sfxDiagnostic": "sfx-rate: quiet (last 3s)"
+    }
+  ],
+  "cases": [
+    {
+      "name": "desktop-boundary-v2",
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary-v2.json",
+      "sha256": "a0815798bfaef443d6f521a0aff1e3ea92ac5f5001b900b964859a032fd8a487",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "previewBuildProof": {
+        "checkedAt": "2026-09-05T18:32:45.263Z",
+        "indexSha256": "7a56e24fac81b8518089218635e6ebef2c9b50ad976986ded4a780ce7b37991c",
+        "assetsChecked": 7,
+        "matchesArchive": true
+      },
+      "completed": false,
+      "errors": [],
+      "sampleCount": 311,
+      "frameCount": 11,
+      "renderers": [
+        "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)"
+      ],
+      "observability": {
+        "reactRoots": 2,
+        "sceneFound": true,
+        "physicsFound": true,
+        "readOnly": true
+      },
+      "visibleSoleClearanceMin": 0.7311590566141647,
+      "visibleSoleClearanceMax": 0.9799844733898264,
+      "fullyOffscreenSamples": [],
+      "maximumSimultaneousVisibleBrackets": 4
+    },
+    {
+      "name": "desktop-movie",
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-movie.json",
+      "sha256": "12f96121a4cd91f5073acdb37622bcebe877eb292acd6475c544c4f936065346",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "previewBuildProof": {
+        "checkedAt": "2026-09-05T18:29:28.401Z",
+        "indexSha256": "7a56e24fac81b8518089218635e6ebef2c9b50ad976986ded4a780ce7b37991c",
+        "assetsChecked": 7,
+        "matchesArchive": true
+      },
+      "completed": true,
+      "errors": [],
+      "sampleCount": 145,
+      "frameCount": 14,
+      "renderers": [
+        "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)"
+      ],
+      "observability": {
+        "reactRoots": 2,
+        "sceneFound": true,
+        "physicsFound": true,
+        "readOnly": true
+      },
+      "visibleSoleClearanceMin": 0.6485333015589836,
+      "visibleSoleClearanceMax": 1.0782831706309706,
+      "fullyOffscreenSamples": [],
+      "maximumSimultaneousVisibleBrackets": 0
+    },
+    {
+      "name": "desktop-natural-boundary",
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-natural-boundary.json",
+      "sha256": "1052f145abee737838a76b7320e9b3ae6af0ae4d30162e22e8f614a4a36039da",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "previewBuildProof": {
+        "checkedAt": "2026-09-05T18:34:11.707Z",
+        "indexSha256": "7a56e24fac81b8518089218635e6ebef2c9b50ad976986ded4a780ce7b37991c",
+        "assetsChecked": 7,
+        "matchesArchive": true
+      },
+      "completed": false,
+      "errors": [],
+      "sampleCount": 316,
+      "frameCount": 12,
+      "renderers": [
+        "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)"
+      ],
+      "observability": {
+        "reactRoots": 2,
+        "sceneFound": true,
+        "physicsFound": true,
+        "readOnly": true
+      },
+      "visibleSoleClearanceMin": 0.8385814001057659,
+      "visibleSoleClearanceMax": 0.9799359177748636,
+      "fullyOffscreenSamples": [],
+      "maximumSimultaneousVisibleBrackets": 4
+    },
+    {
+      "name": "portrait-boundary-v2",
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary-v2.json",
+      "sha256": "5fcb1c52d2f10157694c24ec6f8c5ec3b89777eceb8c6a60b5aba0d35a11cf02",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "previewBuildProof": {
+        "checkedAt": "2026-09-05T18:33:28.530Z",
+        "indexSha256": "7a56e24fac81b8518089218635e6ebef2c9b50ad976986ded4a780ce7b37991c",
+        "assetsChecked": 7,
+        "matchesArchive": true
+      },
+      "completed": false,
+      "errors": [],
+      "sampleCount": 319,
+      "frameCount": 12,
+      "renderers": [
+        "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)"
+      ],
+      "observability": {
+        "reactRoots": 2,
+        "sceneFound": true,
+        "physicsFound": true,
+        "readOnly": true
+      },
+      "visibleSoleClearanceMin": 0.7996190490580516,
+      "visibleSoleClearanceMax": 0.9799725691987671,
+      "fullyOffscreenSamples": [
+        {
+          "seconds": 9.96,
+          "sampleIndex": 69,
+          "boundsNdc": {
+            "min": [
+              1.0353681569233242,
+              -0.03640621806518824,
+              0.993635984254187
+            ],
+            "max": [
+              1.2669544947031828,
+              0.12174544256804463,
+              0.9939097200954352
+            ]
+          }
+        },
+        {
+          "seconds": 10.227,
+          "sampleIndex": 70,
+          "boundsNdc": {
+            "min": [
+              1.1582976871515611,
+              -0.037046016803895354,
+              0.9936363048231891
+            ],
+            "max": [
+              1.3947320432729162,
+              0.12110569825995454,
+              0.9939100137497899
+            ]
+          }
+        },
+        {
+          "seconds": 10.355,
+          "sampleIndex": 71,
+          "boundsNdc": {
+            "min": [
+              1.2195568118950437,
+              -0.03892697235304309,
+              0.9936372472658804
+            ],
+            "max": [
+              1.4583775988777081,
+              0.11922489831529583,
+              0.993910877073282
+            ]
+          }
+        },
+        {
+          "seconds": 10.476,
+          "sampleIndex": 72,
+          "boundsNdc": {
+            "min": [
+              1.2650759341454194,
+              -0.044665197237384324,
+              0.9936401223381209
+            ],
+            "max": [
+              1.5055875289695808,
+              0.11348710740335421,
+              0.9939135108473465
+            ]
+          }
+        },
+        {
+          "seconds": 10.607,
+          "sampleIndex": 73,
+          "boundsNdc": {
+            "min": [
+              1.327336223610819,
+              -0.03604916340285818,
+              0.99363580535287
+            ],
+            "max": [
+              1.5704720295168626,
+              0.12210246652251593,
+              0.9939095562150416
+            ]
+          }
+        },
+        {
+          "seconds": 10.728,
+          "sampleIndex": 74,
+          "boundsNdc": {
+            "min": [
+              1.3883269148020911,
+              -0.0403055232197878,
+              0.993637937977847
+            ],
+            "max": [
+              1.6337919663953107,
+              0.1178464573049699,
+              0.993911509806095
+            ]
+          }
+        },
+        {
+          "seconds": 10.857,
+          "sampleIndex": 75,
+          "boundsNdc": {
+            "min": [
+              1.4494094958253054,
+              -0.04128000794942325,
+              0.9936384262338711
+            ],
+            "max": [
+              1.6972696807504393,
+              0.11687204809567468,
+              0.9939119570808945
+            ]
+          }
+        },
+        {
+          "seconds": 10.976,
+          "sampleIndex": 76,
+          "boundsNdc": {
+            "min": [
+              1.4964561113459496,
+              -0.03592451798823457,
+              0.9936357428995595
+            ],
+            "max": [
+              1.7462805279184808,
+              0.1222271011612954,
+              0.9939094990055323
+            ]
+          }
+        },
+        {
+          "seconds": 11.091,
+          "sampleIndex": 77,
+          "boundsNdc": {
+            "min": [
+              1.5571976047698526,
+              -0.04184244997384491,
+              0.9936387080392519
+            ],
+            "max": [
+              1.8093063171919463,
+              0.11630964885392535,
+              0.9939122152345917
+            ]
+          }
+        },
+        {
+          "seconds": 11.208,
+          "sampleIndex": 78,
+          "boundsNdc": {
+            "min": [
+              1.6033097910015002,
+              -0.04139151287470907,
+              0.9936384821022255
+            ],
+            "max": [
+              1.8572497139342927,
+              0.11676055169895565,
+              0.9939120082601879
+            ]
+          }
+        },
+        {
+          "seconds": 11.341,
+          "sampleIndex": 79,
+          "boundsNdc": {
+            "min": [
+              1.6654052365550107,
+              -0.03595752066286161,
+              0.9936357594354793
+            ],
+            "max": [
+              1.921908469729302,
+              0.12219410134263321,
+              0.9939095141530331
+            ]
+          }
+        },
+        {
+          "seconds": 11.459,
+          "sampleIndex": 80,
+          "boundsNdc": {
+            "min": [
+              1.7258575137147971,
+              -0.043513600449029216,
+              0.9936395453478388
+            ],
+            "max": [
+              1.984597220852063,
+              0.11463862201900497,
+              0.9939129822743594
+            ]
+          }
+        },
+        {
+          "seconds": 11.577,
+          "sampleIndex": 81,
+          "boundsNdc": {
+            "min": [
+              1.7723957747332126,
+              -0.03987908770869407,
+              0.9936377243160412
+            ],
+            "max": [
+              2.033048669716671,
+              0.1182728592117502,
+              0.9939113140786778
+            ]
+          }
+        },
+        {
+          "seconds": 11.709,
+          "sampleIndex": 82,
+          "boundsNdc": {
+            "min": [
+              1.8344653934281643,
+              -0.036557650749965954,
+              0.9936360601290819
+            ],
+            "max": [
+              2.097640083841487,
+              0.12159402283523509,
+              0.9939097895998369
+            ]
+          }
+        },
+        {
+          "seconds": 11.827,
+          "sampleIndex": 83,
+          "boundsNdc": {
+            "min": [
+              1.8946639532346616,
+              -0.045192615762325195,
+              0.9936403865925548
+            ],
+            "max": [
+              2.160038531208259,
+              0.11295972568762311,
+              0.9939137529286255
+            ]
+          }
+        },
+        {
+          "seconds": 11.96,
+          "sampleIndex": 84,
+          "boundsNdc": {
+            "min": [
+              1.9571834009005658,
+              -0.03758096521419168,
+              0.9936365728567907
+            ],
+            "max": [
+              2.22518803591909,
+              0.12057079477474233,
+              0.9939102592805347
+            ]
+          }
+        },
+        {
+          "seconds": 12.106,
+          "sampleIndex": 85,
+          "boundsNdc": {
+            "min": [
+              -2.2250026819673003,
+              -0.03733566627675093,
+              0.9936364499508687
+            ],
+            "max": [
+              -1.9565991146312642,
+              0.12081607317811452,
+              0.9939101466931134
+            ]
+          }
+        },
+        {
+          "seconds": 12.227,
+          "sampleIndex": 86,
+          "boundsNdc": {
+            "min": [
+              -2.1443555635898437,
+              -0.04413610856445503,
+              0.9936398572464449
+            ],
+            "max": [
+              -1.8791992579052095,
+              0.11401615862975854,
+              0.9939132679999412
+            ]
+          }
+        },
+        {
+          "seconds": 12.341,
+          "sampleIndex": 87,
+          "boundsNdc": {
+            "min": [
+              -2.097966229527339,
+              -0.036275276800481315,
+              0.9936359186464276
+            ],
+            "max": [
+              -1.8344431896520317,
+              0.12187637259896003,
+              0.993909659996193
+            ]
+          }
+        },
+        {
+          "seconds": 12.46,
+          "sampleIndex": 88,
+          "boundsNdc": {
+            "min": [
+              -2.0336183672590233,
+              -0.03947297160892539,
+              0.993637520834832
+            ],
+            "max": [
+              -1.7726410351921216,
+              0.11867894299344993,
+              0.9939111276778397
+            ]
+          }
+        },
+        {
+          "seconds": 12.589,
+          "sampleIndex": 89,
+          "boundsNdc": {
+            "min": [
+              -1.9852133554391236,
+              -0.04403951243742328,
+              0.9936398088484052
+            ],
+            "max": [
+              -1.7261923154434353,
+              0.11411274786384452,
+              0.9939132236631527
+            ]
+          }
+        },
+        {
+          "seconds": 12.711,
+          "sampleIndex": 90,
+          "boundsNdc": {
+            "min": [
+              -1.9228556769930116,
+              -0.035961728732731554,
+              0.9936357615439235
+            ],
+            "max": [
+              -1.666083527623088,
+              0.12218989363677205,
+              0.9939095160844447
+            ]
+          }
+        },
+        {
+          "seconds": 12.826,
+          "sampleIndex": 91,
+          "boundsNdc": {
+            "min": [
+              -1.858529423355209,
+              -0.040876101375702335,
+              0.9936382238606227
+            ],
+            "max": [
+              -1.6043333905653818,
+              0.11727592358225407,
+              0.9939117716932624
+            ]
+          }
+        },
+        {
+          "seconds": 12.942,
+          "sampleIndex": 92,
+          "boundsNdc": {
+            "min": [
+              -1.8106401690998057,
+              -0.04227838681602367,
+              0.9936389264602609
+            ],
+            "max": [
+              -1.558317991210437,
+              0.11587374476622649,
+              0.9939124153243858
+            ]
+          }
+        },
+        {
+          "seconds": 13.06,
+          "sampleIndex": 93,
+          "boundsNdc": {
+            "min": [
+              -1.7479214138074293,
+              -0.03597073692854333,
+              0.9936357660574606
+            ],
+            "max": [
+              -1.4978997315474103,
+              0.12218088622008312,
+              0.9939095202190085
+            ]
+          }
+        },
+        {
+          "seconds": 13.18,
+          "sampleIndex": 94,
+          "boundsNdc": {
+            "min": [
+              -1.6992945576617144,
+              -0.04093917386810525,
+              0.9936382554624655
+            ],
+            "max": [
+              -1.4512419271132093,
+              0.11721285596432592,
+              0.9939118006426623
+            ]
+          }
+        },
+        {
+          "seconds": 13.313,
+          "sampleIndex": 95,
+          "boundsNdc": {
+            "min": [
+              -1.635739451153434,
+              -0.04068779413847912,
+              0.9936381295111237
+            ],
+            "max": [
+              -1.3901337020772362,
+              0.11746421622230051,
+              0.9939116852628898
+            ]
+          }
+        },
+        {
+          "seconds": 13.44,
+          "sampleIndex": 96,
+          "boundsNdc": {
+            "min": [
+              -1.572694056913832,
+              -0.03627007880155849,
+              0.9936359160419842
+            ],
+            "max": [
+              -1.3294394502903124,
+              0.1218815701512738,
+              0.993909657610423
+            ]
+          }
+        },
+        {
+          "seconds": 13.56,
+          "sampleIndex": 97,
+          "boundsNdc": {
+            "min": [
+              -1.5081518608549185,
+              -0.04416815896588324,
+              0.9936398733048142
+            ],
+            "max": [
+              -1.2675306434008171,
+              0.11398411051155417,
+              0.993913282710802
+            ]
+          }
+        },
+        {
+          "seconds": 13.677,
+          "sampleIndex": 98,
+          "boundsNdc": {
+            "min": [
+              -1.4610257711210455,
+              -0.03933338344121178,
+              0.9936374508952419
+            ],
+            "max": [
+              -1.2221350904020767,
+              0.11881851998199852,
+              0.9939110636091508
+            ]
+          }
+        },
+        {
+          "seconds": 13.795,
+          "sampleIndex": 99,
+          "boundsNdc": {
+            "min": [
+              -1.397761466240757,
+              -0.036304626397204526,
+              0.9936359333519645
+            ],
+            "max": [
+              -1.1612575505690257,
+              0.12184702552299215,
+              0.9939096734670282
+            ]
+          }
+        },
+        {
+          "seconds": 13.928,
+          "sampleIndex": 100,
+          "boundsNdc": {
+            "min": [
+              -1.333145730779213,
+              -0.045922143511250436,
+              0.9936407521097878
+            ],
+            "max": [
+              -1.0993042682535414,
+              0.11223024799910877,
+              0.9939140877773265
+            ]
+          }
+        },
+        {
+          "seconds": 14.056,
+          "sampleIndex": 101,
+          "boundsNdc": {
+            "min": [
+              -1.2704442840168897,
+              -0.037252832498996954,
+              0.9936364084473579
+            ],
+            "max": [
+              -1.0388696135406357,
+              0.12089889999650012,
+              0.9939101086740497
+            ]
+          }
+        }
+      ],
+      "maximumSimultaneousVisibleBrackets": 4
+    },
+    {
+      "name": "portrait-movie",
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-movie.json",
+      "sha256": "75f0634681d88406d799f1175e1dd5b97cc9f83694726f653fbd289f7b54b117",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "previewBuildProof": {
+        "checkedAt": "2026-09-05T18:30:11.990Z",
+        "indexSha256": "7a56e24fac81b8518089218635e6ebef2c9b50ad976986ded4a780ce7b37991c",
+        "assetsChecked": 7,
+        "matchesArchive": true
+      },
+      "completed": true,
+      "errors": [],
+      "sampleCount": 150,
+      "frameCount": 14,
+      "renderers": [
+        "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)"
+      ],
+      "observability": {
+        "reactRoots": 2,
+        "sceneFound": true,
+        "physicsFound": true,
+        "readOnly": true
+      },
+      "visibleSoleClearanceMin": 0.7358828898985502,
+      "visibleSoleClearanceMax": 0.9799499126645904,
+      "fullyOffscreenSamples": [
+        {
+          "seconds": 8.155,
+          "sampleIndex": 27,
+          "boundsNdc": {
+            "min": [
+              1.0601231077595845,
+              0.049342795426501364,
+              0.9935930141422463
+            ],
+            "max": [
+              1.2942534937193075,
+              0.21004474756805908,
+              0.9938703691641675
+            ]
+          }
+        },
+        {
+          "seconds": 8.475,
+          "sampleIndex": 28,
+          "boundsNdc": {
+            "min": [
+              1.2260779467777607,
+              0.12212892774265606,
+              0.9935565307969059
+            ],
+            "max": [
+              1.4681799079002096,
+              0.2852548147561234,
+              0.9938369764867386
+            ]
+          }
+        },
+        {
+          "seconds": 8.736,
+          "sampleIndex": 29,
+          "boundsNdc": {
+            "min": [
+              1.3527207541558102,
+              0.10735515938977425,
+              0.993563936683546
+            ],
+            "max": [
+              1.5996085087509646,
+              0.26998765033900674,
+              0.993843753662909
+            ]
+          }
+        },
+        {
+          "seconds": 9.001,
+          "sampleIndex": 30,
+          "boundsNdc": {
+            "min": [
+              1.4746389833390718,
+              0.05240276700317432,
+              0.9935914805298482
+            ],
+            "max": [
+              1.7253269335041554,
+              0.2132062748463722,
+              0.9938689651412089
+            ]
+          }
+        },
+        {
+          "seconds": 9.268,
+          "sampleIndex": 31,
+          "boundsNdc": {
+            "min": [
+              1.599314494940688,
+              0.029152788821241404,
+              0.9936031327030111
+            ],
+            "max": [
+              1.8545023317854414,
+              0.18918543141002814,
+              0.9938796334374589
+            ]
+          }
+        },
+        {
+          "seconds": 9.527,
+          "sampleIndex": 32,
+          "boundsNdc": {
+            "min": [
+              1.707542888288204,
+              0.004934166249011749,
+              0.9936152694216955
+            ],
+            "max": [
+              1.9665406446736393,
+              0.16416570201902245,
+              0.9938907471426155
+            ]
+          }
+        },
+        {
+          "seconds": 9.786,
+          "sampleIndex": 33,
+          "boundsNdc": {
+            "min": [
+              1.8297678494279606,
+              -0.029757008158697817,
+              0.9936326526516482
+            ],
+            "max": [
+              2.0928972039202716,
+              0.12839404164580437,
+              0.993906668285798
+            ]
+          }
+        },
+        {
+          "seconds": 10.045,
+          "sampleIndex": 34,
+          "boundsNdc": {
+            "min": [
+              1.9497748818112106,
+              -0.04441836120440971,
+              0.9936399986648089
+            ],
+            "max": [
+              2.2173429801116686,
+              0.11373392603128497,
+              0.9939133975515541
+            ]
+          }
+        },
+        {
+          "seconds": 10.306,
+          "sampleIndex": 35,
+          "boundsNdc": {
+            "min": [
+              -2.2498008800853397,
+              -0.047447843102608224,
+              0.9936415165324013
+            ],
+            "max": [
+              -1.9806452403111703,
+              0.11070464989623642,
+              0.9939147880667818
+            ]
+          }
+        },
+        {
+          "seconds": 10.621,
+          "sampleIndex": 36,
+          "boundsNdc": {
+            "min": [
+              -2.2245867441992186,
+              -0.0491299449633766,
+              0.9936423593131162
+            ],
+            "max": [
+              -1.956437151910371,
+              0.10902265490089734,
+              0.9939155601486317
+            ]
+          }
+        },
+        {
+          "seconds": 10.881,
+          "sampleIndex": 37,
+          "boundsNdc": {
+            "min": [
+              -2.185577154101916,
+              -0.0517323918189667,
+              0.9936436632039473
+            ],
+            "max": [
+              -1.9189835657659506,
+              0.10642036299327426,
+              0.9939167546764107
+            ]
+          }
+        },
+        {
+          "seconds": 11.14,
+          "sampleIndex": 38,
+          "boundsNdc": {
+            "min": [
+              -2.127593111197734,
+              -0.05560071205644452,
+              0.9936456013091491
+            ],
+            "max": [
+              -1.8633112880024314,
+              0.10255224975359017,
+              0.9939185302629208
+            ]
+          }
+        },
+        {
+          "seconds": 11.401,
+          "sampleIndex": 39,
+          "boundsNdc": {
+            "min": [
+              -2.0542753932110993,
+              -0.06049204841084238,
+              0.9936480519318535
+            ],
+            "max": [
+              -1.7929148132043717,
+              0.09766113522251903,
+              0.9939207754563281
+            ]
+          }
+        },
+        {
+          "seconds": 11.66,
+          "sampleIndex": 40,
+          "boundsNdc": {
+            "min": [
+              -1.9731288943608631,
+              -0.06590574435741312,
+              0.9936507642193583
+            ],
+            "max": [
+              -1.7149990625491258,
+              0.0922476328135386,
+              0.9939232604661273
+            ]
+          }
+        },
+        {
+          "seconds": 11.921,
+          "sampleIndex": 41,
+          "boundsNdc": {
+            "min": [
+              -1.8751817835138522,
+              -0.07244039032740127,
+              0.9936540380464512
+            ],
+            "max": [
+              -1.620948205927784,
+              0.08571314771242824,
+              0.9939262600817168
+            ]
+          }
+        },
+        {
+          "seconds": 12.18,
+          "sampleIndex": 42,
+          "boundsNdc": {
+            "min": [
+              -1.7743734285652522,
+              -0.07916603654681073,
+              0.9936574074932761
+            ],
+            "max": [
+              -1.5241460511520777,
+              0.07898758397334496,
+              0.9939293474459682
+            ]
+          }
+        },
+        {
+          "seconds": 12.44,
+          "sampleIndex": 43,
+          "boundsNdc": {
+            "min": [
+              -1.658684698398703,
+              -0.08688459563441518,
+              0.9936612742862704
+            ],
+            "max": [
+              -1.4130500380681568,
+              0.07126901566963524,
+              0.9939328906920876
+            ]
+          }
+        },
+        {
+          "seconds": 12.703,
+          "sampleIndex": 44,
+          "boundsNdc": {
+            "min": [
+              -1.536451727077112,
+              -0.09503993422485038,
+              0.9936653597918593
+            ],
+            "max": [
+              -1.295663962358223,
+              0.0631135467247703,
+              0.993936634550627
+            ]
+          }
+        },
+        {
+          "seconds": 12.962,
+          "sampleIndex": 45,
+          "boundsNdc": {
+            "min": [
+              -1.416964855217209,
+              -0.10301221164196137,
+              0.9936693534893343
+            ],
+            "max": [
+              -1.1809095126333997,
+              0.05514102208267676,
+              0.9939402944772742
+            ]
+          }
+        },
+        {
+          "seconds": 13.221,
+          "sampleIndex": 46,
+          "boundsNdc": {
+            "min": [
+              -1.2866256422461664,
+              -0.11170874519715253,
+              0.9936737098869928
+            ],
+            "max": [
+              -1.0557262475882698,
+              0.04644408377481657,
+              0.9939442870158521
+            ]
+          }
+        }
+      ],
+      "maximumSimultaneousVisibleBrackets": 0
+    },
+    {
+      "name": "portrait-natural-boundary",
+      "trace": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-natural-boundary.json",
+      "sha256": "ab01603de4367331ac8b74c84ed639c7dc67f389e9cb4b156fc84aff375cf62b",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "previewBuildProof": {
+        "checkedAt": "2026-09-05T18:34:55.123Z",
+        "indexSha256": "7a56e24fac81b8518089218635e6ebef2c9b50ad976986ded4a780ce7b37991c",
+        "assetsChecked": 7,
+        "matchesArchive": true
+      },
+      "completed": false,
+      "errors": [],
+      "sampleCount": 325,
+      "frameCount": 13,
+      "renderers": [
+        "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)"
+      ],
+      "observability": {
+        "reactRoots": 2,
+        "sceneFound": true,
+        "physicsFound": true,
+        "readOnly": true
+      },
+      "visibleSoleClearanceMin": 0.8396184792372064,
+      "visibleSoleClearanceMax": 0.9798675852490574,
+      "fullyOffscreenSamples": [
+        {
+          "seconds": 14.985,
+          "sampleIndex": 106,
+          "boundsNdc": {
+            "min": [
+              1.019465406309653,
+              -0.04346898173741123,
+              0.993639522992261
+            ],
+            "max": [
+              1.2502950208009238,
+              0.11468323749711196,
+              0.9939129617947998
+            ]
+          }
+        },
+        {
+          "seconds": 15.301,
+          "sampleIndex": 107,
+          "boundsNdc": {
+            "min": [
+              1.1808942903906594,
+              -0.04198484959837494,
+              0.9936387793869361
+            ],
+            "max": [
+              1.4181299363286228,
+              0.11616725996765097,
+              0.993912280594281
+            ]
+          }
+        },
+        {
+          "seconds": 15.409,
+          "sampleIndex": 108,
+          "boundsNdc": {
+            "min": [
+              1.2268922180650432,
+              -0.04262314727520575,
+              0.9936390991982064
+            ],
+            "max": [
+              1.465933567220451,
+              0.11552900996016827,
+              0.9939125735655324
+            ]
+          }
+        },
+        {
+          "seconds": 15.517,
+          "sampleIndex": 109,
+          "boundsNdc": {
+            "min": [
+              1.2735847416259576,
+              -0.03598980757230392,
+              0.9936357756127648
+            ],
+            "max": [
+              1.5145966016208439,
+              0.12216181722525095,
+              0.993909528972015
+            ]
+          }
+        },
+        {
+          "seconds": 15.635,
+          "sampleIndex": 110,
+          "boundsNdc": {
+            "min": [
+              1.334552121382857,
+              -0.040649932479263025,
+              0.993638110540903
+            ],
+            "max": [
+              1.5778853131949653,
+              0.11750207493858404,
+              0.9939116678849279
+            ]
+          }
+        },
+        {
+          "seconds": 15.752,
+          "sampleIndex": 111,
+          "boundsNdc": {
+            "min": [
+              1.3804139124226982,
+              -0.04256736705662612,
+              0.9936390712502335
+            ],
+            "max": [
+              1.6255226946973347,
+              0.11558478604323971,
+              0.9939125479630305
+            ]
+          }
+        },
+        {
+          "seconds": 15.861,
+          "sampleIndex": 112,
+          "boundsNdc": {
+            "min": [
+              1.4271468255348092,
+              -0.036276399096714804,
+              0.9936359192087514
+            ],
+            "max": [
+              1.6742242441366975,
+              0.12187525039914639,
+              0.9939096605113029
+            ]
+          }
+        },
+        {
+          "seconds": 15.97,
+          "sampleIndex": 113,
+          "boundsNdc": {
+            "min": [
+              1.4883831401671663,
+              -0.03942341283914222,
+              0.9936374960037908
+            ],
+            "max": [
+              1.7378198734896162,
+              0.1187284977983884,
+              0.9939111049311701
+            ]
+          }
+        },
+        {
+          "seconds": 16.086,
+          "sampleIndex": 114,
+          "boundsNdc": {
+            "min": [
+              1.533918185670565,
+              -0.04400527356322913,
+              0.9936397916935278
+            ],
+            "max": [
+              1.7850643062100742,
+              0.11414698429063387,
+              0.9939132079478089
+            ]
+          }
+        },
+        {
+          "seconds": 16.202,
+          "sampleIndex": 115,
+          "boundsNdc": {
+            "min": [
+              1.5962550362636891,
+              -0.0362323674770288,
+              0.9936358971468238
+            ],
+            "max": [
+              1.8500189176899609,
+              0.12191927823416016,
+              0.9939096403017365
+            ]
+          }
+        },
+        {
+          "seconds": 16.318,
+          "sampleIndex": 116,
+          "boundsNdc": {
+            "min": [
+              1.6419198965249475,
+              -0.03955693450823898,
+              0.9936375629037896
+            ],
+            "max": [
+              1.8974224307128686,
+              0.11859498680096849,
+              0.9939111662154543
+            ]
+          }
+        },
+        {
+          "seconds": 16.452,
+          "sampleIndex": 117,
+          "boundsNdc": {
+            "min": [
+              1.6951033681054726,
+              -0.04392723741908313,
+              0.9936397525946741
+            ],
+            "max": [
+              1.952619555293321,
+              0.11422501484857056,
+              0.993913172129908
+            ]
+          }
+        },
+        {
+          "seconds": 16.586,
+          "sampleIndex": 118,
+          "boundsNdc": {
+            "min": [
+              1.7575594532533685,
+              -0.035971729374870545,
+              0.9936357665547236
+            ],
+            "max": [
+              2.0177057460212824,
+              0.12217989385958322,
+              0.9939095206745195
+            ]
+          }
+        },
+        {
+          "seconds": 16.72,
+          "sampleIndex": 119,
+          "boundsNdc": {
+            "min": [
+              1.8183001552390112,
+              -0.04243024788226527,
+              0.9936390025483849
+            ],
+            "max": [
+              2.0807147703455033,
+              0.11572189502703584,
+              0.9939124850268715
+            ]
+          }
+        },
+        {
+          "seconds": 16.854,
+          "sampleIndex": 120,
+          "boundsNdc": {
+            "min": [
+              1.8801367928249493,
+              -0.03940699594600138,
+              0.9936374877782316
+            ],
+            "max": [
+              2.1450577744366495,
+              0.11874491337712113,
+              0.9939110973960839
+            ]
+          }
+        },
+        {
+          "seconds": 16.986,
+          "sampleIndex": 121,
+          "boundsNdc": {
+            "min": [
+              1.941942751141496,
+              -0.03678424128998722,
+              0.9936361736615282
+            ],
+            "max": [
+              2.2093616409871886,
+              0.12136745159560425,
+              0.9939098936001759
+            ]
+          }
+        },
+        {
+          "seconds": 17.122,
+          "sampleIndex": 122,
+          "boundsNdc": {
+            "min": [
+              -2.223328543859064,
+              -0.04696014355569035,
+              0.993641272180267
+            ],
+            "max": [
+              -1.9551836901204607,
+              0.11119231747332642,
+              0.9939145642144017
+            ]
+          }
+        },
+        {
+          "seconds": 17.256,
+          "sampleIndex": 123,
+          "boundsNdc": {
+            "min": [
+              -2.1535694445347673,
+              -0.03660749926449656,
+              0.9936360851055235
+            ],
+            "max": [
+              -1.8879074925367412,
+              0.12154417857487818,
+              0.9939098124792598
+            ]
+          }
+        },
+        {
+          "seconds": 17.389,
+          "sampleIndex": 124,
+          "boundsNdc": {
+            "min": [
+              -2.0894309906866257,
+              -0.03984933109105483,
+              0.9936377094067357
+            ],
+            "max": [
+              -1.8263079950377932,
+              0.11830261347183849,
+              0.9939113004208541
+            ]
+          }
+        },
+        {
+          "seconds": 17.521,
+          "sampleIndex": 125,
+          "boundsNdc": {
+            "min": [
+              -2.0252810864146795,
+              -0.041922389205393686,
+              0.9936387480918829
+            ],
+            "max": [
+              -1.7646733813494648,
+              0.11622971565518937,
+              0.9939122519257191
+            ]
+          }
+        },
+        {
+          "seconds": 17.656,
+          "sampleIndex": 126,
+          "boundsNdc": {
+            "min": [
+              -1.9626071867050408,
+              -0.03600082200516334,
+              0.9936357811315221
+            ],
+            "max": [
+              -1.7043018798725307,
+              0.12215080374443661,
+              0.993909534027398
+            ]
+          }
+        },
+        {
+          "seconds": 17.789,
+          "sampleIndex": 127,
+          "boundsNdc": {
+            "min": [
+              -1.897754009686541,
+              -0.04436326854923642,
+              0.9936399710614874
+            ],
+            "max": [
+              -1.6421119936462223,
+              0.11378901478623717,
+              0.9939133722644737
+            ]
+          }
+        },
+        {
+          "seconds": 17.923,
+          "sampleIndex": 128,
+          "boundsNdc": {
+            "min": [
+              -1.8350846223118418,
+              -0.03808434582203541,
+              0.9936368250730675
+            ],
+            "max": [
+              -1.5817397706145333,
+              0.12006745595399622,
+              0.9939104903227116
+            ]
+          }
+        },
+        {
+          "seconds": 18.057,
+          "sampleIndex": 129,
+          "boundsNdc": {
+            "min": [
+              -1.7715242037402328,
+              -0.037788040839503115,
+              0.9936366766110213
+            ],
+            "max": [
+              -1.5206260184699067,
+              0.12036373639654387,
+              0.993910354324279
+            ]
+          }
+        },
+        {
+          "seconds": 18.189,
+          "sampleIndex": 130,
+          "boundsNdc": {
+            "min": [
+              -1.7067356188714617,
+              -0.04481864229419822,
+              0.9936401992193047
+            ],
+            "max": [
+              -1.4584683972362287,
+              0.11333367310912511,
+              0.9939135812774679
+            ]
+          }
+        },
+        {
+          "seconds": 18.323,
+          "sampleIndex": 131,
+          "boundsNdc": {
+            "min": [
+              -1.6442815609577273,
+              -0.03607001135512944,
+              0.9936358157986882
+            ],
+            "max": [
+              -1.3982609273725068,
+              0.12208162036976525,
+              0.9939095657837964
+            ]
+          }
+        },
+        {
+          "seconds": 18.458,
+          "sampleIndex": 132,
+          "boundsNdc": {
+            "min": [
+              -1.5800055210806432,
+              -0.04144841040952376,
+              0.9936385106101213
+            ],
+            "max": [
+              -1.336563570140504,
+              0.11670365850708038,
+              0.9939120343754156
+            ]
+          }
+        },
+        {
+          "seconds": 18.588,
+          "sampleIndex": 133,
+          "boundsNdc": {
+            "min": [
+              -1.5165622250773565,
+              -0.040255779256600475,
+              0.9936379130540816
+            ],
+            "max": [
+              -1.2755457808452124,
+              0.1178961973656493,
+              0.9939114869743566
+            ]
+          }
+        },
+        {
+          "seconds": 18.723,
+          "sampleIndex": 134,
+          "boundsNdc": {
+            "min": [
+              -1.4534035864378676,
+              -0.0364533544540784,
+              0.9936360078717379
+            ],
+            "max": [
+              -1.2147552964009616,
+              0.12169831021528818,
+              0.9939097417300375
+            ]
+          }
+        },
+        {
+          "seconds": 18.857,
+          "sampleIndex": 135,
+          "boundsNdc": {
+            "min": [
+              -1.388711323176226,
+              -0.046418915675557115,
+              0.993641001008388
+            ],
+            "max": [
+              -1.1527361387121235,
+              0.11173350935592874,
+              0.9939143157931621
+            ]
+          }
+        },
+        {
+          "seconds": 18.99,
+          "sampleIndex": 136,
+          "boundsNdc": {
+            "min": [
+              -1.3261223624403058,
+              -0.03702918769583355,
+              0.9936362963910295
+            ],
+            "max": [
+              -1.09239548681731,
+              0.12112252594605409,
+              0.9939100060255699
+            ]
+          }
+        }
+      ],
+      "maximumSimultaneousVisibleBrackets": 4
+    }
+  ],
+  "feedbackEvidence": "Actual rolling three-second SFX diagnostics retained with samples; this is not an exact per-objective event recorder.",
+  "remainingVariantEvidence": [
+    "orientation resize",
+    "reduced motion",
+    "pause/focus",
+    "replay",
+    "Continue",
+    "full one-shot semantic cue identity/count proof",
+    "independent player and creative review"
+  ],
+  "excludedProbeAttempts": [
+    {
+      "path": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/desktop-boundary.json",
+      "errors": [
+        "locator.click: Error: strict mode violation: locator('canvas') resolved to 3 elements:\n    1) <canvas width=\"1280\" height=\"720\" data-engine=\"three.js r160\"></canvas> aka locator('canvas').first()\n    2) <canvas width=\"1280\" height=\"720\" aria-hidden=\"true\"></canvas> aka locator('canvas').nth(1)\n    3) <canvas width=\"1280\" height=\"720\"></canvas> aka locator('canvas').nth(2)\n\nCall log:\n\u001b[2m  - waiting for locator('canvas')\u001b[22m\n\n    at /home/thomasphillip/Projects/recovery/2026-09-05-claude/evidence/runtime-candidate2-build/verifier-tools/early-grid-baseline-probe.mjs:59:42"
+      ],
+      "reason": "Probe selector failure, retained as a failed attempt; corrected control capture recorded separately."
+    },
+    {
+      "path": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-current-candidate2/portrait-boundary.json",
+      "errors": [
+        "Error: Actual touch joystick unavailable; no synthetic mobile bypass\n    at file:///home/thomasphillip/Projects/recovery/2026-09-05-claude/evidence/runtime-candidate2-build/verifier-tools/early-grid-baseline-probe.mjs:54:47"
+      ],
+      "reason": "Probe selector failure, retained as a failed attempt; corrected control capture recorded separately."
+    }
+  ],
+  "runtimeMutationsByProbe": [],
+  "tasteVerdict": null,
+  "entryParityEvidence": {
+    "path": "/home/thomasphillip/Projects/recovery/2026-09-05-claude/early-entry-parity/report.json",
+    "sha256": "6152984a729c1443707b2d1e249771030198fb6570166794b1bc264b00c251b7",
+    "scope": "Natural predecessor and actual earned Continue, without React/R3F observation hooks"
+  }
+}

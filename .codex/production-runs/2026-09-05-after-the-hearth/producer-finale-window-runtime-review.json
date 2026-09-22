@@ -1,0 +1,15 @@
+{
+  "schema": "paravoxia.producer.evidenceReview.v1",
+  "at": "2026-09-06T20:07:05.812744+00:00",
+  "reportRef": "finale-window-runtime-report.json",
+  "reportSha256": "3ba92aa4b6c721e84b62a6a99ab96c42c3bbb97ad275ef1d78c6baec3d1fafae",
+  "isAcceptance": false,
+  "observed": "Two wrapper attempts exited before browser launch/audio. Temporary modules removed and default sink unchanged. Window2 exposes private lock checker reading /proc/self inside spawned readlink instead of owningNode. ActualFD transport and exclusive kernel lock pass CPU reproduction.",
+  "qualifications": [
+    "Window1 stderr was discarded; root does not invent missingbytes or assert exactfailuremessage forit.",
+    "No browserstate/window/audio exists. No finale/lifecycleverdict follows.",
+    "Report correctlykeepsmissingcleanupreceipt unproven; source/explicitpreflight failure shows window2 neverreachedbrowserlaunch.",
+    "Preserve real lock checks does not forbid fixing whichprocess is inspected. This is routine private measurement correction, not a game repair or newownerpermission."
+  ],
+  "nextDirection": "producer-finale-fd-check-repair-direction.json"
+}

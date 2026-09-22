@@ -1,0 +1,158 @@
+{
+  "schema": "paravoxia.verifier.commonEntryCrossing.report.v1",
+  "role": "common-entry-crossing",
+  "at": "2026-09-06T20:30:29.861088+00:00",
+  "isAcceptance": false,
+  "sourceMutationAuthorized": false,
+  "sourceMutated": false,
+  "verdict": "CORRECTED-ENTRY-AND-EARNED-PREFIX-OBSERVED; CREDIT PLATEAUS AT 6.000000 \u2014 DEPENDENT PASSAGE CLAIMS HALTED",
+  "budget": {
+    "startedAt": "2026-09-06T20:20:45.604757+00:00",
+    "deadlineUtc": "2026-09-06T20:40:45.604757+00:00",
+    "gpuGrantedAt": "2026-09-06T20:28:13Z",
+    "probeStart": "2026-09-06T20:28:17Z",
+    "probeEnd": "2026-09-06T20:29:25Z",
+    "probeExit": 0,
+    "withinCap": true
+  },
+  "discriminatorAnswered": {
+    "question": "Does an ACTUAL incoming-E entry with an EARNED prefix precede the ordinary positive-corner overshoot?",
+    "answer": "YES for entry and prefix. The corrected run stands 0.4547 BEFORE the E plane on route, crosses forward under armed callee observation, and credit ACTUALLY INCREASES from 0.080645 through 6.000000 tracking real foot displacement. Run2's creditAllZero is NOT reproduced.",
+    "residual": "Credit then FREEZES at exactly 6.000000 for the final 48 callee records while displacement continues (disp ~0.0803/record, foot advancing to z16.1309 x-44.1727). The plateau is REPRODUCED with a genuinely walked prefix, so it is no longer explainable as refusal of a skipped prefix."
+  },
+  "correctedEntry": {
+    "preEStand": {
+      "foot": [
+        -42.050784227900664,
+        50.988997028500535,
+        11.545339560689346
+      ],
+      "supported": true,
+      "lateralToRouteX": 0.050784227900663836,
+      "boundLateral": 0.18,
+      "footZ": 11.545339560689346,
+      "signedDistanceBeforeEPlane": 0.45466043931065414,
+      "frame": "published bodyPose (foot)"
+    },
+    "priorRun2Defect": {
+      "footAtE": [
+        -41.39181373859077,
+        50.988984337742814,
+        12.3487786909752
+      ],
+      "beyondEPlane": 0.3487786909752,
+      "lateralOffRoute": 0.6082,
+      "nowCorrectedTo": {
+        "beyondEPlane": -0.45466043931065414,
+        "lateralOffRoute": 0.050784227900663836
+      }
+    },
+    "crossing": {
+      "footBeforeZ": 11.545339560689426,
+      "footAfterZ": 12.1401948621431,
+      "plane": 12,
+      "actuallyCrossedPlane": true,
+      "supported": true,
+      "overshootExceeded": null,
+      "armedBeforeCrossing": true,
+      "calleeRecordsBefore": 3,
+      "calleeRecordsAfter": 37,
+      "observedByCallee": true,
+      "pulseFloorMs": 30,
+      "ordinaryWASDOnly": true
+    }
+  },
+  "vertices": [
+    {
+      "vertex": 1,
+      "alongLegS": 0.3094462549974857,
+      "fullHorizontalToVertex": 0.31341034510899457,
+      "lateralOffRoute": 0.049689633620808075,
+      "supported": true,
+      "bound": 0.35,
+      "bothBoundsHeld": true
+    },
+    {
+      "vertex": 2,
+      "alongLegS": 0.13088589996436184,
+      "fullHorizontalToVertex": 0.13977563138500607,
+      "lateralOffRoute": 0.04905209801421504,
+      "supported": true,
+      "bound": 0.35,
+      "bothBoundsHeld": true
+    },
+    {
+      "vertex": 3,
+      "alongLegS": 0.2742841639077156,
+      "fullHorizontalToVertex": 0.3039126870958473,
+      "lateralOffRoute": 0.13088589995589212,
+      "supported": true,
+      "bound": 0.35,
+      "bothBoundsHeld": true
+    },
+    {
+      "vertex": 4,
+      "alongLegS": 0.11630587871236386,
+      "fullHorizontalToVertex": 0.29647765039954893,
+      "lateralOffRoute": 0.27271219217956144,
+      "supported": true,
+      "bound": 0.35,
+      "bothBoundsHeld": true
+    }
+  ],
+  "creditAccounting": {
+    "records": 179,
+    "nonzeroDisplacementRecords": 146,
+    "initialCredit": 0.0806445765011361,
+    "finalCredit": 6,
+    "monotonicNondecreasing": true,
+    "creditAllZero": false,
+    "plateauValue": 6.0,
+    "plateauRecordCount": 48,
+    "plateauDisplacementContinues": true,
+    "pureFunctionReplay": {
+      "replayedFrom": "frozen pre-teardown copy",
+      "liveGrewDuringReplay": 0,
+      "breakpointsDisabledBeforeReplay": true,
+      "nonzeroGainOnReplayRows": 80,
+      "note": "retained pure function replay is SEPARATE from the actual returned value of the next call, which remains unobserved"
+    },
+    "bodiesClear": "ABSENT from the credit chain; body distance measured independently",
+    "noZeroGainCeilingCausality": "no causality asserted without actual candidate projection and exact args"
+  },
+  "cdpSites": {
+    "callee": {
+      "line": 7839,
+      "column": 193729
+    },
+    "caller": {
+      "line": 7839,
+      "column": 219885
+    },
+    "exactResolution": true,
+    "pausesObserved": 0,
+    "rawDrainedInFinally": true
+  },
+  "haltedClaims": [
+    "full 18-unit COMMON passage",
+    "COMMON success",
+    "chapter acceptance",
+    "full UX claim",
+    "any accounting verdict beyond the observed plateau"
+  ],
+  "artifacts": {
+    "captures": "verifier/captures/common-entry-crossing/run1/",
+    "probeDir": "verifier/probes/common-entry-crossing/",
+    "logs": "logs/common-entry-crossing/",
+    "ready": "common-entry-crossing-ready.json",
+    "summarySha256": "1961bcd89c9dee0ef06d32c676ef66c3962ec3ef402922eb021a6f0388411762"
+  },
+  "preservation": {
+    "originalProbeDirUntouched": true,
+    "originalProbeSha256": "99b165961c1b7291b4c512c82fae2c94a01573a1be41bcb7bcd0e7ba72c579de",
+    "producerFilesWritten": false,
+    "contractWritten": false,
+    "sourceWritten": false,
+    "newPreviewStarted": false
+  }
+}

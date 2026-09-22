@@ -1,0 +1,29 @@
+{
+  "role": "integration-continue-spawn",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T23:15:21.214366+00:00",
+  "wallBudgetSeconds": 1200,
+  "commissionSha256": "9fe731abdba0f9057fb2703f45ddc278516ac8e44e874217365b9a280e34c978",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceManifestSha256Before": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "sourceFilesRehashedBefore": 101,
+  "additionalAllowedBeforeAbsent": [
+    "main/src/components/EfficientScene.test.tsx",
+    "main/src/utils/playerSpawnSelection.ts",
+    "main/src/utils/playerSpawnSelection.test.ts"
+  ],
+  "scope": "One ninth material repair CG-IMPL-011: preserve validated matching on-foot Continue pose without changing actual later ship egress; unchanged signed contract and physical predicates.",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T23:23:22.004432+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "67763bba-9350-484f-a440-51e9af0f5085",
+  "isError": false,
+  "changedKnownSourcePaths": [
+    "main/src/components/EfficientScene.tsx"
+  ],
+  "addedAllowedPaths": [
+    "main/src/utils/playerSpawnSelection.ts",
+    "main/src/utils/playerSpawnSelection.test.ts"
+  ],
+  "sourceDriftOutsideAllowed": []
+}

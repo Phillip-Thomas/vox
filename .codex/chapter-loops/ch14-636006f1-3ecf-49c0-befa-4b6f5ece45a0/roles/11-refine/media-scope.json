@@ -1,0 +1,21 @@
+{
+  "schema": "paravoxia.mediaPerceptionScope.v1",
+  "repo": "/home/thomasphillip/Projects/vox",
+  "run": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "stage": "refine",
+  "directory": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/11-refine",
+  "model": "gemini-3.8-flash",
+  "media": [
+    {
+      "kind": "video",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/video.webm",
+      "sha256": "2412e48721055ee3be261cf9655cb9901f880ee3955f6ec33717ab9924f3913e"
+    },
+    {
+      "kind": "audio",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/audio.wav",
+      "sha256": "13496f96f86a70da1525f076babb785ab0d837e957f45a309b2ff8b9296047ae"
+    }
+  ],
+  "observations": null
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "paravoxia.repairContractDisposition.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "baseContractVersion": "scene-v1",
+  "activeContractVersion": "scene-v2",
+  "activeContractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "defectRegisterSha256": "dd9ff321321e326f5692302cbb155d60a700fab723ec3c81734e4dc4eaae0764",
+  "contractChangeRequired": true,
+  "route": "revised-and-resigned",
+  "directionRefs": [
+    "chapter-repair-direction.json",
+    "cinematography-repair-direction.json"
+  ],
+  "triadResignRequired": true,
+  "triadResignComplete": true,
+  "decidedBy": "creative-producer under explicit standing user delegation",
+  "decidedAt": "2026-09-06T09:17:54.199689+00:00",
+  "implementationDirection": {
+    "defectIds": [
+      "CG-IMPL-004",
+      "CG-IMPL-005"
+    ],
+    "contractChangeRequired": false,
+    "owner": "integration-engineer",
+    "boundedAction": "Repair movie interaction cadence and ordered physical route-following without altering plot, geometry, proof conditions, score or creative contract. Preserve actual full traversal and ordinary controls.",
+    "evidenceRefs": [
+      "producer-movie-interaction-finding.json",
+      "producer-movie-waypoint-finding.json"
+    ]
+  }
+}

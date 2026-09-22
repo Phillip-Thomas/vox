@@ -1,0 +1,39 @@
+{
+  "schema": "paravoxia.producer.evidenceReview.v1",
+  "at": "2026-09-06T19:47:27.241387+00:00",
+  "reportRef": "finale-window-pid-closure-report.json",
+  "reportSha256": "738f3183df68cbe2e3b8213c8bdd795be2117121997e5d1a3758d967f4127ebf",
+  "invocation": {
+    "role": "finale-window-pid-closureor",
+    "requestedModel": "opus",
+    "startedAt": "2026-09-06T19:39:44.652895+00:00",
+    "commissionSha256": "7ed1b27da63d7e6475522fe2b58f60bb8559f5a2c807869221a14c1971ed0cb7",
+    "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sourceFrozen": true,
+    "sourceReference": "iterations/implemented-arrival-common-repair/source",
+    "scope": "CPU-only preparation of atomic finale window and isolated actual audio capture; no GPU/game edits",
+    "exitCode": 0,
+    "finishedAt": "2026-09-06T19:46:50.631560+00:00",
+    "model": "claude-opus-5",
+    "sessionId": "326001c3-e979-4faf-ad35-777a6928c7e7",
+    "isError": false,
+    "gameSourceMutationAuthorized": false
+  },
+  "hashedArtifacts": [
+    "verifier/probes/finale-window/windowSampler.mjs",
+    "verifier/probes/finale-window/finale-window-probe.mjs",
+    "verifier/probes/finale-window/closure-checks.mjs",
+    "logs/finale-window-pid-closure/closure-checks-1.log",
+    "logs/finale-window-pid-closure/game-source-rehash.log",
+    "verifier/probes/finale-window/finale-window-runtime.mjs",
+    "verifier/probes/finale-window/audio-isolation-plan.json"
+  ],
+  "isAcceptance": false,
+  "acceptedChanges": [
+    "Actual supported Browser CDP PID API and immediate guard adoption",
+    "Actual Terra18 and Worker18 committed exact AV history edge"
+  ],
+  "runtimeReady": false,
+  "qualification": "Its claim combined wrapper lock/output lifecycle verified is unsupported by actual spawn. ParentFD9 is dropped, sink numeric index unbound, error/timeout child cleanup absent and overall deadline mis-scoped. Fresh exact transport closure direction recorded; no real GPU/audio run has occurred.",
+  "nextRef": "producer-finale-wrapper-transport-direction.json"
+}

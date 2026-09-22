@@ -1,3 +1,8 @@
+import { presentRegulationObjective } from './regulationVoice.ts';
+import { getSurveyTargetPresentation } from './surveyBrackets.ts';
+import type { VoiceUtteranceOwnership } from '../../audio/voice/voiceBus.ts';
+import { voiceVisibleText, consumeVoiceLineSilently, retireVisibleVoiceLine } from '../../audio/voice/voicePresentation.ts';
+import { getRegulationEchoLines } from '../storyDirector.ts';
 import React, { useLayoutEffect, useRef, useSyncExternalStore } from 'react';
 import { theme } from '../../ui/theme.ts';
 import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
@@ -10,7 +15,7 @@ import {
 import { getMawChargeFraction, subscribeMaw } from '../../game/systems/mawSystem.ts';
 import { subscribeProgression } from '../../game/systems/progressionSystem.ts';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
-import { collectedDebrisCount, getDebrisScattered } from '../debrisSalvage.ts';
+import { isDebrisCollected } from '../debrisSalvage.ts';
 import { collectedPodCount, SUPPLY_POD_COUNT } from '../supplyPods.ts';
 import { NAV_WAYPOINT_COUNT, reachedNavWaypointCount } from '../navWaypoints.ts';
 import { cameraChromeVisualState, getFeedRuntime } from '../feedRuntime.ts';
@@ -18,15 +23,19 @@ import { getMiningProgress } from '../../game/systems/miningProgress.ts';
 import { getStoryText, getStoryTextVersion, subscribeStoryText } from '../storyText.ts';
 import { useStoryState } from '../storyState.ts';
 import { CH1_FIXED_TUTORIAL, CH1_QUOTA } from '../storyScript.ts';
-import { fixedTutorialProgress } from '../storyDirector.ts';
+import { storyNow, isStoryPaused } from '../storyClock.ts';
 import {
   getActiveGuidedStoryObjective,
+  getGuidedObjectivePresentationState,
+  getEarlyObjectiveReceipt,
   getGuidedStoryObjectiveHealth,
   getGuidedStoryObjectiveVersion,
   subscribeGuidedStoryObjective
 } from '../ux/objectiveDirector.ts';
 import {
   readStoryHudSafeAreaInsets,
+  readEarlyFeedReservations,
+  solveEarlyFeedLayout,
   solveStoryEdgeLabelPresentation,
   solveStoryFeedLedgerPlacement,
   solveStoryHudLayout
@@ -101,8 +110,14 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
     getGuidedStoryObjectiveVersion,
     getGuidedStoryObjectiveVersion
   );
+  const early = /^ch1-(fixed|track|raster)$/.test(story.beat ?? '');
+  const earlyRef = useRef(early); earlyRef.current = early;
   const text = getStoryText();
   const objective = getActiveGuidedStoryObjective();
+  const workOrder = objective ? presentRegulationObjective(objective, getRegulationEchoLines()) : early ? [] : text.workorder;
+  const ownedVoice = useRef<{ owner: VoiceUtteranceOwnership; decided: boolean; firstEligible: boolean; firstFrame: number; firstNativeActionable: boolean } | null>(null);
+  const voicedOrder = useRef({ id: objective?.id ?? '', lines: workOrder });
+  voicedOrder.current = { id: objective?.id ?? '', lines: workOrder };
   const objectiveHealth = getGuidedStoryObjectiveHealth();
   const inventoryTick = useSyncExternalStore(subscribeInventory, inventoryVersion, inventoryVersion);
   void inventoryTick;
@@ -110,6 +125,9 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
   const mawFraction = useSyncExternalStore(subscribeMaw, getMawChargeFraction, getMawChargeFraction);
   useSyncExternalStore(subscribeProgression, progressionVersion, progressionVersion);
 
+  const orderRef = useRef<HTMLElement>(null);
+  const earlyLedgerRef = useRef<HTMLDivElement>(null);
+  const earlyCountsRef = useRef('');
   const counterRef = useRef<HTMLDivElement>(null);
   const camRef = useRef<HTMLDivElement>(null);
   const cameraFrameRef = useRef<HTMLDivElement>(null);
@@ -148,6 +166,10 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
     const tick = () => {
       raf = requestAnimationFrame(tick);
       const r = getFeedRuntime();
+      const surveyOrder = ['ch1:fixed:recover-first-debris', 'ch1:fixed:calibrate-extractor', 'ch1:raster:recover-quota', 'ch1:raster:extract-fiber-quota'].includes(voicedOrder.current.id);
+      if (!surveyOrder && !embodiedGuidanceActive && r.treatment > 0.05 && voicedOrder.current.id !== 'ch1:track:tracking-transfer') {
+        voicedOrder.current.lines.forEach((line, index) => voiceVisibleText(`order:${voicedOrder.current.id}:${index}`, line, line.length, 'feed'));
+      }
       const cameraChrome = cameraChromeVisualState(r);
       const cameraDisplay = cameraChrome.visible ? 'block' : 'none';
       for (const node of [cameraFrameRef.current, cameraStatusRef.current, cameraReticleRef.current]) {
@@ -165,6 +187,78 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
       if (counter) {
         const stamp = `FRM ${String(r.frame).padStart(7, '0')}`;
         counter.textContent = garbleText(stamp, r.garble);
+      }
+      if (earlyRef.current) {
+        const state = getGuidedObjectivePresentationState();
+        const snapshot = getSurveyTargetPresentation();
+        const matched = snapshot && snapshot.objective === state.objective && snapshot.runVersion === state.runVersion
+          && snapshot.restoreVersion === state.restoreVersion && snapshot.viewportWidth === window.innerWidth
+          && snapshot.viewportHeight === window.innerHeight ? snapshot : null;
+        const orderNode = orderRef.current;
+        const canonical = state.objective?.workOrder[0] ?? '';
+        const shown = state.objective ? presentRegulationObjective(state.objective, [], matched)[0] ?? '' : '';
+        const line = orderNode?.querySelector<HTMLElement>('[data-feed-order-line]');
+        if (surveyOrder && line) {
+          const displayed = presentInputGlyphs(shown, isTouchDevice(), 'feed');
+          if (line.textContent !== displayed) line.textContent = displayed;
+          orderNode!.dataset.orderPresentation = shown === canonical ? 'canonical' : 'bearing';
+          orderNode!.dataset.targetKey = matched?.targetKey ?? '';
+          orderNode!.dataset.targetFit = matched?.fit ?? 'unresolved';
+          orderNode!.dataset.targetFrame = String(matched?.frame ?? -1);
+        }
+        const reservations = readEarlyFeedReservations().filter(rect => rect.id !== 'feed-work-order' && rect.id !== 'feed-ledger');
+        const layout = solveEarlyFeedLayout({ width: window.innerWidth, height: window.innerHeight,
+          safe: readStoryHudSafeAreaInsets(), reservations });
+        if (orderRef.current) Object.assign(orderRef.current.style, { left: `${layout.order.left}px`, top: `${layout.order.top}px`, width: `${layout.order.width}px` });
+        if (earlyLedgerRef.current) {
+          Object.assign(earlyLedgerRef.current.style, { left: `${layout.ledger.left}px`, bottom: `${layout.ledger.bottom}px`, width: `${layout.ledger.width}px` });
+          const receipt = getEarlyObjectiveReceipt();
+          const ledgerText = receipt && storyNow() - receipt.shownAt < 900 ? receipt.text : earlyCountsRef.current;
+          if (earlyLedgerRef.current.textContent !== ledgerText) earlyLedgerRef.current.textContent = ledgerText;
+        }
+        if (surveyOrder && state.objective && orderNode && line) {
+          const rect = orderNode.getBoundingClientRect(), safe = readStoryHudSafeAreaInsets();
+          const occupied = readEarlyFeedReservations().filter(rect => rect.id !== 'feed-work-order');
+          const style = getComputedStyle(orderNode);
+          const wholeLineVisible = style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0
+            && line.scrollWidth <= line.clientWidth && orderNode.scrollHeight <= orderNode.clientHeight
+            && rect.width > 0 && rect.height > 0 && rect.left >= safe.left + 18 && rect.right <= window.innerWidth - safe.right - 18
+            && rect.top >= safe.top + 18 && rect.bottom <= window.innerHeight - safe.bottom - 18
+            && occupied.every(other => rect.right + 14 <= other.left || rect.left >= other.right + 14 || rect.bottom + 14 <= other.top || rect.top >= other.bottom + 14);
+          const finalSnapshot = getSurveyTargetPresentation(true);
+          const finalized = matched && finalSnapshot && finalSnapshot.objective === matched.objective
+            && finalSnapshot.runVersion === matched.runVersion && finalSnapshot.restoreVersion === matched.restoreVersion
+            && finalSnapshot.geometry === matched.geometry && finalSnapshot.targetKey === matched.targetKey
+            && finalSnapshot.frame <= matched.frame && finalSnapshot.frame >= matched.frame - 1 ? finalSnapshot : null;
+          const targetRect = finalized?.rect;
+          const finalTargetFit = finalized?.fit === 'visible' && !!targetRect
+            && (rect.right + 14 <= targetRect.left || rect.left >= targetRect.right + 14 || rect.bottom + 14 <= targetRect.top || rect.top >= targetRect.bottom + 14);
+          const lineEligible = shown === canonical && wholeLineVisible && !state.presentationSilent
+            && !embodiedGuidanceActive && r.treatment > 0.05 && !document.hidden && document.hasFocus() && !isStoryPaused();
+          const eligible = lineEligible && !!matched && (finalTargetFit || matched.nativeActionable);
+          orderNode.dataset.orderWholeLineVisible = String(wholeLineVisible);
+          orderNode.dataset.orderVoiceEligible = String(eligible);
+          let owned = ownedVoice.current;
+          if (!owned || owned.owner.publication !== state.objective || owned.owner.runVersion !== state.runVersion || owned.owner.restoreVersion !== state.restoreVersion) {
+            if (owned) retireVisibleVoiceLine(owned.owner);
+            const owner: VoiceUtteranceOwnership = { surfaceId: 'feed', lineId: `order:${state.objective.id}:0`, text: canonical,
+              publication: state.objective, runVersion: state.runVersion, restoreVersion: state.restoreVersion };
+            owned = { owner, decided: false, firstEligible: lineEligible,
+              firstFrame: matched?.frame ?? -1, firstNativeActionable: matched?.nativeActionable ?? false }; ownedVoice.current = owned;
+          } else if (!owned.decided) {
+            // The preceding layout reached a browser paint. Decide once from that first
+            // presentation, then ensure it still owns visible eligibility at dispatch.
+            owned.decided = true;
+            const firstTargetEligible = owned.firstNativeActionable || (finalized?.frame === owned.firstFrame && finalTargetFit);
+            if (owned.firstEligible && firstTargetEligible && eligible) voiceVisibleText(owned.owner.lineId, canonical, canonical.length, 'feed', { earlyWorkOrder: owned.owner });
+            else consumeVoiceLineSilently(owned.owner, 'first-presented-frame-ineligible');
+          }
+          if (!eligible) retireVisibleVoiceLine(owned.owner);
+        } else if (ownedVoice.current) {
+          retireVisibleVoiceLine(ownedVoice.current.owner); ownedVoice.current = null;
+        }
+      } else if (ownedVoice.current) {
+        retireVisibleVoiceLine(ownedVoice.current.owner); ownedVoice.current = null;
       }
       // SITE CAM tag (ch1-fixed only): the id follows the cell the worker
       // stands in — each screen flip reads as a coverage hand-off.
@@ -250,8 +344,12 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
     // Ownership may already be embodied on a direct beat link. Mutate the
     // chrome before first paint so REC/SITE framing cannot flash for one frame.
     tick();
-    return () => cancelAnimationFrame(raf);
-  }, [embodiedGuidanceActive]);
+    return () => {
+      cancelAnimationFrame(raf);
+      if (ownedVoice.current) retireVisibleVoiceLine(ownedVoice.current.owner);
+      ownedVoice.current = null;
+    };
+  }, [embodiedGuidanceActive, objective]);
 
   // The anomaly beat used to keep the already-complete quota ledger in the
   // bottom-left corner. Once the embodied objective card owns that space the
@@ -265,7 +363,9 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
   const isoVisible = story.beat === 'ch1-iso';
   const fiber = Math.min(getItemCount('biofiber'), CH1_QUOTA.biofiber);
   const stone = Math.min(getItemCount('stone'), CH1_QUOTA.stone);
-  const fixedProgress = fixedVisible ? fixedTutorialProgress() : null;
+  earlyCountsRef.current = fixedVisible
+    ? `DEBRIS ${isDebrisCollected(0) ? 1 : 0}/1 · FIBER ${Math.min(getItemCount('biofiber'), CH1_FIXED_TUTORIAL.biofiber)}/${CH1_FIXED_TUTORIAL.biofiber}`
+    : `DEBRIS ${Number(isDebrisCollected(0)) + Number(isDebrisCollected(1)) + Number(isDebrisCollected(2))}/3 · FIBER ${fiber}/${CH1_QUOTA.biofiber} · STONE ${stone}/${CH1_QUOTA.stone}`;
   // Feed-era prompts name the d-pad arrows / EXTRACT / JUMP controls on touch;
   // on desktop the authored keyboard tokens pass through unchanged. The survey
   // chart is not openable during the feed era (the [M] on the ch1-nav retained-
@@ -279,8 +379,9 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
 
   return (
     <>
-      {!embodiedGuidanceActive && text.workorder.length > 0 && (
+      {!embodiedGuidanceActive && workOrder.length > 0 && (
         <aside
+          ref={orderRef}
           aria-live="polite"
           aria-atomic="true"
           aria-label="Current story objective"
@@ -319,14 +420,15 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
             // the second one caused by fixing the first.)
             maxHeight: `calc(100vh - 26px - ${ledgerPlacement.bottom + FEED_LEDGER_HEIGHT_ALLOWANCE_PX}px`
               + ' - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            ...(early ? { left: 18, width: 'calc(100vw - 36px)', maxWidth: 680, maxHeight: 'none', overflow: 'visible', fontSize: 14, lineHeight: '20px', letterSpacing: '0.06em' } : {})
           }}
         >
-          <div style={{ color: FEED_INK_DIM, marginBottom: 6 }}>
+          {!early && <div style={{ color: FEED_INK_DIM, marginBottom: 6 }}>
             CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEED
-          </div>
-          {text.workorder.map((line, i) => (
-            <div key={`${i}-${line}`}>{feedLine(line)}</div>
+          </div>}
+          {workOrder.map((line, i) => (
+            <div data-feed-order-line="true" key={`${i}-${line}`}>{feedLine(line)}</div>
           ))}
         </aside>
       )}
@@ -359,7 +461,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
         style={{
           position: 'fixed',
           top: 'calc(26px + env(safe-area-inset-top, 0px))',
-          right: 'calc(56px + env(safe-area-inset-right, 0px))',
+          right: `calc(${early ? 18 : 56}px + env(safe-area-inset-right, 0px))`,
           textAlign: 'right', fontSize: 11, lineHeight: 1.8, display: 'none', opacity: 0,
           maxWidth: FEED_STATUS_WIDTH_PX
         }}
@@ -372,12 +474,12 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
           }} />
           REC
         </div>
-        <div ref={counterRef}>FRM 0000000</div>
+        {!early && <div ref={counterRef}>FRM 0000000</div>}
         {/* camera-switch chrome: live cam id while coverage is cellular; the
             same camera, impossibly HOLDING, while the hand-off is suspended */}
         {fixedVisible && <div ref={camRef}>{siteCamLabel(getFeedRuntime().camCell)}</div>}
         {trackVisible && <div>{siteCamLabel(getFeedRuntime().camCell)} · HOLDING</div>}
-        <div style={{ color: FEED_INK_DIM }}>SITE 7C-θ · LIVE</div>
+        {!early && <div style={{ color: FEED_INK_DIM }}>SITE 7C-θ · LIVE</div>}
       </div>
 
       {/* violation flood (A2 opening) */}
@@ -394,16 +496,10 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
         </div>
       )}
 
-      {/* fixed-screen calibration ledger */}
-      {fixedProgress && (
-        <div {...hudSurface('feed-ledger', 'informational')} style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: 1.9 }}>
-          <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>CALIBRATION</div>
-          <div>
-            FIBER {fixedProgress.fiber}/{CH1_FIXED_TUTORIAL.biofiber} · SCREENS {fixedProgress.screens}/{CH1_FIXED_TUTORIAL.screens}
-          </div>
-          <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>
-            HARVESTER CELL {Math.round(mawFraction * 100)}% · TRICKLE FEED
-          </div>
+      {early && !trackVisible && (
+        <div ref={earlyLedgerRef} {...hudSurface('feed-ledger', 'informational')}
+          style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: '20px', whiteSpace: 'nowrap' }}>
+          {earlyCountsRef.current}
         </div>
       )}
 
@@ -456,11 +552,11 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
       )}
 
       {/* quota ledger */}
-      {quotaVisible && (
+      {quotaVisible && !early && (
         <div {...hudSurface('feed-ledger', 'informational')} style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: 1.9 }}>
           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>QUOTA</div>
           <div>
-            FIBER {fiber}/{CH1_QUOTA.biofiber} · STONE {stone}/{CH1_QUOTA.stone} · DEBRIS {collectedDebrisCount()}/{getDebrisScattered()}
+            FIBER {fiber}/{CH1_QUOTA.biofiber} · STONE {stone}/{CH1_QUOTA.stone}
           </div>
           <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>
             HARVESTER CELL {Math.round(mawFraction * 100)}% · TRICKLE FEED

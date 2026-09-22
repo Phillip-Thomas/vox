@@ -302,7 +302,7 @@ export function countFloraVoxels(
 ): number {
   if (density <= 0) return 0;
   let n = 0;
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     const [x, y, z] = voxel.position;
     if (!shouldPlaceFloraVoxel(voxel, x, y, z, density, terrainSeed, profile)) continue;
     if (chooseFloraKindForVoxel(voxel, x, y, z, terrainSeed, profile) === kind) n++;
@@ -783,7 +783,7 @@ export function buildFloraInstances(
   let slot = 0;
   let voxelCount = 0;
 
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (slot >= capacity) break;
     const [x, y, z] = voxel.position;
     if (options.isHarvested?.(x, y, z)) continue;

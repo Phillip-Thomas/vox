@@ -1,0 +1,23 @@
+{
+  "schema": "paravoxia.verificationReadiness.v1",
+  "ready": true,
+  "readyAt": "2026-09-06T21:21:33.629680+00:00",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "integrationInvocationRef": "integration-manual-credit-finale-frontier-invocation.json",
+  "integrationFinishedAt": "2026-09-06T21:14:29.270627+00:00",
+  "sourceManifestRef": "implementation-source-manifest.json",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "implementationGateRef": "implementation-gate-pass.json",
+  "implementationGateChecks": 1756,
+  "checkResultsRef": "check-results.json",
+  "instructions": "CURRENT candidate preview http://127.0.0.1:37395/; exact100file source frozen. Read verifier-control and ownership. Sole manual-credit-finale GPU role, no source changes.",
+  "publicationAuthorized": false,
+  "limitations": [
+    "Full stable verify and actual gameplay/AV remain pending.",
+    "Continue/private probe preparation is not runtime proof.",
+    "No chapter acceptance or publishing."
+  ],
+  "invalidatedAt": "2026-09-06T20:42:26.868186+00:00"
+}

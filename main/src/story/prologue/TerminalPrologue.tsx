@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { enterPlaying, getGameCanvas, useAppState } from '../../state/appState.ts';
+import { enterPlaying, requestGamePointerLock, useAppState } from '../../state/appState.ts';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
 import { presentInputGlyphs } from '../ux/inputGlyphs.ts';
 import { hasMilestone, markMilestone } from '../../game/systems/progressionSystem.ts';
@@ -81,11 +81,14 @@ const TerminalPrologue: React.FC = () => {
     playSfx('terminalAdvance');
     markMilestone(STORY_MILESTONES.prologueSeen);
     setVoxelRealityStage('bare');
-    if (!isTouch) {
-      try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
-    }
     advanceToBeat('descent');
     enterPlaying();
+    // The movie driver supplies gameplay input without a mouse lock or user
+    // gesture. For an actual player, let React settle the prologue/canvas swap
+    // before requesting capture on the live game canvas.
+    if (!isTouch && !isMovieMode()) {
+      requestAnimationFrame(() => { void requestGamePointerLock(); });
+    }
   }, [isTouch]);
 
   // Movie screenings acknowledge the directive themselves once the world is warm.

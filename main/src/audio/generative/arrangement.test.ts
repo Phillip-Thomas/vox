@@ -7,6 +7,7 @@ import {
   type ArrangementState
 } from './arrangement.ts';
 import { ARRANGEMENT_LEVELS, DWELL_MAX, type ArrangementStateName } from './tuning.ts';
+import type { ArrangementIntent } from './arrangement.ts';
 
 const inputs = (patch: Partial<ArrangementInputs> = {}): ArrangementInputs => ({
   energy: 0.5,
@@ -105,5 +106,70 @@ describe('arrangement state machine (§8.3)', () => {
       expect(arrangementLevels(name).sub).toBeGreaterThan(0);
       expect(arrangementLevels(name).pad + arrangementLevels(name).sub).toBeGreaterThan(0.2);
     }
+  });
+});
+
+describe('the planner intent (Stage 5) above the machine', () => {
+  const intent = (patch: Partial<ArrangementIntent> = {}): ArrangementIntent => ({
+    buildNow: false,
+    liftNow: false,
+    buildSpan: 1,
+    bloomPhrases: 1,
+    randomBuildAllowed: false,
+    ...patch
+  });
+
+  it('with an intent, no stochastic BED → BUILD ever happens', () => {
+    for (const seed of [1, 5, 8, 10, 4242]) {
+      const log = run(seed, 400, () => inputs({ energy: 1, intent: intent() }));
+      expect(log.filter((n) => n === 'BUILD' || n === 'BLOOM').length).toBe(0);
+    }
+  });
+
+  it('buildNow starts the build; it spans buildSpan phrases and blooms for exactly bloomPhrases', () => {
+    const state = createArrangement();
+    advanceArrangementPhrase(state, 5, 0, inputs({ intent: intent() }));
+    advanceArrangementPhrase(state, 5, 1, inputs({ intent: intent({ buildNow: true, buildSpan: 3, bloomPhrases: 2 }) }));
+    expect(state.name).toBe('BUILD');
+    expect(state.forcedBuild).toBe(false);
+    advanceArrangementPhrase(state, 5, 2, inputs({ intent: intent() }));
+    expect(state.name).toBe('BUILD');
+    advanceArrangementPhrase(state, 5, 3, inputs({ intent: intent() }));
+    expect(state.name).toBe('BUILD');
+    advanceArrangementPhrase(state, 5, 4, inputs({ intent: intent() }));
+    expect(state.name).toBe('BLOOM');
+    advanceArrangementPhrase(state, 5, 5, inputs({ intent: intent() }));
+    expect(state.name).toBe('BLOOM');
+    advanceArrangementPhrase(state, 5, 6, inputs({ intent: intent() }));
+    expect(state.name).toBe('EBB');
+  });
+
+  it('liftNow lifts REST to BED so the build rises from a bed; a build reaching the floor still starts', () => {
+    const state = createArrangement();
+    state.name = 'REST';
+    state.dwell = 1;
+    advanceArrangementPhrase(state, 5, 0, inputs({ intent: intent({ liftNow: true }) }));
+    expect(state.name).toBe('BED');
+    advanceArrangementPhrase(state, 5, 1, inputs({ intent: intent({ buildNow: true }) }));
+    expect(state.name).toBe('BUILD');
+    const floor = createArrangement();
+    floor.name = 'REST';
+    advanceArrangementPhrase(floor, 5, 0, inputs({ intent: intent({ buildNow: true }) }));
+    expect(floor.name).toBe('BUILD');
+  });
+
+  it('a forced (warp) build is marked forced and keeps the shipped one-phrase span when no intent is present', () => {
+    const state = createArrangement();
+    advanceArrangementPhrase(state, 7, 0, inputs({ forceBuild: true }));
+    expect(state.name).toBe('BUILD');
+    expect(state.forcedBuild).toBe(true);
+    advanceArrangementPhrase(state, 7, 1, inputs());
+    expect(state.name).toBe('BLOOM');
+  });
+
+  it('era caps still bind: a planned build below material is refused', () => {
+    const state = createArrangement();
+    advanceArrangementPhrase(state, 5, 0, inputs({ era: 0.3, intent: intent({ buildNow: true }) }));
+    expect(state.name).not.toBe('BUILD');
   });
 });

@@ -29,6 +29,8 @@ describe('world prep protocol identity', () => {
     const request = smallRequest(2);
     expect(() => validateWorldPrepRequest(request)).not.toThrow();
     expect(request.protocolVersion).toBe(WORLD_PREP_PROTOCOL_VERSION);
+    expect(WORLD_PREP_PROTOCOL_VERSION).toBe(4);
+    expect(() => validateWorldPrepRequest({ ...request, protocolVersion: 3 as typeof WORLD_PREP_PROTOCOL_VERSION })).toThrow(/protocol version/);
 
     expect(() => validateWorldPrepRequest({ ...request, worldId: '00,0:p1' })).toThrow(/not canonical/);
     expect(() => validateWorldPrepRequest({ ...request, seed: request.seed + 1 })).toThrow(/does not match/);

@@ -1,0 +1,7 @@
+# Chapter reconnaissance routing note — 2026-09-06
+
+`chapter-reconnaissance.md` preserves the prior reconnaissance verbatim. Its opening status and approval language describe the earlier checkpoint. This council now has its own production lock and the owner's standing instruction to auto-approve in-scope continuation decisions, recorded in `owner-standing-authority.json` and the lock's final section. Decisions must be recorded honestly as delegated authority after the exact candidate is signed; they are not evidence of personal human review.
+
+Read for this handback: `production-lock.md`, `owner-standing-authority.json`, and the previously supplied `story-correction-brief.md`. The bounded full-story-council route agrees with the recommendation. W-7744's proposed return motive and exact degree of limited cooperation remain candidate decisions pending the independent treatment, reconciliation, signatures, and recorded delegated disposition. The chapter name, opening relay interaction, inspection-marker mechanic, final passage, and character consequence are proposals to test against fresh evidence and peer directions.
+
+Next dependency: the orchestrator supplies the same source inventory, canon audit, and intent-free blind-reader results to all three directors before independent first treatments. This preservation step is not an independent treatment or a completed Stage 1 intent. It does not commission a probe, change runtime/current canon, or seek further user approval.

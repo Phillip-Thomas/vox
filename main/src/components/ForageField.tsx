@@ -120,7 +120,7 @@ export function nearestForageNodeWorld(
   const density = Number.isFinite(profileDensity) && profileDensity > 0 ? profileDensity : FORAGE_BASE;
   let best: THREE.Vector3 | null = null;
   let bestSq = maxDist * maxDist;
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (!isDecoratableGrassVoxel(voxel)) continue;
     const [x, y, z] = voxel.position;
     if (!isForageVoxel(x, y, z, terrainSeed, density)) continue;
@@ -164,7 +164,7 @@ export default function ForageField({
   const countNodes = () => {
     let n = 0;
     const maxSq = FORAGE_MAX_DIST * FORAGE_MAX_DIST;
-    for (const voxel of voxelSystem.getAllVoxels().values()) {
+    for (const voxel of voxelSystem.voxelValues()) {
       if (!isDecoratableGrassVoxel(voxel)) continue;
       const [x, y, z] = voxel.position;
       const foodHere = isForageVoxel(x, y, z, terrainSeed, density);
@@ -188,7 +188,7 @@ export default function ForageField({
 
     let foodSlot = 0;
     let deadwoodSlot = 0;
-    for (const voxel of voxelSystem.getAllVoxels().values()) {
+    for (const voxel of voxelSystem.voxelValues()) {
       if (!isDecoratableGrassVoxel(voxel)) continue;
       const [x, y, z] = voxel.position;
       const foodHere = isForageVoxel(x, y, z, terrainSeed, density);
@@ -278,7 +278,7 @@ export default function ForageField({
         }
       }
       if (collectedAny) {
-        playSfx('mine'); // a soft confirmation
+        playSfx('inventoryAcquire');
       }
     }
 

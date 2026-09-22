@@ -1,0 +1,47 @@
+{
+  "exitCode": 0,
+  "signal": null,
+  "reason": null,
+  "bytes": 351398,
+  "pid": 3892724,
+  "usage": {
+    "roleLaunches": 0,
+    "modelTurns": 46,
+    "inputTokens": 82306,
+    "cacheReadTokens": 2302464,
+    "outputTokens": 11846
+  },
+  "session": "01a08319-b2d6-72d3-9008-47efad61947a",
+  "resolved": null,
+  "completed": true,
+  "failed": false,
+  "contextTokens": 0,
+  "reported": true,
+  "accounting": "Token usage arrives at turn completion; item count is a conservative work-step limit, not an exact API-call count.",
+  "requestedModel": "gpt-6-astra",
+  "perceptionReceipts": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/perception/178b9689-94f0-4390-8970-ed86426da906.json",
+      "sha256": "5baa92e221b28e5cc5579d4bd0cee1ae8775b88b5010618827bdd293f9f2b4e7"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/perception/5798db1a-eea9-4a30-9b46-b01f9a82a862.json",
+      "sha256": "a38d751460e020bc5d4270b7c19eae62f2e74ca77cf119b74436bed2d0c7e6d0"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/perception/96d1a2e7-bcad-47c8-9c6b-d6d502543f46.json",
+      "sha256": "626b9c6fc3ace5921ae0119ccb657690be38f814f14962c381407f9f7f86d39b"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/perception/98f1e3d5-1b3d-40e8-b593-a09805d0aebc.json",
+      "sha256": "1e8f017bd6bf9847300869eb913939ec2c2fd5670e18724ff442faadc610df69"
+    }
+  ],
+  "chargedUsage": {
+    "roleLaunches": 0,
+    "modelTurns": 50,
+    "inputTokens": 87392,
+    "cacheReadTokens": 2302464,
+    "outputTokens": 16817
+  }
+}

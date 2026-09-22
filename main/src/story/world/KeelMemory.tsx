@@ -1,3 +1,4 @@
+import { precompile } from '../../components/effects/shaderWarmup.ts';
 import React, { useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -72,6 +73,11 @@ const KeelMemory: React.FC<KeelMemoryProps> = ({ planetSize, terrainSeed, comman
   );
   const glowRef = useRef<THREE.MeshStandardMaterial>(null);
   const rootRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (root) return precompile(root);
+  }, []);
+
   const sonarRef = useRef<THREE.Group>(null);
   const sonarRings = useRef<Array<THREE.Mesh | null>>([]);
   const sonarVisibleSeconds = useRef(0);

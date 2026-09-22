@@ -1,0 +1,157 @@
+{
+ "ch4-audit": {
+  "chord": [
+   0,
+   6,
+   7
+  ],
+  "progression": [
+   [
+    0,
+    6,
+    7
+   ],
+   [
+    0,
+    1,
+    7
+   ]
+  ],
+  "melody": {
+   "scale": [
+    0,
+    1,
+    6,
+    7,
+    10,
+    12
+   ],
+   "density": 0.16
+  },
+  "pattern": [
+   0,
+   null,
+   null,
+   6,
+   null,
+   null,
+   7,
+   null
+  ],
+  "tempo": 58,
+  "wave": "square",
+  "pad": 0.1,
+  "sub": 0.14,
+  "ost": 0.035,
+  "riser": 0.12,
+  "baseline": 0.42,
+  "octave": 24
+ },
+ "ch9-hearth": {
+  "chord": [
+   0,
+   4,
+   7,
+   10,
+   14
+  ],
+  "progression": [
+   [
+    0,
+    4,
+    7,
+    10
+   ],
+   [
+    7,
+    10,
+    14
+   ],
+   [
+    0,
+    7,
+    12
+   ]
+  ],
+  "melody": {
+   "scale": [
+    0,
+    2,
+    4,
+    7,
+    9,
+    10,
+    12,
+    14
+   ],
+   "density": 0.26
+  },
+  "pattern": [
+   0,
+   null,
+   null,
+   null,
+   7,
+   null,
+   null,
+   null
+  ],
+  "tempo": 56,
+  "wave": "triangle",
+  "pad": 0.17,
+  "sub": 0.08,
+  "ost": 0.024,
+  "riser": 0.05,
+  "baseline": 0.28,
+  "octave": 12
+ },
+ "ch10-transit/station-resolved": {
+  "chord": [
+   0,
+   7,
+   12,
+   17,
+   29
+  ],
+  "progression": [
+   [
+    0,
+    7,
+    12
+   ],
+   [
+    0,
+    9,
+    17,
+    29
+   ]
+  ],
+  "melody": {
+   "scale": [
+    0,
+    7,
+    12,
+    17
+   ],
+   "density": 0.1
+  },
+  "pattern": [
+   0,
+   null,
+   null,
+   null,
+   17,
+   null,
+   null,
+   null
+  ],
+  "tempo": 68,
+  "wave": "triangle",
+  "pad": 0.17,
+  "sub": 0.1,
+  "ost": 0,
+  "riser": 0.04,
+  "baseline": 0.44,
+  "octave": 12
+ }
+}

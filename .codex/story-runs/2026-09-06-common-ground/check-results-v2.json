@@ -1,0 +1,302 @@
+{
+  "schema": "paravoxia.storyCouncilChecks.v2",
+  "runId": "2026-09-06-common-ground",
+  "iteration": 3,
+  "revision": "council-v2",
+  "checkedAt": "2026-09-06T06:36:25.425347+00:00",
+  "auditor": "independent mechanical documentation audit (Opus, read-only)",
+  "candidateSha256": "133d1dbe54a9f51e68d9fd67997042d1494059e30707a5da6c308d403cebc2fb",
+  "candidateMatchesCommission": true,
+  "artifactHashes": {
+    "story-authority-candidate.md": "133d1dbe54a9f51e68d9fd67997042d1494059e30707a5da6c308d403cebc2fb",
+    "canon-decision-register.json": "267ec0e8ecc8986c71b41a725e15467979704e8a6b4881bf3ab513730f391a4b",
+    "director-signoffs.json": "8bffb4bebe40376427344d1f4fe5b07de7d041f4ea40216d177dcb3d9fb32edb",
+    "owner-story-decision.json": "4407d346ff7046085d7763e1f65d2d73d86ff54bc69aa7c407f267ba54f68577",
+    "owner-standing-authority.json": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+    "council-geometry-basis.json": "b7999bb589cfcf2d420af1f25f59780026c0ea7909a65b52d1f26fb2088ee55a",
+    "arena-director-notes.json": "4659a4369e2d13a656f8d4278f45da2fd8be33d04fb07cc9d574501f7f45eee1",
+    "implementation-diff.patch": "4c661abb2a9b2414e7e310035fe9f626970c845092ada1cae12af2dee896821c",
+    "geometry-arena.json": "5657d52990e0180b61e0a0d725937be8d330b077eab7c21c9a3ab0cd6e654690",
+    "geometry-instrument.json": "2186b509fcf192c090d2545fb8569ac255c96f2de385a2493fcd635eb7b603d3",
+    "selected-geometry-qualification.json": "521e78f5f1b3e76772a89a057de71e07fd037253fc4fd52100b737f50c7c4018",
+    "selected-geometry-qualification.md": "54a06dec9ef1a346324bb489cc984e021921afb92a606720af0fe365ebc77fa0",
+    "arena-instrument-repair-chapter.md": "64d43ab26d90132a32cae20102bae9e5aadaa15f48d0a49419cd49629742b2a8",
+    "arena-instrument-repair-cinema.md": "ad1a3e807f3b1aad4da7e2a22d3826ea44050f45e0cc8327e5c39b7f31a8e17d",
+    "arena-instrument-repair-score.md": "00f304b0cf66aae865a0dd208e033b1d9eac0f9123292659ffcb5ba3945bb1ee",
+    "arena-chapter-final-response.json": "97fb14163d91bfb04b6654e5923cce58ceee906e6888f55ac1fb82df2847e0af",
+    "arena-score-final-response.json": "ffb844fe9844da3fa941c4ef6bfa88e8d008ab045fa0d1d9eff79c6322379b54",
+    "arena-cinema-final-response.json": "00dcd0ae713f37838f256dc13c6b20ccaf8633cc61cb55bc3e1f94b8860d1648"
+  },
+  "commands": [
+    {
+      "command": "node validate-candidate.mjs --owner",
+      "cwd": ".codex/story-runs/2026-09-06-common-ground",
+      "exitCode": 0,
+      "status": "pass",
+      "checks": 102,
+      "expectedChecks": 102,
+      "failures": [],
+      "rawLog": "validate-candidate-v2.log",
+      "sideEffect": "rewrote candidate-validation.json (script always writes it); content deterministic except checkedAt; pre-owner copy candidate-validation.pre-owner.json preserved"
+    },
+    {
+      "command": "npm --prefix main run story:authority",
+      "cwd": "repo root",
+      "exitCode": 0,
+      "status": "pass",
+      "checks": 1096,
+      "priorIteration2Checks": 1094,
+      "rawLog": "story-authority-check-v2.log"
+    },
+    {
+      "command": "npm --prefix main run story:authority:smoke",
+      "cwd": "repo root",
+      "exitCode": 0,
+      "status": "pass",
+      "checks": 1096,
+      "note": "1096 live checks plus beat, precedence, production identity, evidence-chain, release-gate, question, role, review, graph, cycle drift rejection",
+      "rawLog": "story-authority-smoke-v2.log"
+    }
+  ],
+  "cumulativeDiffBoundary": {
+    "rows": [
+      {
+        "path": "main/PARAVOXIA_STORY_BIBLE.md",
+        "receiptBefore": "02fff0ace9d44e7f193008db15b68b01b69d2e8e9725bdc627345fb67584acff",
+        "authorityBeforeSnapshot": "02fff0ace9d44e7f193008db15b68b01b69d2e8e9725bdc627345fb67584acff",
+        "receiptAfter": "6e0e0660fcaddad30a0c89435d914171c6a8e322cd6036e8534dfacf3387721a",
+        "onDisk": "6e0e0660fcaddad30a0c89435d914171c6a8e322cd6036e8534dfacf3387721a",
+        "beforeMatches": true,
+        "afterMatches": true
+      },
+      {
+        "path": "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+        "receiptBefore": "26d386b0dcf0b67410ff1e4b4d9311cb76e3c2f1091583f9e789d9c9bba97cb9",
+        "authorityBeforeSnapshot": "26d386b0dcf0b67410ff1e4b4d9311cb76e3c2f1091583f9e789d9c9bba97cb9",
+        "receiptAfter": "78f7d30063227a472985d4bf4aaaeececeea84b7b131f06b15bf405f9dea397d",
+        "onDisk": "78f7d30063227a472985d4bf4aaaeececeea84b7b131f06b15bf405f9dea397d",
+        "beforeMatches": true,
+        "afterMatches": true
+      },
+      {
+        "path": "main/STORY.md",
+        "receiptBefore": "54008a2becda56c9112a9a5c594751d57bd9ff6757b2f9b9c15dd7fe25b85ed6",
+        "authorityBeforeSnapshot": "54008a2becda56c9112a9a5c594751d57bd9ff6757b2f9b9c15dd7fe25b85ed6",
+        "receiptAfter": "f36794117c7722c7012fa9caa92c89a168cf1c392eba99499104f2a18de0d468",
+        "onDisk": "f36794117c7722c7012fa9caa92c89a168cf1c392eba99499104f2a18de0d468",
+        "beforeMatches": true,
+        "afterMatches": true
+      },
+      {
+        "path": "main/story-authority.json",
+        "receiptBefore": "31fdc34b6e4c6d52e91b3d26bbd2d07d5ee3a655318908cba0ab1bd6abca501e",
+        "authorityBeforeSnapshot": "31fdc34b6e4c6d52e91b3d26bbd2d07d5ee3a655318908cba0ab1bd6abca501e",
+        "receiptAfter": "a1d851d1dbc3591a3bc89ccf62964bd4a5baa71a0f5b9c39ab01318bc3006386",
+        "onDisk": "a1d851d1dbc3591a3bc89ccf62964bd4a5baa71a0f5b9c39ab01318bc3006386",
+        "beforeMatches": true,
+        "afterMatches": true
+      },
+      {
+        "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+        "receiptBefore": "cff55ee62ee72348ff01f8b51b5f9475faad52b73e2854a71846a5e6e5978715",
+        "authorityBeforeSnapshot": "cff55ee62ee72348ff01f8b51b5f9475faad52b73e2854a71846a5e6e5978715",
+        "receiptAfter": "c0b7b64608d8d661419194b1322b8a36e4cae8eb1f31cda7e8a86a29c659c59d",
+        "onDisk": "c0b7b64608d8d661419194b1322b8a36e4cae8eb1f31cda7e8a86a29c659c59d",
+        "beforeMatches": true,
+        "afterMatches": true
+      }
+    ],
+    "allBeforeMatch": true,
+    "allAfterMatch": true,
+    "patchReconstruction": {
+      "method": "git apply implementation-diff.patch onto authority-before/ snapshot in an isolated temp tree",
+      "applyCheck": "ok",
+      "reconstructedEqualsOnDisk": true,
+      "patchSha256": "4c661abb2a9b2414e7e310035fe9f626970c845092ada1cae12af2dee896821c"
+    },
+    "changedPathCount": 5,
+    "pathsOutsideDocumentationAllowedPaths": [],
+    "srcFilesInPatch": 0
+  },
+  "runtimeUnchangedVerification": {
+    "baseline": ".codex/production-runs/2026-09-05-after-the-hearth/initial-source-hashes.json",
+    "baselineCapturedAt": "2026-09-06T03:00:28.695879+00:00",
+    "baselineSourceRevision": "b631a52065a1a69fecac0331e69515c306408641",
+    "filesCompared": 958,
+    "missing": 0,
+    "driftCount": 0,
+    "drift": [],
+    "coverage": "all 958 baseline entries are main/src/** runtime files; none of the five patched documentation paths are in the baseline set, so this is an independent runtime-unchanged proof",
+    "rawLog": "runtime-drift-v2.log"
+  },
+  "validatorAndGateIntegrity": {
+    "main/tools/story-authority-gate.mjs": "e7caa35770b8f1283fcf8d6fb6b29c302869c3141ab05c2b22c562ee9cb2f434",
+    "matchesAuthorityBeforeSnapshot": true,
+    "validateCandidateMjsUnedited": true
+  },
+  "signatureEnvelope": {
+    "threeUniqueDirectors": true,
+    "dispositions": {
+      "chapter": "approve-with-notes",
+      "score": "approve",
+      "cinematography": "approve-with-notes"
+    },
+    "candidateSha256AcrossAll": "133d1dbe54a9f51e68d9fd67997042d1494059e30707a5da6c308d403cebc2fb",
+    "decisionsSha256AcrossAll": "267ec0e8ecc8986c71b41a725e15467979704e8a6b4881bf3ab513730f391a4b",
+    "geometryBasisSha256AcrossAll": "b7999bb589cfcf2d420af1f25f59780026c0ea7909a65b52d1f26fb2088ee55a",
+    "arenaNotesSha256AcrossAll": "4659a4369e2d13a656f8d4278f45da2fd8be33d04fb07cc9d574501f7f45eee1",
+    "ownerDecisionHonesty": {
+      "authorityKind": "standing-user-delegation",
+      "personallyReviewedByUser": false,
+      "runtimeMutationAuthorizedByThisDecision": false,
+      "publicationAuthorized": false,
+      "acceptedMissingEvidence": false
+    },
+    "arenaNoteRoutes": 6,
+    "arenaSourceResponseHashesMatch": true,
+    "registerDecisions": 12,
+    "ownerOnlyChoicesInferred": 0
+  },
+  "v2CanonLanguageVerification": [
+    {
+      "claim": "backed instrument, range 12",
+      "docEvidence": "Bible:64 'one new passive, visibly opaque-backed survey instrument with a constant 12-unit socket-to-socket range'; Exec:88 '12-unit reference range and a single passive backed instrument'",
+      "basisEvidence": "council-geometry-basis.chosenRange=12; chosenApparatus='one passive visibly opaque-backed finite-range survey instrument'",
+      "result": "pass"
+    },
+    {
+      "claim": "36 vs 16 survey route classes",
+      "docEvidence": "Bible:67-68 '16-unit short route with a 14-unit reference shadow and a fully supported 36-unit long route'; Exec:89-93 'short route is 16 units with a 14-unit housing shadow; ... longer route is 36 units (61 samples), 20 units and 125 percent longer'",
+      "basisEvidence": "routeClassProof shortUnits=16, shortUnsupportedUnits=14, longUnits=36, longSamples=61, longRatio=2.25; selected-geometry-qualification surveyRouteShort.walkedUnits=16/unsupportedSpanUnits=14, surveyRouteLong.walkedUnits=36/extraUnits=20/lengthRatio=2.25/sampleCount=61",
+      "arithmetic": {
+        "36-16": 20,
+        "20/16": 1.25,
+        "36/16": 2.25
+      },
+      "result": "pass"
+    },
+    {
+      "claim": "common passage figures",
+      "docEvidence": "Exec:92-93 'common 18-unit passage has full held-reference coverage and a real eight-unit contiguous portion outside the fixed reference's useful coverage'",
+      "basisEvidence": "commonComparisonEtoC.walkedUnits=18, everyDensePointInRangeOfHeldE=true, everyDensePointUnobstructedFromHeldE=true, unitsOutsideFixedReference=8.25, reciprocalNecessity.contiguousSpanUnits=8",
+      "result": "pass (held-reference vs fixed-reference distinction is the load-bearing term; see finding F-A)"
+    },
+    {
+      "claim": "actual Terra comparison precedes explicit far reference",
+      "docEvidence": "Bible:74-79 'Actual completion of that passage earns i needed the end he held. She then explicitly offers and occupies a separate safe far reference.'; Exec:99-100 'After her actual comparison she explicitly offers and occupies the separate far reference for his independently initiated test.'",
+      "result": "pass"
+    },
+    {
+      "claim": "quiet drawing",
+      "docEvidence": "Bible:91-93 'Continuous drawing keeps one quiet standing instruction, without a prompt or chime for each point or turn'; Exec:105 'Keep one quiet instruction while tracing and distinguish range, solid, footing and temporary vacancy holds.'",
+      "result": "pass"
+    },
+    {
+      "claim": "every cap unchanged",
+      "docEvidence": "candidate:62 'at most two route slots ..., 128 grounded samples and 120 world units per trace'; byte-identical to story-authority-candidate.draft.md and .v2-draft.md; Exec:103-104 'Both independent caps (128 samples and 120 walked units) apply simultaneously ... Neither cap may be silently relaxed'; Bible:68 'with all trace caps retained'",
+      "result": "pass"
+    },
+    {
+      "claim": "stage order: exact scene head / non-overlap pending; narrative direction approved",
+      "docEvidence": "Bible:70-72 'Exact connected-head and nonoverlapping actor staging belong to the scene contract; current terrain edits and live interaction must still be verified.'; Exec:96-98 'The scene contract must bind the final connected head and separate near-end body positions: Terra cannot start inside the worker who holds her reference.'; basis.remainingSceneBindings lists both; basis.adoptionScope 'not new canon choices'",
+      "result": "pass"
+    },
+    {
+      "claim": "F01 cell row reads ch10-transit",
+      "docEvidence": "PARAVOXIA_STORY_EXECUTION_PLAN.md:310 'typed state now continues from ch4-audit through ch10-transit and done'",
+      "sourceEvidence": "main/src/story/storyState.ts:349-350 order ends 'ch10-transit', 'done'",
+      "priorFinding": "iteration-2 R1 / critic finding 2 \u2014 now repaired",
+      "result": "pass"
+    },
+    {
+      "claim": "activeProduction manifest deliberately remains the old pre-runtime identity",
+      "docEvidence": "story-authority.json:62-66 activeProduction.runId='2026-07-13-distance-between-fires'; Bible:1506-1509 'Common Ground is approved future direction, not yet runtime. The machine map's older production-contract identity is intentionally retained until the new chapter is implemented and registered through its separate signed scene contract.'",
+      "result": "intentional-and-declared; strict future obligation to update only at signed scene-contract implementation"
+    },
+    {
+      "claim": "source-visible new words are future-labelled",
+      "checks": [
+        "grep of main/src for 'needed the end he held', 'finished the proof', 'PASSAGE OBSERVED', 'MODEL INCOMPLETE' => 0 matches",
+        "no 'ch13' identifier in main/src",
+        "patch adds 0 lines under main/src"
+      ],
+      "result": "pass"
+    },
+    {
+      "claim": "no CPU study credited as live/body/hardware/listening",
+      "docEvidence": "Bible:68-70 'This proves the proposed route-class distinction, not a playable or rendered scene'; Exec:94 'no playable, rendered or hardware result is implied'; selected-geometry-qualification.status 'PREPRODUCTION MEASUREMENT \u2014 proposed apparatus, proposed finite range, proposed stand/bracket collision solids; not shipped behaviour'; basis.hardwareOrLiveAcceptance=false; owner decision runtimeMutationAuthorizedByThisDecision=false",
+      "result": "pass"
+    },
+    {
+      "claim": "timelessness of patched text",
+      "checks": [
+        "0 added lines in implementation-diff.patch containing pronoun/gender/ethnicity or other contemporary-flashpoint vocabulary"
+      ],
+      "result": "pass"
+    }
+  ],
+  "ceilings": {
+    "runtimeStoryCeiling": "ch10-transit",
+    "releaseStoryCeiling": "ch4-arrival",
+    "changedByThisPatch": false
+  },
+  "noAudiovisualOrRuntimePassClaim": true,
+  "noScoreJudging": true,
+  "editsMadeByThisAudit": {
+    "sourceFiles": 0,
+    "governingDocs": 0,
+    "authorityArtifacts": 0,
+    "signatures": 0,
+    "validators": 0,
+    "filesWritten": [
+      "documentation-audit-v2.md",
+      "check-results-v2.json",
+      "validate-candidate-v2.log",
+      "story-authority-check-v2.log",
+      "story-authority-smoke-v2.log",
+      "runtime-drift-v2.log"
+    ],
+    "unavoidableRewrite": "candidate-validation.json (written by the mandated validator itself)"
+  },
+  "findings": [
+    {
+      "id": "F-A",
+      "severity": "cosmetic",
+      "path": "main/PARAVOXIA_STORY_EXECUTION_PLAN.md:92-93",
+      "statement": "'full held-reference coverage and a real eight-unit contiguous portion outside the fixed reference's useful coverage' reads as self-contradiction unless the reader already distinguishes the worker-held reference from the fixed reference. Both halves are true in the measurement.",
+      "smallestFix": "one word: 'full worker-held reference coverage'.",
+      "blocking": false
+    },
+    {
+      "id": "F-B",
+      "severity": "cosmetic",
+      "path": "director-signoffs.json",
+      "statement": "Only the cinematography signoff carries explicit runtimeMutationAuthorized/publicationAuthorized/hardwareOrLiveAcceptance=false fields; chapter and score omit them. The refusals still hold via owner-story-decision.json and council-geometry-basis.hardwareOrLiveAcceptance=false.",
+      "smallestFix": "none now (signatures are frozen); add the three fields to the schema for the next signature round.",
+      "blocking": false
+    },
+    {
+      "id": "F-C",
+      "severity": "cosmetic",
+      "path": "authority-after/",
+      "statement": "authority-before/ contains main/tools/story-authority-gate.mjs but authority-after/ does not; the snapshot pair is asymmetric. The gate file itself is byte-identical to the before snapshot (e7caa357...), so nothing is actually unverified.",
+      "smallestFix": "copy the unchanged gate into authority-after/ for symmetry.",
+      "blocking": false
+    },
+    {
+      "id": "F-D",
+      "severity": "informational",
+      "path": "check-results.json",
+      "statement": "The iteration-2 results file still records 77 validator checks / 1094 gate checks. It is superseded by this file, not corrected, per the preserve-prior-artifacts instruction.",
+      "blocking": false
+    }
+  ],
+  "verdict": "APPROVE (bounded documentation-only)",
+  "explicitFutureObligations": [
+    "A separately signed scene contract must bind the literal connected head, the endpoint-contact predicate, and distinct near-end actor blocking (Terra must never start inside W-7744) before any runtime work.",
+    "The final complete scene geometry hash and three scene signatures remain unproduced.",
+    "story-authority.json activeProduction must move off 2026-07-13-distance-between-fires at, and only at, signed ch13 implementation/registration.",
+    "All figures here are CPU preproduction measurement; headed hardware, supported-tier, live interaction, day/night, actual terrain edits and listening acceptance remain required and unclaimed.",
+    "Public release ceiling stays ch4-arrival with publishAllowed false; this audit authorizes no publication."
+  ]
+}

@@ -1,0 +1,332 @@
+{
+ "schema": "paravoxia.implementationReport.v1",
+ "role": "integration-engineer (navigation/Continue repair)",
+ "runId": "2026-09-05-after-the-hearth",
+ "writtenAt": "2026-09-06T13:47:05+00:00",
+ "isAcceptance": false,
+ "isChapterVerificationComplete": false,
+ "publicationAuthorized": false,
+ "contract": {
+  "version": "scene-v2",
+  "sha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "contractChangeRequired": false,
+  "changedByMe": false,
+  "creativeDecisionsMade": "none; three peer directors remain the only creative authority"
+ },
+ "direction": {
+  "ref": "navigation-repair-direction.json",
+  "defectIds": [
+   "CG-IMPL-010",
+   "CG-IMPL-011",
+   "CG-IMPL-008"
+  ],
+  "budgetRef": "producer-navigation-budget-decision.json",
+  "dispositionRef": "repair-contract-disposition.json"
+ },
+ "startingSource": {
+  "manifestRef": "implementation-source-manifest.json",
+  "manifestFileSha256": "d9e36ae314ba547a292e55376d54eecbf0ff47dc3d6710c4f9b5ae3fee96caf2",
+  "filesRehashedBeforeMutation": 97,
+  "driftBeforeMutation": [],
+  "immutableBeforeBytes": "iterations/implemented-world-repair/source"
+ },
+ "testTotals": {
+  "preRepairV2Baseline": 3091,
+  "preRepairTestFiles": 349,
+  "postRepairTests": 3137,
+  "postRepairTestFiles": 350,
+  "testsAdded": 46,
+  "testsRemoved": 0,
+  "testsChanged": 2,
+  "testFilesAdded": 1,
+  "addedBreakdown": {
+   "main/src/story/autopilot/primitives.test.ts": 29,
+   "main/src/story/commonGroundDirector.test.ts": 11,
+   "main/src/game/systems/persistence.test.ts": 6
+  },
+  "changedNote": "Two pre-existing commonGroundDirector cases were made lifecycle-faithful rather than weakened: 'excuses NOTHING from a restore that has no recording at all' now runs the world's restore in its FIRST session too (the runtime always does; the test omitted it), and the foreign-actor case now goes through the real on-disk restore route instead of a hand-staged copy. Every original assertion in both is retained."
+ },
+ "changedPaths": [
+  {
+   "path": "main/src/story/autopilot/primitives.ts",
+   "beforeSha256": "4cce7261ba455e28a31d77f300e339d5dd907c00c691208b824a058f723313ca",
+   "afterSha256": "a6da0551072c1a39eaa7ce1d91e1546122955b4a9682ec2ccffb1cdf3c7da4ae",
+   "created": false,
+   "inAllowedPaths": true
+  },
+  {
+   "path": "main/src/story/autopilot/primitives.test.ts",
+   "beforeSha256": null,
+   "afterSha256": "158f5ac9451b00c37dc535ee9e1ef4c727b5b8f4f20364c7e85ee92428ad2f2d",
+   "created": true,
+   "inAllowedPaths": true
+  },
+  {
+   "path": "main/src/story/commonGroundState.ts",
+   "beforeSha256": "2094b261328143dda5cfc198aa2791fceb470fefcf006e7cb06e7669d55db2bf",
+   "afterSha256": "681846b7e66a9577596fe07639212a32640baac3bd44c7f14fc994251f1e87a6",
+   "created": false,
+   "inAllowedPaths": true
+  },
+  {
+   "path": "main/src/story/commonGroundDirector.ts",
+   "beforeSha256": "5688b86ebf06fd3a963693026e9933b1286079cf508747588f9f3a238814d6b3",
+   "afterSha256": "23bd8ea59f156d9ba5c801e77acc353bd023cabbfde77af7a04cf195c2db921f",
+   "created": false,
+   "inAllowedPaths": true
+  },
+  {
+   "path": "main/src/story/commonGroundDirector.test.ts",
+   "beforeSha256": "58bc30b4d7ef208002aa448f48cd523d73115c48e979faa46311e94de9143008",
+   "afterSha256": "8584dc5c44320252f206776371c7bba53ed62c2910fd2b3181ca4720999087ac",
+   "created": false,
+   "inAllowedPaths": true
+  },
+  {
+   "path": "main/src/game/systems/persistence.ts",
+   "beforeSha256": "c8d51b1d6055ba221cb910f3eb4cb28c943ac1dd037581a8c1acfa97a0765404",
+   "afterSha256": "f68be69f922abe670bf8a0a12246ad87ebb705e42b49ffd95466c6ca9cb631d7",
+   "created": false,
+   "inAllowedPaths": true
+  },
+  {
+   "path": "main/src/game/systems/persistence.test.ts",
+   "beforeSha256": "c0c2b159b08b12d689bbac403e40069d21a2fdc5bfba6c45ace7dfe38063d734",
+   "afterSha256": "9c1dd65d948c17b37c12b26781966f7b36ee5b3aeca34c64cd3a333c4e99517a",
+   "created": false,
+   "inAllowedPaths": true
+  }
+ ],
+ "scope": {
+  "manifestFilesChanged": 6,
+  "manifestFilesUnchanged": 91,
+  "unexpectedDrift": [],
+  "newPathsCreated": [
+   "main/src/story/autopilot/primitives.test.ts"
+  ],
+  "newPathJustification": "Explicitly pre-allowed by production-lock allowedPaths and named in the commission; demonstrably absent before this pass, so beforeSha256 is null.",
+  "protectedPathsTouched": [],
+  "sharedOrGlobalWorkflowFilesTouched": [],
+  "preExistingDirtyFilesPreserved": 323,
+  "worktreeEntriesAfter": 324,
+  "destructiveGitUsed": false,
+  "gitCheckoutResetRestoreStashClean": "never invoked at any point in this pass"
+ },
+ "defects": [
+  {
+   "id": "CG-IMPL-010",
+   "finding": "VF4-SURVEY-STALL-1",
+   "cause": "Every A* waypoint including the terminal one is voxelCoordToWorld(cell.support) \u2014 a snapped CELL CENTRE \u2014 and nextNavigationStep never consumes the last one, so it stays the steering target. steerFreeToward releases all four controls within tangent radius 0.2 of that centre, while walkToward only arrives on the distance to the goal the caller asked for. Chapter 13 aims CG_RAIL_CORNER_OVERSHOOT 0.6 THROUGH each route corner and stops at CG_RAIL_ROUTE_ARRIVE 0.35. With VOXEL_SCALE 2 the goal (-26,51.05,14.6) quantizes into the SAME cell as vertex 1 (-26,51.05,14), so the closest the body can come while steering is live is 0.6-0.2 = 0.4 > 0.35. The arrival predicate is analytically unsatisfiable, not merely unlucky.",
+   "classification": "snapped safe-cell navigation, NOT an obstacle, water, hole, rise/drop, cross-face edge or unreachable goal. Route reason is dry-surface-path with requestedGoalWasWet false and waterCrossing null; the verifier's ordinary-input discriminator moved the real body freely and supported stayed true with holdReason null.",
+   "stillTimeExplanation": "primitives.ts stuck watchdog accumulates stillTime only `if (pushing && horizontalDelta < 0.06)`, where pushing is forward||backward||left||right. In the dead zone the navigator issues NO control, so pushing is false and stillTime resets to 0 every frame beside a bit-identical body. The watchdog is not measuring the wrong body; it is correctly disarmed. No timeout teleport, nudge or rescue escalation was enabled by this repair.",
+   "fix": "terminalExactGoalHandoff + applyTerminalExactGoal in primitives.ts. At the terminal waypoint only, when the planner resolved the goal's OWN cell (dry-surface-path or already-at-resolved-goal, not wet, not substituted), the goal is same-face, the leg is not a water/jetpack leg, the goal falls inside the terminal cell's tangential footprint, and every further column the capsule actually overlaps is certified by the SAME planner at the SAME surface height \u2014 the aim moves tangentially onto the exact goal, at the height the planner cleared. The body then walks the remainder under ordinary directional input.",
+   "whatWasNotDone": [
+    "arrival radius 0.35 unchanged",
+    "steering dead zone 0.2 unchanged in value (named as NAVIGATION_STEER_DEAD_ZONE only so the arithmetic is testable)",
+    "no authored pose, route or proof predicate altered",
+    "no corner-credit allowance increased",
+    "no distance paid by endpoint motion",
+    "no body clamped or teleported",
+    "no state granted",
+    "no rescue escalation enabled",
+    "navigator not bypassed: the planner still owns every cell, and a refusal keeps the snapped centre exactly as before"
+   ],
+   "sharedWalkerSafetyArgument": "Before the repair a body stopped within 0.2 of the snapped CENTRE, so arrival required stop >= 0.2 + |goal - centre|. After it, the body stops within 0.2 of the GOAL, so arrival requires only stop >= 0.2. The second condition is implied by the first for every offset, so no goal that used to be reached can stop being reached. The smallest stop radius anywhere in the shipped rails is 0.3 > 0.2. Terrain, obstacle, hazard, water and cross-face protection are untouched because the handoff never leaves a cell the planner certified and is refused outright on cross-face, water and substituted goals."
+  },
+  {
+   "id": "CG-IMPL-011 / CG-IMPL-008 (Continue)",
+   "finding": "PC-SAVE-OVERWRITTEN",
+   "cause": "Two coupled defects. (A) commonGroundSnapshot returned a cached live snapshot for the actor BEFORE consulting the staged payload, so an empty placeholder minted during boot permanently shadowed the earned bytes staged a moment later by the world-keyed restore effect. (B) saveWorld writes a whole new WorldSave record, and its commonGround field was serializeCommonGroundForWorld(worldId) ?? undefined \u2014 so a placeholder overwrote the earned blob with emptiness, and a null would have deleted it outright.",
+   "orderingIsolation": "The write is NOT attributed to clicking Continue. The reproduction steps landing-menu boot, the placeholder-minting READ, the world switch to the sibling, and the world-change autosave separately, and names the read as the frame that creates the placeholder. The storage snapshot alone could not have identified this.",
+   "fix": "(1) serializeCommonGroundForWorld returns null for a snapshot that cannot speak for its world; (2) saveWorld carries the previously persisted commonGround forward instead of dropping or replacing it; (3) commonGroundSnapshot lets a staged payload take over an empty placeholder, never real progress; (4) a world is 'settled' only when its restore found NOTHING (absent/legacy) or when a payload actually VALIDATED \u2014 a completed read of a present payload settles nothing; (5) clearCommonGroundForWorld now also removes the stored chapter field so carry-forward cannot resurrect it.",
+   "resumePointClassification": "PC-CONTINUE-RESUME-POINT is a FIXTURE PREDECESSOR GAP, not a generalized wrong-world-selection bug. The deep link seeded story:ch13-fault-reviewed and story:ch13-return-chosen but never story:ch13-origin-landed, and storyState.storyEntryPoint resolves exactly that milestone set to ch13-return. Proved in both directions by test: without origin-landed the entry is ch13-return; with it, ch13-survey, and the same saved bytes resume the drawing.",
+   "whatWasNotDone": [
+    "no synthetic success",
+    "no fabricated milestone or unauthorized past event",
+    "no replayed old F/ACK \u2014 the restored survey activates none of the already-earned anchors",
+    "no restore replay",
+    "no cross-world leak (Origin and the sibling keep separate records, asserted both ways)",
+    "no prehydration empty-state overwrite",
+    "no deferred unlock or unbounded event queue",
+    "no silently reset partial route",
+    "no dropped construction (structures still written normally alongside a carried blob)",
+    "player pose and actual structures preserved"
+   ],
+   "avAfterSilentRestore": "Proved: after a silent restore the next NEW act (span offer at E) commits and activates anc.cg.route-offered, while anc.cg.survey-started and anc.cg.demonstration-opened are NOT replayed into fresh AV history."
+  }
+ ],
+ "reviewItems": [
+  {
+   "id": "NAV-HEIGHT",
+   "status": "closed",
+   "resolution": "certifyColumn now returns the planner's RESOLVED SURFACE rather than a boolean, and terminalExactGoalHandoff compares that height against the terminal waypoint along the up axis, refusing beyond half a cell with 'footprint-height-mismatch'. Dryness alone is not safety: a wall top and a pit floor are both dry. Proved with in-cube stepped terrain (plateau lowered to grid y 23 so a rise has real room), raised and lowered variants both refused, flat control still allowed."
+  },
+  {
+   "id": "NAV-RUNTIME-SEAM",
+   "status": "closed",
+   "resolution": "A test drives the actual autopilotTick -> ch13 rail -> walkToward -> nextNavigationStep -> steerFreeToward wiring in movie mode with the body at the captured frozen pose, observing only the shipped getAutopilotControls(). It uses solely exports present on BOTH byte sets, so tmp/runtime-seam-counterfactual.py runs the same spec against pre-repair source: repaired 1 passed, pre-repair 'expected 0 to be greater than 0' \u2014 the shipped autopilot asked for no movement on any of 30 frames. Removing the runtime handoff fails behaviourally, as required."
+  },
+  {
+   "id": "NAV-EXACT-CACHE",
+   "status": "closed",
+   "resolution": "The decision is cached per (plan, EXACT goal) via exactGoalHandoffFor, because the route cache tolerates a goal drifting up to one unit before replanning. The probes re-run only when the target actually moves; no full A* is forced. A focused same-plan test shows two targets under one unchanged plan, less than one unit apart, getting two different lawful answers (handoff vs footprint-not-certified)."
+  },
+  {
+   "id": "SAVE-ENTRY-BEFORE-RESTORE",
+   "status": "closed",
+   "resolution": "The first 'entered' candidate was withdrawn: it made beat entry mean ownership, which would have made the very placeholder authoritative and reinstated the bug. Ownership is now driven only by persistence. Tests cover beat entry BEFORE staging (earned bytes survive an autosave in that window, then hydrate), a completed restore that finds nothing (emptiness becomes saveable), and a legitimately new action after a bare entry (never dropped)."
+  },
+  {
+   "id": "SAVE-SCOPED-CLEAR",
+   "status": "closed",
+   "resolution": "clearCommonGroundForWorld clears the live/pending maps AND deletes the stored chapter field only, leaving structures, campfires, habitat and every other world alone. Tested that clear -> save -> reload does not resurrect the payload."
+  },
+  {
+   "id": "SAVE-ENTRY staging/hydration window (13:41)",
+   "status": "closed",
+   "resolution": "A completed read of a PRESENT payload no longer settles the world. isPristineCommonGround returns true while bytes are still pending, so an autosave landing between staging and hydration cannot let the placeholder answer. Test: enter -> placeholder -> restore -> IMMEDIATE saveWorld -> next tick; the earned drawing survives and then hydrates."
+  },
+  {
+   "id": "SAVE-ENTRY foreign payload on disk (13:41)",
+   "status": "closed",
+   "resolution": "The foreign-actor test now rewrites the ACTUAL stored record and goes through restoreCommonGroundForWorld. A rejected payload deliberately does NOT settle the world, so this actor's empty state can never overwrite it; the bytes are retained across repeated autosaves. Documented consequence: a world holding another actor's payload stays unsettled and will not have local empty chapter state written over it."
+  },
+  {
+   "id": "probe observer-effect / passive diagnostics",
+   "status": "unchanged by me",
+   "resolution": "getCommonGroundProbeSnapshot still reads the detached lastPublishedPlan; my runtime-seam test consumes it read-only AFTER ordinary ticks and adds no planner execution on inspection."
+  }
+ ],
+ "negativeCases": [
+  "goal replaced by the planner for safety (wet goal, unclearable goal) \u2014 snapped safe cell kept",
+  "goal outside the terminal cell \u2014 refused",
+  "water crossing and jetpack legs \u2014 refused",
+  "cross-face goal and active cross-face leg \u2014 refused",
+  "genuinely unreachable/buried final target against the REAL Origin generator \u2014 refused",
+  "overlapped column is a hole, water, or lava \u2014 refused",
+  "overlapped column is dry but raised or lowered \u2014 refused on height",
+  "non-terminal cursor \u2014 refused; cursor consumption bounds untouched, no cell skipped",
+  "surface-normal height conventions (50.989 / 51.05 / 52.85 / 55.05) must NOT refuse a legitimate handoff",
+  "late payload vs genuinely newer live work \u2014 live work wins",
+  "foreign-actor payload \u2014 rejected for hydration, retained on disk",
+  "explicit scoped clear and explicit world clear \u2014 still remove"
+ ],
+ "checks": [
+  {
+   "command": "npm run verify",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "testFiles": 350,
+   "tests": 3137,
+   "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-repair/verify-navigation-repair.log",
+   "logSha256": "e6f6afdb4aeb6de9b357eb31fc147b80e3a3a9fa7e7604e24d1c7130cf49daa5",
+   "covers": [
+    "catalog:check",
+    "scene:av:check",
+    "creative:workflow:check",
+    "chapter:registry:check",
+    "chapter:journey:check",
+    "typecheck",
+    "preview:check",
+    "audio:diagnostic-check",
+    "story:ladder:check",
+    "guidance:target-check",
+    "story:authority",
+    "test",
+    "audio:check",
+    "build"
+   ]
+  },
+  {
+   "command": "npm run story:ux:check",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "testFiles": 9,
+   "tests": 94,
+   "log": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-repair/story-ux-check.log",
+   "logSha256": "77c95c2b7ac699cafd450ec4d4669f67f01d0f947c2915ade9d59ba695c27a45"
+  }
+ ],
+ "counterfactuals": [
+  {
+   "probe": "tmp/continue-counterfactual.py",
+   "kind": "behavioural, single spec run against both byte sets using only pre-existing exports",
+   "preRepair": "phase=idle samples=0 bytes=563",
+   "repaired": "phase=drawing samples=4 bytes=909",
+   "restoreVerified": true,
+   "temporaryPath": "main/src/story/__continue-counterfactual.test.ts",
+   "temporaryPathNote": "OUTSIDE allowedPaths. Did not pre-exist (the script refuses to run if the path is occupied), existed only for the duration of the script, removal proven by the finally block and independently re-checked; it was harness code, never game production code. Root observed it and asked that later temporary work reuse an allowed test file \u2014 the runtime-seam counterfactual below does exactly that."
+  },
+  {
+   "probe": "tmp/runtime-seam-counterfactual.py",
+   "kind": "behavioural, real autopilotTick wiring, temporary spec written into the ALREADY-ALLOWED main/src/story/autopilot/primitives.test.ts with byte-exact backup and hash-verified restore",
+   "preRepair": "exit 1 \u2014 'expected 0 to be greater than 0' (no directional control on any of 30 frames)",
+   "repaired": "exit 0 \u2014 1 passed",
+   "restoreVerified": true
+  },
+  {
+   "probe": "tmp/navigation-counterfactual.py",
+   "kind": "byte-swap of the four repaired sources",
+   "preRepair": "exit 1",
+   "honestLimitation": "WEAK: on pre-repair bytes primitives.test.ts fails at import because the new exports do not exist, so this proves API absence, not behaviour. The behavioural proofs are the two probes above plus the in-suite withHandoff:false reproduction.",
+   "restoreVerified": true
+  }
+ ],
+ "reproductionHonesty": {
+  "preFixReproductionTiming": "The in-suite pre-fix reproduction (withHandoff:false) and both behavioural counterfactuals were written and run AFTER the repair edits had begun. They are not claimed to have run before any edit. The pre-edit work was source reading, which established the arithmetic cause exactly.",
+  "initialGroundFrameCorrection": "The first version of the navigation tests placed the body in the GROUNDED pose frame (y 50.989). The navigator reads getPlayerWorldPosition(), which is the capsule CENTRE (y 52.789, waypoint plane 52.85); in the wrong frame the cursor-consumption rise bound made a route leg look un-climbed and two cases failed for the wrong reason. Corrected to the centre frame, matching the capture, before any conclusion was drawn.",
+  "integratorLimitation": "The closed-loop walk tests advance the body with a small integrator that moves ONLY along the direction the shipped steering asked for, only while a control is held, at fixed speed. It can never teleport to or overshoot onto a requested point. The runtime-seam test needs no integrator at all: it observes the shipped controls directly."
+ },
+ "preservation": {
+  "priorRepairsPreserved": [
+   "movie interaction cadence and ordered route following (CG-IMPL-004/005)",
+   "lifecycle entry-mode, physical coordinate and anchor eligibility fixes (006/007/009 withdrawal)",
+   "world support/render/boot fixes (006/008)",
+   "the existing unit-level mid-drawing Continue restore test and the AV predecessor map \u2014 both still pass unmodified in substance"
+  ],
+  "fixedLightAndResourceBudgets": "untouched",
+  "passiveDiagnosticBehaviour": "untouched",
+  "authoredPosesRoutesProof": "untouched",
+  "immutableBeforeSourceMutated": false
+ },
+ "boundary": {
+  "whatThisProves": "Source-level correctness only: the cause is reproduced through the real Origin generator, the real A* planner, the real steering intent and dead zone, the real arrival measure, and \u2014 for the runtime seam \u2014 the real autopilotTick control output; and the Continue loss is reproduced and fixed through the real saveWorld/loadWorld/restore/world-selection/autosave sequence with the exact captured data.",
+  "whatThisDoesNotProve": "No hardware, rendering, hearing, frame-budget, feel or gameplay acceptance claim is made from unit tests. VF4-SURVEY-STALL-1 was found on headed NVIDIA GB10 hardware and must be re-measured there.",
+  "requiredNextIndependentPhysicalVerification": [
+   "headed hardware re-run of the ch13-survey demonstration walk through ALL rail vertices with no rescue and no stall-check failure",
+   "the opt-in 30s stall check re-run to exit 0",
+   "an actual partial-Continue capture: earn a drawing, save, Continue, confirm the WorldSave retains its samples and a NEW act is accepted and activates its AV",
+   "the still-unmeasured items listed in verification-world-final-report.json notMeasured"
+  ],
+  "previewNote": "Preview 40131 is immutable PRE-REPAIR source and must NOT be used to validate this source."
+ },
+ "unresolvedFindings": [
+  {
+   "id": "HABITAT-CARRY-SYMMETRY",
+   "severity": "observation, not fixed",
+   "detail": "saveWorld's habitat field has the same shape as the old commonGround one (getHabitatWorldSnapshot(worldId) ?? undefined), so an autosave for a world whose habitat is not live would drop it. NOT demonstrated by any capture and outside this repair's defect scope, so deliberately left alone rather than silently widened. Flagged for routing."
+  },
+  {
+   "id": "FOREIGN-PAYLOAD-WORLD-STAYS-UNSETTLED",
+   "severity": "documented consequence",
+   "detail": "A world holding another actor's chapter payload never settles, so this actor cannot write empty chapter state there. That is the conservative branch of the retain-vs-erase contract and is intended; an explicit clear remains the way to reclaim the record."
+  },
+  {
+   "id": "VF4-HARNESS-MARKER-1",
+   "severity": "pre-existing, not mine",
+   "detail": "markerCount sampling gap remains a verifier harness matter; untouched."
+  }
+ ],
+ "logs": {
+  "dir": ".codex/production-runs/2026-09-05-after-the-hearth/logs/navigation-repair"
+ },
+ "rootOwnedArtifactsNotEdited": [
+  "implementation-source-manifest.json",
+  "check-results.json",
+  "implementation-gate-pass.json",
+  "iteration-ledger.jsonl",
+  "verification-ready.json",
+  "defects.json",
+  "production-lock.json"
+ ]
+}

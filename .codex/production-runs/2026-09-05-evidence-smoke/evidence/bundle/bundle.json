@@ -1,0 +1,639 @@
+{
+  "schema": "capture-bundle-v1",
+  "subject": {
+    "id": "ch10@movie",
+    "kind": "paravoxia-chapter",
+    "prompt": null
+  },
+  "capture": {
+    "lane": "external",
+    "tier": "hardware-high",
+    "adapter": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "headed": true,
+    "resolution": {
+      "w": 1280,
+      "h": 720
+    },
+    "seed": "movie:HIGH",
+    "deterministic": false,
+    "motionRequired": true,
+    "clock": "autopilot-beat-clock",
+    "buildSha": "b631a52",
+    "viewport": "1280x720",
+    "loop": {
+      "looping": false,
+      "periodSeconds": null
+    }
+  },
+  "build": {
+    "compileOk": true,
+    "runtimeOk": true
+  },
+  "frames": [
+    {
+      "file": "frames/f0000_t4.80s_opening-2.0s.png",
+      "role": "keyframe",
+      "voxRole": "still",
+      "label": "opening-2.0s",
+      "frame": 0,
+      "simTime": 4.8,
+      "salience": 1,
+      "sha256": "718d4119dbcfcedcbefb9cf3c6b02f2b656463e2ecfc11787aa27cc3a2a096d5",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.1598,
+        "meanLuma": 0.0639,
+        "maxLuma": 0.9728,
+        "contrast": 0.1145,
+        "clipped": 0.00416,
+        "nearBlack": 0.5062,
+        "colorfulness": 0.6526,
+        "blank": false,
+        "meanLuma255": 16.29
+      },
+      "beat": "ch10-ask",
+      "hudFile": "hud/f0000_t4.80s_opening-2.0s.png"
+    },
+    {
+      "file": "frames/f0001_t5.20s_burst-entry.png",
+      "role": "burst",
+      "voxRole": "burst",
+      "label": "burst-entry",
+      "frame": 1,
+      "simTime": 5.2,
+      "salience": 0,
+      "sha256": "715844200606306738af2d700afcebebb37ee44ab74c228b10ec5503cf01ac74",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.1577,
+        "meanLuma": 0.0631,
+        "maxLuma": 0.9759,
+        "contrast": 0.1131,
+        "clipped": 0.00425,
+        "nearBlack": 0.5076,
+        "colorfulness": 0.6574,
+        "blank": false,
+        "meanLuma255": 16.09
+      },
+      "beat": "ch10-ask",
+      "hudFile": "hud/f0001_t5.20s_burst-entry.png"
+    },
+    {
+      "file": "frames/f0002_t9.40s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 2,
+      "simTime": 9.4,
+      "salience": 0.5,
+      "sha256": "a6eeda118decf044bc705d02295d4b77d829b88317b1ca5e4a624f27840b5a07",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.1552,
+        "meanLuma": 0.0645,
+        "maxLuma": 0.9759,
+        "contrast": 0.1167,
+        "clipped": 0.00422,
+        "nearBlack": 0.5027,
+        "colorfulness": 0.6522,
+        "blank": false,
+        "meanLuma255": 16.45
+      },
+      "beat": "ch10-ask",
+      "hudFile": "hud/f0002_t9.40s_strip.png"
+    },
+    {
+      "file": "frames/f0003_t13.40s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 3,
+      "simTime": 13.4,
+      "salience": 0.5,
+      "sha256": "fc1f14cf7f4faa8a7ff6b611348f0c15905b2f10a12a730831088f110543ed3e",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.2246,
+        "meanLuma": 0.0948,
+        "maxLuma": 0.9728,
+        "contrast": 0.1531,
+        "clipped": 0.00309,
+        "nearBlack": 0.484,
+        "colorfulness": 0.6534,
+        "blank": false,
+        "meanLuma255": 24.17
+      },
+      "beat": "ch10-ask",
+      "hudFile": "hud/f0003_t13.40s_strip.png"
+    },
+    {
+      "file": "frames/f0004_t14.40s_objective-change.png",
+      "role": "keyframe",
+      "voxRole": "trigger",
+      "label": "objective-change",
+      "frame": 4,
+      "simTime": 14.4,
+      "salience": 1,
+      "sha256": "8780f7b51cc1a5ea34e9f853b365c49f943c27405b69829f76058c6e16547572",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.4612,
+        "meanLuma": 0.217,
+        "maxLuma": 0.9476,
+        "contrast": 0.2793,
+        "clipped": 0.00014,
+        "nearBlack": 0.429,
+        "colorfulness": 0.3109,
+        "blank": false,
+        "meanLuma255": 55.33
+      },
+      "beat": "ch10-ask",
+      "hudFile": "hud/f0004_t14.40s_objective-change.png"
+    },
+    {
+      "file": "frames/f0005_t17.60s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 5,
+      "simTime": 17.6,
+      "salience": 0.5,
+      "sha256": "b9d83af6ff52d0106b1bcc85f75679092e6dc23104a3dfed7b5d96249ad1cb20",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.4124,
+        "meanLuma": 0.1652,
+        "maxLuma": 0.9613,
+        "contrast": 0.2156,
+        "clipped": 0.00001,
+        "nearBlack": 0.4286,
+        "colorfulness": 0.4987,
+        "blank": false,
+        "meanLuma255": 42.13
+      },
+      "beat": "ch10-ask",
+      "hudFile": "hud/f0005_t17.60s_strip.png"
+    },
+    {
+      "file": "frames/f0006_t21.70s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 6,
+      "simTime": 21.7,
+      "salience": 0.5,
+      "sha256": "994acf9209d2d2e7047c9847ee66a7239aba014328342087d2bde695881654b9",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.5173,
+        "meanLuma": 0.2334,
+        "maxLuma": 0.9756,
+        "contrast": 0.2772,
+        "clipped": 0.00025,
+        "nearBlack": 0.3327,
+        "colorfulness": 0.3701,
+        "blank": false,
+        "meanLuma255": 59.52
+      },
+      "beat": "ch10-ask",
+      "hudFile": "hud/f0006_t21.70s_strip.png"
+    },
+    {
+      "file": "frames/f0007_t25.80s_caption-first.png",
+      "role": "keyframe",
+      "voxRole": "trigger",
+      "label": "caption-first",
+      "frame": 7,
+      "simTime": 25.8,
+      "salience": 1,
+      "sha256": "ca50c871e63e97d720368764aea3eb2598547816c22b9dc28a525b9291d9053c",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.8767,
+        "meanLuma": 0.4824,
+        "maxLuma": 0.9597,
+        "contrast": 0.2931,
+        "clipped": 0,
+        "nearBlack": 0.0031,
+        "colorfulness": 0.2958,
+        "blank": false,
+        "meanLuma255": 123.01
+      },
+      "beat": "ch10-ask",
+      "hudFile": "hud/f0007_t25.80s_caption-first.png"
+    },
+    {
+      "file": "frames/f0008_t26.20s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 8,
+      "simTime": 26.2,
+      "salience": 0.5,
+      "sha256": "ac058a9768a32ed5b28184b0181e59c1b28e9a77f844ba3cf0ce08d6290d4400",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.8755,
+        "meanLuma": 0.4779,
+        "maxLuma": 0.9568,
+        "contrast": 0.2934,
+        "clipped": 0,
+        "nearBlack": 0.0031,
+        "colorfulness": 0.2979,
+        "blank": false,
+        "meanLuma255": 121.85
+      },
+      "beat": "ch10-ask",
+      "hudFile": "hud/f0008_t26.20s_strip.png"
+    },
+    {
+      "file": "frames/f0009_t30.20s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 9,
+      "simTime": 30.2,
+      "salience": 0.5,
+      "sha256": "22b9671a06daa7f16941d9a0cfd4f1ae838e53ff6915a9cb59510555bdc9bc17",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.4726,
+        "meanLuma": 0.3024,
+        "maxLuma": 0.9569,
+        "contrast": 0.3526,
+        "clipped": 0.00022,
+        "nearBlack": 0.4251,
+        "colorfulness": 0.1954,
+        "blank": false,
+        "meanLuma255": 77.1
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0009_t30.20s_strip.png"
+    },
+    {
+      "file": "frames/f0010_t30.60s_burst-entry.png",
+      "role": "burst",
+      "voxRole": "burst",
+      "label": "burst-entry",
+      "frame": 10,
+      "simTime": 30.6,
+      "salience": 0,
+      "sha256": "b1089d4cb9101013efbac871606fd8b5601b8bf63c2097b6cc4b1c70eb2150d2",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.4712,
+        "meanLuma": 0.302,
+        "maxLuma": 0.9549,
+        "contrast": 0.3526,
+        "clipped": 0.00026,
+        "nearBlack": 0.4261,
+        "colorfulness": 0.1969,
+        "blank": false,
+        "meanLuma255": 77.01
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0010_t30.60s_burst-entry.png"
+    },
+    {
+      "file": "frames/f0011_t30.90s_burst-entry.png",
+      "role": "burst",
+      "voxRole": "burst",
+      "label": "burst-entry",
+      "frame": 11,
+      "simTime": 30.9,
+      "salience": 0,
+      "sha256": "961f2468fbd2c78725b748d314af73029325cc0d5f60737b3921223fc657dd2a",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.4708,
+        "meanLuma": 0.3012,
+        "maxLuma": 0.9507,
+        "contrast": 0.3526,
+        "clipped": 0.00019,
+        "nearBlack": 0.4261,
+        "colorfulness": 0.1969,
+        "blank": false,
+        "meanLuma255": 76.8
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0011_t30.90s_burst-entry.png"
+    },
+    {
+      "file": "frames/f0012_t31.40s_burst-entry.png",
+      "role": "burst",
+      "voxRole": "burst",
+      "label": "burst-entry",
+      "frame": 12,
+      "simTime": 31.4,
+      "salience": 0,
+      "sha256": "a9b1ae47cd42a88ac5be216fd027ba66bbbed2925c9e6902b588513d6eaae73c",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.4708,
+        "meanLuma": 0.3011,
+        "maxLuma": 0.9512,
+        "contrast": 0.3525,
+        "clipped": 0.00088,
+        "nearBlack": 0.4266,
+        "colorfulness": 0.1977,
+        "blank": false,
+        "meanLuma255": 76.79
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0012_t31.40s_burst-entry.png"
+    },
+    {
+      "file": "frames/f0013_t31.80s_burst-entry.png",
+      "role": "burst",
+      "voxRole": "burst",
+      "label": "burst-entry",
+      "frame": 13,
+      "simTime": 31.8,
+      "salience": 0,
+      "sha256": "d7da2a687e34625f69edd6a2802362d8b2e32c9807721d517cadb70c938ee3ee",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.4718,
+        "meanLuma": 0.3013,
+        "maxLuma": 0.9509,
+        "contrast": 0.3524,
+        "clipped": 0.00027,
+        "nearBlack": 0.4261,
+        "colorfulness": 0.1983,
+        "blank": false,
+        "meanLuma255": 76.82
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0013_t31.80s_burst-entry.png"
+    },
+    {
+      "file": "frames/f0014_t32.20s_burst-entry.png",
+      "role": "burst",
+      "voxRole": "burst",
+      "label": "burst-entry",
+      "frame": 14,
+      "simTime": 32.2,
+      "salience": 0,
+      "sha256": "7bdee297d650dac6ebdcf62c7a2bbaee07360536bf0136a2f01a7845b8e7f068",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.473,
+        "meanLuma": 0.3016,
+        "maxLuma": 0.9507,
+        "contrast": 0.3523,
+        "clipped": 0.00027,
+        "nearBlack": 0.4258,
+        "colorfulness": 0.1988,
+        "blank": false,
+        "meanLuma255": 76.91
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0014_t32.20s_burst-entry.png"
+    },
+    {
+      "file": "frames/f0015_t32.60s_burst-entry.png",
+      "role": "burst",
+      "voxRole": "burst",
+      "label": "burst-entry",
+      "frame": 15,
+      "simTime": 32.6,
+      "salience": 0,
+      "sha256": "8c9f48ef8657e40e57065c15712af76fd358ac220801a358e3f6d497b03c5b26",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.4748,
+        "meanLuma": 0.3021,
+        "maxLuma": 0.9538,
+        "contrast": 0.3523,
+        "clipped": 0.00032,
+        "nearBlack": 0.4257,
+        "colorfulness": 0.199,
+        "blank": false,
+        "meanLuma255": 77.05
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0015_t32.60s_burst-entry.png"
+    },
+    {
+      "file": "frames/f0016_t36.70s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 16,
+      "simTime": 36.7,
+      "salience": 0.5,
+      "sha256": "6710577508bc95a9bd2ffbcc5185fbe683ce5af38c6966b92db33780351bdc86",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.1846,
+        "meanLuma": 0.0705,
+        "maxLuma": 0.9725,
+        "contrast": 0.1226,
+        "clipped": 0.00019,
+        "nearBlack": 0.4879,
+        "colorfulness": 0.6697,
+        "blank": false,
+        "meanLuma255": 17.99
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0016_t36.70s_strip.png"
+    },
+    {
+      "file": "frames/f0017_t40.80s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 17,
+      "simTime": 40.8,
+      "salience": 0.5,
+      "sha256": "62d252ded5157c7b9fecd79ba70b318aff3c749230d03f32ab64b96516bc375f",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.1851,
+        "meanLuma": 0.0709,
+        "maxLuma": 0.9683,
+        "contrast": 0.1241,
+        "clipped": 0.00034,
+        "nearBlack": 0.4923,
+        "colorfulness": 0.6674,
+        "blank": false,
+        "meanLuma255": 18.07
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0017_t40.80s_strip.png"
+    },
+    {
+      "file": "frames/f0018_t44.80s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 18,
+      "simTime": 44.8,
+      "salience": 0.5,
+      "sha256": "059db0b126e29ca37793b27f74a56185deacf2fd88bf2cdd2db387696ae5c5f2",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.1827,
+        "meanLuma": 0.0704,
+        "maxLuma": 0.9683,
+        "contrast": 0.1236,
+        "clipped": 0.00034,
+        "nearBlack": 0.4927,
+        "colorfulness": 0.6647,
+        "blank": false,
+        "meanLuma255": 17.96
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0018_t44.80s_strip.png"
+    },
+    {
+      "file": "frames/f0019_t48.90s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 19,
+      "simTime": 48.9,
+      "salience": 0.5,
+      "sha256": "1e2293df8e50bbd7eb1b81bb2fd8411ea4213fe82fd6c470a6c5a3cfab91f7a8",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.1827,
+        "meanLuma": 0.0704,
+        "maxLuma": 0.9725,
+        "contrast": 0.1237,
+        "clipped": 0.00035,
+        "nearBlack": 0.4969,
+        "colorfulness": 0.663,
+        "blank": false,
+        "meanLuma255": 17.95
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0019_t48.90s_strip.png"
+    },
+    {
+      "file": "frames/f0020_t52.90s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 20,
+      "simTime": 52.9,
+      "salience": 0.5,
+      "sha256": "72539994abb1961fef0ca80bdde8c7a46a98acda4e884966ba5a22406cfce489",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.1837,
+        "meanLuma": 0.0698,
+        "maxLuma": 0.9683,
+        "contrast": 0.123,
+        "clipped": 0.00028,
+        "nearBlack": 0.5012,
+        "colorfulness": 0.6627,
+        "blank": false,
+        "meanLuma255": 17.81
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0020_t52.90s_strip.png"
+    },
+    {
+      "file": "frames/f0021_t57.00s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 21,
+      "simTime": 57,
+      "salience": 0.5,
+      "sha256": "730783f0f1a7788f528e689420711857221a5c79e214e89460f578ee7fd74267",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.1845,
+        "meanLuma": 0.0695,
+        "maxLuma": 0.9683,
+        "contrast": 0.1237,
+        "clipped": 0.00023,
+        "nearBlack": 0.5037,
+        "colorfulness": 0.6596,
+        "blank": false,
+        "meanLuma255": 17.71
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0021_t57.00s_strip.png"
+    },
+    {
+      "file": "frames/f0022_t61.10s_strip.png",
+      "role": "temporal",
+      "voxRole": "temporal",
+      "frame": 22,
+      "simTime": 61.1,
+      "salience": 0.5,
+      "sha256": "7cc7ca1177713ec9fafaffa5bf75b4b57a8b029aa92cf27177db256c7c8d16ae",
+      "stats": {
+        "drawCalls": null,
+        "brightRatio": 0.1866,
+        "meanLuma": 0.0688,
+        "maxLuma": 0.9683,
+        "contrast": 0.123,
+        "clipped": 0.00022,
+        "nearBlack": 0.5012,
+        "colorfulness": 0.6626,
+        "blank": false,
+        "meanLuma255": 17.55
+      },
+      "beat": "ch10-transit",
+      "hudFile": "hud/f0022_t61.10s_strip.png"
+    }
+  ],
+  "bursts": [
+    {
+      "t0": 30.6,
+      "frameStart": 10,
+      "frameEnd": 15,
+      "frames": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "dtMs": 526.8,
+      "meanAdjDelta": 0.00228,
+      "netDeltaPerFrame": 0.00087,
+      "flickerRatio": 2.63,
+      "signFlipRatio": 0.748,
+      "changedRatio": 0.015,
+      "pops": 0,
+      "beat": "ch10-transit"
+    }
+  ],
+  "sheet": {
+    "file": "sheet.png",
+    "tileW": 480,
+    "tileH": 270,
+    "tiles": 3,
+    "sha256": "8f591f98be0b5e9cd2a0c1598ddf1b138146bebc4edd2103ee6de4ce16215a00"
+  },
+  "digest": {
+    "file": "digest.md",
+    "sha256": "13a75d4490570699f327a861c82f68cf0b188310ce96ef6edf865997ea1e0b9c"
+  },
+  "provenance": {
+    "generator": "paravoxia-chapter-evidence@v1",
+    "generatedAt": "2026-09-05T13:36:20.525Z",
+    "chapter": "ch10",
+    "lane": "movie",
+    "beats": [
+      "ch10-cold"
+    ],
+    "videos": [
+      {
+        "beat": "ch10-cold",
+        "file": "video/page@4ecbd5974a7d4a319ede0f9127defbdc.webm",
+        "bytes": 12668330,
+        "sha256": "ac876a7a5aa2951fa31084aafc1801fddabf76a47bea0e038e8779e64861ee83"
+      }
+    ],
+    "sessions": [
+      {
+        "id": "ch10-cold",
+        "url": "/?story=ch10-cold&journeyprobe=1&profile=HIGH&movie=1",
+        "frames": 23,
+        "bursts": 1,
+        "pageErrors": [],
+        "reachedExit": false,
+        "completedEvents": [
+          "objective-change",
+          "caption-first"
+        ]
+      }
+    ],
+    "bundleSha256": "e61b4fa963c3f8c3f014ba22ccccffbe3921e23dfef394c4198ff645392f90a8"
+  }
+}

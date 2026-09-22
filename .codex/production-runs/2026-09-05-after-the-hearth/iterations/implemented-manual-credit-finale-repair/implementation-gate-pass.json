@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "phase": "implementation",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "checkedAt": "2026-09-06T21:21:33.629680+00:00",
+  "checkCount": 1756,
+  "gateReportSha256": "6d386dcb5a83e48cdbca95e793d75a181be4b7a48d44ca2a596aaece1e3fc319",
+  "gateReportRef": "iterations/implemented-manual-credit-finale-repair/creative-run-quality-report.json",
+  "publicationAuthorized": false
+}

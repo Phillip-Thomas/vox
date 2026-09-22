@@ -1,0 +1,76 @@
+{
+  "schema": "paravoxia.verifierProbePreflight.v1",
+  "role": "continue-controller-preflight",
+  "at": "2026-09-06T21:11:32Z",
+  "readiness": "PREPARED",
+  "scope": "private verifier preflight closure of the four executable faults in producer-continue-controller-wire-review.json; no game repair, no GPU, no browser launched",
+  "sourceMutationAuthorized": false,
+  "gameSourceTouched": false,
+  "entrypoint": "verifier/probes/continue-controller-closure/earned-continue-3d-probe.mjs",
+  "filesWritten": [
+    { "path": "verifier/probes/continue-controller-closure/earned-continue-3d-probe.mjs", "kind": "modified-entrypoint", "sha256": "b3e37bdaef4218e592bf3c79b529388e24c3d3153b5b7cf394acb60b0f750cbb" },
+    { "path": "verifier/probes/continue-controller-closure/continueClosure.mjs", "kind": "new-helper", "sha256": "79b5d598b08497be1d86dcabe6da31adf00762dddafb3ee2fd6116ecbf946a0c" },
+    { "path": "verifier/probes/continue-controller-closure/continueClosure.selftest.mjs", "kind": "new-test", "sha256": "394404e917461cc2d44bdd10edbc9aef205a3ef9e36b9d7dc5b9d30b15f44027" },
+    { "path": "verifier/probes/continue-controller-closure/liveCalibration.mjs", "kind": "modified-helper", "sha256": "1344212a6ca3472a8ed1a7dae6c962995f493f4459e5b3f624a525d38fcf3a82" },
+    { "path": "verifier/probes/continue-controller-closure/entryAdaptation.selftest.mjs", "kind": "modified-test", "sha256": "a91ee7793754fc75cb8180ff39b92d46768e05ae018348f20ff98891b82b6c0e" },
+    { "path": "logs/continue-controller-preflight/helper-selftests.log", "sha256": "7fb390c4492f24a068fd8c011cac1c40ac394e8cbffe8f00bfb700398245b1e7" },
+    { "path": "logs/continue-controller-preflight/entry-syntax-imports.log", "sha256": "405f8a973bc05fbcdef8cf92c58765d6d9c55f77dff87d2b2d81e18e87fd86b6" }
+  ],
+  "corrections": {
+    "C1": {
+      "fault": "acceptance required beforeOffer.anchors.slice(0,19) with prefix.length===19; 19 is the serialized survey POINT count, not an anchor count",
+      "fix": "extracted and CALLED continueClosure.spanOfferAcceptance from the entry at the offer site; acceptance = signedAuthorizationOk && fPressed && NEW anc.cg.route-offered relative to the pre-[F] reading && every ACTUAL pre-[F] anchor preserved in order",
+      "notAsserted": "no anchor minimum, no claim that anchor count equals point count",
+      "separateGatePreserved": "requiredGates.worldSaveEquality still comes from overwriteVerdict (full WorldSave/point-prefix equality after Continue); untouched",
+      "authorityUsed": "commitCommonGroundSpanOffer sets phase offered + notes anc.cg.route-offered (already read by the prior role; no source re-audit performed)",
+      "wiredAt": "earned-continue-3d-probe.mjs phases.newAction.offer.acceptance -> offer.accepted -> requiredGates.actualAcceptedNewAction"
+    },
+    "C2": {
+      "fault": "sampler read the GUESSED window.__paravoxiaSystem, and aliased the boolean s.worldBound as renderOrigin",
+      "fix": "pure exported readContinueFrame reads __paravoxiaJourneyProbe.snapshot().state.systemFlight for activePlanetId/locationMode/renderOrigin, exactly as main/tools/lib/evidence.mjs:126-140; renderOrigin only when the real array field is published (JourneyRuntimeProbeBridge.tsx:229), else null; worldBound retained as its own distinct boolean",
+      "shapes": "cg bodyPose/bodyCentre/up read TOP-LEVEL; anchors/survey read under .diagnostic",
+      "exercisedIdentically": "CONTINUE_FRAME_READER_SOURCE (readContinueFrame.toString()) is injected into the page and eval'd there, and the same export is called by the CPU test",
+      "perFrameErrors": "errors are recorded on the frame (frame.error + rec.frameErrors); no missing field is back-filled"
+    },
+    "C3": {
+      "fault": "loop broke on the first CG/HUD appearance and the harvest discarded every frame with ms>5000 since click, losing the pose change observed ~1s later and all late-boot frames",
+      "fix": "capture retained from BEFORE the click through at least holdAfterFirstValidMs=5000 past the first valid runtime foot+HUD reading (isValidRuntimeReading), bounded by maxWindowMs=30000; harvest applies NO frame filter",
+      "budgetUnchanged": "continueWaitBudgetMs stays 60000; no physics stop, no forced world, no longer wait budget",
+      "recorded": "cap/capHit, frameErrorCount, firstFootMs, firstFootChangeMs, msFromFirstFootToChange, window.stopReason, cleanup",
+      "incompleteIsIncomplete": "continueCaptureCompleteness reports verdict incomplete (finding EC-CONTINUE-TELEMETRY-INCOMPLETE) when a late boot cannot fit the hold; never reported as proof",
+      "failurePath": "harvestContinueSampler is idempotent and also invoked from the outer finally, so a FAILED Continue still stops the sampler and keeps its frames"
+    },
+    "C4": {
+      "fault": "450ms press + 350ms settle per key, usability decided from the pre-round latched basis, dirs updated only when retainedDirs[k] was truthy, and lateral control judged from the last (possibly partial) round",
+      "fix": "CALIBRATION_BOUNDS pressMs=140 / settleMs=200 (short ordinary press, controlled settle retained); direction AND usability now come from the per-key post-burst stampedCalibration against that key's own live up; applyRetainedDirs assigns totally so unusable/missing keys are CLEARED; usableEntryCensus counts ALL live stamped entries",
+      "noGuess": "a key with no published post-burst up is refused and cleared; no world-up default and no bodyCentre substitution",
+      "boundsPreserved": "maxCalibrations 6 and minUnitsSinceCalib 6 retained as PRIVATE CONTROLLER LIMITS, reported as bounds and never as progress proof",
+      "wiredAt": "walkTowards.runCalibration, the steering loop's dirs application, walk.census, and the EC3D-LATERAL-KEYS-DEAD finding"
+    }
+  },
+  "commandsRun": [
+    { "cmd": "node continueClosure.selftest.mjs", "cwd": "verifier/probes/continue-controller-closure", "result": "73 passed, 0 failed" },
+    { "cmd": "node entryAdaptation.selftest.mjs", "cwd": "verifier/probes/continue-controller-closure", "result": "47 passed, 0 failed" },
+    { "cmd": "node liveCalibration.selftest.mjs", "cwd": "verifier/probes/continue-controller-closure", "result": "36 passed, 0 failed" },
+    { "cmd": "node groundFrame.selftest.mjs", "cwd": "verifier/probes/continue-controller-closure", "result": "25 checks, 0 failed" },
+    { "cmd": "node tangentSteering3d.selftest.mjs", "cwd": "verifier/probes/continue-controller-closure", "result": "OK - all CPU cases passed" },
+    { "cmd": "node --check earned-continue-3d-probe.mjs && node --check continueClosure.mjs && node --check liveCalibration.mjs", "result": "OK" },
+    { "cmd": "entry relative-import resolution check (11 specifiers) + side-effect-free import of both helper modules", "result": "all resolved; continueClosure 9 exports, liveCalibration 13 exports" }
+  ],
+  "notRun": [
+    "the 108-check and 25-check suites and every unrelated suite were NOT repeated",
+    "no browser, no GPU, no preview server, no full verify, no build"
+  ],
+  "behaviourProofNotes": [
+    "continueClosure.selftest.mjs is behavioural: every case CALLS the exported helper. Positive C1 cases use 7 and 8 real anchors; old-anchor, unrelated-anchor, lost-preservation, unsigned and unpressed cases all fail; a generic phase change cannot pass because phase is not an acceptance input.",
+    "C2 fixture is a real nested journey system object plus a boolean cg worldBound; the boolean never becomes renderOrigin and an absent field stays null.",
+    "C3 clock cases: late first pose 8000ms with a change at 9000ms keeps capturing to 12999 and releases at 13000; an immediate first pose keeps capturing to 4999.",
+    "entryAdaptation.selftest.mjs is STATIC WIRING ONLY (it greps the entry text) and is not offered as behaviour proof; it exists to catch an unwired helper."
+  ],
+  "limitations": [
+    "No runtime, GPU or accepted-action evidence was generated by this role; nothing here shows the game restores or accepts the offer.",
+    "The corrected entrypoint has still never been executed headed.",
+    "Candidate bundle/source re-pin and the actual GPU run remain outstanding before any runtime claim."
+  ],
+  "next": "re-pin the candidate source manifest, then run the corrected earned-continue-3d entrypoint on real GPU; judge C1-C4 from that capture, not from this preflight."
+}

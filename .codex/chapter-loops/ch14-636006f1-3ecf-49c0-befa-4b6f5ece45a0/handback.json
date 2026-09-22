@@ -1,0 +1,166 @@
+{
+  "status": "BLOCKED_INFRASTRUCTURE",
+  "chapter": "ch14",
+  "next": null,
+  "spent": {
+    "activeMs": 16488432,
+    "roleLaunches": 16,
+    "modelTurns": 423,
+    "inputTokens": 846529,
+    "cacheReadTokens": 23679131,
+    "outputTokens": 174567
+  },
+  "limits": {
+    "activeMs": 28800000,
+    "endToEndMs": 28800000,
+    "firstPlayableMs": 5400000,
+    "roleLaunches": 14,
+    "modelTurns": 400,
+    "inputTokens": 1000000,
+    "cacheReadTokens": 20000000,
+    "outputTokens": 250000,
+    "roleMs": 2700000,
+    "roleTurns": 60,
+    "contextTokens": 32000,
+    "promptBytes": 48000,
+    "transcriptBytes": 16000000,
+    "lookCycles": 3,
+    "listenCycles": 2,
+    "infrastructureRetries": 1
+  },
+  "remaining": {
+    "activeMs": 12311568,
+    "roleLaunches": 0,
+    "modelTurns": 0,
+    "inputTokens": 153471,
+    "cacheReadTokens": 0,
+    "outputTokens": 75433
+  },
+  "priorSpend": null,
+  "budgetGuidance": {
+    "mode": "adaptive",
+    "tokenPolicy": "advisory",
+    "targets": {
+      "roleLaunches": {
+        "used": 16,
+        "target": 14,
+        "remaining": 0,
+        "exceeded": true
+      },
+      "modelTurns": {
+        "used": 423,
+        "target": 400,
+        "remaining": 0,
+        "exceeded": true
+      },
+      "inputTokens": {
+        "used": 846529,
+        "target": 1000000,
+        "remaining": 153471,
+        "exceeded": false
+      },
+      "cacheReadTokens": {
+        "used": 23679131,
+        "target": 20000000,
+        "remaining": 0,
+        "exceeded": true
+      },
+      "outputTokens": {
+        "used": 174567,
+        "target": 250000,
+        "remaining": 75433,
+        "exceeded": false
+      },
+      "roleTurns": {
+        "used": 0,
+        "target": 60,
+        "remaining": 60,
+        "exceeded": false
+      },
+      "roleMs": {
+        "used": 0,
+        "target": 2700000,
+        "remaining": 2700000,
+        "exceeded": false
+      },
+      "activeMs": {
+        "used": 16488432,
+        "target": 28800000,
+        "remaining": 12311568,
+        "exceeded": false
+      },
+      "endToEndMs": {
+        "used": 77455343,
+        "target": 28800000,
+        "remaining": 0,
+        "exceeded": true
+      }
+    },
+    "nearing": [
+      "roleLaunches",
+      "modelTurns",
+      "inputTokens",
+      "cacheReadTokens",
+      "endToEndMs"
+    ],
+    "action": "finish-existing-work",
+    "instruction": "Save progress.md with changed paths, exact outstanding defects, evidence and the next action. Stop optional exploration and polish. Reuse passing checks; finish the current implementation and required proof. Scheduling overruns do not terminate generation.",
+    "accountingGaps": [
+      {
+        "role": "7-build",
+        "transport": {
+          "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/transport.json",
+          "sha256": "3014b1a0c54dcaa3ec3c2e0495722df98e9274f5fd1c215d87dbc67f9d130769"
+        },
+        "session": "01a082c7-393c-7fe3-80f3-802a6754d95c",
+        "retainedWorkItems": 60,
+        "tokens": null,
+        "explanation": "Previous scheduling hard stop prevented terminal usage reporting. Reported totals exclude this unknown spend; this role is not replayed as a free call."
+      }
+    ]
+  },
+  "accountingComplete": false,
+  "accountingGaps": [
+    {
+      "role": "7-build",
+      "transport": {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/transport.json",
+        "sha256": "3014b1a0c54dcaa3ec3c2e0495722df98e9274f5fd1c215d87dbc67f9d130769"
+      },
+      "session": "01a082c7-393c-7fe3-80f3-802a6754d95c",
+      "retainedWorkItems": 60,
+      "tokens": null,
+      "explanation": "Previous scheduling hard stop prevented terminal usage reporting. Reported totals exclude this unknown spend; this role is not replayed as a free call."
+    }
+  ],
+  "preview": {
+    "url": "http://127.0.0.1:42911/?journeyprobe=1&profile=HIGH",
+    "kind": "normal-save",
+    "live": false,
+    "reused": false,
+    "candidateSha256": "a1a20583be2637f0e349f9655885c3d0c97b52606a9f76fb899e810e89039de3",
+    "pid": 796226,
+    "command": "npm --prefix main run chapter:loop -- preview --run .codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "evidence": null,
+  "candidateSha256": null,
+  "findings": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-defect-repair-20260909/findings.json",
+    "sha256": "4d0038fff138d5242c35e9146e4f8180396f436afbaca5e8d19af481ed74f4ff"
+  },
+  "failure": {
+    "stage": "verify-final",
+    "message": "Probe continuity failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T18:04:23.332Z"
+  },
+  "release": "Creation result only. Existing certification/release gates and publishing authority remain separate.",
+  "clock": {
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "elapsedMs": 77455343,
+    "limitMs": 28800000,
+    "remainingMs": 0,
+    "deadlineAt": "2026-09-09T04:33:28.000Z"
+  },
+  "elapsedMs": 77455343
+}

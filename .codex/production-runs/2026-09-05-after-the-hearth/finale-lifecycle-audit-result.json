@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 511397,
+  "stop_reason": "end_turn",
+  "session_id": "2606006d-cff6-410d-a3c4-8118bab5f5a6",
+  "total_cost_usd": 3.307080499999999,
+  "usage": {
+    "input_tokens": 104,
+    "cache_creation_input_tokens": 96687,
+    "cache_read_input_tokens": 2912267,
+    "output_tokens": 35271,
+    "output_tokens_details": {
+      "thinking_tokens": 14312
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 96687,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1191,
+        "cache_read_input_tokens": 100064,
+        "cache_creation_input_tokens": 783,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 783
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1697,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001782,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 104,
+      "outputTokens": 35271,
+      "cacheReadInputTokens": 2912267,
+      "cacheCreationInputTokens": 96687,
+      "webSearchRequests": 0,
+      "costUSD": 3.3052984999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 14312,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 59,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "All 99 source files verified unchanged before and after; the known auxiliary delta-profile drift is preserved (`605fb2ef\u2026`). Only `finale-lifecycle-audit.json` / `.md` were written. No browser, GPU, build, verify, or `.private/` scratch was needed.\n\n## Answer\n\n**Both halves are yes:** the frozen source contains a causal normal-handback cleanup path, *and* the actual firing is still unobserved.\n\n**First, a correction that changes the reading.** The trace sample is **not atomic** \u2014 `journey-probe.mjs:286-399` builds it from three awaited evaluates (story/milestones, then `avFull`, then `cgDiagnostic`/`cgScoreDiagnostic`). In record 61793 the story fields are older than the score fields. So the \"live token during an active `ch13-common` beat\" is a read-ordering artefact; the score half of that record is already the **post-handback** state (`diagnostic.beat` null, token 0.0235 s).\n\n**Executed evidence.** The token existing at all proves `restoredCompletion` false *and* `commonGroundAudioUnavailable()` false at the begin edge (score.ts:207-216 + director.ts:550-559) \u2014 state, not audibility. `beat`/`mood` null with the token alive is `enterCommonGroundScoreBeat(null)` (director.ts:718-720) plus `storyDirector.ts:1232` deliberately retaining it: **the signed retention exception worked at the handback frame.** Not the 5 s deadline (score.ts:94/234-240). Not a reset (`runId` constant 1). Not the optional repeat (no prompts/interactions). `releaseCommonGroundChapter` (:1769) has **no production caller**.\n\n**The path.** Commit \u2192 `anc.cg.complete` begins the token \u2192 `completeChapter13` \u2192 `completeStory` sets `active:false` synchronously \u2192 retention holds. **Next frame**, `StoryDirectorDriver.tsx:145` computes `foreground` with `story.active` as a conjunct, so the `!foreground` branch at `:151` calls `suspendCommonGroundPresentation('visibility-loss')` \u2192 cancel \u2014 with the page visible and nothing paused. Only afterwards (priority 0 vs \u22121; fiber sorts ascending, `events-485b18b5.cjs.dev.js:1085`) does `tickCommonGroundEntry`\u2192`tickCommonGroundScore` run, i.e. the very deadline-carrier that exists for this case. **0.0235 s \u2248 1.4 frames at 60 Hz** fits \"survived the handback frame, died on the next one\" exactly.\n\n**Still missing (why this stays a hypothesis):** the reason argument is discarded (`_reason`, score.ts:259) \u2014 no capture can name the caller. Alternatives: the declared audio-block cancel (director.ts:576-579, unlikely per evidence and ordering, unsampled) and the `'pause'` label variant (`App.tsx` never sets `storyCompleteOpen` true).\n\n**Next step:** one atomic single-`page.evaluate` poll at ~4-8 ms across commit+8 s in the existing lane, reading `__paravoxiaCommonGround.snapshot().score`, story active/runId, `__voxBundleDiag()`, `__voxAudioDiag()`, visibility/focus. If `t_clear \u2212 t_inactive` \u2248 1-2 frames with audio running and page visible, the story-inactive foreground branch is confirmed as a cancellation attributable solely to normal handback.",
+  "ttft_ms": 1728,
+  "type": "result",
+  "duration_ms": 513448,
+  "uuid": "8aa69263-e515-44a5-b37d-d9b5a8adca7c",
+  "ttft_stream_ms": 813,
+  "time_to_request_ms": 42,
+  "first_content_frame_ms": 813,
+  "queued_turn_count": 0
+}

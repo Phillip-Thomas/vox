@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 573987,
+  "stop_reason": "end_turn",
+  "session_id": "b6b7b27c-f4f6-4d94-973d-f3fa33ddd879",
+  "total_cost_usd": 3.3137580000000004,
+  "usage": {
+    "input_tokens": 82,
+    "cache_creation_input_tokens": 89640,
+    "cache_read_input_tokens": 2400786,
+    "output_tokens": 48587,
+    "output_tokens_details": {
+      "thinking_tokens": 7482
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 89640,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1310,
+        "cache_read_input_tokens": 93532,
+        "cache_creation_input_tokens": 234,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 234
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1780,
+      "outputTokens": 20,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00188,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 82,
+      "outputTokens": 48587,
+      "cacheReadInputTokens": 2400786,
+      "cacheCreationInputTokens": 89640,
+      "webSearchRequests": 0,
+      "costUSD": 3.3118780000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 7482,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 47,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done. **PREPARED NOT RUN** \u2014 CPU only; no browser, GPU, sink, recorder, build or game edit. All 99 manifest game paths rehash clean.\n\n**The four faults, fixed in the actual wrapper (`finale-window-runtime.mjs`):**\n\n1. **Lock fd dropped at spawn** \u2014 `validateInheritedLockFd()` proves the handed descriptor is open and points at the lock (wrapper never opens/flocks anything); `buildStdio()` keeps 0/1/2, fills 3\u20138 with `ignore`, places the *parent's* fd at *child fd 9*; child argv gets `--heavy-lock <path> --heavy-lock-fd 9`. `verifyHeavyLock` untouched. **C16 is the real proof**: `exec 9>LOCK; flock -x 9` \u2192 real node harness using the wrapper's own `buildStdio` \u2192 real node grandchild reporting `readlink(fd 9)==lock`, matching dev+inode, and an independent `flock -n` that **fails**. No second lock is taken.\n2. **`sinkIndex:null`** \u2014 `resolveSinkIndex()` reads `pactl list short sinks` for the exact numeric index; missing/ambiguous/non-numeric all refuse, and a null index is now an explicit refusal instead of a name comparison. PID-tree refusal retained. Driven through the actual `runCombinedCapture` with realistic pactl fixtures.\n3. **Unowned child** \u2014 handle declared before the `try`; `stopProbe()` in the finally on every path: stop-file \u2192 SIGTERM (own child only) \u2192 25 s wait \u2192 bounded SIGKILL \u2192 read the probe's cleanup receipt, *then* unload the sink, *then* exit (lock release). Probe gained a bounded SIGTERM/SIGINT/SIGHUP + stop-file path through the same owned-session guard. Injected ownership/spawn-`error`/timeout failures all assert **no live child after the finally**.\n4. **Deadline** \u2014 one absolute deadline from session start bounds every wait (proved with a 4 s run); child/recorder `error` events recorded and aborted on.\n\nHeader now states the **actual** order, with own-stream verification deliberately **before** recording. The guessed 73.5 s is gone: `assessCoverage()` binds the recorder's wallclock to the actual edge `wallMs` in `window.ndjson` (edge\u22123000 \u2192 edge+11500), else `INCOMPLETE-EVIDENCE-RETAINED` with evidence kept and no replay.\n\n**31/31 closure checks pass.** Two things I am flagging rather than smoothing over:\n\n- The **older 33-check string-search self-test fails 3 checks** (installer/edge source strings). It's untracked, so I have no baseline and will *not* claim they pre-date me \u2014 the executing equivalents (C3\u2013C9) pass, but treat it as unresolved.\n- I briefly **overwrote `finale-wrapper-transport-invocation.json`**, the runner's receipt. I deleted my version rather than fabricate its `startedAt`/`commissionSha256`; the runner rewrites it at session end.\n\nPrepared invocation (wrapper `--out` \u2261 child `--out`, `--unmuted`, fd 9, 34413 identity, role `finale-window-runtime`) is in `finale-wrapper-transport-report.{json,md}`. Note the control role is currently `common-exact-input-runtime`, and **you must confirm the heavy-lock path** \u2014 the wrapper refuses if fd 9 doesn't point at it. The sink/browser/recorder paths were exercised with fixtures and fake children only; only the fd transport was real.",
+  "ttft_ms": 1472,
+  "type": "result",
+  "duration_ms": 582984,
+  "uuid": "7c443114-da58-48c0-bd8f-457d77ef4252",
+  "ttft_stream_ms": 1022,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 1023,
+  "queued_turn_count": 0
+}

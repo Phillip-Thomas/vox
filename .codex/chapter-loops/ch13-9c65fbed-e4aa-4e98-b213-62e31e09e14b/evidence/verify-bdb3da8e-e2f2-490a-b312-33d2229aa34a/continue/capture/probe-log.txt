@@ -1,0 +1,36 @@
+2026-09-07T13:25:38.184Z +271ms PHASE 0 — boot ch13-return and PHYSICALLY EARN the Origin landing before any drawing or save
+2026-09-07T13:25:39.871Z +1958ms [gl] renderer: ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)
+2026-09-07T13:25:39.880Z +1967ms CDP DOMStorage observer attached (passive: reads events only, writes nothing)
+2026-09-07T13:25:39.884Z +1971ms renderer=ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0) headed=true
+2026-09-07T13:25:39.910Z +1997ms entry observation: {"clickCount":0,"trustedClickCount":0,"untrustedClickCount":0,"pointerLockChangeCount":0,"pointerLockErrorCount":0,"consoleWarningCount":0,"consoleErrorCount":0,"pageErrorCount":0,"observerErrorCount":0,"observerClean":true,"unmeasured":["no click event reached the passive observer: pointerType/isTrusted/sourceCapabilities are UNMEASURED","neither pointerlockchange nor pointerlockerror was observed"],"note":"Passive observation only. No cause is claimed; an absent record means UNMEASURED, never \"did not happen\"."}
+2026-09-07T13:25:39.917Z +2004ms boot: beat=ch13-return world={"activePlanetId":"-1,-1:p1","locationMode":"surface","pos":[2180,-110,-1635],"speed":0,"controlMode":"fps","phase":"surface"}
+2026-09-07T13:25:39.921Z +2008ms   ladder: beat=ch13-return obj=null world=-1,-1:p1 avAnchor=null seq=0
+2026-09-07T13:25:41.737Z +3824ms   ladder: beat=ch13-return obj=ch13:return:board world=-1,-1:p1 avAnchor=null seq=0
+2026-09-07T13:25:42.497Z +4584ms   ladder: beat=ch13-return obj=ch13:return:launch world=-1,-1:p1 avAnchor=anc.cg.hatch-boarded seq=1
+2026-09-07T13:25:44.019Z +6106ms   ladder: beat=ch13-return obj=ch13:return:origin world=-1,-1:p1 avAnchor=anc.cg.lift-committed seq=2
+2026-09-07T13:26:54.133Z +76220ms   ladder: beat=ch13-survey obj=ch13:survey:start world=-1,-1 avAnchor=anc.cg.repeated-measure seq=4
+2026-09-07T13:26:56.390Z +78477ms PHASE 0 after 74217ms: originLanded=true world=-1,-1 fps=59.1 gate.ok=true
+2026-09-07T13:26:56.390Z +78477ms PHASE 1 — earn a real partial drawing on the EARNED Origin
+2026-09-07T13:26:57.923Z +80010ms catching capture at the partial checkpoint: partial checkpoint reached: stop the rail now by saving
+2026-09-07T13:26:57.923Z +80010ms movie rail alone after 1532ms: phase=drawing samples=7 walked=5.993958893021402 body=[-27.90385627746582,52.78971481323242,15.964462280273438]
+2026-09-07T13:27:00.334Z +82421ms PHASE 2 — save through the shipped autosave lifecycle (beforeunload -> doSave)
+2026-09-07T13:27:00.338Z +82425ms player pose keys before navigation: [{"key":"pvx.v1.world.-1,-1.player","bytes":168,"pos":[-32.0279541015625,52.78897476196289,21.58220863342285]},{"key":"pvx.v1.world.-1,-1:p1.player","bytes":150,"pos":[9.5020751953125,51.03215789794922,-8]}]
+2026-09-07T13:27:00.338Z +82425ms navigating same tab to http://127.0.0.1:34825/?journeyprobe=1&debug=1 — this fires the shipped beforeunload autosave and RETAINS localStorage
+2026-09-07T13:27:00.668Z +82755ms saved world blobs: [{"key":"pvx.v1.world.-1,-1:p1","bytes":568,"sha256":"267863465c490f400eda84627736ff07ef31ad5e44f0f51e0efcc625bdb3a3c9","file":"worldsave-pvx.v1.world.-1_-1_p1.json","worldId":"-1,-1:p1","seed":1600321158,"hasCommonGround":false,"commonGroundSha256":null},{"key":"pvx.v1.world.-1,-1","bytes":3106,"sha256":"b285fad383dc20efb942f975821bbf345478b8ca3f4d421504d0e10077743003","file":"worldsave-pvx.v1.world.-1_-1.json","worldId":"-1,-1","seed":3215739679,"hasCommonGround":true,"commonGroundSha256":"322db8bbc76c3f9478bee4f352c448322ea627c2faa40a77b443b41020ed49bf"}]
+2026-09-07T13:27:00.668Z +82755ms PHASE 3 — operate the real Continue UI (no deep link, storage retained)
+2026-09-07T13:27:08.186Z +90274ms menu: title=Paravoxia cta="▶ Continue" subtitle="STORY COMPLETE · RETURN TO YOUR WORLD"
+2026-09-07T13:27:09.913Z +92000ms first valid runtime reading (published foot + HUD, no menu) at 1601ms since the Continue click; holding capture 5000ms beyond it
+2026-09-07T13:27:15.129Z +97216ms continue telemetry: 365 rAF frames retained (complete), firstFoot=7ms firstFootChange=515ms, beat values ["null","\"ch13-survey\""], planet values ["\"-1,-1\""]
+2026-09-07T13:27:15.333Z +97420ms after Continue (6824ms): beat=ch13-survey menuStillUp=false survey={"phase":"drawing","approached":false,"samples":22,"lengthUnits":16.68098675147445,"walkedUnits":18.623767275906705,"testedPrefix":0,"tailRevision":0,"witnessOffered":false,"witnessOccupied":false,"acceptedSamples":0,"acceptedClass":null}
+2026-09-07T13:27:15.337Z +97424ms stored WorldSave after Continue: [{"key":"pvx.v1.world.-1,-1:p1","bytes":126,"sha256":"385aa706ccb73249ac5b68e5c415438f01e951bcdca897f5c783ec9a53be3618","file":"worldsave-after-continue-pvx.v1.world.-1_-1_p1.json","hasCommonGround":false,"commonGroundSha256":null,"surveyPhase":null,"savedSamples":0},{"key":"pvx.v1.world.-1,-1","bytes":3221,"sha256":"4f1e660366cfe7fbae1e2988c71b38f5f426a4d021ec386f63a01c3b8b40c89e","file":"worldsave-after-continue-pvx.v1.world.-1_-1.json","hasCommonGround":true,"commonGroundSha256":"aa1e1922c3f9df0430d643ba649b661dad2ad5f2cd187643d418ce9d2df29f07","surveyPhase":"drawing","savedSamples":22}]
+2026-09-07T13:27:17.350Z +99437ms PHASE 4 — NEW action on the restored state: walk to E with ordinary keys, then [F] to offer the span
+2026-09-07T13:27:17.353Z +99440ms calibrating (initial) on face +Y up=[-0.00015449118054743704,0.999999988065073,0.0000015261340837793808]
+2026-09-07T13:27:17.704Z +99791ms calibrate KeyW: 3d=0.758 tangent=0.758 normal=0.001 usable=true dir3d=[-0.9841001186238936,0.0007293929176274931,0.17761313158212724]
+2026-09-07T13:27:18.054Z +100141ms calibrate KeyS: 3d=0.761 tangent=0.761 normal=0.000 usable=true dir3d=[0.9840806973607482,0.0005009934558863362,-0.1777214958510672]
+2026-09-07T13:27:18.401Z +100489ms calibrate KeyA: 3d=0.759 tangent=0.759 normal=-0.000 usable=true dir3d=[0.1775965857954714,-0.0000050276970211182655,0.9841033750010788]
+2026-09-07T13:27:18.754Z +100841ms calibrate KeyD: 3d=0.758 tangent=0.758 normal=-0.000 usable=true dir3d=[-0.1776424504382675,-0.000578459828743053,-0.9840949269183913]
+2026-09-07T13:27:23.069Z +105156ms burst 8: foot=-38.36,50.99,14.91 centre=-38.36,52.79,14.91 face=+Y dist3dFoot=4.66 samples=25
+2026-09-07T13:27:25.490Z +107577ms walk finished in 6736ms after 14 bursts (arrived): dist3dFootToE=1.156 (centre 2.083, diagnostic only) face=+Y arrived=true
+2026-09-07T13:27:25.680Z +107767ms pre-[F] grounded gate: ok=true footDistToE=1.156 (centre 2.083, diagnostic) face=+Y auditMeaningful=true offersF=true
+2026-09-07T13:27:27.446Z +109533ms offer result: phase drawing -> offered; route-offered anchor present=true
+2026-09-07T13:27:27.586Z +109673ms earned-continue-3d: stopped the probe-owned browser session (reason=finally); the root-owned preview was not touched

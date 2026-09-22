@@ -1,0 +1,210 @@
+{
+  "schema": "paravoxia.verifier.exactInputPrep.v0",
+  "role": "mechanical diagnostic engineer",
+  "run": "2026-09-05-after-the-hearth",
+  "state": "PREPARED-NOT-RUN",
+  "preparedAt": "2026-09-06T00:00:00+00:00",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "constraints": {
+    "cpuOnly": true,
+    "gpuUsed": false,
+    "browserUsed": false,
+    "buildRun": false,
+    "gameSourceMutated": false,
+    "sharedProbeEdited": false,
+    "contractChanged": false,
+    "allNinetyNineLiveSourceHashesUnchanged": true,
+    "sourceManifestVerification": {
+      "manifest": "implementation-source-manifest.json",
+      "manifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+      "filesChecked": 99,
+      "mismatched": 0,
+      "missing": 0
+    }
+  },
+  "intentReadFirst": [
+    {
+      "file": "chapter-manual-corner-interpretation.json",
+      "ruling": "Ordinary eligible positive post-plane overshoot within existing physical/corridor/vertex bounds must not permanently freeze credit; that would be an implementation-fidelity defect, not a creative decision.",
+      "obeyed": true
+    },
+    {
+      "file": "producer-chapter-manual-corner-interpretation-review.json",
+      "decision": "Prepare an exact-input discriminator before any material correction; CPU-only; preserve exact early z15.82 refusal.",
+      "obeyed": true
+    }
+  ],
+  "reusedEvidence": {
+    "manualFrontierAudit": {
+      "file": "manual-frontier-audit.json",
+      "sha256": "146dd6b6bfd9985366df9f52081e56560d7b06cf1ead44ca190abde151d0f8d6",
+      "reusedNotRepeated": [
+        "Its CPU replay and private manual probe are reused as prior evidence.",
+        "The interpolation audit was NOT repeated.",
+        "No diagnosis was made from supported=true alone."
+      ]
+    },
+    "privateProbePathReused": "verifier/probes/arrival-common-manual/common-passage-probe.mjs (+ entryObservation.mjs), unmodified"
+  },
+  "callChainFindings": {
+    "method": "Static read of the frozen live source plus exact static binding in the served immutable bundle. No execution of game code.",
+    "creditCall": {
+      "source": "main/src/story/commonGroundDirector.ts:1320-1322",
+      "expression": "common.terraUnits = routeProgressUnits(CG_ROUTE_COMMON, body, common.terraUnits, displacement)",
+      "minified": "t.terraUnits=pwe(tQ,i,t.terraUnits,I)",
+      "corridorRadius": 2.5,
+      "corridorRadiusPassedExplicitly": false
+    },
+    "pointRepresentation": {
+      "field": "body (argument 2)",
+      "definition": "commonGroundPlayerPose() = playerWorldPosition - up * CG_PLAYER_GROUND_OFFSET",
+      "source": "main/src/story/commonGroundDirector.ts:791-799",
+      "kind": "FOOT-projected pose, not body centre",
+      "qualification": "On the curved surface `up` is not +Y, so this foot point differs from body centre HORIZONTALLY as well as vertically. Earlier body-centre poses are not directly comparable without restating the offset."
+    },
+    "displacement": {
+      "source": "main/src/story/commonGroundDirector.ts:911-919 playerDisplacement",
+      "definition": "distanceBetween(previousFootPose, currentFootPose) per director update, measured not timed",
+      "teleportGuard": "moved > 2 returns 0",
+      "qualification": "This is per DIRECTOR UPDATE, not per render frame; the audit's ~0.0836 per-frame ceiling was an INFERRED 60Hz figure and is not reused as fact."
+    },
+    "ceiling": {
+      "source": "main/src/story/commonGroundRoute.ts:481",
+      "definition": "ceiling = previousUnits + displacementUnits, computed once per call from CREDIT, not from the body's true arc"
+    },
+    "predicatesActuallyEvaluated": [
+      {
+        "name": "walkedSegmentSupported(previousBody, body, ground, {extraSolids})",
+        "when": "every update where previousBody exists",
+        "actuallyCovers": [
+          "footing.isSupported at dense 0.25-unit samples across the walked span",
+          "capsule footprint vs CG_APPARATUS_SOLIDS (radius 0.5, height 3.6)",
+          "capsule footprint vs binding.extraSolids"
+        ]
+      },
+      {
+        "name": "ground.isSupported(body)",
+        "when": "first update only, previousBody null",
+        "actuallyCovers": ["single-point support; NO swept footprint"]
+      },
+      {
+        "name": "checkReference(workerSocket, playerSocket(body), {extraSolids}).ok",
+        "when": "only if the support term was true (&& short-circuit)",
+        "actuallyCovers": [
+          "reference range vs REFERENCE_RANGE_UNITS",
+          "solid SIGHT occlusion vs CG_APPARATUS_SOLIDS",
+          "solid SIGHT occlusion vs extraSolids"
+        ]
+      }
+    ],
+    "presumedClearanceBranchNotActuallyCalled": [
+      {
+        "name": "bodiesClear (body-body clearance)",
+        "declaredAt": "main/src/story/commonGroundRoute.ts:433",
+        "calledAt": ["main/src/story/commonGroundDirector.ts:1213", "main/src/story/commonGroundDirector.ts:2419"],
+        "onTerraCreditPath": false,
+        "statement": "NOT in the Terra credit call chain. Reported absent rather than fabricated true."
+      },
+      {
+        "name": "spanClearance",
+        "declaredAt": "main/src/story/commonGroundDirector.ts:2054",
+        "calledAt": ["main/src/story/commonGroundDirector.ts:2104"],
+        "onTerraCreditPath": false,
+        "statement": "Standby placement only. NOT a credit gate."
+      }
+    ],
+    "uncalledOrSkippedPredicateReasons": [
+      "short-circuit-support-false: checkReference is never reached when the support term is false; its outcome for that update is MISSING, not false.",
+      "first-update-no-previous-body: the swept walked-segment/footprint test is replaced by single-point isSupported; footprint sweeping is UNEVALUATED that update.",
+      "guard-false-no-credit-call: routeProgressUnits is not called at all, so no record exists; absence is evidence a guard failed but does NOT identify which.",
+      "no-displacement-early-return: inside routeProgressUnits, !(displacement>0) returns previousUnits before any segment scan.",
+      "which-guard-failed: NOT RECOVERABLE without re-evaluating physical predicates, which is forbidden. Stays MISSING."
+    ]
+  },
+  "discriminator": {
+    "count": 1,
+    "id": "D1-positive-post-plane-overshoot",
+    "control": "C1-squared-corner (diagnostic control only, not a usability standard)",
+    "leg": "bounded vertex 2 -> 3 -> 4",
+    "input": "ordinary held WASD, >=30ms pulses",
+    "beforePlaneTargetSubstitutionForbidden": true,
+    "observationMechanism": "CDP conditional logpoint that records bounded data and evaluates to false; never intentionally pauses, never re-calls predicates",
+    "binding": {
+      "bundle": "/assets/index-BiDWGouH.js",
+      "bundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+      "sourceMapShipped": false,
+      "bindingMethod": "unique minified signature, not a guessed identifier",
+      "uniquenessProof": {
+        "'=2.5){'": 1,
+        "'function pwe(e,A,t,i,g=2.5)'": 1,
+        "'pwe('": 2,
+        "callSiteLiteral": "t.terraUnits=pwe(tQ,i,t.terraUnits,I)",
+        "guardLiteral": "(g?fL(g,i,o,{extraSolids:n}):o.isSupported(i))&&GH(Q,RH(i),zKA()).ok&&(t.terraUnits=pwe("
+      },
+      "cdpSite": { "lineNumber": 7839, "columnNumber": 193729 },
+      "reliable": true,
+      "foreignAppExposure": "none; the breakpoint is scoped to this bundle URL on the run-owned 34413 preview"
+    },
+    "capturedFields": [
+      "prev — ACTUAL prior credit-call previousUnits",
+      "disp — ACTUAL per-update displacement",
+      "foot — ACTUAL foot-projected credit point [x,y,z]",
+      "corridor, routeLen — identity guards",
+      "returned — ACTUAL returned credit, chained from the NEXT call's previousUnits"
+    ],
+    "missingByDesign": [
+      "returned credit of the FINAL call of a session (reported MISSING, never interpolated)",
+      "identity of the failing guard on updates where no credit call occurred"
+    ]
+  },
+  "instrumentationEffect": {
+    "bundleBytesUnchanged": true,
+    "identity": "Conditional breakpoints do not alter served bytes; the bundle sha256 is unchanged. V8 deoptimises and re-JITs the patched function, so it runs less optimised for the session.",
+    "timing": "Condition evaluation runs once per director update inside tickCommon and can slightly lengthen a frame, changing dt and therefore the DISTRIBUTION of per-update displacement. Displacement is measured, so each recorded value is still actual; near-ceiling comparisons must state this caveat.",
+    "volume": "~360-600 records for the bounded leg, hard cap 2400, drops counted. No unbounded logging.",
+    "noCreditSideEffect": "the sink is an inert array on globalThis; nothing reads it back into game state"
+  },
+  "instrumentationOnlyPatchCandidate": {
+    "prepared": false,
+    "reason": "The CDP binding is reliable and exact, so no source patch candidate is needed.",
+    "narrowPathsIfEverOrdered": ["main/src/story/commonGroundDirector.ts (tickCommon credit call only)"],
+    "appliedToLiveGame": false
+  },
+  "preservedRequirements": [
+    "Exact early z15.82 before-plane refusal is preserved; nothing here credits or repairs it.",
+    "All physical predicates and the strict eighteen-unit ordered passage remain unchanged.",
+    "No algorithm patch, no widened tolerance, no tracking state that grants credit.",
+    "Full-route and manual-UX acceptance are explicitly outside this diagnostic.",
+    "The prior reference-3 E entry is recorded as AIRBORNE (direct W->E shortcut) and is not repeated or called grounded."
+  ],
+  "cpuTestsRun": {
+    "command": "node verifier/probes/common-exact-input/selftest.mjs",
+    "exit": 0,
+    "checksPassed": 12,
+    "checksFailed": 0,
+    "log": "logs/common-exact-input-prep/selftest.json",
+    "logSha256": "7a27073e0fa6b5263d1db8bb6ced54000b59ef05f9b08c1da8cbf62e871f957c",
+    "proved": [
+      "served bundle sha256 still matches preview-ownership.json",
+      "minified binding is still unique and the call site literal still matches",
+      "bodiesClear is absent from the credit guard",
+      "declaration line/column are exact",
+      "logpoint condition parses and returns false on every evaluation",
+      "record shape is exact and the cap bounds volume while counting drops",
+      "returned credit chains from actual next-call previousUnits; the final call stays MISSING"
+    ]
+  },
+  "ownedArtifacts": [
+    { "path": "verifier/probes/common-exact-input/creditCallLogpoints.mjs", "sha256": "c1e15bfb939b72380b5397fd976c54b71e7ed526b8ccf32210b05c903a2fc566" },
+    { "path": "verifier/probes/common-exact-input/selftest.mjs", "sha256": "26e0019a0aa4b0b7702c6cbb8c583a001786770b5d45e88f8e91635b8a657191" },
+    { "path": "verifier/probes/common-exact-input/invocation.json", "sha256": "cd3b604298a48212a3219401eb13dcfd6c3d733a1eac41e23e7f6facf3501f28" },
+    { "path": "logs/common-exact-input-prep/selftest.json", "sha256": "7a27073e0fa6b5263d1db8bb6ced54000b59ef05f9b08c1da8cbf62e871f957c" }
+  ],
+  "smallestNextStep": "When GPU/browser access is released by SHORT, attach CDP to the already-running immutable 34413 preview, install the sink, set the single LP-A logpoint at index-BiDWGouH.js 7839:193729, enter via the labelled ch13-survey fixture to a VERIFIED grounded E, and drive one ordinary-WASD vertex 2->3->4 leg with a positive post-plane overshoot, then the squared-corner control. Drain once and chain returns. Nothing else.",
+  "notAClaim": [
+    "This is not a runtime result, not an acceptance, not a defect closure, and not authority to change any algorithm or tolerance.",
+    "No credit-accounting correction is proposed here; the discriminator has not been run."
+  ]
+}

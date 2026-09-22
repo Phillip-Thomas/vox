@@ -1,0 +1,17 @@
+{
+  "schema": "paravoxia.directorSignoff.v1",
+  "director": "score",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "disposition": "approve",
+  "signedBy": "Score Director (/root/score_director)",
+  "signedAt": "2026-09-06T16:20:29.093757Z",
+  "notes": [
+    "Approval binds arrival-v3-candidate/scene-contract.json only. Verified all candidate file hashes, exact seven tested groups and one intent replacement from proposal c470b753cd4081d1d3d97e0bd6baa932b3dba9309eabd4ef3ef62e5b100f4315; remaining differences are version/supersedes/frozenAt and declared authority-reference updates.",
+    "All six cues, every score-anchor binding and reset rule equal signed v2. The conditional arrival copy changes no score meaning or eligibility: home releases at return-chosen; flight, landing, disembarkation and on-foot approach stay with the existing world conductor. Audit music requires actual mounted/performed repeated-measure.",
+    "The existing return:origin ID and Origin \u00b7 audit site label retain one real destination and one entry acknowledgement. Phase-copy replacements and restored reconstruction are silent, with no phrase restart, intensity step, new cue, input or arrival credit. Physical grounded Origin, embodied state and W reach remain necessary.",
+    "The existing fresh-final-completion-only token, immediate control/progression handback, maximum five live seconds, existing 4.5-second release and every cancellation/no-replay rule remain binding. Generic anchor dispatch, copy changes and Continue cannot bypass eligibility.",
+    "This is exact candidate-contract approval, not implementation, GPU, manual-UX, continuous-journey or listening acceptance. No new source, probe, render or audio review occurred. The active v2 contract/current signature and frozen verification source remain untouched.",
+    "producer-v3-decision.json is the declared forward reference for the later delegated producer decision; this signature neither supplies that decision nor claims candidate promotion has occurred."
+  ]
+}

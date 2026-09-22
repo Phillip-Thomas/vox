@@ -1,0 +1,40 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "failureSha256": "a1d7fae28667e437f95d9d57e4788d9696f8e80d3aafd827f776222227a7259e",
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/capture-case.test.mjs",
+      "before": "46a9973164e85cf55b8ce2e46355bd1d3b140409728e9a14ccc167e530f7b63a",
+      "after": "c75aac1b6d562901a24ec8f3fbd70520bd921a8c3bbe242ecbd52160985473f1"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": "70d6e4ee6e19ebc107d60d71e0f974d2063479a4180e0a47bd0c357c1b22ecf1",
+      "after": "753ff94568c813b6e0f360b510de67f3c570a0d0107ed71c4ac317bba2c89acd"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "ed9cc45614ed1731a988a0601378843d6d7e9612de5e9cc9e91841267580bae4",
+      "after": "d0271ac993592479924b9ae382ff7ebcb44f1ed4988ebd38b8d82d095d795d72"
+    }
+  ],
+  "ownerAuthorization": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-settle-repair-20260909/owner-authorization.json",
+    "sha256": "da3c3b69cb02d3c587dd3d6fc4263147771fc3ef14826a0c6386c60cd2f4beaa"
+  },
+  "diagnosis": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-settle-repair-20260909/diagnosis.json",
+    "sha256": "21cb0fd87e0ef7c1f4c4f7debd5f39f1943b597d53be9d2ded225b96d326794a"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run chapter:loop:test",
+    "actualCommand": "npm --prefix main run chapter:loop:test",
+    "log": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-settle-repair-20260909/tests.log",
+      "sha256": "28fcb820204dc0d8c642d86784a3310fd132242cc9e489bf80b11b81b3f6935f"
+    },
+    "filesSha256": "1b4a9db2878cd3d5c1bb150be788cc65255a5e73172ba08729550f0eb0c0673c"
+  }
+}

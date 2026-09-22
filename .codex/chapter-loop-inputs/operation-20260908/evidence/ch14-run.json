@@ -1,0 +1,11 @@
+{
+  "run": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "clock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T00:06:46.000Z",
+    "deadlineAt": "2026-09-08T08:06:46.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": null
+  }
+}

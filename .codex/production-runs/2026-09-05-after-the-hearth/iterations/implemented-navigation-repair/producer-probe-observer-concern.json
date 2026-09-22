@@ -1,0 +1,11 @@
+{
+  "schema": "paravoxia.producerImplementationConcern.v1",
+  "recordedAt": "2026-09-06T11:00:14.353030+00:00",
+  "sourcePath": "main/src/story/commonGroundDirector.ts",
+  "sourceSha256": "388b67121a284cb0fe26c27fe53b2e4aed280fa87cdb9f61e9ba9bc2559d6ff6",
+  "symbol": "getCommonGroundProbeSnapshot",
+  "statement": "The proposed readonly probe calls commonGroundRailPlan(), which can call railWaypoint() and mutate runtime.railTraversal. Snapshot inspection can therefore execute the controller instead of just observe published state, including during manual play.",
+  "classification": "Source-level observer-effect concern under active integration, not a measured browser failure.",
+  "boundedAction": "Return detached last-published rail state or explicitly unavailable plan; publish that state from ordinary controller execution only. Snapshot reads must not run the planner, advance/reset cursors, create story/route state or supply proof. Add meaningful repeated-read and returned-data mutation tests. Preserve normal gameplay behavior.",
+  "status": "open before capture readiness"
+}

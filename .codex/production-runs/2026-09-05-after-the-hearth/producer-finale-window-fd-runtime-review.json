@@ -1,0 +1,81 @@
+{
+  "at": "2026-09-06T20:18:56.447596+00:00",
+  "reportRef": "finale-window-fd-runtime-report.json",
+  "reportSha256": "0218f3d892a45fb15fd25853f7daf50c5e4207ef088fad1ce9881473852ff5ad",
+  "isAcceptance": false,
+  "acceptedPrivateCorrections": true,
+  "artifactHashChecks": [
+    {
+      "path": "verifier/probes/finale-window/finale-window-probe.mjs",
+      "sha256": "356fa23a3d840fa108ec7ab2be24a8fc92d46baec0c898727a5534a4862ba73a",
+      "matches": true
+    },
+    {
+      "path": "logs/finale-window-fd-runtime/fd-check.mjs",
+      "sha256": "9084f3b5c2ae2d32b4e7438161b2584362493e803ac7e76b19c51811c1971862",
+      "matches": true
+    },
+    {
+      "path": "logs/finale-window-fd-runtime/run-fd-check.mjs",
+      "sha256": "8e120e6c403e88f09676c9fa6cb4369c40064d0342ef7f9742a12d13ed977d01",
+      "matches": true
+    },
+    {
+      "path": "logs/finale-window-fd-runtime/fd-check-result.json",
+      "sha256": "aa70f37681851ff21d99c07d087c0d5402e4ceccee327021ca37ed1ccc31e08a",
+      "matches": true
+    },
+    {
+      "path": "logs/finale-window-fd-runtime/evaluate-semantics-check.mjs",
+      "sha256": "b3a61b5b35a238064a4d8670c657929b6115e02108e559ff8abd932926019fdd",
+      "matches": true
+    },
+    {
+      "path": "logs/finale-window-fd-runtime/prepared-cli-window3.txt",
+      "sha256": "dcca7ee4d432afe848a4a94860d4f932333f3b76f96dc2a7341bcacaaf648cba",
+      "matches": true
+    },
+    {
+      "path": "verifier/captures/finale-window/window-3-failed-installer-binding/probe-console.log",
+      "sha256": "217298148356e7e10fe2a10507cc5e122c6697f04eb0dd2b0f49e751e819f51b",
+      "matches": true
+    },
+    {
+      "path": "verifier/captures/finale-window/window-3-failed-installer-binding/runtime-record.json",
+      "sha256": "66c1863c85308eb6c7d0862b323434412cb6511c5f63238b4db2161a89e66907",
+      "matches": true
+    },
+    {
+      "path": "verifier/captures/finale-window/window-3-failed-installer-binding/browser-pid.json",
+      "sha256": "cb35e7bb8ac8f83d598ed5f3d695dab9ffbb80781c7f16574793bd3c14963d2f",
+      "matches": true
+    },
+    {
+      "path": "verifier/captures/finale-window/window-3-failed-installer-binding/cleanup-receipt.json",
+      "sha256": "dde7f99cf508ccc165ed93277d60350c09aa2012c4ba29b853f61f3d25eb7693",
+      "matches": true
+    },
+    {
+      "path": "verifier/captures/finale-window/window-3/probe-console.log",
+      "sha256": "07cd15a2012ba53accfd32c21614a6a74a17d1808fb7591371c53b71143501dd",
+      "matches": true
+    },
+    {
+      "path": "verifier/captures/finale-window/window-3/runtime-record.json",
+      "sha256": "7997fc63a62e828a5a1183f792e23a3fe39df37674a730d4725c5b03ce0470dc",
+      "matches": true
+    }
+  ],
+  "qualifications": [
+    "The role transfer was AFTER the failed firstwindow wrapper ended20:13:22.952 and browser ended20:11:53.578, not mid-window. Root handoff20:13:56.993 occurred on verified clean resources and99unchangedsourcefiles. Report causal framing is corrected here.",
+    "Second retry failed role gate because owner did not reread control before acquiring shared lock; no browser launched. This is not game evidence or a newapprovalblock.",
+    "Role renamed original window3 to window-3-failed-installer-binding and reused window3. Original runtime record SHA66c1863c... retained but old producerhandoff path now points at a differentattempt; follow this explicit relocation mapping.",
+    "Extra headed blankpage API semantics browser was run without sharedlock after GPU transfer, contrarycommission; not accepted as GPU/quality evidence. It ended before COMMON browser observed; do not repeat this recipe. Read installed Playwright source or test in actual owned locked capture.",
+    "Fixed FDchecker7actualchildchecks and33+31focusedtests passed. Corrected installer now calls function; no actual successful finale window/audio yet."
+  ],
+  "relocatedOriginalWindow3": {
+    "path": "verifier/captures/finale-window/window-3-failed-installer-binding/runtime-record.json",
+    "sha256": "66c1863c85308eb6c7d0862b323434412cb6511c5f63238b4db2161a89e66907"
+  },
+  "next": "Continue prepared combinedcapture when GPUreturned, within original62671deadline20:27:05.927860, no replacementbudget/newpreparation."
+}

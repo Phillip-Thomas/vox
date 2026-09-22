@@ -1,0 +1,72 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "26ea744aa1116d6f011ef038dd7e78edd9527b0c58d097fd1cea308a16c23466",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": false,
+    "acceptedAction": 0,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [
+    "ordinaryControls",
+    "acceptedAction",
+    "completePath"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-12/raw/cleanup.json",
+      "sha256": "c39827253898cc132ea5f88364a3cc707cfb8c6076ef83b47e5dc8d48bc46493"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-12/raw/frame-4.png",
+      "sha256": "8e2b2b0174af9dc9ece7b47aabb42288f85474b391fd0d0a85bcaaf78247767a"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-12/raw/frame-5.png",
+      "sha256": "89aea48907918a8c1d3a726bfc3e722941e759ac8acb2f2689c106efc1c7224a"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-12/raw/frame-6.png",
+      "sha256": "15267eea64f9a9a40526303392fe70ec31b5ef9c1d985b024d683cc2b67f8719"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-12/raw/frame-7.png",
+      "sha256": "36e42d0ab711cc8cdf8aa940d5af90e39054907ebd249d65655850cdc066e1c2"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-12/raw/observations.json",
+      "sha256": "fecdbd893fa879c84e623f96888d1c10156defd568e63cf2208d101a3052a7c1"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-12/raw/provenance.json",
+      "sha256": "b175d4664f8c5d4a71392d65f2df962fd5b18ff28e5714f6cd518a3d2d9130ab"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-12/raw/trace.ndjson",
+      "sha256": "6272fee31e605cf9fe0a691a7f3b3ef84d48596480876e95e7f86683729dd0bd"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "Walk did not reach its target within the declared bound"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "5907f92532e125144e7d63b34259cab818659b020f7a3c6f8955ff17f5303736",
+    "buildSha256": "569eaf89de9c51dff801d096c7348b8b77e51127f1b43895daddde7923bb186f",
+    "transportSha256": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820"
+  }
+}

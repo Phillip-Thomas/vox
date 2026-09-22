@@ -1,0 +1,79 @@
+{
+  "documentKind": "chapter-manual-corner-interpretation",
+  "director": "chapter",
+  "runId": "2026-09-05-after-the-hearth",
+  "authoredBy": "Codex chapter_intent — Chapter Director",
+  "authoredAt": "2026-09-06T19:38:53.441292+00:00",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "inspectedSourceHashes": {
+    "main/src/story/commonGroundRoute.ts": "6025bc4c55098bb3bffc54dd04134fa3b666ef71361e22bba1a9b3fad7a1f1ff",
+    "main/src/story/commonGroundDirector.ts": "3b2b95ccd1701b863348e147a8181a704c2ed73258467ea98617e06f0f25aba3"
+  },
+  "evidence": [
+    {
+      "file": "manual-frontier-audit.json",
+      "sha256": "146dd6b6bfd9985366df9f52081e56560d7b06cf1ead44ca190abde151d0f8d6"
+    },
+    {
+      "file": "producer-arrival-common-manual-runtime-review.json",
+      "sha256": "ea6a52e24a7dfd1b6c1b1fe2efec23f1c06274a28d5a0850634af352c91fe70e"
+    },
+    {
+      "file": "producer-manual-frontier-audit-review.json",
+      "sha256": "ad7ea294d32ef894af332f5df85a67ddf84b2af3719b34bb4d824e14611c6cb9"
+    }
+  ],
+  "previousInterpretationMarkdownSha256": "c1e19fbac4970dee675ca7e0046e7a8fd2b180379f567ae9d14bae3e3b8fb9ee",
+  "contractChangeRequired": false,
+  "ruling": "No: ordinary post-plane overshoot within the existing physical/corridor/vertex bounds is not a signed repeated-recovery or sub-frame steering cost. If actual eligible ordered movement crosses the incoming corner and continues over the required route, a carried coordinate residual must not permanently freeze credit merely because its projected arc jump exceeds one frame of displacement. That behavior is an implementation-fidelity defect under unchanged scene-v3, not a new creative decision about making recovery cheaper.",
+  "evidenceClassification": "The reported live plateau at six and CPU replay strongly discriminate projection debt from a simple missing-input explanation. The audit verdict HARNESS-ROUTE-DEFECT and current source comments cannot settle intended behavior. The complete captured passage is still unaccepted: no automatic full-route credit follows from the geometric-plane gate or this interpretation.",
+  "contractClauses": [
+    {
+      "ref": "scene-contract.json#/guidance/objectives/13/acceptanceCriterion",
+      "meaning": "Full actual eighteen-unit passage plus first-time manual success without private route knowledge, rail assistance or per-corner prompts. It does not require sub-0.05 corner squaring or input finer than30ms."
+    },
+    {
+      "ref": "scene-contract.json#/story/events/21/acceptanceCriterion",
+      "meaning": "Real complete E-to-C passage with maintained H reference, grounding, solid sight and clearance; endpoint separation, old footsteps, saved proof and elapsed time are insufficient."
+    },
+    {
+      "ref": "scene-contract.json#/syncAnchors/21/acceptanceCriterion",
+      "meaning": "Same actual-passage criterion at the commit anchor."
+    },
+    {
+      "ref": "scene-contract.json#/story/agencyWindows/3/mandatoryPath",
+      "meaning": "The unchanged full ordered physical route is required; a guide or positioning leg supplies no proof."
+    },
+    {
+      "ref": "scene-contract.json#/story/agencyWindows/3/fallbackSemantics",
+      "meaning": "A genuinely unmet predicate safely holds with actionable recovery; it is not permission to impose undocumented frame-perfect corner control."
+    },
+    {
+      "ref": "scene-contract.json#/story/agencyWindows/3/rescueSemantics",
+      "meaning": "No timeout, rail grant or automatic rescue substitutes for the missing physical action."
+    }
+  ],
+  "preservedRequirements": [
+    "Keep the exact z15.82 early turn before its required incoming-plane crossing as an unproved/refused corner. Later unrelated movement does not repair it; meaningful return to and real traversal of the unfinished route remains necessary.",
+    "Preserve strict actual eighteen-unit ordered passage, unchanged vertices/C, supported segment and capsule-footprint validity, live reference/range/solid sight, body clearance and actual arrival. Plane crossings alone are not route certification.",
+    "No endpoint pumping, late-leg distance payment, far-C shortcut, carried unrelated displacement, relaxed arrival, automatic corner credit, reference exemption or rescue.",
+    "Retain valid earned progress and allow genuine physical recovery through eligible unfinished route. Correct normal post-plane movement must not recreate a permanent accounting stall solely from the previous corner's small residual.",
+    "Do not infer that all captured segments were valid from supported=true or reported plane crossings. Only actual physical predicate evidence can distinguish a rightful safety hold from erroneous credit accounting."
+  ],
+  "auditQualifications": [
+    "The replay interpolates pulse-end poses at calibrated speed/assumed60Hz. It is not the exact live per-update displacement trace; its approximately0.084 budget is inferred.",
+    "supported=true is not proof of walkedSegmentSupported or every footprint/terrain branch. The replay did not reproduce those queries or all live reference/body-clearance checks.",
+    "On the curved surface bodyCentre and projected bodyPose differ horizontally as well as vertically. Bind the replay to the actual credit-call point representation and update sequence.",
+    "Monotonic credit plus ordered geometric planes cannot certify full progress; a constant six passes that weak helper. A credited-frontier check is diagnostic evidence only, never permission to assign credit.",
+    "An aim0.05 before the incoming plane cannot by itself satisfy a literal crossing. Fine-pulse/squared-corner success may be a diagnostic control, not a substitute for ordinary manual usability or authority to impose that precision.",
+    "commonGroundRoute.ts:444-465 comments describe the current implementation and prior early-cut/debt-pumping dispute; they do not amend Chapter intent to punish every ordinary post-plane overshoot."
+  ],
+  "boundedNextDirection": [
+    "Use a bounded vertex2-to3 discriminator on this same source: bind actual prior/current credit-call positions, point representation, per-update displacement, returned credit and the actual walked-segment/reference/footprint/clearance outcomes. Exercise an actually crossed positive post-plane overshoot within existing bounds; do not replace it with a before-plane target. Retain raw existing evidence and label interpolated versus actual samples.",
+    "If physically eligible ordered movement is refused solely by the carried-residual projection jump, route a bounded credit-accounting fidelity correction under the existing implementation authority. If a real segment/footprint/reference predicate fails, diagnose that concrete failure instead of granting credit. No chosen algorithm, new mechanic, tolerance, geometry, copy or signature is prescribed.",
+    "Any correction must preserve the exact early15.82 refusal, ordinary real return/re-traversal, stationary/endpoint/far-C/late-leg pumping negatives and strict final passage/Continue facts. Prove ordinary post-plane control in independent runtime evidence; a narrowly squared harness pass alone cannot close manual fidelity."
+  ],
+  "authorityLimit": "Documentation interpretation only. No source/contract/signature edit, GPU/probe/test run, new council, defect closure or runtime acceptance. The existing contract supports a bounded implementation correction when the physical discriminator confirms it; no new owner approval is needed for routine authorized routing."
+}

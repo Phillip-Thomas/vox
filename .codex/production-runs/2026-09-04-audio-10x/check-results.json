@@ -1,0 +1,39 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-09-04-audio-10x",
+  "contractVersion": "draft-v4",
+  "contractSha256": "672de45a0c8257d334d052cbedf4247fd09b0f1dba385cc5fb9d06e04459d41d",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641",
+  "stage": "audio-stage-3-composed-sync",
+  "recordedAt": "2026-09-05T09:53:15-04:00",
+  "productionScope": {
+    "status": "pass",
+    "evidenceRefs": ["implementation.diff", "production-lock.json"],
+    "note": "Stage 3 diff touches main/src/audio/ (scoreEngine.ts scheduleHit/HitSchedule/impact/pending hits/applyRails dirty check/tonic + constraint plumbing; new pure generative/hitSchedule.ts and generative/moodConstraint.ts; tuning.ts named constants; harmonyBrain.ts planetHomeRoot export only; bedEngine.ts tonic resolver only; sfxEngine.ts playSfx atAudioTime; mix/duckMatrix.ts header + tests (S2-D10); mix/mixTuning.ts AUTOMATION_CADENCE_S 0.25→2 s; soak identity/onset harness), the three contracted story call-site files (storyDirector.ts eight sites + bundle helpers, signedSceneAvRuntime.ts applyScore/answer tick, emergentStoryDirector.ts tickA4), story/storyScore.ts façade tables, tests, main/tools probes, PARAVOXIA_SCORE.md §4, PARAVOXIA_AUDIO_10X_PLAN.md §7, score-treatment.md §14. Untouched: audioCore.ts, MOODS literals (62-entry fingerprint pinned), every copy string, storyText.ts, PostFX.tsx, objective/HUD semantics, oxygen clock (never quantized), sfxRateLimiter thresholds, Stage 5's arrangement/phraseMemory/sectionPlanner/pulse/worldSignals and bedEngine's per-bar rim."
+  },
+  "creativeContract": {
+    "status": "pass",
+    "evidenceRefs": ["scene-contract.json", "evidence/stage-3/README.md", "evidence/stage-3/hit-onset.json", "evidence/stage-3/mood-voicing.json", "evidence/stage-3/sync"],
+    "note": "Stage 3 terms measured in evidence/stage-3/README.md. Deviations recorded for triad/owner disposition: (1) the a3 first-blade notBefore uses the last caption authored BEFORE the wave (the literal 'last A3_CAPTIONS' would move the wave 12.8 s and break the 2.75 s cap) — contractChangeRequired if the literal is wanted; (2) render-identity proven by fingerprint (62/62) not PCM hash (harness replay floor 1 LSB); the inventory is 62 moods, not 55; (3) applyRails dirty check is inaudible (|ΔRMS| ≤ 0.007 dB, residual ≤ −81 dBFS) but not bit-identity; (4) AUTOMATION_CADENCE_S retuned to 2 s to meet < 60 writes/s (median 27.6); (5) S2-D10 (c) guard applied to cap-affected rows, oxygenCritical exemption pinned; (6) two-clock guard added so image members fire on the earlier of the fixed beat-clock and fixed audio-clock targets (beat-clock-only guards drifted to +5.9 frames at the a3 landing under SwiftShader frame drops) — mechanism refinement inside 'fixed at arming', routed to Cinematography; (7) live evidence is the movie lane on headless SwiftShader from natural predecessor entries; variants not separately captured."
+  },
+  "typecheck": { "status": "fail", "evidenceRefs": ["evidence/stage-3/verify.log"], "note": "npm run verify exits 2 at typecheck on ONE error outside this stage: src/audio/voice/voiceBus.ts(146,3) Float32Array of ArrayBufferLike vs of ArrayBuffer — an untracked concurrent Stage 6 (voice) file, mtime 07:58, not touched by Stage 3. Every Stage 3 file typechecks (tsc filtered: 0 other errors). The remaining verify steps were run individually after the typecheck (evidence/stage-3/verify-tail.log): story:authority exit 0, test 318 files / 2644 tests exit 0, build exit 0. Routed to the Stage 6 lane; verify goes green the moment that file is fixed." },
+  "tests": { "status": "pass", "evidenceRefs": ["evidence/stage-3/vitest.log", "evidence/stage-3/verify.log"], "note": "targeted vitest src/story + src/audio: 131 files / 1184 tests (vitest.log); full npm run test: 318 files passed, 1 skipped, 2644 tests, 5 skipped-as-planned (verify-tail.log). New: generative/hitSchedule.test.ts, generative/moodConstraint.test.ts, story/storyScore.stage3.test.ts (caps, chains, reload identity, MOODS fingerprint, census, latency, two-clock), mix/duckMatrix.test.ts S2-D10 pins, sfxEngine.test.ts C6 unshifted law; adapted: storyScore.test.ts, signedSceneAvRuntime.test.ts (answer chases), automationDirty.test.ts (cadence-derived)." },
+  "build": { "status": "pass", "evidenceRefs": ["evidence/stage-3/verify.log"] },
+  "commands": [
+    { "command": "node tools/audio-mood-identity-probe.mjs evidence/stage-3/moods-before.json (untouched instrument)", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/moods-before.log" },
+    { "command": "node tools/audio-mood-identity-probe.mjs … moods-A-nodirty (commit A, RAILS_DIRTY_ENABLED false) --wav; --compare fingerprints 62/62 identical", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/moods-A-nodirty.log" },
+    { "command": "node tools/audio-mood-identity-probe.mjs … moods-floor (same code twice) --compare-wav → 1 LSB", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/floor-vs-A-nodirty.json" },
+    { "command": "node tools/audio-mood-identity-probe.mjs … moods-A-dirty --wav; --compare-wav A-nodirty A-dirty", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/A-nodirty-vs-A-dirty.json" },
+    { "command": "node tools/audio-mood-identity-probe.mjs … moods-B-brain --wav; --compare-wav A-dirty B-brain (57/62 within floor, 5 re-voiced)", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/A-dirty-vs-B-brain.json" },
+    { "command": "node --experimental-strip-types tools/mood-voicing-evidence.ts", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/mood-voicing.json" },
+    { "command": "node tools/audio-hit-onset-probe.mjs evidence/stage-3/hit-onset.json (30/30, max 0.045 ms)", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/hit-onset.log" },
+    { "command": "node tools/audio-param-writes-probe.mjs ch4-vigil 8 3 --trace (median 27.6/s)", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/after-param-writes.log" },
+    { "command": "npm run audio:check (13/13, 26.9 s)", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/audio-check.log" },
+    { "command": "npm run score:fps (median 60.39)", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/fps.log" },
+    { "command": "npm run score:soak:pure", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/pure-soak.log" },
+    { "command": "tools/hit-sync-probe.mjs per beat ×3 runs (before-two-clock/ and final)", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/sync" },
+    { "command": "npx vitest run src/story src/audio", "status": "pass", "exitCode": 0, "evidenceRef": "evidence/stage-3/vitest.log" },
+    { "command": "npm run verify", "status": "fail", "exitCode": 2, "note": "typecheck fails on the concurrent Stage 6 file src/audio/voice/voiceBus.ts only; story:authority/test/build run individually and pass (verify-tail.log)", "evidenceRef": "evidence/stage-3/verify.log" },
+    { "command": "node tools/creative-triad-gate.mjs --run … --phase implementation", "status": "fail", "exitCode": 1, "note": "remaining failures are orchestrator re-pins: authority hashes for PARAVOXIA_AUDIO_10X_PLAN.md (§7 Stage 3 cells), PARAVOXIA_SCORE.md (§4 Stage 3 note) and PARAVOXIA_CREATIVE_COUNCIL.md (changed by a concurrent session, not this stage), plus the UX-baseline source pin for main/src/audio/sfxEngine.ts (contracted C6 change: playSfx atAudioTime); the typecheck check mirrors the voiceBus.ts error above", "evidenceRef": "evidence/stage-3/gate.log" }
+  ]
+}

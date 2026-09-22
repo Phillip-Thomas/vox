@@ -1,0 +1,161 @@
+{
+  "rubric": "paravoxia-story-cohesion v1",
+  "iteration": 3,
+  "revision": "council-v2",
+  "judgePass": "second independent story cohesion judgement",
+  "candidateSha256": "133d1dbe54a9f51e68d9fd67997042d1494059e30707a5da6c308d403cebc2fb",
+  "decisionsSha256": "267ec0e8ecc8986c71b41a725e15467979704e8a6b4881bf3ab513730f391a4b",
+  "directorSignoffsSha256": "8bffb4bebe40376427344d1f4fe5b07de7d041f4ea40216d177dcb3d9fb32edb",
+  "ownerStoryDecisionSha256": "4407d346ff7046085d7763e1f65d2d73d86ff54bc69aa7c407f267ba54f68577",
+  "ownerStandingAuthoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "arenaNotesSha256": "4659a4369e2d13a656f8d4278f45da2fd8be33d04fb07cc9d574501f7f45eee1",
+  "geometryBasisSha256": "b7999bb589cfcf2d420af1f25f59780026c0ea7909a65b52d1f26fb2088ee55a",
+  "implementationDiffSha256": "4c661abb2a9b2414e7e310035fe9f626970c845092ada1cae12af2dee896821c",
+  "measuredCorpusSha256": "d0fe844959ccdbbcd07b8df568f659633c760dede3515d1ddcf565b94e35e53e",
+  "currentDeterministicEvidence": [
+    "check-results-v2.json",
+    "documentation-audit-v2.md",
+    "alignment-report-v2.md",
+    "alignment-report-v2.json"
+  ],
+  "supersededEvidenceNotUsed": [
+    "check-results.json (iteration 2, 77/1094)",
+    "iterations/council-v1/*"
+  ],
+  "categories": [
+    {
+      "slug": "shipped_truth_accuracy",
+      "score": 4.75,
+      "weight": 13,
+      "weighted": 61.75,
+      "priorScore": 4.6,
+      "evidence": "Independently re-read Execution Plan:310 (F01 now ch10-transit/done \u2014 CG-JUDGE-001 genuinely repaired), story-authority.json ceilings and beat order, and w7744-return-cause retention. Candidate labels every ch13 line as future authored copy; grep confirms zero ch13 identifiers or new strings in main/src; 0 patch lines under main/src; 958 runtime hashes with 0 drift. Deductions: production-lock candidate-hash drift (CG-JUDGE-007) and declared activeProduction retention (CG-JUDGE-002); audit F-A wording ambiguity."
+    },
+    {
+      "slug": "causal_plot_coherence",
+      "score": 4.8,
+      "weight": 15,
+      "weighted": 72.0,
+      "priorScore": 4.6,
+      "evidence": "Desire/opposition/tactic/action/consequence complete per movement; A4 fault sets up MODEL INCOMPLETE via a reversal of bodies; the future direction extends the shipped spine from a restored hearth. The v1 deduction on the unestablished dual-route premise is materially answered by measurement (16 vs 36 units, 14 unsupported short units, 61 long samples, 18-unit common passage with a contiguous 8-unit stretch beyond the fixed reference), which also makes the reciprocal exchange geometrically necessary rather than rhetorical. Residual deduction: all of it is CPU preproduction on proposed apparatus (CG-JUDGE-003)."
+    },
+    {
+      "slug": "character_desire_opposition_and_change",
+      "score": 4.75,
+      "weight": 13,
+      "weighted": 61.75,
+      "priorScore": 4.5,
+      "evidence": "Three distinguishable dispositions with Worker 9 correctly withheld. Terra's belief movement now has explicit before/after lines bound to a measured dependency she cannot satisfy while moving; W-7744's change remains produced by his own action and arrival and bounded to a LOCAL RECORD (CG-D04). Deduction: the reversal is carried by two sparse lines whose comprehension is unmeasured (CG-JUDGE-005)."
+    },
+    {
+      "slug": "player_agency_and_authored_rites",
+      "score": 4.85,
+      "weight": 11,
+      "weighted": 53.35,
+      "priorScore": 4.8,
+      "evidence": "Choice, authored rite, hold, revision, reset, fallback and rescue each named honestly; completion granted only by physical arrival with timers, captions, gaze dwell, ledger entries, timeout rescue and movie receipts explicitly excluded; movie must perform real actions and reports stuck on timeout; three cold no-rescue journeys required; score tail is never a progression predicate. New quiet continuous tracing directly targets the blind reader's SEVERITY 1 finding for ch13. Deduction: dense per-verb objective stack remains unmeasured (CG-JUDGE-004)."
+    },
+    {
+      "slug": "reveal_withhold_and_mystery",
+      "score": 4.8,
+      "weight": 11,
+      "weighted": 52.8,
+      "priorScore": 4.8,
+      "evidence": "w7744-return-cause verified still present in lockedOpenQuestions with only the bounded local case answered in the register; protectedUnresolved list intact (Makers, authorship, simulation, third consciousness, Worker 9 timing, final frame); ownerOnlyChoicesInferred 0; no survival, shared-body or future-motive credit taken; CG-D08 is grammar scope, not speaker reassignment; alignment-report-v2 \u00a7Reveal accounting keeps interiority, allegiance and awakening open. Deduction held for the risk that a visibly stored fault plus repeated inspection reads as more institutional causality than intended."
+    },
+    {
+      "slug": "audiovisual_story_arc",
+      "score": 4.65,
+      "weight": 12,
+      "weighted": 55.8,
+      "priorScore": 4.6,
+      "evidence": "Motif has setup, restraint under temporary holds, and a spacing-only payoff gated on real completion; silence carries refusal; no victory cadence, coda or alliance duet; A5/A6/A7 unspent; one player-owned 75-degree view, no new light or privileged renderer; tier/mobile/reduced-motion equivalence preserved. The backed instrument improves visual causality by sharing one solid across render, collision and occlusion. Deductions: no heard or rendered current evidence (offline decode only; worker body and restored core absent from software frames), and the bounded tail requires an integration that does not exist."
+    },
+    {
+      "slug": "canon_and_authority_governance",
+      "score": 4.7,
+      "weight": 10,
+      "weighted": 47.0,
+      "priorScore": 4.65,
+      "evidence": "Precedence explicit and machine-checked (validate-candidate 102/102, story:authority 1096, smoke pass); identical candidate/register/arena/geometry hashes across three v2 signatures and the delegated owner decision; delegation recorded honestly with personallyReviewedByUser false and acceptedMissingEvidence false; ceilings and protected question families unchanged; documentationAllowedPaths exactly equals the five changed paths; patch reconstruction from authority-before is byte-exact. Deductions: production-lock binds the v1 candidate hash (CG-JUDGE-007); signature schema asymmetry (audit F-B); canon voice policy amended under standing delegation without personal review."
+    },
+    {
+      "slug": "implementation_readiness",
+      "score": 4.7,
+      "weight": 8,
+      "weighted": 37.6,
+      "priorScore": 4.5,
+      "evidence": "Stable beat IDs (ch13-home/-return/-survey/-common), implementation-acceptance.md, typed external ch11/ch12 transition requirement against OI-3, and a bounded self-contained packet with no hidden chat context. Readiness rose because the core mechanic now has a qualified basis plus explicitly enumerated remaining scene bindings (connected head cap and endpoint-contact predicate qualified; non-overlapping H vs E staging measured with 2.00 clearance and positioning legs denied proof status). Deductions: score-tail lifecycle unimplemented; live terrain, day/night, tier, save, journey, hardware and listening acceptance all still open; scene contract unsigned."
+    },
+    {
+      "slug": "independent_review_and_dissent",
+      "score": 4.75,
+      "weight": 4,
+      "weighted": 19.0,
+      "priorScore": 4.8,
+      "evidence": "Blind reader isolated by corpus hash with declared elisions; canon audit and contradiction triage separate; ten original notes plus six new arena routes each with an exact recipient response and no author closing its own objection; the material competing thesis was withdrawn by its own proposer; original treatments preserved as alternatives; the failed bare-water substitution preserved rather than deleted. Deductions: dissent-register.md not extended to council-v2 and one open scene objection recorded only in a signature limitation (CG-JUDGE-008); still only one bounded blind measurement, deliberately not re-run against new text."
+    },
+    {
+      "slug": "documentation_precision_and_learning",
+      "score": 4.6,
+      "weight": 3,
+      "weighted": 13.8,
+      "priorScore": 4.5,
+      "evidence": "R1 repaired in-cycle and independently confirmed; three-iteration lineage preserved under iterations/; bounded five-path cumulative diff reproduced exactly; v2 audit re-verifies every numeric claim against the frozen basis including the 36/16/20/2.25 arithmetic; status vocabulary consistent. Deductions: audit findings F-A (self-contradictory-reading sentence), F-C (asymmetric snapshot pair) and F-D (root check-results.json not self-labelled superseded, requiring out-of-band instruction to disambiguate)."
+    }
+  ],
+  "weightSum": 100,
+  "weightedTotalRaw": 474.85,
+  "weightedTotal": 4.7485,
+  "weightedTotalRounded": false,
+  "priorIterationWeightedTotal": 4.633,
+  "passingThreshold": 4.7,
+  "categoryFloor": 4.25,
+  "categoryFloorMet": true,
+  "lowestCategoryScore": 4.6,
+  "lowestCategorySlug": "documentation_precision_and_learning",
+  "openBlockingDefects": {
+    "critical": 0,
+    "high": 0,
+    "unacceptedBlockingMedium": 0,
+    "acceptedMedium": 1,
+    "low": 5,
+    "closed": 2
+  },
+  "requiredSignoffsPresent": true,
+  "signoffDispositions": {
+    "chapter": "approve-with-notes",
+    "score": "approve",
+    "cinematography": "approve-with-notes"
+  },
+  "ownerAuthorityKind": "standing-user-delegation",
+  "personallyReviewedByUser": false,
+  "lockViolation": false,
+  "runtimeMutationClaimed": false,
+  "runtimeDriftFilesCompared": 958,
+  "runtimeDriftCount": 0,
+  "publicationAuthorized": false,
+  "sceneContractApproved": false,
+  "hardwareLiveOrListeningAcceptanceClaimed": false,
+  "releaseStoryCeiling": "ch4-arrival",
+  "runtimeStoryCeiling": "ch10-transit",
+  "decision": "approved",
+  "decisionScope": "Bounded story-council direction and documentation candidate only. Not a scene approval, not runtime acceptance, not a final-game approval, not publication.",
+  "decisionRationale": "Unrounded weighted total 4.7485 clears the 4.70 threshold; every category clears the 4.25 floor with the lowest at 4.60; no critical or high defect is open; the one medium (CG-JUDGE-003) is accepted as a declared open gate by three v2 signatures and the delegated owner decision rather than as satisfied evidence; all required signoffs bind the identical candidate, register, arena and geometry hashes; there is no lock violation and no runtime mutation or drift. The improvement over 4.633 is earned by three verifiable repairs: F01 confirmed corrected at source by independent re-read, the dual-route and reciprocal-necessity premise converted from assertion to a hash-bound measured basis cited by every v2 signature, and Terra's dependence made geometrically necessary with explicit before/after lines. Two new low governance defects (lock candidate-hash drift, un-extended dissent register) are recorded and routed rather than repaired here, and neither is blocking. The margin is thin and is reported unrounded; approval would not survive the loss of any one of those three repairs.",
+  "routedForRepairNotRepairedHere": [
+    "CG-JUDGE-002",
+    "CG-JUDGE-003",
+    "CG-JUDGE-004",
+    "CG-JUDGE-005",
+    "CG-JUDGE-007",
+    "CG-JUDGE-008"
+  ],
+  "retainedUnknowns": [
+    "No live world, edited terrain, player view, day/night, tier, input, save, continuous journey or hardware evidence exists for ch13",
+    "No listening evidence: three offline score files decoded but the available audio input path was not listenable",
+    "Software baselines lack the worker body, restored core and all proposed fixtures",
+    "The bounded score tail requires an unimplemented storyScore integration",
+    "The blind corpus was deliberately not re-run against council-v2 text; A1/A2/A4 perception debt remains open and out of scope",
+    "Scene contract unsigned; connected-head, endpoint-contact and non-overlapping near-end staging remain scene-contract obligations, with the E->H/H->E positioning legs credited with nothing"
+  ]
+}

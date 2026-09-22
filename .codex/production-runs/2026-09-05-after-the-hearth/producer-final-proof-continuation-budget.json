@@ -1,0 +1,22 @@
+{
+  "at": "2026-09-06T22:04:00.206719+00:00",
+  "decidedBy": "delegate",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "authority": "Standing direct user instruction continue autonomously and autoapprove routine checks/fixes; no user review of this specifichash claimed.",
+  "sameProductionRun": true,
+  "priorOriginalVerifierDeadline": "2026-09-06T22:04:34.043543+00:00",
+  "priorBudgetNotRewritten": true,
+  "decision": "One additional bounded10minute actual finale verification task, plus parallel CPU-only preparation of the existing realCOMMONmovie harness for at most5minutes. This explicit continuation follows inspected copy-depth failure and finished priorverifier; no newmaterialgame repair or profilechange.",
+  "finaleCpuAndGpuSeconds": 600,
+  "moviePreparationCpuOnlySeconds": 300,
+  "requiredNewEvidence": "Actual currentcandidate finale atomicstate/output window; CPU preparation alone cannotpass movie or finale.",
+  "preserved": [
+    "Source100snapshot exact;8materialrepairs unchanged; no ninthrepair.",
+    "Existingfull3192tests reused; no source/build/fullsuite.",
+    "SharedGPU serialized; priorownersfinished; no newbrowseruntilownedlockproof.",
+    "All priorattempts preserved, exactarrival/route/scorepredicates unchanged.",
+    "No publishing or acceptedexception."
+  ],
+  "publicationAuthorized": false
+}

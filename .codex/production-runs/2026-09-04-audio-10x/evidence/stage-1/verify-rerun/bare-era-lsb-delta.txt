@@ -1,0 +1,7 @@
+before/bare-bed.wav bits=16 ch=2 sr=44100 samples=4233600 diff=0 maxLSB=0 firstAtS=- dbfs=-inf
+before/color-bed.wav bits=16 ch=2 sr=44100 samples=4233600 diff=128 maxLSB=1 firstAtS=1.021 dbfs=-90.31
+before/bare-story-ch1-fixed.wav bits=16 ch=2 sr=44100 samples=5292000 diff=3634 maxLSB=2 firstAtS=25.965 dbfs=-84.29
+--- builder after-noglue vs before ---
+before/bare-bed.wav bits=16 ch=2 sr=44100 samples=4233600 diff=8 maxLSB=1 firstAtS=0.786 dbfs=-90.31
+before/color-bed.wav bits=16 ch=2 sr=44100 samples=4233600 diff=134 maxLSB=1 firstAtS=3.718 dbfs=-90.31
+before/bare-story-ch1-fixed.wav bits=16 ch=2 sr=44100 samples=5292000 diff=6 maxLSB=1 firstAtS=0.786 dbfs=-90.31

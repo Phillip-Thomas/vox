@@ -1,3 +1,5 @@
+import { beatCh7Board } from './beats/ch7/ch7-board.ts';
+import { normalizeFacts } from './beats/objectivePrimitives.ts';
 import type { ActorId } from '../game/playerActors.ts';
 import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
 import type { ControlMode, FlightPhase } from '../game/playerFlight.ts';
@@ -337,48 +339,7 @@ export function getPhysicalBoardingGuidance(
   current: PhysicalBoardingState = state,
   inputMode: 'keyboard' | 'touch' = isTouchDevice() ? 'touch' : 'keyboard'
 ): GuidedStoryObjective {
-  if (current.phase === 'hatch_entering' || current.phase === 'transfer_requested') {
-    return {
-      id: 'board:hatch-in-progress',
-      kind: 'wait',
-      markerLabel: 'KESTREL HATCH · ENTERING',
-      workOrder: [
-        'HATCH TRANSFER IN PROGRESS.',
-        inputMode === 'touch'
-          ? 'HOLD POSITION · USE TO STEP BACK.'
-          : 'HOLD POSITION · ESC TO STEP BACK.'
-      ],
-      requiresMarker: false
-    };
-  }
-  if (current.phase === 'sealing' || current.phase === 'handback') {
-    return {
-      id: 'board:pressure-seal',
-      kind: 'wait',
-      markerLabel: 'KESTREL · PRESSURE SEAL',
-      workOrder: ['PRESSURE BOUNDARY CLOSING.'],
-      requiresMarker: false
-    };
-  }
-  if (current.phase === 'complete') {
-    return {
-      id: 'board:cockpit-secured',
-      kind: 'wait',
-      markerLabel: 'KESTREL · COCKPIT SECURED',
-      workOrder: ['COCKPIT CONTROL ESTABLISHED.'],
-      requiresMarker: false
-    };
-  }
-  return {
-    id: current.phase === 'cancelled' ? 'board:return-to-hatch' : 'board:enter-hatch',
-    kind: 'interact',
-    markerLabel: 'KESTREL HATCH · BOARD',
-    workOrder: [
-      current.phase === 'cancelled' ? 'RETURN TO THE KESTREL HATCH.' : 'APPROACH THE KESTREL HATCH.',
-      inputMode === 'touch' ? 'USE · ENTER THROUGH THE HATCH.' : '[F] ENTER THROUGH THE HATCH.'
-    ],
-    requiresMarker: true
-  };
+  return beatCh7Board.objective!(normalizeFacts({ boarding: { phase: current.phase, inputMode } }));
 }
 
 export function cancelPhysicalBoarding(reason = 'player-cancelled'): boolean {

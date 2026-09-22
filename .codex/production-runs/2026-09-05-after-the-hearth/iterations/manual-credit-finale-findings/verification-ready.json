@@ -1,0 +1,22 @@
+{
+  "schema": "paravoxia.verificationReadiness.v1",
+  "ready": true,
+  "readyAt": "2026-09-06T17:44:25.316417+00:00",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "integrationInvocationRef": "integration-arrival-common-metadata-invocation.json",
+  "integrationFinishedAt": "2026-09-06T17:41:27.500809+00:00",
+  "sourceManifestRef": "implementation-source-manifest.json",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "implementationGateRef": "implementation-gate-pass.json",
+  "implementationGateChecks": 1756,
+  "checkResultsRef": "check-results.json",
+  "instructions": "Independent fullverify/build first, then root-owned new immutable preview. All prior evidence retained; no new gameplay acceptance implied.",
+  "publicationAuthorized": false,
+  "limitations": [
+    "Static checks and harness preparation do not prove gameplay, GPU/AV or taste.",
+    "Signed COMMON18-unit manual recovery, lawful earnedContinue and full chapter journeys remain pending.",
+    "Existing38007preview is PRIOR source until root replaces it."
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "schema": "paravoxia.shippedVisualBaseline.v1",
+  "runId": "2026-09-06-common-ground",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "sceneId": "common-ground",
+  "sceneIdStatus": "provisional-run-stage; root later maps copies/anchors to the scene production contract",
+  "capturedAt": "2026-09-06T04:58:51.428Z",
+  "captureAuthority": "software-only SwiftShader diagnostic of the source-pinned build; NOT the shipped/delivered look and NOT a production acceptance baseline",
+  "harvestProvenance": {
+    "harvestKind": "fresh mechanical harvest of preserved artifacts",
+    "harvestedAt": "2026-09-06",
+    "originalRoleReport": "absent",
+    "originalTransportDisposition": "software-baseline-transport-interruption.json — transport ended before the CLI role final report; capture subprocess completed both source-pinned software bundles",
+    "originalArtifactsMutated": false,
+    "rerendered": false,
+    "browserOrBuildOrGpuInvoked": false,
+    "note": "All values below are read or recomputed from preserved raw files. No image values were invented."
+  },
+  "productionDisposition": "fail-software (both chapter-evidence runs exited 1); headed hardware evidence remains pending",
+  "gateReady": false,
+  "gateReadyReason": "Software diagnostic only. Hardware reserved by an unrelated Paraform job. ch4/ch9 exit milestones not reached. No navigation, pace, audio, or acceptance claim is supported by this artifact.",
+  "renderer": {
+    "declared": "SwiftShader required; no hardware fallback",
+    "measured": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+    "explicitSwiftShader": true,
+    "tier": "swiftshader-low",
+    "headed": false,
+    "colourManagement": "none",
+    "sourceRef": "evidence/software-baseline/ch4/software-state-entry.json#actualCanvasRenderer"
+  },
+  "buildIdentity": {
+    "buildSha": "b631a52",
+    "buildManifestSha256": "4c9d71ceb6b142ad5e855e72eafc4e1325db44c77f489d8fc04aafc3a28b208e",
+    "previewUrl": "http://127.0.0.1:34147/",
+    "previewSnapshotDir": "/tmp/paravoxia-preview-pV3HaE/dist",
+    "paravoxiaIdentityRecorded": true,
+    "paravoxiaIdentityEvidence": [
+      "evidence/software-baseline/runner.log: \"serving Paravoxia at http://127.0.0.1:34147/ (owned build 4c9d71ce...)\"",
+      "evidence/software-baseline/ch4/capture.log: \"[preview] using http://127.0.0.1:34147/ (identity confirmed)\"",
+      "evidence/software-baseline/ch9/capture.log: \"[preview] using http://127.0.0.1:34147/ (identity confirmed)\"",
+      "document.title == \"Paravoxia\" in all four software-state files"
+    ],
+    "sourceDriverSha256": "3cb028df7f8a2b5b3542628bd3d489d65f7154b3789064fa63f57799fc4d43c4",
+    "diagnosticDriverSha256": "8786f024e06e86c3b1b3e129c34a0fe522b2aa997d2cfa3c3eb9e7b2da6d7a2a"
+  },
+  "sourceIdentityAndDrift": {
+    "snapshots": [
+      { "stage": "before-build", "capturedAt": "2026-09-06T04:52:52.521Z", "revision": "b631a52065a1a69fecac0331e69515c306408641", "sha256": "1bfeb00a390e599edc532dae4a7a25aa7a3ebc67c6c1190e7614bf2521377038", "fileCount": 1060 },
+      { "stage": "after-build", "capturedAt": "2026-09-06T04:52:59.371Z", "revision": "b631a52065a1a69fecac0331e69515c306408641", "sha256": "1bfeb00a390e599edc532dae4a7a25aa7a3ebc67c6c1190e7614bf2521377038", "fileCount": 1060 },
+      { "stage": "after-captures", "capturedAt": "2026-09-06T04:58:51.402Z", "revision": "b631a52065a1a69fecac0331e69515c306408641", "sha256": "1bfeb00a390e599edc532dae4a7a25aa7a3ebc67c6c1190e7614bf2521377038", "fileCount": 1060 }
+    ],
+    "aggregateSha256Identical": true,
+    "fileMapByteIdenticalBeforeVsAfterBuild": true,
+    "fileMapByteIdenticalAfterBuildVsAfterCaptures": true,
+    "gitStatusStringIdenticalAcrossAllThree": true,
+    "sourceChangedDuringBuild": false,
+    "sourceChangedAfterBuild": false,
+    "drift": "none detected",
+    "verificationMethod": "jq -S '.files' pairwise diff plus sha256 of the git status string, this harvest"
+  },
+  "captures": [
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch4/evidence/bundle/frames/f0000_t2.01s_opening-2.0s.png",
+      "sha256": "e3969f53c809aea08873c4baf1a1e75302b7ce7fed29dc5b167f36d5ac752ef2",
+      "sha256Reverified": true,
+      "bytes": 953246,
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": { "codec": "png", "width": 1280, "height": 720, "pixFmt": "rgb24" },
+        "audio": null
+      },
+      "beat": "ch4-audit",
+      "anchor": "anc.audit.arrival-handback",
+      "anchorEvent": "arrival_handback_authenticated",
+      "kind": "still-frame",
+      "role": "keyframe",
+      "label": "opening-2.0s",
+      "storyClockS": 2.008,
+      "clock": "wall-since-settle",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "swiftshader-low",
+      "requestedProfile": "HIGH",
+      "hudSuppressed": true,
+      "measuredStats": { "meanLuma": 0.5091, "meanLuma255": 129.82, "maxLuma": 0.8994, "contrast": 0.2203, "brightRatio": 0.997, "nearBlack": 0, "clipped": 0, "colorfulness": 0.254, "blank": false },
+      "statsSource": "recorded by paravoxia-chapter-evidence@v1 in bundle.json; not recomputed by this harvest"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch4/evidence/bundle/frames/f0001_t66.97s_strip.png",
+      "sha256": "f503338d77514177305c46a8ccff7aa7a17f751129a5b2acb438eb80fa160bae",
+      "sha256Reverified": true,
+      "bytes": 1193837,
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": { "codec": "png", "width": 1280, "height": 720, "pixFmt": "rgb24" },
+        "audio": null
+      },
+      "beat": "ch4-audit",
+      "anchor": null,
+      "anchorStatus": "pending — no signed-AV anchor recorded at this instant in digest.md",
+      "kind": "still-frame",
+      "role": "temporal",
+      "label": "strip",
+      "storyClockS": 66.971,
+      "clock": "wall-since-settle",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "swiftshader-low",
+      "requestedProfile": "HIGH",
+      "hudSuppressed": true,
+      "measuredStats": { "meanLuma": 0.1978, "meanLuma255": 50.44, "maxLuma": 0.9325, "contrast": 0.1524, "brightRatio": 0.6611, "nearBlack": 0.0803, "clipped": 0, "colorfulness": 0.5142, "blank": false },
+      "statsSource": "recorded by paravoxia-chapter-evidence@v1 in bundle.json; not recomputed by this harvest"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch9/evidence/bundle/frames/f0000_t2.00s_opening-2.0s.png",
+      "sha256": "05a0852132c074232ff484fe16d7a007118165f0c8e1e5ad1152e5df5cb56b02",
+      "sha256Reverified": true,
+      "bytes": 744673,
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": { "codec": "png", "width": 1280, "height": 720, "pixFmt": "rgb24" },
+        "audio": null
+      },
+      "beat": "ch9-hearth",
+      "anchor": null,
+      "anchorStatus": "pending — digest.md records no signed-AV anchors for ch9-hearth",
+      "kind": "still-frame",
+      "role": "keyframe",
+      "label": "opening-2.0s",
+      "storyClockS": 2.003,
+      "clock": "wall-since-settle",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "swiftshader-low",
+      "requestedProfile": "HIGH",
+      "hudSuppressed": true,
+      "measuredStats": { "meanLuma": 0.611, "meanLuma255": 155.8, "maxLuma": 0.9277, "contrast": 0.2105, "brightRatio": 0.9512, "nearBlack": 0.0004, "clipped": 0, "colorfulness": 0.2521, "blank": false },
+      "statsSource": "recorded by paravoxia-chapter-evidence@v1 in bundle.json; not recomputed by this harvest"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch9/evidence/bundle/frames/f0001_t46.09s_strip.png",
+      "sha256": "4f3e648b2f27ec0f88ca5c09e09589957a1c46c9285a703c0717cc026b48d28c",
+      "sha256Reverified": true,
+      "bytes": 718119,
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": { "codec": "png", "width": 1280, "height": 720, "pixFmt": "rgb24" },
+        "audio": null
+      },
+      "beat": "ch9-hearth",
+      "anchor": null,
+      "anchorStatus": "pending — digest.md records no signed-AV anchors for ch9-hearth",
+      "kind": "still-frame",
+      "role": "temporal",
+      "label": "strip",
+      "storyClockS": 46.088,
+      "clock": "wall-since-settle",
+      "viewport": "1280x720",
+      "devicePixelRatio": 1,
+      "qualityTier": "swiftshader-low",
+      "requestedProfile": "HIGH",
+      "hudSuppressed": true,
+      "measuredStats": { "meanLuma": 0.5876, "meanLuma255": 149.85, "maxLuma": 0.9163, "contrast": 0.2073, "brightRatio": 0.9484, "nearBlack": 0.0011, "clipped": 0, "colorfulness": 0.2476, "blank": false },
+      "statsSource": "recorded by paravoxia-chapter-evidence@v1 in bundle.json; not recomputed by this harvest"
+    }
+  ],
+  "frameProbeSummary": {
+    "framesOfRecord": 4,
+    "blankFrames": 0,
+    "bursts": 0,
+    "continuousVideo": null,
+    "additionalVideo": [],
+    "audioTracks": [],
+    "audioFormat": null,
+    "allProbesReverifiedThisHarvest": true,
+    "hashMismatches": 0
+  },
+  "auxiliaryArtifacts": [
+    { "path": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch4/evidence/bundle/hud/f0000_t2.01s_opening-2.0s.png", "sha256": "2983edb8a1c8ef37fcf4b4b34db82285eb58dda6b64d5197f6aa897e0d08c061", "bytes": 1003684, "kind": "hud-composite", "use": "audit only — not reviewer evidence", "probe": { "codec": "png", "width": 1280, "height": 720, "pixFmt": "rgb24" } },
+    { "path": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch4/evidence/bundle/hud/f0001_t66.97s_strip.png", "sha256": "ec9b7255b9921dd066cce9d084c4cd619e33d98feaa9133c41f037c477c6b1ef", "bytes": 1036692, "kind": "hud-composite", "use": "audit only — not reviewer evidence", "probe": { "codec": "png", "width": 1280, "height": 720, "pixFmt": "rgb24" } },
+    { "path": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch9/evidence/bundle/hud/f0000_t2.00s_opening-2.0s.png", "sha256": "45fc6911aee5cb93f91dcd5eb11f059b6b0de0ff063fa5425f99e38869ee6694", "bytes": 835795, "kind": "hud-composite", "use": "audit only — not reviewer evidence", "probe": { "codec": "png", "width": 1280, "height": 720, "pixFmt": "rgb24" } },
+    { "path": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch9/evidence/bundle/hud/f0001_t46.09s_strip.png", "sha256": "42c1e4e18a0b57d0e1522dcdd4c44596aa8e9f40f52817776fcd64abf09afea7", "bytes": 741444, "kind": "hud-composite", "use": "audit only — not reviewer evidence", "probe": { "codec": "png", "width": 1280, "height": 720, "pixFmt": "rgb24" } },
+    { "path": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch4/evidence/bundle/sheet.png", "sha256": "69abbae6232f0a7f959ec829f78506001f0473b1c09c3457f6c74dbd8a4b88d5", "bytes": 246441, "kind": "contact-sheet", "tiles": 1, "probe": { "codec": "png", "width": 496, "height": 320, "pixFmt": "rgba" } },
+    { "path": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch9/evidence/bundle/sheet.png", "sha256": "56608ded2fd15feb426966d20d851db4030b23ac02b0930efa29ce35335b71bf", "bytes": 217247, "kind": "contact-sheet", "tiles": 1, "probe": { "codec": "png", "width": 496, "height": 320, "pixFmt": "rgba" } }
+  ],
+  "cameraStates": [
+    {
+      "beat": "ch4-audit",
+      "stage": "entry",
+      "anchor": "anc.audit.arrival-handback",
+      "authority": "player-camera",
+      "authoritySource": "measured — boundary.runtime.camera.signedAuthority",
+      "fovDeg": 75,
+      "perspective": true,
+      "lookMode": "free",
+      "feedBlend": 1,
+      "sideBlend": 1,
+      "externalCameraMix": 0,
+      "sourceRef": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch4/software-state-entry.json#boundary.runtime.camera"
+    },
+    {
+      "beat": "ch4-audit",
+      "stage": "exit",
+      "anchor": null,
+      "authority": "player-camera",
+      "authoritySource": "measured — boundary.runtime.camera.signedAuthority",
+      "fovDeg": 75,
+      "perspective": true,
+      "lookMode": "free",
+      "feedBlend": 1,
+      "sideBlend": 1,
+      "externalCameraMix": 0,
+      "sourceRef": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch4/software-state-exit.json#boundary.runtime.camera"
+    },
+    {
+      "beat": "ch9-hearth",
+      "stage": "entry",
+      "anchor": null,
+      "authority": null,
+      "authoritySource": "pending — boundary.runtime.camera.signedAuthority is explicitly null in the raw file; no signed camera authority was recorded for ch9-hearth",
+      "fovDeg": 75,
+      "perspective": true,
+      "lookMode": "free",
+      "feedBlend": 1,
+      "sideBlend": 1,
+      "externalCameraMix": 0,
+      "sourceRef": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch9/software-state-entry.json#boundary.runtime.camera"
+    },
+    {
+      "beat": "ch9-hearth",
+      "stage": "exit",
+      "anchor": null,
+      "authority": null,
+      "authoritySource": "pending — boundary.runtime.camera.signedAuthority is explicitly null in the raw file; no signed camera authority was recorded for ch9-hearth",
+      "fovDeg": 75,
+      "perspective": true,
+      "lookMode": "free",
+      "feedBlend": 1,
+      "sideBlend": 1,
+      "externalCameraMix": 0,
+      "sourceRef": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch9/software-state-exit.json#boundary.runtime.camera"
+    }
+  ],
+  "cameraStateLimitations": [
+    "FOV 75 is the runtime-reported live camera FOV at the entry and exit samples only. No FOV was sampled at either captured frame instant (t=2.0s / t=46.09s / t=66.97s), so per-frame FOV is pending.",
+    "No rig, dolly, lens-rig, letterbox or look-target state was recorded anywhere in these bundles."
+  ],
+  "paletteStates": [
+    {
+      "beat": "ch4-audit",
+      "anchor": "anc.audit.arrival-handback",
+      "family": null,
+      "familyStatus": "pending — source-ref only; no palette family, grade or colour values were recorded by the capture, and colourManagement is \"none\"",
+      "measurement": "source-ref-only",
+      "sourceRefs": [
+        { "path": "main/src/utils/planetArtDirection.ts", "sha256": "7c13768085c68e175c4d0a0218a7fbe0e7a027f33012149f5742177bed3c3e50" },
+        { "path": "main/src/utils/planetVisualProfile.ts", "sha256": "129e004e92eeeab2de473dc6697647c450cca2884bc68c13039a90009b931ab0" }
+      ],
+      "sourceRefProvenance": "sha256 read from evidence/software-baseline/source-before-build.json and confirmed byte-identical in source-after-captures.json"
+    },
+    {
+      "beat": "ch9-hearth",
+      "anchor": null,
+      "family": null,
+      "familyStatus": "pending — source-ref only; no palette family, grade or colour values were recorded by the capture, and colourManagement is \"none\"",
+      "measurement": "source-ref-only",
+      "sourceRefs": [
+        { "path": "main/src/utils/planetArtDirection.ts", "sha256": "7c13768085c68e175c4d0a0218a7fbe0e7a027f33012149f5742177bed3c3e50" },
+        { "path": "main/src/utils/planetVisualProfile.ts", "sha256": "129e004e92eeeab2de473dc6697647c450cca2884bc68c13039a90009b931ab0" }
+      ],
+      "sourceRefProvenance": "sha256 read from evidence/software-baseline/source-before-build.json and confirmed byte-identical in source-after-captures.json"
+    }
+  ],
+  "realityStage": null,
+  "realityStageStatus": "not expressible as one value — two beats reported different stages; see realityStates",
+  "realityStates": [
+    { "beat": "ch4-audit", "stage": "material", "sourceRef": "evidence/software-baseline/ch4/software-state-entry.json#boundary.runtime.reality", "stableEntryToExit": true },
+    { "beat": "ch9-hearth", "stage": "alive", "sourceRef": "evidence/software-baseline/ch9/software-state-entry.json#boundary.runtime.reality", "stableEntryToExit": true }
+  ],
+  "controlStates": [
+    { "beat": "ch4-audit", "mode": "fps", "phase": "surface", "stableEntryToExit": true },
+    { "beat": "ch9-hearth", "mode": "fps", "phase": "surface", "stableEntryToExit": true }
+  ],
+  "objectiveStates": [
+    { "beat": "ch4-audit", "stage": "entry", "objectiveId": "ch4:audit:attend-fire", "markerLabel": "CAMPFIRE · ATTEND", "health": "ready" },
+    { "beat": "ch4-audit", "stage": "exit", "objectiveId": "ch4:audit:attend-fire", "markerLabel": "CAMPFIRE · ATTEND", "health": "ready" },
+    { "beat": "ch9-hearth", "stage": "entry", "objectiveId": "settle:scan-waterline", "markerLabel": "LIVING WATERLINE · SCAN", "health": "ready" },
+    { "beat": "ch9-hearth", "stage": "exit", "objectiveId": "settle:attend-waterline", "markerLabel": "LIVING WATERLINE · ATTEND", "health": "ready" }
+  ],
+  "milestoneStatus": [
+    { "beat": "ch4-audit", "exitMilestone": "story:ch4:audit-complete", "reached": false, "evidenceExitCode": 1, "productionDisposition": "fail-software", "pageErrors": 0 },
+    { "beat": "ch9-hearth", "exitMilestone": "story:ch9:hearth", "reached": false, "evidenceExitCode": 1, "productionDisposition": "fail-software", "pageErrors": 0 }
+  ],
+  "adjacentEntryRefs": [],
+  "adjacentExitRefs": [],
+  "adjacencyStatus": "pending — no previous/next beat captures exist in this run; continuity variants (mobile, reduced-motion, lowest tier, desktop parity) were never captured",
+  "headedStatus": "pending",
+  "headedStatusReason": "Hardware is reserved by an unrelated Paraform job. All evidence here is headless SwiftShader. No headed capture obligation is created by this artifact.",
+  "unmeasured": [
+    "hardware colour, light and delivered look",
+    "authored timing, feel and pacing",
+    "performance / fps",
+    "audio of any kind (audioFormat null, zero audio tracks, zero videos)",
+    "flicker and frame-to-frame smoothness (zero bursts captured)",
+    "continuous play and navigation",
+    "day/night cycle causality, two-route behaviour, and any 'unheard' audio claim",
+    "per-frame camera FOV, rig, letterbox, grade and DPR changes",
+    "palette family, measured colour values",
+    "previous/next beat continuity and reset matrix",
+    "production acceptance"
+  ]
+}

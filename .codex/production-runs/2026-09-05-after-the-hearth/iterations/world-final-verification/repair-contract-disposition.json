@@ -1,0 +1,68 @@
+{
+  "schema": "paravoxia.repairContractDisposition.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "baseContractVersion": "scene-v1",
+  "activeContractVersion": "scene-v2",
+  "activeContractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "defectRegisterSha256": "cb15a48b97bd0d2797e2fa1447e5e6055565b508e8607ecc49f43cf0ff93ba5d",
+  "contractChangeRequired": true,
+  "route": "revised-and-resigned",
+  "directionRefs": [
+    "chapter-repair-direction.json",
+    "cinematography-repair-direction.json"
+  ],
+  "triadResignRequired": true,
+  "triadResignComplete": true,
+  "decidedBy": "creative-producer under explicit standing user delegation",
+  "decidedAt": "2026-09-06T11:50:25.174164+00:00",
+  "implementationDirection": {
+    "defectIds": [
+      "CG-IMPL-006",
+      "CG-IMPL-008"
+    ],
+    "contractChangeRequired": false,
+    "owner": "integration-engineer",
+    "boundedAction": "Reproduce and correct actual live terrain/render/support disagreement and home boot/foreground anchor loss; reproduce valid intermediate saved-survey entry through actual validator and chapter seam and fix only demonstrated failure. Preserve signedgeometry/fullphysicalproof/audioeligibility/agency/passivediagnostics and earliercontroller fixes. No newcreative direction.",
+    "evidenceRefs": [
+      "verification-world-interim-report.json",
+      "verifier-findings.json",
+      "producer-world-verification-review.json",
+      "producer-lifecycle-source-review.json",
+      "score-home-anchor-eligibility-interpretation.md"
+    ],
+    "directionRef": "world-repair-direction.json"
+  },
+  "priorImplementationDirection": {
+    "defectIds": [
+      "CG-IMPL-004",
+      "CG-IMPL-005"
+    ],
+    "contractChangeRequired": false,
+    "owner": "integration-engineer",
+    "boundedAction": "Repair movie interaction cadence and ordered physical route-following without altering plot, geometry, proof conditions, score or creative contract. Preserve actual full traversal and ordinary controls.",
+    "evidenceRefs": [
+      "producer-movie-interaction-finding.json",
+      "producer-movie-waypoint-finding.json"
+    ]
+  },
+  "priorLifecycleImplementationDirection": {
+    "defectIds": [
+      "CG-IMPL-006",
+      "CG-IMPL-007",
+      "CG-IMPL-008",
+      "CG-IMPL-009"
+    ],
+    "contractChangeRequired": false,
+    "owner": "integration-engineer",
+    "boundedAction": "Repair causal entry-mode, physical coordinate and anchor eligibility integration defects under unchanged signed v2. Diagnose common fixture stall and reproduce manual steering recovery risk; correct only demonstrated in-scope failure while preserving full ordered actual18 traversal and all signed physical/agency conditions. No new creative direction.",
+    "evidenceRefs": [
+      "verification-lifecycle-interim-report.json",
+      "verifier-findings.json",
+      "chapter-manual-corner-interpretation.md",
+      "score-home-anchor-eligibility-interpretation.md",
+      "producer-manual-corner-risk.json",
+      "chapter-corner-candidate-disposition.json"
+    ],
+    "directionRef": "lifecycle-repair-direction.json"
+  }
+}

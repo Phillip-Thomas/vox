@@ -1,0 +1,389 @@
+{
+  "schema": "paravoxia.assemblyBoundaryLedger.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "authorityRef": "owner-decisions.md",
+  "entryRule": "Every originating condition and symbol restriction remains binding. Listed paths are bounded ceilings, not permission to make unrelated changes. No implementation begins before authentic same-hash triad signatures.",
+  "entries": [
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/beats/ch1/ch1-fixed.ts",
+      "symbol": "beatCh1Fixed",
+      "why": "Three objective stages and concise canonical action copy."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/beats/ch1/ch1-track.ts",
+      "symbol": "beatCh1Track",
+      "why": "Concise hold instruction; preserve timing and dramatic voice."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/beats/ch1/ch1-raster.ts",
+      "symbol": "beatCh1Raster",
+      "why": "Narrow required salvage to first three receipts; one action at a time; retain six fiber/four stone."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/beats/ch1/rail-ch1-fixed.ts",
+      "symbol": "tick",
+      "why": "Actual pickup then actual extraction then movement-caused shared coverage transfer."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/beats/ch1/rail-ch1-raster.ts",
+      "symbol": "tick",
+      "why": "Commit one required salvage target, then real yielding patches; no mixed invisible sweep."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/beats/objectivePrimitives.ts",
+      "symbol": "Ch1FixedObjectiveState, StoryObjectiveGuidanceFacts, DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS",
+      "why": "Add pickup fact, preserve progression-derived stages."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/storyDirector.ts",
+      "symbol": "currentCh1FixedObjectiveState, currentCh1RasterObjectiveState, fixedTutorialProgress, quotaCollected, onBeatEntered, storyDirectorTick ch1-fixed/ch1-raster branches, syncFoundationalStoryObjective, completeFoundationalObjective",
+      "why": "Single authoritative predicates, real receipt feedback, shared transfer event, truthful entry restoration."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/storyScript.ts",
+      "symbol": "CH1_FIXED_TUTORIAL",
+      "why": "One successful positive-yield harvest threshold; one actual coverage crossing (two frame visits)."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/debrisSalvage.ts",
+      "symbol": "isDebrisCollected, debrisSalvageComplete, requiredDebrisSalvageComplete (proposed helper)",
+      "why": "Add a distinct first-three-receipts requirement; preserve all-physical-debris meaning of debrisSalvageComplete, collectDebris, loot and migration."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/world/DebrisField.tsx",
+      "symbol": "DebrisField collectable, useFrame",
+      "why": "Real early pickup permission, pause-safe collection, current-target emphasis."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/world/storyAnchorResolver.ts",
+      "symbol": "getDebrisPoses",
+      "why": "Only existing index0 placement into opening view; worldgen-owner coordination."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/world/SideWorkerAvatar.tsx",
+      "symbol": "SideWorkerAvatar",
+      "why": "Visual sole alignment and grounded animation; no physics edit."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/sideLens.ts",
+      "symbol": "LensRig, fixedScreenCellIndex, computeRigFrame, applySideCameraTransform",
+      "why": "Cinema-owned single viewport-aware coverage authority and geometry epoch; reject resize-as-traversal."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/feed/surveyBrackets.ts",
+      "symbol": "surveyBracketMode, surveyBracketDemand, collectHarvestBracketTargets, collectSalvageBracketTargets, SURVEY_BRACKET_LIMIT",
+      "why": "Exactly one phase-matched actionable target; tool/yield/actual approach checks."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/feed/SurveyBracketDriver.tsx",
+      "symbol": "SurveyBracketDriver",
+      "why": "Stable single selection, actual receipt invalidation, exact labels and real projection."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/feed/regulationVoice.ts",
+      "symbol": "presentRegulationObjective, fixed/track/raster presentation",
+      "why": "Canonical imperative replaces static repeated orders; preserve tracking meaning."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "symbol": "RegulationFeedHud work-order, feed-ledger",
+      "why": "One instruction plus essential current receipt/progress, measured desktop/mobile layout."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/ux/storyHudLayout.ts",
+      "symbol": "solveStoryFeedLedgerPlacement",
+      "why": "Measured target, text, caption and touch-control non-overlap under Cinema direction."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/feedRuntime.ts",
+      "symbol": "resetFeedRuntime",
+      "why": "Only if investigation identifies entry-state ownership here; preserve natural flash event."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/feed/FeedOverlay.tsx",
+      "symbol": "FeedOverlay flash synchronization",
+      "why": "Only a demonstrated DOM/runtime restore mismatch; never a cosmetic mask."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/storyState.ts",
+      "symbol": "seedForBeat, storyEntryPoint, reset/start/resume entry boundary",
+      "why": "Only exact cold-entry flash repair and faithful diagnostic/earned-state reconstruction."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/StoryDirectorDriver.tsx",
+      "symbol": "StoryDirectorDriver marker bridge",
+      "why": "Only if existing bridge needs survey availability/readiness integration; no duplicate marker."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "symbol": "activateGuidedStoryObjective, acknowledgeGuidedStoryProgress, acknowledgeGuidedStoryCompletion",
+      "why": "Only existing semantic receipt/restore integration; audio owner coordinates."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/ux/inputGlyphs.ts",
+      "symbol": "existing feed token mapping",
+      "why": "Preserve common touch substitution; change only if new canonical wording exposes missing token."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/story/autopilot.ts",
+      "symbol": "RailRuntime, committedDebrisTarget",
+      "why": "Expose existing required-target facts to rails without reward/progression bypass."
+    },
+    {
+      "source": "chapter-treatment.json",
+      "path": "main/src/components/EfficientPlayer.tsx",
+      "symbol": "pickSideTarget",
+      "why": "Conditional shared pure read-only selection extraction so marker matches ordinary picker; no changed harvesting or physics semantics."
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "path": "main/src/story/storyDirector.ts",
+      "symbol": "tickTrackUnlock, onBeatEntered, scoped once-key caption dispatch",
+      "why": "Two actual track presentation anchors and quota-complete clear/hold separation."
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "path": "main/src/story/storyText.ts",
+      "symbol": "clearStoryTextChannel (proposed selective helper), showSystemLine, showCaption",
+      "why": "Clear only owned/outgoing caption/system text at declared transitions; preserve objective and later channels."
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "path": "main/src/story/feed/regulationVoice.ts",
+      "symbol": "presentRegulationObjective, REGULATION_VOICE.track / proposed single-source track constants",
+      "why": "Canonical active workOrder wins; preserve exact original first/fifth narrative strings and source lineage."
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "symbol": "workOrder, voicedOrder, voiceVisibleText dispatch",
+      "why": "No hidden/duplicate track lines or track HOLD utterance; system caption owns institutional line."
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "path": "main/src/story/feed/RegulationFeedHud.test.tsx",
+      "symbol": "regulation feed objective presentation",
+      "why": "Preserve test asserting canonical active pod workorder renders; implementation fixes bloat."
+    },
+    {
+      "source": "chapter-stage3-proposal.json",
+      "path": "main/src/story/storyText.test.ts",
+      "symbol": "scoped channel clear coverage (proposed focused test)",
+      "why": "Owned track caption clear cannot clear next objective/other text."
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "path": "main/src/story/StoryCaptions.tsx",
+      "symbols": [
+        "StoryCaptions full-caption rectangle reservation; current typewriter/fade/visible-system voice path"
+      ],
+      "scope": "Only if current layout cannot reserve complete text and prove14px clearance; no changed timing,font,voice recipe or global caption redesign."
+    },
+    {
+      "source": "cinematography-stage3-native-delta.json",
+      "path": "main/src/story/storyText.ts",
+      "symbols": [
+        "clearStoryTextChannel proposed selective helper with owned-entry identity"
+      ],
+      "scope": "Compare-and-clear only outgoing/own caption/system; no global state clearing."
+    },
+    {
+      "source": "score-treatment.json",
+      "path": "main/src/story/ux/objectiveCommandFeedback.ts",
+      "symbols": [
+        "COUNTED_ITEMS",
+        "acknowledgeObjectiveCommand"
+      ],
+      "condition": "Required if this treatment is accepted: early-specific phase relevance and threshold completion replace the current generic fixed/raster progress behavior.",
+      "action": "Reuse existing finalized local transaction; positive counted drops and local actor only; completion takes precedence over progress; do not change later objective mappings."
+    },
+    {
+      "source": "score-treatment.json",
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "symbols": [
+        "activateGuidedStoryObjective",
+        "acknowledgeGuidedStoryCompletion",
+        "acknowledgeGuidedStoryProgress",
+        "clearGuidedStoryObjective",
+        "resetGuidedObjectiveFeedbackForTests"
+      ],
+      "proposedSymbols": [
+        "resetGuidedObjectiveFeedbackForRun"
+      ],
+      "condition": "Required for correlation/coalescing and true new-run reset; new production symbol is proposed, not present.",
+      "action": "Add optional presentation context without changing progression. Confirm real completion after restore. Clear feedback sets only on true new run; preserve Continue silence and next actual action audibility."
+    },
+    {
+      "source": "score-treatment.json",
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "symbols": [
+        "StoryUxFeedbackCue",
+        "emitStoryUxFeedbackCue",
+        "subscribeStoryUxFeedback"
+      ],
+      "proposedSymbols": [
+        "cancelPendingStoryUxFeedback",
+        "EARLY_RECEIPT_ACK_MIN_MS",
+        "EARLY_RECEIPT_ACK_MAX_MS"
+      ],
+      "condition": "Required for the proposed early-only audible arbitration and cancellable bounded pending intent; symbols explicitly proposed.",
+      "action": "Deliver semantic listeners exactly once; correlate receipt with native SFX; coalesce redundant entry/progress; delay optional completion 120..240ms relative to receipt; revalidate before ordinary immediate playSfx; trace played/coalesced/canceled/expired."
+    },
+    {
+      "source": "score-treatment.json",
+      "path": "main/src/story/debrisSalvage.ts",
+      "symbols": [
+        "collectDebris"
+      ],
+      "proposedSymbols": [
+        "subscribeDebrisCollectionReceipt"
+      ],
+      "condition": "Only if no equivalent after-all-loot receipt seam exists at integration; current inspected source has none. Proposed export may be kept private with an equivalent existing boundary.",
+      "action": "Emit one presentation-only receipt after original idempotent milestone+loot commit; seed/backfill never emit. Do not change original native terminalKey or loot."
+    },
+    {
+      "source": "score-treatment.json",
+      "path": "main/src/story/storyDirector.ts",
+      "symbols": [
+        "syncFoundationalStoryObjective",
+        "completeFoundationalObjective",
+        "onBeatEntered",
+        "storyDirectorTick"
+      ],
+      "condition": "Chapter-owned shared integration for the accepted early predicate/receipt packet.",
+      "action": "Reconcile post-commit receipt and successor atomically, shared movement transfer only, no timer-derived completion. Cancel stale early presentation on pause/exit. Preserve all bundle helpers and note concurrent flash repair."
+    },
+    {
+      "source": "score-treatment.json",
+      "path": "main/src/story/ux/objectiveRestore.ts",
+      "symbols": [
+        "beginGuidedObjectiveRestore",
+        "readGuidedObjectiveRestore"
+      ],
+      "condition": "Only if existing restore version plus runtime runId cannot identify cancellation/new-run boundaries import-safely.",
+      "action": "Expose minimal import-safe restore/run identity; no audio graph import, save field, or new progression state."
+    },
+    {
+      "source": "score-treatment.json",
+      "path": "main/src/story/storyState.ts",
+      "symbols": [
+        "beginStory",
+        "restartStory",
+        "beginGuidedObjectiveRestore call sites"
+      ],
+      "condition": "Only if existing run/restore publication does not notify the feedback boundary before reconstruction.",
+      "action": "Publish transient restore/new-run intent before state subscribers; do not mutate earned receipts or change Continue location."
+    },
+    {
+      "source": "score-treatment.json",
+      "path": "main/src/story/ux/objectiveCommandFeedback.test.ts",
+      "symbols": [
+        "confirmed objective transaction feedback"
+      ],
+      "condition": "When affected implementation is integrated.",
+      "action": "Positive real local completion vs partial, irrelevant, preearned, duplicate, restored, superseded and optimistic/rolled-back actions."
+    },
+    {
+      "source": "score-treatment.json",
+      "path": "main/src/story/ux/objectiveDirector.test.ts",
+      "symbols": [
+        "guided story objective contract",
+        "objective feedback never claims unearned completion"
+      ],
+      "condition": "When feedback/reset implementation is integrated.",
+      "action": "True first completion after restore; same-ID new run; expected successor retention; unrelated replacement/pause cancellation."
+    },
+    {
+      "source": "score-treatment.json",
+      "path": "main/src/story/ux/feedbackCues.test.ts",
+      "symbols": [
+        "proposed focused early-feedback arbitration tests"
+      ],
+      "condition": "Create only if the pending-intent mechanism is implemented; this file/suite is a proposal.",
+      "action": "Advance fake clock through receipt window, voice-gap, cancellation and supersession; prove semantic/audio separation and no stale callback effect."
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "symbols": [
+        "proposed early pending receipt predicate",
+        "proposed cancelPendingStoryUxFeedback"
+      ],
+      "scope": "Extend valid expected successor to matched terminal-null quota-complete lineage; preserve <=2frame clear; no future WebAudio cancel claim."
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "symbols": [
+        "acknowledgeGuidedStoryCompletion",
+        "clearGuidedStoryObjective"
+      ],
+      "scope": "Carry real receipt/publication context through terminal satisfied clear without generic null-state exemption or repeat completion."
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "path": "main/src/story/storyDirector.ts",
+      "symbols": [
+        "tickTrackUnlock",
+        "onBeatEntered",
+        "scoped track once keys",
+        "quota-complete clear"
+      ],
+      "scope": "Single actual fired-anchor publisher for exact two channels; conditional/selective lifecycle cancellation,completed hold unchanged."
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "path": "main/src/story/storyText.ts",
+      "symbols": [
+        "showSystemLine",
+        "showCaption",
+        "clearStoryTextChannel (proposed selective helper)"
+      ],
+      "scope": "Compare-and-clear exact owned channel entry; no global clear or next-owner deletion."
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "symbols": [
+        "workOrder",
+        "voicedOrder",
+        "voiceVisibleText dispatch"
+      ],
+      "scope": "Canonical6-row workOrder; HOLD unvoiced; no retired lines hidden/voiced; actual system renderer owns first sentence."
+    },
+    {
+      "source": "score-stage3-native-delta.json",
+      "path": "main/src/story/feed/regulationVoice.ts",
+      "symbols": [
+        "presentRegulationObjective",
+        "REGULATION_VOICE.track / proposed exact-string constants"
+      ],
+      "scope": "Canonical fixed/track/raster/depth projection and source-preserved exact first/fifth text; no new journal."
+    }
+  ]
+}

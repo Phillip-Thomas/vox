@@ -134,3 +134,16 @@ shadegent/
 .codex/production-runs/*/evidence/verification*/**/*.png
 .codex/production-runs/*/evidence/verification*/**/*.webm
 .codex/production-runs/*/logs-final/
+
+# Chapter-loop and production-run probe media — regenerable raw output (soak
+# and audition WAVs, session videos, frame PNGs, raw traces). Every file's
+# sha256 is pinned in its run's report.json / evidence registry, so provenance
+# survives without pushing GBs of media; GitHub also rejects files over 100 MB.
+# Curated stills can still be added deliberately with `git add -f`.
+.codex/**/*.wav
+.codex/**/*.webm
+.codex/**/*.png
+.codex/**/*.jpg
+.codex/**/*.mp4
+.codex/**/*.ogg
+.codex/**/*.ndjson

@@ -1,0 +1,8 @@
+{
+  "schema": "paravoxia.chapterLoopOwnerRepair.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "failureSha256": "4814649bd9d5a1468affbfdb41f76e25501d470b57ecb879eec0c5fab542e499",
+  "request": "fix them",
+  "context": "Standing authorization for routine reversible blocker repairs and checks; same run and original clock.",
+  "extraInfrastructureRetries": 1
+}

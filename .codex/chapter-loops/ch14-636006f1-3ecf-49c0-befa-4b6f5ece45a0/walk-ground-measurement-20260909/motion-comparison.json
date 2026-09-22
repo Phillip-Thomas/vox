@@ -1,0 +1,18 @@
+{
+  "before": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9ebc8f51-6394-468f-b6f8-dfa22d7dd461/manual/raw/trace.ndjson",
+    "observedMs": 23995,
+    "movementKeyDownEvents": 119,
+    "observedTravelUnits": 58.33730081264986,
+    "samples": 118,
+    "scope": "bootstrap[5] first traversal only; different initial capture timing; not a full chapter benchmark"
+  },
+  "current": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-149572c5-c98e-4af1-944f-0f5e27c8cdf8/manual/raw/trace.ndjson",
+    "observedMs": 11760,
+    "movementKeyDownEvents": 22,
+    "observedTravelUnits": 52.80302644663072,
+    "samples": 92,
+    "scope": "bootstrap[5] first traversal only; different initial capture timing; not a full chapter benchmark"
+  }
+}

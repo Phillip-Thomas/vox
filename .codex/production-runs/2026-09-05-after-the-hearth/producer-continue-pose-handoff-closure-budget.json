@@ -1,0 +1,9 @@
+{
+  "at": "2026-09-06T23:00:11.181553+00:00",
+  "originalInvocationRef": "continue-pose-handoff-runtime-invocation.json",
+  "originalDeadline": "2026-09-06T23:04:41.608430+00:00",
+  "remainingSecondsAtDispatch": 270,
+  "additionalBudgetSeconds": 0,
+  "reason": "Actual capture identified wrong disembark writer pin and absent clock alignment; one concrete private correction within original bounded task.",
+  "sourceRepairAuthorized": false
+}

@@ -1,0 +1,652 @@
+{
+  "at": "2026-09-07T00:13:05.121875+00:00",
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "sourceFilesRehashed": 103,
+  "sourceDrift": [],
+  "captureRef": "verifier/artifacts/manual-grounded-recovery-runtime-20260907T000701Z/capture-2",
+  "summarySha256": "06cf5bac18bd42fc20ea79de153c81c2b4eb510bf48a144da289cd5ef54a205a",
+  "verdict": "ACTUAL_C_NEGATIVE_GROUNDED_RETURN_FULL_RETRAVERSAL_AND_FINAL_F_COMMIT_PROVEN",
+  "elapsedMs": 94862,
+  "entryScope": "Labelled direct ch13-survey fixture; not station continuity or naive first play",
+  "actualCNegative": {
+    "common": {
+      "beat": "ch13-common",
+      "common": {
+        "stage": "holding-h",
+        "terraUnits": 2.0894374124013417,
+        "comparisonProved": false,
+        "finalReferenceOffered": false,
+        "finalReferenceOccupied": false,
+        "workerUnits": 0,
+        "committed": false
+      },
+      "worker": {
+        "leg": "holding-h",
+        "travelled": 0,
+        "legLength": 0,
+        "held": false,
+        "sampledIndex": 0,
+        "permitted": null,
+        "position": {
+          "x": -40,
+          "y": 51.05,
+          "z": 12
+        }
+      },
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference"
+      ],
+      "shape": {
+        "hasDiagnostic": true,
+        "keys": [
+          "beat",
+          "installWatch",
+          "anchors",
+          "holdReason",
+          "worker",
+          "survey",
+          "common"
+        ]
+      }
+    },
+    "terraUnitsAfterCutRoute": 2.0894374124013417,
+    "cutTurn": {
+      "observedFoot": [
+        -43.95269777209216,
+        50.50918537099979,
+        14.089437397044893
+      ],
+      "observedFootZ": 14.089437397044893,
+      "skippedCornerZ": 16,
+      "shortOfCornerBy": 1.9105626029551068,
+      "note": "ACTUAL observed foot at the early turn; not asserted to equal 15.82"
+    },
+    "cPoint": [
+      -48,
+      51.05,
+      12
+    ],
+    "measuredFoot": [
+      -48.05411649452373,
+      50.993785460612784,
+      11.940479250526732
+    ],
+    "footSource": "actual-foot",
+    "bodyCentre": [
+      -48.303157806396484,
+      52.77647399902344,
+      11.940479278564453
+    ],
+    "up": [
+      -0.13835628437375028,
+      0.9903825213392499,
+      1.557651193833584e-08
+    ],
+    "supportedAtEndpoint": true,
+    "horizontalToC": 0.08044448146017702,
+    "verticalToC": 0.05621453938721288,
+    "distance3DToC": 0.09813964049207269,
+    "bound": 0.35,
+    "reachedC": true,
+    "reachedCBasis": "measured ground foot vs C(-48,51.05,12), FULL 3D distance<=0.35 and supported===true",
+    "negativeObservations": [
+      {
+        "vertex": 3,
+        "finalS": 0.07104513992436115,
+        "finalFoot": [
+          -44.04469643435226,
+          55.018936458521296,
+          16.055776566069465
+        ],
+        "horizontalToVertex": 0.0714758460342188,
+        "supported": false,
+        "claimedValid": false
+      },
+      {
+        "vertex": 4,
+        "finalS": 0.07903855924786285,
+        "finalFoot": [
+          -44.04692332616484,
+          55.348247791482,
+          18.079038559247863
+        ],
+        "horizontalToVertex": 0.09191785673278942,
+        "supported": false,
+        "claimedValid": false
+      },
+      {
+        "vertex": 5,
+        "finalS": 0.2460975085220909,
+        "finalFoot": [
+          -46.24609750852209,
+          52.22878789293763,
+          18.07903837947348
+        ],
+        "horizontalToVertex": 0.25847833396742276,
+        "supported": false,
+        "claimedValid": false
+      }
+    ],
+    "endpointVerdict": "AT-MEASURED-C-WITH-CREDIT-UNDER-18"
+  },
+  "supportedReturn": {
+    "target": [
+      -42,
+      51.05,
+      12
+    ],
+    "measuredFoot": [
+      -41.97606093973479,
+      51.210903132158876,
+      11.924617742234801
+    ],
+    "bodyCentre": [
+      -41.990020751953125,
+      53.01084899902344,
+      11.924617767333984
+    ],
+    "supported": true,
+    "retainedCredit": 2.0894374124013417,
+    "creditedFrontierZ": 14.089437412401342,
+    "marginBeforeFrontier": 2.1648196701665405,
+    "footSource": "actual-foot"
+  },
+  "settle": {
+    "settleRecords": [
+      {
+        "tag": "after-return-legs",
+        "ok": true,
+        "elapsedMs": 328,
+        "samples": [
+          {
+            "tMs": 11,
+            "foot": [
+              -41.981911622247125,
+              51.67658327680663,
+              11.924617746884898
+            ],
+            "bodyCentre": [
+              -41.99330139160156,
+              53.47654724121094,
+              11.924617767333984
+            ],
+            "up": [
+              -0.0063276496413537196,
+              0.9999799802246124,
+              1.1360602934863597e-08
+            ],
+            "supported": false,
+            "groundOffsetUnits": 1.8,
+            "voxelGrounded": true,
+            "voxelDebugPresent": true,
+            "distXZtoE": 0.0775220839144559,
+            "footYabovePlane": 0.6265832768066346
+          },
+          {
+            "tMs": 114,
+            "foot": [
+              -41.98000244383809,
+              51.51359441060951,
+              11.92461774536454
+            ],
+            "bodyCentre": [
+              -41.99223327636719,
+              53.31355285644531,
+              11.924617767333984
+            ],
+            "up": [
+              -0.0067949069606101295,
+              0.9999769143532249,
+              1.2205247112878602e-08
+            ],
+            "supported": false,
+            "groundOffsetUnits": 1.8,
+            "voxelGrounded": true,
+            "voxelDebugPresent": true,
+            "distXZtoE": 0.07798965679097587,
+            "footYabovePlane": 0.46359441060950957
+          },
+          {
+            "tMs": 218,
+            "foot": [
+              -41.97824080317083,
+              51.373890333554144,
+              11.924617743971726
+            ],
+            "bodyCentre": [
+              -41.991241455078125,
+              53.17384338378906,
+              11.924617767333984
+            ],
+            "up": [
+              -0.00722258439294277,
+              0.9999739167971766,
+              1.2979031852185005e-08
+            ],
+            "supported": false,
+            "groundOffsetUnits": 1.8,
+            "voxelGrounded": true,
+            "voxelDebugPresent": true,
+            "distXZtoE": 0.07845984431900732,
+            "footYabovePlane": 0.32389033355414654
+          },
+          {
+            "tMs": 328,
+            "foot": [
+              -41.97606093973479,
+              51.210903132158876,
+              11.924617742234801
+            ],
+            "bodyCentre": [
+              -41.990020751953125,
+              53.01084899902344,
+              11.924617767333984
+            ],
+            "up": [
+              -0.007755451232408289,
+              0.9999699260358692,
+              1.3943990950916501e-08
+            ],
+            "supported": true,
+            "groundOffsetUnits": 1.8,
+            "voxelGrounded": true,
+            "voxelDebugPresent": true,
+            "distXZtoE": 0.07909211965904103,
+            "footYabovePlane": 0.16090313215887875
+          }
+        ],
+        "sampleCount": 4,
+        "last": {
+          "tMs": 328,
+          "foot": [
+            -41.97606093973479,
+            51.210903132158876,
+            11.924617742234801
+          ],
+          "bodyCentre": [
+            -41.990020751953125,
+            53.01084899902344,
+            11.924617767333984
+          ],
+          "up": [
+            -0.007755451232408289,
+            0.9999699260358692,
+            1.3943990950916501e-08
+          ],
+          "supported": true,
+          "groundOffsetUnits": 1.8,
+          "voxelGrounded": true,
+          "voxelDebugPresent": true,
+          "distXZtoE": 0.07909211965904103,
+          "footYabovePlane": 0.16090313215887875
+        }
+      }
+    ],
+    "refined": false,
+    "grounded": true,
+    "method": "released all keys, bounded <=2s retained sampling of actual foot/up/CG-supported and __voxelDebug.player.grounded; ordinary WASD refinement only",
+    "usedTeleport": false,
+    "usedPoseSetter": false,
+    "usedJump": false,
+    "usedRescue": false,
+    "usedGrant": false
+  },
+  "allNineRetraverseVertices": [
+    {
+      "target": [
+        -42,
+        51.05,
+        14
+      ],
+      "actualFoot": [
+        -41.97172894325005,
+        50.98899216656257,
+        14.174053116914575
+      ],
+      "distance3D": 0.18658964574211148,
+      "crossed": true,
+      "supported": true,
+      "terraUnits": 2.1740531170247213
+    },
+    {
+      "target": [
+        -42,
+        51.05,
+        16
+      ],
+      "actualFoot": [
+        -41.97103399664125,
+        50.98930109702304,
+        16.077506845252213
+      ],
+      "distance3D": 0.1026191855070761,
+      "crossed": true,
+      "supported": true,
+      "terraUnits": 4
+    },
+    {
+      "target": [
+        -44,
+        51.05,
+        16
+      ],
+      "actualFoot": [
+        -44.19719079517563,
+        50.98910975124626,
+        16.07750684524542
+      ],
+      "distance3D": 0.22045213347841833,
+      "crossed": true,
+      "supported": true,
+      "terraUnits": 6.07750684524877
+    },
+    {
+      "target": [
+        -44,
+        51.05,
+        18
+      ],
+      "actualFoot": [
+        -44.19557265351656,
+        50.989089985243346,
+        18.061572612478322
+      ],
+      "distance3D": 0.21389221423083218,
+      "crossed": true,
+      "supported": true,
+      "terraUnits": 8.19570276061723
+    },
+    {
+      "target": [
+        -46,
+        51.05,
+        18
+      ],
+      "actualFoot": [
+        -46.300432544212995,
+        50.99085792809013,
+        18.061572612939365
+      ],
+      "distance3D": 0.3123278485122104,
+      "crossed": true,
+      "supported": true,
+      "terraUnits": 10.300723315398812
+    },
+    {
+      "target": [
+        -48,
+        51.05,
+        18
+      ],
+      "actualFoot": [
+        -48.15748713824276,
+        50.99593623091026,
+        18.061572615979326
+      ],
+      "distance3D": 0.17752824248163826,
+      "crossed": true,
+      "supported": true,
+      "terraUnits": 12
+    },
+    {
+      "target": [
+        -48,
+        51.05,
+        16
+      ],
+      "actualFoot": [
+        -48.14588793329404,
+        50.994976580641335,
+        15.808249319926714
+      ],
+      "distance3D": 0.2471420422900428,
+      "crossed": true,
+      "supported": true,
+      "terraUnits": 14.191750680295034
+    },
+    {
+      "target": [
+        -48,
+        51.05,
+        14
+      ],
+      "actualFoot": [
+        -48.13705241266778,
+        50.9945706571273,
+        13.904755525839295
+      ],
+      "distance3D": 0.17586155272687454,
+      "crossed": true,
+      "supported": true,
+      "terraUnits": 16.09524447425691
+    },
+    {
+      "target": [
+        -48,
+        51.05,
+        12
+      ],
+      "actualFoot": [
+        -48.12820933915404,
+        50.99497499336358,
+        11.91908261384555
+      ],
+      "distance3D": 0.1612854903074734,
+      "crossed": true,
+      "supported": true,
+      "terraUnits": 18
+    }
+  ],
+  "maxVertex3DDistance": 0.3123278485122104,
+  "farReference": {
+    "press": {
+      "name": "offer-the-far-reference",
+      "at": "2026-09-07T00:12:02.171Z",
+      "expectedObjectiveId": "ch13:common:offer-final-reference",
+      "verb": "/offer this end|far reference/i",
+      "objectiveId": "ch13:common:offer-final-reference",
+      "prompts": [
+        "F | Offer this end"
+      ],
+      "may": {
+        "ok": true,
+        "why": null,
+        "prompt": "F | Offer this end"
+      },
+      "pressed": true
+    },
+    "commonAfter": {
+      "beat": "ch13-common",
+      "common": {
+        "stage": "testing",
+        "terraUnits": 18,
+        "comparisonProved": true,
+        "finalReferenceOffered": true,
+        "finalReferenceOccupied": true,
+        "workerUnits": 1.3016850001752378,
+        "committed": false
+      },
+      "worker": {
+        "leg": "independent-test",
+        "travelled": 1.3016850001752378,
+        "legLength": 18,
+        "held": false,
+        "sampledIndex": 0,
+        "permitted": 18,
+        "position": {
+          "x": -42,
+          "y": 51.05,
+          "z": 13.301685000175238
+        }
+      },
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test"
+      ],
+      "shape": {
+        "hasDiagnostic": true,
+        "keys": [
+          "beat",
+          "installWatch",
+          "anchors",
+          "holdReason",
+          "worker",
+          "survey",
+          "common"
+        ]
+      }
+    },
+    "ux": {
+      "objectiveId": "ch13:common:release",
+      "markerLabel": "Far reference \u00b7 keep this end",
+      "hudText": "CURRENT OBJECTIVE | Far reference \u00b7 keep this end | Remain at the far reference while W-7744 tests the span. Looking around is free.",
+      "prompts": []
+    }
+  },
+  "finalCg": {
+    "beat": null,
+    "bodyCentre": [
+      -43.92828369140625,
+      52.7887077331543,
+      11.919082641601562
+    ],
+    "bodyPose": [
+      -43.891804209598455,
+      50.989077424616724,
+      11.919082613713128
+    ],
+    "up": [
+      -0.020266378782109344,
+      0.9997946158542063,
+      1.5493574528415763e-08
+    ],
+    "groundOffsetUnits": 1.8,
+    "supported": true,
+    "worldBound": true,
+    "rail": null,
+    "railCursor": null,
+    "holdReason": null,
+    "anchors": [
+      "anc.cg.repeated-measure",
+      "anc.cg.demonstration-opened",
+      "anc.cg.survey-started",
+      "anc.cg.trace-drawn",
+      "anc.cg.route-offered",
+      "anc.cg.specific-hold",
+      "anc.cg.witness-held",
+      "anc.cg.revision-ready",
+      "anc.cg.route-tested",
+      "anc.cg.reciprocal-reference",
+      "anc.cg.reciprocal-crossed",
+      "anc.cg.final-reference-offered",
+      "anc.cg.independent-test",
+      "anc.cg.complete",
+      "anc.cg.handback"
+    ],
+    "survey": {
+      "phase": "tested",
+      "approached": true,
+      "samples": 0,
+      "lengthUnits": 0,
+      "walkedUnits": 0,
+      "testedPrefix": 0,
+      "tailRevision": 0,
+      "witnessOffered": true,
+      "witnessOccupied": false,
+      "acceptedSamples": 16,
+      "acceptedClass": "held-reference"
+    },
+    "common": {
+      "stage": "arrived",
+      "terraUnits": 18,
+      "comparisonProved": true,
+      "finalReferenceOffered": true,
+      "finalReferenceOccupied": false,
+      "workerUnits": 18,
+      "committed": true
+    },
+    "pendingAnchors": [],
+    "worker": {
+      "leg": "arrived",
+      "travelled": 0,
+      "held": false,
+      "position": {
+        "x": -48,
+        "y": 51.05,
+        "z": 12
+      }
+    }
+  },
+  "finalUx": {
+    "objectiveId": null,
+    "markerLabel": null,
+    "hudText": null,
+    "prompts": []
+  },
+  "cleanup": {
+    "schema": "paravoxia.verifier.ownedSessionGuard.v1",
+    "probe": "common-entry-crossing-probe.mjs",
+    "writtenAt": "2026-09-07T00:12:11.093Z",
+    "phase": "post-finally",
+    "supersedesForCleanupState": "summary.json .cleanup (captured pre-finally; its sessionStopped is a pre-cleanup value, not the outcome)",
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "label": "arrival-common-short session",
+    "adopted": true,
+    "adoptedAtMs": 1788739838146,
+    "cleanupRequests": 1,
+    "sessionStopInvocations": 1,
+    "sessionStopped": true,
+    "cleanupError": null,
+    "cleanupReason": "probe-finally",
+    "stopsOnlyProbeOwnedSession": true,
+    "stopsRootPreview": false,
+    "killsProcesses": false,
+    "hidesFailureExitCode": false,
+    "note": "Recorded AFTER the finally block ran. This is the actual cleanup outcome of the browser session this probe owned. A stop-failed or never-requested state is reported honestly and does NOT alter the capture outcome, the retained evidence, or the process exit code. It says nothing about the game.",
+    "outcomeUnchanged": true
+  },
+  "observerTeardown": {
+    "removedBreakpoints": [
+      {
+        "breakpointId": "1:7839:194730:http://127.0.0.1:34825/assets/index-Ddqg7x9Y.js",
+        "result": "removed"
+      },
+      {
+        "breakpointId": "1:7839:220603:http://127.0.0.1:34825/assets/index-Ddqg7x9Y.js",
+        "result": "removed"
+      }
+    ],
+    "debuggerDisabled": true,
+    "pausedAfterWalk": 0,
+    "frozenRecordCount": 2276
+  },
+  "qualification": [
+    "Three unsupported shortcut vertex observations correctly remain negative observations; they are not positive route evidence.",
+    "Worker18 and actual E-to-C progression proved. H-to-E uncredited approach is NOT densely proved: first post-F sample is already workerUnits1.301685. The private helper infers too much from final18.",
+    "Actual final screenshot viewed: nonblank Origin scene, objective/prompts cleared. Debug panels remain; not a beauty or perceptual acceptance artifact.",
+    "Pure callee replay and inferred missing final-call result are not actual function-return proof.",
+    "No source repair or full-suite rerun for private instrumentation. Current353files3207tests receipt reused."
+  ],
+  "remaining": "Other lifecycle, SHORT leave/reenter/tail revision, continuity, variants and affected independent acceptance remain. No defect closures or chapter acceptance."
+}

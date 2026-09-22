@@ -1,0 +1,41 @@
+{
+  "schema": "paravoxia.verifier.arrivalCommonProbe.pin.v1",
+  "role": "arrival-common-manual",
+  "pinnedAtUtc": "2026-09-06T17:01:01.991327+00:00",
+  "why": "Concurrent roles (including the game integration engineer) may edit verifier/probes/lib/* and the manual COMMON helper while this lane is prepared. This lane imports ONLY these pinned bytes; the originals were not edited.",
+  "pins": [
+    {
+      "pinned": "verifier/probes/arrival-common-manual/cgContract.pinned.mjs",
+      "copiedFrom": "verifier/probes/lib/cgContract.mjs",
+      "sourceSha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+      "pinnedSha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+      "byteIdentical": true,
+      "depthNote": "placed at the SAME directory depth as verifier/probes/lib/* so cgContract's RUN_DIR/REPO_ROOT/CAPTURES resolution is unchanged"
+    },
+    {
+      "pinned": "verifier/probes/arrival-common-manual/ownedSession.pinned.mjs",
+      "copiedFrom": "verifier/probes/lib/ownedSession.mjs",
+      "sourceSha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "pinnedSha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "byteIdentical": true,
+      "depthNote": "placed at the SAME directory depth as verifier/probes/lib/* so cgContract's RUN_DIR/REPO_ROOT/CAPTURES resolution is unchanged"
+    },
+    {
+      "pinned": "verifier/probes/arrival-common-manual/sourceSnapshot.pinned.mjs",
+      "copiedFrom": "verifier/probes/lib/sourceSnapshot.mjs",
+      "sourceSha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "pinnedSha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "byteIdentical": true,
+      "depthNote": "placed at the SAME directory depth as verifier/probes/lib/* so cgContract's RUN_DIR/REPO_ROOT/CAPTURES resolution is unchanged"
+    }
+  ],
+  "copiedProbeFolder": {
+    "from": "verifier/probes/common-manual-focused",
+    "note": "byte copy taken 2026-09-06; the original folder is preserved byte-exactly (hashed before and after this preparation)."
+  },
+  "unpinnedDependency": {
+    "path": "main/tools/lib/evidence.mjs",
+    "sha256AtPrep": "1997cf2a3e9db88ae6e1e474b76232a2589c78a58fe69a579b493b44e5aa5328",
+    "why": "Deliberately NOT copied: it transitively imports sibling main tooling (previewServer.mjs, pixel-laws.mjs) whose relative paths a copy would break. Its hash is recorded here so drift is detectable; it is read-only shared tooling, not edited by this role."
+  }
+}

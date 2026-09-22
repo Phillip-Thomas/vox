@@ -1,0 +1,26 @@
+[
+  {
+    "run": "verify-final-377e625e-73de-4c76-8e56-fe2b635737c2",
+    "minutes": 9.98,
+    "lastBeat": "ch1-fixed",
+    "firstWallMs": 1788920835115
+  },
+  {
+    "run": "verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5",
+    "minutes": 14.68,
+    "lastBeat": "ch4-vigil",
+    "firstWallMs": 1788925579589
+  },
+  {
+    "run": "verify-final-885fe363-be04-4866-a7c4-1e4e776e25da",
+    "minutes": 20.54,
+    "lastBeat": "ch8-landfall",
+    "firstWallMs": 1788926745471
+  },
+  {
+    "run": "verify-final-8841b69e-3ae5-45e8-bc15-865c45bb6a57",
+    "minutes": 6.25,
+    "lastBeat": "ch2-color",
+    "firstWallMs": 1788928248584
+  }
+]

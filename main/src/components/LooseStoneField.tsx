@@ -66,7 +66,7 @@ function isStoneVoxel(x: number, y: number, z: number, terrainSeed: number): boo
 function countStones(terrainSeed: number, playerPosition?: THREE.Vector3): number {
   let n = 0;
   const maxSq = STONE_MAX_DIST * STONE_MAX_DIST;
-  for (const voxel of voxelSystem.getAllVoxels().values()) {
+  for (const voxel of voxelSystem.voxelValues()) {
     if (!isDecoratableGrassVoxel(voxel)) continue;
     const [x, y, z] = voxel.position;
     if (!isStoneVoxel(x, y, z, terrainSeed)) continue;
@@ -119,7 +119,7 @@ export default function LooseStoneField({ commandContext, terrainSeed, persisten
     const near: Array<{ x: number; y: number; z: number; w: THREE.Vector3 }> = [];
 
     let slot = 0;
-    for (const voxel of voxelSystem.getAllVoxels().values()) {
+    for (const voxel of voxelSystem.voxelValues()) {
       if (slot >= cap) break;
       if (!isDecoratableGrassVoxel(voxel)) continue;
       const [x, y, z] = voxel.position;
@@ -209,7 +209,7 @@ export default function LooseStoneField({ commandContext, terrainSeed, persisten
         }
       }
       if (collectedAny) {
-        playSfx('mine'); // a short chip as confirmation the stone was gathered
+        playSfx('inventoryAcquire');
       }
     }
 

@@ -1,0 +1,160 @@
+{
+  "schema": "paravoxia.verifier.commonManualRuntime.v1",
+  "role": "common-manual-focused",
+  "startedAt": "2026-09-06T16:24:00Z",
+  "finishedAt": "2026-09-06T16:36:00Z",
+  "verdict": "BLOCKED-BEFORE-GAMEPLAY — pointer lock refused by the browser; NO manual COMMON passage was proved, NO defect closed",
+  "gameplayProved": false,
+  "deviationRun": false,
+  "deviationNotRunBecause": "The reference run stopped at the FIRST shared prerequisite (pointer lock). A deviation session would fail identically at the same gate; the commission forbids repeatedly rerunning the same failure.",
+
+  "controlAndFreezeChecksBeforeEveryBrowser": {
+    "verifierControlActiveRole": "common-manual-focused",
+    "controlSourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "readiness": "verification-ready.json ready=true, contract scene-v2 4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+    "sourceManifestBefore": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "sourceManifestAfter": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "perRunSourceSnapshots": "each capture wrote source-snapshot/ before and after (probeSnapshotBefore/After, manifestSha256 3d58d63cd755dd02207ad85ecf693abf7b32f11c...); the manifest NAME alone was never used as the proof",
+    "gameFilesModified": 0,
+    "driftEvidence": "find main/src main/tools -newermt '2026-09-06 16:24' -> empty",
+    "rootPreviewTouched": false,
+    "otherRoleProcessTouched": false
+  },
+
+  "commissionedPreCaptureCorrection": {
+    "applied": true,
+    "appliedBeforeFirstBrowser": true,
+    "scope": "ONE correction, owned probe files only; no game, geometry, radius, contract, manifest, defect or evidence change; no state writing",
+    "provenance": {
+      "originalQualifiedProbeSnapshot": "logs/common-manual-runtime/pre-correction-probe-snapshot/",
+      "originalSha256": {
+        "common-passage-probe.mjs": "06e2c54d69ff5edde81d54fc6228b7521575fdb7be6a3f69b5012472fada4afb",
+        "commonPassageLogic.mjs": "79f3e00259b0579e4a8a3383951f99c345954be459158f021ddc506b45cd3f32",
+        "selftest.mjs": "116f7d18cfbb7b6268950e9dff1d4812b6247647a21486939095eeb8ed19fd02"
+      },
+      "originalMatchesClosureReportAfterHashes": true
+    },
+    "problemCorrected": "walkTo(original vertex, arrive 0.6) can END 0.6u short of an original corner and then turn, so the body need never cross the signed incoming corner plane. Omitted-corner recovery had the same weakness at arrive 0.5.",
+    "whatWasAdded": {
+      "incomingPlaneAt(route,i)": "the ORIGINAL incoming plane at vertex i: through the frozen vertex, normal = unit XZ direction of segment i-1 -> i; index 0 has none",
+      "signedPlaneOffset / planeLateralOffset": "directional signed offset (<0 before, >=0 past) and in-plane distance from the corner",
+      "planeCrossingVerdict": "requires an OBSERVED sample strictly BEFORE the plane and a LATER sample on/past it, within 1.0u of that corner and supported=true; reports maxOffsetObserved and overshootWithinBound (<=1.0u)",
+      "orderedFrontierVerdict": "crossings must be in route order, in time order, with the game's own credited terraUnits non-decreasing and finite at each crossing",
+      "earlyTurnVerdict": "the deviation body must measure strictly BEFORE the original z=16 plane; an overshot 16+ body is refused as NOT the intended deviation",
+      "walkThroughPlane (probe)": "ordinary held keys and the SAME live calibration; the termination condition becomes an actual plane crossing, and each pulse is capped by the distance remaining TO the plane (short feedback-driven nudges at corners 3/6/terminal 9 instead of a 0.6 target into water)",
+      "mustCross": "a non-crossing STOPS the probe before any later action or [F]"
+    },
+    "separationOfConcerns": "plane predicates are used ONLY at intended-completed COMMON vertices; approximate navigation to W/S/T/E and the deviation's own excursion legs keep the ordinary walkTo and are deliberately not plane-gated",
+    "nothingRelaxed": [
+      "no epsilon widening, no forged gate, no state writing, no game geometry or radius change",
+      "exact floating-point coincidence is NOT required (a crossing is a sign change, not a point hit)",
+      "the chapter's own credited terraUnits remains the proof; the plane predicate is an additional requirement, never a substitute"
+    ],
+    "pureTests": {
+      "command": "node verifier/probes/common-manual-focused/selftest.mjs",
+      "log": "logs/common-manual-runtime/selftest-after-correction.log",
+      "result": "OK 95/95 (83 pre-existing + 12 new)",
+      "newCasesProved": [
+        "reaching 0.6 short of the corner and turning away is NOT a crossing",
+        "an actual crossing is credited with the LIVE units at the crossing sample",
+        "crossing the infinite plane 2u off the corner (the deviation corner-cut) is NOT this corner",
+        "an unsupported crossing sample cannot close a corner",
+        "starting already past the plane is not a crossing",
+        "an unsafe 2u overshoot past a corner is reported, not silently accepted",
+        "ordered frontier rejects a missing vertex, out-of-order crossing, falling credit, and absent live credit",
+        "the deviation point must be strictly BEFORE z=16; an overshot 16+ body and a body ON the plane are both refused",
+        "fail-before-F: an unreached ordered leg can never be a passage, and no authored prompt means no press"
+      ]
+    },
+    "correctionCouldNotBeExercisedLive": "true — the run never reached the COMMON phase, so these predicates have static proof only"
+  },
+
+  "runs": [
+    {
+      "name": "reference-1",
+      "mode": "reference",
+      "startedUtc": "2026-09-06T16:28:06Z",
+      "finishedUtc": "2026-09-06T16:28:22Z",
+      "nodeExit": 2,
+      "log": "logs/common-manual-runtime/reference-1.log",
+      "capture": "verifier/captures/common-manual-focused/reference-1",
+      "verdict": "STOPPED-PREREQUISITE",
+      "stoppedAt": "pointer-lock-and-focus",
+      "gatesPassed": ["browser-identity-is-paravoxia-on-hardware", "manual-lane", "world-bound-and-noninitial-body", "settled-actually-supported-body", "policy-permits-movement"],
+      "gateFailed": "pointer-lock-and-focus",
+      "legs": 0,
+      "planeCrossings": null
+    },
+    {
+      "name": "reference-2",
+      "mode": "reference",
+      "startedUtc": "2026-09-06T16:31:12Z",
+      "finishedUtc": "2026-09-06T16:31:40Z",
+      "nodeExit": 2,
+      "log": "logs/common-manual-runtime/reference-2.log",
+      "capture": "verifier/captures/common-manual-focused/reference-2",
+      "verdict": "STOPPED-PREREQUISITE",
+      "stoppedAt": "pointer-lock-and-focus",
+      "legs": 0,
+      "planeCrossings": null,
+      "note": "the ONE focused instrumentation repair (diagnostics + ordinary repeat clicks) reran only the invalidated reference work; the gate itself was NOT relaxed"
+    }
+  ],
+
+  "blocker": {
+    "gate": "pointer-lock-and-focus",
+    "statement": "Three ordinary real canvas clicks in a headed NVIDIA GB10 session did not obtain pointer lock, so the shipped controller never became active and no key could move the body.",
+    "measuredAtEachAttempt": {
+      "elementAtCanvasCentre": { "tag": "canvas", "isCanvas": true, "pointerEvents": "auto", "zIndex": "auto" },
+      "documentPointerLockElement": null,
+      "documentHasFocus": true,
+      "visibilityState": "visible",
+      "activeElement": "body",
+      "waitedMsPerAttempt": [5147, 5100, 5100]
+    },
+    "rulesOut": [
+      "an overlay swallowing the click — the click point IS the bare canvas with pointerEvents auto",
+      "a lock held by a different element — document.pointerLockElement was null",
+      "a hidden or unfocused document — visibility visible, hasFocus true",
+      "story input policy — moveSpeedScale 1, lookMode free, gate passed",
+      "world/body readiness — worldBound true, settled spread 0.0022u, supported true, gates passed",
+      "identity/lane — served index 1f699b4a and bundle 4f39f1ea matched root ownership; movie flag null, autopilot absent"
+    ],
+    "gameSideCondition": "main/src/components/CameraControls.tsx:103 grants lock only when event.target is the canvas, no lock is held, and allowsMousePointerLock passes; all three were satisfiable, so the refusal came from the browser/OS layer, not from an unmet game condition. requestPointerLock's own rejection reason is logged by the page as console.warn and was NOT captured by this probe.",
+    "environment": {
+      "session": "X11, DISPLAY=:0, headed Playwright chromium-1217, renderer ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "sameRecipePassedEarlierToday": "GATE PASS pointer-lock-active at 15:17:01, 15:21:45 and 15:24:29 in the manual-focused role on this machine and display",
+      "changeSince": "unknown to this role; foreign Chrome processes from other sessions are alive and may hold the X11 input focus. Per commission no foreign process or window was touched, inspected further, or killed.",
+      "notAnHypothesisTestedHere": "OS-level window activation was NOT measured (no xdotool/xprop on this box)"
+    },
+    "ownedSessionCleanup": "both probe-owned browser sessions were stopped in the probe's finally block; the root-owned preview was not touched"
+  },
+
+  "notProved": [
+    "survey drawing / offer / W route test",
+    "COMMON entry",
+    "W at H",
+    "Terra full ordered 18 units",
+    "T [F] and occupancy",
+    "W full ordered 18 units",
+    "final commit, anchors, control hand-back",
+    "the deviation: early turn at z=15.82, far excursion without credit, return to the first unfinished frontier, physical traversal of the omitted ground"
+  ],
+  "explicitlyOutOfScope": ["hearing", "full-story continuity", "earned Continue", "variants", "acceptance", "publication"],
+  "movieFailureInherited": false,
+  "movieFailureNote": "the known movie stall at COMMON rail cursor 3 (target [-44.6,51.05,16], Terra 5.8/18) was NOT inherited as a manual verdict; the manual lane never reached COMMON and therefore says nothing about it",
+  "defectsClosed": [],
+  "requiresIndependentReview": true,
+
+  "probeBytesActuallyUsed": {
+    "common-passage-probe.mjs": "24b44fea96172769854d302996d47c86f4f0bc4f95a56842e0b7d9e2d3e46474",
+    "commonPassageLogic.mjs": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+    "selftest.mjs": "b8948c0b4135389bc18ab04ee39885f01cf265d3fffc3179e84c69b352fbe7f9",
+    "note": "reference-1 used the same bytes for commonPassageLogic/selftest and the pre-diagnostic common-passage-probe.mjs; each capture's own source-snapshot/ holds the exact bytes it ran"
+  },
+  "lockAndIdentity": {
+    "heavyLock": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock fd 9, owned=true, FLOCK WRITE inode 8397196, independent contention probe 'refused (lock is live)'",
+    "previewBinding": "ok=true, served index 1f699b4ab3edd8c792de8516920309f9a69c0e77152ec4d21041f4e561430260 and bundle 4f39f1ea60795e31e681c55c1b339af4a05590ec315e5cc0d712aab7a43b0ec4 matched root ownership (11 dist files); source manifest dc63... (99 source files) matched"
+  },
+  "recommendationForRoot": "This role stops here as commissioned: one bounded correction, one focused repair, no further loop. The next step needs root's decision, not a verifier repair — the browser/OS pointer-lock refusal must be resolved (or the page's own requestPointerLock rejection reason captured) before any manual COMMON capture can begin."
+}

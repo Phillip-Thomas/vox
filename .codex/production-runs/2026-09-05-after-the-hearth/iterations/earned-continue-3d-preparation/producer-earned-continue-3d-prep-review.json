@@ -1,0 +1,72 @@
+{
+  "schema": "paravoxia.producer.evidenceReview.v1",
+  "at": "2026-09-06T20:10:46.335189+00:00",
+  "reportRef": "earned-continue-3d-prep-report.json",
+  "reportSha256": "d4bd8f1eb1a7821e78cbcb6e5417261f7b945c5a0ae5020b14c2a324ddfaa3e8",
+  "invocationRef": "earned-continue-3d-prep-invocation.json",
+  "actualFinishedAt": "2026-09-06T20:04:00.758315+00:00",
+  "isAcceptance": false,
+  "acceptedForBoundedRuntime": true,
+  "conditionalPreGpuCorrectionRequired": true,
+  "sourceMutationAuthorized": false,
+  "preparedFilesVerified": [
+    {
+      "path": "verifier/probes/earned-continue-3d/earned-continue-3d-probe.mjs",
+      "expected": "f0cf8172384b72b690fc1af32dce64ad2e36f1e28d4207bca68aef9ec720a1c9",
+      "actual": "f0cf8172384b72b690fc1af32dce64ad2e36f1e28d4207bca68aef9ec720a1c9"
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/tangentSteering3d.mjs",
+      "expected": "1c1523c4480b1b290849a62102873d29f1d578f07052335943d0c8702ee65b6c",
+      "actual": "1c1523c4480b1b290849a62102873d29f1d578f07052335943d0c8702ee65b6c"
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/tangentSteering3d.selftest.mjs",
+      "expected": "2e90fb4e4ceaa1abf1e275bbea2420b4684a2a9607df59ebd0044be5ec5ad01d",
+      "actual": "2e90fb4e4ceaa1abf1e275bbea2420b4684a2a9607df59ebd0044be5ec5ad01d"
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/poseObservation.mjs",
+      "expected": "35d26b067c154c17af834721e424c700d28f6ea4c17fb88ec24025c7823bccc8",
+      "actual": "35d26b067c154c17af834721e424c700d28f6ea4c17fb88ec24025c7823bccc8"
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/earnedContinueLogic.mjs",
+      "expected": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1",
+      "actual": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1"
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/entryObservation.mjs",
+      "expected": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+      "actual": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4"
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/selftest.mjs",
+      "expected": "f48e843bcac75def449fb17b0c4fefcba70f346ba2fa51a504f54e067556d9c6",
+      "actual": "f48e843bcac75def449fb17b0c4fefcba70f346ba2fa51a504f54e067556d9c6"
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/cgContract.pinned.mjs",
+      "expected": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5",
+      "actual": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5"
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/ownedSession.pinned.mjs",
+      "expected": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "actual": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b"
+    },
+    {
+      "path": "verifier/probes/earned-continue-3d/sourceSnapshot.pinned.mjs",
+      "expected": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "actual": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20"
+    }
+  ],
+  "findings": [
+    "The full XYZ/local tangent steering addresses the prior dropped-Y defect, but walkTowards compares bodyCentre to ground E with radius1.2. The approximately1.8 normal offset makes ordinary correct arrival impossible. Use the published bodyPose foot consistently for ground target decisions, keep centre separately, and exercise actual arrival helper with realistic centre/foot data. Do not widen radius.",
+    "Before new F require actual current foot at grounded E within existing bounds, current beat, actual audit support and offered prompt. Physics contact away from the audit plane remains unavailable and must not be invented.",
+    "The example flock path command does not establish the inherited descriptor. Runtime must use explicit exec9 plus exclusive flock9 and passFD9.",
+    "Report preparedAt20:05 is later than actual transport finish20:04; actual invocation governs clocks. GPUowner in preparation is stale.",
+    "Original saved18point prefix equality is retained; sample-count-only comparisons remain insufficient. Separate pose observation has no runtime proof yet."
+  ],
+  "next": "Correct private arrival binding and execute one bounded earnedContinue lane after actual GPU handoff. Routine diagnosed private corrections authorized within actual clock budget."
+}

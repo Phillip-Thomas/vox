@@ -1,0 +1,16 @@
+{
+  "role": "manual-grounded-recovery-runtime",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-07T00:05:32.259187+00:00",
+  "commissionSha256": "6938a8c97fa4f1531895413ca47fa2656c539ebd06cbafe4f407976a8eba1981",
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "sourceFilesRehashedBefore": 103,
+  "scope": "Actual measured C endpoint-negative followed by physical repayment and eligible heldF; prior hardcodedC labels rejected; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-07T00:13:21.274033+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "8c534128-0cc3-492e-9c0b-91686339c158",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 103
+}

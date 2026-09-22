@@ -1,0 +1,15 @@
+# Manual corner interpretation — Chapter, current evidence
+
+**Ordinary post-plane overshoot is not a signed repeated-recovery or frame-precision cost. A credit lock caused solely by its carried projection residual is an implementation-fidelity defect; correcting it requires no contract amendment.**
+
+This ruling binds scene-v3 `5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54` and source manifest `6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6`. It updates the earlier source-only interpretation while preserving early-cut refusal and genuine missing-ground recovery.
+
+`scene-contract.json#/guidance/objectives/13/acceptanceCriterion` requires the full actual eighteen-unit passage and first-time manual success without private route knowledge or per-corner prompts. `#/story/events/21/acceptanceCriterion` and matching sync anchor require actual maintained-reference, grounded, unobstructed, body-clear passage. `#/story/agencyWindows/3` requires the ordered route, actionable safe recovery and no rescue. None signs sub-0.05 squaring, finer-than-30ms input, or repeated returns caused only by projection bookkeeping.
+
+The audit's replay reproducing six credited units is strong evidence for that bookkeeping mechanism. It does not make the captured passage complete: the replay interpolates pulse endpoints, its per-frame budget is inferred, supported=true does not certify whole-segment/footprint validity, and body centre and projected pose also differ horizontally. Geometric plane crossings or monotonic credit alone certify neither the real segments nor eighteen units. Current code comments cannot decide creative intent.
+
+Preserve the exact **z15.82 pre-plane turn refusal**. A genuinely omitted corner still requires real return and traversal; later ground, C proximity, endpoint pumping or a distant loop cannot pay for it. By contrast, after an actual incoming-plane crossing, ordinary movement within existing bounds must not repeatedly become stuck solely because a small prior residual exceeds one frame's numerical ceiling. Actual route order, full eighteen units, every physical predicate and final C arrival remain mandatory.
+
+The next bounded discriminator should bind the actual credit-call point, previous/current positions, displacement and physical segment/reference/footprint/clearance outcomes around vertices 2–3, distinguishing actual frames from interpolation. If eligible ordered post-plane movement alone causes the lock, route a bounded implementation correction. If a physical condition fails, repair that concrete problem instead. The proposed minus 0.05 target is not itself a crossing; a fine-pulse pass is only a diagnostic contrast, not the definition of acceptable manual play.
+
+Retain exact early-cut and endpoint/far-C/pumping negatives alongside real return/re-traversal and post-plane recovery checks. No algorithm, new field, tolerance, geometry, copy or signature is selected here. No code, GPU, probe or test was run; independent runtime/Continue acceptance remains pending. Exact report hashes, source hashes and qualifications are in `chapter-manual-corner-interpretation.json`.

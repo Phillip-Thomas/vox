@@ -1,0 +1,520 @@
+{
+  "beat": "ch9-hearth",
+  "stage": "exit",
+  "capturedAt": "2026-09-06T04:55:13.145Z",
+  "state": {
+    "href": "http://127.0.0.1:34147/?story=ch9-hearth&journeyprobe=1&profile=HIGH",
+    "lane": "manual",
+    "urlStory": "ch9-hearth",
+    "wallMs": 128951,
+    "beat": "ch9-hearth",
+    "objectiveId": "settle:attend-waterline",
+    "markerLabel": "LIVING WATERLINE · ATTEND",
+    "health": "ready",
+    "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE · ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+    "feedText": "CURRENT OBJECTIVE | LIVING WATERLINE · ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+    "caption": null,
+    "interactionPrompts": [],
+    "story": {
+      "active": true,
+      "chapter": "ch9",
+      "beat": "ch9-hearth",
+      "runId": 1
+    },
+    "objective": {
+      "id": "settle:attend-waterline",
+      "health": "ready",
+      "kind": "interact"
+    },
+    "milestones": [
+      "story:started",
+      "story:prologue-seen",
+      "story:ch1:track",
+      "story:ch1:quota",
+      "story:debris:0",
+      "story:debris:1",
+      "story:debris:2",
+      "story:debris:3",
+      "story:ch1:depth",
+      "story:pod:0",
+      "story:pod:1",
+      "story:pod:2",
+      "story:ch1:nav",
+      "story:ch1:iso",
+      "story:a1",
+      "story:a2",
+      "story:sense:health",
+      "story:sense:inventory",
+      "story:sense:temp",
+      "story:a3",
+      "story:sense:water",
+      "story:ch3:drank",
+      "story:sense:food",
+      "story:ch3:ate",
+      "story:ch3:signal",
+      "story:sense:stamina",
+      "story:ch4:vigil",
+      "story:ch4:arrived",
+      "story:ch4:audit-complete",
+      "story:audit:fire-mismatch",
+      "story:audit:life-mismatch",
+      "story:audit:tree-mismatch",
+      "story:ch4:compliance-complete",
+      "story:comply:fire-doused",
+      "story:comply:organics-resolved",
+      "story:comply:regression-settled",
+      "story:ch4:refusal-complete",
+      "story:defy:refusal-committed",
+      "story:a4",
+      "story:a4:handback",
+      "story:a4:field-pack-dropped",
+      "story:ch5:maw-repaired",
+      "maw_repaired",
+      "story:maw:first-direction-resolved",
+      "story:maw:pond-resonance-visible",
+      "story:sense:maw",
+      "story:ch6:keel-banked",
+      "story:capability:oxygen-online",
+      "story:sense:oxygen",
+      "story:dive:waterline-entered",
+      "story:dive:keel-sonar-revealed",
+      "story:dive:surfaced-with-keel",
+      "story:item:kestrel-keel-memory:acquired",
+      "story:item:kestrel-keel-memory:banked",
+      "story:ch7:flight-ready",
+      "story:capability:jet-installed",
+      "story:route:tidegarden:online",
+      "story:board:pressure-boundary-sealed",
+      "story:board:physical-transaction-complete",
+      "story:ch7:boarded",
+      "story:ch8:launched",
+      "story:ch8:crossed",
+      "story:ch8:landfall",
+      "story:ch9:settled",
+      "story:kestrel:founding-reserve-claimed",
+      "story:tidegarden:scanner-overload"
+    ],
+    "av": {
+      "active": true,
+      "suspended": false,
+      "beat": "ch9-hearth",
+      "anchorId": null,
+      "anchorEvent": null,
+      "activationSequence": 0,
+      "activationHistoryAnchorIds": []
+    },
+    "spaceFlight": {
+      "phase": "surface",
+      "controlMode": "fps"
+    },
+    "system": {
+      "activePlanetId": "-1,-1:p1",
+      "locationMode": "surface",
+      "pos": [
+        2180,
+        -110,
+        -1635
+      ],
+      "speed": 0
+    },
+    "boundary": {
+      "durable": null,
+      "beat": null
+    },
+    "contacts": {
+      "phase": "surface",
+      "ship": [
+        2180,
+        -110,
+        -1635
+      ],
+      "stations": [
+        {
+          "worldId": "-1,-1:a0",
+          "distance": 8766,
+          "phase": "unknown",
+          "canDock": false
+        }
+      ]
+    }
+  },
+  "title": "Paravoxia",
+  "href": "http://127.0.0.1:34147/?story=ch9-hearth&journeyprobe=1&profile=HIGH",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "devicePixelRatio": 1
+  },
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "actualCanvasRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+  "boundary": {
+    "schema": "paravoxia.storyBoundaryState.v1",
+    "verified": true,
+    "sampledAt": 1788670508682,
+    "stateRefs": [
+      "state:camera/embodied",
+      "state:camera/free-look",
+      "state:control/on-foot",
+      "state:item/kestrel-keel-memory-banked",
+      "state:maw/repaired",
+      "state:reality/alive",
+      "state:ship-restoration/flight_ready",
+      "state:space-flight/control-mode=fps",
+      "state:space-flight/phase!=deep_space",
+      "state:space-flight/phase=surface",
+      "state:story/active",
+      "state:system-flight/active-planet=-1,-1:p1",
+      "state:world/tidegarden"
+    ],
+    "runtime": {
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-hearth",
+        "runId": 1
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      },
+      "world": {
+        "systemId": "-1,-1",
+        "activePlanetId": "-1,-1:p1",
+        "spaceStationTargetId": null
+      },
+      "reality": {
+        "stage": "alive"
+      },
+      "control": {
+        "mode": "fps",
+        "phase": "surface"
+      },
+      "shipRestoration": {
+        "repairStage": "flight_ready"
+      },
+      "camera": {
+        "perspective": true,
+        "fov": 75,
+        "lookMode": "free",
+        "feedBlend": 1,
+        "sideBlend": 1,
+        "externalCameraMix": 0,
+        "signedAuthority": null
+      },
+      "maw": {
+        "repaired": true,
+        "ritualPhase": "idle"
+      },
+      "durable": {
+        "storyComplete": false,
+        "keelMemoryBanked": true,
+        "twoWorldHandoff": false,
+        "ch10BearingClaimed": false,
+        "ch10SeamPassed": false,
+        "stationDockingAuthorized": false
+      }
+    }
+  },
+  "journey": {
+    "schema": "paravoxia.journeyRuntimeSnapshot.v1",
+    "sampledAt": 1788670513141,
+    "story": {
+      "active": true,
+      "chapter": "ch9",
+      "beat": "ch9-hearth",
+      "runId": 1
+    },
+    "objective": {
+      "id": "settle:attend-waterline",
+      "kind": "interact",
+      "markerLabel": "LIVING WATERLINE · ATTEND",
+      "workOrder": [
+        "FOLLOW THE LIVING WATERLINE MARKER.",
+        "[F] ATTEND THE RELATIONSHIP."
+      ],
+      "requiresMarker": true,
+      "health": "ready",
+      "revision": 2
+    },
+    "interaction": {
+      "revision": 24,
+      "resolvedAt": 1788670508682,
+      "candidates": [],
+      "winner": null,
+      "published": {
+        "revision": 0,
+        "active": null,
+        "changedAt": null
+      },
+      "trace": {
+        "revision": 0,
+        "entries": [],
+        "latest": null
+      },
+      "effects": [],
+      "prompts": [],
+      "visiblePromptCount": 0
+    },
+    "entities": {},
+    "entityEvents": [],
+    "entityRevision": 0,
+    "receipts": {
+      "local": {
+        "era": "emergent",
+        "milestones": [
+          "story:started",
+          "story:prologue-seen",
+          "story:ch1:track",
+          "story:ch1:quota",
+          "story:debris:0",
+          "story:debris:1",
+          "story:debris:2",
+          "story:debris:3",
+          "story:ch1:depth",
+          "story:pod:0",
+          "story:pod:1",
+          "story:pod:2",
+          "story:ch1:nav",
+          "story:ch1:iso",
+          "story:a1",
+          "story:a2",
+          "story:sense:health",
+          "story:sense:inventory",
+          "story:sense:temp",
+          "story:a3",
+          "story:sense:water",
+          "story:ch3:drank",
+          "story:sense:food",
+          "story:ch3:ate",
+          "story:ch3:signal",
+          "story:sense:stamina",
+          "story:ch4:vigil",
+          "story:ch4:arrived",
+          "story:ch4:audit-complete",
+          "story:audit:fire-mismatch",
+          "story:audit:life-mismatch",
+          "story:audit:tree-mismatch",
+          "story:ch4:compliance-complete",
+          "story:comply:fire-doused",
+          "story:comply:organics-resolved",
+          "story:comply:regression-settled",
+          "story:ch4:refusal-complete",
+          "story:defy:refusal-committed",
+          "story:a4",
+          "story:a4:handback",
+          "story:a4:field-pack-dropped",
+          "story:ch5:maw-repaired",
+          "maw_repaired",
+          "story:maw:first-direction-resolved",
+          "story:maw:pond-resonance-visible",
+          "story:sense:maw",
+          "story:ch6:keel-banked",
+          "story:capability:oxygen-online",
+          "story:sense:oxygen",
+          "story:dive:waterline-entered",
+          "story:dive:keel-sonar-revealed",
+          "story:dive:surfaced-with-keel",
+          "story:item:kestrel-keel-memory:acquired",
+          "story:item:kestrel-keel-memory:banked",
+          "story:ch7:flight-ready",
+          "story:capability:jet-installed",
+          "story:route:tidegarden:online",
+          "story:board:pressure-boundary-sealed",
+          "story:board:physical-transaction-complete",
+          "story:ch7:boarded",
+          "story:ch8:launched",
+          "story:ch8:crossed",
+          "story:ch8:landfall",
+          "story:ch9:settled",
+          "story:kestrel:founding-reserve-claimed",
+          "story:tidegarden:scanner-overload"
+        ]
+      }
+    },
+    "state": {
+      "localActor": {
+        "id": "local",
+        "era": "emergent",
+        "milestones": [
+          "story:started",
+          "story:prologue-seen",
+          "story:ch1:track",
+          "story:ch1:quota",
+          "story:debris:0",
+          "story:debris:1",
+          "story:debris:2",
+          "story:debris:3",
+          "story:ch1:depth",
+          "story:pod:0",
+          "story:pod:1",
+          "story:pod:2",
+          "story:ch1:nav",
+          "story:ch1:iso",
+          "story:a1",
+          "story:a2",
+          "story:sense:health",
+          "story:sense:inventory",
+          "story:sense:temp",
+          "story:a3",
+          "story:sense:water",
+          "story:ch3:drank",
+          "story:sense:food",
+          "story:ch3:ate",
+          "story:ch3:signal",
+          "story:sense:stamina",
+          "story:ch4:vigil",
+          "story:ch4:arrived",
+          "story:ch4:audit-complete",
+          "story:audit:fire-mismatch",
+          "story:audit:life-mismatch",
+          "story:audit:tree-mismatch",
+          "story:ch4:compliance-complete",
+          "story:comply:fire-doused",
+          "story:comply:organics-resolved",
+          "story:comply:regression-settled",
+          "story:ch4:refusal-complete",
+          "story:defy:refusal-committed",
+          "story:a4",
+          "story:a4:handback",
+          "story:a4:field-pack-dropped",
+          "story:ch5:maw-repaired",
+          "maw_repaired",
+          "story:maw:first-direction-resolved",
+          "story:maw:pond-resonance-visible",
+          "story:sense:maw",
+          "story:ch6:keel-banked",
+          "story:capability:oxygen-online",
+          "story:sense:oxygen",
+          "story:dive:waterline-entered",
+          "story:dive:keel-sonar-revealed",
+          "story:dive:surfaced-with-keel",
+          "story:item:kestrel-keel-memory:acquired",
+          "story:item:kestrel-keel-memory:banked",
+          "story:ch7:flight-ready",
+          "story:capability:jet-installed",
+          "story:route:tidegarden:online",
+          "story:board:pressure-boundary-sealed",
+          "story:board:physical-transaction-complete",
+          "story:ch7:boarded",
+          "story:ch8:launched",
+          "story:ch8:crossed",
+          "story:ch8:landfall",
+          "story:ch9:settled",
+          "story:kestrel:founding-reserve-claimed",
+          "story:tidegarden:scanner-overload"
+        ]
+      },
+      "spaceFlight": {
+        "phase": "surface",
+        "controlMode": "fps",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "surface",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            -110,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            0,
+            0,
+            0,
+            1
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "shipRestoration": {
+        "version": 1,
+        "repairStage": "flight_ready",
+        "currentSystemId": "-1,-1",
+        "currentWorldId": "-1,-1:p1",
+        "parkedPose": {
+          "position": [
+            8,
+            51.5,
+            -8
+          ],
+          "quaternion": [
+            0,
+            1,
+            0,
+            2.220446049250313e-16
+          ]
+        },
+        "systemPose": {
+          "position": [
+            2180,
+            -110,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            0,
+            0,
+            0,
+            1
+          ]
+        },
+        "locationMode": "surface",
+        "repairHistory": []
+      },
+      "signedSceneAv": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-hearth",
+        "anchorId": null,
+        "anchorEvent": null,
+        "activationSequence": 0,
+        "activationHistoryAnchorIds": []
+      },
+      "voyage": {
+        "worker-name": null
+      }
+    },
+    "input": {
+      "revision": 0,
+      "hotkeyActivations": 0,
+      "submitCount": 0,
+      "lastSubmittedValue": null,
+      "events": [],
+      "workerName": null,
+      "activeElement": {
+        "tag": "body",
+        "id": null,
+        "name": null,
+        "type": null,
+        "editable": false,
+        "voyageWorkerNameInput": false,
+        "value": null
+      }
+    },
+    "preparation": null
+  },
+  "capturedAtBrowser": "2026-09-06T04:55:13.141Z"
+}

@@ -1,0 +1,95 @@
+{
+  "schema": "paravoxia.chapterFinishAuthority.v1",
+  "request": "lets fix the blockers you encountered and finish it up",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "runPath": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "chapter": "ch14",
+  "extraInfrastructureRetries": 1,
+  "requestedAt": "2026-09-08T20:33:28.000Z",
+  "deadlineAt": "2026-09-09T04:33:28.000Z",
+  "previousPolicySha256": "e7ec8e243ef53b77c59a8de7a9d1c4cda9f08e8131871496088242e65ccc3e8e",
+  "previousStateSha256": "1a68f50f72180947009a3ff3c83d5d49b3efcdd8623d84f2a46a51aa563e7b73",
+  "recipeSha256": "f02385240f2dc2ce81acc74f7c5d111ab90de38a5a66a07781b1c38b7602befe",
+  "builderTransport": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/6-build/transport.json",
+    "sha256": "eef6e7c2db6106ec269c731c897f4fef0fc8d39cc5113f8894a06919abf3bf46"
+  },
+  "builderResult": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/6-build/last-message.txt",
+    "sha256": "d927d0bca7b7acf7dcbcaf3ca597487d974d5374c46ee68bfad8b9d4a16505cf"
+  },
+  "builderPacket": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/6-build/packet.json",
+    "sha256": "68a1a440b7fa5ff03e02634141fdcf85f2ab5d20a9f4db59371b67e4853745bd"
+  },
+  "files": [
+    {
+      "path": "main/tools/chapter-loop.mjs",
+      "before": "321e193370a091e6022775175d717f25985663bdbd2b1863ee2bef2b8e37ab75",
+      "after": "8dd26720eaf6ddb052299af1c30283dffa0a19b77aefaf95a9ba681d838fee65"
+    },
+    {
+      "path": "main/tools/chapter-loop/budget.mjs",
+      "before": "f49f0483f14c2b270d3a03405193c895708cbd3a8379e186bb6a287b43d2e033",
+      "after": "a866f18fddc6e2d1336caa19983718f5a74afc48cd47b78a5f3773c08c0ed294"
+    },
+    {
+      "path": "main/tools/chapter-loop/capture-case.mjs",
+      "before": "b185a523f306df2e4ca0a1209c8930bf45dbd687e501dbdf1c4cf78e720e1c3b",
+      "after": "e1363737eb5dee2803c960099a0189f2b7a461d8f15ca233c445c79279c97ae3"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": "00ebccf2862b2cffa4b97ff3ded0bfb559e65ac479e1bc1d64cecd02233fec0c",
+      "after": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "33603bd92c12b27f48d2a6365cebb08f605df94e793dc3c719f1b79827ebe615",
+      "after": "7dc211021965d004daae6d045424c82c592f50c81e4eadfaeb7aa2af8a1c9e1f"
+    },
+    {
+      "path": "main/tools/chapter-loop/runtime-capture.test.mjs",
+      "before": "bb6093c356b9393dc4cb19a097d4f7f037773e49e33def3d538b41e3f1dd3abf",
+      "after": "84139bac5096c206c4305b23917df8ecd91e433429ee0d3f0b2fb6c2a5a0b04c"
+    },
+    {
+      "path": "main/tools/chapter-loop/capture-case.test.mjs",
+      "before": null,
+      "after": "46a9973164e85cf55b8ce2e46355bd1d3b140409728e9a14ccc167e530f7b63a"
+    },
+    {
+      "path": "main/tools/chapter-loop/finish-renewal.mjs",
+      "before": null,
+      "after": "0252d6abb9719c769ff3e252f01ce165acd7c2885444d591a3e897a2a8f213e6"
+    },
+    {
+      "path": "main/tools/chapter-loop/finish-renewal.test.mjs",
+      "before": null,
+      "after": "991e34ce3c852e21bfba00f1e2f498a27a2da2269fdcce9f59b5aad92aa2284c"
+    },
+    {
+      "path": "docs/chapter-loop/control-config.md",
+      "before": null,
+      "after": "451fd7774bc54b3d3f74355d655532d6f23466448ae0649f3dc9e459f0718b23"
+    }
+  ],
+  "handoff": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/handoff.json",
+    "sha256": "e3ac82f8afe3cd97ff9a3c57640f9aadb580aef326b38c9342e41dbf2ae3cc4f"
+  },
+  "allowedPathAdditions": [
+    "main/story-authority.json",
+    "main/src/game/systems/interactionSystem.ts"
+  ],
+  "lookMedia": [
+    {
+      "kind": "frame",
+      "path": "frame.png"
+    }
+  ],
+  "validation": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/validation.json",
+    "sha256": "e35a42f5af97b46b5745248065169b1a3b4ecd8162d9e00cf4733bc770407479"
+  }
+}

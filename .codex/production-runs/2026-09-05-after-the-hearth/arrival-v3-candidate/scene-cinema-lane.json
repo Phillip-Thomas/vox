@@ -1,0 +1,1400 @@
+{
+  "documentKind": "scene-cinematography-lane",
+  "runId": "2026-09-05-after-the-hearth",
+  "sceneId": "common-ground",
+  "authoredBy": "cinematography-director",
+  "authoredAt": "2026-09-06T06:20:44.979974+00:00",
+  "disposition": "scene recipient reconciliation complete; exact head and H staging CPU-qualified; scene signatures and live acceptance pending",
+  "signature": null,
+  "runtimeAuthorized": false,
+  "planningLockRemains": true,
+  "scoreFirstTreatmentRead": true,
+  "sourceBindings": [
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/story-intent.md",
+      "sha256": "55c0ce529a8dade83d145261f0984ad15f7a5eba78f408a3ee410977ce16984d"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/decision-brief.json",
+      "sha256": "6d1ccb44710bbd37de5681ae1f5f5c2d46d39cfc7031f3a00bd7ae3ae2a01223"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/shipped-visual-baseline.json",
+      "sha256": "50f5e20092bdde3a06e2ccaf87408d9d1fcc62514d09eb1a73e457b6d632830c"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/shipped-ux-baseline.json",
+      "sha256": "2f64541557fc92f33d5f7d601b32135943f282eb3651fbd521a4ca4668183a45"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/cinematography-treatment.md",
+      "sha256": "4bc74306575fecde7f4c5fa8115057bb40c0c6052d694fd2f7d749e2cc7cdf16"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/geometry-instrument.json",
+      "sha256": "2186b509fcf192c090d2545fb8569ac255c96f2de385a2493fcd635eb7b603d3"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/selected-geometry-qualification.md",
+      "sha256": "54a06dec9ef1a346324bb489cc984e021921afb92a606720af0fe365ebc77fa0"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/selected-geometry-qualification.json",
+      "sha256": "521e78f5f1b3e76772a89a057de71e07fd037253fc4fd52100b737f50c7c4018"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/cinema-targeted-baseline.md",
+      "sha256": "487cca5625c86bd3b2fd4f2cdecdb3e3d844af45122d2b1e0ce549ad83a358df"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/head-geometry-qualification.md",
+      "sha256": "49239bdc51af4b2488d0e5832a77ec881c991e4df468076f9984373a8ae1e4c9"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/head-geometry-qualification.json",
+      "sha256": "e64ce08ef8966324fd35d2028e53334224c2c22022939b4dc1530c0f70c4b4d1"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/staged-geometry-qualification.md",
+      "sha256": "4c3e3895336d9df21b167e62687d1311e37738556f89f2ecb98656a343be2c53"
+    },
+    {
+      "path": ".codex/story-runs/2026-09-06-common-ground/staged-geometry-qualification.json",
+      "sha256": "7cc0d63d843df60462a2fd55ba928bfd5656c20b4d20c31a581fec559532b7ff"
+    },
+    {
+      "path": ".codex/production-runs/2026-08-11-ch10-station-introduction/scene-contract.json",
+      "sha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+      "purpose": "performance budget DELTA semantics and advisory existing targets only"
+    },
+    {
+      "path": ".codex/production-runs/2026-08-11-ch10-station-introduction/station-continuation-contract.md",
+      "sha256": "65fabd9581ad038294dda240f8b9dcc9d32e62f1200639944539a4c1e27f30c8",
+      "purpose": "existing sidecar chronology and transaction ownership; preserved continuity only"
+    }
+  ],
+  "allEightDecisionBriefItemsDecided": true,
+  "placementDisposition": {
+    "disposition": "accept exact qualified range12 backing/head and staged H; physical scene proof follows implementation",
+    "worldId": "-1,-1",
+    "rangeWorldUnits": 12,
+    "yawDegrees": 90,
+    "groundedPoses": {
+      "R": {
+        "x": -34,
+        "y": 51.05,
+        "z": 20
+      },
+      "S": {
+        "x": -26,
+        "y": 51.05,
+        "z": 12
+      },
+      "E": {
+        "x": -42,
+        "y": 51.05,
+        "z": 12
+      },
+      "C": {
+        "x": -48,
+        "y": 51.05,
+        "z": 12
+      },
+      "W": {
+        "x": -34,
+        "y": 51.05,
+        "z": 10
+      },
+      "T": {
+        "x": -44,
+        "y": 51.05,
+        "z": 12
+      },
+      "H": {
+        "x": -40,
+        "y": 51.05,
+        "z": 12
+      }
+    },
+    "fixedSocketWorld": {
+      "x": -34,
+      "y": 52.35,
+      "z": 20
+    },
+    "socketHeightsAboveGroundedPose": {
+      "fixed": 1.3,
+      "worker": 1.85,
+      "player": 1.35
+    },
+    "intermediateWitnessIsExampleNotExclusiveTarget": true,
+    "nominalIntermediateZ11Retired": true,
+    "finalTerraIsSeparateFromC": true,
+    "worldGeometryChanged": false,
+    "workerComparisonReferencePose": "H, not E",
+    "workerInspectionPose": "W before survey demonstration; Terra may use W as optional intermediate reference only after the worker vacates it",
+    "initialPlayerTraceStart": "F offer beside inspection W opens awaiting-start state without samples; single ch13:survey:start marker targets S; grounded/reachable F at actual S creates first sample then retires start for quiet E-targeted draw",
+    "workerApproachToSurveyStart": "physical W->S after Terra has cleared the start corridor and before worker testing; no proof credit, no teleport, current clearance revalidation",
+    "inspectionPoseEvidence": "staged qualifier grounding/intermediateWitness proves W dry support and clearance; W->S reachability is reported. Live actor approach, interleaving and animation are not claimed proved."
+  },
+  "solids": [
+    {
+      "name": "backing",
+      "lo": {
+        "x": -34.8,
+        "y": 51.35,
+        "z": 19.04
+      },
+      "hi": {
+        "x": -33.2,
+        "y": 53.35,
+        "z": 19.16
+      },
+      "sizeUnits": {
+        "x": 1.6,
+        "y": 2,
+        "z": 0.12
+      },
+      "nonzeroThickness": true,
+      "topAtOrBelowCap": null
+    },
+    {
+      "name": "stand",
+      "lo": {
+        "x": -34.2,
+        "y": 51.05,
+        "z": 19.8
+      },
+      "hi": {
+        "x": -33.8,
+        "y": 52.25,
+        "z": 20.2
+      },
+      "sizeUnits": {
+        "x": 0.4,
+        "y": 1.2,
+        "z": 0.4
+      },
+      "nonzeroThickness": true,
+      "topAtOrBelowCap": true
+    },
+    {
+      "name": "bracket",
+      "lo": {
+        "x": -34.2,
+        "y": 51.85,
+        "z": 19.04
+      },
+      "hi": {
+        "x": -33.8,
+        "y": 52.25,
+        "z": 19.9
+      },
+      "sizeUnits": {
+        "x": 0.4,
+        "y": 0.4,
+        "z": 0.86
+      },
+      "nonzeroThickness": true,
+      "topAtOrBelowCap": true
+    },
+    {
+      "name": "cap",
+      "lo": {
+        "x": -34.2,
+        "y": 52.25,
+        "z": 19.8
+      },
+      "hi": {
+        "x": -33.8,
+        "y": 52.35,
+        "z": 20.2
+      },
+      "sizeUnits": {
+        "x": 0.4,
+        "y": 0.1,
+        "z": 0.4
+      },
+      "nonzeroThickness": true,
+      "topAtOrBelowCap": true,
+      "surfaceMark": "flat/etched top only; no geometry projects above fixed socket plane"
+    }
+  ],
+  "rayContactRule": {
+    "scope": "reference line-of-sight rays only; general symmetric rule for all solids including backing, stand, bracket, cap and trunk",
+    "endpointOnlyContact": "Endpoint-only contact is harmless iff the adjacent open segment remains outside the solid; any interior crossing blocks. Applied symmetrically at BOTH ray endpoints to EVERY box (backing, stand, bracket, cap, trunk) with no object-specific exemption.",
+    "anyInteriorIntersection": "blocks",
+    "facePlaneTangency": "blocks",
+    "walkAndBodyCollision": "inclusive contact blocks; no endpoint-contact exception for walking or capsules",
+    "spatialEpsilon": 0,
+    "backingAlwaysTested": true,
+    "fixedSocketOnCapTop": true,
+    "exactHeadCheckStatus": "PASS",
+    "evidenceRef": ".codex/story-runs/2026-09-06-common-ground/head-geometry-qualification.json#/contactRule",
+    "sixContactTestsPassed": true
+  },
+  "camera": {
+    "authority": "existing player-camera on foot; inherited vehicle rig in vehicle phases",
+    "onFootFovDegrees": 75,
+    "newCameraAuthority": false,
+    "forcedLook": false,
+    "newMovementRestriction": false,
+    "authoredPanZoomCutOrLensEase": "none",
+    "durationAuthority": "actual story/physical events and player inspection; no timer satisfies a predicate",
+    "actorOrInstrumentOrientationMayDescribeReference": true,
+    "renderCameraOrientationMayDetermineReference": false,
+    "preferredInspection": "full feet/contact and instrument; approximately20-60percent frame height when player chooses nearby view",
+    "wholeFinalRouteSingleFrameGuaranteed": false,
+    "finalViewReason": "E and C lie on opposite sides of Terra; free turning follows traversal"
+  },
+  "renderContinuity": {
+    "realityStage": "alive on all ch13 entry/resume/completion states",
+    "palette": "existing planetArtDirection/planetVisualProfile roles; home core warmth and worker visor unchanged",
+    "newLights": 0,
+    "newLightCardinalityTransitions": 0,
+    "newPostPasses": 0,
+    "newGradeExposureFogShakeLetterboxOrRealityEffects": false,
+    "backingAppearance": "neutral opaque front/back with visible physical support; stable geometry/value on every tier",
+    "noFriendlyVisorOrCompletionWorldRecolor": true,
+    "sandboxNoOp": true
+  },
+  "shotLedger": [
+    {
+      "shotId": "shot.cg.home",
+      "semanticAliases": [
+        "CG-B0"
+      ],
+      "objectiveIds": [
+        "ch13:home:review"
+      ],
+      "firstRead": "fresh actual install receipt activates one live hearth acknowledgement in ch13-home, or restored core shows steady warmth silently",
+      "secondRead": "working home and available approach",
+      "exit": "prior installation guidance retires before home:review; fresh acknowledgement occurs once, restored entry never replays it",
+      "cameraRef": "existing player-camera/vehicle policy",
+      "fovOnFoot": 75,
+      "duration": "event-bound and indefinitely player-deferrable",
+      "transition": "physical continuity; no new cut",
+      "safeArea": "existing work-order lower-left, interaction center, caption/touch reserved bands",
+      "evidenceStatus": "new physical state to capture after signed implementation",
+      "beat": "ch13-home",
+      "continuityRefs": [
+        "priorContractContinuity.objectiveBindings",
+        "existing ch12 installed/restored receipts"
+      ]
+    },
+    {
+      "shotId": "shot.cg.choose",
+      "semanticAliases": [
+        "CG-01"
+      ],
+      "objectiveIds": [
+        "ch13:home:choose-return"
+      ],
+      "firstRead": "stored local fault at actual core",
+      "secondRead": "ship approach after explicit choice",
+      "exit": "actual choice or indefinite player deferral",
+      "cameraRef": "existing player-camera/vehicle policy",
+      "fovOnFoot": 75,
+      "duration": "event-bound and indefinitely player-deferrable",
+      "transition": "physical continuity; no new cut",
+      "safeArea": "existing work-order lower-left, interaction center, caption/touch reserved bands",
+      "evidenceStatus": "new physical state to capture after signed implementation",
+      "sceneAnchors": [
+        "anc.cg.return-chosen"
+      ]
+    },
+    {
+      "shotId": "shot.cg.return",
+      "semanticAliases": [
+        "CG-02"
+      ],
+      "objectiveIds": [
+        "ch13:return:board",
+        "ch13:return:launch",
+        "ch13:return:origin",
+        "ch13:survey:offer"
+      ],
+      "firstRead": "actual worker reinspection at W outside Terra start/body corridor",
+      "secondRead": "familiar Origin tree and actual ground",
+      "exit": "real travel and approach; no apparition or arrival montage",
+      "cameraRef": "existing player-camera/vehicle policy",
+      "fovOnFoot": 75,
+      "duration": "event-bound and indefinitely player-deferrable",
+      "transition": "physical continuity; no new cut",
+      "safeArea": "existing work-order lower-left, interaction center, caption/touch reserved bands",
+      "evidenceStatus": "new physical state to capture after signed implementation",
+      "sceneAnchors": [
+        "anc.cg.repeated-measure"
+      ]
+    },
+    {
+      "shotId": "shot.cg.draw",
+      "semanticAliases": [
+        "CG-03"
+      ],
+      "objectiveIds": [
+        "ch13:survey:start",
+        "ch13:survey:draw",
+        "ch13:survey:offer-span"
+      ],
+      "firstRead": "walked trace and actual feet",
+      "secondRead": "survey destination and fixed apparatus",
+      "exit": "actual offer changes action; no per-sample prompts",
+      "cameraRef": "existing player-camera/vehicle policy",
+      "fovOnFoot": 75,
+      "duration": "event-bound and indefinitely player-deferrable",
+      "transition": "physical continuity; no new cut",
+      "safeArea": "existing work-order lower-left, interaction center, caption/touch reserved bands",
+      "evidenceStatus": "new physical state to capture after signed implementation",
+      "entryStaging": "inspection offer at W records nothing; exact start marker targets S; grounded F at S begins first sample, then quiet draw targets E",
+      "sceneAnchors": [
+        "anc.cg.route-offered"
+      ]
+    },
+    {
+      "shotId": "shot.cg.hold",
+      "semanticAliases": [
+        "CG-04"
+      ],
+      "objectiveIds": [
+        "ch13:survey:revise",
+        "ch13:survey:witness"
+      ],
+      "firstRead": "supported stopped body and precise trace end",
+      "secondRead": "actual housing, range or footing cause",
+      "exit": "first-try success omits hold; repair follows the real cause",
+      "cameraRef": "existing player-camera/vehicle policy",
+      "fovOnFoot": 75,
+      "duration": "event-bound and indefinitely player-deferrable",
+      "transition": "physical continuity; no new cut",
+      "safeArea": "existing work-order lower-left, interaction center, caption/touch reserved bands",
+      "evidenceStatus": "new physical state to capture after signed implementation",
+      "sceneAnchors": [
+        "anc.cg.specific-hold"
+      ]
+    },
+    {
+      "shotId": "shot.cg.witness",
+      "semanticAliases": [
+        "CG-04-resume"
+      ],
+      "objectiveIds": [
+        "ch13:survey:witness",
+        "ch13:survey:witness-return",
+        "ch13:survey:test"
+      ],
+      "firstRead": "worker using an actually occupied offered reference",
+      "secondRead": "literal backing and short span",
+      "exit": "actual occupancy/geometry resumes; free look irrelevant to predicate",
+      "cameraRef": "existing player-camera/vehicle policy",
+      "fovOnFoot": 75,
+      "duration": "event-bound and indefinitely player-deferrable",
+      "transition": "physical continuity; no new cut",
+      "safeArea": "existing work-order lower-left, interaction center, caption/touch reserved bands",
+      "evidenceStatus": "new physical state to capture after signed implementation"
+    },
+    {
+      "shotId": "shot.cg.other-end",
+      "semanticAliases": [
+        "CG-05"
+      ],
+      "objectiveIds": [
+        "ch13:common:reciprocal"
+      ],
+      "firstRead": "worker maintaining H, E clear for Terra full18-unit common passage",
+      "secondRead": "original fixed reference becomes insufficient",
+      "exit": "actual comparison commits only after real supported passage",
+      "cameraRef": "existing player-camera/vehicle policy",
+      "fovOnFoot": 75,
+      "duration": "event-bound and indefinitely player-deferrable",
+      "transition": "physical continuity; no new cut",
+      "safeArea": "existing work-order lower-left, interaction center, caption/touch reserved bands",
+      "evidenceStatus": "new physical state to capture after signed implementation",
+      "entryStaging": "actual E->H positioning precedes Terra E start; no positioning credit",
+      "sceneAnchors": [
+        "anc.cg.reciprocal-reference"
+      ],
+      "readiness": "publish the holding claim only after actual E->H arrival; preparation text before it"
+    },
+    {
+      "shotId": "shot.cg.his-test",
+      "semanticAliases": [
+        "CG-06"
+      ],
+      "objectiveIds": [
+        "ch13:common:offer-final-reference",
+        "ch13:common:release",
+        "ch13:common:reference-return"
+      ],
+      "firstRead": "physical H->E return then independent grounded full E->C traversal",
+      "secondRead": "Terra separate valid final reference",
+      "exit": "actual arrival plus prior reciprocal proof; same finite reference rules",
+      "cameraRef": "existing player-camera/vehicle policy",
+      "fovOnFoot": 75,
+      "duration": "event-bound and indefinitely player-deferrable",
+      "transition": "physical continuity; no new cut",
+      "safeArea": "existing work-order lower-left, interaction center, caption/touch reserved bands",
+      "evidenceStatus": "new physical state to capture after signed implementation",
+      "entryStaging": "explicit T offer and current predicate permit uncredited H->E; anc.cg.independent-test starts only once full E->C traversal begins",
+      "sceneAnchors": [
+        "anc.cg.independent-test"
+      ]
+    },
+    {
+      "shotId": "shot.cg.complete",
+      "semanticAliases": [
+        "CG-07",
+        "CG-08"
+      ],
+      "objectiveIds": [],
+      "firstRead": "actual grounded arrival and persistent tested route",
+      "secondRead": "separate accounts and ordinary world",
+      "exit": "mandatory guidance and transient ownership retire immediately; actor/route persist",
+      "cameraRef": "existing player-camera/vehicle policy",
+      "fovOnFoot": 75,
+      "duration": "event-bound and indefinitely player-deferrable",
+      "transition": "physical continuity; no new cut",
+      "safeArea": "existing work-order lower-left, interaction center, caption/touch reserved bands",
+      "evidenceStatus": "new physical state to capture after signed implementation",
+      "scoreIndependence": "no camera/actor wait, friendly recolor or extra flourish to meet a changed fifth; persistent actor/trace make muted or dropped-attack completion legible",
+      "sceneAnchors": [
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ]
+    }
+  ],
+  "semanticAliasStatus": "Shot CG aliases preserved as authoring lineage; canonical anc.cg.* scene anchors bind in combined contract; not claimed implemented runtime anchors.",
+  "objectiveBindings": [
+    {
+      "objectiveId": "ch13:home:review",
+      "markerLabel": "Second hearth · unfinished audit",
+      "standingWorkOrder": "Return to the working hearth. [F] Review the stored audit fault.",
+      "realTransition": "Actual core review → choose-return"
+    },
+    {
+      "objectiveId": "ch13:home:choose-return",
+      "markerLabel": "Second hearth · choose the return",
+      "standingWorkOrder": "[F] Choose to revisit the Origin audit site. You can leave this open.",
+      "realTransition": "Intent commit → actual hatch/course substep"
+    },
+    {
+      "objectiveId": "ch13:return:board",
+      "markerLabel": "Kestrel hatch · board",
+      "standingWorkOrder": "Follow the hatch marker. [F] Board the Kestrel.",
+      "realTransition": "Actual boarded state → launch/current flight substep"
+    },
+    {
+      "objectiveId": "ch13:return:launch",
+      "markerLabel": "Kestrel controls · lift",
+      "standingWorkOrder": "Hold [Space] to ignite and lift.",
+      "realTransition": "Actual boarded ship accepts held control; actual flight → Origin course",
+      "displayLabel": "Kestrel controls · lift",
+      "kind": "interact",
+      "targetMode": "none",
+      "requiresMarker": false,
+      "targetContract": {
+        "maxVisibleTargets": 0
+      },
+      "owner": "existing boarded Kestrel controls; actual boarding/control ownership required",
+      "completion": "actual ignition/lift into flight; control facts and zero targets in evidence"
+    },
+    {
+      "objectiveId": "ch13:return:origin",
+      "markerLabel": "Origin · audit site",
+      "standingWorkOrder": "Fly to Origin. Follow the audit-site approach and land.",
+      "realTransition": "Exact state-conditioned copy under the existing ch13:return:origin travel objective and Origin · audit site label: while airborne, in transit or descending before a grounded Origin landing, use the signed base flight workOrder [\"Fly to Origin.\", \"Follow the audit-site approach and land.\"]. At actual grounded Origin while the player still owns boarded flight controls, use [\"Disembark.\", \"Follow the audit-site marker on foot.\"]. At actual grounded Origin with embodied on-foot controls before physical reach of W-7744, use [\"Follow the audit-site marker on foot.\"]. These are silent same-ID standing-copy changes with no additional entry acknowledgement, score event, required input, objective or arrival credit. The existing destination authority resolves the actual Origin/audit-site target in the active world; on foot it must lead to the real W-7744 approach, never the hatch. Existing vehicle controls own landing/disembarkation; this text does not create a new disembark control. Desktop/mobile, reduced motion and every quality tier use these same phase meanings, exact state copy and destination. Pause/Continue/world handoff reconstruct the actual next action without regressing a grounded Origin arrival to mandatory board or lift. The existing arrival anchor commits once only after the actual Origin world, grounded flight/landing facts, embodied on-foot state and physical reach of W-7744 satisfy the return. World activation or landing alone does not clear the return objective, grant the milestone or open the survey. Keep return:origin active with its signed state-conditioned travel guidance through disembarkation and the real on-foot approach; then clear it and select the actual survey objective from its existing state. No flight-mode regression, elapsed time, rail progress or seeded receipt substitutes for physical arrival."
+    },
+    {
+      "objectiveId": "ch13:survey:offer",
+      "markerLabel": "W-7744 · offer a route",
+      "standingWorkOrder": "Approach W-7744. [F] Offer to demonstrate a route.",
+      "realTransition": "Open actor/world-scoped survey → start; do not record beside the actor"
+    },
+    {
+      "objectiveId": "ch13:survey:start",
+      "markerLabel": "Survey start · begin a route",
+      "standingWorkOrder": "Walk to the survey start. [F] Begin recording your route.",
+      "realTransition": "Actual grounded F at S begins the first sample and replaces start with quiet draw guidance to E"
+    },
+    {
+      "objectiveId": "ch13:survey:draw",
+      "markerLabel": "Survey end · demonstrate a route",
+      "standingWorkOrder": "Walk your route to the survey end. [F] Offer the recorded span.",
+      "realTransition": "Grounded samples form proposal, not accepted proof"
+    },
+    {
+      "objectiveId": "ch13:survey:offer-span",
+      "markerLabel": "Trace end · offer this span",
+      "standingWorkOrder": "[F] Offer the walked span for W-7744 to test.",
+      "realTransition": "Explicit valid span offer → actual worker approach to S; arrival enables its test, approach earns no proof"
+    },
+    {
+      "objectiveId": "ch13:survey:test",
+      "markerLabel": "W-7744 · offered route",
+      "standingWorkOrder": "W-7744 is testing the offered route. Follow his progress, or return to the last tested point to revise.",
+      "realTransition": "State-conditional exact copy under this one objective ID and the fixed actual-worker target: from anc.cg.route-offered until actual arrival at the offered test start, including a body-clearance suspension, workOrder is [\"W-7744 is preparing to test the offered route.\", \"Keep his approach clear. Follow his progress, or return to the last tested point to revise.\"]. After the actual approach ends, workOrder is the signed base testing workOrder. Both states use the exact neutral markerLabel W-7744 · offered route. The transition replaces standing text silently within the same ID; it does not re-enter the objective, repeat its acknowledgement, imply tested progress or change score. Existing revision/hold transitions and silent restore remain. Desktop/mobile, reduced motion and all quality tiers use these same states and words, with existing input-glyph substitutions only. Actual worker samples then own hold/next-span/reciprocal transitions."
+    },
+    {
+      "objectiveId": "ch13:survey:revise",
+      "markerLabel": "Last tested point · revise route",
+      "standingWorkOrder": "Return to the last tested point. [F] Reopen the untested span and walk a new route.",
+      "realTransition": "Reopen unverified tail → draw; include actual refusal reason"
+    },
+    {
+      "objectiveId": "ch13:survey:witness",
+      "markerLabel": "Witness point · hold this end",
+      "standingWorkOrder": "Stand at the marked reference. [F] Offer this end, then remain here while W-7744 tests the span. Looking around is free.",
+      "realTransition": "Offer + occupancy + valid geometry maintains test"
+    },
+    {
+      "objectiveId": "ch13:survey:witness-return",
+      "markerLabel": "Witness point · resume the test",
+      "standingWorkOrder": "Return to the marked reference to resume the test. To change the route, return to the last tested point.",
+      "realTransition": "Reenter inner cylinder and revalidate; no second F"
+    },
+    {
+      "objectiveId": "ch13:common:reciprocal",
+      "markerLabel": "Far reference · check my route",
+      "standingWorkOrder": "W-7744 is holding the reference. Walk the guide line to check your route from this end.",
+      "realTransition": "State-conditional exact copy under this one objective ID and the fixed C destination: enter at anc.cg.route-tested in preparation while W-7744 physically positions E to H. Before actual H arrival, workOrder is [\"W-7744 is taking up the reference position.\", \"Give him room to reach it. When the guide appears, follow it from the survey end.\"]. Only at actual anc.cg.reciprocal-reference does the signed base holding/guide-line workOrder replace it and the common guide become visible. This readiness is an in-place state change, not a second objective entry, acknowledgement or new score event. The marker remains Far reference · check my route at C throughout; no clearance target, F action or guide is introduced during preparation. Existing reset and silent restore rules apply, with actual readiness revalidated before selecting copy. The same state-conditioned words and geometry apply on desktop/mobile, reduced motion and every quality tier. Only actual full 18-unit E-to-C passage supported from H records Terra's comparison."
+    },
+    {
+      "objectiveId": "ch13:common:offer-final-reference",
+      "markerLabel": "Far reference · offer this end",
+      "standingWorkOrder": "Stand at the far reference, clear of the tested span. [F] Offer this end.",
+      "realTransition": "Explicit valid offer replaces guidance; does not commit his test"
+    },
+    {
+      "objectiveId": "ch13:common:release",
+      "markerLabel": "Far reference · keep this end",
+      "standingWorkOrder": "Remain at the far reference while W-7744 tests the span. Looking around is free.",
+      "realTransition": "Explicit T offer and current reference permit H→E positioning without proof, then full E→C test; actual arrival plus comparison commits once"
+    },
+    {
+      "objectiveId": "ch13:common:reference-return",
+      "markerLabel": "Far reference · resume the test",
+      "standingWorkOrder": "Return to the far reference, clear of the tested span, to resume the test. Looking around is free.",
+      "realTransition": "Reentry and actual revalidation resume without another F; retained proof alone cannot move him"
+    }
+  ],
+  "guidanceComposition": {
+    "workOrderRegion": "existing lower-left safe area",
+    "promptRegion": "existing central interaction band",
+    "captionAndMobileControls": "preserve existing safe areas",
+    "oneExactActiveMarker": true,
+    "quietContinuousTrace": true,
+    "perSamplePromptOrChime": false,
+    "missingTarget": "preparation or world-return state; never zero-position marker",
+    "coreShipCompetition": "actual resolver selects correct action; do not depict core marker plus unrelated required ship prompt",
+    "entryProgressCommit": "one semantic entry acknowledgement; persistent trace progress; actual commit retires/replaces guidance",
+    "initialTraceStart": "exact ch13:survey:start pair copied from final Chapter intent; one initial target S, actual grounded F starts capture, no per-point prompts after draw begins",
+    "controlOnlyLaunch": "no spatial marker; existing boarded controls own Space-hold action, targetMode none/requiresMarker false/maxVisibleTargets0",
+    "sceneOwnership": "17 ch13 objective pairs only; the2 unchanged prior-contract pairs are stored under priorContractContinuity and excluded from new guidance/beat registration"
+  },
+  "trace": {
+    "recordsActualWalkedGroundOnly": true,
+    "depthTest": true,
+    "futurePathPreview": false,
+    "proposed": "single broken stroke",
+    "tested": "paired/notched stroke",
+    "heldEnd": "open transverse stop",
+    "colorOrGlowSoleMeaning": false,
+    "slotCount": 2,
+    "maxPointsEach": 128,
+    "maxWalkedUnitsEach": 120,
+    "normalSpacing": 1,
+    "minimumCornerSpacing": 0.25,
+    "overCapacity": "honest stop; no decimation",
+    "geometryPlacement": "actual support with minimal surface offset; no floating path or through-solid line",
+    "scope": "Actual walked survey evidence and genuinely tested geometry only. The separately authorized commonGuide is the sole planned/unwalked visual exception; it does not inherit or fabricate trace evidence.",
+    "futurePathPreviewExceptionRef": "commonGuide; no exception for the S-to-E survey",
+    "glyphRealization": {
+      "geometry": "Reuse the existing unit-box instance geometry and prewarmed material; allocate/upload every needed matrix/color attribute during setup, not at verbs",
+      "proposed": "One short narrow bar oriented along the actual recorded local segment; gaps form the single broken stroke",
+      "tested": "Two parallel short bars with a visible gap, using the actual tested-prefix state; two existing instances per represented sample",
+      "heldEnd": "Replace the endpoint pair with two separated transverse half-bars, leaving an open central gap; never add a third endpoint glyph",
+      "corner": "Orient bars from actual recorded incoming/outgoing segments; clamp length to local recorded spacing rather than enlarging an axis-aligned square",
+      "budget": "At most2 instances per sample across2x128 recorded samples =512. Guide/common display shares the released working display allocation; no third instance pool, material, draw or setup program is required.",
+      "evidence": "Shape carries state with color muted and on lowest tier. Update only matrices/counts or already allocated attributes using existing scratch storage; zero new resources/programs inside critical windows."
+    }
+  },
+  "performanceBudget": {
+    "addedDrawCallsMax": 8,
+    "addedMaterialsMax": 6,
+    "pooledTraceGlyphInstancesMax": 512,
+    "reuseExistingWorkerMesh": true,
+    "prewarmBeforeCriticalWindow": true,
+    "criticalWindowSecondsBeforeAndAfterVerb": 2,
+    "newShaderProgramsInCriticalWindow": 0,
+    "newResourcesFirstUsedInCriticalWindow": 0,
+    "lightCardinalityChanges": 0,
+    "frameLoopAllocations": false,
+    "measuredFrameBudgetPass": false,
+    "budgetSemantics": "DELTAS over locked shipped source/runtime; proposed bounded additions, not measurements or absolute scene counts",
+    "addedShaderProgramsDuringSetupMax": 6,
+    "addedGpuStorageMiBMax": 2,
+    "addedGpuStorageBytesMax": 2097152,
+    "targetFps": 60,
+    "minimumFps": 30,
+    "maximumFrameTimeMs": 33.4,
+    "frameTargetsAdvisoryOnly": true,
+    "mandatoryHardwareProof": "cold high/lowest-tier hardware handback and FPS non-regression against source-pinned baseline; retain existing critical-window hitch/resource gates",
+    "noSetupWorkInCriticalWindow": true,
+    "measurementsRequired": "record draw/program/storage deltas and frame-time distribution at setup, critical anchors, handback and repeated visit; bounded counters must hold without monotonic growth",
+    "measuredResourceBudgetPass": false
+  },
+  "variants": {
+    "lowestTier": "same physical housing, solid predicates, body contacts, trace shape and text; optional foliage/post cannot carry meaning",
+    "mobile": "touch F equivalent, exact objective/marker parity, safe areas; player may freely turn to inspect",
+    "reducedMotion": "same static trace/head grammar and player camera; no pulse, shake or forced traversal",
+    "night": "all-day intended within existing lighting; actual contact and scale readability checked after implementation"
+  },
+  "lifecycle": {
+    "holds": "retain valid proof and current offered reference; no camera or musical timer",
+    "pauseWorldExitQuitReset": "clear local transient presentation; preserve or deliberately reset chapter state under owned lifecycle",
+    "completion": "immediate control/progression and guidance retirement; one local tester and accepted route remain",
+    "scoreTail": "existing authorized live-only max5s plus4.5s release never owns camera or progression",
+    "restoredSave": "steady state only, no install/completion transient replay",
+    "actorMount": "prewarmed under existing world lifecycle; no new farewell or apparition staging",
+    "scoreIndependence": "no camera or actor wait or new flourish for changed fifth; no backing/range/proximity attack, actual arrival remains durable and intelligible muted",
+    "optionalRepeat": "durable local worker and accepted route, no install/completion presentation or score-tail replay",
+    "homeAcknowledgement": "owned by ch13-home on fresh actual prior-contract installation receipt only; prior install action/guidance remains prior-owned; restored entry is steady and silent, never queues/replays acknowledgement or transaction"
+  },
+  "evidence": {
+    "personallyViewedFrames": [
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t006s.png",
+        "sha256": "a6702d2dd2d966342632dd208d733faafecc7faa56f7211b47a2d3fb05a140bb",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      },
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t014s.png",
+        "sha256": "335ea30165082186c1f26b1cf3bed4e6700c91c3085c557c6e029d14638f56e7",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      },
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t022s.png",
+        "sha256": "6b9ecf375486f3ee91512e55ce80a99d9c7e03379d89a09c9b98ac782df94475",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      },
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t030s.png",
+        "sha256": "6981aed13ab34ae71766575c6a17ec3e976dcb8d0874fdb6575c4174e84f7cf9",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      },
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t040s.png",
+        "sha256": "10bd6b6fc98a00f80c586ada77b1c2e6d9aafe2c182899ecd392f0d3cc1cf114",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      },
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t052s.png",
+        "sha256": "5184791c68b89809f88be633edb925f6737d8911275b8000d12c8518424306bb",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      },
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t066s.png",
+        "sha256": "43cbe5009562f6976e97b9abed6125b741f72fc8c6e0ed33cfc3755c5dec9862",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      },
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/tidegarden-home-core/tidegarden-home-core_t006s.png",
+        "sha256": "b8536c91419d68195865d9bf1b3cf48421ee7052d6dc921f85755ad1358d7b0b",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      },
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/tidegarden-home-core/tidegarden-home-core_t018s.png",
+        "sha256": "3798a5f6089fe0091ef394624155e678fd208d11b2cba01f84908f24181dfdc8",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      },
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/tidegarden-home-core/tidegarden-home-core_t032s.png",
+        "sha256": "9049fbbd999f5b57d2a381ae6bf26bc20b68e1ca998f22aa07bf419a86b77587",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      },
+      {
+        "path": ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/tidegarden-home-core/tidegarden-home-core_t046s.png",
+        "sha256": "6b75db88597ab1be04988b5b802249c6c00376e8bf3bbd984aeddf136b877486",
+        "personallyViewed": true,
+        "claim": "environment only; actor/core absent in fixture"
+      }
+    ],
+    "baselineConclusion": "sufficient environmental/fixture-limit grounding for this bounded treatment; no worker/core/new-apparatus rendered proof",
+    "postImplementation": [
+      "every shot anchor HUD-on/off",
+      "both survey routes and own intermediate witness",
+      "specific backing/range/solid/footing holds and vacancy/reentry",
+      "actual18unit common passage",
+      "final separate Terra reference, independent arrival and completion",
+      "day/night, mobile, reduced-motion, cold high/lowest-tier hardware",
+      "completed-save revisit and optional repeat",
+      "real station-home-ch13 continuity and cold no-rescue movies",
+      "muted/missing-musical-attack legibility",
+      "worker inspection W separate from actual S trace start; physical W->S approach without proof credit",
+      "E->H, full Terra18-unit E->C, T offer, H->E, full worker18-unit E->C in order; dynamic actor clearance and holds"
+    ],
+    "criticalFramePlan": {
+      "events": [
+        "objective enter/replace/clear",
+        "reference offer/hold/reentry",
+        "CG-05 actual reciprocal passage",
+        "CG-06 independent initiation",
+        "CG-07 arrival and CG-08 handback"
+      ],
+      "frameOffsets": [
+        -1,
+        0,
+        1
+      ],
+      "denseWindowSeconds": [
+        -2,
+        2
+      ]
+    },
+    "notClaimed": [
+      "hardware approval",
+      "current rendered actor/core/apparatus",
+      "color/lighting quality",
+      "interaction feel or timing",
+      "performance",
+      "audio listening",
+      "independent taste pass"
+    ]
+  },
+  "updatedAt": "2026-09-06T06:46:58.503510+00:00",
+  "independentAuthorship": "Score first treatment was not read before independent Stage 2 authorship; it was read in the authorized Stage 3 peer exchange.",
+  "priorGeometryQualification": {
+    "evidenceRef": ".codex/story-runs/2026-09-06-common-ground/selected-geometry-qualification.json",
+    "lineageOnly": true,
+    "supersededBy": ".codex/story-runs/2026-09-06-common-ground/staged-geometry-qualification.json",
+    "retiredAssumption": "worker-held reference at E; final reference is H and its socket-dependent metrics differ"
+  },
+  "qualifiedGeometry": {
+    "evidenceRef": ".codex/story-runs/2026-09-06-common-ground/staged-geometry-qualification.json",
+    "sha256": "7cc0d63d843df60462a2fd55ba928bfd5656c20b4d20c31a581fec559532b7ff",
+    "verdict": "PASS",
+    "short": {
+      "walkedUnits": 16,
+      "lengthCap": 120,
+      "withinLengthCap": true,
+      "sampleCount": 17,
+      "pointCap": 128,
+      "withinPointCap": true,
+      "segmentIntersectsSolidOrTrunk": null,
+      "vertices": [
+        {
+          "x": -26,
+          "y": 51.05,
+          "z": 12
+        },
+        {
+          "x": -28,
+          "y": 51.05,
+          "z": 12
+        },
+        {
+          "x": -30,
+          "y": 51.05,
+          "z": 12
+        },
+        {
+          "x": -32,
+          "y": 51.05,
+          "z": 12
+        },
+        {
+          "x": -34,
+          "y": 51.05,
+          "z": 12
+        },
+        {
+          "x": -36,
+          "y": 51.05,
+          "z": 12
+        },
+        {
+          "x": -38,
+          "y": 51.05,
+          "z": 12
+        },
+        {
+          "x": -40,
+          "y": 51.05,
+          "z": 12
+        },
+        {
+          "x": -42,
+          "y": 51.05,
+          "z": 12
+        }
+      ],
+      "unsupportedSpanUnits": 14,
+      "unsupportedSpanSamples": 15,
+      "spanStart": {
+        "x": -27,
+        "y": 51.05,
+        "z": 12
+      },
+      "spanEnd": {
+        "x": -41,
+        "y": 51.05,
+        "z": 12
+      },
+      "spanBlockReasons": [
+        "backing"
+      ],
+      "spanCausedSolelyByBacking": true
+    },
+    "long": {
+      "walkedUnits": 36,
+      "extraUnits": 20,
+      "lengthRatio": 2.25,
+      "minExtraUnitsRequired": 12,
+      "minLengthRatioRequired": 1.25,
+      "sampleCount": 61,
+      "withinPointCap": true,
+      "withinLengthCap": true,
+      "segmentIntersectsSolidOrTrunk": null,
+      "everySampleSupported": true,
+      "everyDensePointSupported": true,
+      "denseSpacingUnits": 0.25,
+      "densePointCount": 145,
+      "minRangeMarginUnits": 0.67,
+      "firstUnsupported": -1,
+      "vertices": [
+        {
+          "x": -26,
+          "y": 51.05,
+          "z": 12
+        },
+        {
+          "x": -26,
+          "y": 51.05,
+          "z": 14
+        },
+        {
+          "x": -28,
+          "y": 51.05,
+          "z": 14
+        },
+        {
+          "x": -28,
+          "y": 51.05,
+          "z": 16
+        },
+        {
+          "x": -30,
+          "y": 51.05,
+          "z": 16
+        },
+        {
+          "x": -30,
+          "y": 51.05,
+          "z": 18
+        },
+        {
+          "x": -32,
+          "y": 51.05,
+          "z": 18
+        },
+        {
+          "x": -32,
+          "y": 51.05,
+          "z": 20
+        },
+        {
+          "x": -32,
+          "y": 51.05,
+          "z": 22
+        },
+        {
+          "x": -34,
+          "y": 51.05,
+          "z": 22
+        },
+        {
+          "x": -36,
+          "y": 51.05,
+          "z": 22
+        },
+        {
+          "x": -38,
+          "y": 51.05,
+          "z": 22
+        },
+        {
+          "x": -40,
+          "y": 51.05,
+          "z": 22
+        },
+        {
+          "x": -42,
+          "y": 51.05,
+          "z": 22
+        },
+        {
+          "x": -42,
+          "y": 51.05,
+          "z": 20
+        },
+        {
+          "x": -42,
+          "y": 51.05,
+          "z": 18
+        },
+        {
+          "x": -42,
+          "y": 51.05,
+          "z": 16
+        },
+        {
+          "x": -42,
+          "y": 51.05,
+          "z": 14
+        },
+        {
+          "x": -42,
+          "y": 51.05,
+          "z": 12
+        }
+      ]
+    },
+    "common": {
+      "walkedUnits": 18,
+      "sampleCount": 31,
+      "densePointCount": 73,
+      "withinLengthCap": true,
+      "withinPointCap": true,
+      "segmentIntersectsSolidOrTrunk": null,
+      "vertices": [
+        {
+          "x": -42,
+          "y": 51.05,
+          "z": 12
+        },
+        {
+          "x": -42,
+          "y": 51.05,
+          "z": 14
+        },
+        {
+          "x": -42,
+          "y": 51.05,
+          "z": 16
+        },
+        {
+          "x": -44,
+          "y": 51.05,
+          "z": 16
+        },
+        {
+          "x": -44,
+          "y": 51.05,
+          "z": 18
+        },
+        {
+          "x": -46,
+          "y": 51.05,
+          "z": 18
+        },
+        {
+          "x": -48,
+          "y": 51.05,
+          "z": 18
+        },
+        {
+          "x": -48,
+          "y": 51.05,
+          "z": 16
+        },
+        {
+          "x": -48,
+          "y": 51.05,
+          "z": 14
+        },
+        {
+          "x": -48,
+          "y": 51.05,
+          "z": 12
+        }
+      ],
+      "comparisonStartPose": {
+        "label": "E",
+        "world": {
+          "x": -42,
+          "y": 51.05,
+          "z": 12
+        }
+      },
+      "workerReferencePose": {
+        "label": "H",
+        "world": {
+          "x": -40,
+          "y": 51.05,
+          "z": 12
+        },
+        "distinctFromComparisonStart": true,
+        "separationFromEUnits": 2
+      },
+      "workerReferenceHeldAtH": {
+        "socketWorld": {
+          "x": -40,
+          "y": 52.9,
+          "z": 12
+        },
+        "socketHeight": 1.85,
+        "source": "AuditWorker torso 1.30 + visor 0.55",
+        "note": "reference socket is H + 1.85; it is NOT held at E"
+      },
+      "everySampleInRangeOfWorkerH": true,
+      "everySampleUnobstructedFromWorkerH": true,
+      "everyDensePointInRangeOfWorkerH": true,
+      "everyDensePointUnobstructedFromWorkerH": true,
+      "samplesVerified": 31,
+      "densePointsVerified": 73,
+      "expectedSampleCount": 31,
+      "expectedDensePointCount": 73,
+      "sampleAndDenseCountsAsCommissioned": true,
+      "maxDistanceFromWorkerH": 10.01,
+      "minRangeMarginFromWorkerH": 1.99,
+      "heldFailures": [],
+      "playerPathBodyClearanceFromWorkerH": 2,
+      "meetsBodyBodyClearanceFromWorkerH": true,
+      "bodyBodyClearanceRequired": 1,
+      "workerHOnPlayerPath": false,
+      "unitsOutsideFixedReference": 8.25,
+      "reciprocalNecessity": {
+        "contiguousSpanUnits": 8,
+        "spanStart": {
+          "x": -46,
+          "y": 51.05,
+          "z": 18
+        },
+        "spanEnd": {
+          "x": -48,
+          "y": 51.05,
+          "z": 12
+        },
+        "fractionOfPassage": 0.444,
+        "nonzero": true
+      }
+    },
+    "intermediate": {
+      "label": "W shifted (-34,51.05,10)",
+      "position": {
+        "x": -34,
+        "y": 51.05,
+        "z": 10
+      },
+      "supportVoxel": [
+        -17,
+        25,
+        5
+      ],
+      "socketWorld": {
+        "x": -34,
+        "y": 52.4,
+        "z": 10
+      },
+      "socketHeight": 1.35,
+      "bodyHeight": 3.6,
+      "bodyDiscFullySupported": true,
+      "coversWholeUnsupportedSpan": true,
+      "coveredSpanSamples": 15,
+      "spanSamples": 15,
+      "firstFailure": null,
+      "maxLineOfReferenceDistance": 7.3,
+      "rangeMarginUnits": 4.7,
+      "bodyClearanceFromSurveyRoute": 2,
+      "meetsBodyBodyClearance": true,
+      "bodyBodyClearanceRequired": 1,
+      "occupancyCylinderMarginUnits": 0.75,
+      "releaseCylinderMarginUnits": 0.25,
+      "releaseCylinderOverlapsRoute": false,
+      "reachableOnFootFromS": true,
+      "insideAnySolidFootprint": false,
+      "valid": true
+    },
+    "finalTerra": {
+      "position": {
+        "x": -44,
+        "y": 51.05,
+        "z": 12
+      },
+      "supportVoxel": [
+        -22,
+        25,
+        6
+      ],
+      "socketWorld": {
+        "x": -44,
+        "y": 52.4,
+        "z": 12
+      },
+      "socketHeight": 1.35,
+      "bodyHeight": 3.6,
+      "bodyDiscFullySupported": true,
+      "lateralOffsetFromC": 4,
+      "lateralMinRequired": 2,
+      "meetsLateralMin": true,
+      "standsAtC": false,
+      "everySampleInRange": true,
+      "everySampleUnobstructed": true,
+      "everyDensePointInRange": true,
+      "everyDensePointUnobstructed": true,
+      "densePointCount": 73,
+      "denseSpacingUnits": 0.25,
+      "maxLineOfReferenceDistance": 7.23,
+      "rangeMarginUnits": 4.77,
+      "failures": [],
+      "bodyClearanceFromWorkerFinalRoute": 2,
+      "meetsBodyBodyClearance": true,
+      "occupancyCylinderMarginUnits": 0.75,
+      "releaseCylinderMarginUnits": 0.25,
+      "releaseCylinderOverlapsRoute": false,
+      "verticalDeltaToC": 0,
+      "occupancyVerticalTolerance": 0.6,
+      "releaseVerticalTolerance": 0.9,
+      "reachableOnFootFromE": true,
+      "holdCondition": "no hold required at this pose",
+      "independentOfPositioningLegs": true,
+      "witnessedPath": "full E->C worker traversal",
+      "witnessSocket": "separate far Terra T + 1.35"
+    },
+    "stagedLegs": {
+      "order": [
+        "worker E -> H",
+        "Terra E -> C comparison witnessed from H + 1.85",
+        "Terra occupies T (-44,51.05,12)",
+        "worker H -> E",
+        "worker final E -> C witnessed from T + 1.35"
+      ],
+      "positioningLegsCountAsCommonProof": false,
+      "finalTestUsesPositioningLegs": false,
+      "finalTestPath": "full E -> C (independent), witnessed from the separate far Terra socket at T + 1.35",
+      "legEtoH": {
+        "label": "positioning leg E -> H (before the comparison)",
+        "planned": true,
+        "from": {
+          "x": -42,
+          "y": 51.05,
+          "z": 12
+        },
+        "to": {
+          "x": -40,
+          "y": 51.05,
+          "z": 12
+        },
+        "walkedUnits": 2,
+        "vertices": [
+          {
+            "x": -42,
+            "y": 51.05,
+            "z": 12
+          },
+          {
+            "x": -40,
+            "y": 51.05,
+            "z": 12
+          }
+        ],
+        "sampleCount": 3,
+        "densePointCount": 9,
+        "withinLengthCap": true,
+        "withinPointCap": true,
+        "segmentIntersectsSolidOrTrunk": null,
+        "everyDensePointOnDrySupportedCell": true,
+        "minPlanarGapToAnySolid": 8.75,
+        "anyBodyIntersectsSolid": false
+      },
+      "legHtoE": {
+        "label": "positioning leg H -> E (after Terra occupies T, before the final E->C)",
+        "planned": true,
+        "from": {
+          "x": -40,
+          "y": 51.05,
+          "z": 12
+        },
+        "to": {
+          "x": -42,
+          "y": 51.05,
+          "z": 12
+        },
+        "walkedUnits": 2,
+        "vertices": [
+          {
+            "x": -40,
+            "y": 51.05,
+            "z": 12
+          },
+          {
+            "x": -42,
+            "y": 51.05,
+            "z": 12
+          }
+        ],
+        "sampleCount": 3,
+        "densePointCount": 9,
+        "withinLengthCap": true,
+        "withinPointCap": true,
+        "segmentIntersectsSolidOrTrunk": null,
+        "everyDensePointOnDrySupportedCell": true,
+        "minPlanarGapToAnySolid": 8.75,
+        "anyBodyIntersectsSolid": false
+      },
+      "returningWorkerWitnessedFromTerra": {
+        "witnessSocket": {
+          "label": "T (existing far Terra reference)",
+          "world": {
+            "x": -44,
+            "y": 52.4,
+            "z": 12
+          },
+          "socketHeight": 1.35
+        },
+        "everySampleInRangeOfTerra": true,
+        "everySampleUnobstructedFromTerra": true,
+        "everyDensePointInRangeOfTerra": true,
+        "everyDensePointUnobstructedFromTerra": true,
+        "sampleCount": 3,
+        "densePointCount": 9,
+        "maxDistanceFromTerra": 4.03,
+        "rangeMarginUnits": 7.97,
+        "failures": [],
+        "movingWorkerBodyClearanceFromTerra": 2,
+        "meetsBodyBodyClearance": true,
+        "bodyBodyClearanceRequired": 1
+      }
+    },
+    "headEvidenceRef": ".codex/story-runs/2026-09-06-common-ground/head-geometry-qualification.json",
+    "headSha256": "e64ce08ef8966324fd35d2028e53334224c2c22022939b4dc1530c0f70c4b4d1",
+    "literalConnectedHeadPass": true,
+    "oldLong32SupersededBy36": true,
+    "bodyStartEAndHeldReferenceHDistinct": true,
+    "cpuGeometryOnly": true,
+    "liveRuntimeAccepted": false,
+    "limitations": {
+      "proposedNotShipped": "finite reference range, opaque backing, stand, bracket and cap do not exist in the runtime",
+      "hysteresisNotSimulated": "offer/occupancy hysteresis, hold/recovery timing and render tiers are not simulated",
+      "noRenderOrGpu": true,
+      "exactlyOneCandidate": true,
+      "fallbackScan": false
+    }
+  },
+  "referenceOwnership": [
+    {
+      "stage": "initial inspection",
+      "worker": "W, outside start/body corridor",
+      "Terra": "offers beside W then follows the single actual S-start marker; no sample beside W",
+      "credit": "none"
+    },
+    {
+      "stage": "survey proposal",
+      "worker": "W, separate from walked trace",
+      "Terra": "grounded F at S begins actual chosen S->E trace; quiet standing draw objective thereafter",
+      "credit": "proposal only"
+    },
+    {
+      "stage": "survey test positioning",
+      "worker": "physically W->S with current clearance",
+      "Terra": "clear of worker approach; optional witness W only once vacated",
+      "credit": "none"
+    },
+    {
+      "stage": "survey test",
+      "worker": "actual offered route S->E",
+      "reference": "fixed R, plus explicitly offered current intermediate Terra if required",
+      "credit": "actual sampled tested trace only"
+    },
+    {
+      "stage": "common staging",
+      "worker": "physically E->H, then H+1.85 socket",
+      "Terra": "E only once vacated and safe",
+      "credit": "positioning earns none"
+    },
+    {
+      "stage": "common comparison",
+      "worker": "maintains H",
+      "Terra": "full actual 18-unit E->C supported by H",
+      "credit": "real reciprocal comparison; no retained-footstep shortcut"
+    },
+    {
+      "stage": "final reference",
+      "worker": "at H then physical H->E",
+      "Terra": "explicit F offer and occupancy at separate T; same predicate during worker return",
+      "credit": "reference offer and positioning earn no test credit"
+    },
+    {
+      "stage": "independent final test",
+      "worker": "actual full18-unit E->C",
+      "Terra": "T maintained, free turning; vacancy/clearance holds safely",
+      "credit": "actual final arrival plus reciprocal proof alone commits"
+    }
+  ],
+  "priorContractContinuity": {
+    "contractRef": ".codex/production-runs/2026-08-11-ch10-station-introduction/station-continuation-contract.md",
+    "status": "unchanged external station/ch11 and return/ch12 host continuity; baseline evidence only",
+    "objectiveBindings": [
+      {
+        "objectiveId": "station:return:tidegarden",
+        "markerLabel": "TIDEGARDEN · SECOND HEARTH",
+        "standingWorkOrder": "RETURN TO TIDEGARDEN. DELIVER THE BONDED CELL TO THE SECOND HEARTH.",
+        "realTransition": "Existing world/flight predicate selects install",
+        "scope": "preserved prior-contract continuity; excluded from new scene guidance and beat registration",
+        "registeredByThisScene": false
+      },
+      {
+        "objectiveId": "hearth:return:install-cell",
+        "markerLabel": "SECOND HEARTH · INSTALL BONDED CELL",
+        "standingWorkOrder": "DELIVER THE BONDED CELL TO THE SECOND HEARTH. [F] INSTALL THE SEALED CELL.",
+        "realTransition": "Consume one and commit existing ch12 receipts; notify home entry without delaying or replaying the transaction",
+        "scope": "preserved prior-contract continuity; excluded from new scene guidance and beat registration",
+        "registeredByThisScene": false
+      }
+    ],
+    "newSceneGuidance": false,
+    "newSceneBeatRegistration": false,
+    "receiptBridge": "actual existing installation consumes one cell and commits existing ch12 receipts; a fresh receipt may reactivate ch13-home and emit its one live acknowledgement there without delaying or replaying the transaction",
+    "restoredEntry": "steady ch13-home entry only; no queued live acknowledgement and no transaction replay",
+    "evidenceScope": "real station departure, flight, landing, install and restoration remain required adjacent-continuity proof"
+  },
+  "sceneScope": {
+    "formalBeats": [
+      "ch13-home",
+      "ch13-return",
+      "ch13-survey",
+      "ch13-common"
+    ],
+    "newSceneObjectiveCount": 17,
+    "preservedPriorContinuityObjectiveCount": 2,
+    "hearthAcknowledgementBeat": "ch13-home",
+    "additionalFormalHearthBeat": false,
+    "registrationRule": "register only these four beats and17 ch13 objective IDs; do not register prior station:return:tidegarden or hearth:return:install-cell in this scene"
+  },
+  "commonGuide": {
+    "scope": "Only the already qualified common E-to-C comparison; never initial S-to-E survey discovery",
+    "futurePathPreview": true,
+    "plannedAndUnverified": true,
+    "isRouteEvidence": false,
+    "geometrySource": "Exact CG_ROUTE_COMMON / qualified common.vertices; no route change or new search",
+    "appearance": "Thin continuous single ground line; no arrowheads, waypoint symbols, animated sweep, pulse or endpoint icons",
+    "markerPolicy": "Existing C marker remains the sole crossing marker; later T/reference-return objectives retain their existing single-target ownership",
+    "start": "Actual worker H arrival and common reciprocal readiness; never on earlier route selection or a timer",
+    "duringPassageAndTest": "Remain planned/unverified through Terra passage and the worker test; no common footsteps are synthesized from terraUnits or a displayed guide",
+    "onActualCompletion": "Only validated real worker arrival after the full E-to-C test plus reciprocal proof may replace this display with paired tested common geometry; no extra flourish or cue",
+    "grounding": "Depth tested on current support; never through a solid or floating over an edited hole; literal failure retains existing hold/repair rather than replanning or granting proof",
+    "lifecycle": "Pause/world exit removes transient guide ownership. Resume reconstructs only the planned guide from current phase/physical readiness and revalidated ground, never new proof. Completed Origin restores paired common evidence only from valid earned completion; optional survey repeat may reuse that display allocation while preserving earned facts and the accepted S-to-E route.",
+    "storage": "Static existing common polyline plus existing earned-state facts; no third saved route, no seeded survey samples or new proof counter",
+    "pool": "Existing512 instances only: accepted survey uses at most256; common planned display uses at most9 segment bars plus2 open-stop pieces. Completed common display uses at most62 pieces for31 qualified sample positions. During optional survey repeat the two128-point survey displays can use512, so the common display yields its allocation.",
+    "scoreAndAgency": "No new semantic/audio event, attack or note; same player-owned camera, walking, holds, input and completion predicates"
+  }
+}

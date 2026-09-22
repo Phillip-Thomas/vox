@@ -1,0 +1,148 @@
+{
+  "documentKind": "score-candidate-expiry-interpretation",
+  "director": "score",
+  "authoredBy": "Score Director (/root/score_director)",
+  "authoredAt": "2026-09-06T22:16:05.993576Z",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "manifestProvenance": "Current source100 identity supplied by producer; relevant source files independently hashed below, not a new whole-manifest verification.",
+  "disposition": "retain-strict-cap-and-measure-owning-release-seam",
+  "conclusion": "The 5.0024-second value is an observed adapter-token overage, not a cached age in the inspected diagnostic getter. It does not alone establish the exact audio-authority release time or an audible cap violation. Do not classify the sampled token lifetime as compliant, dismiss the overage as harmless, or close the deadline/release concern. The signed limit remains exactly five seconds; no frame allowance is added.",
+  "adapterTokenObservedBeyondFiveSeconds": true,
+  "audioAuthorityCapViolationEstablished": false,
+  "exactReleaseTimeEstablished": false,
+  "signedClauses": [
+    {
+      "ref": "scene-contract.json#/score/cues/5/barIntent",
+      "text": "Live only for at most five seconds measured on a monotonic clock from the live completion, then the existing 4.5 second release through the existing complementary authority fade; never restored, never repeated."
+    },
+    {
+      "ref": "scene-contract.json#/score/cues/5/mixIntent",
+      "text": "The release tail never owns camera, controls or progression; handback at anc.cg.handback is immediate and independent of it."
+    },
+    {
+      "ref": "scene-contract.json#/score/cues/5/silenceIntent",
+      "text": "No separate coda, no hydration, no replay, no deferral until unlock and no intensity boost to force an attack; new story, optional survey action, actor change, world change, reset, exit, pause, visibility loss, music mute and unavailable audio each invalidate the live token and release immediately."
+    },
+    {
+      "ref": "scene-contract.json#/reset/states/3/acceptanceCriterion",
+      "text": "Reset clears previous beat ownership. The single explicit exception is real first completion and its immediate handback/normal transition to done: it may create and finish the signed live-only token, at most five seconds then the existing 4.5-second release, without retaining any control or progression ownership. Pause, focus loss, quit, deep link, replay, sandbox, world or actor change, new story/optional survey, mute and unavailable audio cancel immediately. Any other beat exit cancels. No cancelled token resumes, hydrates or defers to unlock."
+    }
+  ],
+  "evidence": {
+    "producerReview": {
+      "ref": "producer-finale-candidate-normal-window-review.json",
+      "sha256": "2001d2cb87514a7eb8429c337f61ae490f9571f9dae2f4bc4cd9a6e49e7c7d96"
+    },
+    "priorDirection": {
+      "ref": "score-observed-completion-direction.json",
+      "sha256": "634bffcbeb8f446424387cce1c6ed4f766c4bf350d5a4c64ae0fdb1ca0d73586"
+    },
+    "rawWindow": {
+      "ref": "verifier/captures/manual-credit-finale/finale-candidate-1/window.ndjson",
+      "sha256": "c9ce6e94c7b69b27567005a216b6919926405ef381de0a437126e7c82f1d242d",
+      "records": 848,
+      "postEdgeNonnullRecords": 278,
+      "samples": [
+        {
+          "ndjsonLine": 180,
+          "tMs": 63380.799999952316,
+          "rafTimeMs": 63374.1,
+          "wallMs": 1788732407225,
+          "score.finalTextureSeconds": 0.020899999976158143,
+          "score.finalTextureSecondsPresent": true,
+          "story.beat": "done",
+          "story.active": false
+        },
+        {
+          "ndjsonLine": 456,
+          "tMs": 68345.69999992847,
+          "rafTimeMs": 68344.5,
+          "wallMs": 1788732412190,
+          "score.finalTextureSeconds": 4.985799999952317,
+          "score.finalTextureSecondsPresent": true,
+          "story.beat": "done",
+          "story.active": false
+        },
+        {
+          "ndjsonLine": 457,
+          "tMs": 68362.29999995232,
+          "rafTimeMs": 68361.2,
+          "wallMs": 1788732412206,
+          "score.finalTextureSeconds": 5.002399999976158,
+          "score.finalTextureSecondsPresent": true,
+          "story.beat": "done",
+          "story.active": false
+        },
+        {
+          "ndjsonLine": 458,
+          "tMs": 68379.19999992847,
+          "rafTimeMs": 68377.8,
+          "wallMs": 1788732412223,
+          "score.finalTextureSeconds": null,
+          "score.finalTextureSecondsPresent": true,
+          "story.beat": "done",
+          "story.active": false
+        }
+      ],
+      "meaning": "Line180 is actual done/inactive with Terra18, Worker18, committed and both complete/handback AV anchors. Lines456-458 bracket the final live observation and first null. No reappearance follows. The terminal seal-only null cannot replace the full window.",
+      "timingLimit": "First null is approximately 5.0193 seconds from inferred creation, not an exact clear timestamp. Token creation and release-caller timestamps are not raw fields. The age at line457 is 5.002399999976158 seconds; the signed cap must not be rounded or widened to accept it."
+    },
+    "runtimeRecord": {
+      "ref": "verifier/captures/manual-credit-finale/finale-candidate-1/runtime-record.json",
+      "sha256": "487cfac70e97f064348f6f1552f8334c156849661954f95984b42b3a11047714"
+    },
+    "sourceSha256": {
+      "main/src/story/commonGroundScore.ts": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+      "main/src/story/commonGroundDirector.ts": "73bceed58ff5f17df70d118d1c1091819e964e3ae5761af2b145956171cf0983",
+      "main/src/story/StoryDirectorDriver.tsx": "85327128819f44f745f58f72300da1595a5a2e0283bcdf8777f9495e608f493c",
+      "main/src/story/storyScore.ts": "94d560db834ed0067689e2b4784fb93a5fc6a962f0942082fbcd7038651f7d05",
+      "main/src/audio/scoreEngine.ts": "77c5392efb27f61293adf9a3c9a39f7f554f300394e25fc207dd5c218eda03d2"
+    }
+  },
+  "sourceInterpretation": [
+    {
+      "ref": "main/src/story/commonGroundScore.ts:207-238,280-289",
+      "finding": "Creation stores startedAtMs; elapsedSeconds uses the current monotonic clock (128-134). Diagnostic reads freshly calculate elapsed time while runtime.finalTexture exists. The deadline tick alone compares age against the cap and invokes release. A diagnostic can run after the deadline but before the next gameplay tick; that is frame-polled cleanup lag, not proof that the numeric age was cached."
+    },
+    {
+      "ref": "main/src/story/commonGroundDirector.ts:589-598,651-668,1942-1948; main/src/story/StoryDirectorDriver.tsx:145-177,229-256",
+      "finding": "Normal done now avoids inactivity-only suspension. Unpaused done frames carry the token tick through tickCommonGroundEntry; genuine interruption/audio-block checks remain. The probe snapshot forwards the freshly read score diagnostic. Sampling does not expose the last deadline tick or its actual ordering relative to this read."
+    },
+    {
+      "ref": "main/src/story/commonGroundScore.ts:243-251; main/src/story/storyScore.ts:1017-1025; main/src/audio/scoreEngine.ts:123,1687-1698,1712-1735",
+      "finding": "Normal release clears the token, then deselects the score beat and clears its override. setScoreBeat(null) calls setScoreMood(null). When the built score context exists and leadership changes, the engine schedules complementary authority at ctx.currentTime for 4.5 seconds. The inspected final-token seam does not pre-schedule an independent DSP expiry at creation. This supports a frame-late release concern; the capture does not reveal the actual leadership transition, graph state or scheduled automation."
+    }
+  ],
+  "requiredMeasurableSeam": {
+    "location": "The same token across beginCommonGroundFinalTexture -> deadline tick -> releaseCommonGroundFinalTexture -> setScoreBeat(null)/setScoreMood(null) -> scheduleStoryAuthority(false, atTime) and its complementary bed callback.",
+    "minimumFields": [
+      "Stable token identity; actual completion and token startedAtMs; explicit monotonic deadline startedAtMs + 5000; each relevant deadline-check time, clear time and clear reason; ordered sequence relative to diagnostic reads.",
+      "At actual release: selected beat/override and story-leading state before/after, built/context availability and running state; paired monotonic time and AudioContext.currentTime.",
+      "Actual scheduleStoryAuthority invocation and atTime, complementary score/bed automation start/end and 4.5-second duration, with both endpoints/ownership. Distinguish a real leadership handoff from a no-op call or an earlier release.",
+      "Actual cancellation state and cause when applicable; immediate done/control/guidance handback; no token recreation after expiry or interruption."
+    ],
+    "decisionRule": "If final-texture authority is still intentionally held beyond completion + 5000 ms and its release starts late, that violates the unchanged cap. If the owning authority already began the proper release by that deadline while only token diagnostics linger, the audio-authority cap is not thereby violated, but the observed token-lifecycle discrepancy remains explicit. Missing owning timestamps permit neither a release pass nor a conclusive audible failure.",
+    "noToleranceOrMinimum": "No added millisecond/frame tolerance, guaranteed attack, audible minimum, or fixed five-second performance. Legitimate cancellation may end eligibility early; the existing release tail remains separate from the live interval."
+  },
+  "audioLimits": {
+    "wavRef": "verifier/captures/manual-credit-finale/finale-candidate-1/owned-sink.wav",
+    "wavSha256FromProducer": "4c01aaea3603b712476d44d857db20038245765a8b158f01559ade0676df360c",
+    "pcmDurationApproxSeconds": 69.85,
+    "recorderWallSeconds": 71.719,
+    "meaning": "Same-session owned output exists; the approximately 1.869-second duration mismatch leaves exact PCM/event alignment unproved. No listening performed. Neither whole-file duration nor RMS measures the final cue deadline/release."
+  },
+  "boundaries": {
+    "sourceRepairAuthorized": false,
+    "sourceOrProbeMutation": false,
+    "gpuWork": false,
+    "contractOrSignatureChange": false,
+    "newReviewNetwork": false,
+    "defectClosure": false,
+    "creativeAcceptance": false,
+    "audibleOrTasteClaim": false
+  },
+  "retainedConstraints": "All real pause, quit/menu, mute/zero-volume, unavailable-audio, focus/visibility, reset, actor/world, new-story/optional-action, other-exit and replay/hydration restrictions remain. Normal earned done retains only its bounded exception; handback remains immediate. This interpretation requests precise evidence through the existing producer, not a repair or additional capture by this role."
+}

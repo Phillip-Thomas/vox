@@ -1,0 +1,39 @@
+{
+  "schema": "judge-verdict-pairwise-v1",
+  "rubricId": "paravoxia-chapter-v1",
+  "bundleShaX": "d925f5d0b74219018dffc97000738b332fba9c0387e82ccb019f14038bb8f3e7",
+  "bundleShaY": "e61b4fa963c3f8c3f014ba22ccccffbe3921e23dfef394c4198ff645392f90a8",
+  "dimensions": {
+    "audiovisual_emotional_alignment": { "pX": 0.06, "pY": 0.84, "pTie": 0.10 },
+    "narrative_and_player_causality": { "pX": 0.08, "pY": 0.80, "pTie": 0.12 },
+    "cinematic_composition_and_lens": { "pX": 0.05, "pY": 0.87, "pTie": 0.08 },
+    "score_coherence_and_sync": { "pX": 0.08, "pY": 0.70, "pTie": 0.22 },
+    "palette_light_and_render_cohesion": { "pX": 0.10, "pY": 0.72, "pTie": 0.18 },
+    "transition_and_state_integrity": { "pX": 0.10, "pY": 0.62, "pTie": 0.28 },
+    "creative_ambition_and_specificity": { "pX": 0.08, "pY": 0.78, "pTie": 0.14 }
+  },
+  "overall": { "pX": 0.05, "pY": 0.87, "pTie": 0.08 },
+  "decisiveEvidence": [
+    {
+      "frames": [1],
+      "observation": "X keyframe at t=8.60s (the anc.settle.shelter-certified anchor and habitat-core-online milestone) is a featureless brown box interior: the camera is inside or clipped against geometry. The X digest shows this state persisting across telemetry frames 2-8 (t=8.6s to 14.0s, contrast 0.05-0.09, maxLuma ~0.45), so both settle-beat anchors and the ch9:settled milestone at 11.0s land on an unreadable picture. The anchor is authored to a moment the image cannot show."
+    },
+    {
+      "frames": [0, 2, 3],
+      "observation": "X opening at 6.90s has no primary subject: a sheep body crops the left edge, a deer face intrudes at the right edge, a small ring marker sits at centre in tall grass. The hearth opening at 21.50s and the t=110.50s frame are the same static composition with an unexplained blue-and-grey polygon slab crossing the foreground and floating slab blocks on the water; X telemetry for 21.5-110.5s holds luma within 0.51-0.53 with contrast pinned at 0.27, indicating a near-static camera for ~90 s while the hearth exit milestone is never reached."
+    },
+    {
+      "frames": [0, 1, 2, 3],
+      "observation": "Y carries a legible arrival: opening at 4.80s frames a green target cube centred in the cockpit window against a starfield; at 14.40s (objective landfall) the voxel planet fills the window; at 25.80s (anc.ch10.bearing-claimed, caption-first) the player is on the surface among palms and deer with a post marker as a foreground subject; at 61.10s the cockpit again with a drifting pod in the window. Y luma ramps 0.06 -> 0.22 -> 0.48 across the approach and drops 0.48 -> 0.30 at the transit-ignite anchor (30.20s), so the picture turns where the anchors sit. The seam-of-light anchor at 52.90s shows no measurable change (luma flat at ~0.07), so that one anchor is unconfirmed by the picture."
+    },
+    {
+      "frames": [0, 1, 3],
+      "observation": "Y palette is one world: navy and cyan cockpit with a warm orange lever and warm console strips against the cool window, consistent across 4.80s, 14.40s and 61.10s. X mixes neon green grass, a saturated brown box (colorful 0.92 with contrast 0.05, reading as grey-orange mush) and stray blue polygons, so its settle-beat and hearth-beat frames do not read as the same world."
+    },
+    {
+      "frames": [],
+      "observation": "Smoothness: X captured no adjacent-frame bursts, so its flicker is unmeasured; its camera-inside-geometry span (8.6-14.0s) is a state-integrity defect regardless. Y has one burst at 30.60s with flickerRatio 2.6 and signFlips 0.75 but meanAdjDelta 0.0023 and changed=0.01, pops=0, blank 0/23: a measurable but sub-perceptual oscillation, flagged FLICKER by the producer and smooth by the second pass. Y's 25.8s -> 30.2s -> 36.7s luma steps (0.48 -> 0.30 -> 0.07) are scene changes rather than in-scene pops, but the beat boundary may snap; not confirmable from these frames."
+    }
+  ],
+  "injectionFlag": false
+}

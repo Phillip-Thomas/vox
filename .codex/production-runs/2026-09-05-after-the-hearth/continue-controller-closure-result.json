@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 407057,
+  "stop_reason": "end_turn",
+  "session_id": "056a7f3b-0349-4009-b3be-a461b5bcff4b",
+  "total_cost_usd": 2.3317995,
+  "usage": {
+    "input_tokens": 62,
+    "cache_creation_input_tokens": 81216,
+    "cache_read_input_tokens": 1403795,
+    "output_tokens": 32621,
+    "output_tokens_details": {
+      "thinking_tokens": 2820
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 81216,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1265,
+        "cache_read_input_tokens": 84898,
+        "cache_creation_input_tokens": 478,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 478
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1837,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001907,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 62,
+      "outputTokens": 32621,
+      "cacheReadInputTokens": 1403795,
+      "cacheCreationInputTokens": 81216,
+      "webSearchRequests": 0,
+      "costUSD": 2.3298925,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2820,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 32,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done. Elapsed 16:39:24 \u2192 ~16:45 local, well inside budget. CPU-only; no browser, GPU, build, or game-source write.\n\n## What I found and closed\n\n**Defect 1 \u2014 calibration thrash.** Confirmed the mechanism in the actual trace, not by inference: `runCalibration` latched `basisUp` from one snapshot taken *before* four 450 ms presses. The round's own walking (88 calibrate rows, median 1.878 u each \u21d2 ~7.5 u per round) rotated `up` by a **measured 32.49\u00b0** *within one round* (`face-change-1` \u2192 `face-change-2` ups from `probe-log.txt`), which exceeds the 12\u00b0 staleness bound \u2014 so the loop re-triggered itself: 21 recalibrations, 36 bursts, 90 778 ms, 90.053 u from E.\n\nThe closure stamps each key with the `up` at *its own* post-burst snapshot, retains still-projecting directions through a smooth face change (45\u00b0 per-key bound, justified by the measured 32.49\u00b0 \u2014 a 12\u00b0 per-key bound would reproduce the thrash), requires \u22656 u of real directed foot motion between recalibrations, and hard-caps at 6. Testing surfaced one further hole I had to fix: `anyUsableNow` originally conflated *retained/fresh* with *still steers now*, which let a merely-stale basis bypass the motion guard. Separating steerability from freshness is what actually closes the loop.\n\n**Defect 2 \u2014 object-truthiness [F] gate.** `promptOffersF` returns `{ok,\u2026}`; the probe passed it into two truthiness-only gates, so `[F] Drink` read as offered. The correct verb came from shipped source, not a guess: `commonGroundDirector.ts:1627-1636` \u2192 `story-ch13-offer-span` / \"Offer the walked span\", phase `drawing`, directive `ch13:survey:offer-span`. **Notable:** the neighbouring `story-ch13-hold-witness` / \"Offer this end\" is a different action \u2014 and the existing `earned-continue-3d/selftest.mjs:213` used exactly that wrong verb as its positive fixture, so the original suite structurally could not have caught this.\n\n## Evidence\n\n`node liveCalibration.selftest.mjs` \u2192 **34 passed, 0 failed**; `tangentSteering3d` / `groundFrame` (25) / `selftest` (108/108) all exit 0. The 108-suite ran **exactly once** as a copy-integrity check, never in the edit loop. Entrypoint and every module pass `node --check`; `liveCalibration.mjs` imports cleanly with 10 exports. Adaptation is proved against the **real** exported `newActionGate` / `groundedActionGate` / `chooseKey3d`, not a mirror.\n\n## Two things worth your attention\n\n- The attempt-1 walk failure is now attributable to the private thrash, which means **route inaccessibility cannot be declared from it** \u2014 the producer's caution on that point holds.\n- `main/` shows 301 modified paths from the concurrent integration lane. I recorded `commonGroundDirector.ts` / `ch13-survey.ts` hashes as audit-time observations only, explicitly **not** a violation claim and **not** an accepted-runtime pin; a candidate repin must re-measure.\n\n`newAcceptedAction` and `gameAcceptance` remain **false**. The largest open item is that the adaptation is designed and CPU-proved but **not yet applied inside the copied entrypoint**, and the live `objectiveId` field is unconfirmed \u2014 if the bridge publishes none, the gate must refuse rather than fall back to prompt text. Both are listed in the repin requirements. Role `continue-controller-closure-runtime` is registered, not invoked.",
+  "ttft_ms": 1500,
+  "type": "result",
+  "duration_ms": 408141,
+  "uuid": "8a447efa-dc61-47bf-aca9-5ed07b0d96ce",
+  "ttft_stream_ms": 691,
+  "time_to_request_ms": 33,
+  "first_content_frame_ms": 692,
+  "queued_turn_count": 0
+}

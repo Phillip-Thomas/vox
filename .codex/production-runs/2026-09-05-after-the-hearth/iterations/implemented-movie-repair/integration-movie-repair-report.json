@@ -1,0 +1,270 @@
+{
+  "schema": "paravoxia.integrationMovieRepairReport.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "owner": "integration-engineer",
+  "scope": "bounded new-rail movement and cadence corrections; source only",
+  "completedAt": "2026-09-06T09:48:27.673238+00:00",
+  "contractChanged": false,
+  "creativeChanged": false,
+  "predicatesRelaxed": false,
+  "publicationAuthorized": false,
+  "browserOrGpuRun": false,
+  "renderedOrMovieSuccessClaimed": false,
+  "startingSourceVerified": {
+    "manifest": "implementation-source-manifest.json",
+    "filesChecked": 96,
+    "matchedBeforeEdits": 96,
+    "unexpectedDrift": []
+  },
+  "changedPaths": [
+    {
+      "path": "main/src/story/commonGroundDirector.ts",
+      "beforeSha256": "4f8abeb7cc3a0d3176791789efd5ae69f933dbab87880f443e655586b3a9ce6f",
+      "afterSha256": "deea059b75dde9bc627ca040a4ccac71d260e0cea9fc3459fe0dd074cce3dec4",
+      "inAllowedPaths": true,
+      "kind": "modified"
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.test.ts",
+      "beforeSha256": "289fde04e77d2cbad53fa0ef7d26c67702fa478106011a1ef20b225b2abcd5d0",
+      "afterSha256": "8e11edd1137ecffc57cb63dc86869ddd89f357834eff35ee1fd549538b081616",
+      "inAllowedPaths": true,
+      "kind": "modified"
+    }
+  ],
+  "unchangedSignedFiles": 94,
+  "diff": {
+    "path": "movie-repair.diff",
+    "sha256": "814f5b54093ce1f647a4d9d063a77c795a126cef034641c9dbab1d21c54e9671"
+  },
+  "defects": [
+    {
+      "id": "CG-IMPL-004",
+      "status": "fixed",
+      "cause": "applyCommonGroundRail spent the screening dwell via ctx.noteScreeningAction before calling ctx.performStoryInteraction, whose first test is screeningActionReady; every ch13 act was refused by the dwell the rail had just paid for.",
+      "repair": "CommonGroundRailContext no longer declares screeningActionReady or noteScreeningAction, so consuming the cadence from the chapter rail is a type error. The rail walks and calls the shared performer, which owns resolution, proximity, transaction predicates and the dwell. The stale <= CG_CORE_REACH act gate was removed; the live resolver already carries each rung's true reach.",
+      "milestonesGranted": false,
+      "resolverBypassed": false,
+      "timeoutRescueAdded": false,
+      "regressionTests": [
+        "acts once through the real performer and waits out the next dwell",
+        "performs BOTH home rungs at the core, in order, one dwell apart",
+        "never reaches for the cadence it does not own"
+      ],
+      "counterproof": {
+        "method": "premature noteScreeningAction reinstated in the rail",
+        "failedTests": 6,
+        "exitCode": 1,
+        "logPath": "evidence/integration-movie-repair/counterproof-CG-IMPL-004-reinstated.log"
+      }
+    },
+    {
+      "id": "CG-IMPL-005",
+      "status": "fixed",
+      "cause": "nextWaypoint rescanned the whole polyline each frame for the first point farther than 1.2 units from the body, so the already walked start was retargeted as soon as the body left it.",
+      "repair": "Ordered controller cursor in runtime.railTraversal keyed on run, actor, world, beat, route identity and survey tail revision. Advances only onto vertices the body has genuinely reached, never reconsiders one behind it, and rebuilds from the body's own projection (never ahead of it) on identity change or when the body is not on the leg the cursor believed it was walking.",
+      "controllerStateIsProof": false,
+      "progressAuthorityUnchanged": "routeProgressUnits, trace samples, occupancy and completion predicates untouched",
+      "regressionTests": [
+        "walks the long survey polyline in order, without returning to the start",
+        "walks all eighteen actual units of the common span and arrives at the far end",
+        "rebuilds the traversal from the body after a restore, and grants nothing"
+      ],
+      "counterproof": {
+        "method": "stateless 1.2-unit scan reinstated ahead of the cursor",
+        "failedTests": 4,
+        "exitCode": 1,
+        "logPath": "evidence/integration-movie-repair/counterproof-CG-IMPL-005-reinstated.log"
+      }
+    }
+  ],
+  "movementPrecisionFindings": [
+    {
+      "id": "CG-IMPL-005a",
+      "title": "corner cutting permanently froze the measured comparison at 4 of 18 units",
+      "demonstratedBy": "multi-tick rail test with a walking body against production routeProgressUnits",
+      "detail": "Turning 0.18 units early swings the body's projection around the corner farther than it walked that frame. routeProgressUnits caps a frame's gain at that frame's displacement, so the frame is refused and every later projection is further beyond the allowance. Reference and footing checks were true throughout.",
+      "repair": "A turning vertex is consumed only once the body has actually passed it, and goals aim a short step through corners and through the polyline's far end so arc gain never exceeds displacement. Straight vertices keep ordinary stop-radius arrival.",
+      "predicateChanged": false,
+      "rawEvidence": "evidence/integration-movie-repair/corner-seam-raw-failure.txt"
+    },
+    {
+      "id": "CG-IMPL-005b",
+      "title": "the survey recording began up to two units short of S, in the housing's shadow",
+      "demonstratedBy": "recorded first trace sample at (-27.471, 51.05, 11.414), reference-occluded-survey-housing / backing",
+      "detail": "The first sample is written at the body's actual pose. The approach line in from his inspection pose lands in the survey housing's shadow; S sits roughly 0.2 to 0.35 units from both that shadow and the 12-unit range edge. His first-try test then stopped on an occlusion the authored route does not contain and the movie fell back to the contingent witness, losing the fixed-reference class the long route was chosen to demonstrate.",
+      "repair": "The approach aims a step through the head along the route's own first leg, and the rail records only on arrival. The act reach is the aim plus the stop radius, so the body can never settle outside the reach it waits on.",
+      "resolverPredicateChanged": false,
+      "measuredAfter": {
+        "firstSampleDistanceFromS": 0.3247,
+        "acceptedRouteClass": "fixed-reference",
+        "witness": null
+      }
+    },
+    {
+      "id": "CG-IMPL-005c",
+      "title": "one blanket 1.2-unit stop radius for every rail move",
+      "detail": "The same radius served route waypoints, named poses measured by a 1.25-unit occupancy cylinder, and approaches beside a body. The far-reference and span offers also fired inside the resolver's wider reach but outside the transaction's, spending cadence on attempts the transaction refuses.",
+      "repair": "Plans carry their own arriveRadius: route 0.35, pose 0.6, body 2.4, habitat core 1.2 unchanged. Offers wait for arrival.",
+      "thresholdsRelaxed": false
+    },
+    {
+      "id": "CG-IMPL-005d",
+      "title": "CommonGroundRailContext.walkToward declared a third parameter the shared walker does not have",
+      "detail": "Declared as a slow radius; the real signature is (target, stop, lookLift, gazeTarget, interactionGazeWithin). The rail was passing 0.8 as a gaze lift.",
+      "repair": "Interface corrected to the real signature."
+    }
+  ],
+  "newFindings": [
+    {
+      "id": "CG-IMPL-006",
+      "severity": "medium",
+      "status": "fixed-in-pass",
+      "beat": "ch13-return",
+      "statement": "The on-foot approach walked to CG_POSES.W at the pose stop radius. W is W-7744's mounted inspection pose, not an empty mark, and the beat advances at 3.4 units. Stopping on his body would manufacture the body-clearance stand-off this chapter never resolves by displacing anybody, and the tightened pose radius would have made it worse.",
+      "repair": "The approach stops at body distance (2.4), inside the beat's reach and outside the clearance his leg is held by.",
+      "evidence": "source review; no browser measurement of ch13-return exists",
+      "regressionTest": "stops clear of his body on the return approach and at the survey offer"
+    },
+    {
+      "id": "CG-IMPL-007",
+      "severity": "info",
+      "status": "no-defect",
+      "beat": "ch13-return",
+      "statement": "board / launch / fly / land grammar reviewed line by line against the shipped ch10 and ch12 idioms in autopilot/primitives.ts. They match, and requestLanding is guarded and edge-safe. No change made."
+    }
+  ],
+  "standClearOfWorker": {
+    "surveyTest": "After offering the span the body stands on its own last recorded sample, which is on the span he must walk. The rail now steps off the trace with ordinary movement under the same clearance rule that holds his leg, and a witness is never used to repair the movie's own obstruction.",
+    "witnessBranchPreserved": true,
+    "commonPositioningLegUnchanged": true,
+    "provenBy": "steps off the span he has to test instead of offering itself as a witness"
+  },
+  "testRealism": {
+    "performer": "the shared performer's actual order of operations over the real registered ch13 resolvers: cadence, then resolveStoryInteraction at the live body position, then the dwell, then perform",
+    "alwaysSuccessSpyUsed": false,
+    "body": "bounded step per frame toward the emitted goal, stops inside the requested radius, never teleported onto a goal",
+    "maxPerFrameStepAsserted": true,
+    "proofSource": "production tickCommonGround, routeProgressUnits, trace sampling, occupancy and checkReference"
+  },
+  "checks": [
+    {
+      "name": "typecheck",
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/typecheck.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "unit-tests-full",
+      "command": "npm run test",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/vitest-full.log",
+      "logSha256": "b0b67673a524c967e1142d998f8f216b8e5c71e32ce1b524275084b1e08ede07"
+    },
+    {
+      "name": "unit-tests-story-focused",
+      "command": "npx vitest run src/story src/game/spaceStation src/components/spaceStation",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/vitest-story.log",
+      "logSha256": "ba1b377dd2a20c2dde6acfe896262b62ec5800dd88e6c96207c3623346e4edf7"
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/build.log",
+      "logSha256": "ba05625582f62ad7252cd07c998f026747909212a49ddc7408c9c84ed5ac2e17"
+    },
+    {
+      "name": "scene-av-check",
+      "command": "npm run scene:av:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/gate-scene-av-check.log",
+      "logSha256": "3497e23065174a5531b578d627fbea0014efd673c22182636d8b2a6351bdd8a3"
+    },
+    {
+      "name": "chapter-registry-check",
+      "command": "npm run chapter:registry:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/gate-chapter-registry-check.log",
+      "logSha256": "dc29e1872bec33eb3fa5da4fe418413f68f57c269961ffe0a3b23a2667aa4bdf"
+    },
+    {
+      "name": "chapter-journey-check",
+      "command": "npm run chapter:journey:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/gate-chapter-journey-check.log",
+      "logSha256": "f3ea38a58e9b425faafd034e2e9212ba3c225f5c456098e2be87727e365df5ee"
+    },
+    {
+      "name": "story-ladder-check",
+      "command": "npm run story:ladder:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/gate-story-ladder-check.log",
+      "logSha256": "4e9d7a712479d1ca0acea316dbe23b888116b65ab75279871d1e3423572a1205"
+    },
+    {
+      "name": "guidance-target-check",
+      "command": "npm run guidance:target-check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/gate-guidance-target-check.log",
+      "logSha256": "1feb0b8ca236c77fa670a96cf3f3cab9ff168e796f4abf6403e820ef1197f4f2"
+    },
+    {
+      "name": "story-authority",
+      "command": "npm run story:authority",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/gate-story-authority.log",
+      "logSha256": "e8851b126333aacc11b1a130d5f57d9d9278318d103f15957361804557a277c5"
+    },
+    {
+      "name": "catalog-check",
+      "command": "npm run catalog:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/gate-catalog-check.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "creative-workflow-check",
+      "command": "npm run creative:workflow:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/gate-creative-workflow-check.log",
+      "logSha256": "ebd8b00d7f2558e6325e5ffffa48f7e7a3b4427c7dd50d1d91015bec0062e4b5"
+    },
+    {
+      "name": "creative-triad-gate-implementation",
+      "command": "node tools/creative-triad-gate.mjs --run .codex/production-runs/2026-09-05-after-the-hearth --phase implementation",
+      "exitCode": 0,
+      "logPath": "evidence/integration-movie-repair/gate-creative-triad-implementation.log",
+      "logSha256": "5d57eaa7d000906329b1503253248ad785685bb5d5954fca488bc4634f1f989c"
+    }
+  ],
+  "testTotals": {
+    "files": 348,
+    "tests": 3026,
+    "preRepairV2Baseline": 3018,
+    "intermediateDuringThisPass": 3025,
+    "addedByThisPass": 8,
+    "removed": 0,
+    "weakened": 0,
+    "note": "3018 is the pre-repair scene-v2 baseline recorded in integration-report.json. 3025 was an intermediate suite measured partway through this pass, before the ch13-return approach-clearance regression was added; it is not the baseline."
+  },
+  "rootAction": {
+    "note": "tools/creative-triad-gate.mjs rewrites the run-local creative-run-quality-report.json as a side effect. It was restored from iterations/implemented-scene-v2/creative-run-quality-report.json (68f5b27615425122a9a1623bdf7a077c060318e15b8acd5b5f5f91985ac96752), the hash implementation-gate-pass.json references.",
+    "postRepairGateReport": "evidence/integration-movie-repair/creative-run-quality-report.after-repair.json",
+    "postRepairGateReportSha256": "d07fd049ff72eb10f6c68b8b8ce46c34c20dd7a44f2cdc2fc724bad89a1119ae",
+    "liveGateReportSha256": "68f5b27615425122a9a1623bdf7a077c060318e15b8acd5b5f5f91985ac96752"
+  },
+  "notDone": [
+    "browser",
+    "gpu",
+    "preview",
+    "headed movie",
+    "hardware",
+    "publication"
+  ],
+  "handoff": "Independent verifier owns full npm verify, browser and hardware. No rendered or movie success is claimed by this pass."
+}

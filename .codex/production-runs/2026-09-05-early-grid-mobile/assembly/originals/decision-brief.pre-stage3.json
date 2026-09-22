@@ -1,0 +1,183 @@
+{
+  "schema": "paravoxia.decisionBrief.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "authoredBy": "chapter-director recording already provided owner scope, not claiming new owner choices",
+  "authoredAt": "2026-09-05T18:49:25.028608+00:00",
+  "sourceIntentRef": "story-intent.md#routed-decisions",
+  "items": [
+    {
+      "id": "early-existing-owner-creative",
+      "kind": "creative",
+      "question": "Is a new owner-only creative choice needed for the opening grounding and one-action lesson?",
+      "context": "The owner explicitly requested this bounded opening/mobile repair and concise guidance; no new canon or taste exception is proposed. Exact treatment remains the triad responsibility. Authorization reference: owner-decisions.md.",
+      "options": [
+        "Resolve ordinary treatment choices under the existing owner instruction"
+      ],
+      "recommended": "Resolve ordinary treatment choices under the existing owner instruction",
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "None needed: existing instruction authorizes pickup-harvest-next-screen, one relevant indicator, visible camera handoff and minimal copy. This is scope authority, not approval of this draft or future render.",
+      "decidedAt": "2026-09-05"
+    },
+    {
+      "id": "early-existing-owner-boundary",
+      "kind": "boundary",
+      "question": "Which concrete implementation paths are needed within the already authorized opening/mobile repair?",
+      "context": "Current production lock is planning-only. The following exact proposed symbols define the later implementation packet; conditional paths are not automatically opened. The root must concretize the lock after peer reconciliation without representing a new owner decision. Authorization reference: owner-decisions.md.",
+      "options": [
+        "Prepare the bounded peer-reviewed runtime packet under current owner authorization"
+      ],
+      "recommended": "Prepare the bounded peer-reviewed runtime packet under current owner authorization",
+      "paths": [
+        {
+          "path": "main/src/story/beats/ch1/ch1-fixed.ts",
+          "symbol": "beatCh1Fixed",
+          "why": "Three objective stages and concise canonical action copy."
+        },
+        {
+          "path": "main/src/story/beats/ch1/ch1-track.ts",
+          "symbol": "beatCh1Track",
+          "why": "Concise hold instruction; preserve timing and dramatic voice."
+        },
+        {
+          "path": "main/src/story/beats/ch1/ch1-raster.ts",
+          "symbol": "beatCh1Raster",
+          "why": "Narrow required salvage to first three receipts; one action at a time; retain six fiber/four stone."
+        },
+        {
+          "path": "main/src/story/beats/ch1/rail-ch1-fixed.ts",
+          "symbol": "tick",
+          "why": "Actual pickup then actual extraction then movement-caused shared coverage transfer."
+        },
+        {
+          "path": "main/src/story/beats/ch1/rail-ch1-raster.ts",
+          "symbol": "tick",
+          "why": "Commit one required salvage target, then real yielding patches; no mixed invisible sweep."
+        },
+        {
+          "path": "main/src/story/beats/objectivePrimitives.ts",
+          "symbol": "Ch1FixedObjectiveState, StoryObjectiveGuidanceFacts, DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS",
+          "why": "Add pickup fact, preserve progression-derived stages."
+        },
+        {
+          "path": "main/src/story/storyDirector.ts",
+          "symbol": "currentCh1FixedObjectiveState, currentCh1RasterObjectiveState, fixedTutorialProgress, quotaCollected, onBeatEntered, storyDirectorTick ch1-fixed/ch1-raster branches, syncFoundationalStoryObjective, completeFoundationalObjective",
+          "why": "Single authoritative predicates, real receipt feedback, shared transfer event, truthful entry restoration."
+        },
+        {
+          "path": "main/src/story/storyScript.ts",
+          "symbol": "CH1_FIXED_TUTORIAL",
+          "why": "One successful positive-yield harvest threshold; one actual coverage crossing (two frame visits)."
+        },
+        {
+          "path": "main/src/story/debrisSalvage.ts",
+          "symbol": "isDebrisCollected, debrisSalvageComplete, requiredDebrisSalvageComplete (proposed helper)",
+          "why": "Add a distinct first-three-receipts requirement; preserve all-physical-debris meaning of debrisSalvageComplete, collectDebris, loot and migration."
+        },
+        {
+          "path": "main/src/story/world/DebrisField.tsx",
+          "symbol": "DebrisField collectable, useFrame",
+          "why": "Real early pickup permission, pause-safe collection, current-target emphasis."
+        },
+        {
+          "path": "main/src/story/world/storyAnchorResolver.ts",
+          "symbol": "getDebrisPoses",
+          "why": "Only existing index0 placement into opening view; worldgen-owner coordination."
+        },
+        {
+          "path": "main/src/story/world/SideWorkerAvatar.tsx",
+          "symbol": "SideWorkerAvatar",
+          "why": "Visual sole alignment and grounded animation; no physics edit."
+        },
+        {
+          "path": "main/src/story/sideLens.ts",
+          "symbol": "LensRig, fixedScreenCellIndex, computeRigFrame, applySideCameraTransform",
+          "why": "Cinema-owned single viewport-aware coverage authority and geometry epoch; reject resize-as-traversal."
+        },
+        {
+          "path": "main/src/story/feed/surveyBrackets.ts",
+          "symbol": "surveyBracketMode, surveyBracketDemand, collectHarvestBracketTargets, collectSalvageBracketTargets, SURVEY_BRACKET_LIMIT",
+          "why": "Exactly one phase-matched actionable target; tool/yield/actual approach checks."
+        },
+        {
+          "path": "main/src/story/feed/SurveyBracketDriver.tsx",
+          "symbol": "SurveyBracketDriver",
+          "why": "Stable single selection, actual receipt invalidation, exact labels and real projection."
+        },
+        {
+          "path": "main/src/story/feed/regulationVoice.ts",
+          "symbol": "presentRegulationObjective, fixed/track/raster presentation",
+          "why": "Canonical imperative replaces static repeated orders; preserve tracking meaning."
+        },
+        {
+          "path": "main/src/story/feed/RegulationFeedHud.tsx",
+          "symbol": "RegulationFeedHud work-order, feed-ledger",
+          "why": "One instruction plus essential current receipt/progress, measured desktop/mobile layout."
+        },
+        {
+          "path": "main/src/story/ux/storyHudLayout.ts",
+          "symbol": "solveStoryFeedLedgerPlacement",
+          "why": "Measured target, text, caption and touch-control non-overlap under Cinema direction."
+        },
+        {
+          "path": "main/src/story/feedRuntime.ts",
+          "symbol": "resetFeedRuntime",
+          "why": "Only if investigation identifies entry-state ownership here; preserve natural flash event."
+        },
+        {
+          "path": "main/src/story/feed/FeedOverlay.tsx",
+          "symbol": "FeedOverlay flash synchronization",
+          "why": "Only a demonstrated DOM/runtime restore mismatch; never a cosmetic mask."
+        },
+        {
+          "path": "main/src/story/storyState.ts",
+          "symbol": "seedForBeat, storyEntryPoint, reset/start/resume entry boundary",
+          "why": "Only exact cold-entry flash repair and faithful diagnostic/earned-state reconstruction."
+        },
+        {
+          "path": "main/src/story/StoryDirectorDriver.tsx",
+          "symbol": "StoryDirectorDriver marker bridge",
+          "why": "Only if existing bridge needs survey availability/readiness integration; no duplicate marker."
+        },
+        {
+          "path": "main/src/story/ux/objectiveDirector.ts",
+          "symbol": "activateGuidedStoryObjective, acknowledgeGuidedStoryProgress, acknowledgeGuidedStoryCompletion",
+          "why": "Only existing semantic receipt/restore integration; audio owner coordinates."
+        },
+        {
+          "path": "main/src/story/ux/inputGlyphs.ts",
+          "symbol": "existing feed token mapping",
+          "why": "Preserve common touch substitution; change only if new canonical wording exposes missing token."
+        },
+        {
+          "path": "main/src/story/autopilot.ts",
+          "symbol": "RailRuntime, committedDebrisTarget",
+          "why": "Expose existing required-target facts to rails without reward/progression bypass."
+        },
+        {
+          "path": "main/src/components/EfficientPlayer.tsx",
+          "symbol": "pickSideTarget",
+          "why": "Conditional shared pure read-only selection extraction so marker matches ordinary picker; no changed harvesting or physics semantics."
+        }
+      ],
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "No additional owner permission is needed for these necessary engineering/presentation repairs within the recorded scope. Keep planning-only until fresh peer treatments, reconciliation and same-hash contract. Coordinate worldgen/audio/shared files; no protected-audio edits under this Chapter packet.",
+      "decidedAt": "2026-09-05"
+    },
+    {
+      "id": "early-release-surface",
+      "kind": "release",
+      "question": "Does this pass authorize publishing or a changed release ceiling?",
+      "context": "The user requested ongoing recovery and local repair; production lock publishAllowed is false. Authorization reference: owner-decisions.md.",
+      "options": [
+        "Keep local review and current public ceiling"
+      ],
+      "recommended": "Keep local review and current public ceiling",
+      "decidedBy": "owner",
+      "status": "decided",
+      "decision": "None needed: no release, deployment, signature exception, new story reveal or ceiling change is authorized.",
+      "decidedAt": "2026-09-05"
+    }
+  ]
+}

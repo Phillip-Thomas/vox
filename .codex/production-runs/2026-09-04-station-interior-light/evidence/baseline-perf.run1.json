@@ -1,0 +1,282 @@
+{
+  "schema": "paravoxia.stationBaselinePerf.v1",
+  "runId": "2026-09-04-station-interior-light",
+  "capturedAt": "2026-09-05T01:55:12.208Z",
+  "url": "http://127.0.0.1:4321",
+  "identityCheck": {
+    "title": "Paravoxia",
+    "ok": true
+  },
+  "renderer": "headless chromium, ANGLE/SwiftShader, dpr 1",
+  "desktopViewport": "1600x900",
+  "sampleWindowMs": 3000,
+  "note": "spaceStationInteriorDiagnostics() is NOT exposed on window; instance/visibility/program counts are read from the shipped SandboxHud text in the hud=1 pass.",
+  "cleanPass": [
+    {
+      "cell": "apron",
+      "hud": false,
+      "frames": 1,
+      "elapsedMs": 3016.1999999284744,
+      "fps": 0.33,
+      "state": {
+        "cellId": "apron",
+        "position": [
+          39.6,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "cell": "counter",
+      "hud": false,
+      "frames": 3,
+      "elapsedMs": 3481.2999999523163,
+      "fps": 0.86,
+      "state": {
+        "cellId": "counter",
+        "position": [
+          139.8,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "cell": "concourse",
+      "hud": false,
+      "frames": 3,
+      "elapsedMs": 3150.2999999523163,
+      "fps": 0.95,
+      "state": {
+        "cellId": "concourse",
+        "position": [
+          258.6,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "cell": "floor",
+      "hud": false,
+      "frames": 8,
+      "elapsedMs": 3023,
+      "fps": 2.65,
+      "state": {
+        "cellId": "floor",
+        "position": [
+          421.4,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "cell": "shelves",
+      "hud": false,
+      "frames": 10,
+      "elapsedMs": 3076.6999999284744,
+      "fps": 3.25,
+      "state": {
+        "cellId": "shelves",
+        "position": [
+          580,
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "hudPass": [
+    {
+      "cell": "apron",
+      "hud": true,
+      "fps": 2.93,
+      "frames": 9,
+      "elapsedMs": 3071,
+      "diagnostics": {
+        "raw": "SPACE_STATION SANDBOX — -19,-17:a0\nseed 575085297 · bound 854m · 3 fps\nin: apron   visible: 5/6 (apron, counter, concourse, floor, shelves)\ninstances: 2118/2118\ncrowd: 101\nmeshes: 3  programs: 13\n\nclick to capture mouse · WASD walk · shift run · space jump",
+        "occupiedCellId": "apron",
+        "visibleCellCount": 5,
+        "cellCount": 6,
+        "visibleCellIds": [
+          "apron",
+          "counter",
+          "concourse",
+          "floor",
+          "shelves"
+        ],
+        "instances": 2118,
+        "totalInstances": 2118,
+        "crowd": 101,
+        "meshes": 3,
+        "programs": 13,
+        "hudFps": 3
+      },
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-04-station-interior-light/evidence/baseline-hud/hud-apron.png"
+    },
+    {
+      "cell": "counter",
+      "hud": true,
+      "fps": 2.81,
+      "frames": 9,
+      "elapsedMs": 3208,
+      "diagnostics": {
+        "raw": "SPACE_STATION SANDBOX — -19,-17:a0\nseed 575085297 · bound 854m · 4 fps\nin: counter   visible: 4/6 (counter, concourse, floor, shelves)\ninstances: 1837/2118\ncrowd: 101\nmeshes: 3  programs: 13\n\nclick to capture mouse · WASD walk · shift run · space jump",
+        "occupiedCellId": "counter",
+        "visibleCellCount": 4,
+        "cellCount": 6,
+        "visibleCellIds": [
+          "counter",
+          "concourse",
+          "floor",
+          "shelves"
+        ],
+        "instances": 1837,
+        "totalInstances": 2118,
+        "crowd": 101,
+        "meshes": 3,
+        "programs": 13,
+        "hudFps": 4
+      },
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-04-station-interior-light/evidence/baseline-hud/hud-counter.png"
+    },
+    {
+      "cell": "concourse",
+      "hud": true,
+      "fps": 2.24,
+      "frames": 7,
+      "elapsedMs": 3130,
+      "diagnostics": {
+        "raw": "SPACE_STATION SANDBOX — -19,-17:a0\nseed 575085297 · bound 854m · 2 fps\nin: concourse   visible: 3/6 (concourse, floor, shelves)\ninstances: 1659/2118\ncrowd: 101\nmeshes: 3  programs: 13\n\nclick to capture mouse · WASD walk · shift run · space jump",
+        "occupiedCellId": "concourse",
+        "visibleCellCount": 3,
+        "cellCount": 6,
+        "visibleCellIds": [
+          "concourse",
+          "floor",
+          "shelves"
+        ],
+        "instances": 1659,
+        "totalInstances": 2118,
+        "crowd": 101,
+        "meshes": 3,
+        "programs": 13,
+        "hudFps": 2
+      },
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-04-station-interior-light/evidence/baseline-hud/hud-concourse.png"
+    },
+    {
+      "cell": "floor",
+      "hud": true,
+      "fps": 2.84,
+      "frames": 9,
+      "elapsedMs": 3168,
+      "diagnostics": {
+        "raw": "SPACE_STATION SANDBOX — -19,-17:a0\nseed 575085297 · bound 854m · 2 fps\nin: floor   visible: 2/6 (floor, shelves)\ninstances: 1024/2118\ncrowd: 101\nmeshes: 3  programs: 13\n\nclick to capture mouse · WASD walk · shift run · space jump",
+        "occupiedCellId": "floor",
+        "visibleCellCount": 2,
+        "cellCount": 6,
+        "visibleCellIds": [
+          "floor",
+          "shelves"
+        ],
+        "instances": 1024,
+        "totalInstances": 2118,
+        "crowd": 101,
+        "meshes": 3,
+        "programs": 13,
+        "hudFps": 2
+      },
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-04-station-interior-light/evidence/baseline-hud/hud-floor.png"
+    },
+    {
+      "cell": "shelves",
+      "hud": true,
+      "fps": 3.27,
+      "frames": 10,
+      "elapsedMs": 3061,
+      "diagnostics": {
+        "raw": "SPACE_STATION SANDBOX — -19,-17:a0\nseed 575085297 · bound 854m · 3 fps\nin: shelves   visible: 1/6 (shelves)\ninstances: 549/2118\ncrowd: 101\nmeshes: 3  programs: 13\n\nclick to capture mouse · WASD walk · shift run · space jump",
+        "occupiedCellId": "shelves",
+        "visibleCellCount": 1,
+        "cellCount": 6,
+        "visibleCellIds": [
+          "shelves"
+        ],
+        "instances": 549,
+        "totalInstances": 2118,
+        "crowd": 101,
+        "meshes": 3,
+        "programs": 13,
+        "hudFps": 3
+      },
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-04-station-interior-light/evidence/baseline-hud/hud-shelves.png"
+    }
+  ],
+  "mobile": {
+    "viewport": "390x844",
+    "isMobile": true,
+    "hasTouch": true,
+    "cell": "concourse",
+    "fps": 8.87,
+    "frames": 28,
+    "elapsedMs": 3157,
+    "diagnostics": {
+      "raw": "SPACE_STATION SANDBOX — -19,-17:a0\nseed 575085297 · bound 854m · 9 fps\nin: concourse   visible: 3/6 (concourse, floor, shelves)\ninstances: 1659/2118\ncrowd: 101\nmeshes: 3  programs: 13\n\nclick to capture mouse · WASD walk · shift run · space jump",
+      "occupiedCellId": "concourse",
+      "visibleCellCount": 3,
+      "cellCount": 6,
+      "visibleCellIds": [
+        "concourse",
+        "floor",
+        "shelves"
+      ],
+      "instances": 1659,
+      "totalInstances": 2118,
+      "crowd": 101,
+      "meshes": 3,
+      "programs": 13,
+      "hudFps": 9
+    },
+    "touchControls": {
+      "joystick": true,
+      "actionCluster": true,
+      "actions": [
+        {
+          "testId": "touch-action-cluster",
+          "label": "CONSUMEUSEMINESPRINTJUMP",
+          "aria": null
+        },
+        {
+          "testId": "touch-action-eat",
+          "label": "CONSUME",
+          "aria": "Consume held food or waterskin"
+        },
+        {
+          "testId": "touch-action-use",
+          "label": "USE",
+          "aria": "Use or interact"
+        },
+        {
+          "testId": "touch-action-mine",
+          "label": "MINE",
+          "aria": "Mine"
+        },
+        {
+          "testId": "touch-action-sprint",
+          "label": "SPRINT",
+          "aria": "Hold to sprint"
+        },
+        {
+          "testId": "touch-action-jump",
+          "label": "JUMP",
+          "aria": "Jump"
+        }
+      ]
+    },
+    "screenshot": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-04-station-interior-light/evidence/baseline-hud/hud-mobile-concourse.png"
+  },
+  "runtimeProblems": []
+}

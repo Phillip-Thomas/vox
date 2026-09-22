@@ -1,0 +1,28 @@
+{
+  "request": "lets fix the blockers you encountered and finish it up",
+  "kind": "repair existing implementation; keep approved recipe",
+  "retainedImplementation": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/6-build/implementation.json",
+    "sha256": "98e00b4856016ba59a83e970927a7e3b201daf307fc7c2fbf14558aa86ed2c33"
+  },
+  "controlSchema": {
+    "path": "docs/chapter-loop/control-config.md",
+    "sha256": "451fd7774bc54b3d3f74355d655532d6f23466448ae0649f3dc9e459f0718b23"
+  },
+  "checks": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/6-build/focused-tests.txt",
+    "sha256": "e0cbe310fe9efd9b9b53551801b9d20986af91e11b1a9426e75fb8cce625d095"
+  },
+  "facts": [
+    "All four creative planning/council receipts are retained; do not replan. Previous source passes TypeScript and46 focused tests. Inspect existing implementation via bounded reads; preserve unrelated dirty content.",
+    "Repair the entire player path in your existing source. Supplied control config is invalid: timeoutMs exceeds30000, key.durationMs must be holdMs<=5000, recovery needs pause:{pausedPointer,resumeSelector}, Continue needs continue:{ctaSelector,checkpointPointer}. It uses a nonexistent /journey wrapper; the actual snapshot exposes /unfinishedMap directly.",
+    "The capture browser starts with a fresh context. keep=1 does not provide a predecessor save. Bootstrap ordinary controls before the baseline with bootstrapSteps. Existing story=ch13-survey diagnostic entry may support local manual testing if the actual survey and reciprocal Common Ground completion are then earned, followed by all ch14 actions. This is diagnostic local coverage; full fresh continuity remains a distinct mandatory case.",
+    "The generic walk action now measures ordinary key displacements using an explicit on-foot posePointer and actual target vector or targetPointer. Expose the existing on-foot pose and needed Common Ground state as passive journey telemetry in the owned bridge if necessary. Do not use a ship pose for a walking proof. Read existing CG_POSES/routes and authored interactions, not old minified probe offsets.",
+    "A walk timeout is capped30000; multiple actual waypoints can compose a journey. Bare key600ms then wait does not establish arrival. Bootstrap/setup can each contain up to64 steps. Capture saves real per-beat frames plus frame.png; inspect rendered evidence.",
+    "Validate the full case file with validateCaseFile BEFORE invoking observe. Use the checked gateway only. The previous two look attempts never reached browser launch; their records remain intact. One look slot remains in the cumulative original allowance. No speculative trial should consume it.",
+    "Finish chapter registration and runtime authority through the permitted main/story-authority.json; preserve releaseStoryCeiling ch4-arrival. main/src/game/systems/interactionSystem.ts is also now owned for the small typed action registration. No unrelated shared-engine rewrite.",
+    "AV/continuity still need real executable gameplay. Current runtime AV enters the declared first chapter beat and waits for an actual matching movie rail; no rail was implemented previously. Full continuity starts at crawl with no fixture and must reach and leave ch14, including an earned ch13 handback. Reuse existing rails and authored actions, no backstops, progress setters or moving deadlines. Diagnose feasibility from source before spending observation.",
+    "Use proper result evidence objects {path,sha256} both at top level and within each finding. The old raw BLOCKED result used string finding references; that was rejected. A PASS still requires actual gateway firstPlayable proof. Composition and independent reviews follow only after that proof."
+  ],
+  "remainingDirection": "The Unfinished Map: retain two attributed observations, functioning repair plus visible scar, equally weighted unanswered heading choices, physically return to the actual retained passage. W-7744 stays bounded; later awakenings remain open."
+}

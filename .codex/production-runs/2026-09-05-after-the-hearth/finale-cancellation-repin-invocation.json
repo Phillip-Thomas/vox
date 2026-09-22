@@ -1,0 +1,16 @@
+{
+  "role": "finale-cancellation-repin",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-07T00:20:01.728710+00:00",
+  "commissionSha256": "2fe7ee6c80888f0ee1d7b3b5a06313eded84a719bb7e4ec195551a012ff3f316",
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "sourceFilesRehashedBefore": 103,
+  "deadlineAt": "2026-09-07T00:25:47.989628+00:00",
+  "scope": "Same12minute window continuation: correct actual observer pins, then runtime; no game mutation",
+  "exitCode": -9,
+  "finishedAt": "2026-09-07T00:23:46.662227+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "9ab62674-127f-4262-bda8-cf40c27a9d17",
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 103
+}

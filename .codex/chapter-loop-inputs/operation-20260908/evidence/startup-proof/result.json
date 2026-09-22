@@ -1,0 +1,53 @@
+{
+  "schema": "paravoxia.startupRepairProof.v1",
+  "passed": true,
+  "build": {
+    "files": {
+      "assets/SpaceStationSandbox-B5Mzs7Qc.js": "e093984cf9733e257250e59621feed104834c1366c9265edc1d5e40e62e194c6",
+      "assets/index-CnSz1Ca0.js": "a8e8b668aeb429577c36885f9763041237afd0797fce3b0e904cf8608af81c4f",
+      "assets/index-Cu3vcG_z.css": "398c81b6c1d41236a180d4deb0e2d085f63c962fbf4ec723ca31cd325f46c190",
+      "assets/worldPrep.worker-D9jfWRDd.js": "5c34b2579d4869bbb97ca0d692cf14c2ed050c8983dce442c1ffcca1676bd0de",
+      "audio/music/deep_space_out_there.ogg": "6e02a32d963b84061cdeec66cc852e731e367c93ef572aa169b1baadbcdc20ba",
+      "audio/music/manifest.json": "453c4f17ce55bbdd29a8a943049dbd2f6a3e436fb4d0bba9e2e082f7945fea65",
+      "audio/music/menu_ambientmain.ogg": "9dbe685e40d6cc8876ff08938b011424b802c2757ac4052e3eb93f8634208969",
+      "audio/music/shimmer_dream_ambience.mp3": "e2dbd95fa7e4bcc9e31b861ee1471b64f2dfa2a1d6facc458ab634f952ca567e",
+      "audio/music/surface_project_utopia.ogg": "88d9956c98282523dd1a00fc6023ee01619818c4ce138c52816e0a39f837fa50",
+      "audio/music/warp_surreal_truth.mp3": "fe4a94a95aa8f281185f09818d1c9f4cb0da5cd70350bf13b43b5a3c779ce691",
+      "index.html": "ca6dcefd9ba135d0d7045caeed56e44ce5f3f3d90a93b02073a7a481ebcb3169"
+    },
+    "sha256": "36fca2998a58a45050752b7b64a969de9930712c01c220b9553b5ef3d042a7a6"
+  },
+  "reports": [
+    {
+      "label": "baseline",
+      "url": "http://127.0.0.1:34825/?story=crash&movie=1&journeyprobe=1&profile=HIGH",
+      "kind": "diagnostic-transition-only",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "errors": [
+        {
+          "message": "The root document of this element is not valid for pointer lock.",
+          "stack": ""
+        }
+      ],
+      "descentObserved": true,
+      "success": true,
+      "earnedContinuity": false,
+      "contextClosed": true,
+      "samples": 31
+    },
+    {
+      "label": "candidate",
+      "url": "http://127.0.0.1:41427/?story=crash&movie=1&journeyprobe=1&profile=HIGH",
+      "kind": "diagnostic-transition-only",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "errors": [],
+      "descentObserved": true,
+      "success": true,
+      "earnedContinuity": false,
+      "contextClosed": true,
+      "samples": 63
+    }
+  ],
+  "cleanup": true,
+  "deadline": "2026-09-08T08:06:46.000Z"
+}

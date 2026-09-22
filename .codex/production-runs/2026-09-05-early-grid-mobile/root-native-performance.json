@@ -1,0 +1,39 @@
+{
+  "schema": "paravoxia.rootEngineeringBudgetProposal.v1",
+  "authoredBy": "root engineering decision relayed to mechanical compiler",
+  "recordedAt": "2026-09-05T20:40:18.692006+00:00",
+  "status": "proposed-for-original-director-native-review",
+  "sourceBaselineSha256": "46395cee350f1ee4a6b7c0c310d550baf7ce0e6f6630a5ece8a25a3ac19a434b",
+  "notCapturedMetrics": [
+    "maximumGpuMemoryMb"
+  ],
+  "performance": {
+    "targetFps": 60,
+    "minimumFps": 30,
+    "maximumFrameTimeMs": 40,
+    "maximumDrawCalls": 70,
+    "maximumShaderPrograms": 30,
+    "maximumGpuMemoryMb": 256,
+    "deviceProfiles": [
+      "variant-desktop",
+      "variant-mobile"
+    ],
+    "criticalAnchors": [
+      "anc.descent.impact",
+      "early.fixed.ready",
+      "early.pickup.receipt",
+      "early.harvest.receipt",
+      "early.coverage.transfer",
+      "anc.track.unbolt",
+      "early.track.attention",
+      "early.raster.ready",
+      "early.raster.receipt",
+      "early.raster.salvage-complete",
+      "early.raster.quota-complete",
+      "early.depth.handoff",
+      "early.depth.settled",
+      "early.entry.restored"
+    ],
+    "measurementPlan": "Root engineering acceptance proposal for original directors to ratify against this exact unsigned candidate. Desktop target60fps; mobile minimum30fps; maximum40ms in each critical anchor +/-2000ms. Absolute draw calls70 and shader programs30 derive from maxima in70 captured cameraStates; preserve Cinema stricter matched-frame +0 draw calls, +0 programs, +0 lights, and no new textures/geometries. The256 MiB ceiling applies only to application-owned GL buffers/textures/renderbuffers; it is a proposed future engineering bound, unmeasured in baseline, not total driver/process/device memory. Require actual allocation, texture-format and attachment accounting in bytes with viewport, DPR, profile and source provenance. Unobservable resources are reported unavailable; renderer.info.memory object counts cannot establish byte usage or a pass. This ceiling grants no incremental resource allowance. Preserve real presented-frame duration/program/draw/memory/light accounting, serialized hardware verification and exact source/contract SHA bindings. At most one pending early semantic receipt sound; bounded event work; no per-frame node churn or new score scheduler."
+  }
+}

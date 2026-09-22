@@ -1,0 +1,32 @@
+{
+  "role": "story-verifier",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T12:21:17.133794+00:00",
+  "safeMode": true,
+  "permissionMode": "default",
+  "tools": [
+    "Bash",
+    "Read",
+    "Grep",
+    "Glob",
+    "Write",
+    "Edit"
+  ],
+  "systemPromptSource": ".claude/agents/story-verifier.md",
+  "systemPromptSha256": "06216d09794dac2b5875897d6774a6b2aa11e851cb8a07d280123e5f0a96389f",
+  "commissionSha256": "8d01cbfbc467a54e87393640f73f4da847d30a54aa0d36ba18625302a0fda1af",
+  "scope": "Independent verification after live terrain support, home boot and partial Continue repair; same production run and retained prior failures; no game-source edits, taste verdict or publication",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T12:44:32.077249+00:00",
+  "sessionId": "77ef7283-eb8c-4b2f-8244-3f0489491890",
+  "model": "claude-opus-5",
+  "actualTools": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+  ],
+  "isError": false
+}

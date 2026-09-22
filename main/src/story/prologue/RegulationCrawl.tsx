@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { CRAWL_LINES } from '../storyScript.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
+import { voiceVisibleText } from '../../audio/voice/voicePresentation.ts';
 import { isMovieMode } from '../autopilot.ts';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
 import { presentInputGlyphs } from '../ux/inputGlyphs.ts';
@@ -53,6 +54,26 @@ const RegulationCrawl: React.FC<{ onDone: () => void; onExitStart?: () => void }
   useEffect(() => () => {
     if (completionTimerRef.current !== null) clearTimeout(completionTimerRef.current);
   }, []);
+
+  useEffect(() => {
+    if (leaving) return;
+    let raf = 0;
+    let sampledAt = 0;
+    const tick = (now: number) => {
+      raf = requestAnimationFrame(tick);
+      if (now - sampledAt < 120) return;
+      sampledAt = now;
+      for (const node of crawlRef.current?.querySelectorAll<HTMLElement>('[data-crawl-line]') ?? []) {
+        const rect = node.getBoundingClientRect();
+        if (rect.bottom < window.innerHeight * 0.25 || rect.top > window.innerHeight * 0.8) continue;
+        const index = Number(node.dataset.crawlLine);
+        const line = CRAWL_LINES[index];
+        if (line) voiceVisibleText(`crawl:${index}`, line, line.length, 'terminal');
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [leaving, reducedMotion]);
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -174,6 +195,7 @@ const RegulationCrawl: React.FC<{ onDone: () => void; onExitStart?: () => void }
         }}
       >
         <div
+          ref={crawlRef}
           onClick={(event) => event.stopPropagation()}
           style={{
             width: 'min(92vw, 780px)', maxHeight: '78vh', overflowY: 'auto',
@@ -183,7 +205,7 @@ const RegulationCrawl: React.FC<{ onDone: () => void; onExitStart?: () => void }
           }}
         >
           {CRAWL_LINES.map((line, i) => (
-            <div key={i} style={{
+            <div key={i} data-crawl-line={i} style={{
               color: i < 2 ? PHOSPHOR : undefined,
               fontWeight: line.startsWith('CLAUSE') || line === 'MAKE NO MISTAKES.' ? 700 : 400,
               minHeight: line === '' ? '0.8em' : undefined
@@ -244,6 +266,7 @@ const RegulationCrawl: React.FC<{ onDone: () => void; onExitStart?: () => void }
           {CRAWL_LINES.map((line, i) => (
             <div
               key={i}
+              data-crawl-line={i}
               ref={i === 0 ? firstLineRef : i === CRAWL_LINES.length - 1 ? lastLineRef : undefined}
               style={{
                 color: i < 2 ? PHOSPHOR : undefined,

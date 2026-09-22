@@ -1,0 +1,70 @@
+{
+  "at": "2026-09-06T22:08:19.240626+00:00",
+  "classification": "Actual candidate normal-completion token persists and expires; no audio taste or chapter acceptance",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "captureRef": "verifier/captures/manual-credit-finale/finale-candidate-1",
+  "hashes": {
+    "summary.json": "82efc401eaa73b5f3a86068f1a1d99dc24af2b07792c2dcfac08c94dab5c6613",
+    "runtime-record.json": "487cfac70e97f064348f6f1552f8334c156849661954f95984b42b3a11047714",
+    "window.ndjson": "c9ce6e94c7b69b27567005a216b6919926405ef381de0a437126e7c82f1d242d",
+    "cleanup-receipt.json": "341945a20a533eec2172f058a9ebbed0aa8f9cdf34968dcaf26bc2d2227278a5",
+    "owned-sink.wav": "4c01aaea3603b712476d44d857db20038245765a8b158f01559ade0676df360c"
+  },
+  "actualMetrics": {
+    "records": 848,
+    "postEdgeRecords": 669,
+    "liveAfterEdgeRecords": 278,
+    "edgeTextureAgeSeconds": 0.020899999976158143,
+    "lastLiveAgeSeconds": 5.002399999976158,
+    "lastLiveMsAfterEdge": 4981.5,
+    "firstNullMsAfterEdge": 4998.399999976158,
+    "maxAgeDeviationSeconds": 0.00010000002384291662,
+    "reactivationsAfterNull": 0,
+    "allPostDoneInactive": true,
+    "allPostObjectiveClear": true,
+    "allPostCommitted18": true
+  },
+  "coverage": {
+    "sampleCount": 848,
+    "edgeWallMs": 1788732407225,
+    "recorderStartWallMs": 1788732349877,
+    "recorderStopWallMs": 1788732421596,
+    "requiredFromWallMs": 1788732404225,
+    "requiredToWallMs": 1788732418725,
+    "preEdgeCoveredMs": 57348,
+    "postEdgeCoveredMs": 14371,
+    "complete": true,
+    "reason": "recorder-interval-covers-3000ms-pre-edge-through-11500ms-post-edge"
+  },
+  "cleanupComplete": true,
+  "defaultSinkUnchanged": true,
+  "sinkTeardown": {
+    "moduleId": "536870913",
+    "unloaded": true,
+    "verifiedGone": true,
+    "afterProbeExit": true
+  },
+  "baselineComparison": "Retained baseline window4 token vanished at nextsample13.5ms; currentcandidate survives normaldone through its existing monotonicexpiry. No claim that soleoldcaller was dynamically intercepted.",
+  "limits": [
+    "Last published tokenage is5.0024s; firstnull sample corresponds toabout5.0193s sincecreation. Retain this frame-level overage and do not claim an exactly<=5.000s observed lifetime or widen the signed limit. Actualaudio4.5srelease/deadline behavior needs owning-seam/AV interpretation.",
+    "Timingwindow and actualWAV recorded; PCM/eventalignment and listening/scoretaste remain unclaimed.",
+    "Missing dynamiccancelcaller/pause/mute/contextfields staymissing; actualinterruptionvariant stillneeded alongside existingfocusedtests.",
+    "This is one currentmovie-based completion, not the requiredthreecoldCOMMON matrix or continuousstation journey.",
+    "No defectclosure/acceptedexception/publishing."
+  ],
+  "publicationAuthorized": false,
+  "verifierReportQualification": {
+    "reportRef": "finale-candidate-runtime-report.json",
+    "claim": "finaleTokenDeadlineRelease.observed=false and score.finalTextureSeconds value null",
+    "correction": "Seal-onlynull must not stand for fullwindow. Rawwindow has278 post-edge nonnull score.finalTextureSeconds samples (0.0209..5.0024s), thennull with no reappearance. Absolute deadline/cancelcaller/release curve remain unexposed; age-based evidence is present.",
+    "reportTimeQualification": "Invocation22:04:00.320-22:09:31.621 lasted331s of600s allowance. Optionalcancellation notattempted; claimedinsufficientremainingclock is not established byelapsedtime alone.",
+    "audioAlignmentQualification": "ReportedPCM69.85s versus71.719s recorderwall spans differ by1.869s. PCMfirstsample is not proven to coincide with recorderstartwalltime; no exactcue alignment or hearingclaim."
+  },
+  "renderedFrameInspection": {
+    "at": "2026-09-06T22:16:00.671898+00:00",
+    "frameRef": "verifier/captures/manual-credit-finale/finale-candidate-1/001-post-seal-0.png",
+    "sha256": "968bcd961576361142c7b76fa4a3bbcb36b26f87766678bb129ae32b817ae919",
+    "observed": "Actual1280x720 rendered Origin surface with vegetation, stone path and water, normal crosshair and controls; no story objective visible. Debug/coordinates panels remain open in this raw capture.",
+    "scope": "Mechanical rendered evidence only; not a perceptual framing, UX or taste acceptance."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "at": "2026-09-06T23:45:17.390759+00:00",
+  "captureRef": "verifier/captures/continue-spawn-candidate/actual-now-20260906T2341Z",
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "runtimeMs": 109001,
+  "actualEarnedContinue": true,
+  "savedFullPoints": 22,
+  "restoredPoints": 23,
+  "fullSavedPrefixEqual": true,
+  "validPostclickFrames": 358,
+  "validWindowMs": 6302,
+  "maxHorizontalPositionDelta": 0,
+  "maxTotalPositionDelta": 0.00067138671875,
+  "sourceStable": true,
+  "cleanupComplete": true,
+  "actualNewFReportAccepted": false,
+  "rawFindings": "Prompt offered, ordinary feet0.890806u fromE supported, KeyF press dispatched; drawing remaineddrawing, no newrouteoffered orAVactivation. This does not prove callback invocation.",
+  "causalBoundary": "EfficientPlayer1933/1967 polls held interact each frame. Private probe uses instantaneous keyboard.press(KeyF); proven manual helper uses keydown80ms/up. Actual press duration/frame delivery was not recorded. Control receipt unknown, so no game-source defect inferred yet.",
+  "next": "One private held-key/instrumented runtime with existing80ms recipe, same frozen source; all previous acceptance predicates retained.",
+  "candidateFullSuiteRun": false,
+  "defectClosure": false,
+  "chapterAcceptance": false
+}

@@ -1,3 +1,4 @@
+import { performPlayerCraft } from '../../game/playerCrafting.ts';
 import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { theme, glassPanel } from '../../ui/theme.ts';
 import { getItem } from '../../game/data/items.ts';
@@ -15,16 +16,11 @@ import {
   getShipRepairStage,
   subscribeShipRestoration
 } from '../../game/systems/shipRestoration.ts';
-import { getPlayerUp, getPlayerWorldPosition } from '../../state/playerFrame.ts';
 import type { CommandContext } from '../../game/commands.ts';
-import { craftAndPlaceCampfireCommand, craftRecipeCommand } from '../../game/gameplayCommands.ts';
-import { dispatchGameplayCommand } from '../../game/commandDispatchAdapter.ts';
 import { isFabricatorRecipeAllowed } from '../../story/storyInputPolicy.ts';
 import { getStoryStateSnapshot } from '../../story/storyState.ts';
 import { getActiveGuidedStoryObjective } from '../../story/ux/objectiveDirector.ts';
 import { fabricatorAccessCopy, getPublicFabricatorSections } from './Fabricator.model.ts';
-import { getPlayerSubmergence } from '../../state/playerSubmersion.ts';
-import { isFeetInLava } from '../../state/playerLavaImmersion.ts';
 
 interface CraftingPanelProps {
   open: boolean;
@@ -282,41 +278,8 @@ const RecipeRow: React.FC<{
           if (!affordable) return;
           const storyBeforeCraft = getCraftStorySnapshot();
           let crafted = false;
-          if (recipe.id === 'campfire') {
-            if (getPlayerSubmergence() > 0.2 || isFeetInLava()) {
-              onStatus('Campfire cannot be placed while submerged or standing in lava. Move out and try again.');
-              return;
-            }
-            // A campfire is placed where you stand, not stockpiled — drop it to the
-            // player's feet and consume the just-crafted item.
-            const feet = getPlayerWorldPosition().addScaledVector(getPlayerUp(), -1.1);
-            const up = getPlayerUp();
-            const result = dispatchGameplayCommand(
-              () => craftAndPlaceCampfireCommand(commandContext, { recipe, craftContext: ctx, position: feet, up }),
-              {
-                multiplayer: {
-                  commandType: 'craft_campfire',
-                  payload: {
-                    recipeId: recipe.id,
-                    pos: [feet.x, feet.y, feet.z],
-                    up: [up.x, up.y, up.z]
-                  }
-                }
-              }
-            );
-            crafted = result.ok;
-          } else {
-            const result = dispatchGameplayCommand(
-              () => craftRecipeCommand(commandContext, { recipe, craftContext: ctx }),
-              {
-                multiplayer: {
-                  commandType: 'recipe_crafted',
-                  payload: { recipeId: recipe.id }
-                }
-              }
-            );
-            crafted = result.ok;
-          }
+          crafted = performPlayerCraft(commandContext, recipe).ok;
+          playSfx(crafted ? 'craftSuccess' : 'uiError');
           onStatus(crafted
             ? recipe.id === 'campfire' ? 'Campfire placed at your feet.' : `${out.name} crafted.`
             : `Unable to craft ${out.name}. Check materials and placement.`);
@@ -352,3 +315,4 @@ const RecipeRow: React.FC<{
 };
 
 export default CraftingPanel;
+import { playSfx } from '../../audio/sfxEngine.ts';

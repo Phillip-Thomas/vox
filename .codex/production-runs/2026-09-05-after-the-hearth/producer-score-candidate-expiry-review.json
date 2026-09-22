@@ -1,0 +1,10 @@
+{
+  "at": "2026-09-06T22:16:42.700654+00:00",
+  "roleReportRef": "score-candidate-expiry-interpretation.json",
+  "roleReportSha256": "9ab1f35c50d406e5b6e8138c7f9fb5cb8080719e0ef01c0f58ad868a54f6e4c8",
+  "relevantSourceHashesVerified": 5,
+  "disposition": "Keep CG-IMPL-016 open; fresh token-age overage exists, actual owning audio release timing unmeasured",
+  "constraints": "Signed5s and existing4.5release remain exact; no tolerance, new audible minimum, contract amendment, source repair or defect closure authorized by this interpretation",
+  "next": "Capture actual completion/token/deadline/clear and audio-authority scheduling seams after current movie/Continue GPU ownership, preserving source freeze until a bounded source handoff decision",
+  "publicationAuthorized": false
+}

@@ -1,0 +1,320 @@
+{
+  "schema": "paravoxia.hitSyncEvidence.v1",
+  "beat": "ch1-lift",
+  "start": "ch1-iso",
+  "runs": [
+    {
+      "run": 1,
+      "beatLive": true,
+      "unlocked": "running",
+      "frames": {
+        "count": 1568,
+        "timeOrigin": 1788616728578.8
+      },
+      "caps": {
+        "anc.track.unbolt": 450,
+        "anc.a1.color-stabilizes": 400,
+        "anc.a2.feed-wall-falls": 454.54545454545456,
+        "anc.a2.hand-back": 454.54545454545456,
+        "anc.descent.impact": 400,
+        "anc.lift.perspective-issued": 400,
+        "anc.a3.first-blade": 2750,
+        "anc.a3.material-lands": 2750,
+        "anc.maw.repair-answer": 450,
+        "anc.a4.life-front": 909.0909090909091
+      },
+      "hitTrace": [
+        {
+          "anchorId": "anc.lift.perspective-issued",
+          "kind": "braam",
+          "quantize": "beat",
+          "path": "story-grid",
+          "desired": 24.031333333333333,
+          "notBefore": 20.634,
+          "capMs": 400,
+          "mayLead": true,
+          "fitsCap": true,
+          "rungsDegraded": 0,
+          "schedule": {
+            "kind": "braam",
+            "audioTime": 23.841142857142856,
+            "armedAt": 20.584,
+            "perfTime": 24517.84285719054,
+            "quantumLanded": "beat",
+            "slackMs": -190.1904761904767,
+            "onsetAttackMs": 40
+          },
+          "sampleRate": 48000,
+          "seq": 1,
+          "perfNow": 21260.800000071526
+        }
+      ],
+      "completed": true,
+      "anchorsAnalysed": [
+        {
+          "anchorId": "anc.lift.perspective-issued",
+          "fallback": false,
+          "quantumLanded": "beat",
+          "audioTime": 23.841142857142856,
+          "armedAt": 20.584,
+          "slackMs": -190.1904761904767,
+          "capMs": 400,
+          "onsetAttackMs": 40,
+          "bundleAt": 3.3218098571428563,
+          "armedBeatClock": 0,
+          "latency": {
+            "deviceS": 0.04,
+            "musicPathS": 0.024667,
+            "musicVsSfxS": 0.014667000000000001,
+            "totalS": 0.064667,
+            "sampleRateKey": 48000,
+            "contextSampleRate": 48000
+          },
+          "stateAtBeatClock": 3.323599999666214,
+          "firedBeatClock": 3.323599999666214,
+          "sfxPostedBeatClock": 3.190899999737739,
+          "sfxAudioTime": 23.855809857142855,
+          "sfxPostedAudioTime": 23.776,
+          "firedAudioTime": 23.914666666666665,
+          "firedPerf": 24591.800000071526,
+          "armedPerf": 21260.900000095367,
+          "audibleOnsetPerf": 24582.50985719054,
+          "imageVsOnsetMs": 8.856809523809517,
+          "imageVsOnsetFrames": 0.531408571428571,
+          "imageVsOnsetPerfMs": 9.290142880985513,
+          "fireLatenessBeatClockMs": 1.7901425233577406,
+          "stateNotLaterThanImage": true,
+          "sfxScheduledAhead": 0.07980985714285538,
+          "onsetVsBundle": 0,
+          "frameAtFire": 1315,
+          "frameTimesAroundFire": [
+            -25.11,
+            -8.31,
+            8.29,
+            24.89,
+            41.69,
+            58.29,
+            74.99
+          ],
+          "frameGapAtFireMs": 16.6,
+          "anchorWindow": {
+            "frames": 240,
+            "meanGapMs": 16.67,
+            "maxGapMs": 16.8,
+            "fps": 60
+          },
+          "strip": "ch1-lift/anc.lift.perspective-issued/run1"
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "beatLive": true,
+      "unlocked": "running",
+      "frames": {
+        "count": 1601,
+        "timeOrigin": 1788616757693
+      },
+      "caps": {
+        "anc.track.unbolt": 450,
+        "anc.a1.color-stabilizes": 400,
+        "anc.a2.feed-wall-falls": 454.54545454545456,
+        "anc.a2.hand-back": 454.54545454545456,
+        "anc.descent.impact": 400,
+        "anc.lift.perspective-issued": 400,
+        "anc.a3.first-blade": 2750,
+        "anc.a3.material-lands": 2750,
+        "anc.maw.repair-answer": 450,
+        "anc.a4.life-front": 909.0909090909091
+      },
+      "hitTrace": [
+        {
+          "anchorId": "anc.lift.perspective-issued",
+          "kind": "braam",
+          "quantize": "beat",
+          "path": "story-grid",
+          "desired": 24.33533333333333,
+          "notBefore": 20.935333333333332,
+          "capMs": 400,
+          "mayLead": true,
+          "fitsCap": true,
+          "rungsDegraded": 0,
+          "schedule": {
+            "kind": "braam",
+            "audioTime": 24.033142857142852,
+            "armedAt": 20.88533333333333,
+            "perfTime": 24426.609523761836,
+            "quantumLanded": "beat",
+            "slackMs": -302.19047619047853,
+            "onsetAttackMs": 40
+          },
+          "sampleRate": 48000,
+          "seq": 1,
+          "perfNow": 21278.899999976158
+        }
+      ],
+      "completed": true,
+      "anchorsAnalysed": [
+        {
+          "anchorId": "anc.lift.perspective-issued",
+          "fallback": false,
+          "quantumLanded": "beat",
+          "audioTime": 24.033142857142852,
+          "armedAt": 20.88533333333333,
+          "slackMs": -302.19047619047853,
+          "capMs": 400,
+          "onsetAttackMs": 40,
+          "bundleAt": 3.2124765238095208,
+          "armedBeatClock": 0,
+          "latency": {
+            "deviceS": 0.04,
+            "musicPathS": 0.024667,
+            "musicVsSfxS": 0.014667000000000001,
+            "totalS": 0.064667,
+            "sampleRateKey": 48000,
+            "contextSampleRate": 48000
+          },
+          "stateAtBeatClock": 3.2245999995470047,
+          "firedBeatClock": 3.2245999995470047,
+          "sfxPostedBeatClock": 3.0749999995231625,
+          "sfxAudioTime": 24.047809857142852,
+          "sfxPostedAudioTime": 23.96,
+          "firedAudioTime": 24.112,
+          "firedPerf": 24510,
+          "armedPerf": 21278.899999976158,
+          "audibleOnsetPerf": 24491.276523761837,
+          "imageVsOnsetMs": 14.190142857145815,
+          "imageVsOnsetFrames": 0.8514085714287488,
+          "imageVsOnsetPerfMs": 18.72347623816313,
+          "fireLatenessBeatClockMs": 12.123475737483957,
+          "stateNotLaterThanImage": true,
+          "sfxScheduledAhead": 0.08780985714285094,
+          "onsetVsBundle": 0,
+          "frameAtFire": 1344,
+          "frameTimesAroundFire": [
+            -15.78,
+            0.92,
+            17.52,
+            34.22,
+            50.82,
+            67.52,
+            84.22
+          ],
+          "frameGapAtFireMs": 16.7,
+          "anchorWindow": {
+            "frames": 240,
+            "meanGapMs": 16.67,
+            "maxGapMs": 16.8,
+            "fps": 60
+          },
+          "strip": "ch1-lift/anc.lift.perspective-issued/run2"
+        }
+      ]
+    },
+    {
+      "run": 3,
+      "beatLive": true,
+      "unlocked": "running",
+      "frames": {
+        "count": 1604,
+        "timeOrigin": 1788616786828.3
+      },
+      "caps": {
+        "anc.track.unbolt": 450,
+        "anc.a1.color-stabilizes": 400,
+        "anc.a2.feed-wall-falls": 454.54545454545456,
+        "anc.a2.hand-back": 454.54545454545456,
+        "anc.descent.impact": 400,
+        "anc.lift.perspective-issued": 400,
+        "anc.a3.first-blade": 2750,
+        "anc.a3.material-lands": 2750,
+        "anc.maw.repair-answer": 450,
+        "anc.a4.life-front": 909.0909090909091
+      },
+      "hitTrace": [
+        {
+          "anchorId": "anc.lift.perspective-issued",
+          "kind": "braam",
+          "quantize": "beat",
+          "path": "story-grid",
+          "desired": 24.14333333333333,
+          "notBefore": 20.743333333333332,
+          "capMs": 400,
+          "mayLead": true,
+          "fitsCap": true,
+          "rungsDegraded": 0,
+          "schedule": {
+            "kind": "braam",
+            "audioTime": 23.849142857142855,
+            "armedAt": 20.69333333333333,
+            "perfTime": 24264.809523809523,
+            "quantumLanded": "beat",
+            "slackMs": -294.1904761904759,
+            "onsetAttackMs": 40
+          },
+          "sampleRate": 48000,
+          "seq": 1,
+          "perfNow": 21109.099999904633
+        }
+      ],
+      "completed": true,
+      "anchorsAnalysed": [
+        {
+          "anchorId": "anc.lift.perspective-issued",
+          "fallback": false,
+          "quantumLanded": "beat",
+          "audioTime": 23.849142857142855,
+          "armedAt": 20.69333333333333,
+          "slackMs": -294.1904761904759,
+          "capMs": 400,
+          "onsetAttackMs": 40,
+          "bundleAt": 3.2204765238095234,
+          "armedBeatClock": 0,
+          "latency": {
+            "deviceS": 0.04,
+            "musicPathS": 0.024667,
+            "musicVsSfxS": 0.014667000000000001,
+            "totalS": 0.064667,
+            "sampleRateKey": 48000,
+            "contextSampleRate": 48000
+          },
+          "stateAtBeatClock": 3.2254000000953673,
+          "firedBeatClock": 3.2254000000953673,
+          "sfxPostedBeatClock": 3.0923000000715257,
+          "sfxAudioTime": 23.863809857142854,
+          "sfxPostedAudioTime": 23.78933333333333,
+          "firedAudioTime": 23.925333333333334,
+          "firedPerf": 24340.199999928474,
+          "armedPerf": 21109.099999904633,
+          "audibleOnsetPerf": 24329.476523809524,
+          "imageVsOnsetMs": 11.523476190479442,
+          "imageVsOnsetFrames": 0.6914085714287665,
+          "imageVsOnsetPerfMs": 10.723476118950202,
+          "fireLatenessBeatClockMs": 4.923476285843886,
+          "stateNotLaterThanImage": true,
+          "sfxScheduledAhead": 0.07447652380952263,
+          "onsetVsBundle": 0,
+          "frameAtFire": 1345,
+          "frameTimesAroundFire": [
+            -23.78,
+            -7.08,
+            9.62,
+            26.32,
+            42.92,
+            59.52,
+            76.22
+          ],
+          "frameGapAtFireMs": 16.7,
+          "anchorWindow": {
+            "frames": 240,
+            "meanGapMs": 16.67,
+            "maxGapMs": 16.8,
+            "fps": 60
+          },
+          "strip": "ch1-lift/anc.lift.perspective-issued/run3"
+        }
+      ]
+    }
+  ],
+  "generatedAt": "2026-09-05T13:58:48.498Z"
+}

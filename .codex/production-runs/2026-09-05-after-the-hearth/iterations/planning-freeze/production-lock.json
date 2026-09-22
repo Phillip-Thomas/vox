@@ -1,0 +1,91 @@
+{
+  "schema": "paravoxia.productionLock.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "mode": "chapter",
+  "status": "locked",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "runProfileRef": "paravoxia-creative-chapter@v1",
+  "releaseCandidate": false,
+  "authority": [
+    {
+      "path": "CLAUDE.md",
+      "section": "Current owner direction, story scope, source precedence, or bounded station continuation",
+      "sha256": "d47d2f0b5670d801193c5f4c182b37af7da8313d5d8e4bbf55c4418eebc34d93"
+    },
+    {
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "section": "Current owner direction, story scope, source precedence, or bounded station continuation",
+      "sha256": "88f85610c81eb3deae605ea01c0d2f53994487048e0d6029fb3240b1d51909de"
+    },
+    {
+      "path": "PARAVOXIA_CREATIVE_COUNCIL.md",
+      "section": "Current owner direction, story scope, source precedence, or bounded station continuation",
+      "sha256": "61c06f6ae50b3b870b09764b0ffadf02be2a8e7682946889addca240dd97bcde"
+    },
+    {
+      "path": "main/story-authority.json",
+      "section": "Current owner direction, story scope, source precedence, or bounded station continuation",
+      "sha256": "31fdc34b6e4c6d52e91b3d26bbd2d07d5ee3a655318908cba0ab1bd6abca501e"
+    },
+    {
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "section": "Current owner direction, story scope, source precedence, or bounded station continuation",
+      "sha256": "02fff0ace9d44e7f193008db15b68b01b69d2e8e9725bdc627345fb67584acff"
+    },
+    {
+      "path": "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+      "section": "Current owner direction, story scope, source precedence, or bounded station continuation",
+      "sha256": "26d386b0dcf0b67410ff1e4b4d9311cb76e3c2f1091583f9e789d9c9bba97cb9"
+    },
+    {
+      "path": ".claude/skills/creative-triad/SKILL.md",
+      "section": "Current owner direction, story scope, source precedence, or bounded station continuation",
+      "sha256": "49ba4848937ff6c3e947f4d9a9d5d568bab5a8e36d23bb109df061a1c1824302"
+    },
+    {
+      "path": ".codex/production-runs/2026-08-11-ch10-station-introduction/station-continuation-contract.md",
+      "section": "Current owner direction, story scope, source precedence, or bounded station continuation",
+      "sha256": "65fabd9581ad038294dda240f8b9dcc9d32e62f1200639944539a4c1e27f30c8"
+    }
+  ],
+  "mutationBoundary": "planning-only",
+  "allowedPaths": [
+    ".codex/production-runs/2026-09-05-after-the-hearth/"
+  ],
+  "protectedPaths": [
+    "main/src/",
+    "main/public/",
+    "main/chapter-registry.json",
+    "main/chapter-journey-contract.json",
+    "main/story-authority.json",
+    "firebase.json",
+    ".firebaserc"
+  ],
+  "lockedBeats": [
+    "ch10-transit",
+    "done",
+    "station-visit",
+    "second-hearth-restored"
+  ],
+  "currentRestrictions": {
+    "storyCeiling": "ch4-arrival",
+    "postArrivalStoryMutationAllowed": true,
+    "copyChangeDecisionRefs": [
+      "owner-2026-09-05-continue-story"
+    ],
+    "protectedAudioPaths": [
+      "main/src/audio/",
+      "main/src/components/audio/",
+      "main/public/audio/"
+    ],
+    "openGateRefs": [
+      "stage1-grounded-intent",
+      "decision-brief-owner-items-if-any",
+      "three-director-contract",
+      "runtime-evidence-and-review"
+    ]
+  },
+  "canonicalPreviewUrl": null,
+  "publishAllowed": false,
+  "frozenAt": "2026-09-06T03:00:28.695879+00:00"
+}

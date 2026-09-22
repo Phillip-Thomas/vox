@@ -1,0 +1,374 @@
+{
+  "schema": "paravoxia.shippedUxBaseline.v1",
+  "runId": "2026-09-04-audio-10x",
+  "sceneId": "audio-10x-overhaul",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641",
+  "capturedAt": "2026-09-05T01:55:56.948Z",
+  "contextRef": "main/src/story/ux/README.md",
+  "capturedBy": "story-verifier (mechanical, read-only). No runtime source was modified.",
+  "purpose": "Inventory of the shipped objective / marker-label / work-order / feedback seams that Stage 4 lifecycle sounds (objective-enter, -progress, -complete, -fail, marker-acquired) will attach to, hashed at the production-lock source revision so a Stage 4 change can be proven additive.",
+  "anchorBindingStatus": "bound",
+  "anchorBindingNote": "Bound to scene-contract.json draft-v1 (sceneId audio-10x-overhaul) by the integration engineer. Every shipped objective in markerAndWorkOrderMap now carries contractObjectiveId, the contract's stable-id form of the runtime id (runtime ids use colons, which the contract stableId pattern forbids), and contractAnchorRef, the sync anchor its related hit binds to. Marker labels, work orders, kinds and hashes are unchanged; only the binding fields and the sceneId were added.",
+  "checks": {
+    "story:ux:check": {
+      "command": "npm --prefix main run story:ux:check",
+      "result": "pass",
+      "files": 6,
+      "tests": 62,
+      "durationSeconds": 1.12,
+      "ranAt": "2026-09-04T21:42-04:00 (baseline, pre-mutation)"
+    }
+  },
+  "workingTreeStatus": {
+    "clean": false,
+    "note": "main/src/story/ux/README.md and main/src/story/ux/objectiveDirector.ts were both dirty relative to git HEAD when hashed. The README hash below is byte-identical to the sha256 recorded for it in production-lock.json authority, so the lock and this baseline agree on the same bytes. A separate Stage 0 audio agent was editing main/src/audio/* concurrently; main/src/audio/sfxEngine.ts is hashed here as it stood during capture."
+  },
+  "sourceFiles": [
+    {
+      "path": "main/src/story/ux/README.md",
+      "sha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85",
+      "note": "hash refreshed 2026-09-04T22:14:54-04:00 after a concurrent session edited the README; audio run did not edit it"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "sha256": "93caebedae6e41fec40017d5d2dee011a2093459363dbeaa871f469cbc786ca0",
+      "note": "objective store: stable IDs, exact marker matching, actionable work-order validation, idle/ready/missing-marker health"
+    },
+    {
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "sha256": "e162310b61b059a8a93b00c5db9646b0a2b1a958d3e67cadc59b20e8f392d71b",
+      "note": "the only lifecycle feedback seam that exists today: one objective-enter cue, presentation-only. Stage 4 attaches progress/complete/fail/marker-acquired here."
+    },
+    {
+      "path": "main/src/story/ux/StoryGuidanceHud.tsx",
+      "sha256": "933db268e6f6a34c1d22d3dcebbba3296b6cf4f94def89e1ef47fbb2da225aca",
+      "note": "standing work-order HUD; publishes data-objective-id / -marker-label / -health / -requires-marker"
+    },
+    {
+      "path": "main/src/story/ux/storyGuidancePresentation.ts",
+      "sha256": "a6418424dd01bcb799c93a3dcd1010d7782750e2f6da7340916d3de1ddc7c46e",
+      "note": "guidance presentation and the route-recalibrating standing copy for degraded marker health"
+    },
+    {
+      "path": "main/src/story/ux/storyHudLayout.ts",
+      "sha256": "b9d7d15209741b744bba807cda35a6536ecb22f59c22ec946f4469597fcbde23",
+      "note": "HUD layout and safe area"
+    },
+    {
+      "path": "main/src/story/ux/cinematicHud.ts",
+      "sha256": "39e1d327b2296d33b0fe64d593a89b60a4e1a8177d85d3078b60d5a66ea3ae67",
+      "note": "cinematic HUD suppression"
+    },
+    {
+      "path": "main/src/story/ux/inputGlyphs.ts",
+      "sha256": "a11df2f1fc1b9f8fb3e1cf143205c4fab8b5fa29fd420a9eb683474875338187",
+      "note": "keyboard/touch input-token substitution inside work-order copy"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.test.ts",
+      "sha256": "9004e388e5c1e1c26495203280f1de4cfec79f4ef91a0e7e73ed36ab4d1c8fce",
+      "note": "objective lifecycle tests"
+    },
+    {
+      "path": "main/src/story/ux/StoryGuidanceHud.test.tsx",
+      "sha256": "509fa6d6118dee60a49d5b46dcc87f728eeb952c69fff1548e919dfaf4438b21",
+      "note": "HUD presentation tests"
+    },
+    {
+      "path": "main/src/story/ux/storyGuidancePresentation.test.ts",
+      "sha256": "86841e018a5f9e77c2385f0d2cd1a4ca0e44797d4d6a60290bdd656a190464eb",
+      "note": "presentation tests"
+    },
+    {
+      "path": "main/src/story/ux/storyHudLayout.test.ts",
+      "sha256": "a37709b5943cc38298b531deda1c5f88a2cdca10da202ce9fa839464c69ce9d7",
+      "note": "layout tests"
+    },
+    {
+      "path": "main/src/story/ux/cinematicHud.test.ts",
+      "sha256": "f6226a18249facab177c28a3534d9d9a9432c72a01fedf78f2c316864ccafefe",
+      "note": "cinematic suppression tests"
+    },
+    {
+      "path": "main/src/story/ux/inputGlyphs.test.ts",
+      "sha256": "e49d444e408eea33e2f450829ee2b5eed90917514c03b99d6e0b19475d71d363",
+      "note": "input glyph tests"
+    },
+    {
+      "path": "main/src/story/storyObjectiveGuidance.ts",
+      "sha256": "5421dfe3fae17c7e6130812a6dd53e707594d541b5668f5e940ba0b5c346080b",
+      "note": "progression-derived objective/marker/work-order source for the ch1-ch4 beats that the eleven hits fire under"
+    },
+    {
+      "path": "main/src/story/emergentMawRepair.ts",
+      "sha256": "159cb2976a01d30513e57ea1ff5f4baa6bb4647eb00b10b7e4984bcf8041ea1d",
+      "note": "ch5-maw objective/marker/work-order source; the beat of the signedSceneAvRuntime.ts:445 hit"
+    },
+    {
+      "path": "main/src/audio/sfxEngine.ts",
+      "sha256": "af3140c4a4ba05645ca620343723f9df1ffb35911bfe5858d47b32caca6113a6",
+      "note": "hash refreshed 2026-09-05T09:56:42-04:00 after contracted Stage 3 audio-lane edits; UX seams unchanged"
+    }
+  ],
+  "objectiveContract": {
+    "sourceRef": "main/src/story/ux/objectiveDirector.ts",
+    "stableObjectiveIds": true,
+    "markerMatching": "exact",
+    "requiresActionableWorkOrder": true,
+    "feedbackPresentationOnly": true,
+    "feedbackAdvancesProgression": false,
+    "feedbackEmissionsPerEntry": 1,
+    "healthStates": [
+      "idle",
+      "ready",
+      "missing-marker"
+    ],
+    "shippedLifecycleEvents": [
+      "objective-enter"
+    ],
+    "shippedLifecycleEventsNote": "feedbackCues.ts today defines exactly one cue type, objective-enter, and plays terminalAdvance on it. objective-progress, objective-complete, objective-fail and marker-acquired do not exist yet; they are Stage 4 additions and this file is the before-state they must extend without changing the presentation-only, one-shot, non-progression semantics above.",
+    "mandatoryRungPublicationRule": "A mandatory rung may not be published before its target exists (storyDirector.ts guidance publisher). An absent objective reads idle; a findable-looking rung pointing at nothing is a defect."
+  },
+  "markerAndWorkOrderMap": [
+    {
+      "objectiveId": "ch1:fixed:calibrate-extractor",
+      "kind": "interact",
+      "beat": "ch1-fixed",
+      "markerLabel": "BIOFIBER \u00b7 CALIBRATE EXTRACTOR",
+      "requiresMarker": false,
+      "workOrder": [
+        "HARVEST BIOFIBER FROM THE BRACKETED GROUND.",
+        "HOLD [E] TO EXTRACT."
+      ],
+      "observedHealth": "ready",
+      "relatedHits": [
+        "hit-01-ch1-track-unbolt"
+      ],
+      "presentation": "ch1-fixed presents its work order inside the REGULATION feed directive block rather than the CURRENT OBJECTIVE card; the shared store still owns the id, marker label and health.",
+      "contractObjectiveId": "ch1.fixed.calibrate-extractor",
+      "contractAnchorRefs": [
+        "anc.track.unbolt"
+      ]
+    },
+    {
+      "objectiveId": "ch1:fixed:cross-camera-cell",
+      "kind": "travel",
+      "beat": "ch1-fixed",
+      "markerLabel": "CAMERA HAND-OFF \u00b7 LEAVE THIS FRAME",
+      "requiresMarker": false,
+      "workOrder": [
+        "EXTRACTOR CALIBRATED. COVERAGE CHECK OUTSTANDING.",
+        "WALK [A]/[D] UNTIL THE CAMERA CUTS."
+      ],
+      "observedHealth": "ready",
+      "relatedHits": [
+        "hit-01-ch1-track-unbolt"
+      ],
+      "presentation": "second ch1-fixed rung; the feed directive block is rewritten from progression, and the prologue voyage echoes trailing it survive the swap.",
+      "contractObjectiveId": "ch1.fixed.cross-camera-cell",
+      "contractAnchorRefs": [
+        "anc.track.unbolt"
+      ]
+    },
+    {
+      "objectiveId": "ch1:track:tracking-transfer",
+      "kind": "wait",
+      "beat": "ch1-track",
+      "markerLabel": "TRACKING VIEW \u00b7 CALIBRATING",
+      "requiresMarker": false,
+      "workOrder": [
+        "TRACKING VIEW IS REASSIGNING.",
+        "HOLD POSITION."
+      ],
+      "observedHealth": "ready",
+      "relatedHits": [
+        "hit-01-ch1-track-unbolt"
+      ],
+      "presentation": "standing at the exact frame of the storyDirector.ts:846 bloom; the hit is the beat-entry acknowledgement of this objective being issued.",
+      "contractObjectiveId": "ch1.track.tracking-transfer",
+      "contractAnchorRefs": [
+        "anc.track.unbolt"
+      ]
+    },
+    {
+      "objectiveId": "ch1:lift:perspective-transfer",
+      "kind": "wait",
+      "beat": "ch1-lift",
+      "markerLabel": "FIRST-PERSON LINK \u00b7 CALIBRATING",
+      "requiresMarker": false,
+      "workOrder": [
+        "PERSPECTIVE TRANSFER IS ACTIVE.",
+        "HOLD POSITION."
+      ],
+      "observedHealth": "ready",
+      "relatedHits": [
+        "hit-07-ch1-lift-dpr-snap"
+      ],
+      "presentation": "standing across the mid-lift DPR snap; the HUD line \"PERSPECTIVE IS BEING ISSUED.\" is the same sentence the braam is commissioned to carry.",
+      "contractObjectiveId": "ch1.lift.perspective-transfer",
+      "contractAnchorRefs": [
+        "anc.lift.perspective-issued"
+      ]
+    },
+    {
+      "objectiveId": "ch2:color:approach-redaction",
+      "kind": "travel",
+      "beat": "ch2-color",
+      "markerLabel": "REDACTED SUBJECT",
+      "requiresMarker": true,
+      "workOrder": [
+        "FOLLOW THE REDACTED SUBJECT INDICATOR.",
+        "APPROACH THE SUBJECT."
+      ],
+      "observedHealth": "ready",
+      "relatedHits": [
+        "hit-02-a1-ramp-color-landing"
+      ],
+      "presentation": "the first objective published after the chroma landing; entered at health ready in this trace.",
+      "contractObjectiveId": "ch2.color.approach-redaction",
+      "contractAnchorRefs": [
+        "anc.a1.color-stabilizes"
+      ]
+    },
+    {
+      "objectiveId": "ch3:gather:craft-hatchet",
+      "kind": "craft",
+      "beat": "ch3-gather",
+      "markerLabel": "STONE HATCHET \u00b7 CRAFT",
+      "requiresMarker": false,
+      "workOrder": [
+        "OPEN THE FABRICATOR.",
+        "[C] CRAFT A STONE HATCHET."
+      ],
+      "observedHealth": "ready",
+      "relatedHits": [
+        "hit-04-a2-handoff-bloom"
+      ],
+      "presentation": "the objective standing immediately after the a2 handoff bundle; movie-lane autopilot had already cleared the materials rung.",
+      "contractObjectiveId": "ch3.gather.craft-hatchet",
+      "contractAnchorRefs": [
+        "anc.a2.hand-back"
+      ]
+    },
+    {
+      "objectiveId": "ch3:thirst:drink-water",
+      "kind": "interact",
+      "beat": "ch3-thirst",
+      "markerLabel": "DRINKABLE WATER",
+      "requiresMarker": true,
+      "workOrder": [
+        "FOLLOW THE WATER MARKER.",
+        "LOOK AT THE WATER AND [F] DRINK."
+      ],
+      "observedHealth": "ready",
+      "relatedHits": [
+        "hit-09-a3-material-landing"
+      ],
+      "presentation": "the first objective of the material stage; published on the same seam as the A3 material landing bloom.",
+      "contractObjectiveId": "ch3.thirst.drink-water",
+      "contractAnchorRefs": [
+        "anc.a3.material-lands"
+      ]
+    },
+    {
+      "objectiveId": "maw:recover-field-kit",
+      "kind": "interact",
+      "beat": "ch5-maw",
+      "markerLabel": "W-7744 FIELD PACK \u00b7 RECOVER KIT",
+      "requiresMarker": true,
+      "workOrder": [
+        "FOLLOW THE FIELD PACK MARKER.",
+        "[F] RECOVER THE FIELD KIT."
+      ],
+      "observedHealth": "missing-marker then ready",
+      "relatedHits": [
+        "hit-10-maw-repair-committed"
+      ],
+      "presentation": "the one degraded-health state observed in this baseline: while the marker was unresolved the HUD stood with \"ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE\" and the objective did not clear. Stage 4 marker-acquired must fire on this missing-marker to ready edge and nowhere else.",
+      "contractObjectiveId": "maw.recover-field-kit",
+      "contractAnchorRefs": [
+        "anc.maw.repair-answer"
+      ]
+    },
+    {
+      "objectiveId": "maw:begin-repair",
+      "kind": "interact",
+      "beat": "ch5-maw",
+      "markerLabel": "W-7744 FIELD PACK \u00b7 REPAIR MAW",
+      "requiresMarker": true,
+      "workOrder": [
+        "RETURN TO THE OPEN FIELD PACK.",
+        "[F] BEGIN MAW REPAIR."
+      ],
+      "observedHealth": "ready",
+      "relatedHits": [
+        "hit-10-maw-repair-committed"
+      ],
+      "presentation": "shares its marker label with maw:attend-repair; a replace, not a clear, so no completion may be acknowledged on this transition.",
+      "contractObjectiveId": "maw.begin-repair",
+      "contractAnchorRefs": [
+        "anc.maw.repair-answer"
+      ]
+    },
+    {
+      "objectiveId": "maw:attend-repair",
+      "kind": "wait",
+      "beat": "ch5-maw",
+      "markerLabel": "W-7744 FIELD PACK \u00b7 REPAIR MAW",
+      "requiresMarker": true,
+      "workOrder": [
+        "REMAIN AT THE OPEN FIELD PACK.",
+        "HOLD POSITION UNTIL THE MAW REPAIR COMPLETES."
+      ],
+      "observedHealth": "ready",
+      "relatedHits": [
+        "hit-10-maw-repair-committed"
+      ],
+      "presentation": "the counted attend ritual that ends in anc.maw.repair-committed; the natural Stage 4 objective-progress carrier.",
+      "contractObjectiveId": "maw.attend-repair",
+      "contractAnchorRefs": [
+        "anc.maw.repair-answer"
+      ]
+    },
+    {
+      "objectiveId": "maw:purpose-gap",
+      "kind": "wait",
+      "beat": "ch5-maw",
+      "markerLabel": "REPAIRED MAW \u00b7 LISTEN",
+      "requiresMarker": true,
+      "workOrder": [
+        "REMAIN WITH THE REPAIRED MAW.",
+        "WAIT. LISTEN BEFORE ASSIGNING IT A PURPOSE."
+      ],
+      "observedHealth": "ready",
+      "relatedHits": [
+        "hit-10-maw-repair-committed"
+      ],
+      "presentation": "the objective standing at the exact frame the signedSceneAvRuntime.ts:445 bloom fires; the objective replaced because the repair milestone was satisfied.",
+      "contractObjectiveId": "maw.purpose-gap",
+      "contractAnchorRefs": [
+        "anc.maw.repair-answer"
+      ]
+    }
+  ],
+  "observationMethod": "Marker labels, health and standing copy were read live from the StoryGuidanceHud DOM (data-objective-id, data-objective-marker-label, data-objective-health, data-objective-requires-marker) during the eleven-hit baseline capture, at 220 ms sampling. The workOrder arrays recorded here are the authoritative arrays held by objectiveDirector, taken from the hashed sources above; where the shipped presentation renders them differently (ch1-fixed and ch1-track render inside the REGULATION feed directive block) that is noted per entry.",
+  "mechanicalNotes": [
+    {
+      "id": "note-01-settle-verb",
+      "severity": "observation",
+      "subject": "main/src/story/emergentMawRepair.ts objective maw:resonance-settling",
+      "finding": "Its final work-order line is 'LET THE STRUCTURE SETTLE.', which contains no verb in the gate's wait-kind actionable set (wait, rest, observe, hold, remain, sleep, watch). It is therefore not listed in markerAndWorkOrderMap. It is also outside the eleven hit anchors: it is the rung after the anc.maw.repair-committed bloom. Recorded here so the omission is deliberate and visible, not a gap. No copy change is proposed; copy is protected under this lock."
+    },
+    {
+      "id": "note-02-degraded-health-observed",
+      "severity": "observation",
+      "subject": "maw:recover-field-kit",
+      "finding": "The only missing-marker health state reached in this baseline. The objective stood with 'ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE' and resolved to ready without clearing or replacing. It is the one live example of the edge Stage 4 marker-acquired is specified against."
+    }
+  ],
+  "evidenceRefs": [
+    ".codex/production-runs/2026-09-04-audio-10x/baseline-hit-probe.mjs",
+    ".codex/production-runs/2026-09-04-audio-10x/captures/baseline/baseline-hit-trace.json",
+    ".codex/production-runs/2026-09-04-audio-10x/shipped-visual-baseline.json"
+  ]
+}

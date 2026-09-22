@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 477278,
+  "stop_reason": "end_turn",
+  "session_id": "570b5ab5-e1ab-419a-8bb5-61fa8c68d563",
+  "total_cost_usd": 3.3062185000000004,
+  "usage": {
+    "input_tokens": 86,
+    "cache_creation_input_tokens": 110874,
+    "cache_read_input_tokens": 2531655,
+    "output_tokens": 37154,
+    "output_tokens_details": {
+      "thinking_tokens": 8217
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 110874,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1779,
+        "cache_read_input_tokens": 115725,
+        "cache_creation_input_tokens": 1340,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1340
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2286,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002371,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 86,
+      "outputTokens": 37154,
+      "cacheReadInputTokens": 2531655,
+      "cacheCreationInputTokens": 110874,
+      "webSearchRequests": 0,
+      "costUSD": 3.3038475000000007,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 8217,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 54,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: pass (measurement complete) \u2014 the ch13-return crossing is **flown correctly and then undone every 37.21 s**. Source candidates A, B, C and the marker-CLOSING heuristic are **refuted by measurement**; the same-system planet handoff is implicated.\n\n## Measurements \u2014 1 capture, 90 126 ms, 340 samples @250 ms, streamed live\n\nOrigin (slot 0) centre is `[0,0,0]`, so celestial centre distance = `|systemFlight.pose.position|`, read off the shipped journey bridge. No game code injected.\n\n| cycle | starts | deepest centre distance | at | reset at | activationEpoch |\n|---|---|---|---|---|---|\n| 1 | 4 123 ms | **181.23** | 39 840 ms | 40 130 ms | 3 \u2192 **5** |\n| 2 | 41 090 ms | **169.09** | 77 081 ms | 77 340 ms | 6 \u2192 **8** |\n\nEach cycle: leaves the hearth pad at d=2 736.8, thrusts inward continuously (peak speed 102.84), closes ~2 568 of ~2 737 units, passes **inside the 185-unit activation envelope** \u2014 then in one sub-260 ms step:\n\n```\n77 081 ms  d=169.09  spd=55.00  local_space  deep_space  ep 6  apid=-1,-1:p1  target=-1,-1\n77 340 ms  d=2736.67 spd= 4.04  atmosphere   descent     ep 8  apid=-1,-1:p1  target=null\n                      ^ pose replaced by departure pad [2187.81,-58.50,-1642.99]\n```\n\n`activePlanetId` = `-1,-1:p1` in **340/340** samples; `-1,-1` never observed. So `onOrigin()` never flips, the rail never leaves `fly`, `tickReturn`'s landing block is never reached.\n\n**Ready-corridor fit (derived, exact):** d=310.30/spd 102.64 (unready limit 6.70), d=197.19/spd 61.59 (ready limit **61.09**), d=182.77 and 169.09 \u2192 spd **55.00** (ready limit **55.00**, unready limit 0). Approach assist was `ready:true`; the unready 300-shell park is arithmetically impossible.\n\n## Unavailable, not inferred\n`getSystemTravelAssistTarget().ready`, `SystemTravelDriver.targetReady`/aim-cone, `getAutopilotFlightDirective()`, and `__paravoxiaShipProbe.getFeedback().approachLimited` (bridge absent 338/340 samples) are not on `window` in this build \u2014 recorded as unavailable.\n\n## Source handoff implicated / remaining unknown\n`SystemTravelDriver.tsx:108-260` \u2192 `systemFlight.ts` (`commitSystemPlanetHandoff`/`setActiveSystemPlanet`): the boundary emits the commit signature (`atmosphere`, `target:null`, epoch advanced) yet `activePlanetId` is unchanged and the pose reverts. **Unknown**: the intermediate epoch (4, 7) fits inside one 250 ms gap, so a transient `-1,-1` cannot be excluded, and which mutator issues the second increment is undetermined. Smallest next read: the shipped `subscribeSystemPlanetHandoffCommits` receipts, not on `window` today. No fix proposed.\n\n## Probe limitation (not a game failure)\nExit code 1 = my own log stream ended before the final `say()` in `finally` (`ERR_STREAM_WRITE_AFTER_END`), fired after the capture completed, `run.json` written and browser stopped. Telemetry complete. Bounded window elapsing is a probe stop, not a landing failure; no long run repeated.\n\n## Discipline\n98/98 manifest files match before (15:14:00.818Z) and after (15:18:30.772Z), aggregate identical. Preview index `ca7b448b\u2026dedc71` re-hashed both times, daemon 1290230 untouched. Headed ANGLE NVIDIA GB10; software would have been refused. Exclusive flock 15:15:20.017Z\u219215:16:52.510Z, uncontended. One owned browser, stopped, zero orphans. 1 of 2 authorized captures used. ~8 min total.\n\n## Artifacts (under `.codex/production-runs/2026-09-05-after-the-hearth/`)\n`flight-discriminator-report.json` \u00b7 `flight-discriminator-report.md` \u00b7 `flight-discriminator-progress.md` \u00b7 `verifier/probes/flight-discriminator/{flight-discriminator-probe.mjs,rehash.py}` \u00b7 `logs/flight-discriminator/{telemetry.jsonl,probe.log,run-console.log,source-rehash-{before,after}.json}` \u00b7 `verifier/captures/flight-discriminator/` (run.json + 13 frames; `0150-phase.png`/`999-final.png` are near-white reset-boundary frames, reported as observation, not a defect verdict).",
+  "ttft_ms": 1444,
+  "type": "result",
+  "duration_ms": 569253,
+  "uuid": "f96be622-c05d-4717-b68c-310481503522",
+  "ttft_stream_ms": 688,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 688,
+  "queued_turn_count": 0
+}

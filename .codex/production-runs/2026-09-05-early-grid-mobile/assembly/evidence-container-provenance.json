@@ -1,0 +1,152 @@
+{
+  "acceptanceCriteria": [
+    {
+      "path": "/evidence/acceptanceCriteria/0",
+      "source": "authored merged capture capture.early.contacts/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/1",
+      "source": "authored merged capture capture.early.transfer/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/2",
+      "source": "authored merged capture capture.early.unbolt/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/3",
+      "source": "authored merged capture capture.early.targets/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/4",
+      "source": "authored merged capture capture.early.continuity/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/5",
+      "source": "authored merged capture capture.early.restore/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/6",
+      "source": "authored merged capture capture.early.performance/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/7",
+      "source": "authored merged capture capture.early.continuous-av/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/8",
+      "source": "authored merged capture capture.early.authority-trace/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/9",
+      "source": "authored merged capture capture.early.track-text/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/10",
+      "source": "authored merged capture capture.early.quota-clear-hold/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/11",
+      "source": "authored merged capture capture.early.score-receipts/acceptanceCriterion"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/12",
+      "source": "chapter-treatment.json#/requiredNewEvidence/0"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/13",
+      "source": "chapter-treatment.json#/requiredNewEvidence/1"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/14",
+      "source": "chapter-treatment.json#/requiredNewEvidence/2"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/15",
+      "source": "chapter-treatment.json#/requiredNewEvidence/3"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/16",
+      "source": "chapter-treatment.json#/requiredNewEvidence/4"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/17",
+      "source": "chapter-treatment.json#/requiredNewEvidence/5"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/18",
+      "source": "score-treatment.json#/acceptance/0/required"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/19",
+      "source": "score-treatment.json#/acceptance/1/required"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/20",
+      "source": "score-treatment.json#/acceptance/2/required"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/21",
+      "source": "score-treatment.json#/acceptance/3/required"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/22",
+      "source": "score-treatment.json#/acceptance/4/required"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/23",
+      "source": "score-treatment.json#/acceptance/5/required"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/24",
+      "source": "score-treatment.json#/acceptance/6/required"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/25",
+      "source": "score-treatment.json#/acceptance/7/required"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/26",
+      "source": "score-stage3-native-delta.json#/acceptance/nullSuccessorCases/0"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/27",
+      "source": "score-stage3-native-delta.json#/acceptance/nullSuccessorCases/1"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/28",
+      "source": "score-stage3-native-delta.json#/acceptance/nullSuccessorCases/2"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/29",
+      "source": "score-stage3-native-delta.json#/acceptance/nullSuccessorCases/3"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/30",
+      "source": "score-stage3-native-delta.json#/acceptance/nullSuccessorCases/4"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/31",
+      "source": "score-stage3-native-delta.json#/acceptance/trackCases/0"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/32",
+      "source": "score-stage3-native-delta.json#/acceptance/trackCases/1"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/33",
+      "source": "score-stage3-native-delta.json#/acceptance/trackCases/2"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/34",
+      "source": "score-stage3-native-delta.json#/acceptance/trackCases/3"
+    },
+    {
+      "path": "/evidence/acceptanceCriteria/35",
+      "source": "score-stage3-native-delta.json#/acceptance/trackCases/4"
+    }
+  ],
+  "mechanicalChecks": "Exact Score requestedVerification.checks, each planned with null result. No performed check asserted.",
+  "continuity": "Chapter adjacentContinuity, Cinema palette.id and cinematography.cameraLineage.",
+  "headedTaste": "Existing scene profile and all three directors require future real-GPU and independent creative review. Pending; no decision.",
+  "directorSignoffsRef": "Native expected artifact name only; absent until original directors sign."
+}

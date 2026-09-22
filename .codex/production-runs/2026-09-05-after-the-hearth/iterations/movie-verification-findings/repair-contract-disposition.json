@@ -1,0 +1,18 @@
+{
+  "schema": "paravoxia.repairContractDisposition.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "baseContractVersion": "scene-v1",
+  "activeContractVersion": "scene-v2",
+  "activeContractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "defectRegisterSha256": "ef206401da68692e052eec27d7dbaf2768a1c0b1458008f3eb767bd285909cf3",
+  "contractChangeRequired": true,
+  "route": "revised-and-resigned",
+  "directionRefs": [
+    "chapter-repair-direction.json",
+    "cinematography-repair-direction.json"
+  ],
+  "triadResignRequired": true,
+  "triadResignComplete": true,
+  "decidedBy": "creative-producer under explicit standing user delegation",
+  "decidedAt": "2026-09-06T08:28:57.597206+00:00"
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "failureSha256": "edf3123cd5f4cbba44bea9b274a3323ee66e9599cba0768e3f1adef7f4d03707",
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/capture-case.test.mjs",
+      "before": "b4b00405437da0fa01cf7fd46ef06dee2aa25f025fd66039b23a0cb98cba75c1",
+      "after": "f516f43310660e2289740836ea8ea1b4d8fddc28c963ffd75f307b4919262d14"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": "00650836b95f7b08fa59d89e133f46fd621b555567288604993b926490085e43",
+      "after": "1502a48a4e91769f3c563ecafe0daae97fccb5b3a5a340b120519c63acbb7eaa"
+    }
+  ],
+  "ownerAuthorization": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-braking-repair-20260909/owner-authorization.json",
+    "sha256": "2474d37694c8b2451f668dd6107698d69d64ce96749db4ab953099d035e7c96f"
+  },
+  "diagnosis": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-braking-repair-20260909/diagnosis.json",
+    "sha256": "68baeb99c95b91969ab367c3aa14d812b136125c032fc9c74573e3c67986ac8b"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run chapter:loop:test",
+    "actualCommand": "npm --prefix main run chapter:loop:test",
+    "log": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/walk-braking-repair-20260909/tests.log",
+      "sha256": "e8e5468293aad25cf5743f9e1e5c6a3f75bba6a9b5cf9db94a1fd94f39d31369"
+    },
+    "filesSha256": "d0ed5616a4fdca039b436545bf182f334b23409d5f3c207febb21fe52986ea65"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "4a1bc01b25712cb8162ac26fdd9e5cd42b95850fa0f7fd9fb42cc0828c2d6020",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": false,
+    "acceptedAction": 0,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [
+    "ordinaryControls",
+    "acceptedAction",
+    "completePath"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-7/raw/cleanup.json",
+      "sha256": "c39827253898cc132ea5f88364a3cc707cfb8c6076ef83b47e5dc8d48bc46493"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-7/raw/observations.json",
+      "sha256": "72b88e172f0a982e1bb1da4837a25b26edeaf34d2a6d073d7282ab1562fa794c"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-7/raw/provenance.json",
+      "sha256": "1f62f613df26969324a79c8308f75981877160d84c7be485443ad9768f86e921"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-7/raw/trace.ndjson",
+      "sha256": "372cbf825ccdf0212ccabd9ba43d6e222e9d313b886bac7831e7522bcf018d09"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "bootstrap[20]: bounded wait on /story/beat was not satisfied"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "4424547f55486fbe9a1f31a1715971ed8bdf0911d85672b5de526ae34bfad126",
+    "buildSha256": "e232f2e1db7f0cd78d7d525b7e3db5aa069366db5a3ac314c107697022a8f56a",
+    "transportSha256": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820"
+  }
+}

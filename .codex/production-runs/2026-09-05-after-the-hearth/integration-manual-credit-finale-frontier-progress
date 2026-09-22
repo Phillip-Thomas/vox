@@ -1,0 +1,6 @@
+2026-09-06T21:07Z read producer-manual-credit-finale-frontier-review.json; WIP hashes matched its pins exactly
+2026-09-06T21:09Z bounded fix in nextRouteCoverage only; 59 existing route tests still green
+2026-09-06T21:10Z 3 producer counterexamples added and green (62)
+2026-09-06T21:11Z CG016: driver registers two useFrame callbacks, harness kept only the last; fixed and lifecycle tests added
+2026-09-06T21:12Z focused run: 5 files, 254 tests, exit 0
+2026-09-06T21:14Z rejected draft reconstructed byte-exact (hash-verified), report written

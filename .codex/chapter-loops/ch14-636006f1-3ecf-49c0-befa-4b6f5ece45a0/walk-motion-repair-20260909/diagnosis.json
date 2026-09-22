@@ -1,0 +1,14 @@
+{
+  "failure": {
+    "stage": "verify-final",
+    "message": "Probe manual failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T01:02:00.515Z"
+  },
+  "report": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9ebc8f51-6394-468f-b6f8-dfa22d7dd461/manual/report.json",
+    "sha256": "98573a14450b0feb2a58b474762a8316fc03bd022947b4f13022480e2ada9f9e"
+  },
+  "observations": "Retained second manual capture stopped during steps[3] with Execution context was destroyed, most likely because of a navigation; no page errors. Prior trace did not record navigation, so its initiator is unknown. This is inconclusive infrastructure evidence, not a restore failure. Owner also reported repeated alternating automated motion.",
+  "fix": "Reuse session-local measured walking directions, invalidate on input/view/world changes or measured disagreement, keep keys held through observations, retain stable arrival and bounded no-progress failure. Record main-frame navigation for diagnosis. Bind the undispatched blind player to this chapters frozen diagnostic entry; earned continuity stays separate."
+}

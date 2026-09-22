@@ -1,0 +1,193 @@
+{
+  "schema": "paravoxia.standbySourceAudit.v1",
+  "recordedAt": "2026-09-06T14:41:00Z",
+  "authoredBy": "read-only mechanical navigation/source auditor (opus); not a director, integrator or verifier",
+  "commission": "Why does the repaired ch13 survey movie complete all drawn corners but freeze trying to stand clear for W-7744?",
+  "isAcceptance": false,
+  "authorizesRepair": false,
+  "mutationProof": {
+    "manifestRef": "implementation-source-manifest.json",
+    "manifestSha256Field": "sourceManifestSha256 as recorded by producer-navigation-interim-review.json = 1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+    "filesRehashedBefore": 98,
+    "filesRehashedAfter": 98,
+    "beforeAllMatchManifest": true,
+    "afterAllMatchManifest": true,
+    "beforeEqualsAfter": true,
+    "beforeAt": "2026-09-06T14:34:29Z",
+    "afterAt": "2026-09-06T14:40:25Z",
+    "scratchRef": "standby-source-audit/scratch/hashes-before.json, standby-source-audit/scratch/hashes-after.json",
+    "note": "No source, build, contract, defect or capture file was written by this commission. Only run-local standby-source-audit.* and standby-source-audit/scratch/*."
+  },
+  "evidenceClasses": {
+    "capturedObservation": "values read verbatim out of verifier/captures/navigation/survey-movie-1/summary.json and producer-navigation-interim-review.json",
+    "sourceInference": "control flow derived by reading frozen source at the manifest hashes; deterministic given the captured values",
+    "liveWorldReconstruction": "NONE PERFORMED. No browser, no GPU, no terrain evaluation was run.",
+    "uncertainty": "explicitly listed below"
+  },
+  "capturedObservation": {
+    "outcome": "FAIL-STALL",
+    "stopReason": "stall-fail",
+    "beat": "ch13-survey",
+    "objectiveId": "ch13:survey:test",
+    "railAction": "walk",
+    "railReason": "standing clear of the span he is testing",
+    "railTarget": [-42, 51.05, 9],
+    "railArriveRadius": 0.6,
+    "railCursor": 18,
+    "playerBodyCentre": [-41.980812072753906, 52.7889289855957, 12.155896186828613],
+    "playerGroundedPose": [-41.96532611762542, 50.98899560205237, 12.155896155875269],
+    "supported": true,
+    "workerHeldPosition": [-41.959498142996736, 50.989947221992686, 13.158507095006934],
+    "workerHoldReason": "body-clearance",
+    "workerTravelled": 0.48656999947428703,
+    "workerLegLength": 1.0356557942388147,
+    "surveyPhase": "held",
+    "surveySamples": 42,
+    "surveyLengthUnits": 35.30846079301215,
+    "surveyTestedPrefix": 41,
+    "autopilotFinalState": {"clock": 188.1, "routeAction": "direct", "stillTime": 0, "teleportNudgesTotal": 0},
+    "note": "routeAction/stillTime/teleportNudgesTotal are the four signature values the candidate cause must explain together."
+  },
+  "codePaths": [
+    {
+      "file": "main/src/story/commonGroundDirector.ts",
+      "line": 1950,
+      "code": "const CG_STANDBY_CLEAR_OF_E: CommonGroundPoint = { x: CG_POSES.E.x, y: CG_POSES.E.y, z: CG_POSES.E.z - 3 }",
+      "role": "the authored standby target = (-42, 51.05, 9); derived by arithmetic from pose E, not a member of CG_POSES and not a member of CG_ROUTE_SHORT/LONG/COMMON"
+    },
+    {
+      "file": "main/src/story/commonGroundDirector.ts",
+      "line": 2371,
+      "code": "if (standingOnHisTest(snapshot, body)) return walkTo(CG_STANDBY_CLEAR_OF_E, 'standing clear of the span he is testing')",
+      "role": "publishes the observed rail plan every frame while she remains on his span"
+    },
+    {
+      "file": "main/src/story/commonGroundDirector.ts",
+      "line": 2470,
+      "code": "applyCommonGroundRail -> case 'walk': ctx.walkToward(target, plan.arriveRadius)",
+      "role": "the single consumer; rail presses the shared walker with stop = 0.6"
+    },
+    {
+      "file": "main/src/story/autopilot/primitives.ts",
+      "line": 1641,
+      "code": "walkToward(): distance = gaitDistance(target, player); step = distance > stop ? nextNavigationStep(player, target) : null",
+      "role": "3.16-unit tangential gap > 0.6 so a route is planned every frame; arrival is never declared"
+    },
+    {
+      "file": "main/src/utils/agentSurfaceNavigation.ts",
+      "line": 420,
+      "code": "const requestedGoalWasWet = rawGoalCell?.wet ?? false; ... if (rawGoalCell?.dry) candidates.push(rawGoalCell) else { for (const {du,dv} of orderedOffsets(config.maxGoalApproachRadiusCells)) ... }",
+      "role": "a NON-DRY requested goal is silently substituted by the nearest dry cell in offset order; that ordered set includes the cell the body is already standing in (maxGoalApproachRadiusCells default 8 cells = 16 world units, VOXEL_SCALE = 2)"
+    },
+    {
+      "file": "main/src/utils/agentSurfaceNavigation.ts",
+      "line": 651,
+      "code": "for (const goal of candidates) { const dry = search(goal, false); if (dry.path) { selectedDry = ...; break; } }",
+      "role": "nearest-first, not cheapest-first: the first reachable dry candidate wins, and the start cell is trivially reachable at zero cost"
+    },
+    {
+      "file": "main/src/utils/agentSurfaceNavigation.ts",
+      "line": 742,
+      "code": "if (chosen.path.length === 1 && mode === 'walk') { mode = 'direct'; reason = 'already-at-resolved-goal'; }",
+      "role": "THE OBSERVED MODE. A route whose resolved goal is the start cell is reported as mode 'direct' rather than as a refusal"
+    },
+    {
+      "file": "main/src/story/autopilot/primitives.ts",
+      "line": 1546,
+      "code": "navigationAction = onJetpackLeg ? 'jetpack' : active.route.mode === 'direct' ? 'direct' : 'walk'",
+      "role": "explains the captured routeAction 'direct' while the action is neither a cross-face handoff nor world-navigation-unavailable"
+    },
+    {
+      "file": "main/src/story/autopilot/primitives.ts",
+      "line": 1222,
+      "code": "terminalExactGoalHandoff: refuse('goal-outside-terminal-cell') when |tangential| > VOXEL_SCALE/2",
+      "role": "the sub-cell exact-goal rescue cannot apply: goal z = 9 vs terminal cell centre z = 12 is 3 units, far outside the half-cell bound. The waypoint stays on the body's own cell centre."
+    },
+    {
+      "file": "main/src/story/autopilot/primitives.ts",
+      "line": 1607,
+      "code": "NAVIGATION_STEER_DEAD_ZONE = 0.2; steerFreeToward() clears forward/backward/left/right when the tangential waypoint offset is inside it",
+      "role": "a waypoint on the body's own cell centre produces NO directional input at all"
+    },
+    {
+      "file": "main/src/story/autopilot/primitives.ts",
+      "line": 2400,
+      "code": "const pushing = controls.forward||backward||left||right; if (pushing && delta < 0.06) stillTime += dt; else stillTime = 0; ... if (pushing && ... stillTime > 2.2) unstick",
+      "role": "explains stillTime = 0 AND teleportNudgesTotal = 0: with no input pressed the stuck watchdog never arms, so nothing escalates"
+    },
+    {
+      "file": "main/src/story/commonGroundActor.ts",
+      "line": 249,
+      "code": "const gap = Math.hypot(to.x - playerPosition.x, to.z - playerPosition.z); if (gap < input.bodyClearanceUnits) blocked = true",
+      "role": "the other half of the deadlock: horizontal 2D gap to his NEXT step, clearance 1 unit. Measured separation is 1.0026 units, so his current pose is legal and his next step is not. He never displaces her, by design."
+    },
+    {
+      "file": "main/src/story/world/CommonGroundWorld.tsx",
+      "line": 142,
+      "code": "createFooting(): live reads of createLiveAgentSurfaceTerrain + voxelSystem; no fabricated ground",
+      "role": "the chapter plants no terrain. Every authored pose/route sits at y = 51.05 (support cell 25, top face 51) because that site was QUALIFIED against real terrain. CG_STANDBY_CLEAR_OF_E was never in that qualified set and no footing predicate is applied to it anywhere before it is issued as a walk target."
+    }
+  ],
+  "candidateCause": {
+    "id": "standby-target-substituted-onto-the-body-own-cell",
+    "statement": "The standby target (-42, 51.05, 9) quantizes to the surface cell one cell shy of the body (VOXEL_SCALE 2: Math.round(9/2) = 5 -> centre z = 10; body cell centre z = 12). That goal cell is not dry/traversable, so planAgentSurfaceRoute substitutes the nearest reachable dry cell in ordered-offset order; the body's own cell is in that ordered set and was the first reachable dry candidate. The resulting path has length 1, which line 742 relabels mode 'direct' with reason 'already-at-resolved-goal'. primitives then reports routeAction 'direct', the terminal exact-goal handoff refuses ('goal-outside-terminal-cell'), the single waypoint is the body's own cell centre, steerFreeToward's 0.2 dead zone clears all four movement controls, so nothing is pressed, the stuck watchdog never arms (stillTime 0, nudges 0), and gaitDistance stays 3.16 > 0.6 so walkToward never declares arrival. The rail republishes the identical plan every frame. W-7744 meanwhile holds on body-clearance because his next step would close inside 1 unit of her, and he is authored never to displace her. Neither body can move: a mutual, permanent deadlock.",
+    "explainsAllFourSignatures": {
+      "routeAction=direct": "line 742 + line 1546",
+      "stillTime=0": "no controls pressed -> pushing false -> reset branch",
+      "teleportNudgesTotal=0": "unstick requires pushing",
+      "positionExactlyUnchanged": "no directional input is ever issued"
+    },
+    "independentJustification": "Derived only from frozen source control flow plus the four captured values; it does not rest on root's raw0054 pixels. The pixel observation of nearby water/cliff is CONSISTENT with the goal cell being non-dry but is not used as proof and does not distinguish wet from unsupported/blocked/edge-margin."
+  },
+  "ruledOut": [
+    {"alternative": "world-navigation-unavailable direct fallback (primitives 1306)", "ruling": "RULED OUT for the freeze: that path sets waypoint = the goal itself, so steering would be issued and either the body moves or, if physically walled, pushing stays true and stillTime climbs past 2.2 into an unstick. Captured stillTime 0 and nudges 0 contradict both."},
+    {"alternative": "different-face-direct-fallback (agentSurfaceNavigation 331)", "ruling": "RULED OUT: same waypoint-is-the-goal argument, and start/goal are the same +Y face at the same site (up = (0,0.9999,0), both y ~ 51)."},
+    {"alternative": "route mode 'unreachable' / no dry goal approach", "ruling": "RULED OUT by observation: navigationAction would be 'unreachable', the capture records 'direct'."},
+    {"alternative": "physical obstruction (cliff wall, lip, pond edge) blocking a body that IS pushing", "ruling": "RULED OUT: that is exactly the case the watchdog exists for; stillTime would accumulate and teleportNudgesTotal would be non-zero. Both are zero."},
+    {"alternative": "screeningSettling() post-act stillness", "ruling": "RULED OUT: that branch sets navigationAction = 'idle', not 'direct'."},
+    {"alternative": "the rail is oscillating between plans", "ruling": "RULED OUT by observation: lastPublishedPlan is stably the standby walk, and the stall predicate held every signature continuously for the whole window."},
+    {"alternative": "arrival radius too tight (0.6)", "ruling": "NOT THE CAUSE: the body is 3.16 units away, not 0.6-marginal. No threshold weakening is implied or recommended."},
+    {"alternative": "F Reopen would clear it", "ruling": "NOT SUPPORTED and deliberately not inferred. Reopening the tail changes survey.working state; it removes neither the non-traversable standby column nor the 1-unit body-clearance geometry, and the rail would re-issue the same standby target as soon as she is again standing on his span."}
+  ],
+  "uncertainty": [
+    "WHY the goal cell (-42, ., 10) is not dry is UNMEASURED: wet, body-blocked by a ceiling within clearanceCells, no support column, hazardous, or failing the edgeMarginCells test are all consistent with the captured evidence.",
+    "The exact ordered-offset candidate that won is unmeasured; the freeze only requires that every candidate ordered before the body's own cell was non-dry or dry-unreachable.",
+    "No live terrain sample, route replay, or browser measurement was taken by this commission. planAgentSurfaceRoute's actual returned reason string ('already-at-resolved-goal' vs another) is INFERRED from mode='direct' plus the exclusion of the other two direct-producing branches, not read from the capture: the capture records action, not reason.",
+    "A CPU-only reproduction was scoped but NOT run: the only seed available run-local (3215739679, world '-1,-1') comes from the partial-continue/run-5 fixture and is not proven to be survey-movie-1's world, and planetSize is not recorded in the capture. Running it would have produced a number that could be mistaken for proof of the wrong world."
+  ],
+  "smallestLiveDiscriminator": {
+    "goal": "Establish, in one frame, at the stall pose, what the planner actually returns and why the standby column is not dry.",
+    "shape": "Read-only single-frame probe at the existing stall state that calls planAgentSurfaceRoute(terrain, planetSize, playerPos, (-42,51.05,9)) and logs { mode, reason, waypoints.length, resolvedGoal, requestedGoalWasWet, visitedCells }, plus the classification (support height, dry, wet, waterDepthCells, bodyBlocked) of cells centred (-42,10), (-44,10), (-40,10), (-42,8) and (-42,12).",
+    "decides": "reason 'already-at-resolved-goal' with waypoints.length 1 confirms the candidate cause outright; requestedGoalWasWet then separates water from blocked/unsupported, which is the only thing separating the two repair families below.",
+    "constraints": "No planner mutation, no progress setter, no threshold change. If a CPU-only variant is preferred it needs the survey-movie-1 world's seed and planetSize recorded alongside the capture first."
+  },
+  "proposedRepairScopeRecommendationOnly": {
+    "authorized": false,
+    "note": "Listed for the owning creative/integration lane to consider. Not applied, not endorsed as a single answer, and none of these may be implemented by widening a threshold, relaxing footing, granting endpoint credit or teleporting a body.",
+    "options": [
+      {
+        "id": "A-author-the-standby-pose",
+        "scope": "main/src/story/commonGroundDirector.ts:1950",
+        "summary": "Stop deriving the standby target arithmetically. Make it a qualified pose alongside CG_POSES, chosen on terrain the chapter already stands on (the authored plateau contains many cells more than 1 unit off his span, e.g. the z=14..22 side of CG_ROUTE_LONG), so the target is dry by construction.",
+        "why": "This is the only option that fixes the authored geometry rather than the navigator, and it needs no shared-code change."
+      },
+      {
+        "id": "B-surface-the-degenerate-route",
+        "scope": "main/src/utils/agentSurfaceNavigation.ts:742 and main/src/story/autopilot/primitives.ts walkToward",
+        "summary": "A resolved goal that IS the start cell while the requested goal is still further than the caller's stop radius is not an arrival and is not a route: it is a refusal. Reporting it as such (so walkToward/the rail can see a refusal instead of silently pressing nothing) would make this class of freeze loud rather than invisible.",
+        "why": "Shared navigation code; affects every chapter. Belongs to whoever owns that module, and would need its own regression evidence. It converts a silent deadlock into a named failure; it does NOT by itself let anyone reach the standby point."
+      },
+      {
+        "id": "C-footing-qualification-at-publish-time",
+        "scope": "main/src/story/commonGroundDirector.ts rail plan construction",
+        "summary": "Qualify any rail walk target against the same CommonGroundWorld footing predicate the chapter already trusts, before publishing it, and fall back to an authored supported alternative when it fails.",
+        "why": "Closes the general gap that CG_STANDBY_CLEAR_OF_E exposed: poses and routes are terrain-qualified, derived targets are not."
+      }
+    ]
+  },
+  "notClaimed": [
+    "This is a SOURCE MODEL. It is not live browser proof and must not be cited as one.",
+    "No endpoint credit, threshold weakening, geometry relaxation or rescue is proposed or implied.",
+    "No claim is made about save/score/Continue behaviour; out of scope."
+  ]
+}

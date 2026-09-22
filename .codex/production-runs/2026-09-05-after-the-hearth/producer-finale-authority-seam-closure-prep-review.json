@@ -1,0 +1,29 @@
+{
+  "at": "2026-09-06T22:28:37.687574+00:00",
+  "reportRef": "finale-authority-seam-closure-prep-report.json",
+  "actualInvocationRef": "finale-authority-seam-closure-prep-invocation.json",
+  "actualExit": 124,
+  "sourceDrift": [],
+  "artifactHashes": {
+    "verifier/probes/manual-credit-finale/finale-authority-seam/authority-pins-corrected.json": {
+      "expected": "101460a1f32b93928664bd003acb19ad64a80339a0ddefec15e77a144205d103",
+      "actual": "101460a1f32b93928664bd003acb19ad64a80339a0ddefec15e77a144205d103",
+      "match": true
+    },
+    "verifier/probes/manual-credit-finale/finale-authority-seam/run-seam.mjs": {
+      "expected": "01862ef3615237b163d9af3c018b1500e22a48541418c6b312a214e9578a0c63",
+      "actual": "01862ef3615237b163d9af3c018b1500e22a48541418c6b312a214e9578a0c63",
+      "match": true
+    }
+  },
+  "acceptedForRuntime": false,
+  "usefulDelta": "Actual LY/mMA/bed authority function source pins now identified; sharedlock path and realcontrol checks corrected. No actual CDP attachment or capture yet.",
+  "remaining": [
+    "Rewrite actual seamLogpoints to corrected pins; capture creation plus sparse near-deadline and real LY/mMA/context/bed calls. Use safe IIFE expressions, explicit errors/drops, ensure executed attachment.",
+    "Use existing heavyLockOwnership kernel FD receipt plus independent contender; sameinode and someone refusing contender alone does not prove this process owns lock.",
+    "Rebind private runtime role; invoke working finale browser/audio wrapper rather than no-op placeholder; no deeper copy.",
+    "No new runtime claim until real hits and outputharvest, normal plus actualpause."
+  ],
+  "priorBudgetPreserved": true,
+  "publicationAuthorized": false
+}

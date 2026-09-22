@@ -1,0 +1,25 @@
+{
+  "schema": "paravoxia.localPreview.v1",
+  "owner": "chapter14-root",
+  "ownerPid": 3929104,
+  "daemonPid": 3929127,
+  "url": "http://127.0.0.1:41571/",
+  "chapterMovieUrl": "http://127.0.0.1:41571/?story=ch14-record&movie=1&journeyprobe=1&journeylane=direct-entry&journeymode=movie&profile=HIGH",
+  "dist": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/dist",
+  "files": {
+    "assets/SpaceStationSandbox-BWnX2Ii-.js": "c317631fe0e95e3ae3a4067f52dcf88131593651c7fc3f6c363de75023224b63",
+    "assets/index-BIlQq2St.css": "c91e576a559767e0492defef88efdbcb4d663d3b821ce71c4718bc0294ada9af",
+    "assets/index-C4JBedMD.js": "efac9d62163e25bfc8d4769a60dca2ce1dd10fa71fdae24edd7e7eb426d14ffe",
+    "assets/worldPrep.worker-D9jfWRDd.js": "5c34b2579d4869bbb97ca0d692cf14c2ed050c8983dce442c1ffcca1676bd0de",
+    "audio/music/deep_space_out_there.ogg": "6e02a32d963b84061cdeec66cc852e731e367c93ef572aa169b1baadbcdc20ba",
+    "audio/music/manifest.json": "453c4f17ce55bbdd29a8a943049dbd2f6a3e436fb4d0bba9e2e082f7945fea65",
+    "audio/music/menu_ambientmain.ogg": "9dbe685e40d6cc8876ff08938b011424b802c2757ac4052e3eb93f8634208969",
+    "audio/music/shimmer_dream_ambience.mp3": "e2dbd95fa7e4bcc9e31b861ee1471b64f2dfa2a1d6facc458ab634f952ca567e",
+    "audio/music/surface_project_utopia.ogg": "88d9956c98282523dd1a00fc6023ee01619818c4ce138c52816e0a39f837fa50",
+    "audio/music/warp_surreal_truth.mp3": "fe4a94a95aa8f281185f09818d1c9f4cb0da5cd70350bf13b43b5a3c779ce691",
+    "index.html": "c7638cdf1cfd8d5290bfda3580b0b4af83ea71dc7f3030e4241538bb39bfea74"
+  },
+  "buildSha256": "8560d41dd03b3e8abeb38873ae055ab9a83e7bf4ff28bdf1f9366e3ee66b218c",
+  "immutable": true,
+  "at": "2026-09-08T22:32:48.509Z"
+}

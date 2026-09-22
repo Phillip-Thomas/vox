@@ -1,0 +1,133 @@
+{
+  "schema": "paravoxia.chapterStage3Proposal.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "proposalVersion": "early-chapter-stage3-v1",
+  "authoredAt": "2026-09-05T19:57:45.761641+00:00",
+  "status": "ready-for-peer-responses-unsigned",
+  "actualContractVersion": null,
+  "actualContractSha256": null,
+  "readTreatments": [
+    {
+      "path": "story-intent.md",
+      "sha256": "979b0ccffecc4a462b50fa98698620a2f5971cfc01f6967c143c92219ea536e5",
+      "immutableReadCopy": "chapter-stage3-input-story-intent.md",
+      "immutableCopyMatchesReadHash": true
+    },
+    {
+      "path": "score-treatment.md",
+      "sha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77"
+    },
+    {
+      "path": "score-treatment.json",
+      "sha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d"
+    },
+    {
+      "path": "cinematography-treatment.md",
+      "sha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8"
+    },
+    {
+      "path": "cinematography-treatment.json",
+      "sha256": "04c337f9c04c11fdaeedf900a0770a4ab764eae589d98885cc1d76dc3801723b"
+    }
+  ],
+  "chapterPosition": {
+    "score": "approve-with-required-amendments-for-candidate-assembly",
+    "cinematography": "approve-with-required-amendments-for-candidate-assembly",
+    "notContractSignoff": true
+  },
+  "nativeContributionRef": "chapter-native-contract-contribution.json",
+  "amendments": [
+    "real quota-complete anchor clears instruction before inherited hold",
+    "actual two-channel track text delivery and no invented existing caption/journal",
+    "canonical workOrder projection for fixed/track/raster/depth",
+    "truthful survey/no-target schema and gate branch enforcement",
+    "Two pickup rows use WALK OVER THE DEBRIS TO RECOVER IT. so the single imperative includes the real interaction result and satisfies existing actionability validation without a vocabulary exception."
+  ],
+  "schemaExtension": {
+    "owner": "root",
+    "files": [
+      {
+        "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json",
+        "symbols": [
+          "$defs.guidanceObjective",
+          "$defs.guidanceTargetContract (proposed)",
+          "$defs.runtimeObjectiveId (proposed, guidance only)"
+        ]
+      },
+      {
+        "path": "main/tools/creative-triad-gate.mjs",
+        "symbols": [
+          "validateGuidanceContract",
+          "validateObjectiveLifecycleEvidence",
+          "self-test contract/lifecycle fixtures and negative cases"
+        ]
+      }
+    ],
+    "fields": {
+      "requiresMarker": "boolean; true legacy behavior remains identical",
+      "targetMode": "optional enum directional-marker|survey-bracket|none; omitted is legal only when requiresMarker true, resolved as directional-marker",
+      "targetContract": "required for false: ownerRef/selectionRef/readinessCriterion/completionCriterion nonempty strings, maxVisibleTargets integer, evidenceFields unique nonempty strings",
+      "guidanceObjective.id": "Use guidance-only runtimeObjectiveId pattern ^[a-z0-9]+(?:[:._-][a-z0-9]+)*$ so exact current colon IDs survive; global stableId for anchors remains unchanged."
+    },
+    "invariants": [
+      "requiresMarker true implies omitted or directional-marker mode; unchanged exact marker label, resolution, missingMarkerFrames0 and lifecycle evidence checks.",
+      "requiresMarker false requires explicit survey-bracket or none plus targetContract. It never implies ready or located.",
+      "survey-bracket is permitted only on interact resource objectives here, maxVisibleTargets1; exact objective/bracket label and real selectable actionable target proof required.",
+      "none is permitted only on travel/wait here, maxVisibleTargets0; zero survey/directional designations plus actual movement-event or authored-bundle completion evidence required.",
+      "Reject contradictory true+survey/none, false+directional, omitted false mode, false missing targetContract, interact+none, survey count0 while ready, count>1, stale/nonactionable/depleted target, missing required raw fields/variant proof.",
+      "For survey ready state, require observed targetId/label/real position/projected and label rect/actionable/legal approach/tool-yield where relevant; actual native receipt identity and positive reward or collected receipt proves completion. Observed unavailable/offscreen target cannot be mislabeled ready or clamped into view.",
+      "No-target travel evidence includes valid geometry epoch, after-arm movement/transfer identity and at least one presented destination frame; wait includes fired bundle and inherited duration.",
+      "Lifecycle must retain semantic entry/progress/completion/clear evidence, exact copy, variants/resets, no stale state, no feedback-driven progression and explicit skipped/restored branches. Do not substitute marker observations for survey proof.",
+      "Six normal-route objectives must each be exercised; separately legitimate preearned skip cases may have zero entry and must not fabricate intermediate events.",
+      "Preserve exact runtime objective IDs including colons; never rename them or broadly relax global anchor IDs to satisfy schema."
+    ],
+    "lifecycleEvidenceExtension": {
+      "targetMode": "must match contract",
+      "targetObservations": "source-bound records carrying every contracted evidenceField and rendered-frame reference",
+      "maximumVisibleTargetCount": "must equal declared ceiling at most; none always0",
+      "targetMissingWhileReadyFrames": "must be0 for required survey target",
+      "directionalMarkerCount": "must be0 for survey/none",
+      "completionEvidence": "actual receipt/event and before/after predicate linkage or no-target bundle/transfer proof",
+      "legacyMarkerObservations": "still mandatory for true; do not invent for false"
+    }
+  },
+  "boundaryAdditions": [
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "symbol": "tickTrackUnlock, onBeatEntered, scoped once-key caption dispatch",
+      "why": "Two actual track presentation anchors and quota-complete clear/hold separation."
+    },
+    {
+      "path": "main/src/story/storyText.ts",
+      "symbol": "clearStoryTextChannel (proposed selective helper), showSystemLine, showCaption",
+      "why": "Clear only owned/outgoing caption/system text at declared transitions; preserve objective and later channels."
+    },
+    {
+      "path": "main/src/story/feed/regulationVoice.ts",
+      "symbol": "presentRegulationObjective, REGULATION_VOICE.track / proposed single-source track constants",
+      "why": "Canonical active workOrder wins; preserve exact original first/fifth narrative strings and source lineage."
+    },
+    {
+      "path": "main/src/story/feed/RegulationFeedHud.tsx",
+      "symbol": "workOrder, voicedOrder, voiceVisibleText dispatch",
+      "why": "No hidden/duplicate track lines or track HOLD utterance; system caption owns institutional line."
+    },
+    {
+      "path": "main/src/story/feed/RegulationFeedHud.test.tsx",
+      "symbol": "regulation feed objective presentation",
+      "why": "Preserve test asserting canonical active pod workorder renders; implementation fixes bloat."
+    },
+    {
+      "path": "main/src/story/storyText.test.ts",
+      "symbol": "scoped channel clear coverage (proposed focused test)",
+      "why": "Owned track caption clear cannot clear next objective/other text."
+    }
+  ],
+  "sourceIsolation": "Do not undo root pure objective import-cycle repairs; receipt/fact types do not import runtime registry/director/audio graph into pure declarations.",
+  "pendingPeerResponses": [
+    "Score accepts or objects to actual first/fifth track dispatch and three middle lines retired from automatic dispatch.",
+    "Cinema accepts actual new caption timing/corrected journal claim and quota clear anchor.",
+    "Root agrees/tests exact schema branch shape before canonical candidate."
+  ],
+  "verificationClaim": "Documentation only; no tests/build/browser/GPU or runtime acceptance run here."
+}

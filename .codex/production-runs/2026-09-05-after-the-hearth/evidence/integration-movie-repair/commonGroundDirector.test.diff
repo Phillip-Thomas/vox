@@ -1,0 +1,431 @@
+--- .codex/production-runs/2026-09-05-after-the-hearth/iterations/movie-verification-findings/source/main/src/story/commonGroundDirector.test.ts	2026-09-06 04:55:51.912813333 -0400
++++ main/src/story/commonGroundDirector.test.ts	2026-09-06 05:45:16.480823322 -0400
+@@ -1,3 +1,4 @@
++import { readFileSync } from 'node:fs';
+ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+ 
+ // The one seam a node test cannot supply: a real audio output. Everything else
+@@ -14,7 +15,9 @@
+ });
+ import * as THREE from 'three';
+ import { resetProgression, hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
+-import { setPlayerWorldPosition } from '../state/playerFrame.ts';
++import { commitHabitatCorePlacement, resetHabitats } from '../game/systems/habitatSystem.ts';
++import { getPlayerWorldPosition, setPlayerWorldPosition } from '../state/playerFrame.ts';
++import { resolveStoryInteraction } from './storyInteractions.ts';
+ import { STORY_MILESTONES, completeChapter13 } from './storyState.ts';
+ import {
+   acceptTestedRoute,
+@@ -28,13 +31,21 @@
+   CG_ROUTE_COMMON,
+   CG_ROUTE_LONG,
+   CG_ROUTE_SHORT,
++  TRACE_SAMPLE_SPACING_UNITS,
+   clearCommonGroundWorld,
+   lastTestedPoint,
+   serializeCommonGroundForWorld,
+   stageCommonGroundWorldPayload
+ } from './commonGroundState.ts';
+-import type { CommonGroundFooting } from './commonGroundRoute.ts';
+ import {
++  CG_FIXED_SOCKET,
++  checkReference,
++  playerSocket,
++  type CommonGroundFooting
++} from './commonGroundRoute.ts';
++import {
++  applyCommonGroundRail,
++  type CommonGroundRailContext,
+   commitCommonGroundDemonstrationOffer,
+   commitCommonGroundFaultReview,
+   commitCommonGroundFinalReferenceOffer,
+@@ -77,7 +88,7 @@
+   resetSystemFlightStoreForTests
+ } from '../state/systemFlight.ts';
+ import { STORY_COORDINATE } from './world/storyWorldIdentity.ts';
+-import { STORY_PRIMARY_WORLD_ID } from './tidegardenRoute.ts';
++import { STORY_PRIMARY_WORLD_ID, TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
+ 
+ const flatGround: CommonGroundFooting = {
+   revision: 'test',
+@@ -99,6 +110,7 @@
+ 
+ beforeEach(() => {
+   resetProgression();
++  resetHabitats();
+   clearAllCommonGroundWorlds();
+   resetCommonGroundRuntime({ clearWorlds: true });
+   unbind?.();
+@@ -1092,3 +1104,372 @@
+     expect(getCommonGroundScoreDiagnostic().finalTextureSeconds).toBeNull();
+   });
+ });
++
++// --- the screening rail is an ordinary body on ordinary controls ----------------------
++//
++// CG-IMPL-004 and CG-IMPL-005. Both defects were invisible to a spy that always
++// succeeds and to a stub body that teleports onto every emitted goal, so this
++// harness refuses to be either one:
++//
++//   * the performer here is the REAL shared performer's algorithm — cadence
++//     first, then the LIVE resolver, then the dwell, then the act — over the
++//     real registered ch13 resolvers. A rail that spends the dwell before
++//     asking starves exactly as the hardware movie did.
++//   * the body here walks. It moves a bounded step per frame toward the emitted
++//     goal and stops inside the requested radius, so a plan that stops short of
++//     a pose, or cuts the corners of a measured span, fails here too.
++//
++// Nothing in this block relaxes a predicate: every unit of the comparison is
++// credited by the production `routeProgressUnits` from the body's own
++// displacement, and every act is the one the live resolver was offering.
++
++/** `SCREENING_ACTION_DWELL_SECONDS` in `autopilot/primitives.ts`. */
++const SCREENING_DWELL_SECONDS = 0.85;
++/** An ordinary walking pace, in units per second. */
++const RAIL_WALK_SPEED = 4.5;
++
++interface RailAct {
++  readonly id: string;
++  readonly at: number;
++}
++
++function createRailHarness(dt: number) {
++  const acts: RailAct[] = [];
++  const goals: (readonly [number, number, number])[] = [];
++  let clock = 0;
++  let lastActionAt = -10;
++  let pathUnits = 0;
++  let maxStep = 0;
++
++  /** The shared performer's ACTUAL order of operations. */
++  function performStoryInteraction(id: string): boolean {
++    if (clock - lastActionAt < SCREENING_DWELL_SECONDS) return false;
++    const interaction = resolveStoryInteraction(null, getPlayerWorldPosition());
++    if (!interaction || interaction.id !== id) return false;
++    lastActionAt = clock;
++    interaction.perform();
++    acts.push({ id, at: clock });
++    return true;
++  }
++
++  const ctx = {
++    controls: { forward: false, jump: false, sprint: false, interact: false },
++    _goalScratch: new THREE.Vector3(),
++    clearControls: () => {
++      ctx.controls.forward = false;
++      ctx.controls.jump = false;
++      ctx.controls.sprint = false;
++      ctx.controls.interact = false;
++    },
++    /** Faithful to the shared walker: stop inside `stop`, never teleport. */
++    walkToward: (goal: THREE.Vector3, stop: number) => {
++      const from = getPlayerWorldPosition().clone();
++      const distance = from.distanceTo(goal);
++      if (distance > stop) {
++        const step = Math.min(RAIL_WALK_SPEED * dt, distance);
++        const next = from.clone().lerp(goal, step / distance);
++        pathUnits += from.distanceTo(next);
++        maxStep = Math.max(maxStep, from.distanceTo(next));
++        setPlayerWorldPosition(next);
++      }
++      return distance; // the real walker reports the distance BEFORE it moves
++    },
++    getPlayerWorldPosition: () => getPlayerWorldPosition(),
++    enterShip: () => undefined,
++    exitShip: () => undefined,
++    getSpaceFlightSnapshot: () => ({ controlMode: 'walk', phase: 'surface' }),
++    // Exposed so a rail that reached for the cadence would share THIS clock and
++    // starve the performer below, exactly as the shipped defect did.
++    screeningActionReady: () => clock - lastActionAt >= SCREENING_DWELL_SECONDS,
++    noteScreeningAction: () => { lastActionAt = clock; },
++    performStoryInteraction: performStoryInteraction as unknown as (id: never) => unknown
++  };
++
++  return {
++    ctx,
++    acts,
++    goals,
++    get clock() { return clock; },
++    get pathUnits() { return pathUnits; },
++    get maxStep() { return maxStep; },
++    /** One frame of the real loop: the world ticks, then the rail presses. */
++    frame(): ReturnType<typeof applyCommonGroundRail> {
++      tickCommonGround(dt);
++      const plan = applyCommonGroundRail(ctx as unknown as CommonGroundRailContext);
++      if (plan.target) goals.push(plan.target);
++      clock += dt;
++      return plan;
++    },
++    run(frames: number, until?: () => boolean): number {
++      for (let index = 0; index < frames; index += 1) {
++        if (until?.()) return index;
++        this.frame();
++      }
++      return frames;
++    }
++  };
++}
++
++/** The route vertex an emitted goal belongs to. Vertices are 2 units apart. */
++function goalVertexIndex(
++  route: readonly { x: number; y: number; z: number }[],
++  goal: readonly [number, number, number]
++): number {
++  let best = 0;
++  let bestDistance = Number.POSITIVE_INFINITY;
++  route.forEach((point, index) => {
++    const distance = Math.hypot(point.x - goal[0], point.y - goal[1], point.z - goal[2]);
++    if (distance >= bestDistance) return;
++    bestDistance = distance;
++    best = index;
++  });
++  return best;
++}
++
++describe('the movie walks the route and acts on the shared cadence', () => {
++  it('never reaches for the cadence it does not own', () => {
++    const source = readFileSync(
++      new URL('./commonGroundDirector.ts', import.meta.url).pathname, 'utf8'
++    );
++    const rail = source.slice(source.indexOf('export interface CommonGroundRailContext'));
++    // The chapter rail cannot consume the screening dwell, by construction: the
++    // surface it is handed does not carry it.
++    expect(rail).not.toContain('noteScreeningAction');
++    expect(rail).not.toContain('screeningActionReady');
++    expect(rail).toContain('ctx.performStoryInteraction(plan.interactionId as never)');
++  });
++
++  it('acts once through the real performer and waits out the next dwell', () => {
++    enterCommonGroundBeat('ch13-survey');
++    standAt({ x: CG_POSES.W.x + 5, y: CG_POSES.W.y, z: CG_POSES.W.z });
++    const harness = createRailHarness(0.05);
++    harness.run(400, () => commonGroundSnapshot().survey.phase === 'drawing');
++
++    const offers = harness.acts.filter(act => act.id === 'story-ch13-offer-route');
++    const starts = harness.acts.filter(act => act.id === 'story-ch13-survey-start');
++    // It acted, which the shipped rail could not: it spent the dwell first and
++    // the shared performer then refused every act it had already paid for.
++    expect(offers).toHaveLength(1);
++    expect(starts).toHaveLength(1);
++    expect(commonGroundSnapshot().survey.phase).toBe('drawing');
++    // And the cadence between the two acts is the shared one, unshortened.
++    expect(starts[0].at - offers[0].at).toBeGreaterThanOrEqual(SCREENING_DWELL_SECONDS);
++    // A walked approach, not a teleport onto the goal.
++    expect(harness.maxStep).toBeLessThanOrEqual(RAIL_WALK_SPEED * 0.05 + 1e-9);
++  });
++
++  it('walks the long survey polyline in order, without returning to the start', () => {
++    enterCommonGroundBeat('ch13-survey');
++    standAt({ x: CG_POSES.W.x + 5, y: CG_POSES.W.y, z: CG_POSES.W.z });
++    const harness = createRailHarness(0.05);
++    harness.run(400, () => commonGroundSnapshot().survey.phase === 'drawing');
++    expect(commonGroundSnapshot().survey.phase).toBe('drawing');
++
++    const targeted: number[] = [];
++    const reached = new Set<number>();
++    const startedPath = harness.pathUnits;
++    for (let frame = 0; frame < 4000; frame += 1) {
++      if (commonGroundSnapshot().survey.phase !== 'drawing') break;
++      const plan = harness.frame();
++      if (plan.reason !== 'walking the demonstrated route' || !plan.target) continue;
++      const index = goalVertexIndex(CG_ROUTE_LONG, plan.target);
++      if (targeted[targeted.length - 1] !== index) targeted.push(index);
++      const body = getPlayerWorldPosition();
++      CG_ROUTE_LONG.forEach((point, at) => {
++        if (Math.hypot(body.x - point.x, body.y - point.y, body.z - point.z) <= 0.6) reached.add(at);
++      });
++    }
++
++    // ORDER, AND NO SKIPS. The old stateless scan re-selected the already
++    // walked start the moment the body left it by more than its fixed radius.
++    for (let at = 1; at < targeted.length; at += 1) {
++      expect(targeted[at], `goal ${at} after ${targeted[at - 1]}`).toBeGreaterThan(targeted[at - 1]);
++    }
++    expect(targeted[0]).toBeLessThanOrEqual(1);
++    expect(targeted[targeted.length - 1]).toBe(CG_ROUTE_LONG.length - 1);
++    expect(new Set(targeted).size).toBe(targeted.length);
++
++    // The BODY went through every authored vertex, not just the emitted goals.
++    for (let at = 1; at < CG_ROUTE_LONG.length; at += 1) {
++      expect(reached.has(at), `vertex ${at} walked`).toBe(true);
++    }
++    // No shortcut: the walked path is the authored 36 units, less only the
++    // stop radius the feet are allowed to settle inside at the far end.
++    expect(harness.pathUnits - startedPath).toBeGreaterThanOrEqual(35);
++
++    // It arrived, and the span it offers is the one it actually walked.
++    expect(harness.acts.some(act => act.id === 'story-ch13-offer-span')).toBe(true);
++    expect(commonGroundSnapshot().survey.phase).not.toBe('drawing');
++
++    // THE RECORDED SAMPLES, not the authored polyline. The first sample is
++    // written wherever the body was standing when it began, and the last
++    // wherever it was when it offered; both have to be the authored ends, and
++    // both have to stand from the fixed reference on their own.
++    const slot = commonGroundSnapshot().survey.working
++      ?? commonGroundSnapshot().survey.accepted;
++    const samples = slot?.samples ?? [];
++    expect(samples.length).toBeGreaterThan(2);
++    // The recording BEGAN at the authored start, on its supported side: the
++    // aim through the head plus the stop radius, and nothing looser.
++    expect(distanceFrom(samples[0], CG_POSES.S)).toBeLessThanOrEqual(0.7);
++    // And it ENDED at the authored end, within one sample of the grid the
++    // trace records on — the same grid a player walking here would get.
++    expect(distanceFrom(samples[samples.length - 1], CG_POSES.E))
++      .toBeLessThanOrEqual(TRACE_SAMPLE_SPACING_UNITS);
++    expect(slot?.walkedUnits ?? 0).toBeGreaterThanOrEqual(35);
++    for (const sample of samples) {
++      const check = checkReference(CG_FIXED_SOCKET, playerSocket(sample), {});
++      expect(check.ok, `sample ${JSON.stringify(sample)}: ${check.reason ?? ''}`).toBe(true);
++    }
++  });
++
++  it('walks all eighteen actual units of the common span and arrives at the far end', () => {
++    enterCommonGroundBeat('ch13-common');
++    standAt(CG_POSES.E);
++    const harness = createRailHarness(0.05);
++
++    // He takes the reciprocal reference first, and she gets out of the way of
++    // his positioning leg by walking, not by being moved.
++    harness.run(600, () => commonGroundSnapshot().common.stage === 'holding-h');
++    expect(commonGroundSnapshot().common.stage).toBe('holding-h');
++    expect(getCommonGroundActorState().held).toBe(false);
++    expect(commonGroundSnapshot().common.terraUnits).toBe(0);
++
++    const targeted: number[] = [];
++    const reached = new Set<number>();
++    const startedPath = harness.pathUnits;
++    for (let frame = 0; frame < 4000; frame += 1) {
++      if (commonGroundSnapshot().common.comparisonProved) break;
++      const plan = harness.frame();
++      if (plan.reason !== 'walking the common span' || !plan.target) continue;
++      const index = goalVertexIndex(CG_ROUTE_COMMON, plan.target);
++      if (targeted[targeted.length - 1] !== index) targeted.push(index);
++      const body = getPlayerWorldPosition();
++      CG_ROUTE_COMMON.forEach((point, at) => {
++        if (Math.hypot(body.x - point.x, body.y - point.y, body.z - point.z) <= 0.6) reached.add(at);
++      });
++    }
++
++    // THE PRODUCTION PREDICATE CLOSED IT. Nothing here credits a unit: every
++    // one of the eighteen came from `routeProgressUnits` reading this body's
++    // own frame-by-frame displacement inside the corridor.
++    expect(commonGroundSnapshot().common.terraUnits).toBeGreaterThanOrEqual(CG_COMMON_ROUTE_UNITS);
++    expect(commonGroundSnapshot().common.comparisonProved).toBe(true);
++    expect(hasMilestone(STORY_MILESTONES.ch13ReciprocalCrossed)).toBe(true);
++
++    for (let at = 1; at < targeted.length; at += 1) {
++      expect(targeted[at], `goal ${at} after ${targeted[at - 1]}`).toBeGreaterThan(targeted[at - 1]);
++    }
++    expect(targeted[targeted.length - 1]).toBe(CG_ROUTE_COMMON.length - 1);
++    expect(new Set(targeted).size).toBe(targeted.length);
++    for (let at = 1; at < CG_ROUTE_COMMON.length; at += 1) {
++      expect(reached.has(at), `vertex ${at} walked`).toBe(true);
++    }
++    // Eighteen walked units, walked. Endpoint separation is six.
++    expect(harness.pathUnits - startedPath).toBeGreaterThanOrEqual(CG_COMMON_ROUTE_UNITS);
++    expect(harness.maxStep).toBeLessThanOrEqual(RAIL_WALK_SPEED * 0.05 + 1e-9);
++
++    // And it goes on to occupy the far reference it then offers.
++    harness.run(400, () => commonGroundSnapshot().common.finalReferenceOffered);
++    expect(commonGroundSnapshot().common.finalReferenceOffered).toBe(true);
++    expect(commonGroundSnapshot().common.finalReferenceOccupied).toBe(true);
++  });
++
++  it('rebuilds the traversal from the body after a restore, and grants nothing', () => {
++    enterCommonGroundBeat('ch13-common');
++    standAt(CG_POSES.E);
++    const harness = createRailHarness(0.05);
++    harness.run(600, () => commonGroundSnapshot().common.stage === 'holding-h');
++    harness.run(200, () => {
++      const body = getPlayerWorldPosition();
++      return goalVertexIndex(CG_ROUTE_COMMON, [body.x, body.y, body.z]) >= 5;
++    });
++    const midUnits = commonGroundSnapshot().common.terraUnits;
++    expect(midUnits).toBeGreaterThan(0);
++    expect(commonGroundSnapshot().common.comparisonProved).toBe(false);
++
++    // A Continue puts the body back where the save says it was. The controller
++    // has to follow the body; the body never follows the controller.
++    standAt(CG_ROUTE_COMMON[1]);
++    const plan = harness.frame();
++    expect(plan.reason).toBe('walking the common span');
++    expect(goalVertexIndex(CG_ROUTE_COMMON, plan.target ?? [0, 0, 0])).toBeLessThanOrEqual(2);
++    // The rebuild is a move goal and nothing else: no unit was created by it.
++    expect(commonGroundSnapshot().common.terraUnits).toBeLessThanOrEqual(midUnits + 0.5);
++    expect(commonGroundSnapshot().common.comparisonProved).toBe(false);
++  });
++
++  it('steps off the span he has to test instead of offering itself as a witness', () => {
++    enterCommonGroundBeat('ch13-survey');
++    standAt({ x: CG_POSES.W.x + 5, y: CG_POSES.W.y, z: CG_POSES.W.z });
++    const harness = createRailHarness(0.05);
++    harness.run(6000, () => commonGroundSnapshot().survey.phase === 'offered');
++    expect(commonGroundSnapshot().survey.phase).toBe('offered');
++
++    // Her last recorded sample is under her own feet, and it is on his span.
++    harness.run(6000, () => commonGroundSnapshot().survey.phase === 'tested');
++    expect(commonGroundSnapshot().survey.phase).toBe('tested');
++    // He walked it himself. No witness was invented to unblock her own body,
++    // and no hold was left standing.
++    expect(harness.acts.some(act => act.id === 'story-ch13-hold-witness')).toBe(false);
++    expect(commonGroundSnapshot().survey.hold.reason).toBeNull();
++    expect(getCommonGroundActorState().held).toBe(false);
++    expect(hasMilestone(STORY_MILESTONES.ch13RouteTested)).toBe(true);
++    // And it is the FIRST-TRY class the long route was chosen to demonstrate:
++    // the span stands from the fixed reference, with no contingent witness.
++    expect(commonGroundSnapshot().survey.accepted?.routeClass).toBe('fixed-reference');
++    expect(commonGroundSnapshot().survey.witness).toBeNull();
++  });
++
++  it('performs BOTH home rungs at the core, in order, one dwell apart', () => {
++    // The beat the hardware movie actually stalled on: the ready [F] prompt
++    // stood at the core for the whole run because the rail spent the screening
++    // dwell and the shared performer then refused the act it had paid for.
++    expect(commitHabitatCorePlacement({
++      actorId: 'local',
++      worldId: TIDEGARDEN_WORLD_ID,
++      shelterId: 'ch13-home-fixture',
++      cell: [0, 0, 0],
++      supportCell: [0, -1, 0],
++      position: [-20, 51.05, 30],
++      up: [0, 1, 0],
++      eventId: 'ch13-home-fixture'
++    })).toBe(true);
++    enterCommonGroundBeat('ch13-home');
++    standAt({ x: -20, y: 51.05, z: 40 });
++
++    const harness = createRailHarness(0.05);
++    harness.run(600, () => commonGroundSnapshot().home.returnChosen);
++
++    expect(harness.acts.map(act => act.id)).toEqual([
++      'story-ch13-fault-review',
++      'story-ch13-choose-return'
++    ]);
++    expect(hasMilestone(STORY_MILESTONES.ch13FaultReviewed)).toBe(true);
++    expect(hasMilestone(STORY_MILESTONES.ch13ReturnChosen)).toBe(true);
++    expect(harness.acts[1].at - harness.acts[0].at).toBeGreaterThanOrEqual(SCREENING_DWELL_SECONDS);
++  });
++
++  it('stops clear of his body on the return approach and at the survey offer', () => {
++    // W is his inspection pose, not an empty mark. Both approaches that end
++    // beside him must stop outside the clearance his own leg is held by, or the
++    // rail manufactures the stand-off the chapter never resolves by displacing
++    // anyone.
++    enterCommonGroundBeat('ch13-survey');
++    standAt(CG_POSES.C);
++    tickCommonGround(0.016);
++    const worker = commonGroundActorPosition();
++    const approach = commonGroundRailPlan();
++    expect(approach.action).toBe('walk');
++    expect(approach.arriveRadius).toBeGreaterThanOrEqual(1);
++    expect(approach.arriveRadius).toBeLessThan(3.4);
++
++    enterCommonGroundBeat('ch13-return');
++    markMilestone(STORY_MILESTONES.ch13ReturnChosen);
++    const plan = commonGroundRailPlan();
++    if (plan.action === 'walk' && plan.target) {
++      expect(plan.arriveRadius).toBeGreaterThanOrEqual(1);
++    }
++    void worker;
++  });
++});

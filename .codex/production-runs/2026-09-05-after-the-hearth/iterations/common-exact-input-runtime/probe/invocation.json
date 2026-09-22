@@ -1,0 +1,83 @@
+{
+  "schema": "paravoxia.verifier.exactInputDiscriminator.invocation.v0",
+  "state": "PREPARED-NOT-RUN",
+  "runId": "2026-09-05-after-the-hearth",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "contractVersion": "scene-v3",
+  "preview": {
+    "url": "http://127.0.0.1:34413/",
+    "owner": "root-production-preview",
+    "build": false,
+    "note": "Attach only. Never rebuild, never restart, never take ownership."
+  },
+  "entry": {
+    "url": "?story=ch13-survey&journeyprobe=1&debug=1",
+    "fixtureLabel": "LABELLED DIAGNOSTIC FIXTURE: deep labelled entry, reusing the existing successful movie survey prerequisite ONLY to reach a safe grounded E. It is NOT full-story continuity, NOT an earned Continue, NOT first-time naive UX, and grants no acceptance.",
+    "lane": "MANUAL — ordinary held WASD only. No movie=1 during the measured leg, no autopilot, no teleport, no forced click, no rail-derived target.",
+    "reusedPath": "verifier/probes/arrival-common-manual/common-passage-probe.mjs preparation + physics path and entryObservation.mjs, unmodified and not edited by this commission."
+  },
+  "groundingCorrection": {
+    "priorDefect": "The previous manual reference-3 E entry was AIRBORNE because of a direct W->E shortcut (at-E footY 53.317, unsupported).",
+    "action": "Do NOT repeat the direct W->E shortcut and do NOT describe that entry as grounded. Require ground.isSupported at E to be observed true before the first measured update; if it is not, stop and report, do not proceed."
+  },
+  "measuredLeg": {
+    "scope": "Bounded positive vertex 2 -> 3 -> 4 crossing ONLY. Not the full eighteen-unit route.",
+    "input": "Ordinary held WASD, >=30ms pulses, no sub-frame steering requirement.",
+    "discriminator": {
+      "id": "D1-positive-post-plane-overshoot",
+      "intent": "Cross vertex 2's incoming plane with an ORDINARY eligible POSITIVE post-plane overshoot (target residual 0.10-0.20 units past the vertex on its incoming axis, i.e. the ordinary shape the manual run actually produced), then continue over vertex 3 and vertex 4.",
+      "doNotSubstitute": "MUST NOT be replaced by a before-plane / squared-corner target. Silently switching the target invalidates the discriminator."
+    },
+    "control": {
+      "id": "C1-squared-corner",
+      "intent": "Same leg with the corner residual kept BEHIND the vertex, matching the passing long run's continuous-arc shape.",
+      "status": "DIAGNOSTIC CONTROL ONLY — not a usability standard, not authority to impose that precision, not a passing manual result."
+    },
+    "onlyOnePair": "Exactly one discriminator and one control. No broader suite is proposed."
+  },
+  "instrumentation": {
+    "mechanism": "CDP Debugger.setBreakpointByUrl with a condition that records bounded data and evaluates to false",
+    "pauses": false,
+    "reEvaluatesPredicates": false,
+    "grantsCredit": false,
+    "widensTolerance": false,
+    "mutatesGameSource": false,
+    "sites": [
+      {
+        "id": "LP-A-credit-call",
+        "urlRegex": "assets/index-BiDWGouH\\.js$",
+        "lineNumber": 7839,
+        "columnNumber": 193729,
+        "boundTo": "routeProgressUnits (minified `pwe`), first statement",
+        "condition": "see verifier/probes/common-exact-input/creditCallLogpoints.mjs LP_A.condition"
+      }
+    ],
+    "sinkCap": 2400,
+    "expectedVolume": "~60 records/s while stage==='holding-h'; the bounded vertex 2->4 leg is ~6-10s, so ~360-600 records, well inside the cap. Drops are counted, never silently discarded.",
+    "drain": "single Runtime.evaluate at end of leg"
+  },
+  "flags": {
+    "node": "node verifier/probes/common-exact-input/selftest.mjs",
+    "plannedRunner": "NOT WRITTEN — no runner is provided, because running requires a browser attach that this commission forbids.",
+    "requiredFlagsWhenLaterAuthorised": [
+      "--preview http://127.0.0.1:34413/",
+      "--build false",
+      "--entry '?story=ch13-survey&journeyprobe=1&debug=1'",
+      "--leg vertex2-to-4",
+      "--overshoot-units 0.15",
+      "--control squared",
+      "--record-cap 2400",
+      "--no-interpolation"
+    ]
+  },
+  "timingIdentityEffect": {
+    "identity": "Setting a conditional breakpoint does NOT change the bundle bytes; the served file and its sha256 efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068 are untouched. V8 deoptimises and re-JITs the patched function, so `pwe` runs interpreted/less-optimised for the session.",
+    "timing": "Each condition evaluation costs roughly single-digit microseconds and runs once per director update inside tickCommon. This can lengthen a frame slightly and therefore slightly change dt and per-update displacement. Displacement is MEASURED, not assumed, so the recorded per-update displacement remains the actual one; but the DISTRIBUTION of displacements is not guaranteed identical to an uninstrumented session, and any near-ceiling comparison must state that.",
+    "noObserverCredit": "The sink is a plain array on globalThis; nothing reads it back into game state, so it cannot influence credit."
+  },
+  "fallbackIfBindingUnreliable": {
+    "status": "NOT NEEDED — binding verified unique and exact; no instrumentation-only source patch is proposed or staged.",
+    "narrowPathsIfEverOrdered": ["main/src/story/commonGroundDirector.ts (tickCommon credit call only)"],
+    "notApplied": true
+  }
+}

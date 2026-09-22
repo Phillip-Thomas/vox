@@ -11,11 +11,31 @@ repo-truth and the build plan).
 
 One AudioContext, one output chain, one instrument. Layout:
 
-- `main/src/audio/audioCore.ts` — NEW. The single context and shared music
-  bus: `engines → musicBus (volume·mute) → submerge lowpass → visibility duck
-  → compressor → destination`. Exports `getAudioContext`, `getMusicBus`,
-  `unlockAudio`, `setMusicOutput`, `setMusicSubmerged`,
-  `setMusicVisibilityDucked`, `isMusicMuted`, `rampParam`, `makeNoiseBuffer`.
+- `main/src/audio/audioCore.ts` — NEW. The single context and shared game
+  mix. Signal chain as shipped after audio-10x Stage 2 (2026-09-05):
+  `music engines → musicBus (volume·mute) → submerge lowpass → sceneEnvelope →
+  visibility duck → [Stage 1 glue: compressor −18/2.5 → makeup-cancel trim →
+  tanh soft clip 2×] → [Stage 2 safety: compressor −6/20:1/knee 3/3 ms/0.1 s
+  → trim (SAFETY_MAKEUP_COMP_DB −2.91 cancels Chrome's baked makeup;
+  TAIL_REFERENCE_GAIN_DB +1.99 keeps the pre-Stage-2 tail's measured static
+  gain)] → musicDuck → masterOutput`; SFX plays through five category buses
+  (`world/player/ship` → gain → duck → shared SFX muffle; `ui/voice` → gain →
+  duck, dry) → `sfxOutput` (sfx volume) → `masterOutput`; then the shared
+  `masterOutput → [Stage 2 true-peak limiter: compressor −1/20:1/knee 0/1 ms/
+  80 ms → trim (LIM_MAKEUP_COMP_DB −0.57) → 4×-oversampled ceiling curve at
+  −1 dBTP] → output route`. Music-path latency of the finished tail is
+  measured, not assumed: `LATENCY_COMP_MUSIC_PATH_S` 25.215 ms (glue + safety
+  + limiter pre-delays and the two shaper resamplers), `LATENCY_COMP_SFX_PATH_S`
+  10.340 ms (SFX joins before the limiter), so music lags SFX by 14.875 ms on
+  the same route (`mix/mixTuning.ts`; audio:check re-measures every run). The
+  duck matrix (`mix/duckMatrix.ts`) and snapshot mixer (`mix/mixSnapshot.ts`)
+  write only the musicDuck and category-bus gains, from events and dirty-checked
+  intent; the offline mirror (`createOfflineMusicRuntimeChain`) builds the same
+  tail through the same function. Exports `getAudioContext`, `getMusicBus`,
+  `getGameAudioCategoryBusInput`, `setSfxOutput`, `setSfxSubmerged`,
+  `applyGameAudioDuck`, `setMixSnapshot`, `unlockAudio`, `setMusicOutput`,
+  `setMusicSubmerged`, `setMusicVisibilityDucked`, `isMusicMuted`, `rampParam`,
+  `makeNoiseBuffer`.
 - `main/src/audio/scoreEngine.ts` — NEW (moved from `story/storyScore.ts`).
   The instrument: pad/sub/ostinato/melody/riser voices, the 60 ms lookahead
   scheduler, `ScoreMood`, the celestial idle bed, `setScoreMood(mood|null)`,
@@ -43,7 +63,14 @@ submerge filter, deliberately outside the music compressor/scene envelope so
 SFX stays byte-identical. Its local ramp/noise helpers are intentionally NOT
 shared: different curve shapes/noise generators; deduping would change SFX
 timbre. One context, one `game:` output route, one unlock authority; the
-visibility duck now lives in audioCore, not AudioDirector.)
+visibility duck now lives in audioCore, not AudioDirector.) (2026-09-05,
+audio-10x Stage 2: the SFX sub-master and muffle moved INTO audioCore as the
+category buses above; every `playSfx` posts to `mix/audioEventBus.ts`, a
+per-frame queue deduped by (event, frame) with a held-level law — an id posted
+in consecutive frames sounds only on its rising edge — flushed in a microtask
+so nothing is late; the rate limiter and its loop guard stay as the backstop
+with unchanged thresholds. SFX recipes are untouched; only the sample source
+and the bus they play through changed.)
 
 ## 2. Inventory — what's good, what's a defect (be honest about the floor)
 
@@ -273,6 +300,30 @@ context running, score authority confirmed.
   unit tests stay green.
 - Zero new save fields; sandbox gating through existing predicates; 60fps
   under headless swiftshader; main-thread, no per-frame node churn.
+- (audio-10x Stage 3, 2026-09-05, draft-v4) `scheduleHit(kind, quantize, opts?)
+  : HitSchedule | null` — the frozen `HitSchedule` `{kind, audioTime, armedAt,
+  perfTime, quantumLanded: 'bar'|'beat'|'step', slackMs, onsetAttackMs}`; `null`
+  is the no-transport fallback and is logged `'immediate'`. `setScoreMood(mood,
+  {tonicSemis?, voicingPolicy?})` is additive; the one-argument form keeps the
+  current tonic and policy. Story-side tables in `story/storyScore.ts`:
+  `STORY_HIT_ANCHORS` / `HIT_CAP_MS` (ten scene-contract anchors; a2/a4 caps are
+  `beatMs(tempo)` expressions), `MOOD_TONIC_CHAINS` / `TONIC_CHAIN_POLICY`
+  (prologue seed-unconditional, colour/dusk/vigil/reconstruct live-then-seed,
+  ch10 absolute at offset 0), `MOOD_VOICING_OVERRIDES` (ch4-comply subtractive,
+  a4-exhale ordered, every ch10 beat literal; default `brain` behind a gain
+  guard), `STORY_BUNDLE_MEMBERS` (state / image / SFX census). Directors arm a
+  bundle once through `armStoryHit(anchorId, {beatClock, desiredDelayS?,
+  notBeforeDelayS?})` and read `bundleDelayS` (image members chase `audioTime −
+  armedAt + latencyComp`, latencyComp = device + `tailLatencyForSampleRate(
+  ctx.sampleRate).musicPathS`, clamped to `LATENCY_COMP_MAX_S`) and
+  `sfxAudioTime` (SFX members forward-scheduled by the per-rate music-vs-SFX
+  offset through `playSfx(id, {atAudioTime})`); state never waits. Pure grammar:
+  `generative/hitSchedule.ts` (cap-bounded bar→beat→8th degrade, `mayLead`,
+  `notBefore`) and `generative/moodConstraint.ts` (MOODS as constraints; brain
+  voicing keeps every pitch class, the literal root, the written tight intervals
+  exactly, and never a larger move than the composer's written jump). `applyRails`
+  re-issues a smoothed rail only when its target moved (`RAILS_DIRTY_*`,
+  `RAILS_DIRTY_ENABLED`).
 
 ## 5. World signals available to compose from
 

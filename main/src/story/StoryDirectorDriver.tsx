@@ -1,25 +1,26 @@
+import { tickUnfinishedMap, unfinishedMapMarker, unfinishedMapObjective, getUnfinishedMapSnapshot } from './unfinishedMapDirector.ts';
+import { readGuidedObjectiveRestore } from './ux/objectiveRestore.ts';
+import { setSideCoverageViewport, sampleFixedScreenCoverage, noteFixedScreenCoveragePresented } from './sideLens.ts';
+import { readEarlyFeedReservations, readStoryHudSafeAreaInsets } from './ux/storyHudLayout.ts';
+import { cancelPendingStoryUxFeedback } from './ux/feedbackCues.ts';
+import { isTouchDevice } from '../utils/mobileInput.ts';
+import { resolveMarkerTarget, registerStoryMarkerWorld } from './beats/markerTargets.ts';
+import { storyWorldHandles } from './storyWorldHandles.ts';
 import { useEffect, useRef } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { addAfterEffect, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import {
-  anomalyMassDesignated,
-  storyDirectorTick,
-  storyFreeMarkerTarget,
-  type StoryMarkerTarget
-} from './storyDirector.ts';
+import { storyDirectorTick, type StoryMarkerTarget } from './storyDirector.ts';
 import { advanceToBeat, getStoryStateSnapshot, type StoryBeat } from './storyState.ts';
 import { getStoryInputPolicy } from './storyInputPolicy.ts';
 import { autopilotTick, isMovieMode } from './autopilot.ts';
-import { setScoreIntensity } from './storyScore.ts';
+import { COMPOSED_TIMELINE_BEATS, setScoreIntensity } from './storyScore.ts';
 import { getAppStateSnapshot } from '../state/appState.ts';
 import { getFeedRuntime } from './feedRuntime.ts';
 import { getPlayerLook, getPlayerUp, getPlayerWorldPosition } from '../state/playerFrame.ts';
 import { heroTreeHandle } from './world/HeroAppleTree.tsx';
-import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
-import { signalMesaHandle } from './world/SignalMesa.tsx';
+
+
 import { REDACTION_BANDS } from './storyScript.ts';
-import { currentNavWaypointIndex, currentNavWaypointPosition, NAV_WAYPOINT_COUNT } from './navWaypoints.ts';
-import { getSupplyPodPositions, isPodCollected } from './supplyPods.ts';
 import {
   directionalMarkerRange,
   projectDirectionalMarker,
@@ -39,11 +40,21 @@ import {
   resetAuthoredForegroundClock
 } from './authoredFrameTime.ts';
 import { publishStoryBoundaryTelemetry } from './storyBoundaryTelemetry.ts';
+import { tickChapter10FreePlayEntry, CH10_MOVIE_FREEPLAY_GRACE_SECONDS } from './emergentStoryDirector.ts';
 import {
-  getChapter10MarkerTarget,
-  tickChapter10FreePlayEntry,
-  CH10_MOVIE_FREEPLAY_GRACE_SECONDS
-} from './emergentStoryDirector.ts';
+  getCommonGroundProbeSnapshot,
+  suspendCommonGroundPresentation,
+  tickCommonGroundEntry,
+  tickCommonGroundFreePlay,
+  type CommonGroundProbeSnapshot
+} from './commonGroundDirector.ts';
+
+declare global {
+  interface Window {
+    /** Read-only ch13 diagnostic, installed only under a probe/debug query. */
+    __paravoxiaCommonGround?: { snapshot: () => CommonGroundProbeSnapshot };
+  }
+}
 import {
   stationReturnMarkerTarget,
   stationReturnObjective,
@@ -83,55 +94,7 @@ function redactionLabelFor(distance: number): string {
 }
 
 function surveyMarkerTarget(beat: string | null): StoryMarkerTarget | null {
-  // One goal at a time: the mass is only designated AFTER the calibration
-  // sweep — until then the CCTV era has exactly one task, looking.
-  if (beat === 'ch1-anomaly' && anomalyStoneHandle.position && anomalyMassDesignated()) {
-    return {
-      position: anomalyStoneHandle.position,
-      label: 'UNCHARTED MASS',
-      surfaceUp: anomalyStoneHandle.up
-    };
-  }
-  if (beat === 'ch1-iso' && signalMesaHandle.summit) {
-    // The iso era climbs the mesa; the signal source is its summit (the anomaly
-    // stone now lies across the gravity edge, designated only in ch1-anomaly).
-    return { position: signalMesaHandle.summit, label: 'SIGNAL SOURCE' };
-  }
-  if (beat === 'ch1-nav') {
-    const wp = currentNavWaypointPosition();
-    if (wp) {
-      return { position: wp, label: `TRIANGULATION ${currentNavWaypointIndex() + 1}/${NAV_WAYPOINT_COUNT}` };
-    }
-    return null;
-  }
-  if (beat === 'ch1-depth') {
-    const positions = getSupplyPodPositions();
-    let nearest: THREE.Vector3 | null = null;
-    let nearestDist = Infinity;
-    const player = getPlayerWorldPosition();
-    positions.forEach((pos, i) => {
-      if (isPodCollected(i)) return;
-      const dist = player.distanceTo(pos);
-      if (dist < nearestDist) {
-        nearestDist = dist;
-        nearest = pos;
-      }
-    });
-    return nearest ? { position: nearest, label: 'SUPPLY POD' } : null;
-  }
-  // Chapter 10 resolves its own targets: they are the only ones that must be
-  // present on the frame a mandatory objective enters even when the world
-  // arrived a moment ago, which is what a deep link into finished free play is.
-  const chapter10 = getChapter10MarkerTarget(beat as StoryBeat | null);
-  if (chapter10) return chapter10;
-  // CUT, NOT QUEUE. Chapter 10 owns its marker band outright: when its own rung
-  // wants no marker — the ignite prompt, the resolve card whose whole point is a
-  // frame with no annotation on it — the band goes EMPTY rather than inheriting
-  // the free-play chevron underneath, which is how `KESTREL HATCH · REBOARD`
-  // survived the beat change into ch10-transit and stood over the cut line.
-  if (typeof beat === 'string' && beat.startsWith('ch10')) return null;
-  // Post-feed beats (the first day alive / ch4): the director owns the target.
-  return storyFreeMarkerTarget();
+  return resolveMarkerTarget(beat as StoryBeat | null, getActiveGuidedStoryObjective());
 }
 
 interface StoryDirectorDriverProps {
@@ -145,13 +108,89 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
 }) => {
   const size = useThree(s => s.size);
   const setDpr = useThree(s => s.setDpr);
+
+  // A mounted world is the readiness boundary for every chapter's candidate.
+  useEffect(() => registerStoryMarkerWorld(storyWorldHandles), []);
+  useEffect(() => addAfterEffect(() => noteFixedScreenCoveragePresented()), []);
   const appliedDpr = useRef<number | null>(null);
+  const coverageFrame = useRef(0);
   const authoredClock = useRef(createAuthoredForegroundClock());
 
   useEffect(() => {
     setSignedSceneAvPaused(paused);
     return () => setSignedSceneAvPaused(true);
   }, [paused]);
+
+  // Chapter 13's read-only probe surface, and ONLY under an explicit probe or
+  // debug query. Players never set these; normal play never installs it, and it
+  // is removed on unmount. It exposes one function that returns a copy of state
+  // this chapter already computes for gameplay — no setter, no handle, no
+  // preparation, no mutable reference — because the existing journey probe can
+  // see the player and the AV rail but nothing of this chapter's route, holds or
+  // grounded-pose frame, which is precisely the seam a real measurement missed.
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const params = new URLSearchParams(window.location.search);
+    const wanted = params.get('journeyprobe') === '1'
+      || params.get('chapterjourney') === '1'
+      || params.get('debug') === '1';
+    if (!wanted) return undefined;
+    window.__paravoxiaCommonGround = { snapshot: () => getCommonGroundProbeSnapshot() };
+    return () => { delete window.__paravoxiaCommonGround; };
+  }, []);
+
+  const earlyTicked = useRef(false);
+  useFrame((state, rawDt) => {
+    tickUnfinishedMap();
+    const story = getStoryStateSnapshot();
+    const camera = state.camera as THREE.PerspectiveCamera;
+    const playingPhase = getAppStateSnapshot().phase === 'playing';
+    const hidden = documentIsHidden();
+    const foreground = story.active && !paused && playingPhase && !hidden;
+    // A STORY THAT FINISHED IS NOT A STORY THAT WAS INTERRUPTED.
+    //
+    // `foreground` includes `story.active`, so the normal handback — the real
+    // first completion transitioning to done — turns it false on the very frame
+    // the signed live-only token was created, and this callback runs at priority
+    // -1, ahead of the frame that carries the token's own deadline. Suspending
+    // unconditionally therefore cancelled that token about 13ms after it began
+    // (`verifier/captures/finale-window/window-4`, sample 179: Terra 18, worker
+    // 18, committed, both anchors, visible and focused, token age 21.2ms, gone
+    // at the next atomic sample), which is exactly the completion the reset
+    // clause's single exception protects.
+    //
+    // So the cancellation asks for an ACTUAL cancellation cause. Pause, a phase
+    // that is no longer playing and visibility loss each still cancel here, at
+    // once, with the reason they always carried; mere inactivity does not. This
+    // does NOT make an inactive story foreground: nothing below ticks, the
+    // completed story does not reactivate, guidance still retires immediately on
+    // this frame, and every other cancellation class — quit, menu, mute, zero
+    // volume, unavailable audio, reset, actor or world change, new story,
+    // optional survey, deep link, replay, sandbox and any other beat exit — is
+    // untouched at its own seam. The token still expires on its existing
+    // monotonic five-second deadline through its existing 4.5-second release,
+    // carried by `tickCommonGroundEntry` on the free-play frames below.
+    const interrupted = paused || !playingPhase || hidden;
+    earlyTicked.current = false;
+    if (!foreground) {
+      cancelPendingStoryUxFeedback('foreground-loss');
+      // The live-only texture is cancelled by pause and by visibility loss, and
+      // it never resumes, hydrates or defers to unlock.
+      if (interrupted) suspendCommonGroundPresentation(paused ? 'pause' : 'visibility-loss');
+    }
+    if (!camera.isPerspectiveCamera || !/^ch1-(fixed|track|raster)$/.test(story.beat ?? '')) return;
+    const target = getFeedRuntime().brackets.find(bracket => bracket.visible);
+    const offset = camera.view?.enabled ? camera.view.offsetY : 0;
+    setSideCoverageViewport({ width: size.width, height: size.height, fov: camera.fov, aspect: camera.aspect,
+      touch: isTouchDevice(), safe: readStoryHudSafeAreaInsets(), reservations: readEarlyFeedReservations(),
+      restoreIdentity: `${story.runId}:${readGuidedObjectiveRestore().version}`,
+      targetVertical: target ? { top: target.y - target.size / 2 + offset, bottom: target.y + target.size / 2 + offset } : undefined });
+    sampleFixedScreenCoverage(getPlayerWorldPosition(), ++coverageFrame.current, foreground);
+    if (foreground) {
+      storyDirectorTick(Math.min(rawDt, 0.1), camera, state.clock.elapsedTime);
+      earlyTicked.current = true;
+    }
+  }, -1);
 
   useFrame((state, rawDt) => {
     const story = getStoryStateSnapshot();
@@ -167,6 +206,8 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
     }
 
     const playing = getAppStateSnapshot().phase === 'playing';
+    const dormantMapNavigation = !story.active && !paused && playing && getUnfinishedMapSnapshot().destination !== null && getUnfinishedMapSnapshot().complete;
+    if (dormantMapNavigation) activateGuidedStoryObjective(unfinishedMapObjective());
     const dormantStationReturn = !story.active && !paused && playing && stationReturnPending();
     if (dormantStationReturn) {
       const objective = stationReturnObjective();
@@ -179,7 +220,7 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
         getFeedRuntime().marker.visible = false;
       }
     }
-    const authoredSequence = story.beat === 'a4-exhale' || story.beat === 'ch5-maw';
+    const authoredSequence = story.beat != null && COMPOSED_TIMELINE_BEATS.has(story.beat);
     const inputDt = Math.min(rawDt, 0.1);
     const directorDt = authoredSequence
       ? advanceAuthoredForegroundClock(authoredClock.current, rawDt, {
@@ -208,20 +249,29 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
           inputDt,
           isMovieMode() ? CH10_MOVIE_FREEPLAY_GRACE_SECONDS : undefined
         );
+        // Chapter 13's door, on the same free-play frames and for the same
+        // reason: the player is at the restored core and the story is not.
+        // It also carries the live-only final texture's deadline, because the
+        // handback deactivates the story and this is the frame that survives it.
+        tickCommonGroundEntry(inputDt);
+        // And the persistent local tester after the handback: he stayed.
+        tickCommonGroundFreePlay(inputDt);
+      } else {
+        suspendCommonGroundPresentation('pause');
       }
       publishStoryBoundaryTelemetry(camera.isPerspectiveCamera ? camera : null);
-      if (!dormantStationReturn) return;
+      if (!dormantStationReturn && !dormantMapNavigation) return;
     }
     if (!playing) {
       publishStoryBoundaryTelemetry(camera.isPerspectiveCamera ? camera : null);
       return;
     }
-    // A4 and Maw are authored physical sequences. They may repay a bounded
+    // Signed composed timelines and A4/Maw physical sequences may repay a bounded
     // amount of delayed foreground render time so a slow GPU cannot turn their
     // receipts into a rendered-frame-count deadlock. Player/agent controls keep
     // the conservative 100ms input step and never inherit that catch-up budget.
     if (story.active) {
-      storyDirectorTick(directorDt, camera.isPerspectiveCamera ? camera : null, state.clock.elapsedTime);
+      if (!earlyTicked.current && !(/^ch1-(fixed|track|raster)$/.test(story.beat ?? '') && documentIsHidden())) storyDirectorTick(directorDt, camera.isPerspectiveCamera ? camera : null, state.clock.elapsedTime);
       if (isMovieMode()) autopilotTick(inputDt);
       publishStoryBoundaryTelemetry(camera.isPerspectiveCamera ? camera : null);
     }
@@ -232,12 +282,15 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
     // The feed designates whatever the work order demands: the next supply pod,
     // the active triangulation fix, the signal source, the uncharted mass — a
     // bracket when in frame, an edge chevron pointing at it when it isn't.
+    const feedBeat = story.beat === 'ch2-color' || story.beat === 'ch2-approach';
     const markerTarget = playing
-      ? dormantStationReturn
+      ? dormantMapNavigation
+        ? unfinishedMapMarker()
+        : dormantStationReturn
         ? stationReturnMarkerTarget()
         : surveyMarkerTarget(story.beat)
       : null;
-    if (markerTarget) {
+    if (markerTarget && !feedBeat) {
       const playerPos = getPlayerWorldPosition();
       const playerUp = getPlayerUp();
       const playerForward = getPlayerLook().forward;
@@ -273,7 +326,8 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
       r.marker.visible = false;
     }
     // --- hero tree redaction (Ch2 feed beats only) -----------------------------
-    const feedBeat = story.beat === 'ch2-color' || story.beat === 'ch2-approach';
+    // This is the era presentation of the same resolved candidate. It owns
+    // the visible marker in ch2, so the generic bracket stays hidden.
     if (!playing || !feedBeat || !heroTreeHandle.position || !heroTreeHandle.up) {
       if (r.redaction.visible) r.redaction.visible = false;
       if (r.redactionIndicator.visible) r.redactionIndicator.visible = false;

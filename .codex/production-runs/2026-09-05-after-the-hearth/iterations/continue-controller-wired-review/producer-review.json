@@ -1,0 +1,26 @@
+{
+  "schema": "paravoxia.producerProbePrepReview.v1",
+  "at": "2026-09-06T20:57:58.367220+00:00",
+  "readyForRuntime": false,
+  "reportRef": "continue-controller-wire-report.json",
+  "reportSha256": "eb230b8ed44921e61b54048b1491487729742177382b0b168f0c51dd9d5296ad",
+  "filesRehashed": 14,
+  "acceptedChanges": [
+    "Actual helper calls wired, objectiveId ch13:survey:offer-span distinct from actionId story-ch13-offer-span and exactverb. Booleangateadapter used.",
+    "Per-key stamped calibration/retention and directed-motion guard called by executablepath.",
+    "New route-offered anchor checked relative to beforeF, but acceptance adds an invalid19-anchor condition below."
+  ],
+  "blockingPrivateCorrections": [
+    "C1: remove hardcoded beforeOffer.anchors.slice(0,19)/prefix.length===19. 19 is priorserialized surveyPOINTS count, notstoryanchors. Compare actual dynamic preFanchors withoutinventedminimum; retain separate fullWorldSavepointprefix equality afterContinue. Exact authorizedF plus NEW anc.cg.route-offered required; no genericphasechange/oldanchorpass. Test seven/eightactualpreFanchors positive and old/unrelated/missinganchor negative through actualcalledgate.",
+    "C2: passive sampler must use existing __paravoxiaJourneyProbe.snapshot().state.systemFlight for activePlanetId, as main/tools/lib/evidence.mjs126-140 alreadydoes. __paravoxiaSystem is guessed. Never alias worldBound boolean as renderOrigin; readactualpublishedfield or null with distinctworldBound.",
+    "C3: sampler currentlyharvests immediatelywhenfirstCG/HUDappears, while observedposechangehappens~1secondlater. Retainminimum5seconds AFTERfirstvalidruntimepose, allcapturedframes throughthatwindow; do notfilterms<=5000sinceclickwhenmountislate. Boundtotalwindow~30seconds afteractualclick, preserve latebootunknowns. Catch perframeerrors, caphit+cleanupinfinally and no silentloss.",
+    "C4: runCalibration stillholds eachkey450ms plus350settle, and builds decision diagnostics frompre-roundup; use shortboundedcalibration and actualper-keyup/poststamp forcalibrationusability. dirs update onlywhenretainedDirs[k] truthy leavesstalekeys behind; explicitlyclearunusablekeys. Partial-roundlateralcount0doesnotmeanneitherlateralcontrolworks; countliveusableallentries."
+  ],
+  "nonBlockingQualifications": [
+    "31entryAdaptation checks include sourceregex/staticwiring checks; notactualexecutionofasyncmaincalibrationoracceptance. Do notcallthemfullwiredbehaviorproof.",
+    "Priorclaimed301paths attributioncontradictsnoattribution; preexistingdirtysourcecounts are notauthorship.",
+    "NoGPU/runtime/acceptedaction evidence generated."
+  ],
+  "next": "Apply precise corrections in next actualContinue verifier preflight, narrowactualhelpertests, candidatebundle/source repin beforeGPU. Avoidnewgenericprepcontext orduplicate108suite.",
+  "sourceMutationAuthorized": false
+}

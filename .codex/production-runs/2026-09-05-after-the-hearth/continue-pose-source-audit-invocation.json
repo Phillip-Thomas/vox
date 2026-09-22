@@ -1,0 +1,16 @@
+{
+  "role": "continue-pose-source-audit",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T20:31:04.901597+00:00",
+  "commissionSha256": "c51c97b1afbd8df3bd70ffcb3cb21351c1b6e2b34fc0b258be4cf3f76536558d",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "Read-only actual Continue pose load/validation/scoping causal audit, bounded CPUreplay, no GPU/game changes",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T20:33:19.183720+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "a2454b90-77bc-4cac-8adc-6c6b9bfab824",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

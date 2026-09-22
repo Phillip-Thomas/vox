@@ -1,0 +1,167 @@
+{
+ "schema": "paravoxia.run.finaleWindowPidClosure.v1",
+ "runId": "2026-09-05-after-the-hearth",
+ "lane": "finale-window-pid-closure",
+ "role": "mechanical probe engineer (CPU-only preparation)",
+ "author": "prthomas0321@gmail.com",
+ "authorshipNote": "The two corrections below were written by THIS engineer in this lane. The creative producer and root reported the defects and pre-approved a routine fix; they did not write the code.",
+ "at": "2026-09-06T00:00:00Z",
+ "status": "PREPARED-NOT-RUN",
+ "statusMeaning": "No browser, no GPU, no preview, no recorder, no game run happened in this lane. Only CPU self-tests and file hashing were executed. SHORT holds the GPU; root will perform the ONE unmuted combined-state run afterwards.",
+ "scope": {
+  "ownedAndModified": [
+   "verifier/probes/finale-window/finale-window-probe.mjs",
+   "verifier/probes/finale-window/windowSampler.mjs",
+   "verifier/probes/finale-window/closure-checks.mjs",
+   "logs/finale-window-pid-closure/",
+   "finale-window-pid-closure-report.json",
+   "finale-window-pid-closure-report.md"
+  ],
+  "readOnly": [
+   "verifier/probes/lib/ownedSession.mjs (not mine; unchanged)",
+   "verifier/probes/finale-window/finale-window-runtime.mjs (verified, unchanged)",
+   "verifier/probes/finale-window/audio-isolation-plan.json (unchanged)",
+   "main/node_modules/playwright-core (API confirmation only)"
+  ],
+  "notTouched": "no GPU, no browser, no preview server, no pulse sink, no recorder, no build, no full verify, no game source, no contract, no shipped debug hook, no archived iteration"
+ },
+
+ "failure1_browserProcessPid": {
+  "defectConfirmed": true,
+  "wasAt": "finale-window-probe.mjs:301 — browserPid: browser.process()?.pid ?? null, evaluated as an ARGUMENT to cleanup.adopt(...)",
+  "whyItThrew": "chromium.launch() resolves to a playwright-core Browser. `browser.process` is undefined on that object, so `browser.process()` is a TypeError. Optional chaining after the call does not help: the call itself throws. Because the expression was an argument to adopt(), the throw happened BEFORE the guard owned anything, so the freshly launched headed browser leaked with no cleanup path.",
+  "apiConfirmation": {
+   "source": "INSTALLED driver, not documentation",
+   "package": "main/node_modules/playwright-core",
+   "version": "1.61.0",
+   "types": "node_modules/playwright-core/types/types.d.ts",
+   "findings": [
+    "`export interface Browser` spans lines 9949-10693; a member scan of that range shows process(): ABSENT.",
+    "`process(): ChildProcess` occurs at line 17092 owned by interface ElectronApplication, and at line 18431 owned by interface BrowserServer. Neither is held here.",
+    "`newBrowserCDPSession(): Promise<CDPSession>` at line 10128 IS a member of Browser.",
+    "BrowserType.launchServer exists at runtime (typeof === 'function'), so a BrowserServer route was available but rejected: it would change the shipped launch shape and add a second lifecycle to guarantee-clean."
+   ]
+  },
+  "fix": {
+   "removed": "the browser.process() call entirely — not made 'safe', not wrapped in try/catch",
+   "newPidSource": "ownedBrowserPid(browser): browser.newBrowserCDPSession() -> send('SystemInfo.getProcessInfo') -> the entry with type === 'browser' -> its integer id. The CDP session is bound to the browser THIS probe launched, so the pid can only be that browser's own process.",
+   "neverDone": "no pgrep, no global process scan, no ps/pidof, no parent-guess, no foreign pid, no 'most recent chrome' heuristic",
+   "pidValidation": "the id must be a positive integer; a string, missing entry, or absent processInfo array is a hard error, never coerced",
+   "cdpSessionHygiene": "the pid CDP session is detached in a finally, on success AND on rejection"
+  },
+  "orderingFix": {
+   "rule": "launch -> ADOPT -> then every fallible call",
+   "afterAdoption": ["pid lookup", "newContext", "newPage", "goto", "assertHardwareGl"],
+   "effect": "any of those throwing now closes the probe's own browser through the same guard; the failing phase is recorded and the original error is rethrown unchanged"
+  },
+  "pidFailureBehaviour": {
+   "onLookupFailure": "cleanup.stopOnce('owned-browser-pid-lookup-failed') closes the owned browser, failure.json records phase 'owned-browser-pid-lookup', cleanup-receipt.json is written, the error is rethrown",
+   "browserPidJson": "NOT written on a failed lookup",
+   "consequence": "finale-window-runtime.mjs blocks on browser-pid.json and throws 'probe never published browser-pid.json; refusing to record without a verified owner' — so NO output capture happens and no ownership is ever claimed over an unbound process"
+  },
+  "closeFailureFix": {
+   "was": "stop: async () => { await browser.close().catch(() => {}); }",
+   "now": "stop: async () => { await browser.close(); }",
+   "why": "the guard already catches stop() errors and records stopError with stopped === false. Swallowing the close failure inside stop() made a failed close report as a clean stop."
+  },
+  "audioWrapperUsesRealPid": "finale-window-runtime.mjs reads browser-pid.json, rejects a null pid, and passes that pid to verifySinkOwnership, which walks the real /proc parent chain of each sink input on the owned sink. The pid it trusts is now the CDP-reported browser process, not a guess.",
+  "entrypointGuard": {
+   "added": "main() runs only when process.argv[1] resolves to this module",
+   "why": "the CPU self-test imports the probe to exercise the ACTUAL startup helper; importing must never launch a browser",
+   "wrapperUnaffected": "finale-window-runtime.mjs spawns node with the probe's absolute path as argv[1], so main() still runs under the wrapper"
+  }
+ },
+
+ "failure2_edgeReasonBothRoutes": {
+  "defectConfirmed": true,
+  "was": "edgeReason required only common.committed === true AND workerUnits >= 18",
+  "producerRequirement": "BOTH terraUnits >= 18 AND workerUnits >= 18 AND committed AND the exact AV anchors, all in ONE atomic record",
+  "fix": {
+   "sampler": "the in-page collector now reads diagnostic.common.terraUnits with the SAME presence/type guard already used for workerUnits, publishing terraUnits (number or null) and terraUnitsPresent (boolean). An absent member stays distinguishable from an observed number and never collapses to 0 or false.",
+   "predicate": "cg-common-fields-absent is returned unless committedPresent, workerUnitsPresent+numeric AND terraUnitsPresent+numeric all hold. Then terra18 && worker18 && committed === true is required.",
+   "epsilon": "the pre-existing 1e-6 float-equality guard is applied IDENTICALLY to both sides and was NOT widened. 17.9 and 6 both fail.",
+   "reasons": ["complete+handback+committed-terra18-worker18 (edge)", "common-terra-not-18", "common-worker-not-18", "common-not-committed", "cg-common-fields-absent", "story-not-done", "anchor-ids-missing"],
+   "atomicity": "unchanged — the predicate still reads one synchronous in-page record, and buildInstallerSource still embeds edgeReason verbatim (checked by C9)."
+  },
+  "avFieldUnchanged": {
+   "field": "snapshot.state.signedSceneAv",
+   "provider": "main/src/story/JourneyRuntimeProbeBridge.tsx:244",
+   "note": "kept as-is per the addendum; the earlier state.av name was a readState wrapper alias, and the primary provider wins."
+  },
+  "noOtherChanges": "no other game predicate, no other sampler field, no contract or source edit"
+ },
+
+ "commandsRun": [
+  {"cmd": "node --check verifier/probes/finale-window/windowSampler.mjs", "exit": 0},
+  {"cmd": "node --check verifier/probes/finale-window/finale-window-probe.mjs", "exit": 0},
+  {"cmd": "node --check verifier/probes/finale-window/finale-window-runtime.mjs", "exit": 0},
+  {"cmd": "node --check verifier/probes/finale-window/closure-checks.mjs", "exit": 0},
+  {"cmd": "node verifier/probes/finale-window/closure-checks.mjs", "exit": 0, "result": "25/25 focused runtime-behaviour checks passed", "log": "logs/finale-window-pid-closure/closure-checks-1.log"},
+  {"cmd": "node -e '<rehash implementation-source-manifest.json hashes against the working tree>'", "exit": 0, "result": "gameFilesRehashed 99 mismatches 0", "log": "logs/finale-window-pid-closure/game-source-rehash.log"},
+  {"cmd": "node -e '<scan playwright-core types.d.ts for the Browser interface member set>'", "exit": 0, "result": "Browser has process(): false; newBrowserCDPSession: true; process() owners = ElectronApplication@17092, BrowserServer@18431"}
+ ],
+ "reusedNotRerun": "the previously passing CPU checks C1-C6, C8-C10, C13-C18 were not rewritten; they ran again only because they live in the same focused file that had to run for C7 and C11/C12. No heavy, GPU, build or full-verify check was re-run.",
+
+ "newAndChangedChecks": {
+  "C7": "rewritten: accepts 18/18 committed with exact anchors; REJECTS worker 18 + terra 6, terra 17.9 (no widened epsilon), a missing terraUnits member (reason cg-common-fields-absent, terraUnits null, terraUnitsPresent false), a string \"18\", worker 17.4, and both-18-but-uncommitted",
+  "C11": "NEW — calls the ACTUAL exported startUnmutedOwnedSession() that main() calls, with a PLAYWRIGHT-SHAPED Browser double that has NO process member; asserts the pid 4242 comes from the type==='browser' SystemInfo entry and that the CDP session is detached",
+  "C11b": "NEW — proves the old call is a real TypeError on that shape, and greps the probe source (comments stripped) to fail if browser.process( is ever reintroduced",
+  "C12": "NEW, 4 cases — pid lookup CDP-attach failure, pid lookup with no browser-type entry, newContext failure, goto failure: each closes the owned browser exactly once, records the real failing phase, and for both pid cases publishes NO browser-pid.json",
+  "C12e": "NEW — assertHardwareGl failure closes the adopted browser",
+  "C12f": "NEW — a FAILING browser.close() leaves guard.stopped === false with a stopError, never a clean stop",
+  "C12g": "NEW — ownedBrowserPid rejects a non-integer id and still detaches",
+  "notATestOfACopy": "C11/C12 import finale-window-probe.mjs and invoke its exported startup function. There is no duplicated happy-path wrapper in the test file, so the real call site cannot drift away from what is tested."
+ },
+
+ "combinedWrapperVerified": {
+  "import": "finale-window-runtime.mjs spawns process.execPath with resolve(HERE,'finale-window-probe.mjs') — correct absolute sibling path; closure-check C1 confirms all six-parent runtime imports (evidence.mjs, previewServer.mjs, playwright-core) resolve, and C2 confirms the five-parent path still does not",
+  "playwrightResolution": "PLAYWRIGHT_CORE_URL still points at main/node_modules/playwright-core/index.mjs by absolute file URL; the run folder is outside main/, so a bare specifier would not resolve",
+  "lock": "the prepared command still uses an INHERITED, already-exclusive flock on fd 9 (exec 9>heavy.lock; flock -w 60 -x 9), with --heavy-lock/--heavy-lock-fd 9 --probe-lock-contention; unchanged by this lane",
+  "outputPaths": "probe --out under verifier/captures; browser-pid.json, failure.json, cleanup-receipt.json, window.ndjson, summary.json and frames all written into that same out dir; the wrapper reads browser-pid.json from the SAME resolved out dir and writes owned-sink.wav and runtime-record.json there",
+  "syntax": "all four files pass node --check"
+ },
+
+ "audioIsolationUnchangedAndHonest": {
+  "recordsOnly": "parec -d ${sinkName}.monitor for the probe-owned null sink",
+  "neverRecords": "the default monitor, any microphone, any foreign stream",
+  "neverChanges": "the PulseAudio default sink; PULSE_SINK is set only in the probe child's own env",
+  "foreignStream": "a foreign stream on the owned sink is REFUSED immediately, never waited out and never recorded"
+ },
+
+ "stillMissingAndNotClaimed": [
+  "final-texture cancellation REASON and CALLER — discarded at commonGroundScore.ts:259; no shipped read-only hook exposes it. Timing adjacency in window.ndjson is circumstantial, never causal.",
+  "AudioContext.state / mute / musicVolume at the clearing frame — no shipped read-only hook; absent from every record.",
+  "App.tsx paused / hudBlockingOverlayOpen / downed conjuncts — no shipped read-only hook.",
+  "AUDIBILITY — nothing in this lane, and nothing a future recording produces on its own, is an audibility, taste, causal, repair or acceptance claim. A recorded window is an observation."
+ ],
+ "remainingUnimplementedGuards": [
+  "The pid is trusted as the browser process because Chromium reported it over a CDP session bound to the launched browser. There is no independent cross-check (e.g. against the child pid) because playwright-core's Browser exposes no child handle — a BrowserServer route would provide one but would change the shipped launch shape.",
+  "SystemInfo.getProcessInfo is a Chromium-only CDP method and has not been exercised against a real browser in this lane (CPU-only). Its shape is asserted by mock; the first real run is root's.",
+  "verifier/probes/lib/ownedSession.mjs is outside this lane's ownership and was read, not modified.",
+  "The unmuted variant's actual audio path has never been run; no wav exists."
+ ],
+
+ "gameSourceUnchanged": {
+  "manifest": "implementation-source-manifest.json",
+  "gameFilesRehashed": 99,
+  "mismatches": 0,
+  "log": "logs/finale-window-pid-closure/game-source-rehash.log"
+ },
+ "ownedArtifactHashes": {
+  "verifier/probes/finale-window/windowSampler.mjs": "c984535db45b4f8717b57e335d2cb2b1f6e93dfa579485f651b24a5b79ff5c68",
+  "verifier/probes/finale-window/finale-window-probe.mjs": "4cd3d67bb0b244604c3ddd3b968a87cbcbcb76ed90e1184ae64075339350c6ae",
+  "verifier/probes/finale-window/closure-checks.mjs": "8a8d9ce9760b9dbd913a581fadcfe428e8b267736c67be18227ad083f7ed4817",
+  "logs/finale-window-pid-closure/closure-checks-1.log": "18ed16981888fedcb74020c8a9c87b33f7320796acf45098a203e8c684b105cb",
+  "logs/finale-window-pid-closure/game-source-rehash.log": "3da5330e19cca30801acd2d595df0bda17bec83de65a74e44bbc757376430e53"
+ },
+ "unchangedArtifactHashes": {
+  "verifier/probes/finale-window/finale-window-runtime.mjs": "f844bb43be1ee3922d6e07ab01ebc9defc0ab0d2c721f531732560bc63c368e7",
+  "verifier/probes/finale-window/audio-isolation-plan.json": "80598be940380c4c9f7c2530602597215ea110931ad0843ada2cc803d21424ba"
+ },
+ "priorReportsPreserved": {
+  "finale-window-closure-report.json": "b89348d55ceaae7fc67ed88957ddfce809af8c2dca4a0bc824ba93ec9749e90b",
+  "finale-window-closure-report.md": "39f6c8ca277566601bbbfc54184b7c5ad5da0a25e25e9e635eaa75f579224b7b",
+  "archivedIterations": "iterations/finale-window-initial-preparation and iterations/finale-window-first-closure — read only, untouched"
+ },
+ "nextStep": "Root, after SHORT releases the GPU, runs ONE unmuted combined-state measurement with isolated own-output capture. This lane makes no claim about that run's outcome."
+}

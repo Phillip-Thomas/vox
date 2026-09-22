@@ -1,0 +1,26 @@
+{
+  "schema": "paravoxia.producerPhysicalVerificationReview.v1",
+  "at": "2026-09-06T16:24:49.838868+00:00",
+  "reportRef": "verification-handoff-standby-report.json",
+  "reportSha256": "304182a0ff96ffc8e35551288b65e418a4b49315f0b1a23afd842dd106ec2cd2",
+  "invocationRef": "story-verifier-handoff-standby-invocation.json",
+  "actualModel": "claude-opus-5",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "accepted": [
+    "Independent full verify351files3158tests/build exit0;99source checked after all captures.",
+    "Actual stable Origin commit, physical landing, origin-landed milestone and survey transition in bounded return fixture.",
+    "Three actual long-survey completions into COMMON, two actual W moves toH, two matching COMMON stalls with no rescue.",
+    "All four owned headed GB10 sessions stopped, root preview untouched.",
+    "Root report precision corrections were read and applied BEFORE role final; do not treat superseded draft as final."
+  ],
+  "qualifications": [
+    "Flight AV anchor not measured, only milestone/transition; no fullstory or predecessor continuity.",
+    "Final clearance uses a polyline of issued movie targets, not engine accepted trace samples. These steering targets and their41.056-unit geometric sum are not the actual offered ground path. The corrected desired/occupied distinctions are useful, but this is not exact actual offered-route clearance proof.",
+    "Terra never occupies the desired survey standby in these captures; the rail changes to hold once W can continue, and W does physically finish. No further defect inferred solely from failing to reach an intermediate nonmandatory target.",
+    "Short survey was unmeasured by fixed LONG harness, not impossible because of later COMMON stall.",
+    "Generic visual no-HUD-defect statement does not close directly observed CG014. Raised terrain collision cause remains visual inference."
+  ],
+  "remaining": "Manual COMMON recovery, earned Continue, complete chapter/fullstory/variants/AV and independent reviews remain required.",
+  "chapterAccepted": false,
+  "defectsClosed": []
+}

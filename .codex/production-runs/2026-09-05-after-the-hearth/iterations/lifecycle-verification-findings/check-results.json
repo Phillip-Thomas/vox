@@ -1,0 +1,145 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "compiledAt": "2026-09-06T09:51:53.271786+00:00",
+  "sourceManifestSha256": "58f275f6130914f878942774fd4b4c6ce74327755c33ae257965a9dbeed40e70",
+  "productionScope": {
+    "status": "passed",
+    "evidenceRefs": [
+      "implementation.diff",
+      "implementation-source-manifest.json",
+      "production-lock.json",
+      "producer-boundary-completion.json"
+    ]
+  },
+  "creativeContract": {
+    "status": "passed",
+    "evidenceRefs": [
+      "contract-gate-pass.json",
+      "scene-v2-contract-gate.log",
+      "director-signoffs.json"
+    ]
+  },
+  "typecheck": {
+    "status": "passed",
+    "evidenceRefs": [
+      "evidence/integration-movie-repair/typecheck.log",
+      "integration-movie-repair-report.json"
+    ]
+  },
+  "tests": {
+    "status": "passed",
+    "evidenceRefs": [
+      "evidence/integration-movie-repair/vitest-full.log",
+      "evidence/integration-movie-repair/vitest-story.log"
+    ]
+  },
+  "build": {
+    "status": "passed",
+    "evidenceRefs": [
+      "evidence/integration-movie-repair/build.log"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npm run typecheck",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/typecheck.log",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run test",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/vitest-full.log",
+      "evidenceSha256": "b0b67673a524c967e1142d998f8f216b8e5c71e32ce1b524275084b1e08ede07"
+    },
+    {
+      "command": "npx vitest run src/story src/game/spaceStation src/components/spaceStation",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/vitest-story.log",
+      "evidenceSha256": "ba1b377dd2a20c2dde6acfe896262b62ec5800dd88e6c96207c3623346e4edf7"
+    },
+    {
+      "command": "npm run build",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/build.log",
+      "evidenceSha256": "ba05625582f62ad7252cd07c998f026747909212a49ddc7408c9c84ed5ac2e17"
+    },
+    {
+      "command": "npm run scene:av:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/gate-scene-av-check.log",
+      "evidenceSha256": "3497e23065174a5531b578d627fbea0014efd673c22182636d8b2a6351bdd8a3"
+    },
+    {
+      "command": "npm run chapter:registry:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/gate-chapter-registry-check.log",
+      "evidenceSha256": "dc29e1872bec33eb3fa5da4fe418413f68f57c269961ffe0a3b23a2667aa4bdf"
+    },
+    {
+      "command": "npm run chapter:journey:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/gate-chapter-journey-check.log",
+      "evidenceSha256": "f3ea38a58e9b425faafd034e2e9212ba3c225f5c456098e2be87727e365df5ee"
+    },
+    {
+      "command": "npm run story:ladder:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/gate-story-ladder-check.log",
+      "evidenceSha256": "4e9d7a712479d1ca0acea316dbe23b888116b65ab75279871d1e3423572a1205"
+    },
+    {
+      "command": "npm run guidance:target-check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/gate-guidance-target-check.log",
+      "evidenceSha256": "1feb0b8ca236c77fa670a96cf3f3cab9ff168e796f4abf6403e820ef1197f4f2"
+    },
+    {
+      "command": "npm run story:authority",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/gate-story-authority.log",
+      "evidenceSha256": "e8851b126333aacc11b1a130d5f57d9d9278318d103f15957361804557a277c5"
+    },
+    {
+      "command": "npm run catalog:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/gate-catalog-check.log",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run creative:workflow:check",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/integration-movie-repair/gate-creative-workflow-check.log",
+      "evidenceSha256": "ebd8b00d7f2558e6325e5ffffa48f7e7a3b4427c7dd50d1d91015bec0062e4b5"
+    }
+  ],
+  "scope": "Final movie-repair implementation checks. Independent full verify, actual manual/movie/AV/hardware evidence and creative acceptance remain pending."
+}

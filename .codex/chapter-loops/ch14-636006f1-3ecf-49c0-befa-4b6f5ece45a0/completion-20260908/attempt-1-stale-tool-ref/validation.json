@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "command": "npm --prefix main run chapter:loop:test",
+  "filesSha256": "9bcb61b6e120147694e14537959677cd8af181873b768c4562fbd95d2626759c",
+  "log": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/completion-20260908/tests.log",
+    "sha256": "5c0f53c547f05f77c83adaa42a0142606bd88fd2e38cec923850973f7e304973"
+  }
+}

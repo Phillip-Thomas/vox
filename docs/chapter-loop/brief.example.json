@@ -1,0 +1,503 @@
+{
+  "schema": "paravoxia.chapterBrief.v1",
+  "chapter": "ch14",
+  "requestedAt": "UNBOUND_ACTUAL_REQUEST_TIME_ISO8601",
+  "request": "UNBOUND: copy the actual owner-authorized bounded chapter request and scope.",
+  "authority": "UNBOUND: cite existing authorization; do not ask for routine approvals.",
+  "provider": {
+    "provider": "claude",
+    "permissionMode": "full",
+    "models": {
+      "creative": "UNBOUND_AUTHORIZED_CREATIVE_MODEL",
+      "mechanical": "UNBOUND_AUTHORIZED_MECHANICAL_MODEL"
+    }
+  },
+  "canon": [
+    {
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "sha256": "UNBOUND_ACTUAL_BYTE_HASH",
+      "startLine": 1,
+      "endLine": 10
+    }
+  ],
+  "references": [
+    {
+      "path": "UNBOUND_PREVIOUS_ACCEPTED_CHAPTER_MEDIA",
+      "sha256": "UNBOUND_ACTUAL_BYTE_HASH"
+    },
+    {
+      "path": "UNBOUND_APPROVED_PRESENTATION_REFERENCE",
+      "sha256": "UNBOUND_ACTUAL_BYTE_HASH"
+    }
+  ],
+  "allowedPaths": [
+    "main/src/story/UNBOUND_CHAPTER_FILE.ts"
+  ],
+  "toolRefs": [
+    {
+      "path": "main/tools/chapter-journey-probe.mjs",
+      "sha256": "UNBOUND_ACTUAL_BYTE_HASH"
+    },
+    {
+      "path": "main/tools/chapter-evidence.mjs",
+      "sha256": "UNBOUND_ACTUAL_BYTE_HASH"
+    },
+    {
+      "path": "main/UNBOUND_EXISTING_CAPABILITY_TOOL.mjs",
+      "sha256": "UNBOUND_ACTUAL_BYTE_HASH"
+    },
+    {
+      "path": "main/UNBOUND_EXISTING_TOOL.mjs",
+      "sha256": "UNBOUND_ACTUAL_BYTE_HASH"
+    },
+    {
+      "path": "main/UNBOUND_PROBE_HELPER.mjs",
+      "sha256": "UNBOUND_ACTUAL_BYTE_HASH"
+    }
+  ],
+  "heavyLock": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "previewQuery": {
+    "kind": "diagnostic",
+    "query": "?story=UNBOUND_CHAPTER_ENTRY"
+  },
+  "verification": {
+    "preflight": {
+      "argv": [
+        "node",
+        "UNBOUND_EXISTING_CAPABILITY_TOOL.mjs",
+        "--chapter",
+        "{chapter}",
+        "--describe",
+        "--out",
+        "{out}"
+      ],
+      "cwd": "main",
+      "timeoutMs": 30000
+    },
+    "checks": [
+      {
+        "id": "typecheck",
+        "argv": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "resource": "cpu",
+        "dependencies": [
+          "main/src",
+          "main/tsconfig.json",
+          "main/tsconfig.node.json"
+        ]
+      }
+    ],
+    "build": {
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "main",
+      "timeoutMs": 600000,
+      "dependencies": [
+        "main/src",
+        "main/public",
+        "main/index.html",
+        "main/vite.config.ts",
+        "main/tsconfig.json",
+        "main/tsconfig.node.json"
+      ]
+    },
+    "dist": "main/dist",
+    "cases": [
+      {
+        "argv": [
+          "node",
+          "UNBOUND_EXISTING_TOOL.mjs",
+          "--chapter",
+          "{chapter}",
+          "--output",
+          "{out}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "manual",
+        "report": "report.json",
+        "schema": "UNBOUND_ACTUAL_REPORT_SCHEMA",
+        "assertions": {
+          "ordinaryControls": {
+            "pointer": "/UNBOUND/ordinaryControls",
+            "equals": true
+          },
+          "acceptedAction": {
+            "pointer": "/UNBOUND/acceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/UNBOUND/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/UNBOUND/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "UNBOUND_video"
+          },
+          {
+            "kind": "audio",
+            "path": "UNBOUND_audio"
+          },
+          {
+            "kind": "frame",
+            "path": "UNBOUND_frame"
+          }
+        ],
+        "dependencies": [
+          "main/UNBOUND_EXISTING_TOOL.mjs",
+          "main/UNBOUND_PROBE_HELPER.mjs"
+        ]
+      },
+      {
+        "argv": [
+          "node",
+          "UNBOUND_EXISTING_TOOL.mjs",
+          "--chapter",
+          "{chapter}",
+          "--output",
+          "{out}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "recovery",
+        "report": "report.json",
+        "schema": "UNBOUND_ACTUAL_REPORT_SCHEMA",
+        "assertions": {
+          "interrupted": {
+            "pointer": "/UNBOUND/interrupted",
+            "equals": true
+          },
+          "recovered": {
+            "pointer": "/UNBOUND/recovered",
+            "equals": true
+          },
+          "acceptedAction": {
+            "pointer": "/UNBOUND/acceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/UNBOUND/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/UNBOUND/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "UNBOUND_video"
+          },
+          {
+            "kind": "audio",
+            "path": "UNBOUND_audio"
+          },
+          {
+            "kind": "frame",
+            "path": "UNBOUND_frame"
+          }
+        ],
+        "dependencies": [
+          "main/UNBOUND_EXISTING_TOOL.mjs",
+          "main/UNBOUND_PROBE_HELPER.mjs"
+        ]
+      },
+      {
+        "argv": [
+          "node",
+          "UNBOUND_EXISTING_TOOL.mjs",
+          "--chapter",
+          "{chapter}",
+          "--output",
+          "{out}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "continue",
+        "report": "report.json",
+        "schema": "UNBOUND_ACTUAL_REPORT_SCHEMA",
+        "assertions": {
+          "clickedContinue": {
+            "pointer": "/UNBOUND/clickedContinue",
+            "equals": true
+          },
+          "stateEqual": {
+            "pointer": "/UNBOUND/stateEqual",
+            "equals": true
+          },
+          "newAcceptedAction": {
+            "pointer": "/UNBOUND/newAcceptedAction",
+            "gte": 1
+          },
+          "hardware": {
+            "pointer": "/UNBOUND/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/UNBOUND/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "UNBOUND_video"
+          },
+          {
+            "kind": "audio",
+            "path": "UNBOUND_audio"
+          },
+          {
+            "kind": "frame",
+            "path": "UNBOUND_frame"
+          }
+        ],
+        "dependencies": [
+          "main/UNBOUND_EXISTING_TOOL.mjs",
+          "main/UNBOUND_PROBE_HELPER.mjs"
+        ]
+      },
+      {
+        "argv": [
+          "node",
+          "UNBOUND_EXISTING_TOOL.mjs",
+          "--chapter",
+          "{chapter}",
+          "--output",
+          "{out}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "continuity",
+        "report": "report.json",
+        "schema": "UNBOUND_ACTUAL_REPORT_SCHEMA",
+        "assertions": {
+          "earnedEntry": {
+            "pointer": "/UNBOUND/earnedEntry",
+            "equals": true
+          },
+          "earnedExit": {
+            "pointer": "/UNBOUND/earnedExit",
+            "equals": true
+          },
+          "noFixtures": {
+            "pointer": "/UNBOUND/noFixtures",
+            "equals": true
+          },
+          "hardware": {
+            "pointer": "/UNBOUND/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/UNBOUND/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "UNBOUND_video"
+          },
+          {
+            "kind": "audio",
+            "path": "UNBOUND_audio"
+          },
+          {
+            "kind": "frame",
+            "path": "UNBOUND_frame"
+          }
+        ],
+        "dependencies": [
+          "main/UNBOUND_EXISTING_TOOL.mjs",
+          "main/UNBOUND_PROBE_HELPER.mjs"
+        ]
+      },
+      {
+        "argv": [
+          "node",
+          "UNBOUND_EXISTING_TOOL.mjs",
+          "--chapter",
+          "{chapter}",
+          "--output",
+          "{out}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "av",
+        "report": "report.json",
+        "schema": "UNBOUND_ACTUAL_REPORT_SCHEMA",
+        "assertions": {
+          "videoDecodes": {
+            "pointer": "/UNBOUND/videoDecodes",
+            "equals": true
+          },
+          "audioDecodes": {
+            "pointer": "/UNBOUND/audioDecodes",
+            "equals": true
+          },
+          "framesNonblank": {
+            "pointer": "/UNBOUND/framesNonblank",
+            "equals": true
+          },
+          "hardware": {
+            "pointer": "/UNBOUND/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/UNBOUND/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "UNBOUND_video"
+          },
+          {
+            "kind": "audio",
+            "path": "UNBOUND_audio"
+          },
+          {
+            "kind": "frame",
+            "path": "UNBOUND_frame"
+          }
+        ],
+        "dependencies": [
+          "main/UNBOUND_EXISTING_TOOL.mjs",
+          "main/UNBOUND_PROBE_HELPER.mjs"
+        ],
+        "binaryDependencies": [
+          "ffmpeg",
+          "ffprobe"
+        ]
+      }
+    ],
+    "observe": {
+      "look": {
+        "argv": [
+          "node",
+          "UNBOUND_EXISTING_TOOL.mjs",
+          "--chapter",
+          "{chapter}",
+          "--output",
+          "{out}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "look",
+        "report": "report.json",
+        "schema": "UNBOUND_ACTUAL_REPORT_SCHEMA",
+        "assertions": {
+          "ordinaryControls": {
+            "pointer": "/UNBOUND/ordinaryControls",
+            "equals": true
+          },
+          "acceptedAction": {
+            "pointer": "/UNBOUND/acceptedAction",
+            "gte": 1
+          },
+          "completePath": {
+            "pointer": "/UNBOUND/completePath",
+            "equals": true
+          },
+          "hardware": {
+            "pointer": "/UNBOUND/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/UNBOUND/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "UNBOUND_video"
+          },
+          {
+            "kind": "audio",
+            "path": "UNBOUND_audio"
+          },
+          {
+            "kind": "frame",
+            "path": "UNBOUND_frame"
+          }
+        ]
+      },
+      "listen": {
+        "argv": [
+          "node",
+          "UNBOUND_EXISTING_TOOL.mjs",
+          "--chapter",
+          "{chapter}",
+          "--output",
+          "{out}"
+        ],
+        "cwd": "main",
+        "timeoutMs": 600000,
+        "kind": "listen",
+        "report": "report.json",
+        "schema": "UNBOUND_ACTUAL_REPORT_SCHEMA",
+        "assertions": {
+          "audioDecodes": {
+            "pointer": "/UNBOUND/audioDecodes",
+            "equals": true
+          },
+          "videoDecodes": {
+            "pointer": "/UNBOUND/videoDecodes",
+            "equals": true
+          },
+          "hardware": {
+            "pointer": "/UNBOUND/hardware",
+            "equals": true
+          },
+          "cleanup": {
+            "pointer": "/UNBOUND/cleanup",
+            "equals": true
+          }
+        },
+        "media": [
+          {
+            "kind": "video",
+            "path": "UNBOUND_video"
+          },
+          {
+            "kind": "audio",
+            "path": "UNBOUND_audio"
+          },
+          {
+            "kind": "frame",
+            "path": "UNBOUND_frame"
+          }
+        ]
+      }
+    },
+    "recovery": {
+      "argv": [
+        "node",
+        "UNBOUND_EXISTING_TOOL.mjs",
+        "--chapter",
+        "{chapter}",
+        "--output",
+        "{out}"
+      ],
+      "cwd": "main",
+      "timeoutMs": 600000
+    }
+  }
+}

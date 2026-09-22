@@ -1,0 +1,162 @@
+{
+  "chapter": "ch14",
+  "status": "BLOCKED",
+  "affectedPaths": [
+    {
+      "path": "main/chapter-ch14-controls.json",
+      "sha256": "fc6d5d57222f49bd551f04607ff83ec8a3271c0bf941502c80eb4d31f83608f6"
+    },
+    {
+      "path": "main/chapter-registry.json",
+      "sha256": "1c50df15722f53214f337d5cfc6977d56fdfb46e6f2dd4c3c1d0f62e10411fcd"
+    },
+    {
+      "path": "main/chapter-journey-contract.json",
+      "sha256": "c61b0d01ecfe7fc5c0a6aa298923b451450ce2d49dcfbf1a6c9bd6827730ee19"
+    },
+    {
+      "path": "main/src/App.tsx",
+      "sha256": "8c4388cd7cc35a6501114a0d9f4fe3a5739af19a6d608f41f0dbcdbe3cd34fa0"
+    },
+    {
+      "path": "main/src/game/systems/progressionSystem.ts",
+      "sha256": "d9508a4e276db040ea4bc0362b7c1eb43e5ca58c2b642bd6ed6bfc1a4aff0fe0"
+    },
+    {
+      "path": "main/src/story/JourneyRuntimeProbeBridge.tsx",
+      "sha256": "1230b1796234150e6baf72dc2046f6be3bd9408afae15b1c390e43ce105fab5e"
+    },
+    {
+      "path": "main/src/story/StoryDebugPanel.tsx",
+      "sha256": "a08da4b3090739f5c16a46acff6ff3224d0a352b232b0343a5e2fafc5f030d1b"
+    },
+    {
+      "path": "main/src/story/StoryDirectorDriver.tsx",
+      "sha256": "6574a3b0ba0fec3753b7fe47f18938facf0c1194a5ef95fda2f23f15ff46fcad"
+    },
+    {
+      "path": "main/src/story/StoryOverlays.tsx",
+      "sha256": "d322efd5ccb5b3c6ad2b697ea1c5b1cdeb0df85cd82df33cb790fc9038fa4adf"
+    },
+    {
+      "path": "main/src/story/storyState.ts",
+      "sha256": "d52efe14ab8b7dc78ea8bdb667b872f9b722e260c121051e88d0cd701fb92c6a"
+    },
+    {
+      "path": "main/src/story/storyState.test.ts",
+      "sha256": "f2e8e73f05b38c94325e81393c39f3930740b0b83be01dfd0bbf617003d93adb"
+    },
+    {
+      "path": "main/src/story/tidegardenRoute.ts",
+      "sha256": "ad0025439bd2b6e7120738522e7d1cdfc5b4fef867e0a8330390cd4759fb97d2"
+    },
+    {
+      "path": "main/src/story/beats/index.ts",
+      "sha256": "ac92c97ff5b49a4d7fd36b45d48e13360ff631dcca366f3f508c312049790aa9"
+    },
+    {
+      "path": "main/src/story/beats/definitions.ts",
+      "sha256": "0d37a756ab4bdb13d66ebe02a4dc654bc08c860cb1ba9d5ee12140e68bc0b0da"
+    },
+    {
+      "path": "main/src/story/beats/metadata.generated.ts",
+      "sha256": "6e06533828aeb1aafbc1734fb064d395321843bb89284c8b27508e04ef688e0c"
+    },
+    {
+      "path": "main/src/story/unfinishedMapState.ts",
+      "sha256": "82b0b2a733f3157464eff9649a0635553ed33857eac519ce84a2e17628fc2d02"
+    },
+    {
+      "path": "main/src/story/unfinishedMapState.test.ts",
+      "sha256": "ccc0ad9dbcb8193fd80416e905f19fc7a8356e011e04a49448d49c544b583819"
+    },
+    {
+      "path": "main/src/story/unfinishedMapDirector.ts",
+      "sha256": "6076c616e8adb5b20bf90f6856e786333fa4ce3a4a7df89676531b0e86ad5c1a"
+    },
+    {
+      "path": "main/src/story/unfinishedMapScore.ts",
+      "sha256": "edda4b3910207c1756fe652e9ca4dae49aedc5a18001a24847bbf5a41def848f"
+    },
+    {
+      "path": "main/src/components/ch14/UnfinishedMapPanel.tsx",
+      "sha256": "76d57b351adaeaeef93d7c224b44e218f5bab10e732c04f89168cbcd9ab5518c"
+    },
+    {
+      "path": "main/src/components/ch14/unfinishedMap.css",
+      "sha256": "c27f1a3450adfb2cffdd9355fdb0cfc0f183012285457100b739ae9f7252d0a8"
+    },
+    {
+      "path": "main/src/story/beats/ch14/index.ts",
+      "sha256": "72bda699bea22a3047878121e2ab51ce1c3863a31bafdcdc8f3145802904de58"
+    },
+    {
+      "path": "main/src/story/beats/ch14/ch14-record.ts",
+      "sha256": "28a3baceaa84e3399edf5601826117391a3c5e515052f5a359634f35354672b6"
+    },
+    {
+      "path": "main/src/story/beats/ch14/ch14-scar.ts",
+      "sha256": "f311208313d08d86120e6ca4dd69364517a8b91423201211d3fc412d3334ac66"
+    },
+    {
+      "path": "main/src/story/beats/ch14/ch14-question.ts",
+      "sha256": "5b6a00073ac35fac3a0dbc5ac1bb08451e220807ebd3303ee5872633dacc88e8"
+    },
+    {
+      "path": "main/src/story/beats/ch14/ch14-return.ts",
+      "sha256": "22530adedfff8dc1cee11c32ce216450e7627f95cf7bd3fc030e89200f0468d4"
+    }
+  ],
+  "implemented": [
+    "Four authored beats: begin and index the earned passage, attend the repaired scar, retain an unanswered heading, select and physically record a return.",
+    "Actor-keyed milestone persistence plus an attributed passage observation snapshot using the existing ledgers.",
+    "Compact record panel; embodied interaction reach; existing marker, input, score and free-play handback seams.",
+    "Chapter registry, journey projection and provisional browser control config."
+  ],
+  "implementationLimits": [
+    "The supplied checked observation command exited 2 on both attempts. It produced no observation receipt, rendered frame or firstPlayable result. No replacement probe or runner repair was attempted.",
+    "Browser action schema, visible selectors and snapshot envelope in chapter-ch14-controls.json are unverified. Walking steps are provisional and do not establish a complete automated ordinary-control traversal.",
+    "Score uses the existing mood facade and its existing release fade; the requested two-second release, isolated phrase playback and audible mix are unverified.",
+    "Anchor events are exposed in chapter-local journey telemetry; they are not registered in the signed AV rail.",
+    "New chapter interaction IDs adapt through the shared string-ID boundary because the shared interaction enum is outside owned paths. Runtime arbitration remains unverified.",
+    "No movie rail was added. Continue, Resume, terrain reachability, panel capture restoration and final handback have source implementations but no checked browser proof.",
+    "Common Ground runtime acceptance remains open. No independent review or publication was performed."
+  ],
+  "checks": [
+    {
+      "command": "./main/node_modules/.bin/tsc --noEmit --pretty false -p main",
+      "exitCode": 0,
+      "output": "typecheck.txt"
+    },
+    {
+      "command": "./node_modules/.bin/vitest run src/story/unfinishedMapState.test.ts src/story/storyState.test.ts",
+      "cwd": "main",
+      "exitCode": 0,
+      "testFilesPassed": 2,
+      "testsPassed": 46,
+      "output": "focused-tests.txt"
+    }
+  ],
+  "observation": {
+    "command": [
+      "node",
+      "/home/thomasphillip/Projects/vox/main/tools/chapter-loop.mjs",
+      "observe",
+      "--run",
+      "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+      "--kind",
+      "look"
+    ],
+    "attempts": 2,
+    "exitCodes": [
+      2,
+      2
+    ],
+    "receiptCount": 0,
+    "framesInspected": 0,
+    "firstPlayable": null,
+    "rawOutput": "observe-look-2.txt",
+    "gatewayStateCopy": "gateway-observations.json"
+  },
+  "preservation": "Only the listed owned paths were authored; existing dirty content was edited in place without reset. W-7744 remains a bounded tester and later awakenings are not consumed."
+}

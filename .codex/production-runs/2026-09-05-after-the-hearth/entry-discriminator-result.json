@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 449383,
+  "stop_reason": "end_turn",
+  "session_id": "35e560c1-4a17-4e6d-8d24-30f034dd4da7",
+  "total_cost_usd": 2.6377015,
+  "usage": {
+    "input_tokens": 60,
+    "cache_creation_input_tokens": 93053,
+    "cache_read_input_tokens": 1627355,
+    "output_tokens": 35639,
+    "output_tokens_details": {
+      "thinking_tokens": 9345
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 93053,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2247,
+        "cache_read_input_tokens": 97489,
+        "cache_creation_input_tokens": 1755,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1755
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2159,
+      "outputTokens": 12,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002219,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 60,
+      "outputTokens": 35639,
+      "cacheReadInputTokens": 1627355,
+      "cacheCreationInputTokens": 93053,
+      "webSearchRequests": 0,
+      "costUSD": 2.6354824999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 9345,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 43,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: POINTER-LOCK-SUCCEEDED \u2014 the question's premise did not reproduce; the prior \"browser/OS refusal\" cause is NOT proved and NOT reproducible.**\n\n## What I actually ran\n\nOne headed GB10 cold browser (ANGLE NVIDIA GB10/PCIe), under the inherited **fd 9 exclusive** flock on `/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock` (`owned=true`, `procLock FLOCK WRITE inode 8397196`, independent contention probe \"refused (lock is live)\"), preflight-asserted: `activeRole=entry-discriminator`, `ready=true`, live source manifest **dc63fbae\u2026dc36c**, served index **1f699b4a\u2026** / bundle **4f39f1ea\u2026** both 200 and matching root preview ownership on **:38007**. Entry `?story=ch13-survey&journeyprobe=1&debug=1`. **1 real canvas click of the 2 allowed.** Session stopped in `finally` (`stopped:true`); root preview untouched; watched source bytes and manifest identical before/after (`sourceUnchanged: true`); no drift in `main/src`/`main/tools`.\n\n## Measurements\n\n| Fact | Value |\n|---|---|\n| click (640,360) \u2192 `pointerLockElement === canvas` | **yes, 15 ms, first click** |\n| `pointerlockchange` / `pointerlockerror` | 1 / **0** |\n| authored `console.warn('Pointer lock request failed:')` | **0** |\n| maxTouchPoints / `ontouchstart` / innerWidth | **0 / false / 1280** |\n| `pointer:coarse` / `pointer:fine` / `hover:none` | false / true / false \u2192 `isTouchDevice()` recomputed **false** |\n| shipped touch-controls DOM | **none mounted** (no `touch-joystick`, no `touch-action-cluster`, zero `touch-*` testids) |\n| pre-click state | hasFocus true, visible, activeElement body, lock null, elementFromPoint(centre) IS canvas, pointerEvents auto |\n| readiness | worldBound true, spread 0.0022u, supported true, move 1 / look `free`, movie null, autopilot absent |\n| `userActivation` | isActive true, hasBeenActive true |\n| W pulse 100 ms (**diagnostic only**) | z \u22125.999999998 \u2192 \u22126.513055322, **0.513055324 u**, non-zero, lock held, key released |\n\nBecause the lock was granted, the authored `CameraControls.handleClick` **necessarily passed all three clauses** (`target===canvas`, no lock held, `allowsMousePointerLock` true) and `requestPointerLock()` **resolved** \u2014 no early return, no rejection. Keyboard is independently enabled.\n\n## Corrections to `common-manual-runtime-report.json`\n\n- \"allowsMousePointerLock passed\" was an **assertion, not a measurement** \u2014 pointerType, `sourceCapabilities`, touchActive/touch DOM were never observed there. Measured here (all mouse-compatible, no touch UI), but valid only for 16:40.\n- \"the refusal came from the browser/OS layer\" is **not established**: no console, no `pointerlockerror`, no native reason, no OS activation was captured at 16:31; and the identical recipe now passes.\n- `hasFocus()===true` does **not** rule out loss of OS-level window activation; the `rulesOut` list did not eliminate it.\n\n## Unknowns (not measured, not inferred)\n\n- **Per-click `pointerType`/`sourceCapabilities`/`isTrusted` were NOT captured**: both of my read-only observers threw `TypeError: \u2026 'toLowerCase'` at click time (2 pageerrors) because my own `describe()` ran `tagName.toLowerCase()` on `event.currentTarget` (window/document). Defect in **my** bookkeeping only \u2014 the game handler was untouched and locked on that same click.\n- What differed at 16:31 is unrecoverable (that session logged no console/error/activation and is gone).\n- Foreign window/X11 focus ownership at either time: not inspected (out of scope). No process killed, no desktop/input settings altered.\n\n## Cause\n\n**Not proved.** Proved only: under current conditions the shipped entry path (real click \u2192 authored handler \u2192 requestPointerLock \u2192 lock \u2192 keyboard movement) works end to end. OS blame is unsupported by measurement.\n\n## Minimal next action\n\n1. Drop \"browser/OS pointer-lock refusal\" as a standing blocker \u2014 it did not reproduce.\n2. Before any re-commissioned manual COMMON run, the **shared** probe (another role's file, not edited by me) needs three read-only additions in its pointer-lock loop: console capture, `pointerlockerror` listener, click-event fields.\n3. One-line fix to my owned probe before reuse: guard `describe()` against non-Element targets.\n4. No further manual retry loop from this role.\n\n## Artifacts (all owned, fresh)\n\n- `verifier/probes/entry-discriminator/entry-input-discriminator.mjs`\n- `verifier/probes/entry-discriminator/commonPassageLogic.pinned.mjs` (byte-identical copy, `24d67c65\u20269060c`; original **not** edited)\n- `verifier/captures/entry-discriminator/diag-1/` \u2014 `summary.json`, `frame-before-click.png`, `frame-after-click-1.png`, `frame-after-w-pulse.png`, `frame-final.png`, `source-snapshot/`, `after/source-snapshot/`\n- `logs/entry-discriminator/entry-input-discriminator.log`\n- `entry-discriminator-report.json` / `.md`\n\nFrames: all four render ch13-survey with HUD, objective card \"W-7744 \u00b7 offer a route\" and `debug=1` panels; marker distance 43 m \u2192 44 m across the W pulse. No blank frame, no pop, no missing referenced HUD element.\n\n**Scope note:** not manual playability, not a COMMON passage, not a defect closure, not chapter approval, not a new workflow. Observer-only; no game-state writes, no synthetic clicks, no direct `requestPointerLock`, no gate relaxation. Historical 15:17/15:24 passes remain evidence of earlier success, not current acceptance.",
+  "ttft_ms": 1494,
+  "type": "result",
+  "duration_ms": 460311,
+  "uuid": "47170ca3-b041-4516-8cf3-808c24fe7721",
+  "ttft_stream_ms": 748,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 749,
+  "queued_turn_count": 0
+}

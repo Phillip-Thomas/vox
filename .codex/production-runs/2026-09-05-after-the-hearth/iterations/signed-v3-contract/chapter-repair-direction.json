@@ -1,0 +1,51 @@
+{
+  "schema": "paravoxia.directorRepairDirection.v1",
+  "director": "chapter",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "defectIds": [
+    "CG-IMPL-001",
+    "CG-IMPL-003",
+    "CG-IMPL-014"
+  ],
+  "contractChangeRequired": true,
+  "boundedActions": [
+    "Implement the signed common-only planned/unverified guide on the existing qualified E-to-C polyline after actual H readiness, with exact guide-line work order and one C marker. Keep the initial S-to-E survey actual-walked-only and without preview; add no verb, objective, route geometry or saved route.",
+    "Implement the exact neutral offered-route label and state-conditioned preparing/ready work orders in current scene-v3 guidance objectives 9 and 13, retained from scene-v2. Survey enters at route-offered; common preparation enters at route-tested; actual approach completion/H arrival exclusively authorize the respective ready copy and comparison eligibility. Keep actual-worker/C targets unchanged and one entry acknowledgement despite same-ID ready updates.",
+    "Make real actor approach/body-clearance suspensions truthfully recoverable by ordinary player movement. No new F, forced displacement, teleport, arrival cue, score change or approach/positioning proof is permitted. Preserve initial-only W-to-S and both uncredited E-to-H/H-to-E legs.",
+    "Keep planned common display separate from evidence through Terra passage and worker testing; only validated complete worker arrival plus earned reciprocal proof permits paired common evidence. Display and scalar progress seed no footsteps or proof. Preserve accepted survey evidence, trace caps, existing display allocation, real physical predicates and silent validated Continue/reset behavior.",
+    "Preserve every inherited constraint except the exact signed scene-v2 and scene-v3 amendments, including reciprocal usefulness, no forced failure or route ranking, no late canon reveal, immediate handback, existing live completion audio allowance/cancellations and the real station-home bridge. Contract approval alone closes none of CG-IMPL-001, CG-IMPL-003 or CG-IMPL-014.",
+    "For already authorized CG-IMPL-014, bind objective selection and the real audit-site destination to actual arrival state under the existing ch13:return:origin travel ID and Origin · audit site label. Airborne/transit/descent before grounded Origin uses exactly: Fly to Origin. / Follow the audit-site approach and land. Grounded Origin while still owning boarded flight controls uses exactly: Disembark. / Follow the audit-site marker on foot. Grounded Origin with embodied on-foot controls before W reach uses exactly: Follow the audit-site marker on foot. Existing controls own landing/disembarkation; no new key, F task, objective, target language or plot is introduced. Keep actual departure board/launch readiness where required, but Origin fps handback must not revive mandatory departure boarding.",
+    "Keep one mounted real audit-site/W approach destination through actual world/control handoff. Optional usable-hatch boarding cannot replace the mandatory arrival destination; missing readiness cannot be replaced with zero coordinates or a fabricated actor. Only real grounded Origin, embodied state and physical W-7744 reach commit anc.cg.origin-landed once and clear the return objective into actual saved/current survey state. World activation, landing alone, control-mode change, rail progress and elapsed time grant nothing. Preserve real survey offer/start input and snapshot facts.",
+    "Arrival phase-copy updates and Continue reconstruction are silent within the existing ID, with one acknowledgement at actual course entry and no cue, phrase restart or restored-home reselection. Preserve player-owned on-foot movement/look, existing vehicle controls, all variant parity and the separate mounted/performed repeated-measure requirement for the audit cue."
+  ],
+  "evidenceRefs": [
+    "scene-contract.json",
+    "chapter-common-trace-clarification.md",
+    "chapter-common-trace-patch.json",
+    "cinema-common-trace-clarification.md",
+    "scene-v2-assembly-record.json",
+    "scene-cinema-lane.json#/commonGuide",
+    "staging/scene-v2/chapter-reconciliation.jsonl",
+    "defects.json",
+    "iterations/pre-v3-arrival-promotion/chapter-repair-direction.json",
+    "chapter-arrival-guidance-interpretation.json",
+    "chapter-arrival-guidance-interpretation.md",
+    "cinema-arrival-guidance-amendment-review.json",
+    "score-arrival-guidance-amendment-review.json",
+    "chapter-contract-signoff.json",
+    "chapter-reconciliation.jsonl",
+    "producer-v3-decision.json",
+    "scene-contract.json#/guidance/objectives/4",
+    "scene-contract.json#/story/events/6",
+    "scene-contract.json#/syncAnchors/6",
+    "scene-cinema-lane.json#/objectiveBindings/4",
+    "chapter-common-terminal-interpretation.json"
+  ],
+  "verificationRoute": "After exact signed implementation, use independent raw manual and continuous movie lifecycle traces plus rendered variant evidence: a first-time player discovers and follows the full guide; endpoint-only arrival/display cannot grant proof; obstructed W-to-S/E-to-H approaches show exact preparing copy and recover without extra input; actual readiness silently changes to exact ready copy with one target and one entry cue. Test pause, Continue, world return and completed restore without invented footsteps, premature guide/holding claims, stale objectives or duplicated completion. Verify muted and lowest-tier shape distinction, actual full reciprocal/final traversals and preserved survey choice; then obtain fresh Chapter/player-experience/Cinema reviews and the existing full journey/verification gates. Actual guide, manual play, Continue and runtime acceptance remain unverified by this documentation signature. For CG-IMPL-014, additionally require fresh actual flight-to-land-to-disembark/on-foot-W objective, marker, exact work-order, input, one-acknowledgement and arrival lifecycle evidence, plus actual pause/Continue reconstruction and independent player-experience/Cinema review with unchanged Score eligibility. A movie reaching W despite wrong mandatory guidance is insufficient. This canonical update completes the typed handoff for the existing signed scene-v3 and already authorized engineer direction; it neither closes defects nor expands source boundaries or requests another material repair.",
+  "authoredBy": "Codex chapter_intent — Chapter Director",
+  "authoredAt": "2026-09-06T16:56:07.506210+00:00",
+  "contractChangeReason": "True records the already approved and signed scene-v2 to scene-v3 arrival-copy/lifecycle amendment for CG-IMPL-014. It does not request scene-v4, reopen the signed direction, or authorize another repair. Earlier CG-IMPL-001/003 constraints remain inherited from the approved scene-v2 guide/preparation amendment.",
+  "supportingEvidenceScope": "chapter-common-terminal-interpretation.json remains a separate authority interpretation. CG-IMPL-010 is integration-owned and is not added to this Chapter-owned direction; no terminal steering, geometry or additional source repair is authorized here."
+}

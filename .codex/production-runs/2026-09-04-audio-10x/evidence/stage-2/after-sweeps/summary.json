@@ -1,0 +1,273 @@
+{
+  "generatedAt": "2026-09-05T10:53:36.319Z",
+  "glue": true,
+  "quality": "full",
+  "tail": "shipped",
+  "renders": {},
+  "sweeps": {
+    "sandbox": {
+      "seconds": 180,
+      "planetSeed": 5,
+      "archetype": "verdant",
+      "bars": 59,
+      "analysis": {
+        "seconds": 180,
+        "peak": 0.36024463176727295,
+        "rms": 0.1030435381197998,
+        "nanCount": 0,
+        "clipCount": 0,
+        "longestSilenceS": 0,
+        "maxWindowRms": 0.1256481998459055,
+        "maxSmoothnessDeltaRms": 0.012315269161467857,
+        "maxSmoothnessDeltaAtS": 12.9,
+        "maxSmoothnessDeltaDb": 0.9935491903776816,
+        "maxSmoothnessDeltaDbAtS": 124.1,
+        "maxSmoothnessPreviousRms": 0.09950444563934951,
+        "maxSmoothnessCurrentRms": 0.11156293829990556,
+        "smoothnessViolations": 0
+      },
+      "report": {
+        "pass": true,
+        "checks": [
+          {
+            "name": "finite-plans",
+            "pass": true,
+            "violations": 0,
+            "detail": "every plan field finite"
+          },
+          {
+            "name": "chord-legality",
+            "pass": true,
+            "violations": 0,
+            "detail": "14 transitions, mean displacement 2.79 st"
+          },
+          {
+            "name": "phrase-tabu",
+            "pass": true,
+            "violations": 0,
+            "detail": "2 statements, 2 distinct"
+          },
+          {
+            "name": "mediant-ration",
+            "pass": true,
+            "violations": 0,
+            "detail": "0 mediants (incl. pivot awe-chords) over 8 phrases (ration 1/phrase; paradox 2)"
+          },
+          {
+            "name": "mode-drift",
+            "pass": true,
+            "violations": 0,
+            "detail": "0 drift steps, all single-accidental"
+          },
+          {
+            "name": "signal-smoothness",
+            "pass": true,
+            "violations": 0,
+            "detail": "worst normalized bar step 0.513 (limit 0.7)"
+          },
+          {
+            "name": "no-deadlock",
+            "pass": true,
+            "violations": 0,
+            "detail": "heldNoLegal 0 bars, worst streak 0 (limit 12)"
+          }
+        ],
+        "stats": {
+          "bars": 59,
+          "phrases": 8,
+          "chordChanges": 14,
+          "distinctChords": 5,
+          "mediants": 0,
+          "landingPivots": 0,
+          "stageBlooms": 0,
+          "modeDrifts": 0,
+          "melodyStatements": 2,
+          "distinctStatements": 2,
+          "barNovelty": 0.424,
+          "tabuBypasses": 1,
+          "commonToneRelaxes": 0,
+          "worstSignalStep": 0.513,
+          "modes": "dorian:59",
+          "arrangement": "BED:35 BUILD:8 BLOOM:8 EBB:8"
+        }
+      },
+      "pass": true
+    },
+    "eraBuild": {
+      "seconds": 80,
+      "planetSeed": 5,
+      "archetype": "verdant",
+      "bars": 26,
+      "analysis": {
+        "seconds": 80,
+        "peak": 0.3244848847389221,
+        "rms": 0.08825181485471945,
+        "nanCount": 0,
+        "clipCount": 0,
+        "longestSilenceS": 0,
+        "maxWindowRms": 0.12235758423307869,
+        "maxSmoothnessDeltaRms": 0.011099665016636756,
+        "maxSmoothnessDeltaAtS": 41,
+        "maxSmoothnessDeltaDb": 1.488488911211212,
+        "maxSmoothnessDeltaDbAtS": 28.2,
+        "maxSmoothnessPreviousRms": 0.02975906417214675,
+        "maxSmoothnessCurrentRms": 0.035321872250093,
+        "smoothnessViolations": 0
+      },
+      "report": {
+        "pass": true,
+        "checks": [
+          {
+            "name": "finite-plans",
+            "pass": true,
+            "violations": 0,
+            "detail": "every plan field finite"
+          },
+          {
+            "name": "chord-legality",
+            "pass": true,
+            "violations": 0,
+            "detail": "12 transitions, mean displacement 3.33 st"
+          },
+          {
+            "name": "phrase-tabu",
+            "pass": true,
+            "violations": 0,
+            "detail": "1 statements, 1 distinct"
+          },
+          {
+            "name": "mediant-ration",
+            "pass": true,
+            "violations": 0,
+            "detail": "0 mediants (incl. pivot awe-chords) over 4 phrases (ration 1/phrase; paradox 2)"
+          },
+          {
+            "name": "mode-drift",
+            "pass": true,
+            "violations": 0,
+            "detail": "0 drift steps, all single-accidental"
+          },
+          {
+            "name": "signal-smoothness",
+            "pass": true,
+            "violations": 0,
+            "detail": "worst normalized bar step 0.567 (limit 0.7)"
+          },
+          {
+            "name": "no-deadlock",
+            "pass": true,
+            "violations": 0,
+            "detail": "heldNoLegal 0 bars, worst streak 0 (limit 12)"
+          }
+        ],
+        "stats": {
+          "bars": 26,
+          "phrases": 4,
+          "chordChanges": 12,
+          "distinctChords": 5,
+          "mediants": 0,
+          "landingPivots": 0,
+          "stageBlooms": 0,
+          "modeDrifts": 0,
+          "melodyStatements": 1,
+          "distinctStatements": 1,
+          "barNovelty": 0.385,
+          "tabuBypasses": 1,
+          "commonToneRelaxes": 0,
+          "worstSignalStep": 0.567,
+          "modes": "dorian:26",
+          "arrangement": "BED:16 BUILD:8 BLOOM:2"
+        }
+      },
+      "pass": true
+    },
+    "storyHandoff": {
+      "seconds": 72,
+      "planetSeed": 5,
+      "archetype": "verdant",
+      "bars": 14,
+      "analysis": {
+        "seconds": 72,
+        "peak": 0.33587372303009033,
+        "rms": 0.07682823146371173,
+        "nanCount": 0,
+        "clipCount": 0,
+        "longestSilenceS": 0,
+        "maxWindowRms": 0.12179610452328105,
+        "maxSmoothnessDeltaRms": 0.02637979626959444,
+        "maxSmoothnessDeltaAtS": 18.1,
+        "maxSmoothnessDeltaDb": 4.067274837115448,
+        "maxSmoothnessDeltaDbAtS": 18.1,
+        "maxSmoothnessPreviousRms": 0.04417125743800597,
+        "maxSmoothnessCurrentRms": 0.07055105370760041,
+        "smoothnessViolations": 0
+      },
+      "report": {
+        "pass": true,
+        "checks": [
+          {
+            "name": "finite-plans",
+            "pass": true,
+            "violations": 0,
+            "detail": "every plan field finite"
+          },
+          {
+            "name": "chord-legality",
+            "pass": true,
+            "violations": 0,
+            "detail": "3 transitions, mean displacement 3.00 st"
+          },
+          {
+            "name": "phrase-tabu",
+            "pass": true,
+            "violations": 0,
+            "detail": "0 statements, 0 distinct"
+          },
+          {
+            "name": "mediant-ration",
+            "pass": true,
+            "violations": 0,
+            "detail": "0 mediants (incl. pivot awe-chords) over 2 phrases (ration 1/phrase; paradox 2)"
+          },
+          {
+            "name": "mode-drift",
+            "pass": true,
+            "violations": 0,
+            "detail": "0 drift steps, all single-accidental"
+          },
+          {
+            "name": "signal-smoothness",
+            "pass": true,
+            "violations": 0,
+            "detail": "worst normalized bar step 0.310 (limit 0.7)"
+          },
+          {
+            "name": "no-deadlock",
+            "pass": true,
+            "violations": 0,
+            "detail": "heldNoLegal 0 bars, worst streak 0 (limit 12)"
+          }
+        ],
+        "stats": {
+          "bars": 14,
+          "phrases": 2,
+          "chordChanges": 3,
+          "distinctChords": 4,
+          "mediants": 0,
+          "landingPivots": 0,
+          "stageBlooms": 0,
+          "modeDrifts": 0,
+          "melodyStatements": 0,
+          "distinctStatements": 0,
+          "barNovelty": 0.5,
+          "tabuBypasses": 0,
+          "commonToneRelaxes": 0,
+          "worstSignalStep": 0.31,
+          "modes": "dorian:14",
+          "arrangement": "BED:8 REST:6"
+        }
+      },
+      "pass": true
+    }
+  }
+}

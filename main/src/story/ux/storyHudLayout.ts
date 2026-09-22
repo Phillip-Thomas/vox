@@ -77,6 +77,7 @@ export interface StoryHudTopLeftOcclusion {
 }
 
 export interface StoryHudObservedRect {
+  id?: string;
   left: number;
   top: number;
   right: number;
@@ -394,6 +395,8 @@ export interface StoryMarkerPresentationInput {
   overlayWidth?: number;
   overlayHeight: number;
   layout: StoryHudLayout;
+  /** Actual transient surface rectangles, such as finalized collection feedback. */
+  observedOverlays?: readonly StoryHudObservedRect[];
   /** Pin to the collision-free safe-area lane for the reduced-motion compass. */
   stabilized?: boolean;
 }
@@ -542,6 +545,26 @@ export function solveStoryMarkerPresentation(
         displacedForObjective = true;
       }
     }
+  }
+  // Collection feedback can appear at any objective bearing. Use its measured
+  // rectangle rather than assuming the top-centre lane is unoccupied.
+  for (const overlay of input.observedOverlays ?? []) {
+    if (overlay.width <= 0 || overlay.height <= 0) continue;
+    const gap = STORY_HUD_TOP_OCCLUSION_GAP_PX;
+    const overlaps = (cx: number, cy: number) => cx - halfOverlayWidth < overlay.right + gap
+      && cx + halfOverlayWidth > overlay.left - gap
+      && cy - halfHeight < overlay.bottom + gap && cy + halfHeight > overlay.top - gap;
+    if (!overlaps(x, y)) continue;
+    const options = [
+      { x, y: overlay.bottom + gap + halfHeight },
+      { x, y: overlay.top - gap - halfHeight },
+      { x: overlay.right + gap + halfOverlayWidth, y },
+      { x: overlay.left - gap - halfOverlayWidth, y }
+    ].filter(option => option.x - halfOverlayWidth >= layout.marker.viewportInsetLeft
+      && option.x + halfOverlayWidth <= layout.viewportWidth - layout.marker.viewportInsetRight
+      && option.y >= minY && option.y <= maxY && !overlaps(option.x, option.y));
+    options.sort((a, b) => (a.x - x) ** 2 + (a.y - y) ** 2 - ((b.x - x) ** 2 + (b.y - y) ** 2));
+    if (options[0]) { x = options[0].x; y = options[0].y; displacedForTopChrome = true; }
   }
   const halfLabel = labelWidth / 2;
   const left = x - halfLabel;
@@ -705,4 +728,31 @@ export function setMeasuredStoryObjectiveCardHeight(height: number): void {
 
 export function getMeasuredStoryObjectiveCardHeight(): number {
   return measuredObjectiveCardHeight;
+}
+
+/** Mounted early surfaces, measured in the CSS viewport used by the active camera. */
+export function readEarlyFeedReservations(): StoryHudObservedRect[] {
+  if (typeof document === 'undefined') return [];
+  const ids = ['feed-work-order', 'feed-camera-status', 'feed-ledger', 'story-caption', 'touch-dpad', 'touch-dpad-actions', 'story-journal-trigger', 'hud-corner-actions'];
+  // The story URL mounts this separate control even when no journal is mounted.
+  // Use its stable disclosure relationship, which survives both button labels.
+  const debugTrigger = '[data-testid="story-debug-panel"] > button[aria-controls="story-debug-disclosure"]';
+  const journalTrigger = '[data-story-journal-trigger], .pv-mobile-journal-trigger';
+  return Array.from(document.querySelectorAll<HTMLElement>(`[data-hud-surface], ${journalTrigger}, ${debugTrigger}`))
+    .filter(node => (ids.includes(node.dataset.hudSurface ?? '') || node.matches(journalTrigger) || node.matches(debugTrigger)) && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden')
+    .map(node => { const rect = node.getBoundingClientRect(); return { id: node.matches(debugTrigger) ? 'story-debug-trigger' : node.matches(journalTrigger) ? 'story-journal-trigger' : node.dataset.hudSurface, left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height }; })
+    .filter(rect => rect.width > 0 && rect.height > 0);
+}
+export function solveEarlyFeedLayout(input: {
+  width: number; height: number; safe: StoryHudSafeAreaInsets; reservations: readonly StoryHudObservedRect[];
+}): { order: { left: number; top: number; width: number }; ledger: { left: number; bottom: number; width: number } } {
+  const left = input.safe.left + 18, right = input.width - input.safe.right - 18;
+  const upper = input.reservations.filter(rect => rect.id === 'feed-camera-status' || rect.id === 'story-journal-trigger' || rect.id === 'story-debug-trigger' || rect.id === 'hud-corner-actions' || (!rect.id && rect.top < input.height / 2));
+  const sideWidth = Math.min(680, ...upper.map(rect => rect.left - left - 14), right - left);
+  const top = input.safe.top + 26;
+  const orderTop = sideWidth >= 320 ? top : Math.max(top, ...upper.map(rect => rect.bottom + 14));
+  const lower = input.reservations.filter(rect => rect.id?.startsWith('touch-') || rect.id === 'story-caption' || (!rect.id && rect.top >= input.height / 2));
+  const ledgerBottom = Math.max(input.safe.bottom + 18, ...lower.map(rect => input.height - rect.top + 14));
+  return { order: { left, top: orderTop, width: sideWidth >= 320 ? sideWidth : right - left },
+    ledger: { left, bottom: ledgerBottom, width: right - left } };
 }

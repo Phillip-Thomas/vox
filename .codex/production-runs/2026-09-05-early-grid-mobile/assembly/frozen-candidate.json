@@ -1,0 +1,70 @@
+{
+  "frozenAt": "2026-09-05T21:04:40.376295+00:00",
+  "status": "unsigned-native-candidate-boundary-corrected-awaiting-authentic-exchange-and-signatures",
+  "runId": "2026-09-05-early-grid-mobile",
+  "sceneId": "early-grid-mobile",
+  "contractVersion": "draft-v1",
+  "contractSha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a",
+  "sourceRevision": "working-tree:1eb27bf00229c442169280f126f0f3f15bcad63d3581af76f5c0b8e4d3d0d1a8",
+  "nativeGatePassed": false,
+  "nativeChecks": 2119,
+  "nativeFailures": 33,
+  "nonPeerFailures": 0,
+  "originalDirectorApprovalsOrSignaturesAuthoredByCompiler": 0,
+  "files": [
+    {
+      "path": "scene-contract.json",
+      "sha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a"
+    },
+    {
+      "path": "production-lock.json",
+      "sha256": "5ad49010de4ef45375ab10089f6af297990f7e0c55b05f74237e7448b8e278da"
+    },
+    {
+      "path": "production-lock.md",
+      "sha256": "375027a93f69fbdd0bdf41d43b3cd97ca7fdb83e1ea682fb7459eb71c40ba044"
+    },
+    {
+      "path": "decision-brief.json",
+      "sha256": "ee362e3a10d5ebc15e667bd1cf28c20cabceff59d5cb367d911a2f1829653114"
+    },
+    {
+      "path": "decision-brief.md",
+      "sha256": "d45ebff4822cb793be94853350aecf8f622ad6a8072d2e241a409da2f6275bbd"
+    },
+    {
+      "path": "story-intent.md",
+      "sha256": "ca0d4894e3a7d7a319fd94718c7718859aad7164ee380548953c7ae0bbf9a9bf"
+    },
+    {
+      "path": "cinematography-treatment.md",
+      "sha256": "d6bb7ae9ddadd5ad4a3003e610b2ac64d0ca62f8484f03d13f443635d838a7d9"
+    },
+    {
+      "path": "score-treatment.md",
+      "sha256": "57883ba994b501e96ddd22bc6ce7aa089c33c7c663268d72b6b5a19988ae7460"
+    },
+    {
+      "path": "root-native-performance.json",
+      "sha256": "6b59a66e93b90078a691b98929e94133a6c15d4bedeed3816dc217e01fbc3d24"
+    },
+    {
+      "path": "shipped-visual-baseline.json",
+      "sha256": "aba8da108b70aea647e63d768cd790f100c86d364fbfb370b03a8977a68ae135"
+    },
+    {
+      "path": "shipped-ux-baseline.json",
+      "sha256": "9bfe7c9e8b61180a44218b57ef333aeacf46b141ad0fa27a579f6aeac8a85288"
+    },
+    {
+      "path": "shipped-reference-map.md",
+      "sha256": "c0ffd1068755083d5fe05f4f41984ed57baabfba2b0e0434c951eb4fec57b628"
+    },
+    {
+      "path": "dissent-register.md",
+      "sha256": "61f8ef6cdfc957d026641868e4f677da3a750329480c406b7a0282495e7e646d"
+    }
+  ],
+  "previousContractSha256": "2ef9a016f8c803a1fadbf456d75b7fe1e6a9ae79f072854024d29704ee346410",
+  "boundaryCorrectionRef": "assembly/native-boundary-correction-receipt.json"
+}

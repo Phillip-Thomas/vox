@@ -138,7 +138,9 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
       ch8: 8,
       ch9: 9,
       ch10: 10,
-      complete: 11,
+      ch13: 11,
+      ch14: 12,
+      complete: 13,
       none: -1
     } as const;
     let last = -1;
@@ -147,7 +149,7 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
       expect(rank).toBeGreaterThanOrEqual(last);
       last = rank;
     }
-    expect(last).toBe(11); // ends at 'done'
+    expect(last).toBe(13); // ends at 'done'
   });
 
   it('reads the station chapter as ch10 and never as the monochrome ladder', () => {
@@ -378,9 +380,12 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
     for (const beat of STORY_BEAT_ORDER) {
       const chapter = chapterForBeat(beat);
       const snapshot = { active: true, chapter, beat, runId: 0 } as const;
-      // ch10 is the ONE intended difference: it is chapter five or later and
-      // the retired regex said otherwise.
-      const expected = chapter === 'ch10' ? true : shippedFirstDayOrLater(chapter, beat);
+      // ch10 and ch13 are the intended differences: both are chapter five or
+      // later and the retired regex said otherwise. Every chapter added after
+      // ch9 inherits the right answer from the ordering rather than a list.
+      const expected = chapter === 'ch10' || chapter === 'ch13' || chapter === 'ch14'
+        ? true
+        : shippedFirstDayOrLater(chapter, beat);
       expect(storyFirstDayOrLater(snapshot), beat).toBe(expected);
     }
 
@@ -388,7 +393,7 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
     for (const chapter of ['ch1', 'ch2', 'ch3', 'ch4'] as const) {
       expect(storyChapterAtLeast(chapter, 'ch5'), chapter).toBe(false);
     }
-    for (const chapter of ['ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'complete'] as const) {
+    for (const chapter of ['ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch13', 'ch14', 'complete'] as const) {
       expect(storyChapterAtLeast(chapter, 'ch5'), chapter).toBe(true);
     }
     expect(storyChapterAtLeast('none', 'ch5')).toBe(false);
@@ -475,9 +480,15 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
       // NOT, and must keep the retired answer — chapter 10 flies back to the
       // origin during the ask (the relay is there) and lifts off from the
       // wreck, so a reload restarts the transit where the ship actually is.
+      // Chapter 13's own split, and it is physical rather than ordinal: the
+      // home and the return start at the restored second hearth on Tidegarden,
+      // and the survey and the reciprocal proof are at the Origin audit site.
       const owned = beat === 'ch10-cold' || beat === 'ch10-ask'
+        || beat === 'ch13-home' || beat === 'ch13-return'
         ? true
-        : retiredTidegardenOwned(chapter, beat);
+        : beat === 'ch13-survey' || beat === 'ch13-common'
+          ? false
+          : retiredTidegardenOwned(chapter, beat);
       expect(resolveStoryBootWorldId(STORY_PRIMARY_WORLD_ID, true, { chapter, beat }), beat)
         .toBe(owned ? TIDEGARDEN_WORLD_ID : STORY_PRIMARY_WORLD_ID);
       // The route capability still gates everything: with it closed, the
@@ -826,5 +837,70 @@ describe('anchored spawn scope', () => {
     expect(at('ch1-anomaly')).toBe(false);
     expect(at('a1-ramp')).toBe(false);
     expect(storyAnchoredSpawn({ active: false, chapter: 'ch1', beat: 'ch1-fixed', runId: 1 })).toBe(false);
+  });
+});
+
+// --- CG-IMPL-007: an on-foot beat may not be entered inside the ship ---------
+
+describe('the ch13 direct entries agree with the beat they enter', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('boots the two Origin audit-site beats ON FOOT, with the landed ship still there', () => {
+    // VF-DEEPLINK-1: `bootstrapOriginLaunchDebug` ends in
+    // `restoreBoardedSurfaceFlight`, which is exactly right for the beats that
+    // BEGIN in the cockpit and exactly wrong for these two, which begin after
+    // ch13-return has landed and disembarked. Left boarded, the entry published
+    // an on-foot beat over surface flight controls and walk input did nothing
+    // at all — 243 seconds of measured zero displacement, unrecoverable.
+    for (const beat of ['ch13-survey', 'ch13-common'] as const) {
+      vi.stubGlobal('window', { location: { search: `?story=${beat}` } });
+      initStoryFromSave();
+      expect(getStoryStateSnapshot(), beat).toMatchObject({
+        active: true, chapter: 'ch13', beat
+      });
+      expect(getSpaceFlightSnapshot(), beat)
+        .toMatchObject({ phase: 'surface', controlMode: 'fps' });
+      // The ship is still parked at the audit site, in the authored system, so
+      // she can board it again by the ordinary interaction and fly home.
+      expect(getSystemFlightSnapshot(), beat).toMatchObject({
+        activePlanetId: STORY_PRIMARY_WORLD_ID,
+        locationMode: 'surface'
+      });
+    }
+  });
+
+  it('grants no ch13 proof by stepping out: only the prior beats it seeds', () => {
+    vi.stubGlobal('window', { location: { search: '?story=ch13-survey' } });
+    initStoryFromSave();
+    // The rehearsal seeds the boundary it is NOT playing.
+    expect(hasMilestone(STORY_MILESTONES.ch13FaultReviewed)).toBe(true);
+    expect(hasMilestone(STORY_MILESTONES.ch13ReturnChosen)).toBe(true);
+    // ...and nothing this beat exists to earn.
+    expect(hasMilestone(STORY_MILESTONES.ch13OriginLanded)).toBe(false);
+    expect(hasMilestone(STORY_MILESTONES.ch13RouteTested)).toBe(false);
+    expect(hasMilestone(STORY_MILESTONES.ch13ReciprocalCrossed)).toBe(false);
+    expect(hasMilestone(STORY_MILESTONES.ch13Complete)).toBe(false);
+  });
+
+  it('leaves the two ch13 hearth beats and every boarded rehearsal exactly as they were', () => {
+    // The home and the return open on foot at the restored second hearth and
+    // always did; the repair must not have reached them.
+    for (const beat of ['ch13-home', 'ch13-return'] as const) {
+      vi.stubGlobal('window', { location: { search: `?story=${beat}` } });
+      initStoryFromSave();
+      expect(getSpaceFlightSnapshot(), beat)
+        .toMatchObject({ phase: 'surface', controlMode: 'fps' });
+    }
+    // The beats that genuinely begin in the cockpit still do. Chapter 8's
+    // launch and chapter 10's transit share the same Origin staging helper, and
+    // a repair that reached them would have broken two other chapters.
+    for (const beat of ['ch8-launch', 'ch10-transit'] as const) {
+      vi.stubGlobal('window', { location: { search: `?story=${beat}` } });
+      initStoryFromSave();
+      expect(getSpaceFlightSnapshot(), beat)
+        .toMatchObject({ phase: 'surface', controlMode: 'flight' });
+    }
   });
 });

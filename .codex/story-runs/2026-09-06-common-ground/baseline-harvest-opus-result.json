@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 310566,
+  "stop_reason": "end_turn",
+  "session_id": "c44081de-da26-4929-a95c-60e4e09a5676",
+  "total_cost_usd": 2.685241499999999,
+  "usage": {
+    "input_tokens": 40,
+    "cache_creation_input_tokens": 121810,
+    "cache_read_input_tokens": 1709069,
+    "output_tokens": 24436,
+    "output_tokens_details": {
+      "thinking_tokens": 3201
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 121810,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1429,
+        "cache_read_input_tokens": 126123,
+        "cache_creation_input_tokens": 1683,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1683
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1407,
+      "outputTokens": 20,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001507,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 40,
+      "outputTokens": 24436,
+      "cacheReadInputTokens": 1709069,
+      "cacheCreationInputTokens": 121810,
+      "webSearchRequests": 0,
+      "costUSD": 2.683734499999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 3201,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 32,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "All original transport artifacts preserved untouched; only my two files are new.\n\n**VERDICT**: harvest complete and internally consistent \u2014 **not gate-ready, not approved**. Software-only SwiftShader diagnostic; both original `exit 1` / `fail-software` verdicts retained.\n\n## Confirmed data\n\n| Item | Result |\n|---|---|\n| Paravoxia identity | recorded, 4 independent records (runner.log \"owned build\", both capture.logs \"identity confirmed\", `document.title==\"Paravoxia\"` \u00d74) |\n| Build identity | sha `b631a52`; manifest sha256 `4c9d71ce\u20268b208e` = served build hash |\n| Source drift | **none** \u2014 3 snapshots, same revision `b631a52\u202608641`, same aggregate `1bfeb00a\u202677038`, 1060 files; `jq -S .files` pairwise diffs byte-identical; status string sha256-identical \u00d73 |\n| Renderer | explicit SwiftShader \u2014 `ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0)), SwiftShader driver)`, tier `swiftshader-low`, headless, 1280x720, DPR 1 |\n| Frames | 4 of record, **0 blank**; 10/10 PNGs re-hashed + re-ffprobed, **0 mismatches**; all png_pipe/png/1280x720/rgb24 (sheets 496x320 rgba) |\n| Bursts / video / audio | 0 / 0 / 0 \u2014 confirmed absent as stated |\n| Camera | FOV 75 all four samples; authority `player-camera` (ch4), **null \u2192 pending** (ch9) |\n| Palette | **source-ref only** (`planetArtDirection.ts` `7c137680\u2026`, `planetVisualProfile.ts` `129e004e\u2026`); no measured colour |\n| Milestones | `story:ch4:audit-complete` and `story:ch9:hearth` **not reached**; 0 page errors |\n| headedStatus | `pending` |\n\nFrame inspection: all four render scene content, no blank/black/letterbox/scanline/wrong-era artifact. ch4 t=2.01s daylight shoreline, t=66.97s same vantage with moon+nebula sky (recorded as two instants only \u2014 no cycle causality claimed). Both ch9 frames have a near-camera fauna body occluding ~half the frame with no hearth subject resolvable \u2014 flagged as measurement, not verdict.\n\n## Limitations (recorded as real `pending`, not faked)\n\n`gateReady:false` \u2014 a software diagnostic isn't final approval. Pending: headed hardware (reserved by unrelated Paraform job), ch9 signed camera authority, per-frame FOV/rig/letterbox/grade/DPR, palette family/colour, adjacency and all variants (none exist), `realityStage` as one value (ch4 `material` vs ch9 `alive`, recorded per beat), `sceneId: common-ground` provisional. Not claimed: audio/unheard, night cycle, two-route, hardware look, timing/feel, performance, navigation, pace, acceptance. Frame-to-frame smoothness explicitly unmeasured (0 bursts). No new capture obligation; original hardware capture plan unchanged.\n\n## Artifacts\n\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/software-baseline-verifier-report.md`\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/shipped-visual-baseline.json`\n\nOne caveat on the deliverable itself: I wrote `shipped-visual-baseline.json` with template-extending fields (`harvestProvenance`, `sourceIdentityAndDrift`, `realityStates`, `auxiliaryArtifacts`, `unmeasured`, `*Status` pendings) because the `_template` shape has no slot for provenance, drift, or honest per-field uncertainty. It validates as JSON and keeps every template field, but it is a superset \u2014 if a downstream consumer validates strictly against `paravoxia.shippedVisualBaseline.v1`, it may reject the extras.",
+  "ttft_ms": 1492,
+  "type": "result",
+  "duration_ms": 309755,
+  "uuid": "fd65fb5b-9626-411c-9141-3f367a7660b6",
+  "ttft_stream_ms": 744,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 745,
+  "queued_turn_count": 0
+}

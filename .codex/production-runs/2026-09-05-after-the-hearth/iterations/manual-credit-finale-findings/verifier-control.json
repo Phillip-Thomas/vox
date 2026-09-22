@@ -1,0 +1,12 @@
+{
+  "updatedAt": "2026-09-06T20:28:02.080177+00:00",
+  "action": "continue",
+  "activeRole": "common-entry-crossing",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "instruction": "COMMON entry-crossing GPUgrantednow. Continue54160: read producer-continue-3d-runtime-failure-direction.json; routineCPUfixesauthorized, wait forcontrolreturn before anybrowser. No gamechanges. ScoreDirector is read-only.",
+  "currentPreviewUrl": "http://127.0.0.1:34413/",
+  "previewOwnershipRef": "verifier/artifacts/preview-ownership.json",
+  "currentIndexSha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207",
+  "currentBuildHash": "aa52b0341b78d0931a5c91d431d9ba0ce81b5edde12b9b5b54449a5ee1c20d74",
+  "nonbindingAuxiliaryObservationRef": "producer-nonbinding-auxiliary-observation.json"
+}

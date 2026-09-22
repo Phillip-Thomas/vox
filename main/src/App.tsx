@@ -1,3 +1,6 @@
+import UnfinishedMapPanel from './components/ch14/UnfinishedMapPanel.tsx';
+import { bindMapScoreInterruptions } from './story/unfinishedMapScore.ts';
+import { setUnfinishedMapBlocked, subscribeUnfinishedMap, unfinishedMapPanelOpen } from './story/unfinishedMapDirector.ts';
 import React, { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Stats, Sky, Environment, KeyboardControls } from '@react-three/drei';
@@ -16,6 +19,8 @@ import {
   undockedShipPose
 } from './game/spaceStation/spaceStationUndock.ts';
 import SpaceStationApproachDriver from './components/SpaceStationApproachDriver.tsx';
+import { markStationScreening } from './game/spaceStation/stationScreening.ts';
+import { isMovieMode } from './story/autopilot.ts';
 import SystemTravelProbe from './components/SystemTravelProbe.tsx';
 import SystemTravelDriver from './components/SystemTravelDriver.tsx';
 import TouchControls from './components/mobile/TouchControls.tsx';
@@ -115,10 +120,17 @@ import { subscribeWaterskin } from './game/systems/consumeSystem.ts';
 import { subscribeShipRestoration } from './game/systems/shipRestoration.ts';
 import { installKestrelFabricatorAccess } from './story/kestrelFabricator.ts';
 import {
+  ensureWorldGen,
   hasWorldGenCacheEntry,
   hydrateWorldGenCacheFromPackedPayload,
   scheduleWorldPrewarm
 } from './utils/worldGenCache.ts';
+import { getFeedRuntime } from './story/feedRuntime.ts';
+import './story/beats/index.ts';
+
+/** Probe-only: `?worldprep=sync` keeps the legacy synchronous cold boot. */
+const FORCE_SYNC_WORLD_PREP = typeof window !== 'undefined'
+  && new URLSearchParams(window.location.search).get('worldprep') === 'sync';
 import { scheduleGrassInstancePrewarm } from './utils/grassField.ts';
 import {
   WorldPrepCancelledError,
@@ -166,6 +178,7 @@ import StoryOverlays from './story/StoryOverlays.tsx';
 import PointerLockRecovery from './components/hud/PointerLockRecovery.tsx';
 import StoryDirectorDriver from './story/StoryDirectorDriver.tsx';
 import SurveyBracketDriver from './story/feed/SurveyBracketDriver.tsx';
+import ShaderWarmup from './components/effects/ShaderWarmup.tsx';
 import VehicleSceneAvDriver from './story/VehicleSceneAvDriver.tsx';
 import StoryDebugPanel, { storyDebugEnabled } from './story/StoryDebugPanel.tsx';
 import {
@@ -206,8 +219,10 @@ import DeathSequenceOverlay from './components/hud/DeathSequenceOverlay.tsx';
 import CraftingPanel from './components/ui/CraftingPanel.tsx';
 import { requestSurvivalRecovery } from './game/systems/survivalRecovery.ts';
 import AudioDirector from './components/audio/AudioDirector.tsx';
+import AudioListenerDriver from './components/audio/AudioListenerDriver.tsx';
 import { installGameAudioUnlockOnFirstTrustedGesture } from './audio/gameAudio.ts';
 import { playSfx } from './audio/sfxEngine.ts';
+import { createGameRenderer } from './utils/rendererBootstrap.ts';
 import './App.css';
 
 const SUN_POSITION: [number, number, number] = [100, 20, 100];
@@ -410,6 +425,8 @@ function parseCurrentWorldId(worldId: string): CurrentWorld | null {
 }
 
 const App: React.FC = () => {
+  const [initialRenderReleased, setInitialRenderReleased] = useState(false);
+  const releaseInitialRender = useCallback(() => setInitialRenderReleased(true), []);
   const [queryParams] = useState(() => new URLSearchParams(window.location.search));
   const [graphicsBoot] = useState(() => {
     const persisted = readPersistedQualityProfile();
@@ -441,6 +458,10 @@ const App: React.FC = () => {
     return s;
   });
   const [currentWorld, setCurrentWorld] = useState<CurrentWorld>(() => {
+    // Undocking owns the initial world. Mounting the saved hearth first and
+    // switching in an effect lets cleanup autosave its still-unloaded stores.
+    const undockedFrom = requestedUndockAddress();
+    if (undockedFrom) return createCurrentWorld(undockedFrom.system);
     // ?world=x,y -> spawn on foot directly on that coordinate's planet (debug: lets
     // you inspect a specific seed's terrain/trees without travelling there).
     try {
@@ -531,7 +552,8 @@ const App: React.FC = () => {
   const storyWorldSwapPending = story.active && storyRuntimeWorldId !== currentWorld.worldId;
   const [paused, setPaused] = useState(false);
   const [objectiveJournalOpen, setObjectiveJournalOpen] = useState(false);
-  const hudBlockingOverlayOpen = objectiveJournalOpen
+  const mapRecordOpen = useSyncExternalStore(subscribeUnfinishedMap, unfinishedMapPanelOpen);
+  const hudBlockingOverlayOpen = mapRecordOpen || objectiveJournalOpen
     || (isTouch && activeMobileHudDisclosure !== null);
   const [storyCompleteOpen, setStoryCompleteOpen] = useState(false);
   const [pendingCompletedSiteEntry, setPendingCompletedSiteEntry] = useState(false);
@@ -654,6 +676,7 @@ const App: React.FC = () => {
     const onLockChange = () => {
       if (document.pointerLockElement) { setPauseState(false); return; }
       if (downedRef.current) return;
+      if (unfinishedMapPanelOpen()) return; // Field record deliberately releases capture.
       if (craftingOpenRef.current) return; // Fabricator released lock on purpose
       if (getAppStateSnapshot().phase === 'playing' && !isTouch) setPauseState(true);
     };
@@ -820,6 +843,45 @@ const App: React.FC = () => {
     setPauseState(true);
   };
   const currentWorldKey = currentWorld.worldId;
+  // --- World generation readiness ----------------------------------------------
+  //
+  // Cold boot used to build the world SYNCHRONOUSLY on the main thread: the
+  // first component to call getWorldGen() on a cache miss paid the full
+  // O(R^3) cube scan plus the noise behind it — measured at ~1.75s in one
+  // block and ~3s in total, on every cold entry to any beat. The world-prep
+  // worker and its cooperative hydration already existed for system travel;
+  // this routes cold boot through the same path and holds the world-dependent
+  // subtree until the cache is populated, so every existing synchronous
+  // getWorldGen() call becomes a cache hit and nothing else has to change.
+  //
+  // Readiness is derived from the cache SYNCHRONOUSLY on hit, so a world swap
+  // that system travel already prepared never unmounts the scene for a frame.
+  const worldGenKey = `${planetSize}:${currentWorld.seed}:${currentWorld.worldId}`;
+  const [hydratedWorldGenKey, setHydratedWorldGenKey] = useState<string | null>(null);
+  const initialMountKey = `${worldGenKey}:${story.runId}`;
+  const [initialMountedWorldKey, setInitialMountedWorldKey] = useState<string | null>(null);
+  const initialWorldMounted = useCallback(() => setInitialMountedWorldKey(initialMountKey), [initialMountKey]);
+  // `?worldprep=sync` is a PROBE affordance: it restores the legacy synchronous
+  // cold boot on the same build, so the boot-stall probe can A/B the two paths
+  // without a second checkout. Players never set it.
+  const worldGenReady = FORCE_SYNC_WORLD_PREP
+    || hydratedWorldGenKey === worldGenKey
+    || hasWorldGenCacheEntry(planetSize, currentWorld.seed, currentWorld.worldId);
+  useEffect(() => {
+    if (worldGenReady) return;
+    let live = true;
+    // ensureWorldGen falls back to the synchronous build on any failure, so the
+    // key always flips; the world is never left unmounted.
+    void ensureWorldGen(planetSize, currentWorld.seed, currentWorld.worldId)
+      .finally(() => { if (live) setHydratedWorldGenKey(worldGenKey); });
+    return () => { live = false; };
+  }, [worldGenKey, worldGenReady, currentWorld.seed, currentWorld.worldId]);
+  // While the world prepares under a story entry, hold the BRACE white-out the
+  // descent would otherwise be driving (its director is paused until ready).
+  useEffect(() => {
+    if (worldGenReady || !story.active) return;
+    getFeedRuntime().flash = 1;
+  }, [worldGenReady, story.active]);
   const buildModeOpen = useMemo(() => isBuildEnabled(), [buildHudTick]);
   const inventoryTopOffset = useMemo(() => getInventoryTopOffset(isTouch), [isTouch]);
   // Whether the survey chart is openable right now — the same POLICY gate the
@@ -1099,6 +1161,13 @@ const App: React.FC = () => {
     worldPrepClientRef.current?.dispose();
     worldPrepClientRef.current = null;
   }, []);
+  useEffect(() => {
+    setUnfinishedMapBlocked(paused || downed || craftingOpen || objectiveJournalOpen
+      || !worldGenReady || !initialRenderReleased || storyCompleteOpen || storyCompletePreview
+      || (isTouch && activeMobileHudDisclosure !== null));
+  }, [paused, downed, craftingOpen, objectiveJournalOpen, worldGenReady, initialRenderReleased, storyCompleteOpen, storyCompletePreview, isTouch, activeMobileHudDisclosure]);
+  useEffect(() => bindMapScoreInterruptions(window, document, () => document.hidden), []);
+
 
   /**
    * Docking clearance granted: hand off from the ship to the station interior.
@@ -1123,9 +1192,14 @@ const App: React.FC = () => {
     // debug/rehearsal query into the station page: on undock, initStoryFromSave
     // would otherwise interpret `?story=ch10-transit` as a fresh rehearsal and
     // erase the completion and docking receipts we are crossing this seam with.
-    for (const key of ['story', 'movie', 'journeyprobe', 'systemprobe', 'agent', 'world', 'descent', 'fly', 'undock', 'keep']) {
+    // Keep the read-only journey observer across this real page transition.
+    for (const key of ['story', 'movie', 'systemprobe', 'agent', 'world', 'descent', 'fly', 'undock', 'keep']) {
       params.delete(key);
     }
+    // A screening continues INTO the station. Its own flag, set after the story
+    // query above has been stripped, so the receipt-erasing hazard that
+    // stripping exists to prevent stays prevented — see stationScreening.ts.
+    if (isMovieMode()) markStationScreening(params);
     params.set('spacestation', `${system.x},${system.y},${index}`);
     // No approach: the ship already flew it. Arriving goes straight to the lock.
     params.delete('approach');
@@ -1421,7 +1495,6 @@ const App: React.FC = () => {
     const undockedFrom = requestedUndockAddress();
     if (!undockedFrom) return;
     const system = undockedFrom.system;
-    setCurrentWorld(createCurrentWorld(system));
     resetSystemFlightForInterstellarArrival({
       system,
       // Local space rather than surface: this is a ship in the open, and the
@@ -1535,19 +1608,13 @@ const App: React.FC = () => {
 
       <Canvas
         shadows={false}
-        gl={{
-          antialias: false,
-          alpha: false,
-          powerPreference: 'high-performance',
-          stencil: false,
-          depth: true,
-        }}
+        gl={createGameRenderer}
         performance={{
           min: 0.5,
           max: 1.0,
           debounce: 200
         }}
-        frameloop="always"
+        frameloop={initialRenderReleased ? 'always' : 'never'}
         dpr={[1, 1.5]}
         onCreated={({ gl }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1562,7 +1629,7 @@ const App: React.FC = () => {
             // profiles and saved player choices win, and this is never persisted.
             setQualityProfile('POTATO', { persist: false });
           }
-          // Stash the canvas so the DOM "Play Now" button can request pointer
+          // Stash the canvas so the DOM "Free Play" button can request pointer
           // lock directly inside the click gesture (see LandingMenu).
           setGameCanvas(gl.domElement);
         }}
@@ -1633,17 +1700,25 @@ const App: React.FC = () => {
             keeps advancing across the world swap it fires at its midpoint. */}
         <WarpDriver />
         <VehicleSceneAvDriver />
+        <AudioListenerDriver />
         {/* Story director tick — same placement rationale as WarpDriver. */}
         <StoryDirectorDriver
-          paused={paused || hudBlockingOverlayOpen || downed || storyCompleteOpen || storyCompletePreview}
+          paused={!worldGenReady || !initialRenderReleased || paused || (hudBlockingOverlayOpen && !(isMovieMode() && mapRecordOpen && !objectiveJournalOpen)) || downed || storyCompleteOpen || storyCompletePreview}
           planetRadius={planetSize}
         />
         {/* Survey brackets: projection half. Same placement rationale as the
             story director — it must keep ticking across the world swap. */}
-        <SurveyBracketDriver paused={paused || hudBlockingOverlayOpen || downed || storyCompleteOpen || storyCompletePreview} />
+        <SurveyBracketDriver paused={!worldGenReady || !initialRenderReleased || paused || hudBlockingOverlayOpen || downed || storyCompleteOpen || storyCompletePreview} />
         <SceneReadyProbe />
+        {/* Cold first paint includes the populated world and its staged ecology.
+            ShaderWarmup bounds full-world preparation to 500 ms, reports the
+            preceding worker wait separately, and never re-gates later travel. */}
+        <ShaderWarmup onInitialRelease={releaseInitialRender}
+          initialWorldAvailable={worldGenReady}
+          initialMountComplete={initialMountedWorldKey === initialMountKey} />
         <PoseRecorder coordinate={currentWorld.coordinate} />
 
+        {worldGenReady && (
         <React.Profiler
           id="active-planet-runtime"
           onRender={systemProbeEnabled ? recordSystemReactProfile : () => undefined}
@@ -1662,6 +1737,7 @@ const App: React.FC = () => {
             cinematic={appPhase === 'menu' || storyWorldSwapPending}
             paused={paused || hudBlockingOverlayOpen || storyCompleteOpen || storyCompletePreview}
             profileSystemTravel={systemProbeEnabled}
+            onInitialMountComplete={initialWorldMounted}
             onGroundedChange={grounded => {
               if (grounded) {
                 setArrivalMode(mode => mode === 'approach' ? 'surface' : mode);
@@ -1671,6 +1747,7 @@ const App: React.FC = () => {
             onDebugChange={showDebugHud && debugPanelsOpen && debugEnabled ? setDebugState : undefined}
           />
         </React.Profiler>
+        )}
 
         {benchEnabled && <BenchmarkProbe profile={profile} onSample={setBenchSample} />}
         {systemProbeEnabled && (
@@ -1707,6 +1784,7 @@ const App: React.FC = () => {
       />
 
       {/* --- Story overlays (prologue terminal / regulation feed / captions) --- */}
+      <UnfinishedMapPanel visible={appPhase === 'playing' && !paused && !downed && !craftingOpen && !objectiveJournalOpen} />
       <StoryOverlays
         objectiveJournalOpen={objectiveJournalOpen}
         onObjectiveJournalOpenChange={setObjectiveJournalState}

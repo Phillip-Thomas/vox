@@ -1,0 +1,6 @@
+{
+  "status": "refused-before-state-change",
+  "error": "Evidence changed: main/tools/chapter-loop/runtime-capture.mjs",
+  "cause": "Prior checked infrastructure recovery updated frozen source hashes but left original brief toolRefs stale. Current frozen bytes passed. Continuation now imports those existing validated pins, not arbitrary live files.",
+  "modelLaunched": false
+}

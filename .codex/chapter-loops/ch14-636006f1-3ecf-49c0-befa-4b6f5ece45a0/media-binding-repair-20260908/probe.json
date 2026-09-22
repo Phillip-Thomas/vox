@@ -1,0 +1,25 @@
+{
+  "source": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-1/audio.wav",
+  "sha256": "4a612a832c7e67c8416d8869d44ada63374d2b38cc35eec88d3d829f845b68c4",
+  "model": "gpt-audio-2025-08-28",
+  "usage": {
+    "prompt_tokens": 178,
+    "completion_tokens": 63,
+    "total_tokens": 241,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 122,
+      "text_tokens": 56,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0,
+      "text_tokens": 63
+    }
+  },
+  "response": "I currently don't have an audio excerpt to listen to. Please provide the excerpt by using the appropriate function or tool to share the audio or further details, and I can assist accordingly. Once you share the excerpt, I'll analyze the game audio and describe the sounds, music, transitions, and silences with approximate timestamps.",
+  "at": "2026-09-08T22:12:55.382247+00:00"
+}

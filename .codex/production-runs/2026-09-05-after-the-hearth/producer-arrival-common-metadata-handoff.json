@@ -1,0 +1,21 @@
+{
+  "schema": "paravoxia.producerMetadataHandoff.v1",
+  "authorized": true,
+  "at": "2026-09-06T17:32:52.908237+00:00",
+  "sameMaterialRepairIteration": 7,
+  "sourcePathsBoundedBy": "integration-arrival-common-metadata-commission.txt",
+  "scopeDecisionRef": "producer-arrival-common-metadata-scope-decision.json",
+  "previousRoleFinishedAt": "2026-09-06T17:31:29.918107+00:00",
+  "previousReportSha256": "ff44d9685b0fa22f19be32c0e538d2b7f2ee64564cf6a83ece257b36a787ee02",
+  "sourceSnapshotRef": "iterations/arrival-common-before-metadata-closure/current-source-manifest.json",
+  "sourceSnapshotSha256": "d20486eddc94e0196e0f548cc09f5aa359540ff228d4dce15c817fd5f7970c10",
+  "sourceFilesRehashed": 99,
+  "previousGameplayChangedFiles": 5,
+  "unitTestsPassed": 3172,
+  "previousFullVerifyPassed": false,
+  "counterfactualFailuresOnOldSource": 10,
+  "restoreProofVerified": true,
+  "externalChangeReviewRef": "producer-concurrent-validation-tooling-review.json",
+  "noNewGameplayPatchAuthorized": true,
+  "acceptance": false
+}

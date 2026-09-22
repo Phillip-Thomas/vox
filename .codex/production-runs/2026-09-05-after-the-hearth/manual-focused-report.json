@@ -1,0 +1,660 @@
+{
+ "schema": "paravoxia.verifier.manualFocusedReport.v1",
+ "role": "manual-focused (bounded)",
+ "runId": "2026-09-05-after-the-hearth",
+ "writtenAt": "2026-09-06T15:26:56.816812+00:00",
+ "isChapterAcceptance": false,
+ "isCreativeVerdict": false,
+ "sourceMutation": false,
+ "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+ "sourceRehash": {
+  "filesRehashed": 98,
+  "before": {
+   "at": "2026-09-06T15:11:56.249Z",
+   "count": 98,
+   "mismatches": [],
+   "manifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8"
+  },
+  "after": {
+   "at": "2026-09-06T15:25:46.025Z",
+   "count": 98,
+   "mismatches": [],
+   "manifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8"
+  },
+  "mismatches": 0,
+  "tool": "verifier/probes/manual-focused/rehash-source.mjs"
+ },
+ "preview": {
+  "url": "http://127.0.0.1:38803/",
+  "indexSha256Expected": "ca7b448b72cc17407fc843afffe4808df7fc12ea5203a47b77ceece1c6dedc71",
+  "indexSha256Observed": "ca7b448b72cc17407fc843afffe4808df7fc12ea5203a47b77ceece1c6dedc71",
+  "ownershipRef": "verifier/artifacts/preview-ownership.json",
+  "rootDaemonPid": 1290230,
+  "startedByThisRole": false,
+  "stoppedByThisRole": false
+ },
+ "hardware": {
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "headed": true,
+  "softwareFallback": false
+ },
+ "lane": "MANUAL \u2014 every capture entered ?story=ch13-survey&journeyprobe=1&debug=1 with NO movie=1 and window.__autopilot absent; all motion is held keys",
+ "prerequisiteFixture": "Deep entry ?story=ch13-survey is a labelled beat fixture. It is NOT full-story or station continuity, and this report claims no cold-journey or Continue result.",
+ "sourceGatesReadFirst": [
+  "main/src/components/EfficientPlayer.tsx:1565 \u2014 active = (pointer-lock || touch || autopilot) && !boarding-lock. Desktop manual REQUIRES pointer lock; keys are otherwise ignored.",
+  "main/src/components/CameraControls.tsx:100-114 \u2014 lock is requested only by a real click whose target is gl.domElement.",
+  "main/src/story/storyInputPolicy.ts -> window.__storyInputPolicy (moveSpeedScale/lookMode); ch13-survey authors SANDBOX_POLICY (beats/ch13/ch13-survey.ts:13).",
+  "main/src/story/StoryDirectorDriver.tsx:130-138 -> window.__paravoxiaCommonGround.snapshot() (bodyCentre/up/supported/worldBound/rail/diagnostic).",
+  "main/src/story/JourneyRuntimeProbeBridge.tsx:274-282 + journeyInputRuntime.ts \u2014 passive window-boundary keydown receipts.",
+  "main/src/story/commonGroundState.ts \u2014 CG_POSES S/E/W and CG_ROUTE_LONG used as walk targets only."
+ ],
+ "harnessRootCauseOfPriorInvalidAttempts": "Prior manual-1..5 probes pressed keys without ever acquiring pointer lock, so EfficientPlayer's `active` gate was false and the shipped controller discarded every movement key. The residual displacement they recorded is spawn settling, not input. This is a HARNESS bug, not a game input defect.",
+ "captures": [
+  {
+   "name": "input-gate-1",
+   "dir": "verifier/captures/manual-focused/input-gate-1",
+   "verdict": "INPUT-PROVEN",
+   "note": "step 2: key-down -> gate -> grounded movement, key-up cessation",
+   "startedAt": "2026-09-06T15:13:57.839Z",
+   "finishedAt": "2026-09-06T15:14:11.412Z",
+   "elapsedMs": 13573,
+   "summarySha256": "3ad98082a7bb1b087331f0201cade20766a198ec0562aff842447e28d0261396",
+   "sourceSnapshotSha256": "415b52a03e49692ae1fd80dd875ca7f6e42d9cdd4618cc05b02b83618cf832ea",
+   "gates": [
+    {
+     "name": "hardware",
+     "ok": true
+    },
+    {
+     "name": "world-bound-and-body",
+     "ok": true
+    },
+    {
+     "name": "settled-grounded-body",
+     "ok": true
+    },
+    {
+     "name": "story-policy-permits-movement",
+     "ok": true
+    },
+    {
+     "name": "no-autopilot-in-this-lane",
+     "ok": true
+    },
+    {
+     "name": "pointer-lock-active",
+     "ok": true
+    },
+    {
+     "name": "keydown-reaches-window-boundary",
+     "ok": true
+    },
+    {
+     "name": "held-key-produces-horizontal-movement",
+     "ok": true
+    },
+    {
+     "name": "key-up-stops-movement",
+     "ok": true
+    },
+    {
+     "name": "second-direction-is-steering-not-settling",
+     "ok": true
+    }
+   ],
+   "cleanup": {
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "stopsRootPreview": false
+   }
+  },
+  {
+   "name": "route-1",
+   "dir": "verifier/captures/manual-focused/route-1",
+   "verdict": "W-REACHED",
+   "note": "first asserted manual walk to W",
+   "startedAt": "2026-09-06T15:16:52.780Z",
+   "finishedAt": "2026-09-06T15:17:21.053Z",
+   "elapsedMs": 28273,
+   "summarySha256": "06d6597a4c3c3aeba22871f32f5511b255040b0944fa79fecce222c8a7f42d61",
+   "sourceSnapshotSha256": "a4528fd3102d807bf4c2031e3179eba0c2ec9a0c886afc2793bb17ad767adbf0",
+   "gates": [
+    {
+     "name": "hardware",
+     "ok": true
+    },
+    {
+     "name": "world-bound-and-body",
+     "ok": true
+    },
+    {
+     "name": "settled-grounded-body",
+     "ok": true
+    },
+    {
+     "name": "policy-permits-movement",
+     "ok": true
+    },
+    {
+     "name": "pointer-lock-active",
+     "ok": true
+    },
+    {
+     "name": "manual-lane",
+     "ok": true
+    },
+    {
+     "name": "four-key-calibration-is-directional",
+     "ok": true
+    },
+    {
+     "name": "arrived-at-W",
+     "ok": true
+    },
+    {
+     "name": "W-offers-an-interaction",
+     "ok": true
+    }
+   ],
+   "cleanup": {
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "stopsRootPreview": false
+   }
+  },
+  {
+   "name": "corner-1",
+   "dir": "verifier/captures/manual-focused/corner-1",
+   "verdict": "W-REACHED",
+   "note": "stopped honestly: no rail target is published in the manual lane (movie-only instruction), so the walk targets were re-derived from source poses",
+   "startedAt": "2026-09-06T15:18:17.027Z",
+   "finishedAt": "2026-09-06T15:18:46.272Z",
+   "elapsedMs": 29245,
+   "summarySha256": "c3bfb037e6e94905442b8d35fd507db7f1c28f249331aa123a611e68eb0631f1",
+   "sourceSnapshotSha256": "ce74138e574c8b82f9e688c4cdb87fde5c9f0165afe2b013def5f6801473f6a7",
+   "gates": [
+    {
+     "name": "hardware",
+     "ok": true
+    },
+    {
+     "name": "world-bound-and-body",
+     "ok": true
+    },
+    {
+     "name": "settled-grounded-body",
+     "ok": true
+    },
+    {
+     "name": "policy-permits-movement",
+     "ok": true
+    },
+    {
+     "name": "pointer-lock-active",
+     "ok": true
+    },
+    {
+     "name": "manual-lane",
+     "ok": true
+    },
+    {
+     "name": "four-key-calibration-is-directional",
+     "ok": true
+    },
+    {
+     "name": "arrived-at-W",
+     "ok": true
+    },
+    {
+     "name": "W-offers-an-interaction",
+     "ok": true
+    },
+    {
+     "name": "F-advanced-the-objective",
+     "ok": true
+    },
+    {
+     "name": "survey-actually-started",
+     "ok": false
+    },
+    {
+     "name": "a-real-drawing-was-recorded",
+     "ok": false
+    }
+   ],
+   "cleanup": {
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "stopsRootPreview": false
+   }
+  },
+  {
+   "name": "corner-2",
+   "dir": "verifier/captures/manual-focused/corner-2",
+   "verdict": "CORNER-RECOVERY-OBSERVED",
+   "note": "step 3: W -> F -> S -> F -> drawing with an early corner deviation and ordinary return to frontier -> F at the survey end",
+   "startedAt": "2026-09-06T15:19:51.731Z",
+   "finishedAt": "2026-09-06T15:20:45.711Z",
+   "elapsedMs": 53980,
+   "summarySha256": "233ee34800dc8b13cf4f8b1ecb908dc84f1980355b8298d3bb9a1ac281c5a349",
+   "sourceSnapshotSha256": "c971ffdf0602b8163422a24122f1a3f35993bec0509d367752848f5bcc2ecd38",
+   "gates": [
+    {
+     "name": "hardware",
+     "ok": true
+    },
+    {
+     "name": "world-bound-and-body",
+     "ok": true
+    },
+    {
+     "name": "settled-grounded-body",
+     "ok": true
+    },
+    {
+     "name": "policy-permits-movement",
+     "ok": true
+    },
+    {
+     "name": "pointer-lock-active",
+     "ok": true
+    },
+    {
+     "name": "manual-lane",
+     "ok": true
+    },
+    {
+     "name": "four-key-calibration-is-directional",
+     "ok": true
+    },
+    {
+     "name": "arrived-at-W",
+     "ok": true
+    },
+    {
+     "name": "W-offers-an-interaction",
+     "ok": true
+    },
+    {
+     "name": "F-advanced-the-objective",
+     "ok": true
+    },
+    {
+     "name": "arrived-at-survey-start",
+     "ok": true
+    },
+    {
+     "name": "S-offers-begin-recording",
+     "ok": true
+    },
+    {
+     "name": "survey-actually-started",
+     "ok": true
+    },
+    {
+     "name": "deviation-was-a-real-step-off-route",
+     "ok": true
+    },
+    {
+     "name": "returned-to-frontier-by-ordinary-movement",
+     "ok": true
+    },
+    {
+     "name": "earned-prefix-retained-across-deviation",
+     "ok": true
+    },
+    {
+     "name": "progress-resumed-after-the-deviation",
+     "ok": true
+    },
+    {
+     "name": "a-real-drawing-was-recorded",
+     "ok": true
+    }
+   ],
+   "cleanup": {
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "stopsRootPreview": false
+   }
+  },
+  {
+   "name": "witness-1",
+   "dir": "verifier/captures/manual-focused/witness-1",
+   "verdict": "CORNER-RECOVERY-OBSERVED",
+   "note": "step 4 first pass: stood clear on observed reachable ground; W held with reference-occluded-survey-housing and the authored witness objective appeared",
+   "startedAt": "2026-09-06T15:21:37.092Z",
+   "finishedAt": "2026-09-06T15:23:46.890Z",
+   "elapsedMs": 129798,
+   "summarySha256": "f8ff4ecde8a8f4af3328056cf798d9be2afdf84cfe578cc39ff14a0354cb4005",
+   "sourceSnapshotSha256": "0203ce560fec9a8f679621485964466973716283ec32089b86b70f362d714757",
+   "gates": [
+    {
+     "name": "hardware",
+     "ok": true
+    },
+    {
+     "name": "world-bound-and-body",
+     "ok": true
+    },
+    {
+     "name": "settled-grounded-body",
+     "ok": true
+    },
+    {
+     "name": "policy-permits-movement",
+     "ok": true
+    },
+    {
+     "name": "pointer-lock-active",
+     "ok": true
+    },
+    {
+     "name": "manual-lane",
+     "ok": true
+    },
+    {
+     "name": "four-key-calibration-is-directional",
+     "ok": true
+    },
+    {
+     "name": "arrived-at-W",
+     "ok": true
+    },
+    {
+     "name": "W-offers-an-interaction",
+     "ok": true
+    },
+    {
+     "name": "F-advanced-the-objective",
+     "ok": true
+    },
+    {
+     "name": "arrived-at-survey-start",
+     "ok": true
+    },
+    {
+     "name": "S-offers-begin-recording",
+     "ok": true
+    },
+    {
+     "name": "survey-actually-started",
+     "ok": true
+    },
+    {
+     "name": "deviation-was-a-real-step-off-route",
+     "ok": true
+    },
+    {
+     "name": "returned-to-frontier-by-ordinary-movement",
+     "ok": true
+    },
+    {
+     "name": "earned-prefix-retained-across-deviation",
+     "ok": true
+    },
+    {
+     "name": "progress-resumed-after-the-deviation",
+     "ok": true
+    },
+    {
+     "name": "a-real-drawing-was-recorded",
+     "ok": true
+    },
+    {
+     "name": "an-observed-reachable-clear-stand-exists",
+     "ok": true
+    },
+    {
+     "name": "reached-the-clear-stand",
+     "ok": true
+    },
+    {
+     "name": "W-actually-tested-the-route",
+     "ok": false
+    }
+   ],
+   "cleanup": {
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "stopsRootPreview": false
+   }
+  },
+  {
+   "name": "witness-2",
+   "dir": "verifier/captures/manual-focused/witness-2",
+   "verdict": "CORNER-RECOVERY-OBSERVED",
+   "note": "step 4 completed: authored witness verb at the authored witness point -> W tested the span -> anc.cg.route-tested",
+   "startedAt": "2026-09-06T15:24:21.297Z",
+   "finishedAt": "2026-09-06T15:25:37.866Z",
+   "elapsedMs": 76569,
+   "summarySha256": "377a125ec75e5ae3b2225a0cdeacab5013bd935e2c2ee9598e73c79f3ccbf380",
+   "sourceSnapshotSha256": "4d157f3df48d2066a7561c5864bbeefe08acec6295c0644d3a7a38c86c9fc797",
+   "gates": [
+    {
+     "name": "hardware",
+     "ok": true
+    },
+    {
+     "name": "world-bound-and-body",
+     "ok": true
+    },
+    {
+     "name": "settled-grounded-body",
+     "ok": true
+    },
+    {
+     "name": "policy-permits-movement",
+     "ok": true
+    },
+    {
+     "name": "pointer-lock-active",
+     "ok": true
+    },
+    {
+     "name": "manual-lane",
+     "ok": true
+    },
+    {
+     "name": "four-key-calibration-is-directional",
+     "ok": true
+    },
+    {
+     "name": "arrived-at-W",
+     "ok": true
+    },
+    {
+     "name": "W-offers-an-interaction",
+     "ok": true
+    },
+    {
+     "name": "F-advanced-the-objective",
+     "ok": true
+    },
+    {
+     "name": "arrived-at-survey-start",
+     "ok": true
+    },
+    {
+     "name": "S-offers-begin-recording",
+     "ok": true
+    },
+    {
+     "name": "survey-actually-started",
+     "ok": true
+    },
+    {
+     "name": "deviation-was-a-real-step-off-route",
+     "ok": true
+    },
+    {
+     "name": "returned-to-frontier-by-ordinary-movement",
+     "ok": true
+    },
+    {
+     "name": "earned-prefix-retained-across-deviation",
+     "ok": true
+    },
+    {
+     "name": "progress-resumed-after-the-deviation",
+     "ok": true
+    },
+    {
+     "name": "a-real-drawing-was-recorded",
+     "ok": true
+    },
+    {
+     "name": "an-observed-reachable-clear-stand-exists",
+     "ok": true
+    },
+    {
+     "name": "reached-the-clear-stand",
+     "ok": true
+    },
+    {
+     "name": "reached-the-authored-witness-point",
+     "ok": true
+    },
+    {
+     "name": "W-actually-tested-the-route",
+     "ok": true
+    }
+   ],
+   "cleanup": {
+    "state": "stopped",
+    "cleanupCompleted": true,
+    "stopsRootPreview": false
+   }
+  }
+ ],
+ "measurements": {
+  "inputLiveness": {
+   "KeyW": {
+    "holdMs": 1500,
+    "horizontalUnits": 7.722,
+    "verticalUnits": -0.776,
+    "coastAfterKeyUpUnits": 0.053,
+    "keyBoundaryReceipts": [
+     0,
+     1
+    ]
+   },
+   "KeyD": {
+    "holdMs": 1500,
+    "horizontalUnits": 7.816,
+    "verticalUnits": 4.243,
+    "coastAfterKeyUpUnits": 0.027
+   },
+   "directionsApartDeg": 90.0,
+   "settledSpreadBeforeAnyKeyUnits": 0.00297,
+   "spawnBody": [
+    8,
+    52.789,
+    -6
+   ],
+   "pointerLockAcquiredMs": 6
+  },
+  "routeLegs": {
+   "toW": {
+    "travelledUnits": 56.47,
+    "finalDistanceUnits": 1.14,
+    "elapsedMs": 15234
+   },
+   "toS_witness2": {
+    "finalDistanceUnits": 0.89
+   }
+  },
+  "cornerRecovery_witness2": {
+   "deviationKey": "KeyA",
+   "offsetUnits": 4.36,
+   "returnedToFrontier": true,
+   "returnDistanceUnits": 0.236,
+   "surveyBefore": {
+    "phase": "drawing",
+    "samples": 4,
+    "lengthUnits": 2.6720385493032444,
+    "walkedUnits": 3.302934220539142,
+    "testedPrefix": 0,
+    "holdReason": null
+   },
+   "surveyAfterReturn": {
+    "phase": "drawing",
+    "samples": 11,
+    "lengthUnits": 9.957529750126392,
+    "walkedUnits": 11.779992487619749,
+    "testedPrefix": 0,
+    "holdReason": null
+   },
+   "surveyAtOffer": {
+    "phase": "offered",
+    "samples": 42,
+    "lengthUnits": 39.27027462529537,
+    "walkedUnits": 42.78572618836489,
+    "testedPrefix": 0,
+    "holdReason": null
+   },
+   "newF": false,
+   "teleports": 0,
+   "routeGrants": 0,
+   "endpointPumping": false
+  },
+  "witnessAndTest_witness2": {
+   "standClear": {
+    "chosen": [
+     -41.69676971435547,
+     52.789215087890625,
+     13.018476486206055
+    ],
+    "clearanceUnits": 1.0272959720852004,
+    "candidateCount": 43,
+    "source": "a position this body actually occupied while walking to W (trace-observed reachable ground)"
+   },
+   "holdReasonObserved": "reference-occluded-survey-housing",
+   "authoredObjective": "ch13:survey:witness \u2014 'Witness point \u00b7 hold this end' / 'Stand at the marked reference. [F] Offer this end, then remain here while W-7744 tests the span. Looking around is free.'",
+   "witnessPointWalkedTo": [
+    -34,
+    51.05,
+    10
+   ],
+   "witnessArrivalDistanceUnits": 0.673,
+   "workerTravelledUnitsDuringTest": 32.1,
+   "routeTestedReachedMs": 22907,
+   "anchorsAtEnd": [
+    "anc.cg.repeated-measure",
+    "anc.cg.demonstration-opened",
+    "anc.cg.survey-started",
+    "anc.cg.trace-drawn",
+    "anc.cg.route-offered",
+    "anc.cg.specific-hold",
+    "anc.cg.witness-held",
+    "anc.cg.route-tested",
+    "anc.cg.reciprocal-reference"
+   ],
+   "objectiveAtEnd": "ch13:common:reciprocal \u2014 'Far reference \u00b7 check my route'"
+  },
+  "witness1Contrast": {
+   "standClearOnly": true,
+   "routeTested": false,
+   "workerTravelledUnits": 2.7,
+   "holdReason": "reference-occluded-survey-housing",
+   "watchMs": 76310,
+   "reading": "Standing clear alone does not release the hold; the authored witness verb does. This is an observation of the manual lane only."
+  }
+ },
+ "findings": [
+  "Ordinary manual keyboard play WORKS on this source at ch13-survey once pointer lock is acquired by a real canvas click: 7.722u horizontal for a 1.5s KeyW hold, 7.816u for KeyD, 90.0deg apart, coast after key-up <=0.053u, and window-boundary key receipts incrementing 0->1->2.",
+  "The whole manual survey completed: walk to W (55.96u travelled, arrival 1.17u), F 'Offer to demonstrate a route' -> ch13:survey:start, walk to S (arrival 0.89u), F 'Begin recording your route' -> anc.cg.survey-started, drawing with an EARLY corner deviation of 4.36u off the leg, ordinary return to the frontier within 0.236u, retained prefix (samples 4->11, lengthUnits 2.672->9.958 monotonic), traversal resumed to 42 samples / 39.27 recorded units, and F 'Offer the walked span' accepted.",
+  "The later movie-lane stall did NOT reproduce in the manual lane. The observed hold reason here is 'reference-occluded-survey-housing' with the authored objective 'Witness point \u00b7 hold this end'; walking to the authored witness point (CG_POSES.W) and pressing the offered [F] released it. W-7744 then travelled 32.10u testing the span, witnessOffered/witnessOccupied true, acceptedSamples 42, and anc.cg.route-tested was reached 22.9s later, advancing to ch13:common:reciprocal.",
+  "Standing merely 'clear' of the span on observed reachable ground (1.03u clearance, a position this body had actually walked) did NOT release the hold across a 76.3s watch (witness-1). The release came from the authored witness verb, not from clearance.",
+  "Prior manual-1..5 attempts are explained: they never acquired pointer lock, so the shipped controller ignored their keys. No game input defect is evidenced."
+ ],
+ "limitations": [
+  "Beat-scoped fixture only. No full-story run, no ch13-return flight/landing, no earned-return Continue, no AV/variant/fps/reset-matrix checks were attempted in this role.",
+  "The common route E->C (18 units) beyond anc.cg.reciprocal-reference was NOT walked; this report proves the survey through route-tested only.",
+  "Walk targets S/E/W and the long route were read from frozen source. Nothing was granted, but this is not a no-private-knowledge first-time-player test of contract objective 13.",
+  "debug=1 was enabled for the CG snapshot hook, so debug HUD panels appear in the frames; that is a probe fixture, not a game defect.",
+  "corner-1 stopped honestly at 'no rail target offered' \u2014 the shipped rail is a movie-lane instruction; that stop is a harness discovery, not a game failure.",
+  "No audio was heard or judged. No creative, score, defect-closure or acceptance decision is made here."
+ ],
+ "minimalNextStep": "If root wants the remaining commissioned proof, extend the same guarded manual harness past anc.cg.reciprocal-reference through the 18-unit common passage and both reciprocal traversals; the corner-recovery question for the COMMON route (defect CG-IMPL-009) is still unmeasured \u2014 this run only proved corner recovery inside the SURVEY drawing."
+}

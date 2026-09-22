@@ -1,0 +1,16 @@
+# Runtime handoff observations
+
+- Continue is now proved on source103: real earned save, full raw saved point prefix, stable walking centre through the full valid post-click window, then a newly accepted route offer. Reuse `producer-continue-spawn-key-edge-review.json` and the successful 353-file/3,207-test receipt.
+- Game F is sampled each render frame. An instantaneous Playwright press did not activate it; trusted down/up over 80 ms, spanning five measured frames with pointer lock and grounding, did. Use the held recipe for game interactions and record delivery before diagnosing a game callback failure.
+- Continue telemetry is `frames[].capsule`, with `msSinceClick`, `beatPublished`, `worldBound`, `activePlanetId` and `terrainSeed`. First/menu samples miss delayed relocation. Inspect the complete valid post-click tail. Saved poses are centre coordinates; compare centre to centre.
+- Saved WorldSave SHA changes can be lawful. `overwriteVerdict` only rejects lost counts; its SHA change is diagnostic. Actual preservation additionally requires all serialized saved sample objects to equal the restored prefix.
+- Root preview and full source checks passed before independent runtime. Read current control and its instruction at the handoff; a queued or stale file observation is not current ownership.
+- Absolute deadlines belong in commissions. Phase maxima are not mandatory durations; their sum does not prove an actual attempt cannot fit. The real Continue runs took 107–109 seconds.
+- Repin every compiled-bundle URL/hash/filter to the actual current build. CDP line/column coordinates are zero-based UTF-16. Python codepoint offsets and byte offsets are different. Resolved locations and actual observed hits are separate proof.
+- The manual endpoint probe asserts a fresh output directory. Save external probe snapshots beside it, not inside it before execution. Preserve failed attempts. A stale observer or freshness refusal is not a game failure.
+- A hardcoded `reachedC` label is not endpoint evidence. Read actual ground-foot position, support, credit and comparison state; keep negative-case observations separate from valid recovery gates.
+- Shell launchers acquire and pass FD9 to node; the Claude CLI need not hold that FD. Open the shared lock with append mode. Never stop a foreign browser or the root immutable preview.
+
+- Actual grounded recovery is now proven on source103: 328ms settle, nine supported vertices max3D0.312328, real finalF and Worker18/commit. H-to-E initial positioning is still not densely measured; final18alone is insufficient.
+- A private observer repin must include imported seamLogpoints and pinJSON, not only entry identity hashes. Current cancellation attempt kept all10 unresolved old-bundle sites; no runtime audio proof. Original role ended6minutes before its deadline, so root handed the concrete correction to a fresh verifier under the SAME deadline after cleanup.
+- Continuity preflight report has qualifications: continuous canonical URL defaults story1, not ch13-home; actualContinue/manualrecovery proofs exist. Source100 stopElapsedMs and totalelapsedMs differ. Use invocation receipt walltimes; role prose invented a later finish window.

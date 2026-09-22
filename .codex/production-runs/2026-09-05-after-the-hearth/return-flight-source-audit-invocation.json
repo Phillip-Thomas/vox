@@ -1,0 +1,16 @@
+{
+  "role": "return-flight-source-auditor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T14:47:54.185868+00:00",
+  "commissionSha256": "77bd199a137c26ad1bae1cec8d948e7d8b603f4fc585db461f6dbc937c45d150",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "sourceFilesRehashedBefore": 98,
+  "scope": "Read-only source discriminator for missing Origin landing after ch13 return flight; no game edits, GPU, final acceptance or extra creative lane",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T14:54:13.240773+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "769a8dd3-b012-4622-9353-9416a40ff306",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 98
+}

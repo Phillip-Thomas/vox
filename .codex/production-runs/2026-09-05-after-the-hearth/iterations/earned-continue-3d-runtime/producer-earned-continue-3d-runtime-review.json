@@ -1,0 +1,55 @@
+{
+  "at": "2026-09-06T20:32:08.380587+00:00",
+  "reportRef": "earned-continue-3d-runtime-report.json",
+  "reportSha256": "15ac6d594cdff9d28d8fcc8c7fd6bf3a92e393b6cc386f304100ff2b46c8da52",
+  "invocationRef": "earned-continue-3d-runtime-invocation.json",
+  "actualStartedAt": "2026-09-06T20:14:17.809738+00:00",
+  "actualFinishedAt": "2026-09-06T20:29:31.813100+00:00",
+  "isAcceptance": false,
+  "newActionProved": false,
+  "sourceMutationAuthorized": false,
+  "freshSavedPrefix": {
+    "beforeRef": "verifier/captures/earned-continue-3d/attempt-1/worldsave-pvx.v1.world.-1_-1.json",
+    "beforeSha256": "c2af487d42a99bc1bc1a04b2c61b1d7b6d3ce49d1d4a2f8905108dfceb445d4b",
+    "afterRef": "verifier/captures/earned-continue-3d/attempt-1/worldsave-after-continue-pvx.v1.world.-1_-1.json",
+    "afterSha256": "5d41c352081172d366c46b1310be98b86b91cd504cc61f7527836fbf36536e10",
+    "originalPointCount": 19,
+    "laterPointCount": 20,
+    "allOriginalPointObjectsExactlyEqualInLaterPrefix": true,
+    "note": "The existing older run had18->19. This fresh attempt has19->20. Do not blendcounts. Count-growth alone is not proof; rootcomparedfullobjects."
+  },
+  "poseObservation": {
+    "baseSavedExit": [
+      -31.990680694580078,
+      52.78897476196289,
+      21.41554069519043
+    ],
+    "menuBytesUnchangedBeforeContinue": true,
+    "afterContinueBasePose": [
+      53.753990173339844,
+      13.5,
+      -14
+    ],
+    "savedPoseAlsoCopiedToScopedKey": "pvx.v1.world.-1,-1:p1.player",
+    "baseWorldSeed": 3215739679,
+    "scopedWorldSeed": 1600321158,
+    "branchUnobserved": true,
+    "auditRef": "continue-pose-source-audit.json (active71673)"
+  },
+  "navigation": {
+    "walkMs": 90778,
+    "bursts": 36,
+    "recalibrations": 21,
+    "lastFace": "+Y",
+    "finalDistanceToE": 90.05329428993107,
+    "observation": "FullXYZ/foot fix made A/D measurable and playercrossed+Xto+Y, but four-keycalibration repeatedlychangedthebasis enough totriggeritselfagain. This prevents declaring gamepathinaccessible fromfailedwalk."
+  },
+  "privateGateLimitation": "promptOffersF returns an object but both privateboolgates use its truthiness and noverbpattern; captured F Drink thereforelooksoffered. Arrivalrefusal prevented actualF. Futureprobe must use ok===true +specificauthoredverb/offeranchor. This is not gamecode.",
+  "reportQualifications": [
+    "Report label POSE FINDING \u2014 THE ROUTE-BLOCKING CAUSE overstates causality. Actualchangedpose is proved; whichloader/validator/migrationwroteit remainsopen. Menu wasstable.",
+    "privateProbeFaultObserved=false contradicts the recorded repeatedcalibrationcycle andlatentFobjectgate; reportmustnotbeused ascomplete navigation/acceptanceproof.",
+    "Original wallclock starts20:14:17.809738; report20:14:21 isnearbutnotreceipt. Root20:28direction wasnotshownconsumedbeforefinal.",
+    "Cleanupactualpostfinally20:26:30.047 stopped/errornull/source99stable; validretaineddata, no newF orchapteracceptance."
+  ],
+  "next": "Read-only sourcecausal audit onactualpose/worldrefs. Any runtime retry needsprivatecalibration/Ffixes first, withinauthorizedlaterverification; no blindrepetition."
+}

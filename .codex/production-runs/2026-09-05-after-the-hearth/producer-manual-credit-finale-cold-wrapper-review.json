@@ -1,0 +1,54 @@
+{
+  "at": "2026-09-06T21:56:42.836081+00:00",
+  "disposition": "No cold COMMON movie proof from this wrapper",
+  "reason": "run-cold-common.sh invokes common-entry-crossing-probe.mjs, labelled ch13-survey manual fixture with ordinaryWASD/noautopilot; --lane movie/actualjourney not invoked.",
+  "priorImportFailures": "RepeatedERR_MODULE_NOT_FOUND before anybrowser are instrumentation failures; wrapperexit0 is not proof.",
+  "currentFirstCapture": "Additional manual18/18 candidate capture only; retain original folder name but classify accurately.",
+  "newLaunches": "Root guard-supported actionhold allowed currentownednode to finish and refused subsequent starts beforeGPU.",
+  "correctionRef": "verifier-control.json instruction; activeCLI consumption not yet established",
+  "captures": [
+    {
+      "path": "verifier/captures/manual-credit-finale/cold-common-run1",
+      "files": [
+        "credit-replay.json",
+        "after-F-witness.png",
+        "credit-records.raw.json",
+        "after-F-start.png",
+        "after-held-test.png",
+        "after-F-offer-span.png",
+        "at-witness-point.png",
+        "summary.json",
+        "at-S.png",
+        "credit-records.chained.json",
+        "boot.png",
+        "source-snapshot",
+        "at-E-after-short-draw.png",
+        "common-stage-entry.png",
+        "worker-reciprocal-end.png",
+        "summary.sha256",
+        "first-test-outcome.png",
+        "at-T-far-reference.png",
+        "after-E-crossing.png",
+        "at-W.png",
+        "preflight.json",
+        "after-F-offer.png",
+        "trace.ndjson",
+        "at-pre-E-grounded.png"
+      ]
+    },
+    {
+      "path": "verifier/captures/manual-credit-finale/cold-common-run2",
+      "files": [
+        "refusal.json"
+      ]
+    },
+    {
+      "path": "verifier/captures/manual-credit-finale/cold-common-run3",
+      "files": [
+        "refusal.json"
+      ]
+    }
+  ],
+  "sourceChanged": false,
+  "publicationAuthorized": false
+}

@@ -15,6 +15,7 @@ import { getStoryGuidancePresentationOwnership } from './ux/storyGuidancePresent
 import SleepFade from './transitions/SleepFade.tsx';
 import CinematicFrame from './transitions/CinematicFrame.tsx';
 import JourneyRuntimeProbeBridge from './JourneyRuntimeProbeBridge.tsx';
+import { getUnfinishedMapSnapshot, subscribeUnfinishedMap, unfinishedMapVersion } from './unfinishedMapDirector.ts';
 import { stationReturnPending, subscribeStationReturn } from './stationReturnStory.ts';
 
 /**
@@ -33,6 +34,8 @@ const StoryOverlays: React.FC<StoryOverlaysProps> = ({
 }) => {
   const story = useStoryState();
   const { phase } = useAppState();
+  useSyncExternalStore(subscribeUnfinishedMap, unfinishedMapVersion);
+  const mapNavigation = getUnfinishedMapSnapshot().complete && getUnfinishedMapSnapshot().destination !== null;
   const returningIssuedCell = useSyncExternalStore(
     subscribeStationReturn,
     stationReturnPending,
@@ -49,7 +52,7 @@ const StoryOverlays: React.FC<StoryOverlaysProps> = ({
           <JourneyRuntimeProbeBridge />
           <StoryCaptions />
           <AuditBand />
-          {returningIssuedCell && <FreeMarker />}
+          {(returningIssuedCell || mapNavigation) && <FreeMarker />}
           {returningIssuedCell && (
             <StoryGuidanceHud
               open={objectiveJournalOpen}

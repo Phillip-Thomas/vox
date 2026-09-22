@@ -1,0 +1,18 @@
+{
+  "schema": "paravoxia.namedEventRepair.v1",
+  "kind": "deduplicate-council-packet",
+  "ownerRequest": "RUN THAT BITCH",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "previousStateSha256": "f818efb0654fb3443d7b838b698abf530bd384a5aafff588c7c8e5e5d12f227f",
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "bc82535d745aff065654e1a1dba2f1a1a64180127f5218ecfeb53dfdd2d5ceba",
+      "after": "33603bd92c12b27f48d2a6365cebb08f605df94e793dc3c719f1b79827ebe615"
+    }
+  ],
+  "validation": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/packet-dedup-repair/validation.json",
+    "sha256": "30193d8e89f2b63294d63bfd2c77605e6c08102f802681eefbb28e0caa74f033"
+  }
+}

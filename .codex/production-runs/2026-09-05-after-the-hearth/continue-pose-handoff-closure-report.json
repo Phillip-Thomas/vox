@@ -1,0 +1,32 @@
+{
+  "role": "continue-pose-handoff-runtime",
+  "action": "continue",
+  "verdict": "observer gaps closed: actual position handoff measured end-to-end",
+  "window": {"startedUtc":"2026-09-06T23:01:53Z","endedUtc":"2026-09-06T23:03:43Z","durationSec":110,"exitCode":0,"boundsUnchanged":{"flightSec":180,"earnSec":120}},
+  "capture": "verifier/captures/continue-pose-handoff/attempt2-closure-2026-09-06T2301Z",
+  "logs": "verifier/logs/continue-pose-handoff-closure/",
+  "preservedFirstAttempt": {"capture":"verifier/captures/continue-pose-handoff/attempt-2026-09-06T2256Z","probeSnapshot":"verifier/artifacts/probe-snapshot-attempt1-2026-09-06T2256Z"},
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "preview": {"port":37395,"bundle":"index-C1X65dZp.js","headless":false,"adapter":"ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)","rootPreviewSurvived":true},
+  "harvest": {"events":41,"drops":0,"errors":0,"pinsResolved":"6/6","pinsUnresolved":[]},
+  "hitsBySite": {"EfficientScene.landedPlayerSpawn":16,"EfficientScene.landedPlayerSpawn.postAssign":16,"resolveShipPlayerEgressPosition":7,"EfficientPlayer.mount.initialPosition":2,"MjA.faceChoice":0,"EfficientPlayer.body.setTranslation.egress":0},
+  "gapsClosed": [
+    {"gap":"chosen spawn GA never read live (old pin sat before assignment)","closed":true,
+     "newPin":"EfficientScene.landedPlayerSpawn.postAssign @ 9361:106803 (first position after GA statement 106767..106802)",
+     "measured":{"chosenSpawn_GA":[53.85,21.5,-24],"landedPlayerEgress_FA":[53.85,21.5,-24],"landedShipPos_iA":[53.5,24,-24],"initialPlayerPosition_H":[-32.02875900268555,52.788692474365234,21.45030403137207],"shipBranchTaken":true},
+     "note":"GA equals FA exactly on all 16 hits; H is present and valid but never selected."},
+    {"gap":"physical pose writer unmeasured (disembark setTranslation pin had zero hits)","closed":true,
+     "newPin":"EfficientPlayer.mount.initialPosition @ 7990:64596 (tbe({...initialPosition:g...}))",
+     "measured":{"initialPosition_g":[53.85,21.5,-24],"planetSize_t":50,"terrainSeed_i":3215739679,"actorId":"local","hits":2,"monotonicMs":[8115,8134]},
+     "note":"Handoff reaches the body through the EfficientPlayer mount/Rapier initialization path, NOT the disembark setTranslation writer, which again took ZERO hits and was not repeated as a cause."},
+    {"gap":"click split lacked clockMonotonic reference; event document provenance unproven","closed":true,
+     "measured":{"documentUrl":"http://127.0.0.1:37395/?journeyprobe=1&debug=1","timeOrigin":1788735807195.9,"clickPerformanceNowMs":7353.100000023842,"clickEpochMs":1788735814548,"samplerT0Ms":7268.5,"samplerClickMs":84,"bufferInstalledAtMs":145.9,"bufferInstalledAtEpochMs":1788735807341,"bufferSeqAtClick":32},
+     "note":"Buffer and click share one document/timeOrigin, so frame, seam and event clocks are now alignable. Events seq<=31 are menu boot; seq>=32 are post-Continue."}
+  ],
+  "cause": "Measured, not inferred: at Continue the parked ship is non-null, so GA = FA (egress [53.85,21.5,-24]) and the valid saved on-foot pose H is never consulted; GA is then handed to EfficientPlayer as initialPosition_g at mount (post-click, seq 37/40) and becomes the body pose. Scope is saved-on-foot-pose precedence at the spawn ternary, not the face.",
+  "faceFinding": "Not a defect. Ship really is +X ([53.5,24,-24]) and egress is +X-consistent. No top face forced; MjA.faceChoice resolved but took zero hits and stays explicitly UNMEASURED, as does the derived face helper. Not needed for the position handoff.",
+  "remainingUnmeasured": ["validatedPersistedParked - local still not identified in the exact bundle","MjA derived face (0 hits, out of scope for the position gap)","EfficientPlayer.body.setTranslation.egress (0 hits both attempts; unrelated disembark writer)"],
+  "method": {"logpoints":"always-false IIFE CDP conditions, bounded 400 buffer, own diagnostic writes only","noPause":true,"noSetters":true,"noFunctionWrapping":true,"observerMode":"--pose-handoff-only; no walk, no new [F] segment","rawSaveEquality":"retained","validFootTailSec":5},
+  "housekeeping": {"heavyLock":"exclusive flock on inherited FD 9 of /home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock for the whole capture","sourceEdits":"none","buildEdits":"none","contractEdits":"none","producerReceiptEdits":"none","controlFileEdits":"none","sourceDrift":"none (manifest rehash unchanged)","priorArtifactsPreserved":true},
+  "notClosed": ["no chapter closure","no defect closure","no publication","no further attempt or source patch by this verifier"]
+}

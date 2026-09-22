@@ -1,0 +1,551 @@
+{
+  "schema": "paravoxia.shippedUxBaseline.v1",
+  "runId": "2026-09-04-station-interior-light",
+  "sceneId": "station-interior-light",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "capturedAt": "2026-09-04T22:05-04:00",
+  "capturedBy": "story-verifier (mechanical, read-only)",
+  "contextRef": "main/src/story/ux/README.md",
+  "scopeNote": "Inventory of the station INTERIOR sandbox player-facing UX exactly as shipped. Approach/dock chrome is recorded only where it overlaps the interior branch (DockOverlay). No source file was modified.",
+  "sourceFiles": [
+    {
+      "path": "main/src/story/ux/README.md",
+      "sha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85",
+      "snapshotPath": "baseline-source/main/src/story/ux/README.md"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "sha256": "93caebedae6e41fec40017d5d2dee011a2093459363dbeaa871f469cbc786ca0",
+      "snapshotPath": "baseline-source/main/src/story/ux/objectiveDirector.ts"
+    },
+    {
+      "path": "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+      "sha256": "e9161f07bddf2974add6c0462289e994a07cbc741c4413be6e78e8156d0e26a9",
+      "snapshotPath": "baseline-source/main/src/components/spaceStation/SpaceStationSandbox.tsx"
+    },
+    {
+      "path": "main/src/components/spaceStation/VendorPanel.tsx",
+      "sha256": "b33fe2b9961f88b5cb1d22c0d3daf8ca7960faba0900d961de885b9503058520",
+      "snapshotPath": "baseline-source/main/src/components/spaceStation/VendorPanel.tsx"
+    },
+    {
+      "path": "main/src/components/spaceStation/StationStoryPanel.tsx",
+      "sha256": "dd5c5221d8e24c4d077564a3c77ad53b8c93c5743dd51e86c8ddd60041581f60",
+      "snapshotPath": "baseline-source/main/src/components/spaceStation/StationStoryPanel.tsx"
+    },
+    {
+      "path": "main/src/components/spaceStation/SpaceStationLighting.tsx",
+      "sha256": "c44829c29250710722a5c7871fad1d090a5b10006699989997f3235a8822ec34",
+      "snapshotPath": "baseline-source/main/src/components/spaceStation/SpaceStationLighting.tsx"
+    },
+    {
+      "path": "main/src/components/spaceStation/SpaceStationInterior.tsx",
+      "sha256": "4865728388f0adafda3b756df157a89e7c676e64588d13afc39f02a081888d7b",
+      "snapshotPath": "baseline-source/main/src/components/spaceStation/SpaceStationInterior.tsx"
+    },
+    {
+      "path": "main/src/components/mobile/TouchControls.tsx",
+      "sha256": "d84363940b939616a4b9587469efa4ddc9f06f33d9774018730da380b700dcb9",
+      "snapshotPath": "baseline-source/main/src/components/mobile/TouchControls.tsx"
+    },
+    {
+      "path": "main/src/game/spaceStation/spaceStationStory.ts",
+      "sha256": "c688c184c5a309955be711f2f459cd7cac6baa9cffb9a1a4a7696e293b7b9e9a",
+      "snapshotPath": "baseline-source/main/src/game/spaceStation/spaceStationStory.ts"
+    },
+    {
+      "path": "main/src/game/spaceStation/spaceStationDevFlag.ts",
+      "sha256": "87f2b5d2c977feb9d554aa3ab32a02865b033604e2a16c05c96de3c8f327f823",
+      "snapshotPath": "baseline-source/main/src/game/spaceStation/spaceStationDevFlag.ts"
+    },
+    {
+      "path": "main/src/game/spaceStation/spaceStationDressing.ts",
+      "sha256": "16582db7e216b0d042b7e36c4b7b9878507423277bb33169ef586dcc730157f2",
+      "snapshotPath": "baseline-source/main/src/game/spaceStation/spaceStationDressing.ts"
+    },
+    {
+      "path": "main/src/game/spaceStation/spaceStationLayout.ts",
+      "sha256": "ffa22bd6303a342de9abf5958e4f382eb81d8413937ec21bdbeef65904e91861",
+      "snapshotPath": "baseline-source/main/src/game/spaceStation/spaceStationLayout.ts"
+    },
+    {
+      "path": "main/src/game/spaceStation/spaceStationVendors.ts",
+      "sha256": "2b0a8fea7965e84032ea3ef7e4739126660aa5fcf33a31fd192ab1c31f7a64b9",
+      "snapshotPath": "baseline-source/main/src/game/spaceStation/spaceStationVendors.ts"
+    },
+    {
+      "path": "main/src/game/spaceStation/spaceStationTrade.ts",
+      "sha256": "5bc42f04a3a3f19dd8b66b1d37623bc385f2396e9219dc36b22424789faa182d",
+      "measuredSymbols": "COUNTER_REACH=3.2, FACING_TOLERANCE=0.25",
+      "hashScope": "whole file; only the two symbols above were read",
+      "snapshotPath": "baseline-source/main/src/game/spaceStation/spaceStationTrade.ts"
+    }
+  ],
+  "urlFlagGates": {
+    "spacestation": {
+      "source": "spaceStationDevFlag.ts isSpaceStationSandbox()",
+      "on": "?spacestation=any value except the empty string or '0'",
+      "grammar": "1 => default address {system:{x:-19,y:-17},index:0}; 'x,y' or 'x,y,index' => explicit address; malformed => default"
+    },
+    "hud": {
+      "source": "spaceStationHudVisible()",
+      "default": "visible (any value other than '0')",
+      "hud=0": "hides SandboxHud AND, unless storyMode is on, hides Crosshair (Crosshair render condition is `(spaceStationHudVisible() || storyMode)`)"
+    },
+    "dock": {
+      "source": "spaceStationDockEnabled()",
+      "default": "docking choreography ON",
+      "dock=0": "no DockOverlay; player is placed on the deck directly"
+    },
+    "t": {
+      "source": "spaceStationFixedTime()",
+      "effect": "pins crowd clock to the given number of seconds for byte-comparable captures"
+    },
+    "approach": {
+      "source": "spaceStationApproachEnabled()",
+      "effect": "starts in the ship; ApproachHud instead of interior chrome"
+    },
+    "ruler": {
+      "source": "spaceStationRulerVisible()",
+      "effect": "planet-sized reference sphere"
+    },
+    "storyMode": {
+      "source": "bootstrapStationStorySession() via stationStoryEligible()",
+      "notAUrlToggleAlone": true,
+      "requires": "?from=game AND address === storyStationAddress() AND save carries all of ['story:ch10-bearing-claimed','story:ch10-complete','story:station-docking-authorized']",
+      "effect": "enables StationStoryHud, StationStoryMarker, StoryInteractionPrompt, StationStoryPanel; SUPPRESSES AirlockPrompt; gates VendorPanel trading on story:station-trade-unlocked"
+    }
+  },
+  "hudAndPromptInventory": [
+    {
+      "id": "SandboxHud",
+      "testId": "spaceStation-sandbox-hud",
+      "trigger": "spaceStationHudVisible() && !openVendor && !docking && scene === 'interior'",
+      "copyTemplate": [
+        "SPACE_STATION SANDBOX — ${descriptor.worldId}",
+        "seed ${seed} · bound ${boundRadius}m · ${fps} fps",
+        "in: ${occupiedCellId}   visible: ${visibleCellCount}/${cellCount} (${visibleCellIds})",
+        "instances: ${instances}/${totalInstances}",
+        "crowd: ${population}",
+        "meshes: ${meshes+1}  programs: ${programs}",
+        "LAYOUT PROBLEMS:\\n  ${problems}  (only when problems.length > 0)",
+        "click to capture mouse · WASD walk · shift run · space jump"
+      ],
+      "inputsNamed": [
+        "click (pointer lock)",
+        "WASD",
+        "shift",
+        "space"
+      ],
+      "style": {
+        "position": "absolute top 12 left 12",
+        "maxWidth": 470,
+        "padding": "10px 12px",
+        "font": "12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace",
+        "color": "rgba(228,236,231,0.9)",
+        "background": "rgba(6,8,10,0.7)",
+        "border": "1px solid rgba(228,236,231,0.14)",
+        "pointerEvents": "none",
+        "whiteSpace": "pre-wrap"
+      },
+      "notes": "Only surface for spaceStationInteriorDiagnostics(); it is NOT exposed on window. fps is self-measured over 500ms windows; diagnostics polled every 250ms. Not safe-area inset aware (fixed 12px offsets)."
+    },
+    {
+      "id": "Crosshair",
+      "testId": null,
+      "trigger": "(spaceStationHudVisible() || storyMode) && !openVendor && !openStoryKind && !docking && scene === 'interior'",
+      "copy": "(none)",
+      "style": {
+        "position": "absolute 50%/50%",
+        "size": "3x3 px",
+        "margin": "-1.5px",
+        "background": "rgba(228,236,231,0.55)",
+        "pointerEvents": "none"
+      },
+      "notes": "Disappears entirely under ?hud=0 outside story mode; capture runs therefore have no aim reference."
+    },
+    {
+      "id": "InteractionPrompt",
+      "testId": "spaceStation-interaction-prompt",
+      "trigger": "nearVendor && !nearStoryTargetId && !openVendor && !openStoryKind && !docking",
+      "reach": "COUNTER_REACH 3.2m horizontal AND look-dot >= 0.25 toward the counter (spaceStationTrade.vendorInReach)",
+      "copyDesktop": "[F] talk to ${vendor.name}",
+      "copyTouch": "USE talk to ${vendor.name}",
+      "input": {
+        "desktop": "KeyF",
+        "touch": "USE button (touch-action-use)"
+      },
+      "style": {
+        "position": "absolute left 50% top 58% translateX(-50%)",
+        "padding": "5px 11px",
+        "font": "12px/1.4 ui-monospace",
+        "color": "rgba(228,236,231,0.92)",
+        "background": "rgba(6,8,10,0.72)",
+        "border": "1px solid rgba(228,236,231,0.16)",
+        "whiteSpace": "nowrap",
+        "pointerEvents": "none"
+      },
+      "a11y": "role=status aria-live=polite",
+      "touchDefaultBug": "default param is isTouchDevice() but the call site passes no `touch` prop, so this prompt resolves touch independently of the sandbox's isTouch state used by the other prompts"
+    },
+    {
+      "id": "AirlockPrompt",
+      "testId": "spaceStation-airlock-prompt",
+      "trigger": "nearAirlock && !storyMode && !openVendor && !openStoryKind && !docking && scene === 'interior'",
+      "reach": "AIRLOCK_REACH 9m",
+      "copyDesktop": "[F] return to ship",
+      "copyTouch": "USE · return to ship",
+      "input": {
+        "desktop": "KeyF",
+        "touch": "USE"
+      },
+      "style": "identical to InteractionPrompt (left 50% / top 58%, 5px 11px, rgba(228,236,231,0.92) on rgba(6,8,10,0.72), 1px rgba(228,236,231,0.16))",
+      "a11y": "role=status aria-live=polite",
+      "notes": "Suppressed entirely in story mode; the story path uses StoryInteractionPrompt for the same airlock."
+    },
+    {
+      "id": "StoryInteractionPrompt",
+      "testId": "spaceStation-registry-prompt | spaceStation-issuer-prompt | spaceStation-story-airlock-prompt (by objective.targetKind)",
+      "trigger": "nearStoryTargetId && storyObjective && !openVendor && !openStoryKind && !docking",
+      "reach": "objective.reach (registry 4.2m, issuer 3.4m, airlock 8m), distance measured to objective.target",
+      "copyDesktop": "[F] ${objective.verb}",
+      "copyTouch": "USE ${objective.verb}",
+      "input": {
+        "desktop": "KeyF",
+        "touch": "USE"
+      },
+      "style": {
+        "position": "absolute left 50% top 58% translateX(-50%)",
+        "maxWidth": "calc(100vw - 24px)",
+        "padding": "6px 12px",
+        "font": "12px/1.4 ui-monospace",
+        "color": "#77f0a1",
+        "background": "rgba(6,8,10,0.82)",
+        "border": "1px solid rgba(119,240,161,0.34)",
+        "whiteSpace": "normal",
+        "textAlign": "center",
+        "zIndex": 35,
+        "pointerEvents": "none"
+      },
+      "a11y": "role=status aria-live=polite",
+      "notes": "Takes priority over InteractionPrompt (vendor prompt is gated on !nearStoryTargetId)."
+    },
+    {
+      "id": "StationStoryHud",
+      "testId": "spaceStation-story-objective",
+      "trigger": "storyMode && storyObjective && !openVendor && !openStoryKind && !docking && scene === 'interior'",
+      "copyStructure": [
+        "eyebrow (constant): 'STATION VISIT · ISSUED COMPONENT'  — color rgba(232,238,234,0.58)-class DIM_INK, fontSize 10, letterSpacing 0.16em",
+        "marker line: `${objective.markerLabel}` + (distance !== null ? ` · ${round(distance)}m` : '') — color WARM_INK #ffb45a, letterSpacing 0.06em, marginTop 6",
+        "work order: one div element per objective.workOrder line, marginTop 8",
+        "step aside (registry, before designationPresented): '(your body takes its place before the marker does.)'",
+        "step aside (issuer, after concourseEntered): '(warmth you did not make.)'",
+        "step aside (depart): '(one fire waiting. carry back what the world could not give.)'"
+      ],
+      "style": {
+        "position": "absolute",
+        "top": "calc(16px + env(safe-area-inset-top, 0px))",
+        "left": "calc(16px + env(safe-area-inset-left, 0px))",
+        "width": "min(420px, calc(100vw - 32px))",
+        "padding": "12px 14px",
+        "color": "INK rgba(228,236,231,~0.9)",
+        "background": "rgba(5,8,10,0.82)",
+        "borderLeft": "2px solid rgba(255,180,90,0.86)",
+        "borderTop": "1px solid rgba(228,236,231,0.13)",
+        "font": "12px/1.5 ui-monospace",
+        "pointerEvents": "none",
+        "zIndex": 34
+      },
+      "collision": "SandboxHud occupies top-12/left-12 and StationStoryHud top-16/left-16; with ?hud=1 in story mode the two overlap.",
+      "notes": "Distance is null until the walk controller has published one."
+    },
+    {
+      "id": "StationStoryMarker",
+      "kind": "in-world 3D marker (not DOM)",
+      "trigger": "storyObjective !== null (rendered inside Canvas, interior branch only)",
+      "placement": "[objective.target.x, objective.target.y + 2.2, objective.target.z]",
+      "geometry": [
+        "torus r=0.62 tube=0.045 (8,32), meshBasicMaterial #ffb45a opacity 0.92, depthTest false, renderOrder 1000; spins rotation.z = t*0.55; scale pulses 1 ± 0.08 at 2.4 rad/s",
+        "octahedron r=0.16, meshBasicMaterial #fff2d8, depthTest false, renderOrder 1000",
+        "cylinder r=0.015 h=2 at y-1.1, #ffb45a opacity 0.42, depthTest false, renderOrder 999"
+      ],
+      "notes": "depthTest false on all three: the marker draws through geometry at any distance. There is no marker-label text in world; the label lives only in StationStoryHud."
+    },
+    {
+      "id": "TouchControls",
+      "testIds": [
+        "touch-joystick",
+        "touch-action-cluster",
+        "touch-action-eat|use|mine|sprint|jump"
+      ],
+      "trigger": "isTouch && !docking && !openVendor && !openStoryKind",
+      "controlMode": "scene === 'approach' ? 'flight' : 'fps'",
+      "observedActionsAtStationInterior": [
+        {
+          "testId": "touch-action-eat",
+          "label": "CONSUME",
+          "aria": "Consume held food or waterskin"
+        },
+        {
+          "testId": "touch-action-use",
+          "label": "USE",
+          "aria": "Use or interact"
+        },
+        {
+          "testId": "touch-action-mine",
+          "label": "MINE",
+          "aria": "Mine"
+        },
+        {
+          "testId": "touch-action-sprint",
+          "label": "SPRINT",
+          "aria": "Hold to sprint"
+        },
+        {
+          "testId": "touch-action-jump",
+          "label": "JUMP",
+          "aria": "Jump"
+        }
+      ],
+      "evidence": ".codex/production-runs/2026-09-04-station-interior-light/evidence/baseline-hud/hud-mobile-concourse.png",
+      "notes": "CONSUME and MINE are surfaced inside the station interior although neither has a station verb; measured, not judged."
+    },
+    {
+      "id": "DockOverlay",
+      "testId": "spaceStation-dock-overlay",
+      "trigger": "docking === true (i.e. dock !== 0); suppressed by ?dock=0",
+      "copy": [
+        "${readout.title} (from dockReadout, direction-dependent)",
+        "clamps  — detail: dock 'engaged'|'driving'; depart 'released'|'holding'",
+        "lock pressure — detail: `${pressureKpa.toFixed(1)} / ${STATION_PRESSURE_KPA.toFixed(1)} kPa`",
+        "hatch — detail: dock 'open'|'cycling'; depart 'sealed'|'cycling'",
+        "desktop footer: 'any key or click to skip'",
+        "touch footer: 'tap to skip'"
+      ],
+      "input": "any key, click, or pointerdown skips (skipDock)",
+      "style": {
+        "layer": "absolute inset 0, zIndex 30, pointerEvents auto, touchAction manipulation",
+        "blackout": "#04060a, opacity 1 - reveal",
+        "leaves": "top/bottom, height 50*(1-aperture)vh, linear-gradient(#04060a,#090d12), boxShadow 0 0 34px 6px rgba(0,0,0,0.9), 1px rgba(255,180,90,0.13) edges",
+        "panel": "centred, 14px 18px, 12px/1.5 ui-monospace, color INK, background rgba(6,8,10,0.82), 1px rgba(228,236,231,0.16), whiteSpace nowrap",
+        "bar": "108px label / 128x4px track rgba(228,236,231,0.14) / fill WARM_INK when done else rgba(228,236,231,0.6)"
+      },
+      "a11y": "role=button, aria-label 'Tap to skip docking sequence' (touch) | 'Click or press any key to skip docking sequence'"
+    },
+    {
+      "id": "VendorPanel",
+      "testId": "spaceStation-vendor-panel",
+      "trigger": "openVendor (KeyF/USE at a vendor counter)",
+      "inputCapture": "WalkController inputCaptured while open; TouchControls hidden",
+      "copy": {
+        "header": "${vendor.designation} · ${vendor.name}",
+        "wallet": "${credits} credits · hold ${freeVolume}m³ free",
+        "walletWhenTradeLocked": "trade held until issued cargo is secured",
+        "shelfLabel": "shelf",
+        "tradeLockedBanner": "REGISTRY HOLD · CONVERSATION AVAILABLE",
+        "line": "${commodity.name} … ${spot} / '${stock} on the shelf' [· 'you carry ${held}'] · ${volume}m³ each",
+        "tradeButtons": "buy and sell buttons, one pair per TRADE_SIZES entry, each labelled with its size",
+        "talkLabel": "talk · requested: ${aiMode()}",
+        "authoredTopicButtons": "topic.label (story mode only, via stationVendorTopics)",
+        "playerTurnPrefix": "> ",
+        "provenanceLine": "— ${provider|source}",
+        "pending": "…",
+        "input": "input hint text 'ask something'",
+        "sendButton": "say",
+        "close": "close (aria-label 'Close vendor panel')"
+      },
+      "gating": "tradingEnabled = !storyMode || hasMilestone('story:station-trade-unlocked'); buy/sell buttons disabled with opacity 0.35 otherwise",
+      "style": {
+        "backdrop": "position absolute, inset 0, zIndex 40",
+        "panel": "width min(880px, 92vw)",
+        "log": "minHeight 150",
+        "column": "minHeight 260"
+      },
+      "storyTopics": [
+        {
+          "vendorMatch": "designation 'N-3651' or name 'Esk'",
+          "topics": [
+            "ASK WHAT AN ALLOWANCE IS",
+            "ASK ABOUT THE SEALED VOLUME"
+          ]
+        },
+        {
+          "vendorMatch": "other",
+          "topics": [
+            "(water)",
+            "(aged-lots)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "StationStoryPanel",
+      "testId": "spaceStation-registry-panel | spaceStation-issuer-panel",
+      "trigger": "openStoryKind ('registry' | 'issuer') after a KeyF/USE on the story target",
+      "a11y": "role=dialog aria-modal=true",
+      "registryTranscript": [
+        "eyebrow 'ISSUING STATION · COUNTER', title 'DESIGNATION RECORD'",
+        "REGULATION: PRESENT DESIGNATION.",
+        "action [ PRESENT SUIT RECORD ] -> commitDesignationPresented",
+        "REGULATION: DESIGNATION: W-7743 · RECORD ACCEPTED.",
+        "REGULATION: DECLARE PURPOSE OF ENTRY.",
+        "action [ DECLARE: ISSUED COMPONENT ] -> commitRegistryRecorded",
+        "REGULATION: NEED RECORDED · BONDED CELL / HABITAT GRADE.",
+        "REGULATION: CONCOURSE ACCESS ISSUED.",
+        "dim: (the suit is accepted before you are.)",
+        "action [ CONTINUE TO CONCOURSE ] -> close"
+      ],
+      "issuerTranscript": [
+        "eyebrow 'CERTIFIED COMPONENTS', title '${vendor.designation} · ${vendor.name}' (fallback 'B-7073 · Bell')",
+        "vendor greeting (fallback: 'i can attest to all of it. i can attest to the attestation, if you like.')",
+        "action [ PRESENT HABITAT FAULT ] -> commitHabitatFaultPresented",
+        "'bonded cell. habitat grade. one left with a clean seal.'",
+        "action [ ASK WHAT THE BOND IS ] -> local only, no receipt",
+        "'the cell carries an issuance record. break the record and the core will not take it.'",
+        "action [ ACCEPT ISSUED BONDED CELL ] -> issueBondedCell",
+        "'the seal follows the designation the counter recorded. keep it intact until the core takes it.'",
+        "receipt block (testId spaceStation-bonded-cell-receipt): 'CARGO RECEIPT' / 'BONDED CELL (HABITAT) · SEAL INTACT'",
+        "dim: (the first thing a world could not give fits beneath one arm.)",
+        "action [ STOW RECEIPT · RETURN TO SHIP ] -> close"
+      ],
+      "style": {
+        "backdrop": "position fixed, inset 0, zIndex 140, rgba(2,4,6,0.76), backdropFilter blur(5px), grid place-items center, padding 16",
+        "panel": "min(720px,100%), maxHeight min(760px, 100vh-32px), border 1px rgba(255,180,90,0.38), borderTop 2px rgba(255,180,90,0.8)",
+        "actionButton": "full width, minHeight 48, border 1px rgba(255,180,90,0.34), background rgba(255,180,90,0.065), textAlign left",
+        "closeButton": "minWidth 72, minHeight 44, 1px rgba(232,238,234,0.26)",
+        "receipt": "1px solid #77f0a1, color #77f0a1"
+      },
+      "palette": {
+        "INK": "rgba(232,238,234,0.96)",
+        "DIM": "rgba(232,238,234,0.58)",
+        "WARM": "#ffb45a",
+        "GREEN": "#77f0a1"
+      }
+    }
+  ],
+  "objectiveContract": {
+    "sourceRef": "main/src/game/spaceStation/spaceStationStory.ts",
+    "usesSharedStoryUxDirector": false,
+    "sharedDirectorNote": "No file under main/src/components/spaceStation/ or main/src/game/spaceStation/ imports main/src/story/ux/*. The station derives its objective from milestones on every render instead of running the shared objectiveDirector enter/ready/progress/complete lifecycle, so the shared contract's health states, one-shot entry cues, and missing-marker handling do not apply here.",
+    "stableObjectiveIds": true,
+    "markerMatching": "exact",
+    "requiresActionableWorkOrder": true,
+    "feedbackPresentationOnly": true,
+    "feedbackAdvancesProgression": false,
+    "feedbackEmissionsPerEntry": 1,
+    "healthStates": [
+      "idle",
+      "ready",
+      "missing-marker"
+    ],
+    "clearSemantics": "stationStoryObjective() returns null when step === 'complete' or when the required cell/vendor is absent; the HUD, prompt and 3D marker then unmount together",
+    "changeSemantics": "objective identity changes only when a milestone commit lands (registryRecorded -> issuer; bondedCellAcquired + inventory count > 0 -> depart; stationDeparted -> complete). Recomputed from durable stores, so a reload rebuilds the same step.",
+    "sourceRefNote": "LOCAL objective model: main/src/game/spaceStation/spaceStationStory.ts (LOCAL objective model)",
+    "markerMatchingNote": "single active objective; the in-world marker is placed from objective.target and carries no text, so there is no label-parity check between marker and HUD",
+    "feedbackEmissionsPerEntryNote": "n/a — no entry cue is emitted; prompt visibility is level-triggered on distance <= reach, re-showing every time the player re-enters reach",
+    "healthStatesNote": "derived-only: registry | issuer | depart | complete (deriveStationStoryStep)",
+    "healthStateMapping": {
+      "idle": "no objective derived (step complete, or the required cell/vendor is absent) — HUD, prompt and marker unmounted",
+      "ready": "an objective is derived and its in-world marker is placed from objective.target",
+      "missing-marker": "derived objective whose target cell or vendor cannot be resolved; the station returns null rather than showing a labelled marker"
+    }
+  },
+  "markerAndWorkOrderMap": [
+    {
+      "objectiveId": "station:counter:registry-entry",
+      "step": "registry",
+      "kind": "interact",
+      "targetKind": "registry",
+      "markerLabel": "COUNTER · PRESENT DESIGNATION",
+      "workOrder": [
+        "FOLLOW THE REGISTRY CORRIDOR.",
+        "[F] PRESENT THE SUIT RECORD."
+      ],
+      "verb": "Present the suit record",
+      "promptDesktop": "[F] Present the suit record",
+      "promptTouch": "USE Present the suit record",
+      "reachMetres": 4.2,
+      "target": "[counterCell.min.x + length*0.5, counterCell.min.y, counterCell.max.z - 3.4]",
+      "enter": "milestone story:ch11-docked recorded on arrival in the interior branch (docking complete)",
+      "complete": "commitDesignationPresented then commitRegistryRecorded inside StationStoryPanel",
+      "workOrderInputParity": "work-order line names [F] only; touch player sees 'USE' on the prompt and '[F]' in the HUD"
+    },
+    {
+      "objectiveId": "station:concourse:certified-source",
+      "step": "issuer",
+      "kind": "interact",
+      "targetKind": "issuer",
+      "markerLabel": "CERTIFIED COMPONENTS · ${vendor.designation} “${vendor.name.toUpperCase()}”",
+      "markerLabelIsInterpolated": true,
+      "workOrder": [
+        "FIND THE CERTIFIED COMPONENT TRADER.",
+        "PRESENT THE HABITAT FAULT RECORD."
+      ],
+      "verb": "Present the habitat fault",
+      "promptDesktop": "[F] Present the habitat fault",
+      "promptTouch": "USE Present the habitat fault",
+      "reachMetres": 3.4,
+      "target": "certifiedComponentIssuer(vendors).counter",
+      "enter": "hasMilestone story:ch11-registry-recorded",
+      "complete": "issueBondedCell (grants BONDED_CELL_ITEM_ID and story:ch11-bonded-cell-acquired)",
+      "workOrderInputParity": "no key or input named in either work-order line"
+    },
+    {
+      "objectiveId": "station:departure:stow-cell",
+      "step": "depart",
+      "kind": "interact",
+      "targetKind": "airlock",
+      "markerLabel": "KESTREL AIRLOCK · STOW THE CELL",
+      "workOrder": [
+        "RETURN TO THE KESTREL.",
+        "[F] STOW THE BONDED CELL AND DEPART."
+      ],
+      "verb": "Stow the bonded cell and depart",
+      "promptDesktop": "[F] Stow the bonded cell and depart",
+      "promptTouch": "USE Stow the bonded cell and depart",
+      "reachMetres": 8,
+      "target": "spaceStationDockRoute(descriptor).lock",
+      "enter": "hasMilestone story:ch11-bonded-cell-acquired AND getItemCount('bonded_cell') > 0",
+      "complete": "commitStationDeparted -> step 'complete' -> objective null, HUD/prompt/marker unmount",
+      "workOrderInputParity": "work-order line names [F] only"
+    }
+  ],
+  "milestones": {
+    "docked": "story:ch11-docked",
+    "designationPresented": "story:ch11-designation-presented",
+    "registryRecorded": "story:ch11-registry-recorded",
+    "concourseEntered": "story:ch11-concourse-entered",
+    "habitatFaultPresented": "story:ch11-habitat-fault-presented",
+    "bondedCellAcquired": "story:ch11-bonded-cell-acquired",
+    "tradeUnlocked": "story:station-trade-unlocked",
+    "bondedCellStowed": "story:ch11-bonded-cell-stowed",
+    "stationDeparted": "story:ch11-station-departed"
+  },
+  "inputMap": {
+    "desktop": {
+      "walk": "WASD",
+      "run": "Shift",
+      "jump": "Space",
+      "look": "mouse under pointer lock (click canvas to capture)",
+      "interact": "KeyF — priority order in the keydown handler: story target, then vendor, then airlock",
+      "skipDock": "any key or click while dockInputLocked"
+    },
+    "touch": {
+      "walk": "touch-joystick",
+      "interact": "touch-action-use ('USE')",
+      "jump": "touch-action-jump",
+      "run": "touch-action-sprint (hold)",
+      "unusedAtStation": [
+        "touch-action-eat (CONSUME)",
+        "touch-action-mine (MINE)"
+      ],
+      "skipDock": "pointerdown anywhere on the dock overlay"
+    }
+  },
+  "measuredNotes": [
+    "spaceStationInteriorDiagnostics() is imported by SpaceStationSandbox.tsx but is NOT installed on window; the only runtime read path is the SandboxHud text (?hud=1).",
+    "window dev hooks that DO exist in the interior branch: __spaceStationLook, __spaceStationState, __spaceStationTeleport, __spaceStationTeleportToVendor, __spaceStationTeleportToStoryTarget, __spaceStationVendors, __spaceStationWalk, __spaceStationStaffing, and (story mode only) __spaceStationStory.",
+    "Zero page errors and zero console errors were captured across both baseline probe passes (evidence/baseline-perf.json runtimeProblems is empty)."
+  ],
+  "sceneIdNote": "Runtime sandbox scene the inventory was taken from: space-station-interior-sandbox (the interior branch of the station sandbox); the contract id for this run is station-interior-light."
+}

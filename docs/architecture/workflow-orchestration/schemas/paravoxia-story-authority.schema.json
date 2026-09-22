@@ -24,13 +24,13 @@
       "const": "paravoxia.storyAuthority.v2"
     },
     "snapshotDate": {
-      "const": "2026-07-15"
+      "const": "2026-09-06"
     },
     "status": {
       "const": {
         "documentationLane": "existing-story-reconciliation",
         "runtimeLane": "owner-authorized-implemented-release-gated",
-        "runtimeStoryCeiling": "ch10-transit",
+        "runtimeStoryCeiling": "ch14-return",
         "releaseStoryCeiling": "ch4-arrival",
         "runtimeTerminalBeat": "done"
       }
@@ -50,7 +50,25 @@
           "src/story/ux/feedbackCues.ts",
           "src/story/ux/StoryGuidanceHud.tsx",
           "src/game/systems/mawSystem.ts",
-          "src/game/systems/shipRestoration.ts"
+          "src/game/systems/shipRestoration.ts",
+          "src/story/beats/metadata.generated.ts",
+          "src/game/spaceStation/spaceStationStory.ts",
+          "src/story/stationReturnStory.ts",
+          "src/components/spaceStation/StationScreeningDriver.tsx",
+          "src/story/autopilot/primitives.ts",
+          "src/story/beats/definitions.ts",
+          "src/story/beats/registry.ts",
+          "src/story/commonGroundState.ts",
+          "src/story/commonGroundRoute.ts",
+          "src/story/commonGroundDirector.ts",
+          "src/story/commonGroundActor.ts",
+          "src/story/commonGroundScore.ts",
+          "src/story/world/CommonGroundWorld.tsx",
+          "src/story/beats/ch13/index.ts",
+          "src/story/unfinishedMapDirector.ts",
+          "src/story/unfinishedMapState.ts",
+          "src/story/unfinishedMapScore.ts",
+          "src/story/beats/ch14/index.ts"
         ],
         "shippedOverview": "STORY.md",
         "canon": "PARAVOXIA_STORY_BIBLE.md",
@@ -70,7 +88,7 @@
           "kind": "run-artifact",
           "schema": "paravoxia.sceneContract.v1",
           "pathPattern": ".codex/production-runs/<run-id>/scene-contract.json",
-          "activePath": "../.codex/production-runs/2026-07-13-distance-between-fires/scene-contract.json",
+          "activePath": "../.codex/production-runs/2026-09-05-after-the-hearth/scene-contract.json",
           "authorityCondition": "matching-production-lock-and-explicit-owner-approval"
         }
       }
@@ -87,10 +105,10 @@
     },
     "activeProduction": {
       "const": {
-        "runId": "2026-07-13-distance-between-fires",
-        "sceneId": "distance-between-fires",
-        "contractVersion": "intent-v1",
-        "productionLockPath": "../.codex/production-runs/2026-07-13-distance-between-fires/production-lock.json",
+        "runId": "2026-09-05-after-the-hearth",
+        "sceneId": "common-ground",
+        "contractVersion": "scene-v3",
+        "productionLockPath": "../.codex/production-runs/2026-09-05-after-the-hearth/production-lock.json",
         "implementationStatus": "runtime-implemented",
         "releaseStatus": "gated-unpublished"
       }
@@ -140,6 +158,14 @@
         "ch10-cold",
         "ch10-ask",
         "ch10-transit",
+        "ch13-home",
+        "ch13-return",
+        "ch13-survey",
+        "ch13-common",
+        "ch14-record",
+        "ch14-scar",
+        "ch14-question",
+        "ch14-return",
         "done"
       ]
     },
@@ -311,6 +337,85 @@
             "milestone:story:ch10-station-resolved",
             "milestone:story:station-docking-authorized",
             "state:station/docking-authorized"
+          ]
+        },
+        {
+          "beat": "ch13-home",
+          "checkpointKey": "ch13ReturnChosen",
+          "checkpoint": "story:ch13-return-chosen",
+          "resumeBeat": "ch13-return",
+          "evidence": [
+            "milestone:story:ch13-fault-reviewed",
+            "state:hearth/restored"
+          ]
+        },
+        {
+          "beat": "ch13-return",
+          "checkpointKey": "ch13OriginLanded",
+          "checkpoint": "story:ch13-origin-landed",
+          "resumeBeat": "ch13-survey",
+          "evidence": [
+            "milestone:story:ch13-return-chosen",
+            "state:world/origin",
+            "state:control/on-foot"
+          ]
+        },
+        {
+          "beat": "ch13-survey",
+          "checkpointKey": "ch13RouteTested",
+          "checkpoint": "story:ch13-route-tested",
+          "resumeBeat": "ch13-common",
+          "evidence": [
+            "milestone:story:ch13-origin-landed"
+          ]
+        },
+        {
+          "beat": "ch13-common",
+          "checkpointKey": "ch13Complete",
+          "checkpoint": "story:ch13-complete",
+          "resumeBeat": "done",
+          "evidence": [
+            "milestone:story:ch13-reciprocal-crossed",
+            "state:story/ch13-reciprocal-proof"
+          ]
+        },
+        {
+          "beat": "ch14-record",
+          "checkpointKey": "ch14SurveyIndexed",
+          "checkpoint": "story:ch14:survey-indexed",
+          "resumeBeat": "ch14-scar",
+          "evidence": [
+            "milestone:story:ch14:record-opened",
+            "milestone:story:ch14:survey-indexed"
+          ]
+        },
+        {
+          "beat": "ch14-scar",
+          "checkpointKey": "ch14ScarObserved",
+          "checkpoint": "story:ch14:scar-observed",
+          "resumeBeat": "ch14-question",
+          "evidence": [
+            "milestone:story:ch14:scar-observed"
+          ]
+        },
+        {
+          "beat": "ch14-question",
+          "checkpointKey": "ch14QuestionRetained",
+          "checkpoint": "story:ch14:question-retained",
+          "resumeBeat": "ch14-return",
+          "evidence": [
+            "milestone:story:ch14:question-retained"
+          ]
+        },
+        {
+          "beat": "ch14-return",
+          "checkpointKey": "ch14Complete",
+          "checkpoint": "story:ch14:complete",
+          "resumeBeat": "done",
+          "evidence": [
+            "milestone:story:ch14:return-selected",
+            "milestone:story:ch14:return-recorded",
+            "milestone:story:ch14:complete"
           ]
         }
       ]

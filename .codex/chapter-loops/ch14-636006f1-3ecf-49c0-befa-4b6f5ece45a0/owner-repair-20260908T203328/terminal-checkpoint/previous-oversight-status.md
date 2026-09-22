@@ -1,0 +1,15 @@
+# Paravoxia chapter status — 2026-09-08 20:45 UTC
+
+Owner: current root chapter thread. New direct instruction: lets fix the blockers you encountered and finish it up. Full provider permissions, parent approvals never; no publishing.
+
+Active work: repair preparation for the SAME Chapter14 checkpoint `/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0`. Checked renewal applied; same checkpoint is RUNNING at builder repair. Original deadline expired; newly authorized repair request recorded at2026-09-08T20:33:28Z with eight-hour deadline2026-09-09T04:33:28Z. New first-playable deadline22:03:28UTC once renewal applies; earlier active/model/cycle spend remains cumulative. No goal-tool token budget configured. Existing chapter spend: `{"roleLaunches": 6, "modelTurns": 61, "inputTokens": 206197, "cacheReadTokens": 4563072, "outputTokens": 36485}`. Repair engineering and review telemetry is separate under `/tmp/paravoxia-finish-20260908/roles/`.
+
+Implemented repair mechanics: validate malformed controls before build; bootstrap ordinary landing actions before runtime baseline; bounded walking from measured ordinary key displacement with key release and stall detection; actual per-beat rendered frame capture; documented exact schema and snapshot envelope. Checked finish renewal preserves signed recipe, index, original-state archive, counters, original observations and releaseStoryCeiling ch4-arrival. No creative planning replay.
+
+Validation: new targeted capture/renewal tests pass; final full adapter suite113/113 PASS. Independent source-bound initial and delta handoff reviews PASS. The first engineering agent hit its context cap; partial work was retained and completed locally, no replay. No GPU capture or Chapter14 acceptance yet.
+
+Evidence: `/tmp/paravoxia-finish-20260908/tests-final.log`; `/tmp/paravoxia-finish-20260908/files.json`; `/tmp/paravoxia-finish-20260908/roles/finish-handoff-review/`; `/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328/handoff.json`. Existing TypeScript/46 focused game checks and old failed probes remain at `roles/6-build/` and `observations/`. No live new preview.
+
+Next: complete handoff validation, apply checked same-run renewal, dispatch builder repair through the adapter, then compose, actual manual/recovery/Continue/AV/continuity, independent final reviews and release checks. Chapter13 is still unaccepted; its old source manifest must not be rebound to changed shared files. Preserve exact physical arrival/route predicates and real Continue equality plus a newly accepted action. Shared GPU work stays serialized.
+
+Renewal applied and adapter resumed at 2026-09-08T20:48:09.517558+00:00. Authority and validation: `/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-repair-20260908T203328`. Builder role: `roles/7-build`. NVIDIA GB10 available; shared GPU lock was free at preflight. All old counters and both failed pre-browser look attempts remain recorded.

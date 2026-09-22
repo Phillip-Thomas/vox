@@ -1,0 +1,56 @@
+{
+  "at": "2026-09-08T02:59:40.213043+00:00",
+  "owner": "current root chapter thread",
+  "run": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "status": "BLOCKED_CONTRACT",
+  "stage": "build",
+  "rawBuilderVerdict": "BLOCKED",
+  "failure": {
+    "stage": "build",
+    "message": "Finding needs actual evidence",
+    "at": "2026-09-08T02:55:12.908Z"
+  },
+  "usage": {
+    "roleLaunches": 6,
+    "modelTurns": 61,
+    "inputTokens": 206197,
+    "cacheReadTokens": 4563072,
+    "outputTokens": 36485
+  },
+  "remaining": {
+    "roleLaunches": 8,
+    "modelTurns": 339,
+    "inputTokens": 793803,
+    "cacheReadTokens": 15436928,
+    "outputTokens": 213515
+  },
+  "clockDeadline": "2026-09-08T08:06:46+00:00",
+  "remainingMinutes": 307.1,
+  "firstPlayable": null,
+  "lookUsed": 2,
+  "preview": null,
+  "chapter13SourceDrift": [
+    "main/chapter-journey-contract.json",
+    "main/chapter-registry.json",
+    "main/src/App.tsx",
+    "main/src/story/StoryDebugPanel.tsx",
+    "main/src/story/StoryDirectorDriver.tsx",
+    "main/src/story/beats/definitions.ts",
+    "main/src/story/beats/index.ts",
+    "main/src/story/beats/metadata.generated.ts",
+    "main/src/story/storyState.test.ts",
+    "main/src/story/storyState.ts",
+    "main/src/story/tidegardenRoute.ts"
+  ],
+  "accepted": false,
+  "publishing": false,
+  "engineeringAudit": {
+    "status": "context-cap-no-conclusion",
+    "transport": "/tmp/paravoxia-all-20260908/roles/ch13-verification-readiness/transport.json"
+  },
+  "evidence": {
+    "implementation": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/6-build/implementation.json",
+    "tests": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/6-build/focused-tests.txt",
+    "bindingDiagnosis": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/root-handback/binding-diagnosis.json"
+  }
+}

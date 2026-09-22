@@ -1,0 +1,124 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "7e037c9e9aeaecde8820467d65fc925b315b5c8980dd77d1e6526774c55ab6cd",
+  "kind": "av",
+  "chapter": "ch14",
+  "proof": {
+    "earnedEntry": false,
+    "earnedExit": false,
+    "chapterWindowComplete": true,
+    "noFixtures": false,
+    "priorIndex": 0,
+    "entryIndex": 238,
+    "beatIndices": [
+      238,
+      239,
+      280,
+      284
+    ],
+    "exitIndex": 333,
+    "sampleCount": 345,
+    "hardware": true,
+    "cleanup": true,
+    "videoDecodes": true,
+    "audioDecodes": true,
+    "framesNonblank": true
+  },
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/cleanup.json",
+      "sha256": "f59ae1921f160675e27ec382e1226df0c632193d6e862b2a1a182dc327391757"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/decoded-0.png",
+      "sha256": "b189df1425c4950da985e85c64039044e935f47a7217dd5575f98e25724391a9"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/decoded-1.png",
+      "sha256": "3f341743c7b5eae9720a09d4974e45f539e4b4df3004a363934f9baefb2c3faf"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/decoded-2.png",
+      "sha256": "aa14b397764371e05023734e3428b03bb18b9e968a95fa66424e0b5fb1705194"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/frame-0.png",
+      "sha256": "eda1bf5dd9121960e5fe0304ee6dbbaad38d4458a818bb3d99e66dadbdb973c1"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/frame-1.png",
+      "sha256": "64db171b17e9a94f3369a7590742e09b806d778c609d6cd599b4a5e7ae58894e"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/frame-2.png",
+      "sha256": "eed008f595902e02b781f811b1b1e67e85ff397f9e3ee5f716813f0ed5ca4ee9"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/frame-3.png",
+      "sha256": "0deaae06776e2791807bd303a9afb8506f41b1e6307616addab9421f63f5cff1"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/frame-4.png",
+      "sha256": "e51300d05395fdf9b39080d94abc92cc666bb37119d640bec12aa769c8d2dc30"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/frame-5.png",
+      "sha256": "c88036828f5e4d5b17e3719711fded2bef105c7432a6c8dbe96daf3c85e9cca0"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/frame-6.png",
+      "sha256": "eb40feebb2b41cbf067e91587922ea60ddcd70cf7dd7bdaa8e33236da40f5d2e"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/frame-7.png",
+      "sha256": "96cd4330f3250ac10d78c3d1998a085db4750577a665a7f19af7fd7dd2f95cb8"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/frame-8.png",
+      "sha256": "003c5e2fa8c8fcab4802b9f2515c06907bbb85a359f5dec113248585243771e1"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/media-proof.json",
+      "sha256": "2d6b3521c89f848b336a0f808c49dcf3a879f54d6e71ef875cb65085d51f60d2"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/provenance.json",
+      "sha256": "677508c283d45a6e697841d46f4c273d7014d3977c13c36c4fafad735ffe0e66"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/session.webm",
+      "sha256": "476fc6b3c96a619bd89118b4d1857e29c59c6929a5edebaebba48317b5f96dd2"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/raw/trace.ndjson",
+      "sha256": "0b707f30446ef52696b480665637f44942a92b52270458e1401730a10fc82d60"
+    }
+  ],
+  "media": [
+    {
+      "kind": "video",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/video.webm",
+      "sha256": "be13b9916a5350bfe3bd0a022b621c3206e994d694f6b7fca001eb9446ead281"
+    },
+    {
+      "kind": "audio",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/audio.wav",
+      "sha256": "fd58152151c3cd985a14f7ce20ad856671beb9ab6fb19b1719bd8a38bca0a76a"
+    },
+    {
+      "kind": "frame",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/frame.png",
+      "sha256": "e51300d05395fdf9b39080d94abc92cc666bb37119d640bec12aa769c8d2dc30"
+    }
+  ],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 0,
+  "reused": false,
+  "status": "passed",
+  "errors": [],
+  "provenance": {
+    "sourceManifestSha256": "20c9167747aaa2c936dae021c8a6328625976e2a90bde8ba76a59e5dfe5fdf45",
+    "buildSha256": "569eaf89de9c51dff801d096c7348b8b77e51127f1b43895daddde7923bb186f",
+    "transportSha256": "abc3e04bb58d2aabf6022bedcc149c4a35f10cf96e496f1daa56e1e48f9cffe0"
+  }
+}

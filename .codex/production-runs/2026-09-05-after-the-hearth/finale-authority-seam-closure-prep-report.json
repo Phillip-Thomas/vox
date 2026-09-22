@@ -1,0 +1,59 @@
+{
+ "documentKind": "finale-authority-seam-closure-prep",
+ "role": "story-verifier (CPU-only correction continuation)",
+ "at": "2026-09-06T22:26:55Z",
+ "originalDeadline": "2026-09-06T22:27:38.154473+00:00",
+ "dispatchClock": "2026-09-06T22:24:47Z",
+ "realElapsedSecondsThisRole": 128,
+ "capturePerformed": false,
+ "gpuUsed": false,
+ "browserLaunched": false,
+ "audioUsed": false,
+ "lockAcquired": false,
+ "sourceModified": false,
+ "producerMetadataEdited": false,
+ "frozen": {
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "bundle": "main/dist/assets/index-C1X65dZp.js",
+  "bundleSha256": "68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b"
+ },
+ "corrections": {
+  "labels": {
+   "B4": "clearScoreIntensityOverride",
+   "E4": "setScoreBeat",
+   "LY": "setScoreMood (newly pinned)",
+   "mMA": "scheduleStoryAuthority(storyLeads,atTime) (newly pinned; previously mis-declared unresolved)",
+   "$Z": "scheduled-hit cancellation sweep only"
+  },
+  "authorityChainNowPinned": true,
+  "onlyCallsite": "inside LY: t!==!Ka&&mMA(!Ka,i.currentTime), with t=!Ka(old leading), i=jZ?WI:null",
+  "coordinates": "0-based CDP line/column bound to first EXECUTABLE statement; authority pins are line0=5208 (not 7839)",
+  "cancelReasonProvenance": "ngA(e) raw parameter IS observable at entry (CANCEL_ngA_ENTRY) although discarded; recorded as reasonArgObservable:true-at-entry, never persisted by the app",
+  "samplingPolicy": "emit only at deadline age>=4.8s or first live occurrence per pin; per-pin droppedCount mandatory; buffer flushed through finally",
+  "guards": "all logpoint expressions must be try/catch wrapped and terminate ,!1"
+ },
+ "safeCommand": {
+  "removedWrongLock": "verifier/artifacts/heavy.lock command DELETED; never use it",
+  "sharedLock": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "ownershipProof": "fd9 st_dev/st_ino identity match PLUS a `flock -n -x` contender child that MUST fail; env/fstat alone rejected",
+  "alsoGates": "verifier-control.json activeRole+action, frozen source manifest sha, served bundle sha, LIVE HTTP index sha at ctl.currentPreviewUrl, 0-based pin presence, non-pausing+guarded logpoints",
+  "cpuCheck": "node --check OK; executed on CPU and correctly REFUSED exit 70 (activeRole=continue-candidate-closure)"
+ },
+ "ownedArtifacts": {
+  "verifier/probes/manual-credit-finale/finale-authority-seam/authority-pins-corrected.json": "101460a1f32b93928664bd003acb19ad64a80339a0ddefec15e77a144205d103",
+  "verifier/probes/manual-credit-finale/finale-authority-seam/run-seam.mjs": "01862ef3615237b163d9af3c018b1500e22a48541418c6b312a214e9578a0c63"
+ },
+ "notImplemented": [
+  "CDP logpoints for the new authority pins are NOT wired into finale-window-probe.mjs; run-seam.mjs still performs NO capture. No prepared-capture claim is made.",
+  "seamLogpoints.mjs still references the old declaration-bound pinRefs and was NOT rewritten (out of time).",
+  "finale-window-probe.mjs / finale-window-runtime.mjs remain bound to finale-candidate-runtime; private rebinding NOT done."
+ ],
+ "remainingAttachmentStepsForRuntimeOwner": [
+  "1. Rewrite seamLogpoints.mjs entries to pinRef the 7 keys in authority-pins-corrected.json, using line0/column0 verbatim, each condition of the form try{...}catch(_){} ,!1 .",
+  "2. Add the sampling gate inside each condition: emit only if (deadlineAge>=4.8 || firstSeen[pinId]) else droppedCount[pinId]++.",
+  "3. In finale-window-probe.mjs, set the logpoints via Debugger.setBreakpointByUrl with urlRegex for index-C1X65dZp.js, lineNumber=line0, columnNumber=column0; assert breakpointId resolved locations equal the requested ones, abort otherwise.",
+  "4. Drain Runtime.consoleAPICalled into an event buffer; write buffer + droppedCounts + evaluationErrors in a finally block.",
+  "5. Read context.running/currentTime by a separate Runtime.evaluate; do NOT alias it from pin scope.",
+  "6. Invoke via the gated run-seam.mjs ONLY after root sets activeRole=finale-authority-seam-runtime and execs fd 9 on the Paraform shared heavy.lock with an exclusive flock held."
+ ]
+}

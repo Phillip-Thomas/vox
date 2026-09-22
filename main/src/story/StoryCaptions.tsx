@@ -1,12 +1,15 @@
+import { voiceVisibleText } from '../audio/voice/voicePresentation.ts';
 import React, { useLayoutEffect, useRef, useSyncExternalStore } from 'react';
 import { theme } from '../ui/theme.ts';
 import { isTouchDevice } from '../utils/mobileInput.ts';
 import { getStoryText, getStoryTextVersion, subscribeStoryText } from './storyText.ts';
+import { getStoryStateSnapshot } from './storyState.ts';
 import { storyNow } from './storyClock.ts';
 import { getActiveGuidedStoryObjective } from './ux/objectiveDirector.ts';
 import { presentInputGlyphs } from './ux/inputGlyphs.ts';
 import {
   getMeasuredStoryObjectiveCardHeight,
+  readEarlyFeedReservations,
   readStoryHudSafeAreaInsets,
   readTouchControlClearance,
   solveStoryHudLayout
@@ -64,7 +67,7 @@ const StoryCaptions: React.FC = () => {
         viewportWidth,
         viewportHeight,
         touch: isTouchDevice(),
-        objectivePresent: getActiveGuidedStoryObjective() !== null,
+        objectivePresent: getActiveGuidedStoryObjective() !== null && !/^ch1-(fixed|track|raster)$/.test(getStoryStateSnapshot().beat ?? ''),
         objectiveHeight: getMeasuredStoryObjectiveCardHeight(),
         touchControlTopFromBottom: controlClearance,
         safeAreaInsets
@@ -73,9 +76,23 @@ const StoryCaptions: React.FC = () => {
       root.style.bottom = `${layout.caption.bottom}px`;
       root.style.maxWidth = `${layout.caption.maxWidth}px`;
       root.dataset.captionPlacement = layout.caption.placement;
+      if (isTouchDevice() && viewportWidth > viewportHeight && /^ch1-(fixed|track|raster)$/.test(getStoryStateSnapshot().beat ?? '')) {
+        const controls = readEarlyFeedReservations().filter(rect => rect.id?.startsWith('touch-'));
+        const left = Math.max(safeAreaInsets.left + 18, ...controls.filter(rect => rect.left < viewportWidth / 2).map(rect => rect.right + 14));
+        const right = Math.min(viewportWidth - safeAreaInsets.right - 18, ...controls.filter(rect => rect.left >= viewportWidth / 2).map(rect => rect.left - 14));
+        if (right - left >= 320) {
+          root.style.left = `${(left + right) / 2}px`;
+          root.style.maxWidth = `${right - left}px`;
+          root.style.bottom = `${safeAreaInsets.bottom + 18}px`;
+          root.dataset.captionPlacement = 'between-measured-controls';
+        }
+      }
+
       const elapsed = storyNow() - active.shownAt;
       const revealed = Math.min(shownText.length, Math.floor(elapsed / 34));
       el.textContent = shownText.slice(0, revealed);
+      root.style.visibility = elapsed >= active.ttlMs ? 'hidden' : 'visible';
+      if (isSystem) voiceVisibleText(`system:${active.shownAt}`, shownText, revealed, 'feed');
       const fadeStart = active.ttlMs - 700;
       el.style.opacity = elapsed > fadeStart
         ? String(Math.max(0, 1 - (elapsed - fadeStart) / 700))
@@ -102,7 +119,7 @@ const StoryCaptions: React.FC = () => {
     viewportWidth: typeof window === 'undefined' ? 1280 : window.innerWidth,
     viewportHeight: typeof window === 'undefined' ? 720 : window.innerHeight,
     touch: isTouchDevice(),
-    objectivePresent: getActiveGuidedStoryObjective() !== null,
+    objectivePresent: getActiveGuidedStoryObjective() !== null && !/^ch1-(fixed|track|raster)$/.test(getStoryStateSnapshot().beat ?? ''),
     objectiveHeight: getMeasuredStoryObjectiveCardHeight()
   });
 
@@ -134,7 +151,8 @@ const StoryCaptions: React.FC = () => {
         textAlign: 'center'
       }}
     >
-      <div ref={captionRef} />
+      <div aria-hidden style={{ visibility: 'hidden' }}>{presentInputGlyphs(active.text, isTouchDevice())}</div>
+      <div ref={captionRef} style={{ position: 'absolute', inset: 0, paddingInline: 8 }} />
     </div>
   );
 };

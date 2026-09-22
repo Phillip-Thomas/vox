@@ -1,0 +1,136 @@
+{
+  "schema": "paravoxia.producerFocusedEvidenceReview.v1",
+  "reviewedAt": "2026-09-06T15:26:13.149317+00:00",
+  "author": "root producer reviewing retained independent evidence",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "sourceFilesChecked": 98,
+  "sourceDrift": [],
+  "isChapterAcceptance": false,
+  "evidenceRefs": [
+    {
+      "ref": "flight-discriminator-report.json",
+      "sha256": "29996b32f82cd405ebb9cf52c44d138b8aaeaedafcfccdd68511f29c6be3776d"
+    },
+    {
+      "ref": "flight-discriminator-report.md",
+      "sha256": "28761aa89043a1ab88e65c5b8bc0956d4a2c1b026ea1f519c395506f91435fb9"
+    },
+    {
+      "ref": "flight-discriminator-invocation.json",
+      "sha256": "75abf448bb6040b6eae4518c33b483acd936f9baed60a2fca27e617e40b7e5dd"
+    },
+    {
+      "ref": "verifier/captures/flight-discriminator/run.json",
+      "sha256": "9b909f415204b3a5254ef2ebe172048dff9e12fa7bb4ad2eb4fbacd8aef30ea7"
+    },
+    {
+      "ref": "logs/flight-discriminator/telemetry.jsonl",
+      "sha256": "aee4b84cdf0dbd0707d11b2ff045e57b1eb51c47e86254cd30a72662dc54732e"
+    },
+    {
+      "ref": "verifier/probes/flight-discriminator/flight-discriminator-probe.mjs",
+      "sha256": "15e65e89fd09e75c65e9ebce54e9a66b066cc0ea6f87d72d1a2097d51a8a4049"
+    },
+    {
+      "ref": "logs/flight-discriminator/run-console.log",
+      "sha256": "09ab37ff13bceb8d7ddd7be61261e64616738544c1ae4e89837aced3caef3145"
+    },
+    {
+      "ref": "verifier/captures/manual-focused/input-gate-1/summary.json",
+      "sha256": "3ad98082a7bb1b087331f0201cade20766a198ec0562aff842447e28d0261396"
+    },
+    {
+      "ref": "verifier/captures/manual-focused/route-1/summary.json",
+      "sha256": "06d6597a4c3c3aeba22871f32f5511b255040b0944fa79fecce222c8a7f42d61"
+    },
+    {
+      "ref": "verifier/captures/manual-focused/corner-2/summary.json",
+      "sha256": "233ee34800dc8b13cf4f8b1ecb908dc84f1980355b8298d3bb9a1ac281c5a349"
+    },
+    {
+      "ref": "verifier/captures/manual-focused/witness-1/summary.json",
+      "sha256": "f8ff4ecde8a8f4af3328056cf798d9be2afdf84cfe578cc39ff14a0354cb4005"
+    },
+    {
+      "ref": "chapter-manual-corner-interpretation.md",
+      "sha256": "c1e19fbac4970dee675ca7e0046e7a8fd2b180379f567ae9d14bae3e3b8fb9ee"
+    },
+    {
+      "ref": "chapter-corner-candidate-disposition.json",
+      "sha256": "ae53954f3862b03647297bb064b92fbf712a5a3246bba1ba1f7c1ce39108acd7"
+    },
+    {
+      "ref": "manual-focused-report.json",
+      "sha256": "c453c827ef3b16577994d8375a503a711ee4306d5ea33f987c5eb1746e5f6592"
+    },
+    {
+      "ref": "manual-focused-report.md",
+      "sha256": "f50c6f18a43509523b5003f0d036896ea049b6249625831c790fc1ad5b39ff5d"
+    },
+    {
+      "ref": "manual-focused-invocation.json",
+      "sha256": "02b8d3561aee43333e498612945f21af5704222d68e28dcb245db6f4e8aeef0f"
+    },
+    {
+      "ref": "verifier/captures/manual-focused/witness-2/summary.json",
+      "sha256": "377a125ec75e5ae3b2225a0cdeacab5013bd935e2c2ee9598e73c79f3ccbf380"
+    }
+  ],
+  "flight": {
+    "roleFinished": true,
+    "roleExitCode": 0,
+    "actualModel": "claude-opus-5",
+    "sessionId": "570b5ab5-e1ab-419a-8bb5-61fa8c68d563",
+    "liveSamples": 340,
+    "durationMs": 90126,
+    "hardware": "headed ANGLE NVIDIA GB10",
+    "firstDeepestCentreDistance": 181.23,
+    "secondDeepestCentreDistance": 169.09,
+    "resetCentreDistance": 2736.67,
+    "activationEpochTransitions": [
+      [
+        3,
+        5
+      ],
+      [
+        6,
+        8
+      ]
+    ],
+    "observedActivePlanetIds": [
+      "-1,-1:p1"
+    ],
+    "originLanded": false,
+    "liveConclusion": "Twice reaches actual Origin activation envelope then pose resets to departure; same-system handoff implicated. Unready300shell does not explain these measurements. Second mutator not yet proven.",
+    "probeExitCode": 1,
+    "probeError": "Postcapture ERR_STREAM_WRITE_AFTER_END; actual finally awaits owned browser stop, writes run.json, ends streams, then writes last say. Root inspected this source ordering and embedded stopped=true cleanup with requests1/errornull. Not a clean probe exit and not a game failure.",
+    "imagesViewed": [
+      "verifier/captures/flight-discriminator/0150-phase.png"
+    ],
+    "rawImageObservation": "Near-white arrival-boundary frame; visible departure world coordinate and descent phase. No taste verdict."
+  },
+  "manual": {
+    "roleFinished": true,
+    "inputGate": "Actual settled-body pointer lock and ordinary directional keys cause7.72 and7.82 horizontalunits with90-degree direction and<.06keyup coast. Movement itself sometimes unsupported; this is input proof, not full grounded-route proof.",
+    "route": "Actual W arrival1.141units with expected F offer prompt.",
+    "survey": "corner-2 ordinary keys and F recorded42samples40.129routeunits and offered actual span; runtime phase offered and no autopilot.",
+    "witness1": "Reached expected reference-occluded-survey-housing hold. Script waited without travelling to witness point. Does not prove game failure.",
+    "rootCommissionError": "Root commission step3 wrongly equated survey drawing deviation with signed COMMON ordered18-unit corner recovery. Correction sent15:24:10.906349UTC in currentcontrol/inbox. Retain old probe bytes/verdict as historical; do not claim CG009 is verified or closed.",
+    "remaining": "Both focused roles complete. Next repair needs audit completion and exact source direction. All COMMON18-unit physical recovery/final proof, lawful earnedContinue, fullstory/station, AV/variants and independent chapter reviews still pending.",
+    "finishedAt": "2026-09-06T15:28:19.386073+00:00",
+    "roleExitCode": 0,
+    "actualModel": "claude-opus-5",
+    "sessionId": "0cff3889-4cc0-4f8e-bec0-933f74f03562",
+    "witness2": "Actual ordinary move to authored W witness point distance0.673, real F Offer this end, witnessOffered/Occupied true; W travelled32.1045units, accepted42samples and route-tested, then objective ch13:common:reciprocal. No common reciprocal traversal performed.",
+    "reportQualifications": [
+      "Report md claims future writtenAt15:29Z despite actual final invocation15:28:19; rely on actual capture/invocation timestamps. Root15:27:54 correction was not read before final; preserve original report.",
+      "Report wrongly generalizes old manual1..5 neverclicked/everykeydownignored/residualonlysettling. Actual manual4 had3.648horizontalmovement and some earlierattempts clicked before readiness. New inputproof is valid, but oldattempts require their individual receipts.",
+      "Survey recorder excursion is recorded free movement; inherited CORNER-RECOVERY-OBSERVED labels do not demonstrate signed orderedCOMMON18-unit frontier recovery. Report limitations correctly acknowledge COMMON/CG009 unmeasured. Root step3 commission error remains recorded.",
+      "Chosen stand candidate distance1.03+ fromplannedspan was not measuredactualbody clearance; arrival tolerances allowed zero-motion leg .43-.59away. Do not infer actual1unitclearance fromchosenpoint. Actual W route-tested after witnessF/occupancy remains independently observed."
+    ]
+  },
+  "sourceMutationAuthorized": false,
+  "acceptedExceptions": [],
+  "next": "Handoff-standby causal audit exec72464 stillactive; source frozen. Concrete sixthrepairbudget recorded but mutation gated until report/scope and source ownership.",
+  "updatedAt": "2026-09-06T15:29:22.730738+00:00"
+}

@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 506347,
+  "stop_reason": "end_turn",
+  "session_id": "4fbae108-44b5-45ee-ba3a-247ccc8cc16d",
+  "total_cost_usd": 3.1852240000000003,
+  "usage": {
+    "input_tokens": 84,
+    "cache_creation_input_tokens": 89687,
+    "cache_read_input_tokens": 2527412,
+    "output_tokens": 40890,
+    "output_tokens_details": {
+      "thinking_tokens": 10331
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 89687,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1794,
+        "cache_read_input_tokens": 95049,
+        "cache_creation_input_tokens": 944,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 944
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1903,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001978,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 84,
+      "outputTokens": 40890,
+      "cacheReadInputTokens": 2527412,
+      "cacheCreationInputTokens": 89687,
+      "webSearchRequests": 0,
+      "costUSD": 3.183246000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 10331,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 49,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Clean \u2014 the only matches are the producer's own transport runner and my grep; browser 2018970 is gone, 0 sink modules, 0 temp locks. Finished at **20:17:45 UTC**, inside the 20-minute cap.\n\n## VERDICT\n\n**Repair: COMPLETE and proven. Measurement: NOT OBTAINED** \u2014 root reassigned `activeRole` to `common-physical-discriminator` at **20:13:56Z**, mid-window. The probe's role gate correctly refused the second launch. External authority change, not a probe fault.\n\n## Repair 1 \u2014 the commissioned cause\n\n`execFileSync('readlink',['-f','/proc/self/fd/9'])` resolved `/proc/self` inside the **spawned readlink**. Measured in a real held child:\n\n| reader | observed |\n|---|---|\n| in-process `fs.readlinkSync` | `/tmp/finale-window-fdcheck-\u2026.lock` \u2705 |\n| old spawned `readlink -f` | `/proc/<readlink-pid>/fd/9` |\n\nThe old reader **didn't even error** \u2014 it returned the readlink process's own `/proc` path, which can never equal the lock path, so `owned` was *always false*.\n\nFixed with in-process `readlinkSync` + `fstatSync`/`statSync` **dev+inode** matching. Kernel exclusive `FLOCK WRITE` retained. Contention now accepts **only flock exit 1**; spawn errors/signals/other statuses are `conclusive:false` and refused.\n\n**7/7 cases against the ACTUAL exported `verifyHeavyLock` in real Node children** with inherited exclusive fd 9 on a unique temp lock: held-pass (contention exit 1), missing-fd, wrong-fd-pipe, wrong-target, unheld-refusal, two arg guards. Case A could not have passed under the old code. Transport reused from the existing `fd-transport-diagnostic.mjs`.\n\nThree retained failed attempts were faults in **my harness**, not the probe (fd 8 = capture pipe, fd 21 = `/dev/null`, `exec 21>&-` reopened by Node) \u2014 the probe correctly refused each time. Fixed by having the child pick a descriptor it has *proven* closed instead of guessing.\n\n## Repair 2 \u2014 new fault, reachable only because Repair 1 worked\n\nThe run reached a real browser for the first time in this lane, then crashed on `install.inventory`. Proven on shipped headed Chrome: **playwright-core evaluates a string pageFunction as an expression and ignores the second argument** \u2014 `(cfg) => {\u2026}` serialised to `undefined` and **the installer never ran** (`window.__marker` stayed null; the invoked form returned the object). Fixed by invoking the expression with the config inlined; `buildInstallerSource` unchanged. Root's control note independently authorizes this exact correction.\n\nTherefore `no-stream-on-owned-sink` was a **consequence of the probe crashing before the game made sound** \u2014 not evidence about game audio.\n\n**Affected rerun only:** 33/33 self-test, 31/31 focused checks, after both fixes.\n\n## Attempts\n\n- **window-3 first** (20:11:51\u201320:13:22): reached `browser-pid-observed` \u2014 headed pid 2018970, **ANGLE NVIDIA GB10/PCIe OpenGL 4.5.0**, unmuted, owned sink created and index-resolved. First launch ever in this lane. Preserved as `window-3-failed-installer-binding`.\n- **window-3 second** (20:14:59\u201320:15:46): role-gate refusal. Not a repeat of any prior fault.\n\n## Staying MISSING\n\nTerra18, Worker18, committed, both AV anchors, atomic edge record, output WAV + duration/energy, interval\u2192edge mapping, final-texture token timing, gesture receipt \u2014 all MISSING. Cancellation reason and AudioContext/mute/pause remain MISSING for the unchanged shipped-hook reason. **No finale, audibility, cause, taste or defect conclusion drawn**; no state-only substitute, no cue re-triggered, no game predicate changed.\n\n## Integrity\n\nManifest `6ef957c3\u2026fee5d6` and contract `5ef85a32\u20267eec54` **identical before/after**; 99/99 game paths clean (1 known tolerated auxiliary drift). Zero leaked sink modules, default sink unchanged, no mic/foreign stream touched, no foreign kill, no owned browser alive, temp locks removed, production heavy lock untouched. **No producer control/invocation/prior report/iteration edited.**\n\n**Blocked on:** `activeRole` returning to `finale-window-runtime`. Probe is repaired and ready; prepared CLI in `logs/finale-window-fd-runtime/prepared-cli-window3.txt`.\n\nArtifacts: `finale-window-fd-runtime-report.json` / `.md`, `logs/finale-window-fd-runtime/`, `verifier/captures/finale-window/window-3` and `window-3-failed-installer-binding`.",
+  "ttft_ms": 1481,
+  "type": "result",
+  "duration_ms": 658362,
+  "uuid": "1d453b0f-843c-4406-affe-fb39402c7544",
+  "ttft_stream_ms": 724,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 724,
+  "queued_turn_count": 0
+}

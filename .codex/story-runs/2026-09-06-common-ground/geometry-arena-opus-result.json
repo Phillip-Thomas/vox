@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 1087302,
+  "stop_reason": "end_turn",
+  "session_id": "94a2aeff-2805-4014-95a7-12d2ee16d74c",
+  "total_cost_usd": 7.163965499999998,
+  "usage": {
+    "input_tokens": 118,
+    "cache_creation_input_tokens": 161362,
+    "cache_read_input_tokens": 6519901,
+    "output_tokens": 91528,
+    "output_tokens_details": {
+      "thinking_tokens": 26909
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 161362,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1594,
+        "cache_read_input_tokens": 166439,
+        "cache_creation_input_tokens": 919,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 919
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1540,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0016049999999999999,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 118,
+      "outputTokens": 91528,
+      "cacheReadInputTokens": 6519901,
+      "cacheCreationInputTokens": 161362,
+      "webSearchRequests": 0,
+      "costUSD": 7.162360499999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 26909,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 65,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: fail \u2014 0 qualifying layouts at either nominated range (12 and 24 world units). Bounded failure packet; no constraint relaxed.**\n\n## Measurements\n\n| Measure | Range 12 (Chapter) | Range 24 (Cinema) | Required |\n|---|---|---|---|\n| Qualifying layouts | **0** | **0** | \u22651 |\n| Combos evaluated (cap 10 000) | 10 000 of 712 008 | 10 000 of 712 008 | \u226410 000 |\n| Distinct pairs / instruments evaluated | 1 728 / 201 | 2 422 / 279 | \u2014 |\n| Max detour available | +16.00 u / \u00d72.20 | +16.00 u / \u00d72.20 | \u2265+12 u **and** \u00d71.25 |\n| Max short-route unsupported span available | 22.00 u | 24.00 u | \u22656.00 u |\n| **Best span when long route fully in reference** | **2.00 u** | **0.00 u** | \u22656.00 u |\n| **Best long-route coverage when span qualifies** | **94.03 %** (4 samples out) | **87.76 %** (6 out) | 100 % |\n| Deepest stage reached | `long-fully-supported` | `long-fully-supported` | `qualified` |\n| Wall / CPU | 0.79 s | 1.45 s | \u22645 min (used 3.16 s total) |\n\n- **Topology is not the blocker.** Connected water footprint = 534 columns, `u\u2208[-21,25] v\u2208[-25,5]`, world `x\u2208[-42,50] z\u2208[-50,10]`, max depth 12. Two real banks exist (2 552 pairs with node-disjoint second routes); best pair `(-12,51.05,-8)\u2192(8,51.05,-16)`, 36.00 vs 52.00 u (+16.00, \u00d71.44), both caps satisfied. Search was **not** aborted.\n- **Each half is satisfiable; they never coexist.** A head that keeps the whole wrap-around bank in range necessarily encloses the shorter bank too. Range 24 fails harder than range 12.\n- **Zero relief confirmed on the pond arena**: 1 068/1 068 dry nodes at support height 25; **0 of 579 040** sample lines lost to solid occlusion \u2014 the proposed finite range is the only reference-withdrawing mechanism here.\n- Both readings of \"longer bank route\" measured (shortest-supported \u2192 detour exactly **0.00 u** in every case; authored second bank \u2192 real detour but incomplete coverage). Short route selected as the *least-supported* shortest route via DP over the shortest-path DAG, so no BFS tie-break decides the result (0 length anomalies).\n- **Witness pose, socket coords, reciprocal span, ranking: not reported \u2014 those stages were never reached.** Not invented.\n- Shipped-planner cross-check (representative): positive **18/18** + **26/26** edges, **4/4** + **6/6** corner legs; negative **55/55** rejected columns agreed.\n- Determinism: two runs byte-identical apart from timestamp/timing.\n\n**Limitations recorded:** bounded (10 000/712 008 combos per range; the combination cap, not the 300 s CPU budget, was binding); pristine procedural terrain only \u2014 live voxel edits can invalidate any span, live-edit confirmation still needs a running client and a contracted debug hook; no visual/GPU/tier evidence; hysteresis and witness cylinders not simulated. `planAgentSurfaceRoute` trunk-blindness (pass-2 Part B) guarded here with 0.50 body-radius inflation and segment-level tests, still open in shipped navigation.\n\n## Artifacts\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/geometry-arena-probe.mts` (`17436bc4\u2026`)\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/geometry-arena.json`\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/geometry-arena.md`\n\n**Provenance:** only those three files created; scratch in `/tmp` only. Pass-1/pass-2 artifacts and all nine read source files hash-verified unchanged against the pass-2 record. No runtime, canon, validator, signature, build, browser, GPU or server touched.",
+  "ttft_ms": 1374,
+  "type": "result",
+  "duration_ms": 1120631,
+  "uuid": "2e93fc96-21d7-4f0c-8424-f2ab5409df0c",
+  "ttft_stream_ms": 1028,
+  "time_to_request_ms": 19,
+  "first_content_frame_ms": 1029,
+  "queued_turn_count": 0
+}

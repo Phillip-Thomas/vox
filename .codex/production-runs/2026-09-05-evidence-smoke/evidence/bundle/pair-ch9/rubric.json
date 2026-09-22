@@ -1,0 +1,70 @@
+{
+  "schema": "judge-rubric-v1",
+  "id": "paravoxia-chapter-v1",
+  "grades": {
+    "count": 5,
+    "anchors": [
+      "0 broken — blank frames, a frozen scene where motion was owed, popping geometry, or a HUD-only image",
+      "1 poor — a first-time player would not know what they are looking at or why it matters",
+      "2 acceptable — legible and intact, but forgettable; nothing a player would describe afterwards",
+      "3 strong — composed, cohesive, and emotionally readable; a player would keep going",
+      "4 exceptional — a still a player would screenshot; image, light and moment agree completely"
+    ]
+  },
+  "dimensions": [
+    {
+      "id": "audiovisual_emotional_alignment",
+      "weight": 0.2,
+      "applicability": "always",
+      "prompt": "From the frames and the digest's beat timeline: does the image carry the emotional turn the beat is built on — arrival, withholding, threat, relief — or does it merely depict a location while something is said to happen? Score the picture's contribution only; you cannot hear the score, so do not infer it."
+    },
+    {
+      "id": "narrative_and_player_causality",
+      "weight": 0.175,
+      "applicability": "always",
+      "evidence": "digest-first",
+      "prompt": "Judge from the DIGEST's objective, caption and milestone timeline: is there a legible chain of player action → world response → next objective, with the objective and caption changing when the milestones latch? Frames confirm that the thing named on screen is the thing the player is looking at. Order and timing come from the digest numbers, never from frame order."
+    },
+    {
+      "id": "cinematic_composition_and_lens",
+      "weight": 0.175,
+      "applicability": "always",
+      "prompt": "Framing, focal hierarchy, lens: does each frame of record have one primary subject a stranger could name, held by a composed frame — and do the hero stills (labelled opening-2.0s and the anchor triggers) hold up alone as images? Cockpit furniture, empty sky and centred nothing grade low. The HUD is absent from these frames on purpose; never grade a debug overlay."
+    },
+    {
+      "id": "score_coherence_and_sync",
+      "weight": 0.15,
+      "applicability": "requiresMotion",
+      "evidence": "digest-first",
+      "prompt": "You cannot hear the score. From the digest alone — signed-AV anchor activations and their story-clock times against the objective/caption timeline — does the authored synchronization land where the picture turns? Report the anchor timing you can see; if the digest carries no anchors, say sync is unmeasured."
+    },
+    {
+      "id": "palette_light_and_render_cohesion",
+      "weight": 0.125,
+      "applicability": "always",
+      "tierSensitive": true,
+      "prompt": "One palette, one light, one grade across the frames of record: warm subject against cool ground where the beat calls for it, no clipped whites, no grey mush, no render seams. Frames from different beats should read as the same world. On a swiftshader-low capture cap confidence at medium and say what a hardware capture would need to confirm."
+    },
+    {
+      "id": "transition_and_state_integrity",
+      "weight": 0.125,
+      "applicability": "requiresMotion",
+      "evidence": "digest-first",
+      "prompt": "From the ADJACENT-FRAME BURST scalars and the blank/pop counts in the digest: flicker (high flickerRatio with high signFlips), luminance pops, blank frames, or a beat boundary that snaps rather than transitions is a defect exactly as bad as a freeze. If no bursts were captured, say smoothness is unmeasured; never assume it."
+    },
+    {
+      "id": "creative_ambition_and_specificity",
+      "weight": 0.05,
+      "applicability": "always",
+      "prompt": "Is this a specific place and moment that could only be this chapter — a particular sky, a particular hearth, a particular station — or a generic space scene? Complexity is not the criterion; specificity is."
+    }
+  ],
+  "extras": {
+    "nameWeakestStrongest": true
+  },
+  "passBar": {
+    "minQuality": 0.95,
+    "rejectBelow": 0.6,
+    "allowSevere": false
+  }
+}

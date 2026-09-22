@@ -43,7 +43,7 @@ try {
     await page.waitForFunction(() => {
       if (window.__paravoxiaAppState?.phase === 'playing') return true;
       const button = [...document.querySelectorAll('button')]
-        .find(candidate => candidate.textContent?.includes('Play Now'));
+        .find(candidate => candidate.textContent?.includes('Free Play'));
       return button instanceof HTMLButtonElement && !button.disabled;
     }, undefined, { timeout: 45_000 }).catch(async error => {
       const diagnostic = await page.evaluate(() => ({
@@ -57,7 +57,7 @@ try {
     });
     const alreadyPlaying = await page.evaluate(() => window.__paravoxiaAppState?.phase === 'playing');
     if (!alreadyPlaying) {
-      await page.getByRole('button', { name: /Play Now/i }).click({ force: true });
+      await page.getByRole('button', { name: /Free Play/i }).click({ force: true });
     }
     await page.waitForFunction(expectedBeat => (
       window.__paravoxiaAppState?.phase === 'playing'

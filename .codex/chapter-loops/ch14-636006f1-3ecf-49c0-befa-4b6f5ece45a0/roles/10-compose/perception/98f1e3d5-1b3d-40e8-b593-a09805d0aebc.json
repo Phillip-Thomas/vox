@@ -1,0 +1,37 @@
+{
+  "schema": "paravoxia.mediaPerception.v1",
+  "model": "gemini-3.8-flash",
+  "source": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-3/video.webm",
+    "sha256": "2412e48721055ee3be261cf9655cb9901f880ee3955f6ec33717ab9924f3913e",
+    "kind": "video"
+  },
+  "segment": {
+    "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/perception/98f1e3d5-1b3d-40e8-b593-a09805d0aebc.mp4",
+    "sha256": "36a75314c770c8fdfc17694d8d46ddcd471b081da6f8470011946210591cc31d",
+    "startSeconds": 16,
+    "seconds": 15.920000000000002
+  },
+  "question": "Inspect the actual return journey and ending. Does arrival display a return receipt and retire the mandatory objective with no forced camera, cut or end card? Does ordinary embodied view remain? Are pause, Resume or Continue demonstrated? Report visible facts and approximate timestamps; do not infer audio or unseen control tests.",
+  "at": "2026-09-08T22:26:51.151Z",
+  "status": "observed",
+  "usage": {
+    "promptTokenCount": 1170,
+    "candidatesTokenCount": 303,
+    "totalTokenCount": 2119,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 114
+      },
+      {
+        "modality": "VIDEO",
+        "tokenCount": 1056
+      }
+    ],
+    "thoughtsTokenCount": 646,
+    "serviceTier": "standard"
+  },
+  "resolvedModel": "gemini-3.8-flash",
+  "description": "Based on the visible video content:\n\n### Return Journey, Receipt, and Objective\n* **Journey and Arrival (00:00–00:11):** The player navigates toward the waypoint marker labeled `retained common passage` (decreasing from ~45m to 4m). The bottom-left HUD displays:  \n  `CURRENT OBJECTIVE / retained common passage / the unfinished map / walk back to the retained common passage. [F] / record the return visit.`\n* **Objective Retired and Receipt (00:11–00:15):** Between 00:11 and 00:12, upon reaching the location, the bottom-left objective interface disappears entirely. Centered text appears on screen at 00:12 reading: `return visit recorded. the question remains open.`\n* **Camera / Cut / End Card:** No cutscene cut, forced camera shift, or end card occurs; the screen smoothly stays in the live scene.\n\n### Embodied View\n* The ordinary first-person embodied view remains continuously intact through 00:15, with the player facing the standing figure and surrounding environment while the top-left suit HUD and top-right orbital scan display stay active.\n\n### Pause, Resume, or Continue\n* Neither a pause screen, pause menu, \"Resume\" prompt, nor \"Continue\" prompt is displayed or demonstrated at any point in the footage."
+}

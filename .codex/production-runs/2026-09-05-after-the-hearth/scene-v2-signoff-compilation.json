@@ -1,0 +1,20 @@
+{
+  "compiledAt": "2026-09-06T08:28:57.597206+00:00",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sources": [
+    {
+      "path": "chapter-contract-signoff.json",
+      "sha256": "35dd926eb4105caea56c155c1eb0bb3278a839711bf144f7407d7c8de8397a2d"
+    },
+    {
+      "path": "score-contract-signoff.json",
+      "sha256": "2cc3a7f5aad712a389751c4bac4641bd9be1c8e7868739514a1c9145613c9efa"
+    },
+    {
+      "path": "cinematography-contract-signoff.json",
+      "sha256": "2a0b058628e558090f88941a6bab689b8a7b667c7974856a952d212345c4593c"
+    }
+  ],
+  "fieldMapping": "contractVersion -> revision; signature values preserved",
+  "compiledSha256": "ae38ad487699e83ab1d4f981ff7855c36fdf33a866cd69e6410a3bdddb76013a"
+}

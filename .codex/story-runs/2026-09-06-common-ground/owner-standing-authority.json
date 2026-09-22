@@ -1,0 +1,17 @@
+{
+  "schema": "paravoxia.ownerStandingAuthority.v1",
+  "recordedAt": "2026-09-06T04:22:49.322379+00:00",
+  "source": "direct user messages in this session",
+  "instructions": [
+    "okay, well lets continue the story, be creative, be imaginitaive, keep it aligned with the plot thusfar, but take the game to the next level.",
+    "yes continue, and please auto approve everything"
+  ],
+  "scope": "Decisions necessary to design, implement and verify the next plot-aligned Paravoxia story continuation, including the Common Ground direction described in this conversation.",
+  "effect": "The user delegates approval of in-scope creative and implementation decisions. Do not stop for routine permission or skill owner-gate questions. Record the actual delegated decision and rationale after director signatures; never claim the user personally inspected a later candidate hash.",
+  "constraints": [
+    "Keep aligned with plot thus far.",
+    "Preserve existing unrelated dirty work.",
+    "Keep independent roles, evidence and verification honest.",
+    "No publication was requested by this story-building task."
+  ]
+}

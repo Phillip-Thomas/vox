@@ -1,0 +1,7 @@
+{
+  "kind": "noncertifying station replay with one ordinary key diagnostic",
+  "samples": [],
+  "errors": [],
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded."
+}

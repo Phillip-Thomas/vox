@@ -1,0 +1,14 @@
+[
+  {
+    "kind": "manual",
+    "result": true
+  },
+  {
+    "kind": "continue",
+    "result": true
+  },
+  {
+    "kind": "recovery",
+    "result": true
+  }
+]

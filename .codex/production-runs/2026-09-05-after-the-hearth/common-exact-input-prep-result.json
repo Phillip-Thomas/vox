@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 369697,
+  "stop_reason": "end_turn",
+  "session_id": "5ed7b961-b123-4a25-b55f-59e69b888c59",
+  "total_cost_usd": 1.6048519999999997,
+  "usage": {
+    "input_tokens": 46,
+    "cache_creation_input_tokens": 54752,
+    "cache_read_input_tokens": 749286,
+    "output_tokens": 27228,
+    "output_tokens_details": {
+      "thinking_tokens": 2887
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 54752,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1229,
+        "cache_read_input_tokens": 58405,
+        "cache_creation_input_tokens": 414,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 414
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1669,
+      "outputTokens": 18,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001759,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 46,
+      "outputTokens": 27228,
+      "cacheReadInputTokens": 749286,
+      "cacheCreationInputTokens": 54752,
+      "webSearchRequests": 0,
+      "costUSD": 1.6030929999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2887,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 31,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**PREPARED, NOT RUN.** Done inside budget, CPU only. All 99 live source hashes re-verified unchanged (0 mismatched, 0 missing).\n\n**Intent read first.** The Chapter interpretation and producer review both say the same thing: ordinary eligible positive post-plane overshoot must not permanently freeze credit, and a CPU-only exact-input discriminator must precede any correction. Everything below obeys that.\n\n**What the actual call chain does** (static read of frozen source + static binding in the served bundle \u2014 no game code executed):\n- Credit point is a **FOOT projection**, `playerWorldPosition \u2212 up * CG_PLAYER_GROUND_OFFSET`. On the curved surface it differs from body centre **horizontally as well as vertically**, so earlier body-centre poses aren't directly comparable.\n- Displacement is **per director update**, measured; the audit's `0.0836` per-frame ceiling was inferred at assumed 60 Hz and I did not reuse it as fact.\n- Only **two** predicates actually gate credit: `walkedSegmentSupported` (dense 0.25-unit support + capsule footprint vs apparatus/extra solids) and, **only if that was true**, `checkReference(...).ok` (range + solid sight). Nothing else.\n\n**The presumed clearance branch is not there.** `bodiesClear` is called at director `:1213` and `:2419`, neither on the path to the credit call at `:1320`; `spanClearance` is standby-placement only. The shipped bundle confirms it literally \u2014 the guard is `(...support...)&&GH(...).ok&&(t.terraUnits=pwe(...))`, with no `TKA`. I reported this as absent rather than fabricating a true branch.\n\n**Skip reasons recorded, not guessed:** short-circuit hides `checkReference` when support is false (MISSING, not false); the first update has no swept footprint; when a guard fails there is *no* credit call at all, which proves *a* guard failed but never *which* \u2014 and recovering that would require re-evaluating physical predicates, so it stays missing.\n\n**The discriminator.** One only, plus one labelled control. A single CDP logpoint whose condition records bounded data and returns `false` \u2014 never pauses, never re-calls predicates. No source map ships, so I bound by **unique minified signature, not a guessed variable**: `=2.5){` appears exactly once in 5.67 M chars, and `pwe(` exactly twice (declaration + the one call site). Because that binding is reliable, **no instrumentation-only source patch was needed and none is staged**. Returned credit is chained from the next call's `previousUnits` \u2014 actual, with the final call's return left explicitly MISSING rather than interpolated.\n\nTwo things worth your attention: the instrumentation causes V8 deopt and can shift the *distribution* of per-update displacement (each recorded value is still actual, but near-ceiling comparisons must carry that caveat); and the prior reference-3 E entry is recorded as **airborne** from the direct W\u2192E shortcut, so the plan enters via the labelled survey fixture and requires a *verified* grounded E before the first measured update.\n\n`node verifier/probes/common-exact-input/selftest.mjs` \u2192 exit 0, 12/12, including a live re-check that the bundle hash and guard literal still match.\n\nNext step is narrow: when SHORT releases the GPU, attach to the running 34413 preview, set LP-A at `index-BiDWGouH.js` 7839:193729, drive one ordinary-WASD vertex 2\u21923\u21924 leg with a positive overshoot plus the squared-corner control, drain once. No correction is proposed \u2014 the discriminator hasn't run.",
+  "ttft_ms": 2580,
+  "type": "result",
+  "duration_ms": 381963,
+  "uuid": "0006d320-2a1a-4f40-bfbb-9477a324716e",
+  "ttft_stream_ms": 1197,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 1197,
+  "queued_turn_count": 0
+}

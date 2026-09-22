@@ -1,0 +1,32 @@
+{
+  "schema": "paravoxia.namedEventRepair.v1",
+  "ownerRequest": "RUN THAT BITCH",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "previousStateSha256": "1550588cd5068f2b54cb2467ceb5c54c66eb6db0fb5263afad3229449bec7a0d",
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "a6f07511ce6058659b3bdfc287a299775787f590e23539fe73b8e9d766734215",
+      "after": "bc82535d745aff065654e1a1dba2f1a1a64180127f5218ecfeb53dfdd2d5ceba"
+    },
+    {
+      "path": "main/tools/chapter-loop.mjs",
+      "before": "9a24402947c3bf8f22d4d76b864935f488f2ccfa731820be4f59407aaaa72d0c",
+      "after": "321e193370a091e6022775175d717f25985663bdbd2b1863ee2bef2b8e37ab75"
+    },
+    {
+      "path": "main/tools/chapter-loop/role-result.mjs",
+      "before": null,
+      "after": "e931e6e670327b8e44c4cefd1d8e892805955ddde1a20fec184d5ed05d70309f"
+    },
+    {
+      "path": "main/tools/chapter-loop/role-result.test.mjs",
+      "before": null,
+      "after": "cf5550cf716aa469318987b3692e30e72aede437842bb7c54d570c217bbcc717"
+    }
+  ],
+  "validation": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/named-event-repair/validation.json",
+    "sha256": "5cf9172cb3a293732e3f8a8b191a4ca1412e585bfc7355a80a344308354beb87"
+  }
+}

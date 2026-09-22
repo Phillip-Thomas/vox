@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 419776,
+  "stop_reason": "end_turn",
+  "session_id": "6fe2bdc5-41c3-4814-83db-5411920c7478",
+  "total_cost_usd": 2.2676119999999997,
+  "usage": {
+    "input_tokens": 62,
+    "cache_creation_input_tokens": 76415,
+    "cache_read_input_tokens": 1495002,
+    "output_tokens": 30151,
+    "output_tokens_details": {
+      "thinking_tokens": 11801
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 76415,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1545,
+        "cache_read_input_tokens": 79738,
+        "cache_creation_input_tokens": 837,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 837
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1776,
+      "outputTokens": 20,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001876,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 62,
+      "outputTokens": 30151,
+      "cacheReadInputTokens": 1495002,
+      "cacheCreationInputTokens": 76415,
+      "webSearchRequests": 0,
+      "costUSD": 2.265736,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 11801,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 34,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done. Report at `manual-frontier-audit.{json,md}`; scratch in `verifier/probes/manual-frontier-audit/`, receipts in `logs/manual-frontier-audit/`. No game/contract/probe bytes changed (`source-before.sha256` == `source-after.sha256`), no browser/GPU/build.\n\n## Verdict: harness route defect \u2014 not a candidate game defect\n\n**Observed.** vertex 2 crossed at 70877 ms with foot pose **z = 16.164333**, i.e. 0.164 *past* the vertex on that corner's incoming +z axis, credit 4.008321. vertex 3 \u2192 credit steps to exactly **6** (= arc 2\u00d73) and never moves again through vertices 4\u20139, `supported: true` on every sample, ~12 further walked units. Credit call is `routeProgressUnits(CG_ROUTE_COMMON, body, terraUnits, displacement)` at `commonGroundDirector.ts:1320`, gated on `walkedSegmentSupported && checkReference` \u2014 both live-true, so neither is a candidate cause.\n\n**Missing condition.** `routeProgressUnits` (`commonGroundRoute.ts:467`) computes `ceiling = previousUnits + displacementUnits` from the *credit*, not the body's true arc. Re-traversal must therefore resume at or behind the frontier **on every segment, including the outgoing leg's axis at each corner**. The 0.164 residual past vertex 2 is only lateral on leg 2\u21923, but leg 3\u21924 runs back along +z \u2014 so at vertex 3 the projected arc jumps 6 \u2192 6.164 with no matching displacement. One frame buys \u22480.0836 units (measured `unitsPerMs` 0.005014681 at 60 Hz). 0.1643 > 0.0836 \u21d2 refused, and the gap only grows. That is the file's own deliberate frontier lock, reached by a route the probe chose.\n\n**Harness cause, exact.** `common-passage-probe.mjs:590-592` aims `vertex + plane.normal * 0.15` \u2014 deliberately past each vertex along that vertex's incoming normal \u2014 and the 30 ms minimum pulse quantises to ~0.15 units. At a corner that normal is the axis the route re-uses later, so every corner step manufactures ~2\u00d7 the per-frame ceiling as debt. The run returned to the frontier and then re-created the debt at the very next corner; the documented recovery was never actually performed.\n\n**Discrimination (CPU, actual game function, actual captured poses).** `frontier-replay.mjs`, exit 0: replay A of the unmodified captured poses locks at **6** (matches live); replay B, changing *only* the sign of the vertex-2 residual, credits **18** (6, 8.027, 10.038, 12, 14.076, 16.061, 18). Limits recorded: pulse-END poses interpolated at calibration speed, support/reference/terrain gating not reproduced, `bodyPose` foot used.\n\n**Contrast, not dismissal.** Passing `journey-common-1` reaches vertex 3 at `pose [-43.889, 50.99, 15.926]` \u2014 outgoing axis still *behind* the vertex \u2014 so arc is continuous and credit tracks displacement. Its 0.24 overshoot is harmless because it lies along the leg already being credited. reference-3 read only for the at-E footY 53.317 unsupported contrast.\n\n**Instrumentation limitation.** `commonPassageLogic.mjs:186 orderedFrontierVerdict` checks only ordered indices, non-decreasing time, `crossed===true`, finite units and **monotonic** units \u2014 a constant 6 passes all of them. It never asserts `units >= 2*index`. Plane crossings are not certification.\n\n**Next measurement (smallest falsifiable).** Same deviation script, one bounded change: aim to vertex \u22120.05 along the incoming normal, require outgoing-axis residual \u2264 0.05 before turning, assert live `terraUnits >= 2*index \u2212 0.05` at each crossing. Prediction 6/8/10/12/14/16/18 with no game change; if it still freezes at 6 with verified sub-0.05 residuals while supported and reference-held stay true, the harness explanation is dead.\n\nNo source mutation needed. If root later orders one: bounded to `routeProgressUnits`, with the four `commonGroundRoute.test.ts` regressions (C earns 0, endpoint proximity 0, 0.18 early turn still holds at 4 over 300 units, far-end wiggle buys nothing) as the gate.",
+  "ttft_ms": 1633,
+  "type": "result",
+  "duration_ms": 420200,
+  "uuid": "eacc4474-383a-43f2-942d-570769a4db87",
+  "ttft_stream_ms": 885,
+  "time_to_request_ms": 34,
+  "first_content_frame_ms": 887,
+  "queued_turn_count": 0
+}

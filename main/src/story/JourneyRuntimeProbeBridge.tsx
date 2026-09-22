@@ -1,3 +1,6 @@
+import { getAppStateSnapshot } from '../state/appState.ts';
+import { getCommonGroundProbeSnapshot } from './commonGroundDirector.ts';
+import { getUnfinishedMapSnapshot } from './unfinishedMapDirector.ts';
 import React, { useEffect } from 'react';
 import {
   getInteractionProbeSnapshot
@@ -31,9 +34,13 @@ import { hifiWreckHandle } from './world/hifiWreck.ts';
 import {
   setCinematicGazeIntent,
   setCinematicLookTarget,
-  setCinematicLookWeight
+  setCinematicLookWeight,
+  getCinematicCameraPose,
+  getCinematicLookWeight
 } from './cinematicLook.ts';
-import { getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { getPlayerWorldPosition, getPlayerLook, getPlayerUp } from '../state/playerFrame.ts';
+import { getStoryInputPolicy } from './storyInputPolicy.ts';
+import { isMapViewOpen } from '../game/mapView.ts';
 import { getSpaceFlightSnapshot } from '../state/spaceFlight.ts';
 import { getSystemFlightSnapshot } from '../state/systemFlight.ts';
 import { getSignedSceneAvDebugSnapshot } from './signedSceneAvRuntime.ts';
@@ -162,6 +169,17 @@ function buildSnapshot(): Record<string, unknown> {
   const signedSceneAv = getSignedSceneAvDebugSnapshot();
   return {
     schema: 'paravoxia.journeyRuntimeSnapshot.v1',
+    unfinishedMap: getUnfinishedMapSnapshot(),
+    // Passive on-foot telemetry in the same grounded frame as the authored routes.
+    commonGround: getCommonGroundProbeSnapshot(),
+    view: {
+      forward: getPlayerLook().forward.toArray(),
+      up: getPlayerUp().toArray(),
+      ordinaryLook: getStoryInputPolicy().lookMode === 'free' && !isMapViewOpen()
+        && getCinematicCameraPose().weight <= 0.001 && getCinematicLookWeight() <= 0.001,
+      pointerLocked: document.pointerLockElement !== null
+    },
+    shell: { ...getAppStateSnapshot() },
     sampledAt: Date.now(),
     story: {
       active: story.active,

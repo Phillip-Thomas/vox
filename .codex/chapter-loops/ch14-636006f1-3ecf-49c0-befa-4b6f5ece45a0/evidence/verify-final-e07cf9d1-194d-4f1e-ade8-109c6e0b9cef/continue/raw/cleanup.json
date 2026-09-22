@@ -1,0 +1,18 @@
+{
+  "phase": "done",
+  "errors": [],
+  "closed": {
+    "page": "closed",
+    "context": "closed",
+    "video": "saved",
+    "browser": "closed",
+    "browserServer": "closed"
+  },
+  "media": {
+    "requested": true,
+    "recorderStopped": true,
+    "moduleRemoved": true,
+    "defaultSinkAfter": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+    "defaultSinkUnchanged": true
+  }
+}

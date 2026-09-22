@@ -1,0 +1,37 @@
+{
+  "schema": "paravoxia.nativeBoundaryCorrection.v1",
+  "appliedAt": "2026-09-05T21:04:40.376295+00:00",
+  "authoredDeltaRef": "cinematography-native-review-delta.json",
+  "authoredDeltaSha256": "1d678266aae1ee95a501dcaab230358cb8a248b8d17ae265b0ca036cb8f38dc7",
+  "beforeContractSha256": "2ef9a016f8c803a1fadbf456d75b7fe1e6a9ae79f072854024d29704ee346410",
+  "afterContractSha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a",
+  "contractVersion": "draft-v1",
+  "reason": "Unsigned draft revised only to restore exact original-treatment scope identified by authentic Cinema review. No creative fields changed. Actual first-wave reviews retain their historical hash and final signatures must bind corrected hash.",
+  "newAllowedPaths": [
+    "main/src/story/feed/SurveyBracketOverlay.tsx",
+    "main/src/components/CameraControls.tsx"
+  ],
+  "appendedLedgerEntries": 7,
+  "preservedFiles": [
+    {
+      "path": "assembly/history/pre-native-boundary-correction/scene-contract.json",
+      "sha256": "2ef9a016f8c803a1fadbf456d75b7fe1e6a9ae79f072854024d29704ee346410"
+    },
+    {
+      "path": "assembly/history/pre-native-boundary-correction/production-lock.json",
+      "sha256": "08d1fd3e14c6e3cd436ebb91ab117ef8e862e5f2ab133b55a81b3c3b120da696"
+    },
+    {
+      "path": "assembly/history/pre-native-boundary-correction/production-lock.md",
+      "sha256": "f832a5dee01aa78b846d67c2d615fee7d8ea249e19a3882232a3c83b977d9f1f"
+    },
+    {
+      "path": "assembly/history/pre-native-boundary-correction/assembly/implementation-boundary.json",
+      "sha256": "ac7cebb6be62605c70f82e3feb7c6817e197fa5511ed871bf8ab91683295876e"
+    },
+    {
+      "path": "assembly/history/pre-native-boundary-correction/assembly/frozen-candidate.json",
+      "sha256": "26ebb2e7b1cc94ecb32351f8fdb653a71fc65d34e7b0f6d817d955b1cb74a3b0"
+    }
+  ]
+}

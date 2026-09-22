@@ -1,3 +1,6 @@
+import { prepareStoryAnchors } from '../story/world/storyAnchorResolver.ts';
+import { packPreparedStoryAnchors, unpackPreparedStoryAnchors } from '../story/world/preparedStoryAnchors.ts';
+import { STORY_PRIMARY_WORLD_ID, STORY_SEED } from '../story/world/storyWorldIdentity.ts';
 import { blockToRenderMaterial } from '../game/adapters.ts';
 import { ALL_BLOCK_IDS, type BlockId } from '../game/data/blocks.ts';
 import { ALL_RESOURCE_IDS, type ResourceId } from '../game/data/resources.ts';
@@ -6,8 +9,18 @@ import { resolvePlanetProfile } from '../game/PlanetProfile.ts';
 import { parsePlanetWorldId, planetSeedForAddress } from '../game/starSystem.ts';
 import { MATERIAL_ORDER, type MaterialType } from '../types/materials.ts';
 import { createResolvedWorldGenerator } from './resolvedWorldGenerator.ts';
+import type { PreparedTerrainFields } from './proceduralWorldGenerator.ts';
+import * as THREE from 'three';
+import { VOXEL_SCALE } from './cubeGravityConstants.ts';
+import { findValidSpawnSite, type SpawnTerrainQuery } from './spawnValidation.ts';
 
-export const WORLD_PREP_PROTOCOL_VERSION = 2;
+/**
+ * v3 adds the generator's PREPARED FIELDS — its memoised existence, surface
+ * height and land-offset answers — so the main thread inherits the worker's
+ * work instead of recomputing it (PARAVOXIA_WORLD_GEN_OFFTHREAD_PLAN.md, Batch 2).
+ * v4 also carries the exact static story anchors in a hashed Float64 buffer.
+ */
+export const WORLD_PREP_PROTOCOL_VERSION = 4;
 export const MAX_WORLD_PREP_PLANET_SIZE = 4_096;
 
 export type PackedCoordinate = [number, number, number];
@@ -39,6 +52,11 @@ export interface WorldPrepCounts {
   waterVoxels: number;
   waterCells: number;
   waterFaces: number;
+  /** Prepared-field entry counts (v3). */
+  fieldExistence: number;
+  fieldSurfaceHeight: number;
+  fieldLandOffset: number;
+  storyAnchorValues: number;
 }
 
 export interface PackedWorldPrepBuffers {
@@ -57,6 +75,21 @@ export interface PackedWorldPrepBuffers {
   waterFacePositions: Int16Array;
   waterFaceDirections: Uint8Array;
   arrivalCandidate: Int16Array;
+  /** Validated arrival pad, or the INT16 sentinel (-32768 x3) when none (v3). */
+  validatedArrivalCandidate: Int16Array;
+  /**
+   * Prepared fields (v3). Keys are packed voxel keys (see voxelCacheKey) and
+   * exceed 2^31, so they travel as Float64; heights and offsets are Float64
+   * because Float32 was measured inexact for every one of them.
+   */
+  fieldExistenceKeys: Float64Array;
+  fieldExistenceValues: Uint8Array;
+  fieldSurfaceHeightKeys: Float64Array;
+  fieldSurfaceHeightValues: Float64Array;
+  fieldLandOffsetKeys: Float64Array;
+  fieldLandOffsetValues: Float64Array;
+  /** Exact static story poses, empty for planets outside the authored story world. */
+  storyAnchors: Float64Array;
 }
 
 export interface PackedWorldPrepPayload {
@@ -124,6 +157,21 @@ export interface WorldPrepSemanticData {
   waterCells: PackedCoordinate[];
   waterFaces: WorldPrepSemanticWaterFace[];
   arrivalCandidate: PackedCoordinate;
+  /**
+   * The canonical arrival pad, validated dry/level/ship-clear with a player
+   * egress — the same search `findTopFaceSurfaceVoxel` runs on the main thread
+   * when this is absent (~160ms of a cold boot). Null when the bounded search
+   * found no pad, which the main thread then reports as the contract failure it is.
+   */
+  validatedArrivalCandidate?: PackedCoordinate | null;
+  /**
+   * The generator's memoised answers after the scans above (v3). Optional: the
+   * fields are an optimisation the synchronous path never depends on, so a
+   * producer (or a test fixture) may omit them and the payload simply ships
+   * empty field buffers.
+   */
+  fields?: PreparedTerrainFields;
+  storyAnchors?: Float64Array;
 }
 
 export interface WorldPrepResultLease {
@@ -154,8 +202,22 @@ const BUFFER_KEYS: ReadonlyArray<keyof PackedWorldPrepBuffers> = [
   'waterCellPositions',
   'waterFacePositions',
   'waterFaceDirections',
-  'arrivalCandidate'
+  'arrivalCandidate',
+  'validatedArrivalCandidate',
+  'fieldExistenceKeys',
+  'fieldExistenceValues',
+  'fieldSurfaceHeightKeys',
+  'fieldSurfaceHeightValues',
+  'fieldLandOffsetKeys',
+  'fieldLandOffsetValues',
+  'storyAnchors'
 ];
+
+const EMPTY_PREPARED_FIELDS: PreparedTerrainFields = {
+  existence: { keys: new Float64Array(0), values: new Uint8Array(0) },
+  surfaceHeight: { keys: new Float64Array(0), values: new Float64Array(0) },
+  landOffset: { keys: new Float64Array(0), values: new Float64Array(0) }
+};
 
 export function createWorldPrepRequest(input: Omit<
   WorldPrepRequest,
@@ -271,15 +333,61 @@ export function buildWorldPrepSemanticData(request: WorldPrepRequest): WorldPrep
     faceDir: face.faceDir
   }));
 
+  const validatedArrivalCandidate = findValidatedArrival(generator, request.planetSize);
+  const storyAnchors = packPreparedStoryAnchors(
+    request.worldId === STORY_PRIMARY_WORLD_ID && request.seed === STORY_SEED && validatedArrivalCandidate
+      ? prepareStoryAnchors({ generator, voxels: positions, validatedArrivalCandidate: {
+          x: validatedArrivalCandidate[0], y: validatedArrivalCandidate[1], z: validatedArrivalCandidate[2]
+        } }, request.planetSize, request.seed)
+      : null
+  );
   return {
     voxels,
     exposedVoxelIndices,
     waterVoxels,
     waterCells,
     waterFaces,
-    arrivalCandidate: findArrivalCandidate(positions)
+    storyAnchors,
+    arrivalCandidate: findArrivalCandidate(positions),
+    validatedArrivalCandidate,
+    // Every scan above has filled the generator's memo caches; ship them.
+    fields: generator.exportPreparedFields()
   };
 }
+
+/**
+ * EXACTLY the search `findTopFaceSurfaceVoxel` (worldArrival.ts) performs for
+ * the default site, so the worker's answer is the one the main thread would
+ * have computed. Any drift between the two is a spawn that moves between a
+ * worker boot and a synchronous boot — keep them identical.
+ */
+function findValidatedArrival(
+  generator: SpawnTerrainQuery,
+  planetSize: number
+): PackedCoordinate | null {
+  const preferredWorld = new THREE.Vector3(
+    DEFAULT_ARRIVAL_SITE.x * VOXEL_SCALE,
+    planetSize,
+    DEFAULT_ARRIVAL_SITE.z * VOXEL_SCALE
+  );
+  const site = findValidSpawnSite(generator, planetSize, preferredWorld, {
+    kind: 'ship',
+    face: 'top',
+    requirePlayerEgress: true,
+    maxSearchRadius: Math.floor(planetSize / VOXEL_SCALE) * 2
+  });
+  return site ? [site.supportVoxel.x, site.supportVoxel.y, site.supportVoxel.z] : null;
+}
+
+/** Null when the packed triple is the sentinel. */
+export function readValidatedArrival(buffer: Int16Array): PackedCoordinate | null {
+  if (buffer.length !== 3 || buffer[0] === VALIDATED_ARRIVAL_NONE) return null;
+  return [buffer[0], buffer[1], buffer[2]];
+}
+
+/** Mirrors `DEFAULT_SITE` in worldArrival.ts; both must agree. */
+export const DEFAULT_ARRIVAL_SITE: { x: number; z: number } = { x: 4, z: -4 };
+const VALIDATED_ARRIVAL_NONE = -32768;
 
 export function buildPackedWorldPrepPayload(request: WorldPrepRequest): PackedWorldPrepPayload {
   return packWorldPrepSemanticData(request, buildWorldPrepSemanticData(request));
@@ -297,6 +405,7 @@ export function packWorldPrepSemanticData(
   const waterVoxelCount = semantic.waterVoxels.length;
   const waterCellCount = semantic.waterCells.length;
   const waterFaceCount = semantic.waterFaces.length;
+  const fields = semantic.fields ?? EMPTY_PREPARED_FIELDS;
   const buffers: PackedWorldPrepBuffers = {
     voxelPositions: new Int16Array(voxelCount * 3),
     blockIds: new Uint8Array(voxelCount),
@@ -312,7 +421,17 @@ export function packWorldPrepSemanticData(
     waterCellPositions: new Int16Array(waterCellCount * 3),
     waterFacePositions: new Int16Array(waterFaceCount * 3),
     waterFaceDirections: new Uint8Array(waterFaceCount),
-    arrivalCandidate: Int16Array.from(semantic.arrivalCandidate)
+    arrivalCandidate: Int16Array.from(semantic.arrivalCandidate),
+    validatedArrivalCandidate: Int16Array.from(
+      semantic.validatedArrivalCandidate ?? [VALIDATED_ARRIVAL_NONE, VALIDATED_ARRIVAL_NONE, VALIDATED_ARRIVAL_NONE]
+    ),
+    fieldExistenceKeys: Float64Array.from(fields.existence.keys),
+    fieldExistenceValues: Uint8Array.from(fields.existence.values),
+    fieldSurfaceHeightKeys: Float64Array.from(fields.surfaceHeight.keys),
+    fieldSurfaceHeightValues: Float64Array.from(fields.surfaceHeight.values),
+    fieldLandOffsetKeys: Float64Array.from(fields.landOffset.keys),
+    fieldLandOffsetValues: Float64Array.from(fields.landOffset.values),
+    storyAnchors: Float64Array.from(semantic.storyAnchors ?? [])
   };
 
   semantic.voxels.forEach((voxel, index) => {
@@ -356,7 +475,11 @@ export function packWorldPrepSemanticData(
     exposedVoxels: exposedCount,
     waterVoxels: waterVoxelCount,
     waterCells: waterCellCount,
-    waterFaces: waterFaceCount
+    waterFaces: waterFaceCount,
+    fieldExistence: fields.existence.keys.length,
+    fieldSurfaceHeight: fields.surfaceHeight.keys.length,
+    fieldLandOffset: fields.landOffset.keys.length,
+    storyAnchorValues: buffers.storyAnchors.length
   };
   const metadata = canonicalMetadata(request, lookups, counts);
   const metadataBytes = new TextEncoder().encode(metadata);
@@ -416,6 +539,13 @@ export function unpackWorldPrepPayload(payload: PackedWorldPrepPayload): WorldPr
       { length: payload.counts.waterCells },
       (_, index) => readCoordinate(payload.buffers.waterCellPositions, index)
     ),
+    validatedArrivalCandidate: readValidatedArrival(payload.buffers.validatedArrivalCandidate),
+    storyAnchors: payload.buffers.storyAnchors,
+    fields: {
+      existence: { keys: payload.buffers.fieldExistenceKeys, values: payload.buffers.fieldExistenceValues },
+      surfaceHeight: { keys: payload.buffers.fieldSurfaceHeightKeys, values: payload.buffers.fieldSurfaceHeightValues },
+      landOffset: { keys: payload.buffers.fieldLandOffsetKeys, values: payload.buffers.fieldLandOffsetValues }
+    },
     waterFaces: Array.from({ length: payload.counts.waterFaces }, (_, index) => ({
       position: readCoordinate(payload.buffers.waterFacePositions, index),
       faceDir: payload.buffers.waterFaceDirections[index]
@@ -461,6 +591,8 @@ export function semanticParityErrors(
   if (!sameWaterVoxels(actual.waterVoxels, expected.waterVoxels)) errors.push('water voxels differ');
   if (!sameCoordinateList(actual.waterCells, expected.waterCells)) errors.push('water cells differ');
   if (!sameWaterFaces(actual.waterFaces, expected.waterFaces)) errors.push('water faces differ');
+  const expectedAnchors = expected.storyAnchors ?? new Float64Array();
+  if (actual.storyAnchors?.length !== expectedAnchors.length || expectedAnchors.some((value, index) => !Object.is(value, actual.storyAnchors?.[index]))) errors.push('story anchors differ');
   return errors;
 }
 
@@ -492,7 +624,16 @@ export function validatePackedWorldPrepPayload(payload: PackedWorldPrepPayload):
   assertBufferLength(payload.buffers.waterFacePositions, counts.waterFaces * 3, 'waterFacePositions');
   assertBufferLength(payload.buffers.waterFaceDirections, counts.waterFaces, 'waterFaceDirections');
   assertBufferLength(payload.buffers.arrivalCandidate, 3, 'arrivalCandidate');
+  assertBufferLength(payload.buffers.validatedArrivalCandidate, 3, 'validatedArrivalCandidate');
+  assertBufferLength(payload.buffers.fieldExistenceKeys, counts.fieldExistence, 'fieldExistenceKeys');
+  assertBufferLength(payload.buffers.fieldExistenceValues, counts.fieldExistence, 'fieldExistenceValues');
+  assertBufferLength(payload.buffers.fieldSurfaceHeightKeys, counts.fieldSurfaceHeight, 'fieldSurfaceHeightKeys');
+  assertBufferLength(payload.buffers.fieldSurfaceHeightValues, counts.fieldSurfaceHeight, 'fieldSurfaceHeightValues');
+  assertBufferLength(payload.buffers.fieldLandOffsetKeys, counts.fieldLandOffset, 'fieldLandOffsetKeys');
+  assertBufferLength(payload.buffers.fieldLandOffsetValues, counts.fieldLandOffset, 'fieldLandOffsetValues');
 
+  assertBufferLength(payload.buffers.storyAnchors, counts.storyAnchorValues, 'storyAnchors');
+  unpackPreparedStoryAnchors(payload.buffers.storyAnchors);
   const metadataBytes = new TextEncoder().encode(canonicalMetadata(request, payload.lookups, counts));
   const transferByteSize = packedTransferByteSize(payload.buffers);
   if (payload.transferByteSize !== transferByteSize) throw new Error('transferByteSize differs');
@@ -585,6 +726,7 @@ function fnvBytes(initial: number, bytes: Uint8Array): number {
 }
 
 function validateSemanticData(semantic: WorldPrepSemanticData): void {
+  if (semantic.storyAnchors) unpackPreparedStoryAnchors(semantic.storyAnchors);
   semantic.voxels.forEach(voxel => {
     validateCoordinate(voxel.position);
     if (!BLOCK_INDEX.has(voxel.blockId)) throw new Error(`unknown block: ${voxel.blockId}`);
@@ -612,6 +754,13 @@ function validateSemanticData(semantic: WorldPrepSemanticData): void {
     }
   });
   validateCoordinate(semantic.arrivalCandidate);
+  if (semantic.validatedArrivalCandidate) validateCoordinate(semantic.validatedArrivalCandidate);
+  for (const [name, field] of Object.entries(semantic.fields ?? {})) {
+    if (field.keys.length !== field.values.length) throw new Error(`prepared field ${name} keys/values length differ`);
+    for (let i = 0; i < field.keys.length; i++) {
+      if (!Number.isSafeInteger(field.keys[i])) throw new Error(`prepared field ${name} has a non-integer key`);
+    }
+  }
 }
 
 function validateCoordinate(coordinate: PackedCoordinate): void {

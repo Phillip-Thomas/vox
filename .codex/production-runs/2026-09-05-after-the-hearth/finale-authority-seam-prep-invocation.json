@@ -1,0 +1,16 @@
+{
+  "role": "finale-authority-seam-prep",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T22:19:38.154473+00:00",
+  "commissionSha256": "ac9233c7a8eba046262e2b1783672611994906f0efb3b43fa7d1545834dc2bed",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "sourceFilesRehashedBefore": 100,
+  "scope": "CPU-only sparse finale authority seam instrumentation preparation; no GPU or game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T22:22:51.251012+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "5481a74e-7e2e-4d37-a496-97a21476ce8b",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 100
+}

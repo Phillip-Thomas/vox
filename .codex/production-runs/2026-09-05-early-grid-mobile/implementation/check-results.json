@@ -1,0 +1,46 @@
+{
+  "schema": "paravoxia.earlyImplementationChecks.v1",
+  "checkedAt": "2026-09-05T21:46:26.013272+00:00",
+  "sourceIdentity": "d093e565487e7bb2ebf2c4caff8ca177369277a38be98d0b8d5d6e6e3d092b6e",
+  "result": "PASS-source-checks-only",
+  "typecheck": {
+    "command": "npm --prefix main run typecheck",
+    "exitCode": 0,
+    "projects": [
+      "tsconfig.json",
+      "tsconfig.node.json"
+    ],
+    "log": "typecheck-final.log"
+  },
+  "tests": {
+    "command": "npx vitest run [12 focused and adjacent suites listed in tests-final.log]",
+    "exitCode": 0,
+    "filesPassed": 12,
+    "testsPassed": 207,
+    "testsFailed": 0,
+    "log": "tests-final.log"
+  },
+  "scopeExtension": "test-scope-extension.json",
+  "browser": {
+    "run": false
+  },
+  "gpu": {
+    "run": false
+  },
+  "build": {
+    "run": false
+  },
+  "independentAudit": {
+    "run": false
+  },
+  "fullVerify": {
+    "run": false
+  },
+  "evidenceArtifacts": {
+    "typecheck-final.log": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af",
+    "tests-final.log": "b00d8df21cb24604f22ddbacfb8a9c99dabc065a18b024d41525f3d40efa0685",
+    "implementation.diff": "83c55a6d53c44b3833b0e77a0950caa7161f58e8103700c90c8165df5590f9cc",
+    "before-manifest.json": "7a3753c84450852111649de9d901e6a7b96a9fc122bd14c53c80529fcde1c72c",
+    "test-scope-extension.json": "d7ba1a411cbe913075b4d6488ae5f8d77d4dd392ba201261d9a324add61abd4c"
+  }
+}

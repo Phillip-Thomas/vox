@@ -1,0 +1,11 @@
+{
+  "schema": "paravoxia.workflowChangeValidation.v1",
+  "status": "passed",
+  "command": "npm --prefix main run chapter:loop:test",
+  "tests": 120,
+  "filesSha256": "e02e1b4aa3ca90b48c81d4855fb9cb7075503dc2b3444d7a7231db01beccbb51",
+  "log": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-adaptive-budget-20260908/tests.log",
+    "sha256": "b3620afe84ad3c7e8ae3ad5d3b6c3b98f9fa77da353bea9ec96ed7753168b751"
+  }
+}

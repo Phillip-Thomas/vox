@@ -1,0 +1,18 @@
+{
+  "schema": "paravoxia.producerSourceHandoff.v1",
+  "at": "2026-09-06T20:42:26.868186+00:00",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "filesRehashed": 99,
+  "allStable": true,
+  "archivedSourceRef": "iterations/manual-credit-finale-findings/source",
+  "finishedReaderRefs": [
+    "common-entry-crossing-invocation.json",
+    "earned-continue-3d-runtime-invocation.json",
+    "finale-window-capture-continuation-invocation.json",
+    "continue-pose-scope-audit-invocation.json"
+  ],
+  "activeWriter": "integration-manual-credit-finale",
+  "concurrentPrivateRole": "continue-controller-closure, probes only, CPU",
+  "sourceDirectionRef": "manual-credit-finale-repair-direction.json",
+  "publicationAuthorized": false
+}

@@ -1,0 +1,6 @@
+{
+  "at": "2026-09-06T18:32:00.018929+00:00",
+  "to": "finale-window-closure",
+  "from": "creative-producer",
+  "instruction": "Root confirms YOUR corrected actual bridge field state.signedSceneAv is right (JourneyRuntimeProbeBridge.tsx244); my initial note called itstate.av because readState wrapper aliasesit, that initial note was imprecise. Exactproviderwins. NEW concrete unmutedpath issue: line294 browser.process()?.pid calls Puppeteer/BrowserServer-only API on playwright Browser returned bychromium.launch; PlaywrightBrowser hasno process method. This willthrow beforecleanup.adopt evaluates andleaklaunchedbrowser. ObtainactualbrowserPID via ownedbrowser CDP SystemInfo.getProcessInfo or use supportedBrowserServer lifecycle ifappropriate; adoptbrowser FIRST independently ofoptionalPID lookup. PIDlookupfailuremustcleanownedbrowserandabortaudio, neverclaimownershipfromunboundprocess. VerifyactualruntimeAPIfromlocalPlaywrighttypes; no GPU now. AddmeaningfulmockwithBrowserobjectWITHOUTprocess method andfailureafterlaunch. Report any remainingunimplementedguard, do not callcurrentbrowser.process safe."
+}

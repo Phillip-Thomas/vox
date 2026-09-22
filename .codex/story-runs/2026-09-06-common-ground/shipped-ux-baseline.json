@@ -1,0 +1,50 @@
+{
+  "schema": "paravoxia.storyCouncilUxBaseline.v1",
+  "capturedAt": "2026-09-06T04:16:51.213775+00:00",
+  "basis": "current source inventory; no fresh runtime probe",
+  "sourceHashes": {
+    "main/src/story/stationReturnStory.ts": "5844152757cd0788df28d349dae6eee092bdbc09df8e3c487111c71bbfe37b49",
+    "main/src/story/ux/README.md": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85",
+    "main/src/story/ux/objectiveDirector.ts": "485860f85e20727d30008c94a8f5d22f888ca888c78e5b740f38853d39a5c4e8",
+    "main/src/story/ux/feedbackCues.ts": "e8a076e2280ae4761d9ddba5b6d76682ee3e59636140c3ca6960bef15e548322",
+    "main/src/story/StoryDirectorDriver.tsx": "46ed17413bbd37ecf5cadfa9b5b2feb67f694931f34b010ec3e3004a66e28c8c",
+    "main/src/story/world/TidegardenSettlementWorld.tsx": "a1b8ff5292c38e6dbe1319708810573d4e28fbfcbe0006034b8ecaad7264122c",
+    "main/src/game/spaceStation/spaceStationStory.ts": "c688c184c5a309955be711f2f459cd7cac6baa9cffb9a1a4a7696e293b7b9e9a",
+    "main/src/components/spaceStation/StationStoryPanel.tsx": "dd5c5221d8e24c4d077564a3c77ad53b8c93c5743dd51e86c8ddd60041581f60"
+  },
+  "entry": {
+    "stationExit": "station:return:tidegarden",
+    "marker": "TIDEGARDEN · SECOND HEARTH",
+    "workOrder": [
+      "RETURN TO TIDEGARDEN.",
+      "DELIVER THE BONDED CELL TO THE SECOND HEARTH."
+    ]
+  },
+  "surface": {
+    "objective": "hearth:return:install-cell",
+    "marker": "SECOND HEARTH · INSTALL BONDED CELL",
+    "workOrder": [
+      "DELIVER THE BONDED CELL TO THE SECOND HEARTH.",
+      "[F] INSTALL THE SEALED CELL."
+    ],
+    "reach": 4.2
+  },
+  "completion": {
+    "receipts": [
+      "story:ch12-bonded-cell-installed",
+      "story:ch12-hearth-restored"
+    ],
+    "consumes": {
+      "item": "bonded_cell",
+      "count": 1
+    },
+    "nextObjective": null,
+    "newContinuationRegistered": false
+  },
+  "authority": "existing objectiveDirector and marker bridge; new work must not introduce a competing HUD",
+  "runtimeProof": "historical 15-check browser record; not fresh proof of the currently dirty runtime",
+  "limitations": [
+    "Current audio/visual work is uncommitted and independently owned.",
+    "No new chapter is implemented or rendered."
+  ]
+}

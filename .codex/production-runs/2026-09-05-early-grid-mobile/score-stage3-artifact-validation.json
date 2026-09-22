@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-09-05T20:31:47.711Z",
+  "method": "Extracted current native validateJsonSchema helper; Score score/reset/capture records,merged14anchors and Chapter6guidance rows only. No full contract gate or runtime test.",
+  "nativeScoreCueCount": 19,
+  "mergedNativeAnchorCount": 14,
+  "guidanceRowsChecked": 6,
+  "recipientRows": 2,
+  "firstBladeMatches": true,
+  "nativeErrors": [],
+  "validatorPath": "main/tools/creative-triad-gate.mjs",
+  "validatorSha256": "404431dd7092067db81d60196c56afffacd4c1b7ab831d56165509183c54ed2a",
+  "schemaPath": "docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json",
+  "schemaSha256": "d80e8f3762c567c270d118f189d19fbbccb166f2fe93517e51971b4174689769",
+  "fullContractGateRun": false,
+  "runtimeEvidenceOrApprovalClaim": false
+}

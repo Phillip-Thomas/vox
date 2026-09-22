@@ -1,0 +1,139 @@
+{
+  "schema": "paravoxia.scoreNativeCandidateReview.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "authoredBy": "score",
+  "authoredAt": "2026-09-05T21:06:51.348428+00:00",
+  "reviewedContractVersion": "draft-v1",
+  "reviewedContractSha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a",
+  "incomingNoteHistoricalSha256": "2ef9a016f8c803a1fadbf456d75b7fe1e6a9ae79f072854024d29704ee346410",
+  "status": "authentic-native-notes-and-recipient-responses-ready-no-signature",
+  "scoreCreativeChangesRequested": false,
+  "creativeParity": {
+    "scoreFieldExactAcrossCorrection": true,
+    "scoreFieldMatchesAuthoredStage3": "Verified exactly after mechanical contract:capture evidence-reference qualification.",
+    "cueCount": 19,
+    "all14AnchorScoreRelationsMatch": true,
+    "scoreResetMatches": true,
+    "guidanceCount": 6
+  },
+  "boundaryAudit": {
+    "onlyTopLevelChange": [
+      "production"
+    ],
+    "onlyProductionChange": [
+      "allowedPaths"
+    ],
+    "allowedPathCount": 39,
+    "addedPaths": [
+      "main/src/components/CameraControls.tsx",
+      "main/src/story/feed/SurveyBracketOverlay.tsx"
+    ],
+    "appendedLedgerEntries": 7,
+    "exactAuthoredAppendedEntries": true,
+    "cameraControlsConditional": true,
+    "noProtectedAudioExpansion": true
+  },
+  "performanceDisposition": {
+    "acceptedAsFutureAcceptance": true,
+    "maximumDrawCalls": 70,
+    "maximumShaderPrograms": 30,
+    "matchedCaseIncrementalCeiling": 0,
+    "noNewLightsTexturesGeometries": true,
+    "maximumApplicationOwnedGlAllocationMiB": 256,
+    "memoryBaselineMeasured": false,
+    "noResourceIncrease": true,
+    "proof": "Actual viewport/profile/DPR,format,attachment/allocation bytes; unavailable observations remain unavailable. No driver/process/device total inferred."
+  },
+  "originalsVerified": [
+    {
+      "path": "assembly/originals/score-treatment.md",
+      "sha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77"
+    },
+    {
+      "path": "score-treatment.json",
+      "sha256": "9a63e64968e83dd9136c96b5272fffb3be2f45c44231eb51c2b249650d692a5d"
+    },
+    {
+      "path": "score-preparatory-notes.jsonl",
+      "sha256": "c2bd20652736e4f288d7caad674c2d75457b67c185e6b28c64267b8f5c90fc03"
+    }
+  ],
+  "inputBindings": [
+    {
+      "path": "scene-contract.json",
+      "sha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a"
+    },
+    {
+      "path": "production-lock.json",
+      "sha256": "5ad49010de4ef45375ab10089f6af297990f7e0c55b05f74237e7448b8e278da"
+    },
+    {
+      "path": "assembly/frozen-candidate.json",
+      "sha256": "87f5ff92a73416d9ce54b60e5e9a1e6da37769845cc8563da668b0228e53afd0"
+    },
+    {
+      "path": "assembly/implementation-boundary.json",
+      "sha256": "eb29f63cbf946fa88043f1ebba141697d8823db99d0338d0da023569f11ac0ca"
+    },
+    {
+      "path": "assembly/native-boundary-correction-receipt.json",
+      "sha256": "7bfef13d096912edfe019037382ba997d45a9da118ae3ba865830c8e59d5557f"
+    },
+    {
+      "path": "assembly/native-packaging-transformations.json",
+      "sha256": "379a0e97eeabc8f725ad72001256f8afa094fceef05a077ac86a7ad42762259c"
+    },
+    {
+      "path": "assembly/engineering-budget.md",
+      "sha256": "a37ee669391a8ccc4fa83df824c7db250bcf6ecf1dd0dbb2f7a9e7029c919234"
+    },
+    {
+      "path": "root-native-performance.json",
+      "sha256": "6b59a66e93b90078a691b98929e94133a6c15d4bedeed3816dc217e01fbc3d24"
+    },
+    {
+      "path": "assembly/compilation-report.json",
+      "sha256": "e0927ae0606b8b6f8b69929adec1eb72c6d6635feeb772256092b8ef62c80e1a"
+    },
+    {
+      "path": "assembly/support-provenance.json",
+      "sha256": "e6c9150e58fc275951aeea0353b4dce80acf5b43c32116a986080c5408fc50fc"
+    },
+    {
+      "path": "assembly/authored-binding-audit.json",
+      "sha256": "23decf34fcd1105dd4cfb74f9f434fb315f7b93fd45430c888beee1dbf1e4205"
+    },
+    {
+      "path": "assembly/contract-readiness-report.json",
+      "sha256": "84862480eb3568b0fb1bd783f5aae8edab4afee4b76660a60d544cc5320b65bd"
+    },
+    {
+      "path": "chapter-peer-notes.jsonl",
+      "sha256": "9b39c018aa497ecc7c44211107d1d136128cdfeed309b809a0e7f2ac759a65cc"
+    },
+    {
+      "path": "cinematography-peer-notes.jsonl",
+      "sha256": "03d85f7ed9317ae3675547f72636901eb712a5130f85381b3cf3c3b9ea959d1b"
+    },
+    {
+      "path": "cinematography-native-review-delta.json",
+      "sha256": "1d678266aae1ee95a501dcaab230358cb8a248b8d17ae265b0ca036cb8f38dc7"
+    },
+    {
+      "path": "score-stage3-native-delta.json",
+      "sha256": "15d8704f4927c10a55ded685e324a6cb7bd7ad029177dae6b1a0dd976973f989"
+    }
+  ],
+  "notes": {
+    "firstWave": "score-peer-notes.jsonl",
+    "firstWaveCount": 2,
+    "firstWaveStatus": "open, response/disposition null",
+    "recipientReplies": "score-reconciliation.jsonl",
+    "recipientReplyCount": 2,
+    "recipientStatus": "accepted; historical incoming hash retained and current corrected hash independently reviewed"
+  },
+  "evidenceQualification": "Packaged baseline associations are context,not new cue/transaction/voice occurrence proof. Runtime/AV/audio admission and independent review remain outstanding.",
+  "canonicalSignature": null,
+  "runtimeEdited": false,
+  "buildBrowserGpuOrAuditionPerformed": false
+}

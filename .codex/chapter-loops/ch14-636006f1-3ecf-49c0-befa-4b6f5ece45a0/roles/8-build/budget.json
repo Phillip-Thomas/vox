@@ -1,0 +1,60 @@
+{
+  "mode": "adaptive",
+  "targets": {
+    "roleTurns": {
+      "used": 96,
+      "target": 60,
+      "remaining": 0,
+      "exceeded": true
+    },
+    "roleMs": {
+      "used": 2338321,
+      "target": 2700000,
+      "remaining": 361679,
+      "exceeded": false
+    },
+    "modelTurns": {
+      "used": 217,
+      "target": 400,
+      "remaining": 183,
+      "exceeded": false
+    },
+    "roleLaunches": {
+      "used": 8,
+      "target": 14,
+      "remaining": 6,
+      "exceeded": false
+    },
+    "activeMs": {
+      "used": 4412928,
+      "target": 28800000,
+      "remaining": 24387072,
+      "exceeded": false
+    },
+    "endToEndMs": {
+      "used": 5295929,
+      "target": 28800000,
+      "remaining": 23504071,
+      "exceeded": false
+    }
+  },
+  "nearing": [
+    "roleTurns",
+    "roleMs"
+  ],
+  "action": "finish-existing-work",
+  "instruction": "Save progress.md with changed paths, exact outstanding defects, evidence and the next action. Stop optional exploration and polish. Reuse passing checks; finish the current implementation and required proof. Scheduling overruns do not terminate generation.",
+  "accountingGaps": [
+    {
+      "role": "7-build",
+      "transport": {
+        "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/7-build/transport.json",
+        "sha256": "3014b1a0c54dcaa3ec3c2e0495722df98e9274f5fd1c215d87dbc67f9d130769"
+      },
+      "session": "01a082c7-393c-7fe3-80f3-802a6754d95c",
+      "retainedWorkItems": 60,
+      "tokens": null,
+      "explanation": "Previous scheduling hard stop prevented terminal usage reporting. Reported totals exclude this unknown spend; this role is not replayed as a free call."
+    }
+  ]
+}

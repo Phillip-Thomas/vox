@@ -1,0 +1,11 @@
+{
+  "schema": "paravoxia.producerImplementationConcern.v1",
+  "recordedAt": "2026-09-06T11:06:42.784040+00:00",
+  "defectId": "CG-IMPL-008",
+  "sourceSha256": "63cc4e6cc3bb1a4d04bdab7b51f83b967dd261b59ea872bb0789451b4dd87315",
+  "statement": "Mid-beat Continue may still block new anchors behind already-earned mandatory events whose activation ledger was cleared. Current tests cover restored pre-review home, not restored already-reviewed home followed by a new return-choice act.",
+  "sourceCandidate": "enterSignedSceneAvBeat clears activatedAnchorIds at fresh beat entry. isPendingOrderedAnchor excludes conditional/direct-missing events but still requires ch13 fault-reviewed. enterCommonGroundBeat only requests home-steady. Existing reviewed milestone skips the old F review; later real return-choice anchor can therefore be rejected behind its never-replayed predecessor. Similar issue may affect mid-survey/common Continue.",
+  "classification": "Source-derived unmeasured risk; reproduce through real fresh AV runtime and validated chapter save state before claiming failure.",
+  "boundedAction": "Test Continue after real fault review but before return choice, and meaningful mid-survey/common restoration with subsequent actually earned anchors. Correct receipt/state eligibility only if demonstrated; do not replay old actions/audio, fabricate activation history, or globally make required anchors optional. Existing Score interpretation explicitly binds already-earned silent restoration and later eligible events.",
+  "status": "requires bounded assessment within008 before finalclearance"
+}

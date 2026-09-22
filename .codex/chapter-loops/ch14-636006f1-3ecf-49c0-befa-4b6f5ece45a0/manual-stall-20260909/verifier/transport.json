@@ -1,0 +1,22 @@
+{
+  "exitCode": 0,
+  "signal": null,
+  "reason": null,
+  "bytes": 1680317,
+  "pid": 133426,
+  "usage": {
+    "roleLaunches": 0,
+    "modelTurns": 54,
+    "inputTokens": 97254,
+    "cacheReadTokens": 1955208,
+    "outputTokens": 36030
+  },
+  "session": "a0c4e358-db49-4685-990f-dbaa2c41fc4a",
+  "resolved": "claude-opus-5",
+  "completed": true,
+  "failed": false,
+  "final": "Cleanup confirmed clean; the residual Chrome processes are unrelated (VS Code crashpad and a separate pre-existing paraform-managed instance).\n\n**VERDICT**: fail — blocker root cause identified: **terrain/collision support gap**, not survival/downed, input/focus, render/physics stall, or controller error. Defect is intermittent.\n\n**Measurements**\n\n| Item | Failing run | Diagnostic replay (1, max) |\n|---|---|---|\n| Build sha256 | `fabdd0a0…` | `fabdd0a0…` (identical) |\n| Renderer | ANGLE NVIDIA GB10/PCIe OpenGL 4.5.0 | same, headed, no software |\n| steps[38] outcome | wedged, `noProgressMs` 8000 exceeded | arrived, 54 pulses, 1 calibration, 12.1s |\n| Frozen bodyPose | `[-41.4463…, 50.6632…, 10.5215…]` | n/a |\n| Freeze duration | 7.48s, 37 bit-identical samples | n/a |\n| Only advancing field | `t` (runner clock) | n/a |\n| Case proof | ordinaryControls false, acceptedAction 0 | true, 8, completePath true |\n\n**Causal chain (evidence-bound)**\n1. A genuine support gap exists on the ch14-scar route. In the replay `/commonGround/supported` reads **false** at `[-41.876,50.977,10.824]` and `[-41.233,50.896,10.471]`, and earlier at `bootstrap[36]` `[-41.637,…,11.413]` / `[-42.449,…,11.413]`. Band ≈ x∈[-42.45,-41.23], z∈[10.47,11.41], floor plane y≈50.99. Only 23 of 754 samples in the whole run are unsupported, and they cluster here.\n2. The failing pose `[-41.446, 50.663, 10.521]` lies **inside that band**, 0.326u below the floor plane.\n3. The replay crossed the gap with a shallow 0.093u dip and recovered to y=51.223. The failing run fell 0.326u, below the lip, and pinned: y floor-clamped (rest, not mid-fall), horizontal resolution returning the identical clamped value every tick → bit-identical pose.\n4. `walkByInputs` cannot recover from a total wedge: `disagreements` only increments when `moved > 0.02`, so a wedge (`moved≈0`) **resets** it, and recalibration/direction change never fire. It holds W+D for the full 8000ms and throws.\n\n**Hypotheses excluded**\n- **Survival/downed** — failure frame shows SUIT HUD HEALTH **100%** (food 89, water 84, temp/stam/oxy 100). `isDowned()` is `health<=0` (`survivalVitals.ts:111`); no downed gate in the movement path.\n- **Input/focus** — the same held chord drove ~2.9u at ~4.7u/s in the 1.2s before the freeze; `hotkeyActivations`/`revision` both 212, `targetEditable` false. No new events during the freeze is expected: `heldWalkInput` emits no repeats.\n- **Render/physics stall** — `page.evaluate` returned on the page main thread every ~200ms for the full 8s with `runtimeReady` true, so the thread was never blocked; and y settled at a floor-clamped rest, which requires the physics step to have run.\n- **Controller error** — no pageerrors in either run; `holdReason` null, `worldBound` true throughout.\n\n**Objective visual defects**: none. Failure frame HUD intact, objective copy present, no blank/pop.\n\n**Artifacts**\n- Result: `/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/manual-stall-20260909/verifier/result.json` (sha256 `0258fd08…`)\n- Replay trace/provenance/frames: `…/manual-stall-20260909/verifier/run/raw/`\n- Scratch config (production tool unmodified): `…/verifier/scratch/manual-diagnostic.config.json`\n- Failure frame: `…/verify-final-72d6ce01…/manual/raw/frame-5.png`\n\nTwo notes for the caller, both unambiguous from the traces: the replay **passed**, so it is noncertifying and the blocker is not cleared; and two independent contributors are in evidence — the world-geometry support gap (game source) and the harness wedge-recovery blind spot — so fixing only the harness would mask the gap. Source parity: 721 game files byte-identical to the candidate; only `main/package.json`/`package-lock.json` differ, and solely in npm script definitions, which cannot affect the hash-verified served bundle.",
+  "contextTokens": 102654,
+  "reported": true,
+  "accounting": "Live per-message usage, reconciled to cumulative terminal usage."
+}

@@ -1,0 +1,139 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "8d25327f5eabc6984eb1413a87ae34955342010ee4065d6198ccb936b9cc5dde",
+  "kind": "continue",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": true,
+    "acceptedAction": 2,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": true,
+    "clickedContinue": true,
+    "ctaBeforeRuntimeReady": true,
+    "stateEqual": true,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true,
+    "videoDecodes": true,
+    "audioDecodes": true,
+    "audioIsolated": true,
+    "mediaCleanup": true,
+    "mediaCaptured": true
+  },
+  "missing": [
+    "newAcceptedAction"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/raw/cleanup.json",
+      "sha256": "d8111b6706898e1340b5db6df4a8f7c8d4e720c37aa957092676cbe2ec926c92"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/raw/frame-4.png",
+      "sha256": "87e1154cd59f254731c8f7661dc3abecfa7c653afbed80881acdc3fdaea1acd0"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/raw/frame-5.png",
+      "sha256": "646b2064fe4ad4952e7f91e1908c4c51adefb14b7104fbc762b4db3f06705448"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/raw/media-proof.json",
+      "sha256": "cf01eccfdca510404ee32bf58c374649847a7eae73bf60b6ce70c72da2430fff"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/raw/observations.json",
+      "sha256": "e62ac49df423b32b9b4471ea34aae52b25da321d0dafb0baae80847d285b01d5"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/raw/provenance.json",
+      "sha256": "423dbdfba2f1bd08027ea0bc3860b592760835317c9afcc5f5532acd0982c789"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/raw/review-storage.json",
+      "sha256": "6259c70d2146f806bab3dd531bb2cd6d9ae0a435ddd3d7c2946068a976026f4d"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/raw/trace.ndjson",
+      "sha256": "8d16975108b15813927e268decd578a247d75c35a4c49b6924fa7450a3b9bc72"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/raw/walk-calibration.ndjson",
+      "sha256": "e62563f2d2093c7d1f1c218ae86a28457421bd42e101b598b5d431a3298d3945"
+    }
+  ],
+  "reviewEntry": null,
+  "media": [
+    {
+      "kind": "frame",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/frame.png",
+      "sha256": "7b371631d70079dc0c1f980634afd195f7f530a006f8baee4d3c75a34e1c6a68"
+    },
+    {
+      "kind": "video",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/video.webm",
+      "sha256": "11f0802655071784d5c15fa6e2ee65c0246bdbb9094c2736b11f517e13df347e"
+    },
+    {
+      "kind": "audio",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-77109559-9a57-4474-af6a-fc4888015ccb/continue/audio.wav",
+      "sha256": "dd2fdfdc8bfb4c2cb266c239426cb34deae11be934a1eb6abb127a96e698aeb9"
+    }
+  ],
+  "mediaTimeline": {
+    "clock": "host wall clock (Date.now)",
+    "alignment": "approximate; audio and video are separate unsynchronized recordings",
+    "uncertainty": "Offsets are host wall-clock differences between the recorder/context start and the observed gesture. The Playwright video timeline is frame-driven and the parec stream begins only after process spawn plus PulseAudio scheduling latency (unmeasured here). Audio and video are two independent recordings and are NOT muxed or sample-aligned: treat every offset as approximate guidance for seeking (order is reliable, absolute position is not), never as a synchronization claim.",
+    "audio": {
+      "startedAtWallMs": 1788919710735,
+      "stoppedAtWallMs": 1788919853975
+    },
+    "video": {
+      "startedAtWallMs": 1788919710321,
+      "stoppedAtWallMs": 1788919855936
+    },
+    "marks": [
+      {
+        "mark": "recording-started",
+        "note": null,
+        "wallMs": 1788919710735,
+        "audioOffsetSeconds": 0,
+        "videoOffsetSeconds": 0.414
+      },
+      {
+        "mark": "interruption",
+        "note": "ordinary page reload",
+        "wallMs": 1788919820219,
+        "audioOffsetSeconds": 109.484,
+        "videoOffsetSeconds": 109.898
+      },
+      {
+        "mark": "continue-cta",
+        "note": "click button:has-text(\"Continue\")",
+        "wallMs": 1788919823510,
+        "audioOffsetSeconds": 112.775,
+        "videoOffsetSeconds": 113.189
+      },
+      {
+        "mark": "new-action-start",
+        "note": null,
+        "wallMs": 1788919823861,
+        "audioOffsetSeconds": 113.126,
+        "videoOffsetSeconds": 113.54
+      }
+    ]
+  },
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "newActionSteps[0]: bounded wait on /unfinishedMap/ready was not satisfied"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "622e6761f655df8429b7ee303770d30f7a13655c58e0cb151c99d02ef2348f76",
+    "buildSha256": "dac60db8e8a8abfd6a4264ad4f1464368a140bae96b4bc3e90f9f5a319729c89",
+    "transportSha256": "b00a44117c71ed1c23a0983e8a7a39530f5da20b1f4a037e4cf1b5241adc365d"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "updatedAt": "2026-09-06T11:42:15.780109+00:00",
+  "action": "pause",
+  "sourceManifestSha256": "51b25376aa6c87dc428249fcfd907811c592bc9dfdaf00d82c53112593ea02c3",
+  "instruction": "Finalize current diagnostics, write verification-world-interim-report.json/md plus final findings and harness hash/test records, and END verifier invocation cleanly. Two actual blockers suffice for bounded engineer reproduction; no more browserwork. No game source edits; this is interim failure, not chapter completion."
+}

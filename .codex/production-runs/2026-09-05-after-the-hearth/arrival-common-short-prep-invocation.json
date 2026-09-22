@@ -1,0 +1,16 @@
+{
+  "role": "arrival-common-short-prepor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T17:45:19.289813+00:00",
+  "commissionSha256": "0f42bf4e6e9edb7ee06056f5dc2054bf638b6395fc5b880e975612f656637857",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFrozen": true,
+  "sourceReference": "iterations/implemented-arrival-common-repair/source",
+  "scope": "Prepare ordinary-input SHORT survey witness/revision instrumentation only; no GPU or game edits or acceptance",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T17:57:55.313665+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "7bf1ffb1-726e-41b9-bf77-f61206a83d0b",
+  "isError": false,
+  "gameSourceMutationAuthorized": false
+}

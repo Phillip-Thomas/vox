@@ -1,0 +1,28 @@
+{
+  "noncertifying": true,
+  "route": "supported ch10-transit diagnostic; actual same-tab docking and undocking, no injected saves",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "errors": [],
+  "error": null,
+  "complete": true,
+  "elapsedMs": 242320,
+  "runIds": [
+    1
+  ],
+  "sameRunId": true,
+  "journeyObserverReturned": true,
+  "realStationDeparture": true,
+  "bondedCellStowed": true,
+  "bondedCellAcquired": true,
+  "finalUrl": "http://127.0.0.1:33001/?journeyprobe=1&journeylane=direct-entry&profile=HIGH&movie=1",
+  "finalStory": {
+    "active": false,
+    "chapter": "complete",
+    "beat": "done",
+    "runId": 1
+  },
+  "finalShell": {
+    "phase": "playing",
+    "sceneReady": false
+  }
+}

@@ -2,6 +2,7 @@ import {
   getAudioContext,
   getMusicBus,
   isMusicMuted,
+  makeImpulseBuffer,
   makeNoiseBuffer,
   rampParamAt,
   unlockAudio
@@ -12,7 +13,22 @@ import {
   setMusicChord,
   setMusicPrimitiveTargets
 } from './musicPrimitives.ts';
-import { nextGridStep, type HitQuantize } from './generative/transport.ts';
+import { type HitQuantize } from './generative/transport.ts';
+import {
+  resolveHitQuantum,
+  rungForQuantize,
+  type HitQuantumRung,
+  type HitQuantumRequest,
+  type HitQuantumResult
+} from './generative/hitSchedule.ts';
+import {
+  deriveMoodConstraint,
+  resolveMoodVoicingAt,
+  voiceMoodChord,
+  type MoodHarmonyConstraint,
+  type MoodVoicingPolicy
+} from './generative/moodConstraint.ts';
+import { planetHomeRoot } from './generative/harmonyBrain.ts';
 import {
   CHIP_MONO_DUCK,
   ERA_ALIVE,
@@ -21,16 +37,29 @@ import {
   HIT_ALIVE_UPPER_VOICE_CAP,
   HIT_BARE_MAX_PITCHED_VOICES,
   HIT_BARE_UPPER_VOICE_CAP,
+  HIT_BRAAM_ATTACK_S,
+  HIT_CANCEL_GRACE_S,
   HIT_COLOR_MAX_PITCHED_VOICES,
   HIT_COLOR_UPPER_VOICE_CAP,
   HIT_MATERIAL_UPPER_VOICE_CAP,
   HIT_MIN_LEAD_S,
   PHRASE_BARS,
+  RAILS_DIRTY_ABS,
+  RAILS_DIRTY_ENABLED,
+  RAILS_DIRTY_REL,
+  REVERB_EARLY_LEVEL,
+  REVERB_EARLY_TAPS,
+  REVERB_EARLY_WINDOW_MS,
+  REVERB_HF_DAMP_HZ,
+  REVERB_LATE_LEVEL,
+  REVERB_LATE_ONSET_MS,
+  REVERB_PREDELAY_MS,
   SCORE_BARE_PULSE_VOICE_CAP,
   SCORE_BARE_TRIANGLE_VOICE_CAP,
   SCORE_COLOR_PULSE_VOICE_CAP,
   SCORE_COLOR_TRIANGLE_VOICE_CAP,
-  SCORE_NO_VOICE_CAP
+  SCORE_NO_VOICE_CAP,
+  TONIC_LIVE_WINDOW_BARS
 } from './generative/tuning.ts';
 import { eraFade } from './generative/worldSignals.ts';
 import { planMoodPhrase } from './generative/moodMelody.ts';
@@ -78,6 +107,8 @@ export interface ScoreMood {
 }
 
 const ROOT_HZ = 55; // A1
+/** The instrument's pitch reference (A1); story-side carrier derivations read it here. */
+export const SCORE_ROOT_HZ = ROOT_HZ;
 /**
  * Melody-phrase attack time (s). The sustain hold is clamped to land at or
  * after the attack completes — a short note at a fast mood tempo must soften
@@ -301,6 +332,10 @@ let idle = true;
 let bedLead = false;
 /** Grid quantizer registered by the generative bed (its transport owns the sandbox grid). */
 let bedQuantizer: ((quantize: HitQuantize) => number | null) | null = null;
+let bedHitQuantumResolver: ((request: HitQuantumRequest) => HitQuantumResult | null) | null = null;
+export function registerBedHitQuantumResolver(fn: typeof bedHitQuantumResolver): void {
+  bedHitQuantumResolver = fn;
+}
 export interface BedHitOnsetState {
   published: { root: number; tones: readonly number[] };
   era: number;
@@ -308,11 +343,110 @@ export interface BedHitOnsetState {
 }
 let bedHitOnsetResolver: ((time: number) => BedHitOnsetState | null) | null = null;
 export type ScoreHitKind = 'braam' | 'bloom' | 'boom';
+/** `impact` renders boom AND braam at ONE onset (the descent) — scheduleHit only. */
+export type ScheduleHitKind = ScoreHitKind | 'impact';
 export interface ScheduledBedHit {
-  kind: ScoreHitKind;
+  kind: ScheduleHitKind;
   time: number;
 }
 let scheduledBedHits: ScheduledBedHit[] = [];
+
+// --- Composed sync (audio-10x Stage 3): the frozen HitSchedule contract -------------------------
+/**
+ * What `scheduleHit` returns for one grid-scheduled hit. `audioTime` is the
+ * ENVELOPE START on the audio clock (pre-tail; the image side adds device +
+ * music-path latency). `perfTime` is the same instant projected onto
+ * performance.now() at arming. `slackMs` is the signed distance the onset moved
+ * from the caller's desired time (positive = later); the anchor's cap bounds it.
+ */
+export interface HitSchedule {
+  kind: ScheduleHitKind;
+  audioTime: number;
+  armedAt: number;
+  perfTime: number;
+  quantumLanded: 'bar' | 'beat' | 'step';
+  slackMs: number;
+  onsetAttackMs: number;
+}
+export interface ScheduleHitOptions {
+  /** Desired onset (audio time); default = now + HIT_MIN_LEAD_S. */
+  desired?: number;
+  /** Hard floor (audio time) no quantum may precede. */
+  notBefore?: number;
+  /** Cap on |onset − desired|, ms; default = no cap (the written quantum). */
+  capMs?: number;
+  /** Admit the nearer earlier quantum (±cap rulings). */
+  mayLead?: boolean;
+  /** Lowest degrade rung (default 'step'). */
+  floorRung?: HitQuantumRung;
+  /** Scene-contract anchor id, for the trace. */
+  anchorId?: string;
+}
+export type HitSchedulePath = 'story-grid' | 'bed-grid' | 'immediate';
+export interface HitScheduleTraceEntry {
+  seq: number;
+  anchorId: string | null;
+  kind: ScheduleHitKind;
+  quantize: HitQuantize;
+  path: HitSchedulePath;
+  desired: number | null;
+  notBefore: number | null;
+  capMs: number | null;
+  mayLead: boolean;
+  fitsCap: boolean | null;
+  rungsDegraded: number;
+  schedule: HitSchedule | null;
+  sampleRate: number | null;
+  perfNow: number;
+  tonicProvenance?: ReturnType<typeof getScoreTonicProvenance>;
+}
+interface PendingHit {
+  audioTime: number;
+  kind: ScheduleHitKind;
+  anchorId: string | null;
+  nodes: GainNode[];
+}
+let pendingHits: PendingHit[] = [];
+/** Retain cancellation handles through the longest punctuation tail, then release them. */
+export const SCHEDULED_HIT_RETENTION_S = 8;
+
+export function pruneScheduledHitHandles<T extends { audioTime: number }>(hits: readonly T[], now: number): T[] {
+  return hits.filter((hit) => hit.audioTime >= now - SCHEDULED_HIT_RETENTION_S);
+}
+
+function retainScheduledHit(hit: PendingHit): void {
+  // Ended WebAudio sources clean up naturally. Pruning handles must never
+  // disconnect a still-sounding release or change an envelope.
+  pendingHits = pruneScheduledHitHandles(pendingHits, activeScoreContext?.currentTime ?? hit.audioTime);
+  pendingHits.push(hit);
+}
+const HIT_TRACE_MAX = 64;
+let hitTrace: HitScheduleTraceEntry[] = [];
+let hitTraceSeq = 0;
+/**
+ * Never-quantize law (contract check-never-quantize): REGULATION is machine time
+ * and the oxygen body clock is protected. These are not hit kinds; the scheduler
+ * refuses them by name so a future caller cannot smuggle one onto the grid.
+ */
+export const NEVER_QUANTIZE_KINDS: ReadonlySet<string> = new Set([
+  'oxygenPulse', 'terminalAlarm', 'terminalCorrupt', 'terminalKey', 'violation', 'violationFlood', 'inputAck', 'klaxon'
+]);
+/** One tonic (Stage 3): the chain tonic every mood voice transposes by. */
+let moodTonicSemis = 0;
+let moodVoicingPolicy: MoodVoicingPolicy = 'literal';
+let moodConstraint: MoodHarmonyConstraint | null = null;
+export interface BedTonicState {
+  tonicPc: number;
+  /** Audio time of the bed's last harmony publish. */
+  lastPublishAt: number;
+  barSeconds: number;
+}
+let bedTonicResolver: (() => BedTonicState | null) | null = null;
+let bedTonicHandback: ((tonicPc: number) => void) | null = null;
+
+export function registerBedTonicHandback(fn: ((tonicPc: number) => void) | null): void {
+  bedTonicHandback = fn;
+}
 /** One-shot hit output at fixed gain, so grid hits sound even while idle yields. */
 let hitBus: GainNode | null = null;
 /** Fixed hit-output gain — matches the shipped mood-era master level for hits. */
@@ -971,12 +1105,21 @@ function buildScoreGraph(ctx: BaseAudioContext, out: AudioNode): void {
 }
 
 function makeScoreImpulse(ctx: BaseAudioContext): AudioBuffer {
-  const buffer = makeNoiseBuffer(ctx, SCORE_REVERB_SECONDS, SCORE_REVERB_SEED);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < data.length; i++) {
-    data[i] *= Math.pow(1 - i / data.length, SCORE_REVERB_DECAY);
-  }
-  return buffer;
+  // Stage 1: the story convolver shares the bed's impulse generator — stereo,
+  // pre-delayed early reflections, HF-damped tail (was mono noise × decay).
+  return makeImpulseBuffer(ctx, {
+    seconds: SCORE_REVERB_SECONDS,
+    decay: SCORE_REVERB_DECAY,
+    seed: SCORE_REVERB_SEED,
+    preDelayMs: REVERB_PREDELAY_MS,
+    earlyTaps: REVERB_EARLY_TAPS,
+    earlyWindowMs: REVERB_EARLY_WINDOW_MS,
+    earlyLevel: REVERB_EARLY_LEVEL,
+    lateLevel: REVERB_LATE_LEVEL,
+    lateOnsetMs: REVERB_LATE_ONSET_MS,
+    hfDampHz: REVERB_HF_DAMP_HZ,
+    channels: 2
+  });
 }
 
 /**
@@ -1068,7 +1211,11 @@ function stepScoreScheduler(ctx: BaseAudioContext, now: number): void {
     // to the new chord and the ostinato transposes with its root.
     if (mood.progression && patternStep % STEPS_PER_CHORD === 0) {
       chordIndex = Math.floor(patternStep / STEPS_PER_CHORD) % mood.progression.length;
-      currentChord = mood.progression[chordIndex];
+      // MOODS as constraints: the authored chord voiced under the chain tonic by
+      // the entry's policy (literal = the shipped stack; brain = minimal motion).
+      currentChord = moodConstraint
+        ? voiceMoodChord(moodConstraint, chordIndex, currentChord)
+        : mood.progression[chordIndex];
       retuneVoices(ctx, now);
     }
     const chordRoot = currentChord[0] ?? 0;
@@ -1221,6 +1368,24 @@ function schedulePhrase(
 }
 
 /** Smooth the mood/intensity-dependent parameters toward their targets. */
+/**
+ * applyRails dirty check (Stage 3, evidence/stage-2 deviation 11). A smoothed
+ * rail re-issued with an unchanged target is a no-op the param is already
+ * gliding toward; skipping it cannot be heard. The cache is per AudioParam and
+ * is dropped whenever a mood retunes the instrument, so every retune's first
+ * pass writes every rail exactly as before.
+ */
+let railTargets = new WeakMap<AudioParam, number>();
+function railTarget(param: AudioParam | undefined, value: number, now: number, tau: number): void {
+  if (!param) return;
+  if (RAILS_DIRTY_ENABLED) {
+    const last = railTargets.get(param);
+    if (last != null && Math.abs(value - last) <= Math.max(RAILS_DIRTY_ABS, RAILS_DIRTY_REL * Math.abs(last))) return;
+    railTargets.set(param, value);
+  }
+  param.setTargetAtTime(value, now, tau);
+}
+
 function applyRails(_ctx: BaseAudioContext, now: number): void {
   if (!master) return;
   const prim = getMusicPrimitives();
@@ -1230,15 +1395,13 @@ function applyRails(_ctx: BaseAudioContext, now: number): void {
   // The idle bed sits UNDER the streamed music, lifted by the wonder axis.
   const idleScale = idle ? 0.32 * (0.5 + 0.7 * prim.wonder) : 1;
   if (idle && !bedLead) {
-    master.gain.setTargetAtTime(
-      on ? SCORE_MASTER_LEVEL * idleScale : 0,
-      now,
-      SCORE_MASTER_IDLE_TAU_S
-    );
+    railTarget(master.gain, on ? SCORE_MASTER_LEVEL * idleScale : 0, now, SCORE_MASTER_IDLE_TAU_S);
   } else if (now >= authorityFadeUntil) {
     // Story/bed handoffs use one shared, complementary start-anchored crossfade. Once
-    // that scheduled ramp has landed, this target only holds the endpoint.
-    master.gain.setTargetAtTime(on ? SCORE_MASTER_LEVEL : 0, now, SCORE_MASTER_STEADY_TAU_S);
+    // that scheduled ramp has landed, this target only holds the endpoint — and the
+    // ramp itself lands on that endpoint, so an unchanged target need not be re-issued
+    // (the crossfade drops the cache entry so the first post-fade hold is written).
+    railTarget(master.gain, on ? SCORE_MASTER_LEVEL : 0, now, SCORE_MASTER_STEADY_TAU_S);
   }
   if (!mood) return;
   if (idle) intensity = 0.2 + 0.5 * prim.wonder; // the sky sets the idle breath
@@ -1246,19 +1409,19 @@ function applyRails(_ctx: BaseAudioContext, now: number): void {
   const material = eraFade(prim.era, ERA_MATERIAL);
   const alive = eraFade(prim.era, ERA_ALIVE);
   const subLayers = resolveScoreSubLayerGains(prim.era, prim.warmth);
-  padGain?.gain.setTargetAtTime(mood.pad * boost, now, SCORE_PAD_BUS_SLEW_S);
-  subGain?.gain.setTargetAtTime(mood.sub * boost, now, SCORE_SUB_BUS_SLEW_S);
-  subRichGain?.gain.setTargetAtTime(
+  railTarget(padGain?.gain, mood.pad * boost, now, SCORE_PAD_BUS_SLEW_S);
+  railTarget(subGain?.gain, mood.sub * boost, now, SCORE_SUB_BUS_SLEW_S);
+  railTarget(subRichGain?.gain, 
     subLayers.rich,
     now,
     SCORE_SUB_TIMBRE_SLEW_S
   );
-  subChipGain?.gain.setTargetAtTime(
+  railTarget(subChipGain?.gain, 
     subLayers.chip,
     now,
     SCORE_SUB_TIMBRE_SLEW_S
   );
-  subHarmonicGain?.gain.setTargetAtTime(
+  railTarget(subHarmonicGain?.gain, 
     subLayers.harmonic,
     now,
     SCORE_SUB_HARMONIC_SLEW_S
@@ -1268,44 +1431,44 @@ function applyRails(_ctx: BaseAudioContext, now: number): void {
   const width = SCORE_PAD_WIDTH_MAX * richness;
   padVoices.forEach((voice, index) => {
     const layers = resolveScorePadLayerGains(voice.active, prim.era, prim.warmth, index);
-    voice.pan.pan.setTargetAtTime(
+    railTarget(voice.pan.pan, 
       ((index / Math.max(1, padVoices.length - 1)) * 2 - 1) * width,
       now,
       SCORE_PAD_WIDTH_SLEW_S
     );
-    voice.gain.gain.setTargetAtTime(layers.rich, now, SCORE_PAD_VOICE_SLEW_S);
-    voice.chipGain.gain.setTargetAtTime(layers.chip, now, SCORE_PAD_VOICE_SLEW_S);
-    voice.organGain.gain.setTargetAtTime(layers.organ, now, SCORE_ORGAN_SLEW_S);
+    railTarget(voice.gain.gain, layers.rich, now, SCORE_PAD_VOICE_SLEW_S);
+    railTarget(voice.chipGain.gain, layers.chip, now, SCORE_PAD_VOICE_SLEW_S);
+    railTarget(voice.organGain.gain, layers.organ, now, SCORE_ORGAN_SLEW_S);
   });
-  scoreReverbWet?.gain.setTargetAtTime(
+  railTarget(scoreReverbWet?.gain, 
     SCORE_REVERB_WET_MAX *
       richness *
       (SCORE_REVERB_WONDER_FLOOR + SCORE_REVERB_WONDER_LIFT * prim.wonder),
     now,
     SCORE_REVERB_SLEW_S
   );
-  ostGain?.gain.setTargetAtTime(
+  railTarget(ostGain?.gain, 
     mood.ost * (0.35 + 0.65 * intensity),
     now,
     SCORE_OST_GAIN_SLEW_S
   );
   // Warmth opens the pad; tension (via intensity) opens everything else.
-  padFilter?.frequency.setTargetAtTime(
+  railTarget(padFilter?.frequency, 
     320 + intensity * 2100 + prim.warmth * 500,
     now,
     SCORE_PAD_FILTER_SLEW_S
   );
-  ostFilter?.frequency.setTargetAtTime(
+  railTarget(ostFilter?.frequency, 
     resolveScoreOstinatoFilterHz(prim.era, intensity),
     now,
     SCORE_OST_FILTER_SLEW_S
   );
-  riserGain?.gain.setTargetAtTime(
+  railTarget(riserGain?.gain, 
     mood.riser * intensity * intensity,
     now,
     SCORE_RISER_GAIN_SLEW_S
   );
-  riserFilter?.frequency.setTargetAtTime(
+  railTarget(riserFilter?.frequency, 
     220 + intensity * 1900,
     now,
     SCORE_RISER_FILTER_SLEW_S
@@ -1327,9 +1490,9 @@ function retuneVoices(_ctx: BaseAudioContext, now: number): void {
       // Every layer receives an explicit zero target. In particular, an organ
       // voice that outlived a four-tone chord can never leak its stale pitch
       // into a later triad.
-      voice.gain.gain.setTargetAtTime(0, now, SCORE_PAD_VOICE_SLEW_S);
-      voice.chipGain.gain.setTargetAtTime(0, now, SCORE_PAD_VOICE_SLEW_S);
-      voice.organGain.gain.setTargetAtTime(0, now, SCORE_ORGAN_SLEW_S);
+      railTarget(voice.gain.gain, 0, now, SCORE_PAD_VOICE_SLEW_S);
+      railTarget(voice.chipGain.gain, 0, now, SCORE_PAD_VOICE_SLEW_S);
+      railTarget(voice.organGain.gain, 0, now, SCORE_ORGAN_SLEW_S);
       return;
     }
     const hz = hzForSemis(state.semis, HIT_SEMITONES_PER_OCTAVE);
@@ -1360,6 +1523,18 @@ function retuneVoices(_ctx: BaseAudioContext, now: number): void {
   // ONE harmonic truth: while the generative bed leads the sandbox, ITS
   // harmony brain is the sole publisher and the idle voice stays quiet.
   if (!(idle && bedLead)) setMusicChord(currentChord[0] ?? 0, currentChord);
+}
+
+// Live inspection: the scheduler's trace and pending hits (evidence probes).
+if (typeof window !== 'undefined') {
+  (window as unknown as { __voxHitDiag?: () => unknown }).__voxHitDiag = () => ({
+    trace: hitTrace,
+    pending: getPendingScheduledHitCount(),
+    tonic: moodTonicSemis,
+    voicingPolicy: moodVoicingPolicy,
+    sampleRate: activeScoreContext?.sampleRate ?? null,
+    currentTime: activeScoreContext?.currentTime ?? null
+  });
 }
 
 // --- public API -------------------------------------------------------------------------
@@ -1412,6 +1587,54 @@ export function registerBedQuantizer(fn: ((quantize: HitQuantize) => number | nu
   }
 }
 
+/**
+ * One tonic (Stage 3): the bed reports its harmony brain's tonic and last publish
+ * so a pitch-locked chain entering from bed-led play can read the LIVE centre
+ * (within TONIC_LIVE_WINDOW_BARS of the bed's own bars) instead of jumping.
+ */
+export function registerBedTonicResolver(fn: (() => BedTonicState | null) | null): void {
+  bedTonicResolver = fn;
+}
+
+/**
+ * The live bed tonic if the bed leads NOW and published inside the window, else
+ * null. Read at chain entry BEFORE the mood takes the instrument.
+ */
+export function readLiveBedTonic(): number | null {
+  if (!idle || !bedLead || !bedTonicResolver) return null;
+  const state = bedTonicResolver();
+  if (!state) return null;
+  const now = activeScoreContext?.currentTime ?? state.lastPublishAt;
+  if (now - state.lastPublishAt > TONIC_LIVE_WINDOW_BARS * state.barSeconds) return null;
+  return ((state.tonicPc % 12) + 12) % 12;
+}
+
+/** The planet seed the bed handed this engine (null before any planet exists). */
+export function getScorePlanetSeed(): number | null {
+  return planetGenome ? planetGenomeSeed : null;
+}
+
+/**
+ * planetHomeRoot(seed) as this engine derives it: the harmony brain's tonic
+ * pitch class from the seed alone (ONE truth with the bed's own key), or the
+ * reference A (0) when no planet has been configured (harness renders).
+ */
+export function resolveScorePlanetHomeRoot(): number {
+  const seed = getScorePlanetSeed();
+  return seed == null ? 0 : planetHomeRoot(seed);
+}
+
+/** Explicit provenance for probes; a seedless offline harness is never mistaken for a configured planet. */
+export function getScoreTonicProvenance(): { source: 'planet-seed' | 'reference-fallback'; planetSeed: number | null; tonicPc: number } {
+  const planetSeed = getScorePlanetSeed();
+  return { source: planetSeed == null ? 'reference-fallback' : 'planet-seed', planetSeed, tonicPc: resolveScorePlanetHomeRoot() };
+}
+
+/** The tonic and voicing policy the mood path is currently transposing/voicing under (inspection). */
+export function getScoreMoodTonic(): { tonicSemis: number; voicingPolicy: MoodVoicingPolicy } {
+  return { tonicSemis: moodTonicSemis, voicingPolicy: moodVoicingPolicy };
+}
+
 /** Resolve a hit inside an already-planned bed bar without waiting a scheduler tick. */
 export function registerBedHitOnsetResolver(
   fn: ((time: number) => BedHitOnsetState | null) | null
@@ -1446,7 +1669,8 @@ export function flushScheduledBedHits(
     stage
   );
   for (const event of due) {
-    renderHitInto(activeScoreContext, hitBus, event.kind, event.time, renderPlan);
+    const nodes = renderHitInto(activeScoreContext, hitBus, event.kind, event.time, renderPlan);
+    retainScheduledHit({ audioTime: event.time, kind: event.kind, anchorId: null, nodes });
   }
   return due.length;
 }
@@ -1462,6 +1686,7 @@ export function registerStoryAuthorityCrossfade(fn: StoryAuthorityCrossfade | nu
 
 function scheduleStoryAuthority(storyLeads: boolean, atTime: number): void {
   if (master) {
+    railTargets.delete(master.gain);
     rampParamAt(
       master.gain,
       storyLeads ? SCORE_MASTER_LEVEL : 0,
@@ -1477,15 +1702,29 @@ function scheduleStoryAuthority(storyLeads: boolean, atTime: number): void {
  * Retune the whole instrument to a mood. `null` hands the instrument to the
  * CELESTIAL IDLE BED — the score never leaves, it recedes.
  */
-export function setScoreMood(next: ScoreMood | null): void {
+export interface SetScoreMoodOptions {
+  /** Chain tonic (semitones above A1) the mood is voiced under; omitted = keep the current tonic. */
+  tonicSemis?: number;
+  /** MOODS-as-constraints voicing policy for this entry; omitted = keep the current policy. */
+  voicingPolicy?: MoodVoicingPolicy;
+}
+
+export function setScoreMood(next: ScoreMood | null, options: SetScoreMoodOptions = {}): void {
   const storyWasLeading = !idle;
+  // A seed-pinned story can interrupt an approach-retargeted bed. Restore the
+  // outgoing chain's harmonic authority before the bed resumes its legal walk.
+  if (storyWasLeading && next == null && bedLead) bedTonicHandback?.(moodTonicSemis);
   idle = next == null;
   mood = next ?? IDLE_MOOD;
   intensity = mood.baseline;
   patternStep = 0;
   chordIndex = 0;
-  currentChord = mood.progression?.[0] ?? mood.chord;
+  if (options.tonicSemis != null) moodTonicSemis = options.tonicSemis;
+  if (options.voicingPolicy != null) moodVoicingPolicy = options.voicingPolicy;
+  moodConstraint = deriveMoodConstraint(mood, moodTonicSemis, moodVoicingPolicy, SCORE_PAD_VOICE_COUNT);
+  currentChord = voiceMoodChord(moodConstraint, 0, null);
   melodyDegree = 4;
+  railTargets = new WeakMap();
   const ctx = built ? activeScoreContext : null;
   if (ctx) {
     // When the generative bed resumes, keep the outgoing story harmony stable
@@ -1521,25 +1760,155 @@ export function scoreHit(kind: 'braam' | 'bloom' | 'boom'): void {
   );
 }
 
+function onsetAttackMsFor(kind: ScheduleHitKind, palette: ScoreHitPalette): number {
+  const braamS = palette.braamEnabled ? HIT_BRAAM_ATTACK_S : HIT_EARLY_ACCENT_ATTACK_S;
+  const boomS = palette.boomBodyWave ? BOOM_BODY_ATTACK_S : BOOM_AIR_ATTACK_S;
+  switch (kind) {
+    case 'bloom': return BLOOM_ATTACK_BASE_S * 1000;
+    case 'braam': return braamS * 1000;
+    case 'boom': return boomS * 1000;
+    case 'impact': return Math.min(braamS, boomS) * 1000;
+  }
+}
+
+function pushHitTrace(entry: Omit<HitScheduleTraceEntry, 'seq' | 'perfNow'>): void {
+  hitTrace.push({
+    ...entry,
+    tonicProvenance: getScoreTonicProvenance(),
+    seq: ++hitTraceSeq,
+    perfNow: typeof performance !== 'undefined' ? performance.now() : 0
+  });
+  if (hitTrace.length > HIT_TRACE_MAX) hitTrace.splice(0, hitTrace.length - HIT_TRACE_MAX);
+}
+
+/** The scheduler's recent decisions (live inspection / evidence probes). */
+export function getHitScheduleTrace(): readonly HitScheduleTraceEntry[] {
+  return hitTrace;
+}
+
+/** Record that `scoreHit` fired as the no-transport fallback for an anchor (logged as 'immediate'). */
+export function noteImmediateHit(kind: ScheduleHitKind, anchorId: string | null): void {
+  pushHitTrace({
+    anchorId, kind, quantize: 'beat', path: 'immediate', desired: null, notBefore: null, capMs: null,
+    mayLead: false, fitsCap: null, rungsDegraded: 0, schedule: null,
+    sampleRate: activeScoreContext?.sampleRate ?? null
+  });
+}
+
+function makeSchedule(
+  kind: ScheduleHitKind,
+  audioTime: number,
+  armedAt: number,
+  quantumLanded: HitQuantumRung,
+  desired: number,
+  palette: ScoreHitPalette
+): HitSchedule {
+  const perfNow = typeof performance !== 'undefined' ? performance.now() : 0;
+  return {
+    kind,
+    audioTime,
+    armedAt,
+    perfTime: perfNow + (audioTime - armedAt) * 1000,
+    quantumLanded,
+    slackMs: (audioTime - desired) * 1000,
+    onsetAttackMs: onsetAttackMsFor(kind, palette)
+  };
+}
+
 /**
- * Grid-synced punctuation (P2, §8.1): schedule a hit ON the musical grid and
- * return the exact audio time it will land, so VISUALS can chase AUDIO — a
- * drop that lands off-grid is a defect. Additive API; `scoreHit` stays for
- * legacy reflex moments. Returns null when the score cannot sound (no
- * context / muted). Quantization rides the shipped scheduler's step grid
- * ('phrase' = PHRASE_BARS bars); P3 migrates it onto the generative
- * transport when that clock takes over.
+ * Cancel every scheduled hit still further out than HIT_CANCEL_GRACE_S (a chain
+ * exit to bed-led play, deep-link, replay, quit, completion, sandbox — contract
+ * reset-score). A hit inside the grace is committed and sounds. Pause and
+ * focus-loss never call this: the context suspends and the grid and the armed
+ * hit resume together.
  */
-export function scheduleHit(kind: 'braam' | 'bloom' | 'boom', quantize: HitQuantize): number | null {
+export function cancelPendingScheduledHits(): number {
+  const now = activeScoreContext?.currentTime ?? Number.POSITIVE_INFINITY;
+  let cancelled = 0;
+  const keep: PendingHit[] = [];
+  for (const hit of pendingHits) {
+    if (hit.audioTime > now + HIT_CANCEL_GRACE_S) {
+      for (const node of hit.nodes) node.disconnect();
+      cancelled++;
+    } else if (hit.audioTime > now - 1) {
+      keep.push(hit);
+    }
+  }
+  pendingHits = keep;
+  clearScheduledBedHits();
+  return cancelled;
+}
+
+/** Pending (not yet sounding) scheduled hits, for tests and the reset probe. */
+export function getPendingScheduledHitCount(): number {
+  const now = activeScoreContext?.currentTime ?? 0;
+  return pendingHits.filter((hit) => hit.audioTime > now).length;
+}
+
+/**
+ * Grid-synced punctuation (P2 §8.1; audio-10x Stage 3 composed sync): schedule
+ * a hit ON the musical grid and return the frozen HitSchedule — the exact audio
+ * time it will land, so VISUALS chase AUDIO (a drop that lands off-grid is a
+ * defect). Additive API; `scoreHit` stays for legacy reflex moments.
+ *
+ * Grid law (contract): while a story mood leads, the mood's own 8th-note step
+ * grid IS the grid ("beat" means the mood's tempo) — the bed yields and the
+ * story scheduler owns time. While the generative bed leads the sandbox, its
+ * transport owns the grid. With no transport at all (menu / no context / muted)
+ * the return is null and the caller logs 'immediate' and fires `scoreHit`.
+ *
+ * `opts.capMs` bounds |onset − desired|; the written quantum degrades
+ * bar → beat → 8th until it fits (hitSchedule.ts). `notBefore` is a hard floor;
+ * `mayLead` admits the nearer earlier quantum. The hit is rendered NOW at its
+ * future onset (persistent-graph law: nodes wait, nothing is scheduled from
+ * rAF) and registered so a chain exit can cancel it.
+ */
+export function scheduleHit(
+  kind: ScheduleHitKind,
+  quantize: HitQuantize,
+  opts: ScheduleHitOptions = {}
+): HitSchedule | null {
+  if (NEVER_QUANTIZE_KINDS.has(kind as string)) {
+    throw new Error(`scheduleHit: '${kind}' is machine time and is never quantized`);
+  }
   const context = ensureScore();
-  if (!context || !master || isMusicMuted() || !mood) return null;
+  const anchorId = opts.anchorId ?? null;
+  if (!context || !master || isMusicMuted() || !mood) {
+    pushHitTrace({
+      anchorId, kind, quantize, path: 'immediate', desired: opts.desired ?? null, notBefore: opts.notBefore ?? null,
+      capMs: opts.capMs ?? null, mayLead: opts.mayLead ?? false, fitsCap: null, rungsDegraded: 0, schedule: null,
+      sampleRate: context?.sampleRate ?? null
+    });
+    return null;
+  }
+  const now = context.currentTime;
+  const minLead = now + HIT_MIN_LEAD_S;
+  const desired = Math.max(opts.desired ?? minLead, minLead);
+  const notBefore = Math.max(opts.notBefore ?? minLead, minLead);
+  const capMs = opts.capMs ?? Number.POSITIVE_INFINITY;
   // While the generative bed leads the sandbox, ITS transport owns the grid.
   if (idle && bedLead && bedQuantizer) {
-    const time = bedQuantizer(quantize);
+    const resolved = bedHitQuantumResolver?.({ quantize, desired, notBefore, capMs, mayLead: opts.mayLead, floorRung: opts.floorRung });
+    let rung = resolved?.quantumLanded ?? rungForQuantize(quantize);
+    let time = resolved?.time ?? bedQuantizer(quantize);
+    let rungsDegraded = resolved?.rungsDegraded ?? 0;
+    if (!resolved && (opts.notBefore != null || opts.desired != null || opts.floorRung != null || opts.mayLead)) {
+      throw new Error('scheduleHit: bed transport must expose the constrained quantum resolver');
+    }
+    if (!resolved && time != null && Math.abs(time - desired) * 1000 > capMs && quantize !== 'beat') {
+      const beatTime = bedQuantizer('beat');
+      if (beatTime != null) {
+        time = beatTime;
+        rung = 'beat';
+        rungsDegraded = 1;
+      }
+    }
     if (time != null) {
       const onset = bedHitOnsetResolver?.(time);
+      const palette = resolveScoreHitPalette(onset?.era ?? getMusicPrimitives().era, onset?.stage);
+      const schedule = makeSchedule(kind, time, now, rung, desired, palette);
       if (onset) {
-        renderHit(
+        const nodes = renderHit(
           context,
           kind,
           time,
@@ -1549,49 +1918,87 @@ export function scheduleHit(kind: 'braam' | 'bloom' | 'boom', quantize: HitQuant
             onset.stage
           )
         );
-        return time;
+        retainScheduledHit({ audioTime: time, kind, anchorId, nodes });
+      } else {
+        // The bed may change harmony/era before this future quantum. Queue only
+        // timing here; bedEngine flushes it after publishing the owning bar's
+        // explicit onset harmony and stage palette.
+        scheduledBedHits.push({ kind, time });
       }
-      // The bed may change harmony/era before this future quantum. Queue only
-      // timing here; bedEngine flushes it after publishing the owning bar's
-      // explicit onset harmony and stage palette.
-      scheduledBedHits.push({ kind, time });
-      return time;
+      pushHitTrace({
+        anchorId, kind, quantize, path: 'bed-grid', desired, notBefore, capMs: Number.isFinite(capMs) ? capMs : null,
+        mayLead: opts.mayLead ?? false, fitsCap: Math.abs(schedule.slackMs) <= capMs, rungsDegraded, schedule,
+        sampleRate: context.sampleRate
+      });
+      return schedule;
     }
+    pushHitTrace({
+      anchorId, kind, quantize, path: 'immediate', desired, notBefore, capMs: Number.isFinite(capMs) ? capMs : null,
+      mayLead: opts.mayLead ?? false, fitsCap: null, rungsDegraded: 0, schedule: null, sampleRate: context.sampleRate
+    });
     return null;
   }
-  const stepSeconds = 60 / mood.tempo / 2; // 8th notes, matching the scheduler
-  const stepsPerUnit =
-    quantize === 'beat' ? STEPS_PER_BEAT :
-    quantize === 'bar' ? STEPS_PER_BAR :
-    STEPS_PER_BAR * PHRASE_BARS;
-  const notBefore = context.currentTime + HIT_MIN_LEAD_S;
+  return scheduleOnStoryGrid(context, now, kind, quantize, { desired, notBefore, capMs, mayLead: opts.mayLead, floorRung: opts.floorRung }, anchorId);
+}
+
+
+/**
+ * The story-grid scheduling core, shared by the live `scheduleHit` and the
+ * offline rim (`scheduleHitOffline`): one quantum law, one render path.
+ */
+function scheduleOnStoryGrid(
+  context: BaseAudioContext,
+  now: number,
+  kind: ScheduleHitKind,
+  quantize: HitQuantize,
+  req: { desired: number; notBefore: number; capMs: number; mayLead?: boolean; floorRung?: HitQuantumRung },
+  anchorId: string | null
+): HitSchedule {
+  const { desired, notBefore, capMs } = req;
+  const opts = { mayLead: req.mayLead, floorRung: req.floorRung };
+  const minLead = now + HIT_MIN_LEAD_S;
+  const leading = mood ?? IDLE_MOOD;
+  const stepSeconds = SCORE_SECONDS_PER_MINUTE / leading.tempo / STEPS_PER_BEAT; // 8th notes, matching the scheduler
   // The scheduler clamps a stale nextNoteAt to currentTime before scheduling
   // step `patternStep` — mirror that so our grid matches the audible one. A
   // never-started grid (nextNoteAt 0) anchors at the lead horizon.
-  const base = nextNoteAt > 0 ? Math.max(nextNoteAt, context.currentTime) : notBefore;
-  const { step, time } = nextGridStep(patternStep, base, stepSeconds, stepsPerUnit, notBefore);
-  // A bar/phrase quantum can also be a two-bar progression boundary. Capture
-  // the chord that the scheduler will publish BEFORE that onset, not the chord
-  // that happened to be live when this lookahead request was made.
-  const onsetPlan = resolveScheduledScoreHitRenderPlan(
-    mood,
-    step,
-    getMusicPrimitives().era
+  const base = nextNoteAt > 0 ? Math.max(nextNoteAt, now) : minLead;
+  const q = resolveHitQuantum(
+    { currentStep: patternStep, stepTime: base, stepSeconds, stepsPerBeat: STEPS_PER_BEAT, stepsPerBar: STEPS_PER_BAR, barsPerPhrase: PHRASE_BARS },
+    { quantize, desired, notBefore, capMs, mayLead: opts.mayLead, floorRung: opts.floorRung }
   );
-  renderHit(context, kind, time, onsetPlan);
-  return time;
+  // A bar/phrase quantum can also be a two-bar progression boundary. Capture
+  // the chord that the scheduler will publish BEFORE that onset — voiced by the
+  // same constraint the pad will play — not the chord live at request time.
+  const era = getMusicPrimitives().era;
+  const onsetChord = moodConstraint
+    ? resolveMoodVoicingAt(moodConstraint, Math.floor(Math.max(0, q.step) / STEPS_PER_CHORD))
+    : resolveScoreHarmonyAtStep(leading, q.step).chord;
+  const onsetPlan: ScoreHitRenderPlan = {
+    pitch: resolveScoreHitPitchPlan({ root: onsetChord[0] ?? HIT_FALLBACK_ROOT_SEMIS, chord: onsetChord }),
+    palette: resolveScoreHitPalette(era)
+  };
+  const nodes = renderHit(context, kind, q.time, onsetPlan);
+  retainScheduledHit({ audioTime: q.time, kind, anchorId, nodes });
+  const schedule = makeSchedule(kind, q.time, now, q.quantumLanded, desired, onsetPlan.palette);
+  pushHitTrace({
+    anchorId, kind, quantize, path: 'story-grid', desired, notBefore, capMs: Number.isFinite(capMs) ? capMs : null,
+    mayLead: opts.mayLead ?? false, fitsCap: q.fitsCap, rungsDegraded: q.rungsDegraded, schedule,
+    sampleRate: context.sampleRate
+  });
+  return schedule;
 }
 
 function renderHit(
   context: BaseAudioContext,
-  kind: 'braam' | 'bloom' | 'boom',
+  kind: ScheduleHitKind,
   now: number,
   renderPlan?: ScoreHitRenderPlan
-): void {
+): GainNode[] {
   // Hits ride a fixed-gain bus so grid punctuation (blooms/booms the bed
   // schedules) still sounds while the idle voice yields to the bed.
-  if (!hitBus) return;
-  renderHitInto(context, hitBus, kind, now, renderPlan);
+  if (!hitBus) return [];
+  return renderHitInto(context, hitBus, kind, now, renderPlan);
 }
 
 /**
@@ -1602,13 +2009,20 @@ function renderHit(
 export function renderHitInto(
   context: BaseAudioContext,
   dest: AudioNode,
-  kind: 'braam' | 'bloom' | 'boom',
+  kind: ScheduleHitKind,
   now: number,
   scheduledRenderPlan = resolveScoreHitRenderPlan(
     getMusicChord(),
     getMusicPrimitives().era
   )
-): void {
+): GainNode[] {
+  if (kind === 'impact') {
+    // ONE onset, two bodies: the descent's boom and braam share `now` exactly.
+    return [
+      ...renderHitInto(context, dest, 'boom', now, scheduledRenderPlan),
+      ...renderHitInto(context, dest, 'braam', now, scheduledRenderPlan)
+    ];
+  }
   const out = context.createGain();
   out.connect(dest);
   const { pitch: pitchPlan, palette } = scheduledRenderPlan;
@@ -1695,7 +2109,7 @@ export function renderHitInto(
           HIT_EARLY_ACCENT_RELEASE_S
         );
       }
-      return;
+      return [out];
     }
     const filter = context.createBiquadFilter();
     filter.type = 'lowpass';
@@ -1705,13 +2119,13 @@ export function renderHitInto(
     out.disconnect();
     out.connect(filter);
     filter.connect(dest);
-    tone(pitchPlan.rootSemis, 0, 'sawtooth', 0.16, 0.35, 0.5, 2.2);
+    tone(pitchPlan.rootSemis, 0, 'sawtooth', 0.16, HIT_BRAAM_ATTACK_S, 0.5, 2.2);
     tone(
       pitchPlan.rootSemis,
       -HIT_SEMITONES_PER_OCTAVE,
       'sawtooth',
       0.14,
-      0.35,
+      HIT_BRAAM_ATTACK_S,
       0.5,
       2.2
     );
@@ -1770,6 +2184,7 @@ export function renderHitInto(
       );
     }
   }
+  return [out];
 }
 
 // --- Offline render rim (P4 verification harness) -----------------------------------------------
@@ -1800,7 +2215,9 @@ export function beginOfflineScoreRender(
   nextNoteAt = 0;
   patternStep = 0;
   chordIndex = 0;
-  currentChord = mood?.progression?.[0] ?? mood?.chord ?? [0];
+  railTargets = new WeakMap();
+  moodConstraint = mood ? deriveMoodConstraint(mood, moodTonicSemis, moodVoicingPolicy, SCORE_PAD_VOICE_COUNT) : null;
+  currentChord = moodConstraint ? voiceMoodChord(moodConstraint, 0, null) : [0];
   retuneVoices(ctx, 0);
 }
 
@@ -1809,10 +2226,40 @@ export function stepOfflineScoreRender(ctx: BaseAudioContext, now: number): void
   stepScoreScheduler(ctx, now);
 }
 
+/**
+ * Offline rim of `scheduleHit`: the same quantum law on the offline instrument's
+ * own step grid (the harness drives `stepOfflineScoreRender`). Null when no
+ * offline render is active on `ctx`.
+ */
+export function scheduleHitOffline(
+  ctx: BaseAudioContext,
+  kind: ScheduleHitKind,
+  quantize: HitQuantize,
+  opts: ScheduleHitOptions = {}
+): HitSchedule | null {
+  if (!built || activeScoreContext !== ctx || !mood || !hitBus) return null;
+  const now = ctx.currentTime;
+  const minLead = now + HIT_MIN_LEAD_S;
+  return scheduleOnStoryGrid(
+    ctx,
+    now,
+    kind,
+    quantize,
+    {
+      desired: Math.max(opts.desired ?? minLead, minLead),
+      notBefore: Math.max(opts.notBefore ?? minLead, minLead),
+      capMs: opts.capMs ?? Number.POSITIVE_INFINITY,
+      mayLead: opts.mayLead,
+      floorRung: opts.floorRung
+    },
+    opts.anchorId ?? null
+  );
+}
+
 /** Render a hit through the instrument's own hit bus at an absolute time. */
 export function renderHitOfflineAt(
   ctx: BaseAudioContext,
-  kind: ScoreHitKind,
+  kind: ScheduleHitKind,
   at: number,
   onsetPlan?: ScoreHitRenderPlan
 ): void {
@@ -1850,4 +2297,15 @@ export function endOfflineScoreRender(): void {
   chordIndex = 0;
   melodyDegree = 4;
   authorityFadeUntil = 0;
+  // Render-to-render determinism: a harness page runs many renders through one
+  // module instance, so every walked/held value must return to its cold start.
+  intensity = IDLE_MOOD.baseline;
+  currentChord = [0];
+  storyAuthorityCrossfade = null;
+  pendingHits = [];
+  hitTrace = [];
+  railTargets = new WeakMap();
+  moodTonicSemis = 0;
+  moodVoicingPolicy = 'literal';
+  moodConstraint = null;
 }

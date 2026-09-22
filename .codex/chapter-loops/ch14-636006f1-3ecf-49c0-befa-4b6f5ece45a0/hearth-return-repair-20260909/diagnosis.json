@@ -1,0 +1,401 @@
+{
+  "cause": "App initially selects Tidegarden for restored done checkpoint, then undock effect switches to station system before habitat/structures hydrate. Autosave cleanup overwrites unloaded world.",
+  "before": {
+    "elapsed": 34,
+    "world": {
+      "worldId": "-1,-1:p1",
+      "seed": 1600321158,
+      "structures": [
+        {
+          "id": 1,
+          "cell": [
+            0,
+            25,
+            -1
+          ],
+          "face": 3,
+          "type": "foundation",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 2,
+          "cell": [
+            0,
+            26,
+            -1
+          ],
+          "face": 2,
+          "type": "ceiling",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 3,
+          "cell": [
+            0,
+            25,
+            -1
+          ],
+          "face": 1,
+          "type": "wall",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 4,
+          "cell": [
+            0,
+            26,
+            -1
+          ],
+          "face": 1,
+          "type": "wall",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 5,
+          "cell": [
+            0,
+            25,
+            -1
+          ],
+          "face": 4,
+          "type": "wall",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 6,
+          "cell": [
+            0,
+            26,
+            -1
+          ],
+          "face": 4,
+          "type": "wall",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 7,
+          "cell": [
+            0,
+            25,
+            -1
+          ],
+          "face": 5,
+          "type": "wall",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 8,
+          "cell": [
+            0,
+            26,
+            -1
+          ],
+          "face": 5,
+          "type": "wall",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 9,
+          "cell": [
+            1,
+            25,
+            -1
+          ],
+          "face": 3,
+          "type": "foundation",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 10,
+          "cell": [
+            1,
+            26,
+            -1
+          ],
+          "face": 2,
+          "type": "ceiling",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 11,
+          "cell": [
+            1,
+            25,
+            -1
+          ],
+          "face": 0,
+          "type": "doorway",
+          "material": "wood",
+          "up": 2,
+          "tall": "lower",
+          "partner": [
+            1,
+            26,
+            -1
+          ],
+          "ownerId": "local",
+          "placedBy": "local",
+          "leaf": true,
+          "open": true
+        },
+        {
+          "id": 12,
+          "cell": [
+            1,
+            26,
+            -1
+          ],
+          "face": 0,
+          "type": "doorway",
+          "material": "wood",
+          "up": 2,
+          "tall": "upper",
+          "partner": [
+            1,
+            25,
+            -1
+          ],
+          "ownerId": "local",
+          "placedBy": "local",
+          "leaf": true,
+          "open": true
+        },
+        {
+          "id": 13,
+          "cell": [
+            1,
+            25,
+            -1
+          ],
+          "face": 4,
+          "type": "wall",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 14,
+          "cell": [
+            1,
+            26,
+            -1
+          ],
+          "face": 4,
+          "type": "wall",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 15,
+          "cell": [
+            1,
+            25,
+            -1
+          ],
+          "face": 5,
+          "type": "wall",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        },
+        {
+          "id": 16,
+          "cell": [
+            1,
+            26,
+            -1
+          ],
+          "face": 5,
+          "type": "wall",
+          "material": "wood",
+          "up": 2,
+          "ownerId": "local",
+          "placedBy": "local"
+        }
+      ],
+      "campfires": [],
+      "trees": [
+        [
+          0,
+          24,
+          6
+        ],
+        [
+          0,
+          24,
+          7
+        ],
+        [
+          -6,
+          24,
+          8
+        ],
+        [
+          -5,
+          24,
+          -4
+        ],
+        [
+          6,
+          24,
+          -4
+        ]
+      ],
+      "stones": [
+        [
+          1,
+          24,
+          -7
+        ],
+        [
+          0,
+          24,
+          -3
+        ],
+        [
+          0,
+          24,
+          7
+        ],
+        [
+          -1,
+          24,
+          7
+        ],
+        [
+          -5,
+          24,
+          3
+        ],
+        [
+          -2,
+          24,
+          -4
+        ],
+        [
+          5,
+          24,
+          -3
+        ]
+      ],
+      "forage": [
+        [
+          1,
+          24,
+          -5
+        ],
+        [
+          0,
+          24,
+          -4
+        ],
+        [
+          -1,
+          24,
+          -2
+        ],
+        [
+          -5,
+          24,
+          -2
+        ]
+      ],
+      "flora": [],
+      "habitat": {
+        "schemaVersion": 1,
+        "worldId": "-1,-1:p1",
+        "core": {
+          "actorId": "local",
+          "worldId": "-1,-1:p1",
+          "shelterId": "habitat:-1,-1:p1:0,25,-1",
+          "cell": [
+            0,
+            25,
+            -1
+          ],
+          "supportCell": [
+            0,
+            24,
+            -1
+          ],
+          "position": [
+            0,
+            50.24,
+            -2
+          ],
+          "up": [
+            0,
+            1,
+            0
+          ],
+          "eventId": "story:tidegarden:local:movie-habitat-core-online"
+        },
+        "shelterCertification": {
+          "shelterId": "habitat:-1,-1:p1:0,25,-1",
+          "eventId": "story:tidegarden:local:movie-shelter-certified",
+          "cell": [
+            0,
+            25,
+            -1
+          ],
+          "insulation": 0.43125,
+          "interiorCellCount": 4
+        },
+        "safeRest": {
+          "shelterId": "habitat:-1,-1:p1:0,25,-1",
+          "eventId": "story:tidegarden:local:movie-safe-rest",
+          "dayPhase": 0.505451249999809
+        }
+      }
+    }
+  },
+  "after": {
+    "elapsed": 21641,
+    "url": "http://127.0.0.1:41267/?journeyprobe=1&profile=HIGH&movie=1",
+    "world": {
+      "worldId": "-1,-1:p1",
+      "seed": 1600321158,
+      "structures": [],
+      "campfires": [],
+      "trees": [],
+      "stones": [],
+      "forage": [],
+      "flora": []
+    }
+  },
+  "baselineResult": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-return-repair-20260909/station-forward/result.json"
+}

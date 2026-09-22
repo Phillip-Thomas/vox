@@ -1,0 +1,142 @@
+{
+  "summary": "Complete diagnostic ordinary-control ch14 path earned through actual predecessor survey, reciprocal handback, both field observations, retained question and physical return. Checked gateway firstPlayable received at 2026-09-08T22:00:04.669Z.",
+  "affectedPaths": [
+    {
+      "path": "main/src/story/storyState.ts",
+      "sha256": "40bc6d1d634385ec5814c4284f37d5cc5fb9014a320247ee29d190231a86a81d"
+    },
+    {
+      "path": "main/src/story/unfinishedMapDirector.ts",
+      "sha256": "07ac67caba312448db12e3cdd3688ee853180b8908b24802884c336e93fd5ae1"
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.ts",
+      "sha256": "db2605351c0e9c98c0d187e3713dc88ee3c7c6bbb4f1f5af37212f903f498fd6"
+    },
+    {
+      "path": "main/chapter-registry.json",
+      "sha256": "d3cfabff4e9c687a5f7f9cf7fbb3c78aae5447163e68fec3e79cd90589044ed7"
+    },
+    {
+      "path": "main/chapter-ch14-controls.json",
+      "sha256": "6d233b8b67bec8356f632eab5c5ff4f130a366b6a6342a605adae239b1c80bf0"
+    },
+    {
+      "path": "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+      "sha256": "c035b902e65244bcdece498a29f84cf91daa0aa4bbd69f3b8642fb0749c15606"
+    }
+  ],
+  "retainedProjections": [
+    {
+      "path": "main/story-authority.json",
+      "sha256": "3df4ec68074e82b2c28c239f6ff42c78a36f2762a64b37c360d0c261b59fc7da"
+    },
+    {
+      "path": "main/chapter-journey-contract.json",
+      "sha256": "0527b772ada53b79f6d4c7f3be1e4df36bf198e7a26e05aa95710e1618b1baaf"
+    }
+  ],
+  "checks": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/8-build/typecheck.txt",
+      "sha256": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/8-build/focused-tests.txt",
+      "sha256": "f4f943aec277b7fd821123bfd130f0d7f32efd2fb0f04682e97616cc69aee19c"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/8-build/common-ground-tests.txt",
+      "sha256": "812dbbaa9408e18ec1664fef3e1301a7c3cc531ac26fa354051fad0633c20ef2"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/8-build/registry-check.txt",
+      "sha256": "a0bf8d79f5c185d5fbe2082043f859f4333d3905de1a22e166fe0e8dc371da15"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/8-build/authority-check.txt",
+      "sha256": "21bbcfaadaeb4fa364190cf6cd73954d4d6d297a5af763c5028f2ce1b5cad8f6"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/8-build/journey-check.txt",
+      "sha256": "01794efaec6bd82449e2dff5b0483c2903583af628ee008c18e6ce3d1c715cf3"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/8-build/control-validation.json",
+      "sha256": "52e19d99355747543794977e1eeba58bb893966fbfbae14d4aaf48f87c4f8106"
+    }
+  ],
+  "playableEvidence": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/report.json",
+      "sha256": "95ad13ad14a2de5655c99ce77162807aa7deeba38f75ec56de7dee33263c61e6"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/frame.png",
+      "sha256": "b425b455dd32140606e8cadffd0b34c410bb8c6710af49dcc3ac89be2236c10d"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/frame-7.png",
+      "sha256": "7d4f555eb80211ecfce691a53b208e7397c7d2ecad9173205dd315360cbc5d2b"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/trace.ndjson",
+      "sha256": "1c9fc2f7444281c684d89ffb9d059bb893dde2a3aa17dffbc59dba8ce857e681"
+    }
+  ],
+  "observed": {
+    "commonGround": {
+      "stage": "arrived",
+      "terraUnits": 18,
+      "comparisonProved": true,
+      "finalReferenceOffered": true,
+      "finalReferenceOccupied": false,
+      "workerUnits": 18,
+      "committed": true
+    },
+    "record": {
+      "/unfinishedMap/opened": true,
+      "/unfinishedMap/indexed": true,
+      "/unfinishedMap/scar": true,
+      "/unfinishedMap/retained": true,
+      "/unfinishedMap/selected": true,
+      "/unfinishedMap/returned": true,
+      "/unfinishedMap/complete": true,
+      "/unfinishedMap/targets": {
+        "survey": [
+          -44,
+          51.05,
+          12
+        ],
+        "scar": [
+          2.6600000000000006,
+          53.84,
+          -7.54
+        ]
+      },
+      "/unfinishedMap/reach": {
+        "survey": true,
+        "scar": false
+      },
+      "/unfinishedMap/question": "survived",
+      "/unfinishedMap/survey": {
+        "routeClass": "held-reference",
+        "lengthUnits": 16.23662889161766,
+        "testedPrefixCount": 22
+      }
+    },
+    "story": {
+      "active": false,
+      "chapter": "complete",
+      "beat": "done",
+      "runId": 1
+    }
+  },
+  "implementationLimits": [
+    "Manual coverage starts at the existing diagnostic ch13-survey entry; earlier chapters are not earned by this capture. Common Ground full runtime acceptance remains open.",
+    "Pause/recovery, reload Continue equality plus a new action, fresh crawl-to-ch14 continuity, audible AV and independent reviews remain separate mandatory gates. Their control configurations validate; this build receipt does not certify those cases.",
+    "AV movie entry maps to the diagnostic predecessor and must earn actual ch13 proof; no ch14 receipt is seeded.",
+    "Inspected actual retained-question and handback frames. The hull-side ordinary gaze shows a tree and hull edge; the signature scar composition still needs cinema review."
+  ],
+  "releaseStoryCeiling": "ch4-arrival"
+}

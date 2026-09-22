@@ -1,0 +1,21 @@
+{
+  "schema": "paravoxia.diagnosticCheckpoint.v1",
+  "noncertifying": true,
+  "wallMs": 1790046971012,
+  "url": "http://127.0.0.1:39637/?story=1&movie=1&journeyprobe=1&journeylane=continuous&journeymode=movie&profile=HIGH",
+  "story": {
+    "active": true,
+    "chapter": "prologue",
+    "beat": "crawl",
+    "runId": 1
+  },
+  "objective": {
+    "id": null,
+    "health": "idle",
+    "revision": 0
+  },
+  "storageState": {
+    "cookies": [],
+    "origins": []
+  }
+}

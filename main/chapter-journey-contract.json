@@ -2003,7 +2003,9 @@
         "before": [
           "ch9"
         ],
-        "after": []
+        "after": [
+          "ch13"
+        ]
       },
       "registryProjection": {
         "requiredObjectiveBeats": [
@@ -2186,6 +2188,405 @@
           }
         }
       ],
+      "inputContracts": [],
+      "optionalCapabilities": [],
+      "placementExceptions": []
+    },
+    {
+      "id": "ch13",
+      "continuity": {
+        "before": [
+          "ch10"
+        ],
+        "after": [
+          "ch14"
+        ]
+      },
+      "registryProjection": {
+        "requiredObjectiveBeats": [
+          "ch13-home",
+          "ch13-return",
+          "ch13-survey",
+          "ch13-common"
+        ],
+        "checkpointReceipts": [
+          "milestone:story:ch13-fault-reviewed",
+          "state:hearth/restored",
+          "milestone:story:ch13-return-chosen",
+          "state:world/origin",
+          "state:control/on-foot",
+          "milestone:story:ch13-origin-landed",
+          "milestone:story:ch13-reciprocal-crossed",
+          "state:story/ch13-reciprocal-proof"
+        ],
+        "requiredSignedAnchorIds": [
+          "anc.cg.cell-installed",
+          "anc.cg.home-steady",
+          "anc.cg.complete",
+          "anc.cg.handback"
+        ],
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
+      },
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
+      "objectives": [
+        {
+          "id": "objective:ch13:ch13-home",
+          "beat": "ch13-home",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "Review the stored audit fault at the working core, then either accept the return to the Origin audit site or leave the invitation standing.",
+            "completionEvidenceRefs": [
+              "milestone:story:ch13-fault-reviewed",
+              "milestone:story:ch13-return-chosen"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "The home works again, which is the only condition under which going back to the thing she left unfinished is a choice rather than an errand.",
+            "capability": "The shipped [F] interaction at the certified habitat core, against a fault record that has been on the books since chapter 4.",
+            "storyFunction": "Turns a mechanical repair into an acknowledged home, and turns the old fault from a loose end into an invitation she owns.",
+            "expectedPlayerSeconds": {
+              "min": 30,
+              "max": 600
+            },
+            "spatialTolerance": "The core is a fixed shipped handle; the player may wander freely and the invitation never worsens or expires.",
+            "recovery": "Both rungs persist until performed. There is no failure state, no timer and no summons.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        },
+        {
+          "id": "objective:ch13:ch13-return",
+          "beat": "ch13-return",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "Board the Kestrel, hold the ignition control to lift, fly to Origin and land at the audit site, then approach W-7744 on foot.",
+            "completionEvidenceRefs": [
+              "state:control/flight",
+              "state:system-flight/active-planet=p1",
+              "milestone:story:ch13-origin-landed"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "Going back is the choice she just made, so the trip is hers to fly and nothing about it is new.",
+            "capability": "The shipped boarding, held-ignition and landing grammar, unchanged, aimed at a place the story already owns.",
+            "storyFunction": "Puts real distance between the decision and its consequence without narrating either.",
+            "expectedPlayerSeconds": {
+              "min": 90,
+              "max": 600
+            },
+            "spatialTolerance": "Travel rungs do not fail on course drift; the audit-site marker is a fixed pose and the approach is walked.",
+            "recovery": "Shipped flight rescue applies unchanged and never lands, claims or advances on the player behalf.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        },
+        {
+          "id": "objective:ch13:ch13-survey",
+          "beat": "ch13-survey",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "Offer to demonstrate a route, walk a trace from the survey start to the survey end, offer the walked span, and then either hold the intermediate reference or revise the untested tail until a route is actually tested.",
+            "completionEvidenceRefs": [
+              "milestone:story:ch13-route-tested"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "She arrives believing her crossing finished the proof; this is the first time anything has asked her to make it demonstrable to somebody else.",
+            "capability": "Walking, and one [F]. Nothing here needs a new verb, and nothing here is a puzzle.",
+            "storyFunction": "Separates traversability from demonstrability, and makes the difference physical rather than stated.",
+            "expectedPlayerSeconds": {
+              "min": 120,
+              "max": 900
+            },
+            "spatialTolerance": "Both measured route classes complete. A first-try success on the longer supported route is legal and is not a lesser outcome.",
+            "recovery": "Every refusal names its literal physical cause and has a reachable repair: revise the tail, revise unsafe footing, or occupy the marked reference. Revision is unlimited, free, and preserves the tested prefix.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        },
+        {
+          "id": "objective:ch13:ch13-common",
+          "beat": "ch13-common",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "Walk the full eighteen-unit common span under the reference W-7744 maintains at H, then stand at the separate far reference, offer that end, and remain there while he makes his own complete test.",
+            "completionEvidenceRefs": [
+              "milestone:story:ch13-reciprocal-crossed",
+              "milestone:story:ch13-complete"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "She has just watched a route become demonstrable because somebody else held an end; this is where she needs one held for her, and then holds one back.",
+            "capability": "Following the visible common guide, standing still, and one [F]. The guide is a planned, unverified line and not a route she has walked; the two uncredited two-unit positioning legs are his, and prove nothing.",
+            "storyFunction": "She accepts another body necessary contribution to a result she wants, and their accounts stay different.",
+            "expectedPlayerSeconds": {
+              "min": 90,
+              "max": 600
+            },
+            "spatialTolerance": "Looking away is free and changes nothing; leaving the release cylinder holds the test rather than failing it, and reentry resumes it without a second input.",
+            "recovery": "A lapsed reference publishes a return objective and retains every earned fact. Neither saved evidence nor elapsed time exempts a resumed test from live range, sight, occupancy and clearance.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        }
+      ],
+      "lifecycleContracts": [],
+      "interactionContracts": [],
+      "inputContracts": [],
+      "optionalCapabilities": [],
+      "placementExceptions": []
+    },
+    {
+      "id": "ch14",
+      "continuity": {
+        "before": [
+          "ch13"
+        ],
+        "after": []
+      },
+      "registryProjection": {
+        "requiredObjectiveBeats": [
+          "ch14-record",
+          "ch14-scar",
+          "ch14-question",
+          "ch14-return"
+        ],
+        "checkpointReceipts": [
+          "milestone:story:ch14:record-opened",
+          "milestone:story:ch14:survey-indexed",
+          "milestone:story:ch14:scar-observed",
+          "milestone:story:ch14:question-retained",
+          "milestone:story:ch14:return-selected",
+          "milestone:story:ch14:return-recorded",
+          "milestone:story:ch14:complete"
+        ],
+        "requiredSignedAnchorIds": [],
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
+      },
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
+      "objectives": [
+        {
+          "id": "objective:ch14:ch14-record",
+          "beat": "ch14-record",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "At the retained common passage, explicitly begin a field record and inspect its attributed entry before choosing to visit the repaired hull.",
+            "completionEvidenceRefs": [
+              "milestone:story:ch14:record-opened",
+              "milestone:story:ch14:survey-indexed"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "The earned reciprocal proof becomes a deliberately unfinished field record.",
+            "capability": "Existing walking, F interaction and visible record controls.",
+            "storyFunction": "Keep useful observations and their limits separate.",
+            "expectedPlayerSeconds": {
+              "min": 5,
+              "max": 600
+            },
+            "spatialTolerance": "No gaze predicate; actual Origin attendance on foot. Detours preserve entries.",
+            "recovery": "Resume or Continue restores receipts. Revalidate actor, world and physical reach before the next visit.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        },
+        {
+          "id": "objective:ch14:ch14-scar",
+          "beat": "ch14-scar",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "Walk to the existing repaired hull and press F within physical reach of its surviving scar.",
+            "completionEvidenceRefs": [
+              "milestone:story:ch14:scar-observed"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "The earned reciprocal proof becomes a deliberately unfinished field record.",
+            "capability": "Existing walking, F interaction and visible record controls.",
+            "storyFunction": "Keep useful observations and their limits separate.",
+            "expectedPlayerSeconds": {
+              "min": 5,
+              "max": 600
+            },
+            "spatialTolerance": "No gaze predicate; actual Origin attendance on foot. Detours preserve entries.",
+            "recovery": "Resume or Continue restores receipts. Revalidate actor, world and physical reach before the next visit.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        },
+        {
+          "id": "objective:ch14:ch14-question",
+          "beat": "ch14-question",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "Choose which unanswered question heads the record and explicitly retain both distinct entries.",
+            "completionEvidenceRefs": [
+              "milestone:story:ch14:question-retained"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "The earned reciprocal proof becomes a deliberately unfinished field record.",
+            "capability": "Existing walking, F interaction and visible record controls.",
+            "storyFunction": "Keep useful observations and their limits separate.",
+            "expectedPlayerSeconds": {
+              "min": 5,
+              "max": 600
+            },
+            "spatialTolerance": "No gaze predicate; actual Origin attendance on foot. Detours preserve entries.",
+            "recovery": "Resume or Continue restores receipts. Revalidate actor, world and physical reach before the next visit.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        },
+        {
+          "id": "objective:ch14:ch14-return",
+          "beat": "ch14-return",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "Select the survey entry, choose Return to this place, close the panel, walk back and press F to record the real return.",
+            "completionEvidenceRefs": [
+              "milestone:story:ch14:return-selected",
+              "milestone:story:ch14:return-recorded",
+              "milestone:story:ch14:complete"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "The earned reciprocal proof becomes a deliberately unfinished field record.",
+            "capability": "Existing walking, F interaction and visible record controls.",
+            "storyFunction": "Keep useful observations and their limits separate.",
+            "expectedPlayerSeconds": {
+              "min": 5,
+              "max": 600
+            },
+            "spatialTolerance": "No gaze predicate; actual Origin attendance on foot. Detours preserve entries.",
+            "recovery": "Resume or Continue restores receipts. Revalidate actor, world and physical reach before the next visit.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        }
+      ],
+      "lifecycleContracts": [],
+      "interactionContracts": [],
       "inputContracts": [],
       "optionalCapabilities": [],
       "placementExceptions": []

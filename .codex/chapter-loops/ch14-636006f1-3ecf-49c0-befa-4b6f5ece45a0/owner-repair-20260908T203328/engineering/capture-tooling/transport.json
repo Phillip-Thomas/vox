@@ -1,0 +1,21 @@
+{
+  "exitCode": 143,
+  "signal": null,
+  "reason": "budget:role",
+  "bytes": 330410,
+  "pid": 3679146,
+  "usage": {
+    "roleLaunches": 0,
+    "modelTurns": 13,
+    "inputTokens": 32666,
+    "cacheReadTokens": 238269,
+    "outputTokens": 7491
+  },
+  "session": "a2c522e8-a9ff-4f60-a989-486f6365fd41",
+  "resolved": "claude-opus-5",
+  "completed": false,
+  "failed": false,
+  "contextTokens": 32642,
+  "reported": true,
+  "accounting": "Live per-message usage, reconciled to cumulative terminal usage."
+}

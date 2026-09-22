@@ -1,0 +1,22 @@
+{
+  "compiledBy": "creative-producer",
+  "compiledAt": "2026-09-06T08:22:04.111961+00:00",
+  "sourceHashes": {
+    "chapter-peer-notes.jsonl": "1fdb74012331da371a9b77a4e47e3d2ebff3aa019cb6123800e20be894c20615",
+    "chapter-reconciliation.jsonl": "d475ca53dc4db2293ff410d5e3dabd959669f9270b6862f86a261a6c257cfdcb",
+    "score-peer-notes.jsonl": "40fc6777b355e0c492aed0c7393e5a6b09cd61a64208d3756d3d20a70e4d5ca4",
+    "score-reconciliation.jsonl": "f63588fbb6a7ea23f54cf0e2dd71dead7ae4e8c2d9ccad89e054889eef21138a",
+    "cinematography-peer-notes.jsonl": "2d76fb26db53e69340259490c3a459513d2a06b0d7d280eaddec2b5616f0610b",
+    "cinematography-reconciliation.jsonl": "2f62b8021b2b6db58b4042f1964f35833a1f907b6f850ec8ffdb105c80c97adb"
+  },
+  "lossless": true,
+  "directedRoutes": [
+    "chapter->score",
+    "chapter->cinematography",
+    "score->chapter",
+    "score->cinematography",
+    "cinematography->chapter",
+    "cinematography->score"
+  ],
+  "compiledSha256": "7d11e47c58c0ea1eef6928563dbe13fda1eae9f5922941f7df6cb9d0b5356b28"
+}

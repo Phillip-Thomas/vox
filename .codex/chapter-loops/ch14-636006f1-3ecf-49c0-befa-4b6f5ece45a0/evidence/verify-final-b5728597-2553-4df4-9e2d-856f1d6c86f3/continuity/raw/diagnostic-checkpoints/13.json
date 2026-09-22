@@ -1,0 +1,50 @@
+{
+  "schema": "paravoxia.diagnosticCheckpoint.v1",
+  "noncertifying": true,
+  "wallMs": 1788975552288,
+  "url": "http://127.0.0.1:42911/?story=1&movie=1&journeyprobe=1&journeylane=continuous&journeymode=movie&profile=HIGH",
+  "story": {
+    "active": true,
+    "chapter": "ch1",
+    "beat": "ch1-depth",
+    "runId": 1
+  },
+  "objective": {
+    "id": "ch1:depth:recover-supply-pods",
+    "kind": "interact",
+    "markerLabel": "SUPPLY POD",
+    "workOrder": [
+      "FOLLOW THE NEXT SUPPLY POD MARKER.",
+      "RECOVER THE SUPPLY POD."
+    ],
+    "requiresMarker": true,
+    "health": "ready",
+    "revision": 15
+  },
+  "storageState": {
+    "cookies": [],
+    "origins": [
+      {
+        "origin": "http://127.0.0.1:42911",
+        "localStorage": [
+          {
+            "name": "pvx.v1.world.-1,-1",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"structures\":[],\"campfires\":[],\"trees\":[],\"stones\":[[-8,25,-3],[-10,25,-3]],\"forage\":[],\"flora\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.voxels",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"generationSchemaVersion\":1,\"fingerprint\":115629,\"removed\":[[6,25,-2],[-5,25,-2],[-6,25,-2]],\"added\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.player",
+            "value": "{\"pos\":[-12.048725128173828,52.78897476196289,-6],\"forward\":[0,0,-1],\"pitch\":0}"
+          },
+          {
+            "name": "pvx.v1.global",
+            "value": "{\"inventory\":{\"berry\":2,\"faulty_maw\":1,\"wood\":3,\"stone\":7,\"biofiber\":6,\"flint\":1},\"mawCharge\":100,\"era\":\"primitive\",\"milestones\":[\"story:started\",\"story:choice:dispenser:unlock\",\"story:choice:lights:dimall\",\"story:choice:question:unknown\",\"story:name:moss\",\"story:choice:light:blinds\",\"story:choice:bell:ring\",\"story:choice:diagnostic:replay\",\"story:choice:replay2:remember\",\"story:choice:hum:join\",\"story:choice:hum2:continue\",\"story:choice:anomaly:ack\",\"story:debris-scattered:3\",\"story:tone:low\",\"story:cell:100\",\"story:prologue-seen\",\"story:debris:0\",\"story:debris:1\",\"story:ch1:track\",\"story:debris-stone-backfill:v2\",\"story:debris:2\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1\",\"dayPhase\":0.25,\"vitals\":{\"health\":100,\"hunger\":45.74515555453354,\"thirst\":53.71773333179886,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":\"-1,-1\",\"currentWorldId\":\"-1,-1\",\"parkedPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16]},\"systemPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16],\"velocity\":[0,0,0]},\"locationMode\":\"surface\",\"repairHistory\":[]}}"
+          }
+        ]
+      }
+    ]
+  }
+}

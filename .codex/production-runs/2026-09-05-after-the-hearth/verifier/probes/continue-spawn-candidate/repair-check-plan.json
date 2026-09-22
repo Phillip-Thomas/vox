@@ -1,0 +1,14 @@
+{
+  "schema": "paravoxia.repairChecks.v1",
+  "note": "continue-spawn-verifier. runtime[0] is the ACTUAL earned-Continue + new grounded [F] browser probe via the owned shell launcher that holds the shared heavy lock on FD9; the node probe inherits FD9. The launcher's post-finally strict-verdict-gate.mjs converts the freshly written capture into a truthful exit status (full point-object prefix equality, scoped centre-to-centre pose retention, post-finally cleanup receipt, source stability, plus the existing mandatory newF/route-offered/noReplay identities). Never substitute an artifact-reading script for the runtime step. PVX_URL/PVX_MANIFEST/PVX_OUT are exported by the invoking shell from the CURRENT root handoff, re-hashed at release. Engineer focused101 tests reused by exact source/log receipt; full verify once via --final after this actual strict runtime.",
+  "checksNote": "checks[] is intentionally EMPTY (runtime-review item 5): the focused 15-test playerSpawnSelection suite and the 101 focused tests were already verified on this exact source 2de3fa2a; re-running them here would be a duplicate. tools/repair-check.mjs ITSELF mandates and appends ['npm','run','verify'] to the final group, so the single full stable suite runs exactly once, only under --final, and only after the strict runtime step passes.",
+  "runtime": [
+    [
+      "bash",
+      "-lc",
+      "exec /home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-candidate/run-continue-spawn.sh"
+    ]
+  ],
+  "checks": [],
+  "final": []
+}

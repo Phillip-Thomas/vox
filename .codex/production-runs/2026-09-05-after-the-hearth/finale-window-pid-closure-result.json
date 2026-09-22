@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 424303,
+  "stop_reason": "end_turn",
+  "session_id": "326001c3-e979-4faf-ad35-777a6928c7e7",
+  "total_cost_usd": 2.3011825000000004,
+  "usage": {
+    "input_tokens": 86,
+    "cache_creation_input_tokens": 63827,
+    "cache_read_input_tokens": 1619061,
+    "output_tokens": 34039,
+    "output_tokens_details": {
+      "thinking_tokens": 3525
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 63827,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1233,
+        "cache_read_input_tokens": 67485,
+        "cache_creation_input_tokens": 409,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 409
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1877,
+      "outputTokens": 20,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001977,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 86,
+      "outputTokens": 34039,
+      "cacheReadInputTokens": 1619061,
+      "cacheCreationInputTokens": 63827,
+      "webSearchRequests": 0,
+      "costUSD": 2.2992055000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 3525,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 49,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Both failures are closed. **PREPARED, NOT RUN** \u2014 no browser, GPU, sink, recorder, build, or game run happened.\n\n## Failure 1 \u2014 `browser.process()` was a real throw\n\nConfirmed from the **installed driver** (`main/node_modules/playwright-core` @ **1.61.0**, `types/types.d.ts`), not docs:\n\n- `export interface Browser` spans **9949\u201310693** \u2192 member scan: `process()` **absent**\n- `process(): ChildProcess` exists only at **17092** (`ElectronApplication`) and **18431** (`BrowserServer`)\n- `newBrowserCDPSession()` **is** on `Browser` at **10128**\n\nSo `browser.process` was `undefined`; the call threw a TypeError **as an argument to `cleanup.adopt(...)`** \u2014 before ownership existed \u2014 leaking the headed browser. Fixes:\n\n- **Removed** the call (not wrapped, not \"made safe\").\n- New `ownedBrowserPid()`: `newBrowserCDPSession()` \u2192 `SystemInfo.getProcessInfo` \u2192 the `type === 'browser'` entry's integer id, from a session bound to *this* probe's browser. No pgrep/ps/global scan/guess. Non-integer id = hard error; CDP detached in a `finally`.\n- Ordering is now **launch \u2192 ADOPT \u2192 everything fallible** (pid lookup, `newContext`, `newPage`, `goto`, `assertHardwareGl`).\n- Pid-lookup failure stops the browser, records phase `owned-browser-pid-lookup`, and writes **no** `browser-pid.json` \u2192 the wrapper refuses to record. No output capture, no unbound-process ownership claim.\n- `stop()` no longer swallows: `await browser.close()` instead of `.catch(() => {})`, so a failed close is `stopError` + `stopped === false`.\n- Entrypoint guard so the test can import the real helper without launching.\n\n## Failure 2 \u2014 edge now requires **both** routes\n\n`terraUnits` is read with the same presence/type guard as `workerUnits` (`terraUnits` + `terraUnitsPresent`); the edge requires `terra18 && worker18 && committed`. The pre-existing `1e-6` guard is applied identically to both and **not widened**. `state.signedSceneAv` (Bridge.tsx:244) left as-is.\n\n## Tests hit the actual call site\n\nC11/C12 **import the probe and invoke the exported `startUnmutedOwnedSession()` that `main()` calls** \u2014 no copied happy path. The `Browser` double is playwright-shaped with **no `process` member**, plus a source grep (C11b) that fails if `browser.process(` returns.\n\n**`node closure-checks.mjs` \u2192 exit 0, 25/25 passed.** All four files pass `node --check`. **99/99 game source hashes rehashed, 0 mismatches.** `finale-window-runtime.mjs` and `audio-isolation-plan.json` unchanged; prior reports and archived iterations preserved byte-for-byte.\n\nReports: `finale-window-pid-closure-report.json` / `.md`; logs in `logs/finale-window-pid-closure/`.\n\nStill missing and **not** claimed: cancellation reason/caller (discarded at `commonGroundScore.ts:259`), AudioContext/mute/pause state, App.tsx `paused`/overlay. No audibility or causal claim. Remaining guards reported honestly \u2014 notably that `SystemInfo.getProcessInfo` is asserted by mock only and has **never been exercised against a real browser**; root's single unmuted run after SHORT releases the GPU is its first real exercise.",
+  "ttft_ms": 1481,
+  "type": "result",
+  "duration_ms": 425281,
+  "uuid": "7b220e30-e461-4942-a661-3c518612b58f",
+  "ttft_stream_ms": 723,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 724,
+  "queued_turn_count": 0
+}

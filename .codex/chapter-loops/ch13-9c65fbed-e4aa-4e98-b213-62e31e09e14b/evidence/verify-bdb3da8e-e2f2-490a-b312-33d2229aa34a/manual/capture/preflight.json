@@ -1,0 +1,95 @@
+{
+ "role": "manual-grounded-recovery-runtime",
+ "url": "http://127.0.0.1:34825/",
+ "heavyLock": {
+  "lockPath": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "fd": 3,
+  "owned": true,
+  "problems": [],
+  "fdDevIno": {
+   "dev": 66306,
+   "ino": 8397196
+  },
+  "pathDevIno": {
+   "dev": 66306,
+   "ino": 8397196
+  },
+  "procLock": {
+   "kind": "FLOCK",
+   "scope": "ADVISORY",
+   "mode": "WRITE",
+   "pid": 2794712,
+   "major": 259,
+   "minor": 2,
+   "inode": 8397196
+  },
+  "ancestors": [
+   2794724,
+   2794713,
+   2794712,
+   2787384,
+   2787383,
+   2787331,
+   2787323,
+   722387,
+   722380,
+   349992,
+   7668,
+   6224,
+   4302,
+   2737,
+   1
+  ],
+  "contentionProbe": "not-run (shared lock is never contended during preparation)",
+  "procLockCreatorInAncestry": true,
+  "fdinfoLocks": [
+   {
+    "kind": "FLOCK",
+    "scope": "ADVISORY",
+    "mode": "WRITE",
+    "pid": 2794712,
+    "major": 259,
+    "minor": 2,
+    "inode": 8397196
+   }
+  ],
+  "fdinfoLock": {
+   "kind": "FLOCK",
+   "scope": "ADVISORY",
+   "mode": "WRITE",
+   "pid": 2794712,
+   "major": 259,
+   "minor": 2,
+   "inode": 8397196
+  }
+ },
+ "previewBinding": {
+  "ok": true,
+  "problems": [],
+  "expectedIndexSha256": "74025800f5312519a92b480a15b493c3b27f971f0cbcbe1ec2b571342d4f4c82",
+  "expectedBundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9",
+  "servedIndexSha256": "74025800f5312519a92b480a15b493c3b27f971f0cbcbe1ec2b571342d4f4c82",
+  "servedBundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9",
+  "ownedFileMapCount": 11,
+  "note": "preview-ownership.json publishes index+bundle byte hashes and a matched-file COUNT; the remaining build files are unmeasured here."
+ },
+ "served": {
+  "url": "http://127.0.0.1:34825/",
+  "bundlePath": "/assets/index-Ddqg7x9Y.js",
+  "indexSha256": "74025800f5312519a92b480a15b493c3b27f971f0cbcbe1ec2b571342d4f4c82",
+  "bundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9",
+  "errors": [],
+  "status": {
+   "index": 200,
+   "bundle": 200
+  }
+ },
+ "liveManifestSha": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+ "liveContractSha": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+ "controlAction": "continue",
+ "controlActiveRole": "manual-grounded-recovery-runtime",
+ "decision": {
+  "launch": true,
+  "refusals": []
+ }
+}

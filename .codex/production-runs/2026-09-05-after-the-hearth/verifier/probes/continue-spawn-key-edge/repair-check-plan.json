@@ -1,0 +1,14 @@
+{
+  "schema": "paravoxia.repairChecks.v1",
+  "note": "continue-spawn-key-edge. Identical to continue-spawn-candidate EXCEPT the final grounded [F] is HELD: keyboard.down('KeyF') / 80ms / keyboard.up('KeyF') in try/finally, matching the proven manual helper. Rationale: EfficientPlayer.tsx:1967 samples controls.interact once per RAF frame and latches a rising edge, so a zero-duration press can be missed entirely; the prior run's absence of route-offered is therefore NOT yet a proven game-callback failure. Narrow PASSIVE receipt added (DOM keydown/keyup timeStamp/code/isTrusted, pointerlock/focus/__voxelDebug.player.grounded before+during+after, rAF ticks spanning the hold) so a missing DELIVERED EDGE is distinguishable from a delivered edge the game ignored. No direct game call, setter, forced click, CDP pin, or broad observer. runtime[0] is the ACTUAL browser probe via the owned shell launcher holding the shared heavy lock on FD9; node inherits FD9. The launcher's post-finally strict-verdict-gate.mjs converts the freshly written capture into a truthful exit status. Never substitute an artifact-reading script for the runtime step. PVX_URL/PVX_MANIFEST/PVX_OUT come from the CURRENT root handoff. Full verify once via --final after this strict runtime.",
+  "checksNote": "checks[] is intentionally EMPTY (runtime-review item 5): the focused 15-test playerSpawnSelection suite and the 101 focused tests were already verified on this exact source 2de3fa2a; re-running them here would be a duplicate. tools/repair-check.mjs ITSELF mandates and appends ['npm','run','verify'] to the final group, so the single full stable suite runs exactly once, only under --final, and only after the strict runtime step passes.",
+  "runtime": [
+    [
+      "bash",
+      "-lc",
+      "exec /home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/continue-spawn-key-edge/run-continue-spawn-key-edge.sh"
+    ]
+  ],
+  "checks": [],
+  "final": []
+}

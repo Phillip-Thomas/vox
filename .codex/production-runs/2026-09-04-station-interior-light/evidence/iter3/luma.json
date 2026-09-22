@@ -1,0 +1,691 @@
+{
+  "schema": "paravoxia.stationLuma.v1",
+  "url": "http://127.0.0.1:4321",
+  "identity": "Paravoxia",
+  "viewport": "1600x900",
+  "renderer": "headless chromium, ANGLE/SwiftShader, dpr 1",
+  "capturedAt": "2026-09-05T14:01:23.711Z",
+  "targets": {
+    "floor": {
+      "median": [
+        22,
+        34
+      ],
+      "mean": [
+        24,
+        38
+      ],
+      "under16Max": 35,
+      "over235Max": 2
+    },
+    "apron": {
+      "median": [
+        30,
+        42
+      ],
+      "mean": [
+        30,
+        44
+      ],
+      "under16Max": 25,
+      "over235Max": 3
+    },
+    "shelves": {
+      "median": [
+        34,
+        46
+      ],
+      "mean": [
+        34,
+        48
+      ],
+      "under16Max": 25,
+      "over235Max": 3
+    },
+    "counter": {
+      "median": [
+        48,
+        62
+      ],
+      "mean": [
+        50,
+        66
+      ],
+      "under16Max": 10,
+      "over235Max": 4
+    },
+    "concourse": {
+      "median": [
+        56,
+        72
+      ],
+      "mean": [
+        56,
+        76
+      ],
+      "under16Max": 12,
+      "over235Max": 5
+    },
+    "concourse-up": {
+      "median": [
+        30,
+        255
+      ],
+      "mean": [
+        30,
+        255
+      ],
+      "under16Max": 40,
+      "over235Max": 5
+    }
+  },
+  "legibilityFloor": {
+    "medianMin": 22,
+    "under16Max": 35
+  },
+  "frames": [
+    {
+      "id": "01-dock",
+      "file": "01-dock.png",
+      "cell": "apron",
+      "u": 0.12,
+      "turn": -1.5707963267948966,
+      "pitch": 0,
+      "district": "apron",
+      "inOrdering": true,
+      "note": "just off the airlock, down the dock spine",
+      "state": {
+        "cellId": "apron",
+        "position": [
+          11.879999999999999,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "apron",
+        "progress": 1,
+        "ambientIntensity": 1,
+        "fogDensity": 0.003,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 52,
+        "mean": 53.6,
+        "stdDev": 39.3,
+        "pctUnder16": 23,
+        "pctOver235": 0,
+        "floorBandMedian": 90
+      }
+    },
+    {
+      "id": "01b-apron-back",
+      "file": "01b-apron-back.png",
+      "cell": "apron",
+      "u": 0.12,
+      "turn": 1.5707963267948966,
+      "pitch": 0,
+      "district": "apron",
+      "inOrdering": false,
+      "note": "180° back at the unlit Kestrel lock frame",
+      "state": {
+        "cellId": "apron",
+        "position": [
+          11.879999999999999,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "apron",
+        "progress": 1,
+        "ambientIntensity": 1,
+        "fogDensity": 0.003,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 84,
+        "mean": 78.4,
+        "stdDev": 27.3,
+        "pctUnder16": 0.3,
+        "pctOver235": 0,
+        "floorBandMedian": 92
+      }
+    },
+    {
+      "id": "02-dock-mid",
+      "file": "02-dock-mid.png",
+      "cell": "apron",
+      "u": 0.55,
+      "turn": -1.5707963267948966,
+      "pitch": 0,
+      "district": "apron",
+      "inOrdering": true,
+      "note": "mid dock, cargo both sides",
+      "state": {
+        "cellId": "apron",
+        "position": [
+          54.45,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "apron",
+        "progress": 1,
+        "ambientIntensity": 1,
+        "fogDensity": 0.003,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 40,
+        "mean": 42.7,
+        "stdDev": 33.3,
+        "pctUnder16": 25.3,
+        "pctOver235": 0,
+        "floorBandMedian": 71
+      }
+    },
+    {
+      "id": "03-registry",
+      "file": "03-registry.png",
+      "cell": "counter",
+      "u": 0.25,
+      "turn": -1.5707963267948966,
+      "pitch": 0,
+      "district": "counter",
+      "inOrdering": true,
+      "note": "inside the registry corridor",
+      "state": {
+        "cellId": "counter",
+        "position": [
+          124.5,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "counter",
+        "progress": 1,
+        "ambientIntensity": 1.55,
+        "fogDensity": 0.002,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 57,
+        "mean": 58.7,
+        "stdDev": 31.1,
+        "pctUnder16": 4.4,
+        "pctOver235": 0,
+        "floorBandMedian": 61
+      }
+    },
+    {
+      "id": "03b-counter-exit",
+      "file": "03b-counter-exit.png",
+      "cell": "counter",
+      "u": 0.92,
+      "turn": -1.5707963267948966,
+      "pitch": 0,
+      "district": "counter",
+      "inOrdering": false,
+      "note": "the concourse portal, warm, from the counter",
+      "state": {
+        "cellId": "counter",
+        "position": [
+          192.84,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "counter",
+        "progress": 1,
+        "ambientIntensity": 1.55,
+        "fogDensity": 0.002,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 65,
+        "mean": 65.5,
+        "stdDev": 37.9,
+        "pctUnder16": 5,
+        "pctOver235": 0.1,
+        "floorBandMedian": 71
+      }
+    },
+    {
+      "id": "04-concourse-entry",
+      "file": "04-concourse-entry.png",
+      "cell": "concourse",
+      "u": 0.06,
+      "turn": -1.5707963267948966,
+      "pitch": 0,
+      "district": "concourse",
+      "inOrdering": true,
+      "note": "entering the concourse",
+      "state": {
+        "cellId": "concourse",
+        "position": [
+          209.64,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "concourse",
+        "progress": 1,
+        "ambientIntensity": 1.85,
+        "fogDensity": 0.0018,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 53,
+        "mean": 64.6,
+        "stdDev": 44.9,
+        "pctUnder16": 13.7,
+        "pctOver235": 0,
+        "floorBandMedian": 108
+      }
+    },
+    {
+      "id": "05-concourse-mid",
+      "file": "05-concourse-mid.png",
+      "cell": "concourse",
+      "u": 0.45,
+      "turn": -1.5707963267948966,
+      "pitch": 0,
+      "district": "concourse",
+      "inOrdering": true,
+      "note": "mid concourse, stalls both sides",
+      "state": {
+        "cellId": "concourse",
+        "position": [
+          265.8,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "concourse",
+        "progress": 1,
+        "ambientIntensity": 1.85,
+        "fogDensity": 0.0018,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 48,
+        "mean": 60.7,
+        "stdDev": 42.5,
+        "pctUnder16": 12.5,
+        "pctOver235": 0,
+        "floorBandMedian": 96
+      }
+    },
+    {
+      "id": "06-concourse-look",
+      "file": "06-concourse-look.png",
+      "cell": "concourse",
+      "u": 0.45,
+      "turn": -0.6207963267948966,
+      "pitch": 0,
+      "district": "concourse",
+      "inOrdering": true,
+      "note": "facing a stall row",
+      "state": {
+        "cellId": "concourse",
+        "position": [
+          265.8,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "concourse",
+        "progress": 1,
+        "ambientIntensity": 1.85,
+        "fogDensity": 0.0018,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 62,
+        "mean": 63.4,
+        "stdDev": 44.5,
+        "pctUnder16": 15.6,
+        "pctOver235": 0.1,
+        "floorBandMedian": 99
+      }
+    },
+    {
+      "id": "06b-concourse-up",
+      "file": "06b-concourse-up.png",
+      "cell": "concourse",
+      "u": 0.45,
+      "turn": -1.5707963267948966,
+      "pitch": 0.34,
+      "district": "concourse-up",
+      "inOrdering": false,
+      "note": "up at the canopies",
+      "state": {
+        "cellId": "concourse",
+        "position": [
+          265.8,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "concourse",
+        "progress": 1,
+        "ambientIntensity": 1.85,
+        "fogDensity": 0.0018,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 37,
+        "mean": 47.4,
+        "stdDev": 37.7,
+        "pctUnder16": 12.8,
+        "pctOver235": 0,
+        "floorBandMedian": 61
+      }
+    },
+    {
+      "id": "07-bureau",
+      "file": "07-bureau.png",
+      "cell": "floor",
+      "u": 0.18,
+      "turn": -1.5707963267948966,
+      "pitch": 0,
+      "district": "floor",
+      "inOrdering": true,
+      "note": "the bureaucratic hall",
+      "state": {
+        "cellId": "floor",
+        "position": [
+          379.38,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "floor",
+        "progress": 1,
+        "ambientIntensity": 0.95,
+        "fogDensity": 0.004,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 18,
+        "mean": 20.8,
+        "stdDev": 16.3,
+        "pctUnder16": 44.5,
+        "pctOver235": 0,
+        "floorBandMedian": 34
+      }
+    },
+    {
+      "id": "07b-hall-back",
+      "file": "07b-hall-back.png",
+      "cell": "floor",
+      "u": 0.18,
+      "turn": 1.5707963267948966,
+      "pitch": 0,
+      "district": "floor",
+      "inOrdering": false,
+      "note": "180° back at the concourse portal from the hall",
+      "state": {
+        "cellId": "floor",
+        "position": [
+          379.38,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "floor",
+        "progress": 1,
+        "ambientIntensity": 0.95,
+        "fogDensity": 0.004,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 41,
+        "mean": 42.4,
+        "stdDev": 20.5,
+        "pctUnder16": 4,
+        "pctOver235": 0,
+        "floorBandMedian": 45
+      }
+    },
+    {
+      "id": "08-bureau-deep",
+      "file": "08-bureau-deep.png",
+      "cell": "floor",
+      "u": 0.55,
+      "turn": -1.5707963267948966,
+      "pitch": 0,
+      "district": "floor",
+      "inOrdering": true,
+      "note": "deep in the cubicle grid",
+      "state": {
+        "cellId": "floor",
+        "position": [
+          450.05,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "floor",
+        "progress": 1,
+        "ambientIntensity": 0.95,
+        "fogDensity": 0.004,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 38,
+        "mean": 34.4,
+        "stdDev": 19.5,
+        "pctUnder16": 15,
+        "pctOver235": 0,
+        "floorBandMedian": 42
+      }
+    },
+    {
+      "id": "09-warehouse",
+      "file": "09-warehouse.png",
+      "cell": "shelves",
+      "u": 0.3,
+      "turn": -1.5707963267948966,
+      "pitch": 0,
+      "district": "shelves",
+      "inOrdering": true,
+      "note": "racking in the warehouse",
+      "state": {
+        "cellId": "shelves",
+        "position": [
+          569,
+          0,
+          0
+        ]
+      },
+      "fill": {
+        "district": "shelves",
+        "progress": 1,
+        "ambientIntensity": 1.1,
+        "fogDensity": 0.0035,
+        "poolSize": 7,
+        "pooledFittings": 178,
+        "unpooledFittings": 58
+      },
+      "metrics": {
+        "width": 1600,
+        "height": 900,
+        "median": 44,
+        "mean": 48.2,
+        "stdDev": 37.9,
+        "pctUnder16": 30.9,
+        "pctOver235": 0,
+        "floorBandMedian": 87
+      }
+    }
+  ],
+  "districts": {
+    "floor": {
+      "frames": [
+        "07-bureau",
+        "08-bureau-deep"
+      ],
+      "median": 28,
+      "mean": 27.6,
+      "stdDev": 17.9,
+      "pctUnder16": 29.8
+    },
+    "apron": {
+      "frames": [
+        "01-dock",
+        "02-dock-mid"
+      ],
+      "median": 46,
+      "mean": 48.2,
+      "stdDev": 36.3,
+      "pctUnder16": 24.1
+    },
+    "shelves": {
+      "frames": [
+        "09-warehouse"
+      ],
+      "median": 44,
+      "mean": 48.2,
+      "stdDev": 37.9,
+      "pctUnder16": 30.9
+    },
+    "counter": {
+      "frames": [
+        "03-registry"
+      ],
+      "median": 57,
+      "mean": 58.7,
+      "stdDev": 31.1,
+      "pctUnder16": 4.4
+    },
+    "concourse": {
+      "frames": [
+        "04-concourse-entry",
+        "05-concourse-mid",
+        "06-concourse-look"
+      ],
+      "median": 54.3,
+      "mean": 62.9,
+      "stdDev": 44,
+      "pctUnder16": 13.9
+    }
+  },
+  "ordering": [
+    {
+      "label": "hall + 6 ≤ apron",
+      "ok": true
+    },
+    {
+      "label": "apron ≤ shelves",
+      "ok": false
+    },
+    {
+      "label": "shelves ≤ counter",
+      "ok": true
+    },
+    {
+      "label": "counter ≤ concourse − 6",
+      "ok": false
+    },
+    {
+      "label": "concourse is the maximum",
+      "ok": false
+    },
+    {
+      "label": "hall is the minimum",
+      "ok": true
+    },
+    {
+      "label": "counter has the lowest std-dev",
+      "ok": false
+    },
+    {
+      "label": "counter has the lowest % under 16",
+      "ok": true
+    }
+  ],
+  "strips": [],
+  "failures": [
+    "01-dock: median 52 outside 30–42",
+    "01-dock: mean 53.6 outside 30–44",
+    "02-dock-mid: 25.3% under 16 exceeds 25%",
+    "04-concourse-entry: median 53 outside 56–72",
+    "04-concourse-entry: 13.7% under 16 exceeds 12%",
+    "05-concourse-mid: median 48 outside 56–72",
+    "05-concourse-mid: 12.5% under 16 exceeds 12%",
+    "06-concourse-look: 15.6% under 16 exceeds 12%",
+    "07-bureau: median 18 outside 22–34",
+    "07-bureau: mean 20.8 outside 24–38",
+    "07-bureau: 44.5% under 16 exceeds 35%",
+    "07-bureau: median 18 below the legibility floor 22",
+    "07-bureau: 44.5% under 16 exceeds the legibility floor 35%",
+    "08-bureau-deep: median 38 outside 22–34",
+    "09-warehouse: mean 48.2 outside 34–48",
+    "09-warehouse: 30.9% under 16 exceeds 25%",
+    "ordering: apron ≤ shelves",
+    "ordering: counter ≤ concourse − 6",
+    "ordering: concourse is the maximum",
+    "ordering: counter has the lowest std-dev"
+  ],
+  "problems": []
+}

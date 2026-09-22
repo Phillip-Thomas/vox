@@ -1,0 +1,28 @@
+{
+  "schema": "paravoxia.implementationRepairDirection.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "recordedAt": "2026-09-06T10:23:04.781386+00:00",
+  "author": "creative-producer under explicit standing user delegation",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceManifestSha256": "58f275f6130914f878942774fd4b4c6ce74327755c33ae257965a9dbeed40e70",
+  "defectRegisterSha256": "e150eafccc7afdbc06d322a2cd74106f0c62846e2cb7ae38ed33982d00930504",
+  "defectIds": [
+    "CG-IMPL-006",
+    "CG-IMPL-007",
+    "CG-IMPL-008"
+  ],
+  "owner": "integration-engineer",
+  "contractChangeRequired": false,
+  "boundedAction": "Repair causal entry-mode, physical coordinate and anchor eligibility integration defects under unchanged signed v2. Diagnose common fixture stall and reproduce manual steering recovery risk; correct only demonstrated in-scope failure while preserving full ordered actual18 traversal and all signed physical/agency conditions. No new creative direction.",
+  "evidenceRefs": [
+    "verification-lifecycle-interim-report.json",
+    "verifier-findings.json",
+    "chapter-manual-corner-interpretation.md",
+    "score-home-anchor-eligibility-interpretation.md",
+    "producer-manual-corner-risk.json"
+  ],
+  "manualRiskDisposition": "Browser manual traversal not reached. Engineer may reproduce this recorded source/test risk and implement a bounded correction only if demonstrated; otherwise retain working behavior and report. Chapter existing-contract interpretation is binding, no skipped-ground or unrelated-distance credit.",
+  "scope": "Production-lock allowed source only; any new boundary reported before mutation. No publication.",
+  "budgetDisposition": "Fourth integration pass overall: original implementation plus three bounded repair passes. Within chapter maxPatchLoops4; ledger rows also include immutable findings/signature checkpoints and are not patch-count proxies."
+}

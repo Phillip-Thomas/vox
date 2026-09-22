@@ -1,0 +1,196 @@
+{
+  "schema": "paravoxia.verifier.continueControllerWire.v1",
+  "role": "continue-controller-wire",
+  "run": "2026-09-05-after-the-hearth",
+  "continuationOf": "continue-controller-closure (original invocation 50554)",
+  "originalDeadline": "2026-09-06T20:59:21.964214+00:00",
+  "startedAt": "2026-09-06T20:48:07.485702+00:00",
+  "authoredAtUtc": "2026-09-06T20:53:00+00:00",
+  "mode": "CPU-only mechanical probe engineering. Entrypoint now WIRED. PREPARED, NOT RUN.",
+  "readFirst": "producer-continue-controller-helper-review.json",
+  "acceptance": {
+    "isAcceptance": false,
+    "gameAcceptance": false,
+    "newActionProved": false,
+    "browserOrGpuUsed": false,
+    "gameSourceMutated": false,
+    "note": "No browser, GPU, build or headed session. No F pressed against a live build. Nothing here proves a runtime action."
+  },
+  "mandatoryCorrectionsAddressed": {
+    "C1_wireHelpersIntoExecutablePath": {
+      "status": "DONE",
+      "before": "2a9c9a542812952528875b4fde248c721f07a9f6b4a59fa86572799fd836b082 (byte-identical copy, helpers unused)",
+      "after": "2f9e297c947bf517337aefa5d9de646dd783b39e928cabeb28808ec34c9eecbf",
+      "sites": [
+        "walkTowards.runCalibration: per-key stampedCalibration(upAtSample) replaces the pre-round basisUp latch",
+        "walkTowards steering loop: recalibrationDecision() + faceChangeRetention() + dirsFromEntries() replace the whole-basis basisStale trigger",
+        "walkTowards post-burst: accumulateDirected() on REAL foot displacement; restamp of the pressed key",
+        "runCalibration(why, onlyKeys): partial recalibration of only the stale keys",
+        "PHASE 4 pre-[F]: signedSpanOfferAuthorization() + gateInputsFromAuthorization()",
+        "PHASE 4 acceptance: exact new signed span-offer transition",
+        "PHASE 3: passive per-rAF Continue telemetry armed before the click"
+      ],
+      "realFootOnly": "arrival/steering/accumulation read cur.bodyPose (full XYZ). bodyCentre is retained beside it as diagnosticOnly and is never substituted; a missing bodyPose stops the walk with 'no-foot-pose'."
+    },
+    "C2_objectiveIdVsActionId": {
+      "status": "DONE",
+      "defect": "signedSpanOfferAuthorization passed contract.actionId as expectedObjectiveId; INTERACTION actionId was compared against the HUD objectiveId.",
+      "actualMappingFromSource": {
+        "objectiveId": "ch13:survey:offer-span",
+        "objectiveIdPublisher": "ch13SurveyObjective(state='offer-span') -> objective('ch13:survey:offer-span', ...) at main/src/story/beats/objectivePrimitives.ts:761-766, surfaced as [data-story-guidance-hud][data-objective-id] at main/src/story/ux/StoryGuidanceHud.tsx:148 and read by evidence.mjs pageReadState:112 and this probe's uiProbe",
+        "actionId": "story-ch13-offer-span",
+        "actionIdPublisher": "storyInteractions candidate at main/src/story/commonGroundDirector.ts:1632",
+        "verb": "Offer the walked span (commonGroundDirector.ts:1633)",
+        "literalHudPromptLine": "[F] Offer the walked span for W-7744 to test. (objectivePrimitives.ts:765)",
+        "directiveKey": "ch13:survey:offer-span (commonGroundMarkerTarget switch, commonGroundDirector.ts:1552)",
+        "namespacesKeptSeparate": [
+          "verb",
+          "actionId",
+          "directiveKey",
+          "objectiveId"
+        ]
+      },
+      "currentDrawingObjectiveDoesDiffer": {
+        "finding": "survey.phase === 'drawing' publishes objectiveId 'ch13:survey:draw' UNTIL slot.samples.length >= 2 AND distanceBetween(player(), CG_POSES.E) <= CG_POINT_REACH; only then does it become 'ch13:survey:offer-span'.",
+        "sourceRef": "main/src/story/commonGroundDirector.ts:1478-1485",
+        "consequence": "Binding on survey.phase alone was insufficient. The contract now carries notYetObjectiveId 'ch13:survey:draw' and the authorization refuses it explicitly."
+      },
+      "noInventedGap": "The correct ID exists in the shipped source and is published by the shipped HUD; no observation gap was manufactured from having used the wrong ID.",
+      "binding": "mayPressF({objectiveId, expectedObjectiveId: contract.objectiveId, prompts, verbPattern}).ok === true AND beat==='ch13-survey' AND survey.phase==='drawing' AND objectiveId==='ch13:survey:offer-span' AND FOOT arrival established from groundTargetArrival on the live bodyPose.",
+      "booleanToBothGates": "gateInputsFromAuthorization(spanAuth).promptOffersF (boolean) is passed to BOTH newActionGate and groundedActionGate; it throws TypeError on an object, which is exactly the attempt-1 truthiness defect.",
+      "refusalsProved": [
+        "[F] Drink",
+        "[F] Offer this end (story-ch13-hold-witness)",
+        "object {ok:false} handed to the gate adapter",
+        "stale/not-ready objective ch13:survey:draw",
+        "actionId used in the objectiveId slot",
+        "wrong beat",
+        "missing foot arrival",
+        "missing objective"
+      ]
+    },
+    "C3_offerAcceptedCriterion": {
+      "status": "DONE",
+      "before": "accepted: (afterOffer?.survey?.phase && afterOffer.survey.phase !== 'drawing') || (afterOffer?.anchors ?? []).includes('anc.cg.route-offered')  \u2014 a generic phase change OR the mere PRESENCE of an anchor.",
+      "after": "accepted = spanAuth.ok===true && fPressed===true && anc.cg.route-offered is NEW relative to the pre-[F] anchorsBefore baseline && the restored 19-anchor prefix is still intact and in order.",
+      "committedStateCriterionFromSource": "commitCommonGroundSpanOffer is the perform() of candidate story-ch13-offer-span (commonGroundDirector.ts:1634); anc.cg.route-offered is the committed anchor this probe already read from the live bridge's diagnostic.anchors.",
+      "alsoRecorded": [
+        "fAuthorizedAndPressed",
+        "newRouteOfferedAnchor",
+        "unrelatedNewAnchorsIgnored",
+        "restoredPrefixIntact",
+        "acceptedCriterion.rule"
+      ],
+      "noImaginedApi": "Only cgSnap().anchors (s.diagnostic.anchors) and survey are read; no new bridge method was assumed."
+    },
+    "C4_continueTelemetry": {
+      "status": "DONE (armed, NOT RUN)",
+      "armedBeforeClick": true,
+      "placement": "immediately before page.click('button[aria-describedby=\"landing-story-subtitle\"]'); harvested after the restore wait",
+      "hooksUsedAllPreExisting": {
+        "beat": "window.__storyBeat \u2014 the SAME hook evidence.mjs pageReadState:111 already reads; not a guessed __storyBeat API",
+        "cgFoot/capsule/up/renderOrigin": "window.__paravoxiaCommonGround.snapshot() \u2014 the hook this probe's cgSnap already uses (bodyPose/bodyCentre/up/worldBound)",
+        "terrainSeed/playerRequested": "window.__voxelDebug.spawn \u2014 published at main/src/components/EfficientScene.tsx:302-313",
+        "activePlanetId": "window.__paravoxiaSystem.snapshot() if published; null-retained otherwise"
+      },
+      "honesty": "Every field is null-retained when unpublished, and neverPublished flags are emitted per field. No value is back-filled or inferred.",
+      "cleanup": "the sampler sets stopped=true and deletes window.__voxContinueSampler at harvest; frames capped at 6000",
+      "forbiddenMechanismsAbsent": [
+        "no setter",
+        "no forced world switch",
+        "no physics stop",
+        "no waitReady while the menu is up",
+        "no GPU work; this is preparation for the next actual earned run"
+      ],
+      "poseScopeReviewApplied": {
+        "read": "producer-continue-pose-scope-review.json",
+        "p1": "sibling PLANET slot1, not an actor copy \u2014 no actor-alias claim is made anywhere in this wiring",
+        "worldExcursionUnproved": "the prior report's transient Origin->Tidegarden->Origin excursion remains UNPROVED; this sampler is exactly the instrument that could settle it, and asserts nothing yet",
+        "openQuestion": "exact mount/seed/beat transition around Continue still needs the actual run; no source cause is patched or inferred"
+      }
+    },
+    "C5_attribution": {
+      "status": "ACKNOWLEDGED",
+      "note": "301 dirty main/ paths are pre-existing worktree changes owned by the independent source-integration lane (main writer 55635). Re-observed as 301 at close. No attribution is drawn from git status counts; no file under main/ was written by this role."
+    }
+  },
+  "testsRun": {
+    "policy": "only the affected helper + caller-adaptation + entry syntax/import checks; the unaffected 108 were NOT rerun",
+    "results": [
+      {
+        "cmd": "node liveCalibration.selftest.mjs",
+        "result": "36 passed, 0 failed",
+        "note": "was 31/3 immediately after the namespace fix; the 3 failures were the fixture using actionId in the objectiveId slot \u2014 fixture corrected, 2 new namespace refusal checks added"
+      },
+      {
+        "cmd": "node tangentSteering3d.selftest.mjs",
+        "result": "OK \u2014 all CPU cases passed"
+      },
+      {
+        "cmd": "node groundFrame.selftest.mjs",
+        "result": "25 checks, 0 failed"
+      },
+      {
+        "cmd": "node entryAdaptation.selftest.mjs",
+        "result": "31 passed, 0 failed",
+        "note": "NEW. Asserts the ACTUAL entrypoint calls each helper, that the old latch/acceptance code is gone, that both gates receive the boolean, that the sampler is armed before the click and cleaned up, and exercises signedSpanOfferAuthorization/gateInputsFromAuthorization directly. An unwired helper cannot pass it."
+      },
+      {
+        "cmd": "node --check earned-continue-3d-probe.mjs",
+        "result": "syntax OK"
+      },
+      {
+        "cmd": "node -e import('./earned-continue-3d-probe.mjs')",
+        "result": "module graph resolved; exits on the required --out capture-name argument, proving the import path including ./liveCalibration.mjs loads"
+      }
+    ],
+    "logFile": "logs/continue-controller-wire/tests.log"
+  },
+  "preservation": {
+    "originalProbeDir": "verifier/probes/earned-continue-3d/ untouched",
+    "originalFailedCapture": "verifier/captures/earned-continue-3d/attempt-1/ untouched, read-only",
+    "priorReportsInvocationsProducerMetadata": "not opened for write",
+    "gameSource": "main/ read-only; git status main/ = 301 pre-existing paths, unchanged by this role",
+    "priorClosureReport": "continue-controller-closure-report.json left intact; this is a separate report"
+  },
+  "hashDependencyReceipt": {
+    "cgContract.pinned.mjs": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5",
+    "earned-continue-3d-probe.mjs": "2f9e297c947bf517337aefa5d9de646dd783b39e928cabeb28808ec34c9eecbf",
+    "earnedContinueLogic.mjs": "6ff3c7f62181a9ec2e453e231fd54ed1c940411eb742c7ab0c104cc9d59795c1",
+    "entryAdaptation.selftest.mjs": "1907e8e85206fec51dd08217aecb6c3dcb87072d837beffe11863ad293766abf",
+    "entryObservation.mjs": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+    "groundFrame.selftest.mjs": "f30ae2947fc6e8c991c2ab49d6bf5a9957d07e78e0ba5d08d32859661bd803ec",
+    "liveCalibration.mjs": "b4a40472898c559b3bfda7883ee01ecb9bc0ed6abe1aea71c9c2dc4f4d3d9d1a",
+    "liveCalibration.selftest.mjs": "22893baf1d058d2b420d3f2ec1ddd38f47dd7f6d902c7d78135070199ceb630f",
+    "ownedSession.pinned.mjs": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+    "poseObservation.mjs": "35d26b067c154c17af834721e424c700d28f6ea4c17fb88ec24025c7823bccc8",
+    "selftest.mjs": "f48e843bcac75def449fb17b0c4fefcba70f346ba2fa51a504f54e067556d9c6",
+    "sourceSnapshot.pinned.mjs": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+    "tangentSteering3d.mjs": "26c63b7dd602bfe926cd236e156d88c649795ffd5470aa52f4ef8c1a45d30d30",
+    "tangentSteering3d.selftest.mjs": "2e90fb4e4ceaa1abf1e275bbea2420b4684a2a9607df59ebd0044be5ec5ad01d"
+  },
+  "newOrModifiedThisRole": {
+    "liveCalibration.mjs": "MODIFIED \u2014 objectiveId/notYetObjectiveId/promptLine added; expectedObjectiveId now contract.objectiveId; draw-state refusal added",
+    "liveCalibration.selftest.mjs": "MODIFIED \u2014 fixture bound to the objectiveId namespace; 2 namespace refusal checks added (36 total)",
+    "entryAdaptation.selftest.mjs": "NEW \u2014 caller-adaptation test over the actual entrypoint",
+    "earned-continue-3d-probe.mjs": "MODIFIED \u2014 the actual executable entrypoint adaptation (was byte-identical 2a9c9...)"
+  },
+  "readinessGate": {
+    "READY_PREPARED": true,
+    "basis": "the actual executable entrypoint is wired and the affected tests execute that wired path",
+    "stillOutstandingAndNotClaimed": [
+      "candidate source/bundle repin",
+      "actual headed runtime run",
+      "serial GPU permission for continue-controller-closure-runtime"
+    ],
+    "notProof": "the 6u minimum-directed-motion and 6-round calibration cap are PRIVATE SAFEGUARDS on the probe's own retry behaviour. They are not evidence of route progress and must not be reported as such."
+  },
+  "refusedControllerNotGameInaccessibility": "Where the gate refuses, the report must say the CONTROLLER refused to authorize [F] under the signed contract. That is not evidence the game or the action is inaccessible; it is an unproved question until an actual earned run is permitted.",
+  "incompleteItems": [
+    "No headed run: the wired entrypoint has never executed against a live build. Every claim here is CPU-static or unit-level.",
+    "The Continue telemetry sampler is armed but has produced ZERO frames; the mount/seed/beat transition around Continue remains unresolved.",
+    "window.__paravoxiaSystem.snapshot() is used opportunistically for activePlanetId and was NOT verified to exist in the shipped bundle; it is null-retained and flagged via neverPublished.activePlanetId rather than assumed.",
+    "renderOrigin falls back to snapshot().worldBound; a dedicated renderOrigin field was not confirmed on the bridge.",
+    "Candidate source/bundle repin and runtime remain later work, per the commission."
+  ]
+}

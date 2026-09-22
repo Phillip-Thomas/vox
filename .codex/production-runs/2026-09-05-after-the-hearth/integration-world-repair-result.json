@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 1589665,
+  "stop_reason": "end_turn",
+  "session_id": "cdc9088e-30af-499e-9833-c56d5c5fe491",
+  "total_cost_usd": 19.988098500000007,
+  "usage": {
+    "input_tokens": 320,
+    "cache_creation_input_tokens": 307177,
+    "cache_read_input_tokens": 27604435,
+    "output_tokens": 124361,
+    "output_tokens_details": {
+      "thinking_tokens": 38534
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 307177,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1163,
+        "cache_read_input_tokens": 310635,
+        "cache_creation_input_tokens": 662,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 662
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 3386,
+      "outputTokens": 20,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.003486,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 320,
+      "outputTokens": 124361,
+      "cacheReadInputTokens": 27604435,
+      "cacheCreationInputTokens": 307177,
+      "webSearchRequests": 0,
+      "costUSD": 19.984612500000004,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 38534,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 174,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Source is final and verified. Summary of this bounded pass:\n\n## What was wrong, and why\n\n**VF3-FOOTING-1 \u2014 cause established, not inferred.** A probe against the *real* generator at the real identity (`getWorldGen(50, STORY_SEED, \"-1,-1\")`, seed 3215739679) prints the actual column at S as `25:S 26:S 27:.` while `renderedRadiusCells(50) = 25`. `createFooting` queried the cell above the body **unclipped**, so the generator's phantom voxel *outside* the meshed, collided cube became an invisible ceiling over the ground she was standing on. At the landing area the generator stops at 25 \u2014 which is exactly why `supported` was TRUE there and false for the whole approach. The jump table follows from the same read; it is not evidence the ground is at y=53.\n\n**VF3-AVHOME-1 \u2014 the app-phase candidate was wrong.** A `?story=ch13-home` deep link is already `playing`. The real path: `storyDirector` runs `subscribeStory(syncBeat)` plus an immediate `syncBeat()`, and `initStoryFromSave` activates the beat inside App's `useState` initializer \u2014 so `anc.cg.home-steady` publishes *before the first frame exists* \u2014 while `<StoryDirectorDriver paused={!worldGenReady || !initialRenderReleased || \u2026} />` reports the whole world-gen and shader-warmup boot to the chapter as **`pause`**, which cleared it.\n\n**VF3-CG008-1 \u2014 demonstrated, not assumed.** Through the real `serializeCommonGround` \u2192 WorldSave \u2192 `hydrateCommonGround` validator \u2192 chapter seam: draw three real samples, save, cold reload, offer the span \u2014 `anc.cg.route-offered` refused with an empty activation history.\n\n## Repairs\n\nFive allowed files. Procedural fallback clipped **only** (a real placed block still carries *and* obstructs anywhere, per root's review); a real contact band `VOXEL_SCALE/8` so a still-cell-25 hover is not grounded; a bounded one-anchor beat-entry queue surviving pause/visibility-loss only; and validated actor/world-scoped saved survey state answering \"is that predecessor still pending?\" \u2014 nothing activated, replayed or manufactured. Five counterfactuals prove each clause necessary.\n\n## Checks\n\n`npm test` 349 files / **3091 tests** (baseline 3068, +23, 0 removed) \u00b7 typecheck \u00b7 build \u00b7 scene AV, chapter registry, chapter journey, story authority, story ladder, guidance targets, creative workflow, story UX \u2014 all exit 0. Manifest 96/96 clean before mutation, 4 changed / 0 unexpected after; dirty tree 322 \u2192 323 (the one new allowed test file). **No `git checkout`/`reset`/`restore`/`stash`/`clean` at any point.**\n\n## Explicitly not claimed\n\nNothing here is hardware, browser, movie, visual or audio acceptance \u2014 I ran no GPU or browser, and nothing was listened to. The station\u2192home bridge and everything downstream of the survey start are still unverified on real hardware; `CONTACT_TOLERANCE` contains both qualified poses but the real gait envelope over uneven live terrain is unmeasured, and should be re-examined rather than widened if it ever refuses a legal pose. Root's three review points are addressed; source is frozen for the fresh implementation gate and independent physical proof.",
+  "ttft_ms": 1398,
+  "type": "result",
+  "duration_ms": 1729112,
+  "uuid": "a582912e-c4c0-4b4c-8440-ff9cf2e99a4c",
+  "ttft_stream_ms": 720,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 720,
+  "queued_turn_count": 0
+}

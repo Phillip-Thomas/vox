@@ -34,6 +34,9 @@ const { values } = parseArgs({
     'out-dir': { type: 'string' },
     'run-id': { type: 'string' },
     run: { type: 'string' },
+    'chapter-loop': { type: 'string' },
+    'release-gates': { type: 'string' },
+    'specialist-review': { type: 'string', multiple: true },
     force: { type: 'boolean', default: false },
     'run-mechanical': { type: 'boolean', default: false },
     'attach-mechanical-evidence': { type: 'boolean', default: false },
@@ -67,6 +70,43 @@ try {
 }
 
 async function main() {
+  // Chapter Loop has three real independent reviews. Its dedicated deterministic
+  // finalizer must run before Terra validation: the legacy spec requires six
+  // distinct identities and cannot truthfully consume a three-review alias map.
+  if (values['chapter-loop']) {
+    if (values.run || values['self-test']) throw new Error('--chapter-loop cannot be combined with --run or --self-test');
+    for (const name of ['journey-evidence', 'journey-scenario', 'attach-mechanical-evidence', 'manual-evidence', 'audio-evidence', 'base-url']) {
+      if (values[name]) throw new Error(`--${name} is a legacy-lane option; Chapter Loop release uses its archived candidate and --release-gates command receipts`);
+    }
+    if (values.registry !== 'main/chapter-registry.json' || values['journey-contract'] !== defaultJourneyContract) {
+      throw new Error('Chapter Loop release uses the canonical registry and journey contract');
+    }
+    const explicitJourneyLane = process.argv.slice(2).some(arg => arg === '--journey-lane' || arg.startsWith('--journey-lane='));
+    const journeyLane = explicitJourneyLane ? values['journey-lane'] : 'continuous';
+    if (values['run-journey'] && (journeyLane === 'direct-entry' || (values['journey-mode'] === 'manual' && !values.headed))) {
+      throw new Error('Certifying Chapter Loop journey requires continuous/resume entry and --headed for manual mode');
+    }
+    const { finalizeReleaseReviews } = await import('./chapter-loop/release-review.mjs');
+    const specialistReviews = await Promise.all((values['specialist-review'] || []).map(async input => {
+      const file = await requireRepoArtifactAbsolute(input, '--specialist-review');
+      return { path: toRepoPath(file), sha256: sha256(await fs.readFile(file)) };
+    }));
+    const result = await finalizeReleaseReviews(repoRoot, values['chapter-loop'], {
+      releaseGates: values['release-gates'], specialistReviews,
+      runMechanical: values['run-mechanical'], runJourney: values['run-journey'],
+      runs: values.runs, headed: values.headed,
+      journeyLane, journeyMode: values['journey-mode'],
+    });
+    console.log(`Chapter Loop release: ${result.report.disposition}`);
+    console.log(`Three independent review sessions reused: ${result.report.reviews.map(review => review.session).join(', ')}`);
+    console.log(`Review evidence: ${toRepoPath(result.reportPath)}`);
+    console.log(`Deterministic command receipts: ${toRepoPath(result.packetPath)}`);
+    for (const blocker of result.report.blockers) console.log(`Blocked: ${blocker}`);
+    console.log('Human taste and publication decisions remain separate.');
+    if (result.report.blockers.length) process.exitCode = 1;
+    return;
+  }
+  if (values['release-gates'] || values['specialist-review']?.length) throw new Error('--release-gates and --specialist-review require --chapter-loop');
   await validateLane()
 
   if (values['self-test']) {
@@ -1696,6 +1736,17 @@ function toRepoPath(filePath) {
 function printUsage() {
   console.log([
     'Usage:',
+    '  node main/tools/creative-chapter-acceptance-workflow.mjs --chapter-loop <existing-run-directory>',
+    '    [--run-mechanical --run-journey --journey-lane continuous --journey-mode manual --headed]',
+    '    [--release-gates <repo-relative-release-gates.json>] [--specialist-review <repo-file> ...]',
+    'Chapter Loop reuses three real provider-backed reviews, runs current registry/authority/contract gates,',
+    'and records existing full mechanical/journey command evidence when requested. No AI review roles launch.',
+    'Its release/release-gates.json contains commands {mechanical, journey, registry, authority, journey-contract}',
+    'with path/SHA-256 references to adapter-recorded command.json receipts; bare reports/self-scores are invalid.',
+    'Shared engine, persistence, audio engine or rendering changes require a source-bound independent specialist review.',
+    'The strongest automated disposition is machine-ready-for-human-taste; publishing remains separate.',
+    'Release checks share the chapter request\'s original eight-hour deadline; restart does not grant more time.',
+    '',
     '  node main/tools/creative-chapter-acceptance-workflow.mjs \\',
     '    --chapter <id> --candidate-revision <git-sha> \\',
     '    --production-authority <file> --council-authority <file> \\',

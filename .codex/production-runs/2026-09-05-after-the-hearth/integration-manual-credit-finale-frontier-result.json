@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 411158,
+  "stop_reason": "end_turn",
+  "session_id": "80fb066d-97bb-40f4-bcf8-e5345c08588a",
+  "total_cost_usd": 2.5848040000000005,
+  "usage": {
+    "input_tokens": 76,
+    "cache_creation_input_tokens": 79896,
+    "cache_read_input_tokens": 1996756,
+    "output_tokens": 31394,
+    "output_tokens_details": {
+      "thinking_tokens": 10222
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 79896,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1165,
+        "cache_read_input_tokens": 83518,
+        "cache_creation_input_tokens": 538,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 538
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2166,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002236,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 76,
+      "outputTokens": 31394,
+      "cacheReadInputTokens": 1996756,
+      "cacheCreationInputTokens": 79896,
+      "webSearchRequests": 0,
+      "costUSD": 2.582568,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 10222,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 43,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done, inside the original cap (finished 21:14Z against the 21:27:26Z deadline).\n\n## What I found and did\n\n**Producer review read first.** The three WIP source hashes it pinned matched the working tree byte-for-byte, so the \"current real previous foot + ordered vertex crossing\" draft was the correct base and I preserved it.\n\n**The fix \u2014 `nextRouteCoverage` in `commonGroundRoute.ts` only, 3 files changed of the 8 allowed:**\n\n1. Corner certification now additionally requires the incoming leg to be covered to that vertex under the *existing* strict frontier/displacement accounting (`certifiedUnits + displacement + 1e-9 >= arcAtVertex(next)`). A lagging prior frontier breaks the loop instead of certifying.\n2. Ordinary leg movement is strict again \u2014 projection credited only within `units + displacement`. No max, no creep, no min-clamp toward a distant projection, no bank.\n3. The sole exception is the corner certified in that same update, where the outgoing projection settles only the *local* residual corner-cutting creates, bounded by the next unreached vertex. The next ordinary update is strict again.\n\nUntouched: 0.35 reach, corridor, all tolerances/precision, `routeProgressUnits`, `provenVertex`, `syncedRouteCoverage`, real feet, gap/break handling, earned prefix.\n\n**The three counterexamples reproduce and now fail closed:** 1.01 \u2192 **0** (and re-traversal really pays 1.01); 1.51 \u2192 **0.5** retained; the genuine vertex-1 crossing \u2192 **0.5**, `reachedVertex` still 0, neither 2 nor 2.01. Call 298 still pays exactly (6.130885899955892 \u2192 6.294483000367848 \u2192 6.376281547075248) because under the strict rule its projection lands exactly on the honest ceiling from the real previous credit \u2014 ordinary movement, not a grant. The z 15.82 refusal, exact 18, near corner, far C and stationary-zero all hold.\n\n**CG-IMPL-016:** the real cause of the incomplete test was in the harness, not the driver \u2014 `StoryDirectorDriver` registers **two** `useFrame` callbacks and the harness kept only the last, so three of its own cancellation assertions were silently testing the wrong callback and failing. It now captures and runs every callback in order. Added behaviour (not regex) lifecycle coverage: the token is spared across 400 real done frames with no suspension call and no renewal, and every genuine interruption still lands on a finished story. `StoryDirectorDriver.tsx` is unchanged.\n\n**Evidence:** `npx vitest run` on the five focused suites from `main/` \u2014 5 files, **254 tests passed, exit 0**, logged to `logs/integration-manual-credit-finale-frontier/focused-tests.log`. Report JSON/MD/progress written under the run root.\n\nTwo honesty notes: I ran no build, broad suite or typecheck, and I do not claim the earlier unbound `tmp/tsc.log`. And I archived the rejected draft *after* editing \u2014 I reconstructed `commonGroundRoute.ts` and `commonGroundRoute.test.ts` byte-exact and hash-verified them against the producer's pins, but `StoryDirectorDriver.test.tsx`'s rejected bytes were lost before copying; only the producer's pinned hash attests it, and the report says so rather than implying an archive I don't have.",
+  "ttft_ms": 1609,
+  "type": "result",
+  "duration_ms": 446267,
+  "uuid": "0acbe4aa-c755-46fa-b616-914e10f4b357",
+  "ttft_stream_ms": 1103,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 1103,
+  "queued_turn_count": 0
+}

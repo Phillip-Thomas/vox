@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useSyncExternalStore } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { theme } from '../ui/theme.ts';
 import { getStoryText, getStoryTextVersion, subscribeStoryText } from './storyText.ts';
 import { storyNow } from './storyClock.ts';
 import { hudSurface } from '../ui/hudSurfaces.ts';
 import { readTopLeftHudOcclusion } from './ux/storyHudLayout.ts';
+import { voiceVisibleText } from '../audio/voice/voicePresentation.ts';
 
 /** Below the 11vh letterbox bars; the band must survive cutscenes. */
 const DEFAULT_TOP_FRACTION = 0.135;
@@ -20,12 +21,67 @@ let occludedTop: number | null = null;
 // no chrome. The system is a voice in the player's world now, not the world
 // itself. Typewriter reveal shares the caption grammar (same clock, colder ink).
 
+// --- The klaxon ember pulse (parity member) ------------------------------------------
+//
+// A deaf player must be able to SEE the klaxon. The parity is one frame of ember on
+// the band itself — audit family #ff5a3c, no screen flash, no chrome, no second
+// surface. It is already a single frame, so reduced motion leaves it unchanged:
+// there is nothing to reduce.
+//
+// It fires on the same tick as `playSfx('terminalAlarm')` (storyDirector.ts, the
+// ch3-signal klaxon repeat). NOTHING CALLS IT YET — Stage 4/6 integration binds the
+// emitter, and until it does the band renders exactly as it shipped.
+//
+// The ember rides the band, so it shows only while the band is on screen. Where the
+// klaxon fires with no band — the a2 violation flood — parity is the violation band
+// and the klaxon flash already on screen, per the chapter ruling.
+
+export const AUDIT_EMBER_COLOR = '#ff5a3c';
+
+type EmberListener = (token: number) => void;
+const emberListeners = new Set<EmberListener>();
+let emberToken = 0;
+
+/** Raise one frame of ember on the audit band. */
+export function pulseAuditEmber(): void {
+  emberToken += 1;
+  for (const listener of emberListeners) listener(emberToken);
+}
+
+export function subscribeAuditEmber(listener: EmberListener): () => void {
+  emberListeners.add(listener);
+  return () => {
+    emberListeners.delete(listener);
+  };
+}
+
+export function readAuditEmberToken(): number {
+  return emberToken;
+}
+
 const AuditBand: React.FC = () => {
   useSyncExternalStore(subscribeStoryText, getStoryTextVersion, getStoryTextVersion);
   const audit = getStoryText().audit;
   const lineRef = useRef<HTMLDivElement>(null);
+  const [ember, setEmber] = useState(false);
 
+  // ONE FRAME. The pulse arms on the klaxon tick and disarms on the next animation
+  // frame, so it can never become a throb: a throb reads as an ongoing state, and
+  // the klaxon is an event.
   useEffect(() => {
+    let raf = 0;
+    const unsubscribe = subscribeAuditEmber(() => {
+      setEmber(true);
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => setEmber(false));
+    });
+    return () => {
+      cancelAnimationFrame(raf);
+      unsubscribe();
+    };
+  }, []);
+
+  useLayoutEffect(() => {
     if (!audit) return;
     let raf = 0;
     const el = lineRef.current;
@@ -33,8 +89,9 @@ const AuditBand: React.FC = () => {
       raf = requestAnimationFrame(tick);
       if (!el) return;
       const elapsed = storyNow() - audit.shownAt;
-      const revealed = Math.min(audit.text.length, Math.floor(elapsed / 22));
+      const revealed = Math.min(audit.text.length, Math.floor(elapsed / 22) + (audit.voice?.surfaceId === 'ch10-relay' ? 1 : 0));
       el.textContent = audit.text.slice(0, revealed);
+      voiceVisibleText(`audit:${audit.shownAt}`, audit.text, revealed, audit.voice?.surfaceId ?? 'audit-band', { slot: audit.voice?.slot });
       const fadeStart = audit.ttlMs - 600;
       const root = el.parentElement!;
       root.style.opacity = elapsed > fadeStart
@@ -67,7 +124,10 @@ const AuditBand: React.FC = () => {
       }
       root.style.top = occludedTop === null ? DEFAULT_TOP : `${occludedTop}px`;
     };
-    raf = requestAnimationFrame(tick);
+    // The relay anchor publishes the line synchronously; paint and first grain
+    // begin in this commit, with subsequent characters on the existing clock.
+    if (audit.voice?.surfaceId === 'ch10-relay') tick();
+    else raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [audit]);
 
@@ -93,8 +153,11 @@ const AuditBand: React.FC = () => {
         // Legible over any sky: a quiet dark pill, not a chrome panel.
         background: 'rgba(4, 10, 8, 0.42)',
         padding: '6px 14px',
-        borderRadius: 3
+        borderRadius: 3,
+        // The klaxon's visual parity, on the band and nowhere else.
+        boxShadow: ember ? `inset 0 0 0 1px ${AUDIT_EMBER_COLOR}` : 'none'
       }}
+      data-audit-ember={ember ? 'true' : 'false'}
     >
       {audit.header && (
         <div

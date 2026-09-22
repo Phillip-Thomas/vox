@@ -1,0 +1,12 @@
+{
+  "ticket": "39103eac-76e9-4866-9819-5ad2ebe8216a",
+  "at": "2026-09-08T00:22:09.328Z",
+  "task": {
+    "id": "chapter-bindings",
+    "seconds": 600,
+    "writes": false,
+    "task": "Inspect current generic chapter journey/evidence tools and installed Chapter Loop preflight/capture contracts. Determine the smallest REAL command bindings to create ch14 with the full loop and finish ch13 without re-running all earlier story for every case. Existing tools have interaction-effect, reload-continue, lifecycle contracts, manual Playwright drivers and continuous/resume lanes. Read only relevant sources in staged repo main/tools/chapter-journey-probe.mjs, main/chapter-journey-contract.json, chapter-loop modules and actual legacy .codex/production-runs/2026-09-05-after-the-hearth as needed. Identify exact supported argv, raw report assertions, earned-save provenance requirements, and any actual missing implementation. Preflight must check tool availability before creation but cannot require already-authored ch14 game content; post-build verify must bind exact source/build. Do not invent successful evidence, no GPU or model launches, no files changed except outputDirectory. Return bounded JSON with commands, blockers, smallest repair recommendation."
+  },
+  "permissionMode": "full",
+  "model": "opus"
+}

@@ -1,0 +1,116 @@
+{
+  "schema": "paravoxia.verifier.commonManualProbePrep.v1",
+  "role": "story-verifier (opus) — common-manual-focused probe preparation",
+  "runId": "2026-09-05-after-the-hearth",
+  "preparedAt": "2026-09-06T15:44:03Z",
+  "taskKind": "HARNESS PREPARATION ONLY",
+  "executedAgainstGpuOrBrowser": false,
+  "notRunStatement": "NOT RUN. No browser, no GPU, no preview, no npm verify/build, no capture. verification-ready.json ready=false and verifier-control.json action=hold at preparation time, so the probe's own preflight guard refuses launch; that refusal was exercised statically (exit 3, launched=false) and no browser process was created.",
+  "ownedArtifacts": [
+    { "path": "verifier/probes/common-manual-focused/commonPassageLogic.mjs", "sha256": "917807d70b363922b433f2b5e3188f4ed93c8ddcc04fdf0b7bc3be742fe05dc6", "bytes": 16834, "kind": "pure logic (guards, parsers, arrival, progress, verdicts)" },
+    { "path": "verifier/probes/common-manual-focused/common-passage-probe.mjs", "sha256": "11c4a7d1373ae0aee603f80d828f487d284311244457696b9d4a8d6100b2cdc5", "bytes": 34897, "kind": "capture harness (refuses to launch under hold)" },
+    { "path": "verifier/probes/common-manual-focused/selftest.mjs", "sha256": "52b2ba18368421174eb0f97172f7810197c90e4c3a0f8dc17b742dfdf4ffbce1", "bytes": 12523, "kind": "bounded static self-tests, 43 cases" },
+    { "path": "logs/common-manual-focused-prep/node-check.log", "kind": "node --check receipts" },
+    { "path": "logs/common-manual-focused-prep/selftest.log", "kind": "self-test receipt" },
+    { "path": "logs/common-manual-focused-prep/refusal-demo.log", "kind": "live-file launch-refusal receipt (exit 3, no browser)" },
+    { "path": "common-manual-probe-prep-report.json" },
+    { "path": "common-manual-probe-prep-report.md" }
+  ],
+  "mutationScope": "Only the paths above. No game source, no canonical evidence/gate/manifest/defect/control artifact, no existing probe, no capture bytes, no new game tests were created or modified.",
+  "sourceReading": {
+    "snapshot": "iterations/handoff-standby-findings/source/ (immutable pre-repair 98-file snapshot)",
+    "filesRead": [
+      "main/src/story/commonGroundState.ts (CG_POSES, CG_ROUTE_COMMON, CG_ROUTE_LONG, CG_COMMON_ROUTE_UNITS=18, BODY_BODY_CLEARANCE_UNITS=1, OCCUPANCY_RADIUS_UNITS=1.25)",
+      "main/src/story/commonGroundRoute.ts (routeProgressUnits frontier rule and its documented recovery-by-return behaviour; the 0.6-allowance reconciliation is documented as REMOVED in this snapshot)",
+      "main/src/story/commonGroundDirector.ts (ch13-common stage machine, prompt gating, getCommonGroundProbeSnapshot/getCommonGroundDiagnostic read-only bridge fields)",
+      "main/src/story/beats/objectivePrimitives.ts (ch13:common:* objective ids and prompt copy)"
+    ],
+    "concurrentMutationNote": "integration-handoff-standby is concurrently editing authorized game files. Nothing here asserts unchanged live source; the probe binds itself to the FUTURE root-published manifest via --expect-source-manifest and takes before/after probe-source snapshots."
+  },
+  "reusedReadOnly": [
+    "verifier/probes/manual-focused/manual-witness-hold-probe.mjs (the survey/witness sequence that physically reached ch13:common:reciprocal in 76s; reused as a pattern, not modified)",
+    "verifier/probes/lib/ownedSession.mjs", "verifier/probes/lib/sourceSnapshot.mjs", "verifier/probes/lib/cgContract.mjs",
+    "main/tools/lib/evidence.mjs"
+  ],
+  "precisionCorrectionsHonoured": {
+    "surveyExcursionIsNotCornerRecovery": "The survey free-drawing loop is NOT used as corner evidence. The deviation under test is the COMMON early turn at z 15.82 on the E->C route, before the z=16 corner, and its verdict is computed only from common.terraUnits, frontier return and traversal of the omitted corner.",
+    "oldManual4Motion": "No blanket claim that earlier manual attempts never moved; only this run's own key receipts are asserted.",
+    "clearanceIsMeasuredNotChosen": "Body clearance is the live measured distance between the player's grounded pose and the worker's live position (>= 1 unit), never a desired standpoint's distance from a planned span.",
+    "timestamps": "Every timestamp is written from actual wall clock at the moment of writing; no future-dated fields."
+  },
+  "designedProof": {
+    "phaseA": "readiness (finite, non-initial, settled, actually supported body + worldBound), identity (<title>Paravoxia</title> + hardware ANGLE + headed), real shipped-canvas click AFTER readiness, pointer lock + focus + input policy, four ordinary key receipts with horizontal motion and distinct measured directions",
+    "phaseB": "survey earned by ordinary keys/F: W offer -> S begin recording (anc.cg.survey-started) -> 18-vertex authored long route drawn -> [F] offer span at E -> authored witness hold answered at W with the authored [F] -> anc.cg.route-tested -> beat ch13-common with objective ch13:common:reciprocal",
+    "phaseC": "H reference held by W (stage=holding-h + anc.cg.reciprocal-reference + worker body at H), then Terra's ordered E->C traversal of the ten-vertex 18-unit CG_ROUTE_COMMON with per-step sampling of terraUnits, supported, pose vs capsule centre, and worker clearance",
+    "phaseC_deviation_mode": "--mode deviation: walk to (-42,14), turn early at z 15.82 BEFORE the z=16 corner, cut to vertex 3, complete every remaining vertex to C (must buy no credit), then return ordinarily back along the route to the frontier at z 15.82, physically traverse the omitted corner at (-42,16), and resume the ordered remainder — with NO extra F, NO reset, NO teleport, NO endpoint pumping",
+    "phaseD": "far reference T: ordinary walk, exact objective ch13:common:offer-final-reference and literal '[F] Offer this end' prompt checked BEFORE pressing F; assert finalReferenceOffered && finalReferenceOccupied && anc.cg.final-reference-offered",
+    "phaseE": "release: hold occupancy at T while W walks H->E and tests the full span; assert workerUnits >= 18, committed, anc.cg.complete and anc.cg.handback, occupancy held throughout, clearance maintained"
+  },
+  "expectedPhysicalAssertions": [
+    "terraUnits >= 18 - 1e-6 (full actual eighteen-unit ordered passage; endpoint separation of 6 units is explicitly not the passage)",
+    "physical arrival: grounded pose within 1.0 unit of C in XZ, with supported === true at arrival",
+    "live reference evidenced by credit actually accruing while walking (routeProgressUnits only advances under walkedSegmentSupported + checkReference)",
+    "every ordered common leg reached by measured distance (no timeout/stall counted as arrival)",
+    "minimum measured player/worker body clearance >= 1 unit throughout",
+    "earned prefix never lost (monotone terraUnits) and zero extra F presses / resets during the passage",
+    "anc.cg.reciprocal-crossed, then finalReferenceOffered+Occupied, then workerUnits >= 18 with committed + anc.cg.complete + anc.cg.handback"
+  ],
+  "stoppingConditions": [
+    "preflight refusal (ready=false, control hold, foreign activeRole, missing --url/--out, missing external heavy lock, source-manifest drift) — exits 3 BEFORE any browser launch",
+    "identity/hardware/manual-lane gate failure",
+    "unusable or unsettled or unsupported body, missing world binding, no pointer lock/focus, policy blocks movement",
+    "any walk leg not reached (timeout, stall, no calibrated key) — probe STOPS immediately, never labels arrival, and performs no later F or action",
+    "any F whose exact current objective or literal prompt is absent — probe stops instead of pressing",
+    "per-phase budgets (--ready-ms/--leg-ms/--survey-ms/--common-ms/--release-ms/--watch-ms) exceeded",
+    "passage verdict not ok at C — stops before the T offer and the release phase"
+  ],
+  "verdicts": [
+    "REFUSED-PREREQUISITE (exit 3)",
+    "STOPPED-PREREQUISITE (exit 2, with stoppedAt and stop screenshot/state)",
+    "GATES-FAILED (exit 2)",
+    "RECOVERY-NOT-PROVED (exit 2)",
+    "COMMON-PASSAGE-OBSERVED-CLEAN-ROUTE (--mode reference, exit 0)",
+    "COMMON-PASSAGE-AND-EARLY-CORNER-RECOVERY-OBSERVED (--mode deviation, exit 0)",
+    "ERROR (exit 2)",
+    "Sub-verdicts: passageVerdict -> FULL-EIGHTEEN-UNIT-PASSAGE-OBSERVED | PASSAGE-NOT-PROVED | INCONCLUSIVE-UNAVAILABLE-FIELD; recoveryVerdict -> EARLY-CORNER-RECOVERY-EARNED-THROUGH-OMITTED-GROUND | RECOVERY-FAILED-CREDIT-NOT-RESTORED | NO-STALL-OBSERVED-CASE-NOT-EXERCISED | RECOVERY-CLAIM-UNSOUND | INCONCLUSIVE-UNAVAILABLE-FIELD"
+  ],
+  "staticValidation": {
+    "nodeCheck": "PASS for all three files",
+    "selfTests": "43/43 PASS (node verifier/probes/common-manual-focused/selftest.mjs)",
+    "selfTestCoverage": [
+      "route geometry copies still total 18 units, E->C, ten vertices; early turn is on segment 2 below z=16",
+      "zero-motion hold, vertical-only spawn settling and uninitialised-origin body all rejected as receipts",
+      "timeout and stall never read as arrival; non-finite distance never reads as arrival",
+      "mandatory prompt/objective negatives: no prompt, wrong verb, wrong objective all refuse F",
+      "preflight refuses on unready, hold, foreign role, missing url, missing heavy lock, manifest drift",
+      "identity: correct title with SwiftShader, wrong title with ANGLE, and headless all refused",
+      "endpoint-only credit, missing arrival, missing support/reference and short clearance all fail the passage",
+      "endpoint pumping and unrestored credit fail the recovery verdict; unavailable fields become INCONCLUSIVE"
+    ],
+    "liveRefusalReceipt": "node common-passage-probe.mjs --mode deviation --url http://127.0.0.1:38803/ ... => exit 3, launched=false, four refusals (ready=false, control hold, no heavy lock, manifest sha mismatch). No browser was launched."
+  },
+  "recommendedRootInvocation": {
+    "preconditions": [
+      "root publishes the final immutable source/build and sets verification-ready.json ready=true with the NEW sourceManifestSha256",
+      "verifier-control.json action releases to activeRole=common-manual-focused with the new canonicalUrl",
+      "the exclusive shared heavy lock is acquired EXTERNALLY and its path passed via --heavy-lock (or PARAVOXIA_HEAVY_LOCK)",
+      "one owned headed hardware NVIDIA GB10 browser; no other capture running"
+    ],
+    "commands": [
+      "node verifier/probes/common-manual-focused/selftest.mjs",
+      "node verifier/probes/common-manual-focused/common-passage-probe.mjs --mode reference --url <ROOT_CANONICAL_URL> --out verifier/captures/common-manual-focused/reference-1 --expect-source-manifest <NEW_MANIFEST_SHA256> --heavy-lock <LOCK_PATH> --leg-ms 90000 --survey-ms 420000 --common-ms 480000 --release-ms 300000",
+      "node verifier/probes/common-manual-focused/common-passage-probe.mjs --mode deviation --url <ROOT_CANONICAL_URL> --out verifier/captures/common-manual-focused/deviation-1 --expect-source-manifest <NEW_MANIFEST_SHA256> --heavy-lock <LOCK_PATH> --common-ms 600000"
+    ],
+    "twoRunsRationale": "terraUnits is monotone within one run, so a clean ordinary reference route and the early-deviation/recovery case cannot both be exercised in one session. Run reference first (clean route baseline), then deviation (the CG-IMPL-009 question) as a separate capture."
+  },
+  "knownLimitations": [
+    "NOT RUN: no runtime, rendering, audio, performance or creative fact is measured or claimed here.",
+    "Entry is the labelled deep fixture ?story=ch13-survey; it lacks Origin-landed continuity and proves nothing about full-story arrival, an earned Continue, or first-time naive UX.",
+    "Route waypoints were read from frozen chapter source, so this probe is instrumented manual play and can never support a no-private-knowledge first-time-usability claim.",
+    "manual rail is expected to be null in the manual lane; the probe reads rail/railCursor read-only and derives no target from an absent rail.",
+    "No source or telemetry bridge is added; anything the existing read-only bridge does not publish (e.g. a direct per-frame reference/sight boolean for the player) is reported as unavailable and treated as INCONCLUSIVE. Live reference is inferred only from credit accruing while walking, which is a proxy the source justifies but not a published predicate.",
+    "The self-tests validate harness logic only; they are not game tests and prove nothing about the chapter implementation.",
+    "The immutable 38803 preview is prior source; --url must be the root's future canonical URL. Nothing here authorizes a capture against it."
+  ],
+  "noAcceptance": "This preparation grants no acceptance, closes no defect (CG-IMPL-009 and the conditional manual-corner risk remain open and unmeasured), and is not a creative or reviewer sign-off."
+}

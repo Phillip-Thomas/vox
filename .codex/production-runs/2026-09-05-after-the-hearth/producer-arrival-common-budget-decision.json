@@ -1,0 +1,59 @@
+{
+  "schema": "paravoxia.producerDelegatedBudgetDecision.v1",
+  "author": "creative-producer",
+  "decidedAt": "2026-09-06T16:25:53.012819+00:00",
+  "authority": "Direct user instruction to continue the story and auto approve everything; necessary in-scope implementation and verification decisions delegated.",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "directUserInstruction": "yes continue, and please auto approve everything",
+  "briefItemRef": "CG-S1-boundary-state",
+  "personallyReviewedByUser": false,
+  "productionRunUnchanged": true,
+  "baseRunProfileRef": "paravoxia-creative-chapter@v1",
+  "baseProfilePath": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-chapter.run-profile.json",
+  "baseProfileSha256": "f6ce3f3cea205b307fb0f19beb5c0390947c5d854b8090254c7b8f5c28ae1654",
+  "baseProfileEdited": false,
+  "completedMaterialRepairLoops": 6,
+  "runLocalBudgetOverride": {
+    "field": "executionBudget.maxPatchLoops",
+    "baseValue": 4,
+    "previousValueForThisRun": 6,
+    "valueForThisRun": 7,
+    "additionalMaterialRepairsAuthorized": 1
+  },
+  "decision": "Authorize one further bounded material repair in this same run for the remaining CG010 COMMON movie steering failure and CG014 post-landing guidance under exact signed scene-v3. Source mutation is pending completion of active manual and earned-Continue preparation roles, final exact direction, candidate promotion and passing contract gate. This is six-to-seven, not unlimited repairs or waived acceptance.",
+  "stallClassification": {
+    "kind": "Distinct demonstrated later COMMON controller boundary plus newly visible arrival UX gap; prior flight and survey improvements retained.",
+    "evidence": [
+      "Fresh GB10 flight physically lands Origin and earns survey, but mandatory board instruction persists during grounded arrival.",
+      "Three long-survey entries reach COMMON; two stall about5.8/18 because movie goals overrun into unsafe footprint columns.",
+      "Real terrain/planner CPU audit and source geometry align with that failure; original signed route remains unchanged.",
+      "Chapter Director rules controller overshoot an implementation device; all three peers sign only the necessary conditional arrival-copy amendment.",
+      "Manual original-corner proof remains active to inform exact repair; no new verdict or score accepted."
+    ],
+    "sourceRefs": [
+      "producer-handoff-standby-verification-review.json",
+      "producer-common-terminal-audit-review.json",
+      "chapter-common-terminal-interpretation.json",
+      "producer-v3-decision.json"
+    ]
+  },
+  "conditions": [
+    "Finish current common-manual-runtime and earned-continue-probe-prep; preserve all actual evidence and frozen99source. Any newly found defect outside these two needs explicit routing before mutation. Also finish the bounded entry-discriminator before mutation; manual entry remains unmeasured and no source input fix is inferred.",
+    "Promote exact scene-v3 candidate5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54 with all three signatures and pass contract gate; original signed route/18proof unchanged.",
+    "One integration engineer; exact source paths and direction; actual terrain/controller seam tests for EVERY COMMON corner/terminal and survey controls, old-source counterfactuals, full verify and independent hardware replay.",
+    "Preserve terrain/footprint safety, actual ordered18, unfinished corner recovery, C placement, body clearance, milestones/save/actor/world, score/camera/control eligibility. No grants, endpoint credit, larger arrival radius, teleport, artificiallanding or timeout rescue.",
+    "Separate fullstory, earnedContinue, manual, variants/performance/AV and independent reviews remain mandatory.",
+    "No shared profile/workflow changes, publication or acceptance exception; after this repair any further material iteration requires a new concrete decision."
+  ],
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "contractChangeRequired": true,
+  "acceptedDefectExceptions": [],
+  "publicationAuthorized": false,
+  "sourceMutationAuthorizedNow": true,
+  "sourceMutationPending": null,
+  "previousBoundedOverrideRef": "producer-navigation-budget-decision.json",
+  "previousBoundedOverrideSha256": "bd3294ab20b6ac177fa509f0d510489e0cdd6127fbb363e5e46f72dd406e2e93",
+  "finalDirectionRef": "arrival-common-repair-direction.json",
+  "sourceHandoffAt": "2026-09-06T16:52:49.839010+00:00"
+}

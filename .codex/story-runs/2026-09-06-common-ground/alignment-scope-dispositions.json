@@ -1,0 +1,52 @@
+{
+  "schema": "paravoxia.alignmentScopeDispositions.v1",
+  "candidateSha256": "790b2894a48d6eb2a24816dede8ff8d911448e217e18f394d25be35444cd87ae",
+  "alignmentReport": "alignment-report.md",
+  "candidateDisposition": "independent judge approves bounded documentation; no blocking candidate canon leak",
+  "findings": [
+    {
+      "ids": [
+        "A1",
+        "A2",
+        "A4"
+      ],
+      "status": "existing-runtime-perception-debt-unresolved",
+      "scope": "Earlier organic/compliance and directive-guidance delivery. Not repaired or accepted away by this documentation patch; preserves existing source and triage. New chapter must avoid the same failures; broader old-copy rewrite remains outside approved exact patch."
+    },
+    {
+      "ids": [
+        "A3"
+      ],
+      "status": "targeted-by-approved-future-production-not-yet-fixed",
+      "scope": "Live restoration acknowledgement is explicitly in Common Ground runtime acceptance; current installation still has no authored payoff."
+    },
+    {
+      "ids": [
+        "A5"
+      ],
+      "status": "approved-future-recurrence-not-yet-observed",
+      "scope": "Local recurrence/independent test authored as future direction, no new measured player response."
+    },
+    {
+      "ids": [
+        "A6"
+      ],
+      "status": "bounded-measurement-limitation-no-new-copy-authorized",
+      "scope": "Relay-speed seed non-registration in selected blind report; no whole-story inference or explanatory repair."
+    },
+    {
+      "ids": [
+        "A7"
+      ],
+      "status": "retained-taste-and-coverage-observations",
+      "scope": "No lethal stakes, seal mechanism, station affiliation or vendor rewrite inferred."
+    }
+  ],
+  "unmeasuredProduction": [
+    "two actual route classes and reference sockets",
+    "scene geometry/night variants",
+    "actual implementation/save/UX/movie",
+    "combined audio and headed hardware acceptance"
+  ],
+  "claim": "Scope classification is not a closure of inherited runtime defects or a replacement for independent final review."
+}

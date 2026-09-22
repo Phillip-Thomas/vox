@@ -1,0 +1,58 @@
+{
+  "schema": "paravoxia.producerBoundedRepairDirection.v1",
+  "author": "creative-producer",
+  "decidedAt": "2026-09-06T20:37:25.856520+00:00",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceMutationAuthorized": true,
+  "sourceMutationPending": null,
+  "defectIds": [
+    "CG-IMPL-015",
+    "CG-IMPL-016"
+  ],
+  "materialRepairIteration": 8,
+  "baseline": {
+    "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sourceFileCount": 99,
+    "testFiles": 351,
+    "tests": 3172,
+    "immutableSourceRef": "iterations/manual-credit-finale-findings/source"
+  },
+  "allowedSourcePaths": [
+    "main/src/story/commonGroundRoute.ts",
+    "main/src/story/commonGroundRoute.test.ts",
+    "main/src/story/commonGroundDirector.ts",
+    "main/src/story/commonGroundDirector.test.ts",
+    "main/src/story/StoryDirectorDriver.tsx",
+    "main/src/story/StoryDirectorDriver.test.tsx",
+    "main/src/story/commonGroundScore.ts",
+    "main/src/story/commonGroundScore.test.ts"
+  ],
+  "directionRefs": [
+    "producer-common-entry-crossing-review.json",
+    "chapter-manual-corner-interpretation.json",
+    "score-observed-completion-direction.json",
+    "producer-score-observed-direction-review.json"
+  ],
+  "budgetDecisionRef": "producer-manual-credit-finale-budget-decision.json",
+  "sourceDirections": [
+    "Use actual eligible prior/current foot movement to preserve ordered physical coverage across ordinary positive post-plane turns. Captured call298 has previous credit6, actualdelta.1635971455 and projection6.2944830004; replay and next actual state remain6. Fix carried residual without paying for skipped incoming route. Algorithm belongs to integration within exact constraints. Update now-stale comments claiming every manual corner accounting stall is intended.",
+    "Separate true foreground cancellation from normal done for existing eligible final token. Do not make every inactive state eligible; keep current expiry/release order and all cancellation semantics. No forced attack/audio engine expansion."
+  ],
+  "requiredValidation": [
+    "Retained exact actual-frame data regression with variable deltas and both corner directions, plus first-time normal ordinary controls; no assumed60Hz substitution.",
+    "Exact early z15.82 before incoming plane stays unproved; original earlycut/no-return, farC, stationary, lateral/lateleg distance, invalid support/reference, and successful actual return/retraversal. Full18 both actors and realcommit/handback remain required.",
+    "Real driver lifecycle callback test for normal-done exception, every cancellation class at its owning seam and no completed-save hydration/resume; no tests merely regex matching code.",
+    "Independent actual affected manual positive/negative + finale token/output window, focused checks then one stable full suite. Reuse unaffected evidence but never call old-source tests candidate proof."
+  ],
+  "prohibited": [
+    "Geometry/vertices/C/tolerance/arrival changes",
+    "Grants, endpoint/lateleg pumping, teleports or timeout rescue",
+    "Unconfirmed Continue pose patch or unsafe-spawn bypass",
+    "New cues/audio/engine/camera/taste/contract/profile/policy changes",
+    "GPU/browser/preview replacement/publication during source integration"
+  ],
+  "independentVerificationRequired": true,
+  "acceptanceWaived": false,
+  "sourceHandoffAt": "2026-09-06T20:42:26.868186+00:00"
+}

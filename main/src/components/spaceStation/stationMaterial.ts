@@ -46,7 +46,8 @@ const COMMON_HEAD = /* glsl */ `
 export function createStationMaterial(options: StationMaterialOptions = {}): THREE.MeshStandardMaterial {
   const {
     panelSize = 2.6,
-    seamStrength = 0.55,
+    // 0.45: on a lit floor the tile grid reads as a grid, not as black bars.
+    seamStrength = 0.45,
     grime = 0.5,
     roughness = 0.88,
     metalness = 0.08,

@@ -6,6 +6,7 @@ import {
   pcMod,
   type ChordAnchor,
   type ChordQuality,
+  type ChordShape,
   type ModeName
 } from './theory.ts';
 import { RHYTHM_CELL_IDS, RHYTHM_CELLS, SLOTS_PER_BAR, type RhythmCellId } from './rhythm.ts';
@@ -287,6 +288,7 @@ export interface MotifRenderContext {
   mode: ModeName;
   chordRootPc: number;
   chordQuality: ChordQuality;
+  chordShape?: ChordShape;
   /** Absolute semitone (above A1) the anchor tone should sit nearest. */
   anchorSemis: number;
   /** Snap the final note to the landing tone (full statements yes; looping cells no). */
@@ -338,7 +340,7 @@ export function renderMotif(
 ): RenderedNote[] {
   if (figure.notes.length === 0) return [];
   const scale = MODE_SCALES[ctx.mode];
-  const startPc = chordAnchorPc(ctx.chordRootPc, ctx.chordQuality, genome.startTone);
+  const startPc = chordAnchorPc(ctx.chordRootPc, ctx.chordQuality, genome.startTone, ctx.chordShape);
   const startIdx = nearestDegreeIndex(ctx.tonicPc, scale, startPc);
   // Octave placement: the anchor instance nearest anchorSemis.
   let anchorDegree = startIdx;
@@ -357,7 +359,7 @@ export function renderMotif(
     semis: pitchOfDegree(ctx.tonicPc, scale, anchorDegree + n.degreeOffset)
   }));
   if (ctx.snapLanding && rendered.length > 1) {
-    const landPc = chordAnchorPc(ctx.chordRootPc, ctx.chordQuality, genome.landTone);
+    const landPc = chordAnchorPc(ctx.chordRootPc, ctx.chordQuality, genome.landTone, ctx.chordShape);
     const landIdx = nearestDegreeIndex(ctx.tonicPc, scale, landPc);
     const unsnapped = rendered[rendered.length - 1].semis;
     let best = pitchOfDegree(ctx.tonicPc, scale, landIdx);

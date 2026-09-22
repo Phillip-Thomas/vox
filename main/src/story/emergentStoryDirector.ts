@@ -1,3 +1,4 @@
+import { resolveMarkerTarget } from './beats/markerTargets.ts';
 import * as THREE from 'three';
 import { subscribeFinalizedLocalGameplayCommand } from '../game/commandDispatchAdapter.ts';
 import { getLocalActorId } from '../game/playerActors.ts';
@@ -5,7 +6,7 @@ import { getCampfires } from '../game/systems/campfires.ts';
 import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
 import { getShipPosition } from '../state/shipProximity.ts';
 import { registerStoryInteraction } from './storyInteractions.ts';
-import { readSystemCompanionBodyTarget } from '../state/systemCompanionBodyTargets.ts';
+
 import { buildStarSystemManifest } from '../game/starSystem.ts';
 import { systemSpaceStations } from '../game/spaceStation/spaceStationBody.ts';
 import { STORY_COORDINATE } from './world/storyWorld.ts';
@@ -34,7 +35,17 @@ import {
   getMawFirstDirectionChoice
 } from './emergentMawRepair.ts';
 import { emitEmergentStoryEvent } from './emergentStoryEvents.ts';
-import { scoreHit, setScoreIntensity } from './storyScore.ts';
+import { SFX_BUNDLE_ARM_LEAD_S } from '../audio/generative/tuning.ts';
+import {
+  armStoryHit,
+  bundleAudioClockDue,
+  bundlePresentationDue,
+  fireStoryHitFallback,
+  noteStoryBundleFired,
+  noteStoryBundleSfxPosted,
+  noteStoryBundleState,
+  setScoreIntensity
+} from './storyScore.ts';
 import {
   advanceToBeat,
   completeChapter10,
@@ -127,7 +138,6 @@ import {
 import {
   activateGuidedStoryObjective,
   clearGuidedStoryObjective,
-  observeGuidedStoryMarker,
   getActiveGuidedStoryObjective,
   getGuidedStoryObjectiveHealth,
   type GuidedStoryObjective,
@@ -144,6 +154,13 @@ import {
   createFlightGuidanceDwell,
   resetFlightGuidanceDwell
 } from './flightGuidanceDwell.model.ts';
+import { chapterReactivationBeat } from './beats/registry.ts';
+import {
+  commonGroundGuidanceFacts,
+  ensureCommonGroundInteractions,
+  enterCommonGroundBeat,
+  tickCommonGround
+} from './commonGroundDirector.ts';
 
 const ORIGIN_WORLD_ID = STORY_PRIMARY_WORLD_ID;
 
@@ -189,6 +206,12 @@ interface EmergentDirectorRuntime {
   ch10RefusedAt: number;
   ch10AnswerAt: number;
   ch10ResolvedAt: number;
+  /**
+   * anc.a4.life-front (audio-10x Stage 3): the exhale bundle's beat-runtime
+   * timing — storyAwaken (forward-scheduled), the caption and the lifeProgress
+   * origin chase the bloom; commitA4Alive is immediate. Null until the commit.
+   */
+  a4Bundle: { at: number; sfxAt: number; sfxAudioTime: number | null; audibleAudioTime: number | null; fallback: boolean; fired: boolean; sfxPosted: boolean } | null;
 }
 
 /** The three-valued cause taxonomy for L2's firing moment (ruling R1). */
@@ -217,7 +240,8 @@ const runtime: EmergentDirectorRuntime = {
   ch10FaultReadAt: -1,
   ch10RefusedAt: -1,
   ch10AnswerAt: -1,
-  ch10ResolvedAt: -1
+  ch10ResolvedAt: -1,
+  a4Bundle: null
 };
 
 // --- Frozen cadence tables ------------------------------------------------
@@ -446,21 +470,10 @@ let beatEntryInProgress = false;
 let beatEntryPublishedObjective = false;
 
 function publishGuidedObjective(objective: GuidedStoryObjective): boolean {
+  const marker = resolveMarkerTarget(runtime.beat, objective);
+  if (objective.requiresMarker !== false && !marker) return false;
   if (beatEntryInProgress) beatEntryPublishedObjective = true;
-  const activated = activateGuidedStoryObjective(objective);
-  // SAME-FRAME MARKER RESOLUTION. Activation deliberately clears markerVisible,
-  // and the shared marker driver only answers on the NEXT frame — so between
-  // the two, a mandatory rung was observable at `missing-marker`. The next
-  // frame healed it, which is exactly why it survived: the invariant is that a
-  // mandatory objective is never observable in that state, not that it recovers
-  // from it. Chapter 10 resolves its own targets from handles that already
-  // exist at publication time, so it can answer in the same frame it publishes.
-  // Non-ch10 beats resolve null here and keep their shipped driver behaviour.
-  if (activated) {
-    const target = getChapter10MarkerTarget(runtime.beat, objective);
-    if (target) observeGuidedStoryMarker(target.label);
-  }
-  return activated;
+  return activateGuidedStoryObjective(objective, marker?.label);
 }
 
 function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
@@ -559,35 +572,30 @@ function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
         return resolveStoryObjectiveGuidance(beat, {
           ch10TransitState: chapter10TransitState(actorId)
         });
+      case 'ch13-home':
+      case 'ch13-return':
+      case 'ch13-survey':
+      case 'ch13-common':
+        return resolveStoryObjectiveGuidance(beat, commonGroundGuidanceFacts());
       default:
         return null;
     }
   })();
-  if (guidance && chapter10GuidanceFindable(beat, guidance)) publishGuidedObjective(guidance);
-}
-
-/**
- * A mandatory rung may not be PUBLISHED before the thing it points at exists.
- *
- * Same-frame marker resolution fixed the case where the handle was already
- * there. It could not fix the deep link, where the ladder publishes while the
- * world is still arriving: `station:return:reboard` names the Kestrel's hatch,
- * and the ship mounts a few seconds after the bootstrap, so the rung stood at
- * missing-marker for 3.4 seconds. Waiting is the honest answer — an absent
- * objective is `idle`, which is true (guidance has nothing findable to say yet)
- * where a findable-looking rung pointing at nothing is a lie. The director ticks
- * every frame, so publication follows the handle by one frame.
- *
- * Non-ch10 beats are unaffected: they resolve null here and keep publishing
- * exactly as they ship today.
- */
-function chapter10GuidanceFindable(
-  beat: StoryBeat,
-  objective: GuidedStoryObjective
-): boolean {
-  if (!beat.startsWith('ch10')) return true;
-  if (objective.requiresMarker === false) return true;
-  return getChapter10MarkerTarget(beat, objective) !== null;
+  if (!guidance) return;
+  if (publishGuidedObjective(guidance)) return;
+  // SAME ID, DIFFERENT TRUTH. Two ch13 rungs are entered at an anchor that
+  // precedes the physical fact their standing order describes — he is offered
+  // the span before he has walked to it, and the reciprocal order publishes
+  // before he is actually holding H. `activateGuidedStoryObjective` short-
+  // circuits on an unchanged id, which is exactly right for progress (the id is
+  // the acknowledgement) and exactly wrong for a work order that has become
+  // true. Republishing the same id updates the copy without a second enter cue,
+  // because the objective director only cues an id it has not entered before.
+  const active = getActiveGuidedStoryObjective();
+  if (!active || active.id !== guidance.id) return;
+  if (active.workOrder.join('\u0000') === guidance.workOrder.join('\u0000')) return;
+  clearGuidedStoryObjective('replace');
+  publishGuidedObjective(guidance);
 }
 
 /**
@@ -662,6 +670,7 @@ const AUDITOR_TURN_SPEED = 5.2;
 export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
   ensureFinalizedLocalCommandStoryAdapter();
   ensureChapter10Interactions();
+  ensureCommonGroundInteractions();
   const leavingA4 = runtime.beat === 'a4-exhale' && beat !== 'a4-exhale';
   if (leavingA4) {
     clearVoxelRealityOverrides();
@@ -672,6 +681,7 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
   }
   runtime.beat = beat;
   runtime.elapsed = 0;
+  runtime.a4Bundle = null;
   runtime.latches.clear();
   runtime.completionObservedAt = -1;
   runtime.voiceLatchesSeeded = false;
@@ -720,15 +730,12 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
   beatEntryInProgress = true;
   switch (beat) {
     case 'ch4-audit':
-      setWorkOrder(['FOLLOW THE INSPECTION.', 'ATTEND EACH MISMATCH.']);
       showAuditLine('AUDIT IN PROGRESS. THREE DEVIATIONS REQUIRE WITNESS.', 'W-7744');
       break;
     case 'ch4-comply':
-      setWorkOrder(['RESOLVE HEAT SOURCE.', 'RESOLVE ORGANIC CONTAMINATION.']);
       showAuditLine('RESTORE THE SITE TO ITS VERIFIED FLOOR.', 'W-7744');
       break;
     case 'ch4-defy':
-      setWorkOrder(['STERILIZE PRIMARY ORGANIC ANOMALY.']);
       showAuditLine('THE TREE IS THE REMAINING ERROR.', 'W-7744');
       break;
     case 'a4-exhale':
@@ -761,14 +768,11 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
       showCaption('(the wreck is waiting for an owner.)');
       break;
     case 'ch8-launch':
-      setWorkOrder(['IGNITE. LIFT. LEAVE THE ATMOSPHERE.']);
       break;
     case 'ch8-crossing':
-      setWorkOrder(['FIND THE SIBLING WORLD.', 'HOLD COURSE INTO ITS APPROACH ENVELOPE.']);
       showCaption('(there is another world here. it was always here.)');
       break;
     case 'ch8-landfall':
-      setWorkOrder(['LAND ON DRY, LEVEL GROUND.', 'EXIT THE KESTREL.']);
       break;
     case 'ch9-settle':
       activateSettlementGuidance(getLocalActorId());
@@ -789,6 +793,9 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
     default:
       break;
   }
+  // One bounded line. Chapter 13 owns its own entry state, its own actor and
+  // its own anchors; this seam only tells it which beat the frame belongs to.
+  enterCommonGroundBeat(beat);
   syncEmergentObjectiveGuidance(beat);
   beatEntryInProgress = false;
   if (!beatEntryPublishedObjective) clearGuidedStoryObjective();
@@ -860,6 +867,12 @@ export function emergentStoryDirectorTick(dt: number): void {
     case 'ch10-transit':
       tickChapter10Transit(dt);
       break;
+    case 'ch13-home':
+    case 'ch13-return':
+    case 'ch13-survey':
+    case 'ch13-common':
+      tickCommonGround(dt);
+      break;
     default:
       break;
   }
@@ -927,9 +940,12 @@ function tickRefusal(dt: number): void {
   advanceToBeat('a4-exhale');
 }
 
+/** The a4 life front's authored moment into the beat, seconds (the exhale's arming tick). */
+const A4_LIFE_FRONT_AT = 1.75;
+
 function tickA4(): void {
   const actorId = getLocalActorId();
-  if (runtime.elapsed >= 1.75) {
+  if (runtime.elapsed >= A4_LIFE_FRONT_AT) {
     once('a4-life-front', () => {
       const committed = commitA4Alive(ORIGIN_WORLD_ID, actorId);
       if (!committed.ok) {
@@ -937,17 +953,39 @@ function tickA4(): void {
         return;
       }
       if (!committed.idempotent) {
-        playSfx('storyAwaken');
-        scoreHit('bloom');
+        // anc.a4.life-front: the commit above is immediate. The exhale —
+        // storyAwaken, the caption and the lifeProgress origin — is one bundle
+        // that chases the bloom onto the 66 BPM beat. A bloom, never a braam.
+        const arm = armStoryHit('anc.a4.life-front', { beatClock: runtime.elapsed });
+        noteStoryBundleState('anc.a4.life-front', runtime.elapsed);
+        runtime.a4Bundle = {
+          at: runtime.elapsed + arm.bundleDelayS,
+          sfxAt: runtime.elapsed + arm.sfxArmDelayS,
+          sfxAudioTime: arm.sfxAudioTime,
+          audibleAudioTime: arm.audibleAudioTime,
+          fallback: arm.fallback,
+          fired: false,
+          sfxPosted: false
+        };
       }
       setScoreIntensity(0.8);
-      if (!committed.idempotent) {
-        showCaption('(the world exhales where it had been holding still.)');
-      }
     });
   }
+  const bundle = runtime.a4Bundle;
+  if (bundle && !bundle.sfxPosted && (runtime.elapsed >= bundle.sfxAt || bundleAudioClockDue(bundle.sfxAudioTime, SFX_BUNDLE_ARM_LEAD_S))) {
+    bundle.sfxPosted = true;
+    playSfx('storyAwaken', bundle.sfxAudioTime != null ? { atAudioTime: bundle.sfxAudioTime } : undefined);
+    noteStoryBundleSfxPosted('anc.a4.life-front', runtime.elapsed, bundle.sfxAudioTime);
+  }
+  if (bundle && !bundle.fired && bundlePresentationDue(runtime.elapsed, bundle.at, bundle.audibleAudioTime)) {
+    bundle.fired = true;
+    // Preserve the stored target; a late foreground frame is visible in telemetry.
+    if (bundle.fallback) fireStoryHitFallback('anc.a4.life-front');
+    noteStoryBundleFired('anc.a4.life-front', runtime.elapsed);
+    showCaption('(the world exhales where it had been holding still.)');
+  }
   if (!hasMilestone(EMERGENT_AUDIT_MILESTONES.a4Alive, actorId)) return;
-  const lifeProgress = smoothstep((runtime.elapsed - 1.75) / 3.4);
+  const lifeProgress = bundle && !bundle.fired ? 0 : smoothstep((runtime.elapsed - (bundle?.at ?? A4_LIFE_FRONT_AT)) / 3.4);
   overrideVoxelRealityEffects({
     organic: lifeProgress,
     detail: 0.82 + lifeProgress * 0.18,
@@ -1477,19 +1515,9 @@ function tickSecondHearth(): void {
     activateSettlementGuidance(actorId);
     return;
   }
-  publishGuidedObjective({
-    id: 'settle:second-hearth-settling',
-    kind: 'wait',
-    markerLabel: 'SECOND HEARTH · SETTLING',
-    workOrder: [
-      'THE SECOND HEARTH IS SAFE.',
-      'LET THE TWO-WORLD HANDOFF SETTLE.'
-    ],
-    requiresMarker: false
-  });
+  publishGuidedObjective(resolveStoryObjectiveGuidance('ch9-hearth', { secondHearthComplete: true })!);
   once('second-hearth-rest', () => {
     runtime.completionObservedAt = runtime.elapsed;
-    setWorkOrder([]);
     setScoreIntensity(0.36);
     showCaption('(one fire behind you. one fire here. home is the distance you can keep alive.)', 6500);
   });
@@ -1595,7 +1623,9 @@ export function tickChapter10FreePlayEntry(
   if (hasMilestone(STORY_MILESTONES.ch10ColdNoticed, actorId)) return false;
   if (!chapter10ColdEntryReady(readChapter10ColdEntryFacts(actorId, graceSeconds))) return false;
   markMilestone(STORY_MILESTONES.ch10ColdNoticed, actorId);
-  return reactivateStoryAtBeat('ch10-cold');
+  // The contract declares which beat is the door (`entry: 'reactivation-from-done'`);
+  // the literal is the legacy answer for a registry that is off or not yet loaded.
+  return reactivateStoryAtBeat(chapterReactivationBeat('ch10') ?? 'ch10-cold');
 }
 
 // --- ch10 receipts ----------------------------------------------------------
@@ -1723,7 +1753,7 @@ export function reconcileChapter10StationTarget(actorId: string = getLocalActorI
  * from the approach instrument: the bearing is held for the whole transit, and
  * the instrument only speaks inside its own scan range.
  */
-function chapter10StationTargetPosition(): THREE.Vector3 | null {
+export function chapter10StationTargetPosition(): THREE.Vector3 | null {
   const system = getSystemFlightSnapshot();
   const body = chapter10ClaimedStationBody();
   if (!body) return null;
@@ -1759,47 +1789,7 @@ export function getChapter10MarkerTarget(
   beat: StoryBeat | null,
   objective = getActiveGuidedStoryObjective()
 ): Chapter10MarkerTarget | null {
-  if (!beat || !beat.startsWith('ch10') || !objective) return null;
-  if (objective.requiresMarker === false) return null;
-  const label = objective.markerLabel;
-  switch (objective.id) {
-    case 'station:fault-read': {
-      const core = chapter10HabitatCorePosition();
-      return core ? { position: core.clone(), label } : null;
-    }
-    case 'station:fabrication-attempt':
-    case 'station:return:reboard':
-    case 'station:transit:reboard': {
-      const fabricator = chapter10FabricatorPosition();
-      return fabricator ? { position: fabricator.clone(), label } : null;
-    }
-    case 'station:relay-query':
-    case 'station:bearing-claim': {
-      const relay = chapter10WreckSitePosition();
-      return relay ? { position: relay.clone(), label } : null;
-    }
-    case 'station:return:crossing': {
-      // The crossing back is ch8's grammar in the opposite direction, so it
-      // borrows ch8's marker treatment exactly: a spatial bearing, not a
-      // surface route.
-      const origin = readSystemCompanionBodyTarget(ORIGIN_WORLD_ID);
-      return origin ? { position: origin, label, projectionSpace: 'spatial' } : null;
-    }
-    case 'station:return:landfall': {
-      // The descent goal is the wreck site itself, read as a bearing rather
-      // than a surface route: the player is still in the air.
-      const site = chapter10WreckSitePosition();
-      return site ? { position: site.clone(), label, projectionSpace: 'spatial' } : null;
-    }
-    case 'station:transit:hold': {
-      const station = chapter10StationTargetPosition();
-      return station
-        ? { position: station.clone(), label, projectionSpace: 'spatial' }
-        : null;
-    }
-    default:
-      return null;
-  }
+  return beat?.startsWith('ch10') ? resolveMarkerTarget(beat, objective) : null;
 }
 
 // --- ch10 player verbs ------------------------------------------------------
@@ -1826,12 +1816,12 @@ function withinChapter10Reach(
 
 const _ch10InteractionTarget = new THREE.Vector3();
 
-function chapter10HabitatCorePosition(): THREE.Vector3 | null {
+export function chapter10HabitatCorePosition(): THREE.Vector3 | null {
   const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
   return habitat ? _ch10InteractionTarget.set(...habitat.core.position) : null;
 }
 
-function chapter10FabricatorPosition(): THREE.Vector3 | null {
+export function chapter10FabricatorPosition(): THREE.Vector3 | null {
   // The fabricator is the Kestrel's own, carried since chapter 7.
   const ship = getShipPosition();
   return ship ? _ch10InteractionTarget.set(ship[0], ship[1], ship[2]) : null;
@@ -1938,7 +1928,7 @@ function tickChapter10Ask(): void {
     once('ch10-relay-ask', () => {
       runtime.ch10AnswerAt = runtime.elapsed + chapter10RelayAnswerDelaySeconds();
       noteChapter10Anchor('anc.ch10.relay-ask');
-      showAuditLine(K7, CH10_RELAY_HEADER);
+      showAuditLine(K7, CH10_RELAY_HEADER, 6500, { surfaceId: 'ch10-relay', slot: 0 });
     });
   }
   if (runtime.ch10AnswerAt >= 0 && runtime.elapsed >= runtime.ch10AnswerAt) {
@@ -1948,7 +1938,7 @@ function tickChapter10Ask(): void {
       // shared anchor itself, and the wrongness is metric, not dynamic.
       markMilestone(STORY_MILESTONES.ch10RelayAnswered, actorId);
       noteChapter10Anchor('anc.ch10.relay-answer');
-      showAuditLine(K8, CH10_RELAY_HEADER);
+      showAuditLine(K8, CH10_RELAY_HEADER, 6500, { surfaceId: 'ch10-relay', slot: 1 });
     });
     if (runtime.elapsed >= runtime.ch10AnswerAt + regulationRevealSeconds(K8)) {
       once('ch10-k9', () => showCaption(K9));
@@ -2132,7 +2122,7 @@ function tickChapter10Transit(dt: number): void {
     // now leads into the normal clearance and docking procedure.
     setStoryMoveScale(1);
     setWorkOrder([]);
-    clearGuidedStoryObjective();
+    clearGuidedStoryObjective('satisfied');
     noteChapter10Anchor('anc.ch10.threshold-handback');
     completeChapter10();
   });

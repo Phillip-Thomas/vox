@@ -1,0 +1,29 @@
+{
+  "schema": "paravoxia.producerGpuHandoff.v1",
+  "at": "2026-09-06T18:07:25.429716+00:00",
+  "fromRole": "arrival-common-verifier",
+  "toRole": "arrival-common-manual",
+  "capturesComplete": true,
+  "priorRoleReportMayContinue": true,
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "cleanupReceipts": [
+    {
+      "ref": "verifier/captures/arrival-common/journey-common-1/cleanup-receipt.json",
+      "sha256": "3a91ac690b1a3adc06011ef221d8c96662066e76504ce455848c3290282ce6de"
+    },
+    {
+      "ref": "verifier/captures/arrival-common/journey-common-2/cleanup-receipt.json",
+      "sha256": "da8998c57c359d495a1d160057c1342985448fb5cb0379a98edf09eb5e5ff8e7"
+    },
+    {
+      "ref": "verifier/captures/arrival-common/journey-common-3/cleanup-receipt.json",
+      "sha256": "4e19266a9bffdd16dd5a6bd174692c9e1bcb30886c1c1d2cf20fa6bcec2f247f"
+    },
+    {
+      "ref": "verifier/captures/arrival-common/flight-1/run.json",
+      "sha256": "33f336ccc4a64fe7d940bfa293a8d0b552282c2691952706576ac2459dc30450"
+    }
+  ],
+  "captureAuthorityReleased": true,
+  "rationale": "All commissioned flight and3coldCOMMON captures ended with exact post-finally cleanup. Root independently read actual18/18/commit/finalanchors in3traces. Prior verifier now writes read-only report. Control transfers sole GPU permission to manual; kernel exclusive flock remains mandatory. This is scheduling, not acceptance or a source change."
+}

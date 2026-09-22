@@ -1,0 +1,109 @@
+{
+ "role": "story-verifier-manual-credit-finale-final-runtime",
+ "startedAt": "2026-09-06T21:51:36Z",
+ "endedAt": "2026-09-06T22:02:00Z",
+ "originalDeadline": "2026-09-06T22:04:34.043543+00:00",
+ "verdict": "INCOMPLETE - NO ACCEPTANCE CLAIM. Causal correction consumed; no new movie/finale proof obtained.",
+ "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+ "sourceUnchanged": true,
+ "gamePatched": false,
+ "fullSuiteRerun": false,
+ "publication": false,
+ "servedIdentity": {
+  "url": "http://127.0.0.1:37395/",
+  "index": "a9b880389deff7717b3d76b0f4a962beff1031a2ffa44fde427a5f0022353d8f",
+  "bundle": "/assets/index-C1X65dZp.js",
+  "bundleSha256": "68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b",
+  "httpStatus": 200
+ },
+ "causalCorrectionConsumed": {
+  "accepted": true,
+  "finding": "cut-run10 return z=14.269255559712665 lies BEYOND credited frontier z=14.17033378734409 (credit 2.1703337873440898); 0.09892177236857513 units never repaid. Coarse arrival accepted nominal target z14. Prior 'clean reproducible game recovery failure' claim is WITHDRAWN.",
+  "recoveryAttempt": "NOT RUN this invocation - UNMEASURED, not a game failure."
+ },
+ "rootMidFlightCorrection": {
+  "consumedAt": "2026-09-06T21:55:40.987128+00:00",
+  "ack": "logs/manual-credit-finale-final-runtime/root-correction-consumed.json",
+  "myError": "run-cold-common.sh launched common-entry-crossing-probe.mjs (labelled manual ch13-survey fixture, ordinary WASD, no autopilot) instead of the instructed journey-probe.mjs movie lane. cold-common-run1 is a duplicate manual positive and is NOT movie proof. Claim withdrawn."
+ },
+ "coldCommonMovie": {
+  "required": 3,
+  "actualMovieRuns": 0,
+  "cold-common-run1": {
+   "lane": "MANUAL ch13-survey (WRONG LANE)",
+   "durationS": 83.6,
+   "verdict": "SHORT-HELD-REFERENCE-PROVEN",
+   "countsAsMovieProof": false
+  },
+  "runs2_3": "probe self-refused on control action=hold (21:55:59Z/21:56:00Z), before any browser launch"
+ },
+ "finaleWindow": {
+  "measured": false,
+  "attempts": 5,
+  "outcome": "UNMEASURED - probe never reached the Terra18/Worker18/commit window",
+  "attemptChain": [
+   {
+    "n": 1,
+    "fail": "wrapper requires --heavy-lock <path> to prove fd identity",
+    "artifact": "logs/.../failed-finale-attempt1-nolockpath.log"
+   },
+   {
+    "n": 2,
+    "fail": "stale pinned manifest 6ef957c3... vs frozen 8962a7b2...",
+    "artifact": "captures/.../failed-finale-attempt2-stalepin"
+   },
+   {
+    "n": 3,
+    "fail": "stale preview pin port 34413 vs live 37395",
+    "artifact": "captures/.../failed-finale-attempt3-stalepreviewpin"
+   },
+   {
+    "n": 4,
+    "fail": "stale served index pin 6c8c378b... vs live a9b88038...",
+    "artifact": "captures/.../failed-finale-attempt4-staleindexpin"
+   },
+   {
+    "n": 5,
+    "fail": "ERR_MODULE_NOT_FOUND ../lib/ownedSession.mjs",
+    "artifact": "captures/.../finale-window-fr5"
+   }
+  ],
+  "blockingDefect": {
+   "kind": "PROBE/TOOLING DEFECT, NOT GAME",
+   "evidence": "retained finale-window-probe.mjs:423 dynamically imports '../lib/ownedSession.mjs' -> verifier/probes/manual-credit-finale/lib/ownedSession.mjs which does not exist. The module actually lives at verifier/probes/lib/ownedSession.mjs, i.e. the retained relative path is one level short ('../../lib/ownedSession.mjs'). This is present in the ORIGINAL retained file, not introduced by my private copy.",
+   "notFixed": "deliberately left unfixed: no budget remained to fix AND run a >=3s-pre/11.5s-post window before the deadline"
+  }
+ },
+ "privateFixesMade": [
+  "role pin in cec-fr copy",
+  "role pin in finale-window-fr copy",
+  "manifest/preview/index pins in finale-window-fr copy",
+  "--heavy-lock path arg in launcher"
+ ],
+ "lockDiscipline": {
+  "path": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+  "inode": 8397196,
+  "mode": "flock -x on fd9 per run",
+  "contenderRefusalObserved": true,
+  "releasedAtEnd": true
+ },
+ "teardown": {
+  "ownedBrowsersClosed": true,
+  "lockFreeAtExit": true,
+  "rootPreviewUntouched": true,
+  "foreignProcessesKilled": false,
+  "note": "chromium PIDs under /home/thomasphillip/.cache/paraform-managed-webgpu (crashpad 3583125, port 9333) are FOREIGN/root-managed and were left running."
+ },
+ "limitations": [
+  "No cold COMMON movie run was executed at all.",
+  "Finale window unmeasured; no audio/frame/PCM/event evidence exists.",
+  "No recovery retraversal attempted.",
+  "No chapter acceptance, Continue, UX/variant or taste judgement made or implied."
+ ],
+ "artifacts": {
+  "ack": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/logs/manual-credit-finale-final-runtime/root-correction-consumed.json",
+  "logs": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/logs/manual-credit-finale-final-runtime/",
+  "captures": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/manual-credit-finale/",
+  "probes": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/final-runtime/"
+ }
+}

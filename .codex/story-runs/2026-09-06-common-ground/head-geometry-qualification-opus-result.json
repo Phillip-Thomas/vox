@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 279955,
+  "stop_reason": "end_turn",
+  "session_id": "524d1fc4-8624-499f-8baa-42da45b56b6d",
+  "total_cost_usd": 1.7852234999999996,
+  "usage": {
+    "input_tokens": 42,
+    "cache_creation_input_tokens": 66179,
+    "cache_read_input_tokens": 1029575,
+    "output_tokens": 24274,
+    "output_tokens_details": {
+      "thinking_tokens": 6959
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 66179,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1316,
+        "cache_read_input_tokens": 71977,
+        "cache_creation_input_tokens": 198,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 198
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1506,
+      "outputTokens": 16,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001586,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 42,
+      "outputTokens": 24274,
+      "cacheReadInputTokens": 1029575,
+      "cacheCreationInputTokens": 66179,
+      "webSearchRequests": 0,
+      "costUSD": 1.7836375,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 6959,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 25,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: pass \u2014 head cap qualifies; probe verdict `PASS`, `failures: []`, all original property checks unchanged.\n\n**Measurements**\n\n| Property | Selected run | Head-cap run | Result |\n|---|---|---|---|\n| Verdict / failures | PASS / [] | PASS / [] | same |\n| Short route | 16.00 u, 17 samples, span 14.00 (backing only) | identical | same |\n| Long route | 36.00 u, +20.00, ratio 2.25, 145 dense pts all supported, min margin 0.67 | identical (`longUnchangedFromSelectedCandidate: true`) | same |\n| Common E\u2192C | 18.00 u, 31 samples / 73 dense in range+clear, max 8.50 | identical | same |\n| Terra / shifted-W witnesses | valid, margins 4.77 / 4.70 | identical | same |\n| Body / path intersections | none | none | same |\n| Numeric diff of shared JSON keys | \u2014 | 0 (only 4 descriptive strings changed) | same |\n| CPU | 0.74 s | 0.71 s (budget 60 s), rerun byte-identical | pass |\n\n**Cap + connection** (measured, not asserted): cap world AABB lo(-34.20, 52.25, 19.80) hi(-33.80, 52.35, 20.20), 0.40\u00d70.10\u00d70.40, stand footprint shared exactly; cap bottom coincident with stand top (52.25); `socketLiesOnCapTopFace: true`, `verticalGapCapTopToSocketUnits: 0`. Chain backing\u2192bracket (0.40\u00d70.40\u00d70.12) \u2192stand (0.40\u00d70.40\u00d70.10) \u2192cap. No geometry above 52.35. The 0.10 gap caveat is removed, not re-worded.\n\n**Contact rule / ray audit**: open-segment predicate applied symmetrically to all boxes incl. trunk, no exemption, no epsilon. Cap: 162 endpoint-only contacts (17 short + 145 long dense), **0** interior crossings; stand/bracket 0; backing 15 crossings (short route only \u2014 the span cause is unchanged). Inclusive predicate would have blocked all 162 \u2014 that delta is why the rule is needed. Walk mask/segment/body tests remain inclusive.\n\n**Unit tests** (all pass, in `contactRule.unitTests`): top-contact-exiting clear; reversed-endpoints clear; endpoint-on-face-pointing-inside blocked (inside 0.05); crossing-head blocked (0.40); tangency-along-solid-face **blocked** \u2014 documented consequence of the chosen predicate (coplanar grazing yields a positive-length interval from the other two slabs); backing-cross blocked with inside length exactly 0.120000 (asserted, guards against epsilon erosion).\n\n**Objective defects**: none.\n\n**Hashes** \u2014 13-file manifest (7 imported `main/src` modules + `geometry-instrument.mts/json/md` + 3 `selected-geometry-qualification.*`) byte-identical before/after; 14th control file `arena-instrument-repair-cinema.md` also unchanged. `selected-geometry-qualification.mts 963e3519\u2026` preserved. New: `.mts eb9e1130\u2026`, `.json e64ce08e\u2026`, `.md 49239bdc\u2026`(287 prose words). No runtime/main/build/browser/GPU/signed file touched.\n\n**Artifacts**\n- `/home/thomasphillip/Projects/vox/.codex/story-runs/2026-09-06-common-ground/head-geometry-qualification.mts`\n- `\u2026/head-geometry-qualification.json`\n- `\u2026/head-geometry-qualification.md`\n- bundle `/tmp/cg-head.mjs`, determinism rerun `/tmp/rerun.json`, hash baseline `/tmp/hashes-before.json`",
+  "ttft_ms": 1165,
+  "type": "result",
+  "duration_ms": 280923,
+  "uuid": "ae3f36e2-ba70-44d8-9ba9-ee1e780978ed",
+  "ttft_stream_ms": 798,
+  "time_to_request_ms": 19,
+  "first_content_frame_ms": 798,
+  "queued_turn_count": 0
+}

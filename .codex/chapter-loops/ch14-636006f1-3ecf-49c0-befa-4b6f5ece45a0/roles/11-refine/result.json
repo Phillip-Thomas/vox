@@ -1,0 +1,55 @@
+{
+  "schema": "paravoxia.chapterLoopRole.v1",
+  "summary": "Added immediate focus-loss audio cancellation and cue timing diagnostics; preserved existing return treatment. All 35 affected tests and TypeScript checks passed. Audible acceptance still requires runner capture and final judges. Nothing published.",
+  "verdict": "REVISE",
+  "evidence": [
+    {
+      "path": "main/src/story/unfinishedMapScore.ts",
+      "sha256": "61fbd0bc74e390a36e5e5accadf3be0e4d4f0fcd1696b4e18d7bc3e765f30149"
+    },
+    {
+      "path": "main/src/App.tsx",
+      "sha256": "0833482ed11b753289f1cb25b15f73b359f84af661be8458c52e408467671054"
+    },
+    {
+      "path": "main/src/story/unfinishedMapScore.test.ts",
+      "sha256": "74d8569aa162ed3164d02c4da32cbc813ab9a473b97267d386a31b0c57945842"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/11-refine/checks.txt",
+      "sha256": "2c90e15fac188885459b2d862cf763f94b1244ea971463335ba0a144233d742e"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/11-refine/progress.md",
+      "sha256": "d86bf6b0dad254b5acaa994af726f8477b0dc9f55adf2335e658b532fd520c63"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "major",
+      "description": "Earned-return cue requests and six-second envelope are source-verified; actual audible alignment and complete release remain unproved.",
+      "evidence": [
+        {
+          "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/11-refine/progress.md",
+          "sha256": "d86bf6b0dad254b5acaa994af726f8477b0dc9f55adf2335e658b532fd520c63"
+        }
+      ]
+    },
+    {
+      "severity": "major",
+      "description": "Interruption and silent restoration tests pass against mocked audio; Pause, Resume and Continue still require audible runtime verification.",
+      "evidence": [
+        {
+          "path": "main/src/story/unfinishedMapScore.test.ts",
+          "sha256": "74d8569aa162ed3164d02c4da32cbc813ab9a473b97267d386a31b0c57945842"
+        }
+      ]
+    }
+  ],
+  "keep": [
+    "Compact record preserves the visible hull and unanswered question.",
+    "Physical return retires guidance immediately without forced framing.",
+    "Approved three-lane treatments, attribution and W-7744’s bounded role remain intact."
+  ],
+  "session": "01a0839f-badc-7902-8dfe-1ab71aa7f844"
+}

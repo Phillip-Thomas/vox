@@ -1,0 +1,50 @@
+{
+  "schema": "paravoxia.diagnosticCheckpoint.v1",
+  "noncertifying": true,
+  "wallMs": 1790049325358,
+  "url": "http://127.0.0.1:44597/?story=1&movie=1&journeyprobe=1&journeylane=continuous&journeymode=movie&profile=HIGH",
+  "story": {
+    "active": true,
+    "chapter": "ch3",
+    "beat": "ch3-thirst",
+    "runId": 1
+  },
+  "objective": {
+    "id": "ch3:thirst:drink-water",
+    "kind": "interact",
+    "markerLabel": "DRINKABLE WATER",
+    "workOrder": [
+      "FOLLOW THE WATER MARKER.",
+      "LOOK AT THE WATER AND [F] DRINK."
+    ],
+    "requiresMarker": true,
+    "health": "ready",
+    "revision": 49
+  },
+  "storageState": {
+    "cookies": [],
+    "origins": [
+      {
+        "origin": "http://127.0.0.1:44597",
+        "localStorage": [
+          {
+            "name": "pvx.v1.world.-1,-1",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"structures\":[],\"campfires\":[{\"pos\":[-23.9218487607227,51.688974761968005,17.16731817253663],\"up\":[-0.000003046448822851406,0.9999999999953474,1.5598143801539623e-7],\"ownerId\":\"local\",\"placedBy\":\"local\"}],\"trees\":[],\"stones\":[[-8,25,-3],[-10,25,-3],[15,25,-4],[11,25,-5],[23,25,-10],[23,25,-6],[21,25,-7],[20,25,-6],[19,25,-6],[18,25,-6],[16,25,-6],[11,25,-8],[10,25,-7],[-3,25,-5],[-5,25,-1],[-9,25,1],[-11,25,5]],\"forage\":[],\"flora\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.voxels",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"generationSchemaVersion\":1,\"fingerprint\":115629,\"removed\":[[6,25,-2],[-7,25,-2],[-8,25,-2],[-11,25,-2]],\"added\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.player",
+            "value": "{\"pos\":[-23.921852111816406,52.78897476196289,17.16731834411621],\"forward\":[0.9367099623946535,0.0000027990288725924787,0.3501063357649679],\"pitch\":0.052216425544500004}"
+          },
+          {
+            "name": "pvx.v1.global",
+            "value": "{\"inventory\":{\"berry\":3,\"faulty_maw\":1,\"wood\":1,\"stone\":30,\"biofiber\":7},\"mawCharge\":100,\"era\":\"primitive\",\"milestones\":[\"story:started\",\"story:choice:dispenser:unlock\",\"story:choice:stowmass:adopt\",\"story:choice:question:unknown\",\"story:name:moss\",\"story:choice:light:blinds\",\"story:choice:bell:ring\",\"story:choice:diagnostic:replay\",\"story:choice:replay2:remember\",\"story:choice:thermal:hold\",\"story:choice:anomaly:ack\",\"story:debris-scattered:3\",\"story:tone:low\",\"story:cell:100\",\"story:prologue-seen\",\"story:debris:0\",\"story:debris:1\",\"story:ch1:track\",\"story:debris-stone-backfill:v2\",\"story:debris:2\",\"story:ch1:quota\",\"story:pod:0\",\"story:pod:1\",\"story:pod:2\",\"story:ch1:depth\",\"story:ch1:nav\",\"story:ch1:iso\",\"story:a1\",\"story:a2\",\"story:sense:health\",\"story:sense:inventory\",\"story:sense:temp\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1\",\"dayPhase\":0.033064583332896635,\"vitals\":{\"health\":100,\"hunger\":21.439744444490838,\"thirst\":14.009616666733468,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":\"-1,-1\",\"currentWorldId\":\"-1,-1\",\"parkedPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16]},\"systemPose\":{\"position\":[3,51.6,-6],\"quaternion\":[0,1,0,2.220446049250313e-16],\"velocity\":[0,0,0]},\"locationMode\":\"surface\",\"repairHistory\":[]}}"
+          }
+        ]
+      }
+    ]
+  }
+}

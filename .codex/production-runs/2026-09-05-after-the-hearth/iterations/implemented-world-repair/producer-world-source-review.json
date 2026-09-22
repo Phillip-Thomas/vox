@@ -1,0 +1,69 @@
+{
+  "schema": "paravoxia.producerSourceReview.v1",
+  "reviewedAt": "2026-09-06T12:21:03.228569+00:00",
+  "integrationReportSha256": "2468f7331895b2a91639ee0f1c9c58141552366bb23577f19ac1d8b9fad742bb",
+  "integrationFinishedAt": "2026-09-06T12:19:37.406297+00:00",
+  "sourceManifestSha256": "d9e36ae314ba547a292e55376d54eecbf0ff47dc3d6710c4f9b5ae3fee96caf2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "acceptedForIndependentVerification": true,
+  "disposition": "frozen-for-independent-verification-with-open-defects",
+  "sourceAcceptance": false,
+  "sourceFilesRehashed": 97,
+  "reportedChangedPaths": 5,
+  "unexpectedDrift": [],
+  "tests": {
+    "preRepairV2Baseline": 3068,
+    "baselineNote": "Historical key name retained per root's compiler expectation; the value is the actual pre-repair baseline this pass started from (independently re-run by the verifier as 348 files / 3068 tests).",
+    "baselineFiles": 348,
+    "files": 349,
+    "tests": 3091,
+    "addedByThisPass": 23,
+    "removed": 0,
+    "arithmetic": "3068 + 23 - 0 = 3091",
+    "addedBreakdown": {
+      "main/src/story/world/CommonGroundWorld.test.tsx": 17,
+      "main/src/story/commonGroundDirector.test.ts": 6
+    },
+    "removedNote": "No test was deleted. One existing case, \"never defers an acknowledgement across a pause, a mute or a Continue\", was RENAMED and rewritten as \"never defers a MID-BEAT acknowledgement across a pause, a mute or a Continue\": its old form asserted the defect (a boot pause destroying the beat-entry anchor). The rule it protected \u2014 no deferred live install acknowledgement \u2014 is asserted more directly in the rewrite. Counted as changed, not removed.",
+    "intermediateSuiteTotals": [
+      {
+        "stage": "after VF3-FOOTING-1 fix only",
+        "command": "npx vitest run src/story/world/CommonGroundWorld.test.tsx",
+        "tests": 14,
+        "note": "focused file only, not a suite total"
+      },
+      {
+        "stage": "after root placed-block review finding",
+        "command": "npx vitest run src/story/world/CommonGroundWorld.test.tsx",
+        "tests": 17,
+        "note": "focused file only, not a suite total"
+      },
+      {
+        "stage": "after VF3-AVHOME-1 fix",
+        "command": "npx vitest run src/story/commonGroundDirector.test.ts",
+        "tests": 91,
+        "note": "focused file only"
+      },
+      {
+        "stage": "after VF3-CG008-1 fix",
+        "command": "npx vitest run src/story/commonGroundDirector.test.ts",
+        "tests": 94,
+        "note": "focused file only"
+      }
+    ],
+    "finalSuiteTotalsAreFrom": "npm test (vitest-full.log), 349 files / 3091 tests, exit 0"
+  },
+  "implementationGateChecks": 1708,
+  "observations": [
+    "The actual generator confirms the invisible procedural ceiling. Final solid query preserves exposed/placed voxels outside the procedural radius; the 17 footing regressions include actual boundary hole rejection, placed outside support/ceiling/removal, water, lava and within-cell airborne negatives. Final-code counterfactuals demonstrate each added clause matters.",
+    "The boot cause is the world-generation/warmup paused prop, not the speculative app-state loading phase: deep-link app phase already starts playing. The separate home entry queue is bounded to the entry event and one retry. Live acknowledgements still clear on interruption, and exit/reset/world/actor transitions clear both queues.",
+    "Continue regressions now use actual WorldSave serialization, localStorage round trip, hydration validator and signed AV seam for unfinished drawing and testing before the final routeTested milestone. Their poses and flat terrain are controlled test inputs; they are not physically earned browser play.",
+    "Validated restored survey state satisfies only predecessor ordering, without adding activation history, replaying a cue or fabricating milestones. Final proof anchors remain milestone-backed. The negative no-recording restore remains refused.",
+    "The reported existing common Continue case is after an earned crossing; it is not independent physical proof of a save during an unfinished crossing. The main verifier must test unfinished common and actual partial-survey Continue.",
+    "Only three runtime files, one existing test and one new allowed test differ from the previous source snapshot. The prior coordinate conversion, on-foot entry, shared F cadence, original route-credit algorithm and passive diagnostics are preserved. No contract revision or threshold widening occurred.",
+    "The report sourceManifestSha256 is the input manifest 51b25376...02c3; this review and new implementation-source-manifest identify the final candidate d9e36ae3...caf2. Actual invocation finishedAt is authoritative for the end of source ownership.",
+    "The prior destructive Git cleanup incident remains in lifecycle-mutation-cleanup-deviation.json. This pass reports exact private-byte/finally restoration; current preservation was independently checked against prior dirty snapshots. No incident-free claim is made for the whole production run.",
+    "producer-harness-final-review.json retains capture-tool limitations and the bounded run-local corrections assigned to the next verifier. No browser, audiovisual or creative acceptance is established by preparation or these checks."
+  ],
+  "nextAction": "Independent full verify/build, replace the older immutable preview, then actual targeted paths and all signed chapter evidence before independent reviews. No source edits by verifier."
+}

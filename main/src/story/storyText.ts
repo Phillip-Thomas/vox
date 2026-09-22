@@ -12,6 +12,7 @@
 import { storyNow } from './storyClock.ts';
 
 export type StoryTextChannel = 'workorder' | 'violation' | 'caption' | 'system' | 'audit';
+export interface AuditVoiceCue { surfaceId: 'audit-band' | 'ch10-relay'; slot: 0 | 1 }
 
 export interface StoryTextState {
   workorder: string[];
@@ -20,7 +21,7 @@ export interface StoryTextState {
   system: { text: string; shownAt: number; ttlMs: number } | null;
   /** Post-feed regulation voice: caps, top band, OVER the living world — the
    *  system speaks into the player's frame but no longer owns it. */
-  audit: { text: string; header?: string; shownAt: number; ttlMs: number } | null;
+  audit: { text: string; header?: string; shownAt: number; ttlMs: number; voice?: AuditVoiceCue } | null;
 }
 
 const MAX_VIOLATIONS = 7;
@@ -84,9 +85,15 @@ export function showSystemLine(text: string, ttlMs = 4000): void {
   emit();
 }
 
+/** Compare-and-clear an owned entry; an incoming caption or objective is untouched. */
+export function clearStoryTextChannel(channel: 'caption' | 'system', owned: StoryTextState['caption']): boolean {
+  if (!owned || state[channel] !== owned) return false;
+  state[channel] = null; emit(); return true;
+}
+
 /** The AUDIT band (ch3-signal onward): the network / the auditor's suit. */
-export function showAuditLine(text: string, header?: string, ttlMs = 6500): void {
-  state.audit = { text, header, shownAt: storyNow(), ttlMs };
+export function showAuditLine(text: string, header?: string, ttlMs = 6500, voice?: AuditVoiceCue): void {
+  state.audit = { text, header, shownAt: storyNow(), ttlMs, ...(voice ? { voice } : {}) };
   emit();
 }
 

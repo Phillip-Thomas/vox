@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 2106414,
+  "stop_reason": "end_turn",
+  "session_id": "168d5577-112e-4a0a-8364-4569fcd833cc",
+  "total_cost_usd": 27.554153999999993,
+  "usage": {
+    "input_tokens": 362,
+    "cache_creation_input_tokens": 357853,
+    "cache_read_input_tokens": 39525840,
+    "output_tokens": 168324,
+    "output_tokens_details": {
+      "thinking_tokens": 50162
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 357853,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1224,
+        "cache_read_input_tokens": 361099,
+        "cache_creation_input_tokens": 874,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 874
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2679,
+      "outputTokens": 23,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002794,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 362,
+      "outputTokens": 168324,
+      "cacheReadInputTokens": 39525840,
+      "cacheCreationInputTokens": 357853,
+      "webSearchRequests": 0,
+      "costUSD": 27.551359999999992,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 50162,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 197,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Bounded repair complete. Source is frozen for root review.\n\n## What was wrong\n\n**CG-IMPL-010 (VF4-SURVEY-STALL-1)** was arithmetic, not chance. Chapter 13 aims 0.6 *through* each route corner; with `VOXEL_SCALE = 2` that goal quantizes into the **same cell** as the vertex, and every A* waypoint \u2014 including the terminal one, which is never consumed \u2014 is a snapped **cell centre**. `steerFreeToward` drops all four controls within 0.2 of that centre, while `walkToward` arrives only on distance to the real goal. Closest possible approach: **0.6 \u2212 0.2 = 0.4 > 0.35**. The arrival predicate was *unsatisfiable*. It recurs at every later corner, which is why one nudge never fixed the route.\n\n`stillTime = 0` beside a frozen body is fully explained: the watchdog counts only while `pushing`, and the navigator was issuing nothing. Correctly disarmed \u2014 I did not arm it.\n\n**CG-IMPL-011/008**: an empty placeholder snapshot, minted by a read before the world-keyed restore effect ran, both shadowed the earned payload and got serialized over it (1186 \u2192 606 bytes, 4 samples \u2192 0). I isolated the *frame*, rather than blaming the Continue click.\n\n## Two judgement calls worth flagging\n\n**The resume point is not a bug.** The fixture seeded `fault-reviewed` + `return-chosen` but never `ch13-origin-landed`, and `storyEntryPoint` resolves exactly that set to `ch13-return`. I proved it both ways rather than \"fixing\" lawful behaviour.\n\n**I withdrew my own first Continue candidate.** Root pointed out that treating beat entry as world ownership would make the very placeholder authoritative and reinstate the bug. That was correct \u2014 ownership is now driven only by persistence, and only a restore that found *nothing* or a payload that *validated* settles a world.\n\n## The proof that matters\n\nThe helper tests alone weren't sufficient, so there is now a test driving the real `autopilotTick \u2192 ch13 rail \u2192 walkToward \u2192 nextNavigationStep \u2192 steerFreeToward`, observing only shipped controls. Run against pre-repair bytes: **`expected 0 to be greater than 0`** \u2014 no movement asked for on any of 30 frames. The Continue counterfactual reads `phase=idle samples=0` before, `phase=drawing samples=4` after.\n\n`npm run verify` exit **0**, 350 files / **3137** tests (+46, \u22120, 2 made lifecycle-faithful without dropping an assertion). 6 of 97 manifest files changed, **zero unexpected drift**, 323 dirty files preserved, no destructive Git.\n\n## Honest limitations\n\n- One counterfactual briefly created a file **outside allowedPaths**; it didn't pre-exist, removal is proven, and later work reused an allowed file as root asked. Recorded rather than buried.\n- Reproductions ran **after** edits began \u2014 not claimed otherwise. An early draft used the grounded frame instead of the capsule centre the navigator reads, and failed for the wrong reason until corrected.\n- **HABITAT-CARRY-SYMMETRY**: `saveWorld`'s `habitat` field has the same drop-shaped defect the `commonGround` field had. Not demonstrated by any capture and out of scope, so I flagged it for routing rather than silently widening.\n- **Nothing here is a hardware claim.** VF4 was found on GB10 and must be re-measured there; preview 40131 is pre-repair source and cannot validate this.",
+  "ttft_ms": 1431,
+  "type": "result",
+  "duration_ms": 2416498,
+  "uuid": "f676a209-0e5c-410e-bb49-929c5b7e45d5",
+  "ttft_stream_ms": 857,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 857,
+  "queued_turn_count": 0
+}

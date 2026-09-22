@@ -1,0 +1,114 @@
+{
+ "bundle": "assets/index-Ddqg7x9Y.js",
+ "bundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9",
+ "resolvedOfflineAt": "2026-09-06T22:24Z",
+ "allOnLine": 7840,
+ "pins": {
+  "CAP_CONST": {
+   "matches": 1,
+   "anchor": {
+    "line": 7840,
+    "column": 189584
+   },
+   "pattern": "Bwe=5,EI=\\{beat:null,mood:null,finalTexture:null\\}",
+   "note": "signed 5s cap literal + module state EI",
+   "status": "resolved-unique"
+  },
+  "BEGIN_Qwe": {
+   "matches": 1,
+   "anchor": {
+    "line": 7840,
+    "column": 190086
+   },
+   "pattern": "function Qwe\\(e,A\\)\\{return A\\.restoredCompletion",
+   "note": "token creation; sets EI.finalTexture={beat,startedAtMs:KKA()}",
+   "status": "resolved-unique"
+  },
+  "DEADLINE_hwe": {
+   "matches": 1,
+   "anchor": {
+    "line": 7840,
+    "column": 190301
+   },
+   "pattern": "function hwe\\(e\\)\\{const A=EI\\.finalTexture;",
+   "note": "deadline tick: age<Bwe ? false : LKA()",
+   "status": "resolved-unique"
+  },
+  "RELEASE_LKA": {
+   "matches": 1,
+   "anchor": {
+    "line": 7840,
+    "column": 190388
+   },
+   "pattern": "function LKA\\(\\)\\{const e=EI\\.finalTexture;",
+   "note": "release: clear token, E4(null), B4(beat), clear beat/mood",
+   "status": "resolved-unique"
+  },
+  "CANCEL_ngA": {
+   "matches": 1,
+   "anchor": {
+    "line": 7840,
+    "column": 190499
+   },
+   "pattern": "function ngA\\(e\\)\\{return EI\\.finalTexture\\?",
+   "note": "cancel(reason) -> LKA(); REASON ARG DISCARDED",
+   "status": "resolved-unique"
+  },
+  "DIAG_dwe": {
+   "matches": 1,
+   "anchor": {
+    "line": 7840,
+    "column": 190614
+   },
+   "pattern": "function dwe\\(\\)\\{return\\{beat:EI\\.beat",
+   "note": "diagnostic getter finalTextureSeconds",
+   "status": "resolved-unique"
+  },
+  "ELAPSED_vKA": {
+   "matches": 1,
+   "anchor": {
+    "line": 7840,
+    "column": 189746
+   },
+   "pattern": "function vKA\\(e\\)\\{return Math\\.max\\(0,\\(KKA\\(\\)-e\\)/1e3\\)",
+   "note": "monotonic elapsed seconds",
+   "status": "resolved-unique"
+  },
+  "SETBEAT_l4": {
+   "matches": 1,
+   "anchor": {
+    "line": 7840,
+    "column": 160327
+   },
+   "pattern": "function l4\\(e,A\\)\\{IQ=\\{beat:e,mood:QL\\(A\\)\\}",
+   "note": "setScoreBeat/mood",
+   "status": "resolved-unique"
+  },
+  "CLEARBEAT_B4": {
+   "matches": 1,
+   "anchor": {
+    "line": 7840,
+    "column": 160410
+   },
+   "pattern": "function B4\\(e\\)\\{if\\(!IQ\\|\\|e&&IQ\\.beat!==e\\)return!1;",
+   "note": "clear score beat/override",
+   "status": "resolved-unique"
+  },
+  "AUTHORITY_E4": {
+   "matches": 1,
+   "anchor": {
+    "line": 7840,
+    "column": 160539
+   },
+   "pattern": "function E4\\(e\\)\\{if\\(c4=e,!e\\)\\{HE=null,\\$Z\\(\\),LY\\(null\\);return\\}",
+   "note": "leadership set; $Z() on null = story-authority release callsite",
+   "status": "resolved-unique"
+  }
+ },
+ "unresolved": {
+  "SCHEDULE_STORY_AUTHORITY_ATTIME": "$Z() is called with NO arguments at E4(null); the 4.5s duration and atTime are computed inside $Z, not at this callsite. No literal 4.5 adjacent to currentTime/gain/ramp was found in the bundle, so the complementary-bed automation endpoints are NOT yet pinned offline.",
+  "TOKEN_IDENTITY": "EI.finalTexture has only {beat,startedAtMs}. No token id is published; stable identity must be the captured creation timestamp KKA() value."
+ },
+ "repinnedAt": "2026-09-07T00:22Z",
+ "repinNote": "All pin line0/column0 re-resolved against index-Ddqg7x9Y.js and verified byte-identical to prior coordinates; only bundle identity was stale."
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "paravoxia.authorizedChapterOperation.v1",
+  "request": "do it all",
+  "scope": [
+    "repair startup",
+    "verify Chapter13",
+    "create Chapter14"
+  ],
+  "clock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T00:06:46.000Z",
+    "deadlineAt": "2026-09-08T08:06:46.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": null
+  },
+  "status": "repairing",
+  "provider": {
+    "provider": "claude",
+    "models": {
+      "creative": "fable",
+      "mechanical": "opus"
+    }
+  },
+  "publishing": false
+}

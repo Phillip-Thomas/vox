@@ -1,0 +1,16 @@
+{
+  "role": "finale-window-closureor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T18:27:14.373089+00:00",
+  "commissionSha256": "1551cab75f2cdce54c504ee81fe2f35a1387dc20ae957b6cf8c6058f97543d86",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFrozen": true,
+  "sourceReference": "iterations/implemented-arrival-common-repair/source",
+  "scope": "CPU-only preparation of atomic finale window and isolated actual audio capture; no GPU/game edits",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T18:35:06.879059+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "9a8e1966-8e84-44bb-9200-9a54863520b5",
+  "isError": false,
+  "gameSourceMutationAuthorized": false
+}

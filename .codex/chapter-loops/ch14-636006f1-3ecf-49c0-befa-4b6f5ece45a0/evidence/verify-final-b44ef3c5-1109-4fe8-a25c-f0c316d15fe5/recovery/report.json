@@ -1,0 +1,149 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "9728c899035272cf4d5df07a5367a587b1302d6be2e3fa0ce7a529f1ee1044aa",
+  "kind": "recovery",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": true,
+    "acceptedAction": 2,
+    "completePath": false,
+    "interrupted": true,
+    "recovered": true,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 6,
+    "hardware": true,
+    "cleanup": true,
+    "videoDecodes": true,
+    "audioDecodes": true,
+    "audioIsolated": true,
+    "mediaCleanup": true,
+    "mediaCaptured": true
+  },
+  "missing": [],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/raw/cleanup.json",
+      "sha256": "d8111b6706898e1340b5db6df4a8f7c8d4e720c37aa957092676cbe2ec926c92"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/raw/frame-4.png",
+      "sha256": "7349e2abf67d5cee40837a2b03515dc5447b12adf4fc14dc26411fda4f5598bf"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/raw/frame-5.png",
+      "sha256": "4f82ae1acfdf5cc803c64fd310a01709f6fbed4f69603b7fa9a7d26b82c46412"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/raw/frame-6.png",
+      "sha256": "f4ad54c3e121a1dea8a709cd4ecc952239c43455a00355e553fb05f5c6146324"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/raw/frame-7.png",
+      "sha256": "efc347314ba9ccc4b73137a8bcccb8e3bc8e6f5715ef00e52726f86b2053daf8"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/raw/media-proof.json",
+      "sha256": "36315887911ef118d52fa2d6fadb3fb21f2cb4f486a737887bd1f9085809efc5"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/raw/observations.json",
+      "sha256": "886d31ee035caf924e65cd3390e09fcc22f5fe0ebd14e6a95542a5364e23ddee"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/raw/provenance.json",
+      "sha256": "b88f3ef2d376130f76158ebefb9c26395d00f2b90bab809355af398edef18f3a"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/raw/trace.ndjson",
+      "sha256": "edde17269df67580350e25db7da4556feb6b1174fad7be03214815c94a610b0f"
+    }
+  ],
+  "reviewEntry": null,
+  "media": [
+    {
+      "kind": "frame",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/frame.png",
+      "sha256": "82f843d84d01e6962766739a082e7cc74f04e2db925560a47e2c82cb045c4f08"
+    },
+    {
+      "kind": "video",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/video.webm",
+      "sha256": "f0ec81e328213f264c4e9c52ea2d145f1ced45b0a59c7bbf9a15015a8429a311"
+    },
+    {
+      "kind": "audio",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/recovery/audio.wav",
+      "sha256": "4a8e76e6a98d63b1fb102211d12af1fdf9c9d980561fe2de4b46172f96fcd832"
+    }
+  ],
+  "mediaTimeline": {
+    "clock": "host wall clock (Date.now)",
+    "alignment": "approximate; audio and video are separate unsynchronized recordings",
+    "uncertainty": "Offsets are host wall-clock differences between the recorder/context start and the observed gesture. The Playwright video timeline is frame-driven and the parec stream begins only after process spawn plus PulseAudio scheduling latency (unmeasured here). Audio and video are two independent recordings and are NOT muxed or sample-aligned: treat every offset as approximate guidance for seeking (order is reliable, absolute position is not), never as a synchronization claim.",
+    "audio": {
+      "startedAtWallMs": 1788924977872,
+      "stoppedAtWallMs": 1788925175663
+    },
+    "video": {
+      "startedAtWallMs": 1788924977442,
+      "stoppedAtWallMs": 1788925179460
+    },
+    "marks": [
+      {
+        "mark": "recording-started",
+        "note": null,
+        "wallMs": 1788924977873,
+        "audioOffsetSeconds": 0.001,
+        "videoOffsetSeconds": 0.431
+      },
+      {
+        "mark": "interruption",
+        "note": "ordinary Escape press",
+        "wallMs": 1788925115817,
+        "audioOffsetSeconds": 137.945,
+        "videoOffsetSeconds": 138.375
+      },
+      {
+        "mark": "recovery-cta",
+        "note": "click button:has-text(\"Resume\")",
+        "wallMs": 1788925118983,
+        "audioOffsetSeconds": 141.111,
+        "videoOffsetSeconds": 141.541
+      },
+      {
+        "mark": "new-action-start",
+        "note": null,
+        "wallMs": 1788925119261,
+        "audioOffsetSeconds": 141.389,
+        "videoOffsetSeconds": 141.819
+      },
+      {
+        "mark": "new-action-end",
+        "note": null,
+        "wallMs": 1788925167411,
+        "audioOffsetSeconds": 189.539,
+        "videoOffsetSeconds": 189.969
+      },
+      {
+        "mark": "recording-tail-end",
+        "note": null,
+        "wallMs": 1788925175440,
+        "audioOffsetSeconds": 197.568,
+        "videoOffsetSeconds": 197.998
+      }
+    ]
+  },
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 0,
+  "reused": false,
+  "status": "passed",
+  "errors": [],
+  "provenance": {
+    "sourceManifestSha256": "1d9b0c751ef1d464b9693dc471d1ef058213be91974fec93969f59ab50437d4f",
+    "buildSha256": "646ffd729782e01c81c0018dcb14bc02a86afd9c6829c319c2fbfb43245c4c7e",
+    "transportSha256": "8f4f5467737f5bc105f789851f352695fe41531a884adc18a86ea689207de2fd"
+  }
+}

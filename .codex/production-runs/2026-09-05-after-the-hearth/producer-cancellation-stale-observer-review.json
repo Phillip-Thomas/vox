@@ -1,0 +1,31 @@
+{
+  "at": "2026-09-07T00:20:01.704108+00:00",
+  "priorInvocation": {
+    "role": "finale-cancellation-candidate-runtime",
+    "requestedModel": "opus",
+    "startedAt": "2026-09-07T00:13:47.989804+00:00",
+    "commissionSha256": "2534937ea8a38ae5455f05f9826972cc6734a1c798e80677ab596bb60c6975cd",
+    "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+    "sourceFilesRehashedBefore": 103,
+    "deadlineAt": "2026-09-07T00:25:47.989628+00:00",
+    "scope": "Actual pause/Resume cancellation and silent earned completed-save Continue; no game mutation",
+    "exitCode": 0,
+    "finishedAt": "2026-09-07T00:19:22.453884+00:00",
+    "model": "claude-opus-5",
+    "sessionId": "1fc48f6d-f600-4577-8b9f-d2261790174b",
+    "isError": false,
+    "sourceDrift": [],
+    "sourceFilesRehashedAfter": 103
+  },
+  "captureRef": "verifier/captures/manual-credit-finale/pause-cancel-20260907T001707Z",
+  "captureOutcome": "INSTRUMENT_INCONCLUSIVE",
+  "actualObserverAttached": false,
+  "actualResolvedBreakpoints": 0,
+  "requestedBreakpoints": 10,
+  "actualEvents": 2,
+  "cause": "Private seamobserver still targets oldindex-C1X65dZp.js after entryidentitypins updated. No cancellation proof; no gamefailure inferred.",
+  "cleanupComplete": true,
+  "defaultSinkUnchanged": true,
+  "sameWindowDeadline": "2026-09-07T00:25:47.989628+00:00",
+  "nextAction": "Finishedrolehandedoff; existing authorized private observer correction and actualcapture inside original12minute deadline. No source pass, build or suite."
+}

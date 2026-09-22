@@ -1,0 +1,16 @@
+{
+  "schema": "paravoxia.chapterLoopRepairReplay.v1",
+  "at": "2026-09-07T13:20:00.150Z",
+  "proof": {
+    "hardware": true,
+    "cleanup": true,
+    "ordinaryControls": true,
+    "acceptedAction": 1
+  },
+  "raw": {
+    "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-a5da6276-d9c2-434d-8a2e-d0837f1cd835/manual/capture/summary.json",
+    "sha256": "658ff90c5ca9f371b14f00a10a110ac5fa392abfa8438232897b92564a6110f9"
+  },
+  "reused": true,
+  "scope": "Re-normalized retained real runtime bytes. Not a fresh gameplay run or chapter acceptance."
+}

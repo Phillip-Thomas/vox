@@ -1,0 +1,50 @@
+{
+  "kind": "owner-reported visual defect; cause pending focused runtime diagnosis",
+  "at": "2026-09-09T16:57:56.552369+00:00",
+  "request": "during the movie tests ... I do not see the constellations ... arent they supposed to appear then?",
+  "expected": "STARGAZE line5 initiates18-second reveal of star nodes and connected figures; rest is offered after sequence.",
+  "observed": "Current movie frames at710s,720s,725s show upward camera, stars and tree canopy, but no clearly visible connected figures. Actual story:ch4:constellations milestone appears in retained trace. Milestone alone does not certify visible reveal.",
+  "unproven": "Whether the defect is sparse sky placement/framing, canopy occlusion, or runtime uniform/rendering. Do not infer zero camera pitch from view.forward: that is tangent forward and excludes separately stored pitch.",
+  "frames": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/t710.png",
+      "sha256": "e6fa6e88ac17d4785700ed6eb7fd2dad9f6209ae3df91399297a5021fea23bad"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/t720.png",
+      "sha256": "7eee631a3b5a7b4ac8b8db718f0ca9cd6bcc136b1d9cd74cea70818b87fac6ea"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/t725.png",
+      "sha256": "7dc412c7706896b7faf37d694cd0c1a5f2851083f76cb0a9039d8cfb7f766071"
+    }
+  ],
+  "source": [
+    {
+      "path": "main/src/story/storyScript.ts",
+      "sha256": "54dcaddd1793febec7ba8a4d144174a65310792e3300b00d8c8016e4b382d8f9"
+    },
+    {
+      "path": "main/src/story/storyDirector.ts",
+      "sha256": "a89549a728780673d1b8f25f423275558726f852fd32bd63f6845eeb026f82ec"
+    },
+    {
+      "path": "main/src/story/beats/ch4/rail-ch4-vigil.ts",
+      "sha256": "074c2a5030ad347b65a4799cf5b56a1c5bbbfe70c3dba153ab090c15013ca18d"
+    },
+    {
+      "path": "main/src/story/autopilot/primitives.ts",
+      "sha256": "f3a8787699bbec8c82a9b470734cc4f130b800172a5ddc9fd81a86ddd3a28b0a"
+    },
+    {
+      "path": "main/src/components/SpaceSky.tsx",
+      "sha256": "d8b446657b94c286317a0488df88c73e778b233854ff9eb67b34403e2e72317e"
+    },
+    {
+      "path": "main/src/utils/spaceSky.ts",
+      "sha256": "c631eda8e778a9211f8f30c87de276d9bf61f2f4cb4693ae064f5daeac1ec965"
+    }
+  ],
+  "currentCapture": "evidence/verify-final-561def89-cdb8-452f-a802-fe94949f8ed9",
+  "disposition": "Keep current immutable capture collecting route evidence; serialize focused vigil GPU diagnosis after it. No source edits during capture."
+}

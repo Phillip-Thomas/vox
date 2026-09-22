@@ -1,0 +1,16 @@
+{
+  "role": "manual-frontier-auditor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T18:26:00.233452+00:00",
+  "commissionSha256": "9ec27a9a571158fef7663e9ec1ba07395a7d4ea495786a4ee39d77d1f3595676",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFrozen": true,
+  "sourceReference": "iterations/implemented-arrival-common-repair/source",
+  "scope": "Read-only causal audit of manual corner credit plateau6; no GPU/game changes",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T18:33:01.186650+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "6fe2bdc5-41c3-4814-83db-5411920c7478",
+  "isError": false,
+  "gameSourceMutationAuthorized": false
+}

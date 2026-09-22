@@ -1,0 +1,101 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "sourceRevision": "b631a52065a1a69fecac0331e69515c306408641+working-tree",
+  "compiledAt": "2026-09-06T23:31:31.572839+00:00",
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "productionScope": {
+    "status": "passed",
+    "evidenceRefs": [
+      "implementation.diff",
+      "implementation-source-manifest.json",
+      "production-lock.json",
+      "producer-boundary-completion.json",
+      "producer-concurrent-validation-tooling-review.json",
+      "producer-continue-spawn-boundary-completion.json",
+      "producer-continue-spawn-boundary-prefix-correction.json",
+      "producer-continue-spawn-source-review.json"
+    ]
+  },
+  "creativeContract": {
+    "status": "passed",
+    "evidenceRefs": [
+      "contract-gate-pass.json",
+      "scene-v3-contract-gate.log",
+      "final-contract-gate-pass.json",
+      "scene-v3-final-contract-gate.log",
+      "director-signoffs.json"
+    ]
+  },
+  "typecheck": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/integration-continue-spawn/typecheck.log",
+      "logs/continue-spawn-verifier/node-typecheck.log"
+    ]
+  },
+  "tests": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/integration-continue-spawn/focused-vitest.log"
+    ]
+  },
+  "build": {
+    "status": "passed",
+    "evidenceRefs": [
+      "logs/continue-spawn-verifier/build.log"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npx tsc --noEmit -p tsconfig.node.json --pretty false",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/continue-spawn-verifier/node-typecheck.log",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "startedAt": "2026-09-06T23:25:56Z",
+      "finishedAt": "2026-09-06T23:25:56Z"
+    },
+    {
+      "command": "npm run build",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/continue-spawn-verifier/build.log",
+      "evidenceSha256": "c57aab10bd9f42620ee29bbeddd0a43e3370eb930dac950ffd6446b2eb1bd8a3",
+      "startedAt": "2026-09-06T23:26:21Z",
+      "finishedAt": "2026-09-06T23:26:27Z"
+    },
+    {
+      "command": "npx tsc --noEmit -p tsconfig.json --pretty false",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/integration-continue-spawn/typecheck.log",
+      "evidenceSha256": "cc8a7fda226bb5da06de15e4cc12b2670add5b6120e6584547678350c7cdd2ea",
+      "reused": true,
+      "reviewRef": "producer-continue-spawn-source-review.json"
+    },
+    {
+      "command": "npx vitest run src/utils/playerSpawnSelection.test.ts src/utils/spawnValidation.test.ts src/utils/worldArrival.test.ts src/state/shipFlightContinuity.test.ts src/story/diveReloadRecovery.test.ts src/game/systems/persistence.test.ts src/utils/waterVoxels.test.ts src/App.test.tsx",
+      "cwd": "main",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "logs/integration-continue-spawn/focused-vitest.log",
+      "evidenceSha256": "30cfb58b8eefebfe6f77d12e4865b7fc008c1ce3578b712a3cac1705cd1d05bc",
+      "result": "101 tests / 8 files passed; focused only",
+      "reused": true
+    }
+  ],
+  "scope": "Source103 candidate: independent missing node typecheck/build plus hash-verified engineer application typecheck and focused101 tests reused. No candidate full suite or runtime acceptance yet.",
+  "externalSourceChanges": {
+    "reviewRef": "producer-concurrent-validation-tooling-review.json",
+    "reviewSha256": "61c6095b0abaeb21ce189a3658826220aab6086365766e6a93331fb60cb420da",
+    "hashes": {
+      "main/tools/creative-triad-gate.mjs": "23b347b7d7f8ae67c87d3e0eff14baf80d6e9e80cb2255bff81bc91a555e66bf"
+    }
+  }
+}

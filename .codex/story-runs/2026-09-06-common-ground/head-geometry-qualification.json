@@ -1,0 +1,1324 @@
+{
+  "probe": "common-ground HEAD-CAP qualification (exactly one candidate, no search; selected-candidate probe + head cap + general contact rule)",
+  "generatedAt": "2026-09-06T06:22:08.445Z",
+  "status": "PREPRODUCTION MEASUREMENT — proposed apparatus, proposed finite range, proposed stand/bracket/cap collision solids; not shipped behaviour",
+  "selectsWinner": false,
+  "ownGeometryProposed": false,
+  "scope": "bounded collision layout specification for the already nominated passive apparatus; no new story proposal",
+  "candidateSource": "geometry-instrument.json ranges[range=12].top3[0]",
+  "candidate": {
+    "centreCell": [
+      -17,
+      25,
+      10
+    ],
+    "centreWorldXZ": [
+      -34,
+      20
+    ],
+    "quarterTurns": 1,
+    "yawDegrees": 90,
+    "S": [
+      -26,
+      12
+    ],
+    "E": [
+      -42,
+      12
+    ],
+    "C": [
+      -48,
+      12
+    ],
+    "W": [
+      -34,
+      10
+    ],
+    "WNominal": [
+      -34,
+      11
+    ],
+    "terra": [
+      -44,
+      12
+    ]
+  },
+  "conventionsInheritedFrom": "geometry-instrument-probe.mts (rendered-cube gate + Amanatides-Woo DDA + measured sockets + trunk collider + undecimated 1.0/0.25 sampling)",
+  "world": {
+    "planetSize": 50,
+    "radiusCells": 25,
+    "storyCoordinate": {
+      "x": -1,
+      "y": -1
+    },
+    "storySeed": 3215739679,
+    "worldId": "-1,-1",
+    "voxelScale": 2,
+    "voxelCount": 115629,
+    "heroTree": {
+      "x": -24,
+      "y": 50.95,
+      "z": 22
+    },
+    "pondSearchOrigin": {
+      "x": 6,
+      "y": 50.5,
+      "z": -12
+    },
+    "dryWalkableNodesOnBoundedTopFace": 1524
+  },
+  "thresholds": {
+    "range": 12,
+    "minExtraUnits": 12,
+    "minLengthRatio": 1.25,
+    "minUnsupportedShortSpanUnits": 6,
+    "bodyBodyClearance": 1,
+    "terraLateralMinUnits": 2,
+    "maxTracePoints": 128,
+    "maxTraceLength": 120,
+    "sampleSpacing": 1,
+    "cornerSpacing": 0.25,
+    "occupancyCylinder": {
+      "radius": 1.25,
+      "vertical": 0.6
+    },
+    "releaseCylinder": {
+      "radius": 1.75,
+      "vertical": 0.9
+    },
+    "newThresholdsAdded": "none",
+    "relaxationsApplied": "none",
+    "denseSegmentSpacingIsReportingOnly": 0.25
+  },
+  "sockets": {
+    "fixedApparatusPlate": 1.3,
+    "workerVisor": 1.85,
+    "playerEye": 1.35,
+    "workerBodyHeight": 2.01,
+    "playerBodyHeight": 3.6,
+    "bodyRadius": 0.5
+  },
+  "socketDisambiguation": {
+    "actualFixedReferenceSocketHeight": 1.3,
+    "actualFixedReferenceSocketWorld": {
+      "x": -34,
+      "y": 52.35,
+      "z": 20
+    },
+    "usedByEveryFixedReferencePredicate": true,
+    "genericPosesRSocketHeightInBroadJson": 1.85,
+    "genericPosesRSocketWorldInBroadJson": {
+      "x": -34,
+      "y": 52.9,
+      "z": 20
+    },
+    "genericPosesREntryIsMetadataOnly": "geometry-instrument-probe.mts emits poses.* with the worker socket 1.85 for every key except W; the R entry therefore reports 1.85 as generic per-pose metadata. No predicate reads it — apparatus.socketWorld (1.30) is the fixed reference.",
+    "verticalDifferenceUnits": 0.55,
+    "counterfactualIfGenericSocketWereUsed": {
+      "S_distance": 11.31,
+      "S_supported": true,
+      "unsupportedShortSpanUnits": 14,
+      "differsFromMeasured": true
+    }
+  },
+  "grounding": {
+    "R": {
+      "world": {
+        "x": -34,
+        "y": 51.05,
+        "z": 20
+      },
+      "supportVoxel": [
+        -17,
+        25,
+        10
+      ],
+      "matchesRequestedY": true,
+      "bodyDiscFullySupported": true,
+      "maxNeighbourStepUnits": 0,
+      "groundClearanceUsed": 1.05
+    },
+    "S": {
+      "world": {
+        "x": -26,
+        "y": 51.05,
+        "z": 12
+      },
+      "supportVoxel": [
+        -13,
+        25,
+        6
+      ],
+      "matchesRequestedY": true,
+      "bodyDiscFullySupported": true,
+      "maxNeighbourStepUnits": 0,
+      "groundClearanceUsed": 1.05
+    },
+    "E": {
+      "world": {
+        "x": -42,
+        "y": 51.05,
+        "z": 12
+      },
+      "supportVoxel": [
+        -21,
+        25,
+        6
+      ],
+      "matchesRequestedY": true,
+      "bodyDiscFullySupported": true,
+      "maxNeighbourStepUnits": 0,
+      "groundClearanceUsed": 1.05
+    },
+    "C": {
+      "world": {
+        "x": -48,
+        "y": 51.05,
+        "z": 12
+      },
+      "supportVoxel": [
+        -24,
+        25,
+        6
+      ],
+      "matchesRequestedY": true,
+      "bodyDiscFullySupported": true,
+      "maxNeighbourStepUnits": 0,
+      "groundClearanceUsed": 1.05
+    },
+    "W": {
+      "world": {
+        "x": -34,
+        "y": 51.05,
+        "z": 10
+      },
+      "supportVoxel": [
+        -17,
+        25,
+        5
+      ],
+      "matchesRequestedY": true,
+      "bodyDiscFullySupported": true,
+      "maxNeighbourStepUnits": 0,
+      "groundClearanceUsed": 1.05
+    },
+    "WNominal": {
+      "world": {
+        "x": -34,
+        "y": 51.05,
+        "z": 11
+      },
+      "supportVoxel": [
+        -17,
+        25,
+        6
+      ],
+      "matchesRequestedY": true,
+      "bodyDiscFullySupported": true,
+      "maxNeighbourStepUnits": 0,
+      "groundClearanceUsed": 1.05
+    },
+    "T": {
+      "world": {
+        "x": -44,
+        "y": 51.05,
+        "z": 12
+      },
+      "supportVoxel": [
+        -22,
+        25,
+        6
+      ],
+      "matchesRequestedY": true,
+      "bodyDiscFullySupported": true,
+      "maxNeighbourStepUnits": 0,
+      "groundClearanceUsed": 1.05
+    }
+  },
+  "solids": {
+    "localFrame": {
+      "backing": {
+        "lo": {
+          "x": -0.96,
+          "y": 0.30000000000000004,
+          "z": -0.8
+        },
+        "hi": {
+          "x": -0.8400000000000001,
+          "y": 2.3,
+          "z": 0.8
+        }
+      },
+      "stand": {
+        "lo": {
+          "x": -0.2,
+          "y": 0,
+          "z": -0.2
+        },
+        "hi": {
+          "x": 0.2,
+          "y": 1.2,
+          "z": 0.2
+        }
+      },
+      "bracket": {
+        "lo": {
+          "x": -0.96,
+          "y": 0.8,
+          "z": -0.2
+        },
+        "hi": {
+          "x": -0.1,
+          "y": 1.2,
+          "z": 0.2
+        }
+      },
+      "cap": {
+        "lo": {
+          "x": -0.2,
+          "y": 1.2,
+          "z": -0.2
+        },
+        "hi": {
+          "x": 0.2,
+          "y": 1.3,
+          "z": 0.2
+        }
+      },
+      "standBracketCapLocalY": 1.2,
+      "headCapTopLocalY": 1.3
+    },
+    "world": [
+      {
+        "name": "backing",
+        "lo": {
+          "x": -34.8,
+          "y": 51.35,
+          "z": 19.04
+        },
+        "hi": {
+          "x": -33.2,
+          "y": 53.35,
+          "z": 19.16
+        },
+        "sizeUnits": {
+          "x": 1.6,
+          "y": 2,
+          "z": 0.12
+        },
+        "nonzeroThickness": true,
+        "topAtOrBelowCap": null
+      },
+      {
+        "name": "stand",
+        "lo": {
+          "x": -34.2,
+          "y": 51.05,
+          "z": 19.8
+        },
+        "hi": {
+          "x": -33.8,
+          "y": 52.25,
+          "z": 20.2
+        },
+        "sizeUnits": {
+          "x": 0.4,
+          "y": 1.2,
+          "z": 0.4
+        },
+        "nonzeroThickness": true,
+        "topAtOrBelowCap": true
+      },
+      {
+        "name": "bracket",
+        "lo": {
+          "x": -34.2,
+          "y": 51.85,
+          "z": 19.04
+        },
+        "hi": {
+          "x": -33.8,
+          "y": 52.25,
+          "z": 19.9
+        },
+        "sizeUnits": {
+          "x": 0.4,
+          "y": 0.4,
+          "z": 0.86
+        },
+        "nonzeroThickness": true,
+        "topAtOrBelowCap": true
+      },
+      {
+        "name": "cap",
+        "lo": {
+          "x": -34.2,
+          "y": 52.25,
+          "z": 19.8
+        },
+        "hi": {
+          "x": -33.8,
+          "y": 52.35,
+          "z": 20.2
+        },
+        "sizeUnits": {
+          "x": 0.4,
+          "y": 0.1,
+          "z": 0.4
+        },
+        "nonzeroThickness": true,
+        "topAtOrBelowCap": true
+      }
+    ],
+    "solidCapWorldY": 52.25,
+    "headCapTopWorldY": 52.35,
+    "headCapTopEqualsFixedSocketPlane": true,
+    "standAndBracketEntirelyBelowCap": true,
+    "capBelowEveryRaySocket": {
+      "fixedPlate": 52.35,
+      "workerVisorAtE": 52.9,
+      "playerEyeAtW": 52.4,
+      "playerEyeAtTerra": 52.4,
+      "capBelowAll": true
+    },
+    "exemptions": "none — backing, stand, bracket and cap are all in the walk mask, the walked-segment test and every ray",
+    "footprintColumns": 1,
+    "footprintColumnsUniformHeight": true
+  },
+  "headConnection": {
+    "fixedSocketWorld": {
+      "x": -34,
+      "y": 52.35,
+      "z": 20
+    },
+    "fixedSocketWorldY": 52.35,
+    "standBracketCapWorldY": 52.25,
+    "standTopWorldY": 52.25,
+    "headCapWorldAabb": {
+      "lo": {
+        "x": -34.2,
+        "y": 52.25,
+        "z": 19.8
+      },
+      "hi": {
+        "x": -33.8,
+        "y": 52.35,
+        "z": 20.2
+      }
+    },
+    "headCapTopWorldY": 52.35,
+    "headCapBottomMeetsStandTop": true,
+    "headCapSharesStandFootprint": true,
+    "capTouchesStand": {
+      "x": 0.4,
+      "y": 0,
+      "z": 0.4,
+      "connected": false
+    },
+    "socketLiesOnCapTopFace": true,
+    "verticalGapCapTopToSocketUnits": 0,
+    "geometryAboveSocketPlane": "none — etched flat mark on the exposed top surface; nothing is modelled above grounded+1.30",
+    "statement": "The head is literally connected: backing -> bracket -> stand -> cap is one contiguous solid chain from the dry ground column to the fixed reference plane, and the fixed socket (-34, 52.35, 20) lies exactly ON the cap top face. There is no gap. Reference rays only touch that face at their endpoint; under the general surface-contact rule such endpoint contact is harmless while any interior crossing blocks.",
+    "bracketTouchesBacking": {
+      "x": 0.4,
+      "y": 0.4,
+      "z": 0.12,
+      "connected": true
+    },
+    "bracketTouchesStand": {
+      "x": 0.4,
+      "y": 0.4,
+      "z": 0.1,
+      "connected": true
+    },
+    "backingBottomAboveGroundUnits": 0.3
+  },
+  "contactRule": {
+    "statement": "Endpoint-only contact is harmless iff the adjacent open segment remains outside the solid; any interior crossing blocks. Applied symmetrically at BOTH ray endpoints to EVERY box (backing, stand, bracket, cap, trunk) with no object-specific exemption.",
+    "appliesTo": "reference rays only (los)",
+    "walkCollisionRemainsInclusive": "walk mask, walked-segment test and body-capsule test still use the inclusive segmentHitsBox predicate",
+    "spatialEpsilonUsed": "none — exact parametric slab arithmetic; a 0.12-thick slab still blocks",
+    "tangencyAlongFace": "a segment lying IN a face plane produces a positive-length open interval from the other two slabs and therefore BLOCKS (documented, conservative)",
+    "unitTests": [
+      {
+        "id": "top-contact-exiting",
+        "expected": "clear",
+        "actual": "clear",
+        "pass": true,
+        "rationale": "endpoint rests on the cap top face, open segment rises away",
+        "box": "cap",
+        "a": {
+          "x": -34,
+          "y": 52.35,
+          "z": 20
+        },
+        "b": {
+          "x": -34,
+          "y": 54,
+          "z": 20
+        },
+        "inclusiveSegmentHitsBox": true,
+        "endpointOnlyContact": true,
+        "openIntervalLength": 0,
+        "worldLengthInsideUnits": 0
+      },
+      {
+        "id": "reversed-endpoints",
+        "expected": "clear",
+        "actual": "clear",
+        "pass": true,
+        "rationale": "same pair reversed — rule is symmetric at both endpoints",
+        "box": "cap",
+        "a": {
+          "x": -34,
+          "y": 54,
+          "z": 20
+        },
+        "b": {
+          "x": -34,
+          "y": 52.35,
+          "z": 20
+        },
+        "inclusiveSegmentHitsBox": true,
+        "endpointOnlyContact": true,
+        "openIntervalLength": 0,
+        "worldLengthInsideUnits": 0
+      },
+      {
+        "id": "endpoint-on-face-pointing-inside",
+        "expected": "blocked",
+        "actual": "blocked",
+        "pass": true,
+        "rationale": "open segment immediately enters the solid",
+        "box": "cap",
+        "a": {
+          "x": -34,
+          "y": 52.35,
+          "z": 20
+        },
+        "b": {
+          "x": -34,
+          "y": 52.3,
+          "z": 20
+        },
+        "inclusiveSegmentHitsBox": true,
+        "endpointOnlyContact": false,
+        "openIntervalLength": 1,
+        "worldLengthInsideUnits": 0.05
+      },
+      {
+        "id": "crossing-head",
+        "expected": "blocked",
+        "actual": "blocked",
+        "pass": true,
+        "rationale": "interior crossing of the cap",
+        "box": "cap",
+        "a": {
+          "x": -34,
+          "y": 52.3,
+          "z": 19
+        },
+        "b": {
+          "x": -34,
+          "y": 52.3,
+          "z": 21
+        },
+        "inclusiveSegmentHitsBox": true,
+        "endpointOnlyContact": false,
+        "openIntervalLength": 0.2,
+        "worldLengthInsideUnits": 0.4
+      },
+      {
+        "id": "tangency-along-solid-face",
+        "expected": "blocked",
+        "actual": "blocked",
+        "pass": true,
+        "rationale": "segment lies IN the cap top plane; documented consequence of the chosen predicate (coplanar grazing blocks)",
+        "box": "cap",
+        "a": {
+          "x": -34.5,
+          "y": 52.35,
+          "z": 20
+        },
+        "b": {
+          "x": -33.5,
+          "y": 52.35,
+          "z": 20
+        },
+        "inclusiveSegmentHitsBox": true,
+        "endpointOnlyContact": false,
+        "openIntervalLength": 0.4,
+        "worldLengthInsideUnits": 0.4
+      },
+      {
+        "id": "backing-cross-0.12-thick",
+        "expected": "blocked",
+        "actual": "blocked",
+        "pass": true,
+        "rationale": "thin 0.12 slab must still block — no spatial epsilon anywhere",
+        "box": "backing",
+        "a": {
+          "x": -34,
+          "y": 52,
+          "z": 18.54
+        },
+        "b": {
+          "x": -34,
+          "y": 52,
+          "z": 19.66
+        },
+        "inclusiveSegmentHitsBox": true,
+        "endpointOnlyContact": false,
+        "openIntervalLength": 0.107143,
+        "worldLengthInsideUnits": 0.12
+      }
+    ],
+    "unitTestsAllPass": true
+  },
+  "fixedValidEndpoints": {
+    "S": {
+      "distance": 11.33,
+      "rangeMargin": 0.67,
+      "supported": true,
+      "blockedBy": null
+    },
+    "E": {
+      "distance": 11.33,
+      "rangeMargin": 0.67,
+      "supported": true,
+      "blockedBy": null
+    }
+  },
+  "surveyRouteShort": {
+    "walkedUnits": 16,
+    "lengthCap": 120,
+    "withinLengthCap": true,
+    "sampleCount": 17,
+    "pointCap": 128,
+    "withinPointCap": true,
+    "segmentIntersectsSolidOrTrunk": null,
+    "vertices": [
+      {
+        "x": -26,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -28,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -30,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -32,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -34,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -36,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -38,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -40,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -42,
+        "y": 51.05,
+        "z": 12
+      }
+    ],
+    "unsupportedSpanUnits": 14,
+    "unsupportedSpanSamples": 15,
+    "spanStart": {
+      "x": -27,
+      "y": 51.05,
+      "z": 12
+    },
+    "spanEnd": {
+      "x": -41,
+      "y": 51.05,
+      "z": 12
+    },
+    "spanBlockReasons": [
+      "backing"
+    ],
+    "spanCausedSolelyByBacking": true
+  },
+  "surveyRouteLong": {
+    "walkedUnits": 36,
+    "extraUnits": 20,
+    "lengthRatio": 2.25,
+    "minExtraUnitsRequired": 12,
+    "minLengthRatioRequired": 1.25,
+    "sampleCount": 61,
+    "withinPointCap": true,
+    "withinLengthCap": true,
+    "segmentIntersectsSolidOrTrunk": null,
+    "everySampleSupported": true,
+    "everyDensePointSupported": true,
+    "denseSpacingUnits": 0.25,
+    "densePointCount": 145,
+    "minRangeMarginUnits": 0.67,
+    "firstUnsupported": -1,
+    "vertices": [
+      {
+        "x": -26,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -26,
+        "y": 51.05,
+        "z": 14
+      },
+      {
+        "x": -28,
+        "y": 51.05,
+        "z": 14
+      },
+      {
+        "x": -28,
+        "y": 51.05,
+        "z": 16
+      },
+      {
+        "x": -30,
+        "y": 51.05,
+        "z": 16
+      },
+      {
+        "x": -30,
+        "y": 51.05,
+        "z": 18
+      },
+      {
+        "x": -32,
+        "y": 51.05,
+        "z": 18
+      },
+      {
+        "x": -32,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -32,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -34,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -36,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -38,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -40,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -42,
+        "y": 51.05,
+        "z": 22
+      },
+      {
+        "x": -42,
+        "y": 51.05,
+        "z": 20
+      },
+      {
+        "x": -42,
+        "y": 51.05,
+        "z": 18
+      },
+      {
+        "x": -42,
+        "y": 51.05,
+        "z": 16
+      },
+      {
+        "x": -42,
+        "y": 51.05,
+        "z": 14
+      },
+      {
+        "x": -42,
+        "y": 51.05,
+        "z": 12
+      }
+    ]
+  },
+  "endpointReferenceInsufficiency": {
+    "S": {
+      "covers": false,
+      "coveredCount": 11,
+      "total": 15,
+      "firstFailReason": "out-of-range"
+    },
+    "E": {
+      "covers": false,
+      "coveredCount": 11,
+      "total": 15,
+      "firstFailReason": "out-of-range"
+    },
+    "neitherEndpointCoversWholeSpan": true
+  },
+  "intermediateWitness": {
+    "shifted": {
+      "label": "W shifted (-34,51.05,10)",
+      "position": {
+        "x": -34,
+        "y": 51.05,
+        "z": 10
+      },
+      "supportVoxel": [
+        -17,
+        25,
+        5
+      ],
+      "socketWorld": {
+        "x": -34,
+        "y": 52.4,
+        "z": 10
+      },
+      "socketHeight": 1.35,
+      "bodyHeight": 3.6,
+      "bodyDiscFullySupported": true,
+      "coversWholeUnsupportedSpan": true,
+      "coveredSpanSamples": 15,
+      "spanSamples": 15,
+      "firstFailure": null,
+      "maxLineOfReferenceDistance": 7.3,
+      "rangeMarginUnits": 4.7,
+      "bodyClearanceFromSurveyRoute": 2,
+      "meetsBodyBodyClearance": true,
+      "bodyBodyClearanceRequired": 1,
+      "occupancyCylinderMarginUnits": 0.75,
+      "releaseCylinderMarginUnits": 0.25,
+      "releaseCylinderOverlapsRoute": false,
+      "reachableOnFootFromS": true,
+      "insideAnySolidFootprint": false,
+      "valid": true
+    },
+    "nominalForComparison": {
+      "label": "W nominal (-34,51.05,11)",
+      "position": {
+        "x": -34,
+        "y": 51.05,
+        "z": 11
+      },
+      "supportVoxel": [
+        -17,
+        25,
+        6
+      ],
+      "socketWorld": {
+        "x": -34,
+        "y": 52.4,
+        "z": 11
+      },
+      "socketHeight": 1.35,
+      "bodyHeight": 3.6,
+      "bodyDiscFullySupported": true,
+      "coversWholeUnsupportedSpan": true,
+      "coveredSpanSamples": 15,
+      "spanSamples": 15,
+      "firstFailure": null,
+      "maxLineOfReferenceDistance": 7.09,
+      "rangeMarginUnits": 4.91,
+      "bodyClearanceFromSurveyRoute": 1,
+      "meetsBodyBodyClearance": true,
+      "bodyBodyClearanceRequired": 1,
+      "occupancyCylinderMarginUnits": -0.25,
+      "releaseCylinderMarginUnits": -0.75,
+      "releaseCylinderOverlapsRoute": true,
+      "reachableOnFootFromS": true,
+      "insideAnySolidFootprint": false,
+      "valid": true
+    }
+  },
+  "commonComparisonEtoC": {
+    "walkedUnits": 18,
+    "sampleCount": 31,
+    "densePointCount": 73,
+    "withinLengthCap": true,
+    "withinPointCap": true,
+    "segmentIntersectsSolidOrTrunk": null,
+    "vertices": [
+      {
+        "x": -42,
+        "y": 51.05,
+        "z": 12
+      },
+      {
+        "x": -42,
+        "y": 51.05,
+        "z": 14
+      },
+      {
+        "x": -42,
+        "y": 51.05,
+        "z": 16
+      },
+      {
+        "x": -44,
+        "y": 51.05,
+        "z": 16
+      },
+      {
+        "x": -44,
+        "y": 51.05,
+        "z": 18
+      },
+      {
+        "x": -46,
+        "y": 51.05,
+        "z": 18
+      },
+      {
+        "x": -48,
+        "y": 51.05,
+        "z": 18
+      },
+      {
+        "x": -48,
+        "y": 51.05,
+        "z": 16
+      },
+      {
+        "x": -48,
+        "y": 51.05,
+        "z": 14
+      },
+      {
+        "x": -48,
+        "y": 51.05,
+        "z": 12
+      }
+    ],
+    "heldReferenceAtE": {
+      "socketWorld": {
+        "x": -42,
+        "y": 52.9,
+        "z": 12
+      },
+      "socketHeight": 1.85,
+      "source": "AuditWorker torso 1.30 + visor 0.55"
+    },
+    "everySampleInRangeOfHeldE": true,
+    "everySampleUnobstructedFromHeldE": true,
+    "everyDensePointInRangeOfHeldE": true,
+    "everyDensePointUnobstructedFromHeldE": true,
+    "maxDistanceFromHeldE": 8.5,
+    "minRangeMarginFromHeldE": 3.5,
+    "heldFailures": [],
+    "unitsOutsideFixedReference": 8.25,
+    "reciprocalNecessity": {
+      "contiguousSpanUnits": 8,
+      "spanStart": {
+        "x": -46,
+        "y": 51.05,
+        "z": 18
+      },
+      "spanEnd": {
+        "x": -48,
+        "y": 51.05,
+        "z": 12
+      },
+      "fractionOfPassage": 0.444,
+      "nonzero": true
+    }
+  },
+  "terraFinalWitness": {
+    "position": {
+      "x": -44,
+      "y": 51.05,
+      "z": 12
+    },
+    "supportVoxel": [
+      -22,
+      25,
+      6
+    ],
+    "socketWorld": {
+      "x": -44,
+      "y": 52.4,
+      "z": 12
+    },
+    "socketHeight": 1.35,
+    "bodyHeight": 3.6,
+    "bodyDiscFullySupported": true,
+    "lateralOffsetFromC": 4,
+    "lateralMinRequired": 2,
+    "meetsLateralMin": true,
+    "standsAtC": false,
+    "everySampleInRange": true,
+    "everySampleUnobstructed": true,
+    "everyDensePointInRange": true,
+    "everyDensePointUnobstructed": true,
+    "densePointCount": 73,
+    "denseSpacingUnits": 0.25,
+    "maxLineOfReferenceDistance": 7.23,
+    "rangeMarginUnits": 4.77,
+    "failures": [],
+    "bodyClearanceFromWorkerFinalRoute": 2,
+    "meetsBodyBodyClearance": true,
+    "occupancyCylinderMarginUnits": 0.75,
+    "releaseCylinderMarginUnits": 0.25,
+    "releaseCylinderOverlapsRoute": false,
+    "verticalDeltaToC": 0,
+    "occupancyVerticalTolerance": 0.6,
+    "releaseVerticalTolerance": 0.9,
+    "reachableOnFootFromE": true,
+    "holdCondition": "no hold required at this pose"
+  },
+  "intersectionAudit": {
+    "bodies": [
+      {
+        "body": "S",
+        "position": {
+          "x": -26,
+          "y": 51.05,
+          "z": 12
+        },
+        "perSolid": [
+          {
+            "solid": "backing",
+            "planarGapToSurface": 10.07,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "stand",
+            "planarGapToSurface": 11.03,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "bracket",
+            "planarGapToSurface": 10.51,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "cap",
+            "planarGapToSurface": 11.03,
+            "capsuleIntersects": false
+          }
+        ],
+        "anyIntersection": false
+      },
+      {
+        "body": "E",
+        "position": {
+          "x": -42,
+          "y": 51.05,
+          "z": 12
+        },
+        "perSolid": [
+          {
+            "solid": "backing",
+            "planarGapToSurface": 10.07,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "stand",
+            "planarGapToSurface": 11.03,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "bracket",
+            "planarGapToSurface": 10.51,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "cap",
+            "planarGapToSurface": 11.03,
+            "capsuleIntersects": false
+          }
+        ],
+        "anyIntersection": false
+      },
+      {
+        "body": "C",
+        "position": {
+          "x": -48,
+          "y": 51.05,
+          "z": 12
+        },
+        "perSolid": [
+          {
+            "solid": "backing",
+            "planarGapToSurface": 14.96,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "stand",
+            "planarGapToSurface": 15.85,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "bracket",
+            "planarGapToSurface": 15.49,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "cap",
+            "planarGapToSurface": 15.85,
+            "capsuleIntersects": false
+          }
+        ],
+        "anyIntersection": false
+      },
+      {
+        "body": "W",
+        "position": {
+          "x": -34,
+          "y": 51.05,
+          "z": 10
+        },
+        "perSolid": [
+          {
+            "solid": "backing",
+            "planarGapToSurface": 9.04,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "stand",
+            "planarGapToSurface": 9.8,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "bracket",
+            "planarGapToSurface": 9.04,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "cap",
+            "planarGapToSurface": 9.8,
+            "capsuleIntersects": false
+          }
+        ],
+        "anyIntersection": false
+      },
+      {
+        "body": "T",
+        "position": {
+          "x": -44,
+          "y": 51.05,
+          "z": 12
+        },
+        "perSolid": [
+          {
+            "solid": "backing",
+            "planarGapToSurface": 11.58,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "stand",
+            "planarGapToSurface": 12.53,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "bracket",
+            "planarGapToSurface": 12.07,
+            "capsuleIntersects": false
+          },
+          {
+            "solid": "cap",
+            "planarGapToSurface": 12.53,
+            "capsuleIntersects": false
+          }
+        ],
+        "anyIntersection": false
+      }
+    ],
+    "paths": [
+      {
+        "path": "short S->E",
+        "hit": null
+      },
+      {
+        "path": "long S->E",
+        "hit": null
+      },
+      {
+        "path": "common E->C",
+        "hit": null
+      }
+    ],
+    "rays": [
+      {
+        "raySet": "short-route samples -> fixed 1.30 socket",
+        "rayCount": 17,
+        "minRayEndpointY": 52.35,
+        "minRayEndpointAboveStandBracketCap": true,
+        "minRayEndpointAtOrAboveHeadCapTop": true,
+        "hitsPerSolid": {
+          "backing": 15,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        },
+        "inclusiveContactPerSolid": {
+          "backing": 15,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 17
+        },
+        "endpointOnlyContactPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 17
+        }
+      },
+      {
+        "raySet": "long-route dense -> fixed 1.30 socket",
+        "rayCount": 145,
+        "minRayEndpointY": 52.35,
+        "minRayEndpointAboveStandBracketCap": true,
+        "minRayEndpointAtOrAboveHeadCapTop": true,
+        "hitsPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        },
+        "inclusiveContactPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 145
+        },
+        "endpointOnlyContactPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 145
+        }
+      },
+      {
+        "raySet": "E->C dense -> held worker socket at E (1.85)",
+        "rayCount": 73,
+        "minRayEndpointY": 52.4,
+        "minRayEndpointAboveStandBracketCap": true,
+        "minRayEndpointAtOrAboveHeadCapTop": true,
+        "hitsPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        },
+        "inclusiveContactPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        },
+        "endpointOnlyContactPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        }
+      },
+      {
+        "raySet": "worker final dense -> Terra socket (1.35)",
+        "rayCount": 73,
+        "minRayEndpointY": 52.4,
+        "minRayEndpointAboveStandBracketCap": true,
+        "minRayEndpointAtOrAboveHeadCapTop": true,
+        "hitsPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        },
+        "inclusiveContactPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        },
+        "endpointOnlyContactPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        }
+      },
+      {
+        "raySet": "unsupported-span samples -> shifted W socket (1.35)",
+        "rayCount": 15,
+        "minRayEndpointY": 52.4,
+        "minRayEndpointAboveStandBracketCap": true,
+        "minRayEndpointAtOrAboveHeadCapTop": true,
+        "hitsPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        },
+        "inclusiveContactPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        },
+        "endpointOnlyContactPerSolid": {
+          "backing": 0,
+          "stand": 0,
+          "bracket": 0,
+          "cap": 0
+        }
+      }
+    ]
+  },
+  "routeIdentityVsBroadProbe": {
+    "shortWalkedUnits": 16,
+    "broadShortWalkedUnits": 16,
+    "longWalkedUnits": 36,
+    "broadLongWalkedUnits": 32,
+    "selectedCandidateLongWalkedUnits": 36,
+    "longUnchangedFromSelectedCandidate": true,
+    "commonWalkedUnits": 18,
+    "broadCommonWalkedUnits": 18,
+    "sameShortLongCommonRoutes": false
+  },
+  "failures": [],
+  "verdict": "PASS",
+  "cpuSeconds": 0.71,
+  "cpuBudgetSeconds": 60,
+  "limits": {
+    "proposedNotShipped": "finite reference range, opaque backing, stand, bracket and cap do not exist in the runtime",
+    "hysteresisNotSimulated": "offer/occupancy hysteresis, hold/recovery timing and render tiers are not simulated",
+    "noRenderOrGpu": true,
+    "exactlyOneCandidate": true,
+    "fallbackScan": false
+  }
+}

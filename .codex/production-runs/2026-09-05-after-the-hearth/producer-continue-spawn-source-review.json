@@ -1,0 +1,58 @@
+{
+  "schema": "paravoxia.producer.sourceReview.v1",
+  "at": "2026-09-06T23:24:13.144212+00:00",
+  "acceptedForIndependentVerification": true,
+  "sourceRepairIteration": 9,
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "invocationRef": "integration-continue-spawn-invocation.json",
+  "sourceHashes": {
+    "main/src/components/EfficientScene.tsx": "9114c71a6b4d5c2502013c72b0a962a8955a1793bd4afc0c474dda92022f39a9",
+    "main/src/utils/playerSpawnSelection.ts": "005e3b8f7a0acad7f934332bcadf765d987ec8b8e604133c4c90e8559c9e08b3",
+    "main/src/utils/playerSpawnSelection.test.ts": "e5cc2f8f0d206e1df555ac53494adc0b246734eff50cf7650913de1f7cf7fe26"
+  },
+  "diffRef": "continue-spawn-cumulative.diff",
+  "diffSha256": "e5f6cddd54c88fcb2e0197ec31fdab590ede9e3b7de96b658bbf455420192816",
+  "protectedEfficientPlayerUnchanged": true,
+  "findings": [
+    "Existing initial-position loading and safe validator behavior are retained, with tagged source information for saved valid, relocated valid, fallback, approach and system/dive recovery.",
+    "Only a validated saved pose with a merely persisted parked ship and no subsequent ship use receives restore precedence.",
+    "Actual controlMode flight and handleLanded consume precedence; session landing/boarding provenance preserves current lawful egress.",
+    "Reset position remains explicit ship egress when parked ship known, otherwise arrival pad. Ship pose/rendering/hatch are unchanged.",
+    "No route, arrival, score, audio, geometry or predicate change. Only3 authorized paths changed."
+  ],
+  "focusedEvidence": {
+    "appTypecheck": {
+      "command": "npx tsc --noEmit -p tsconfig.json --pretty false",
+      "logRef": "logs/integration-continue-spawn/typecheck.log",
+      "logSha256": "cc8a7fda226bb5da06de15e4cc12b2670add5b6120e6584547678350c7cdd2ea",
+      "exitCode": 0,
+      "qualification": "Checks application tsconfig, not the separate tsconfig.node.json portion of npm run typecheck. Reuse application result; verifier may run missing node portion only."
+    },
+    "tests": {
+      "files": 8,
+      "tests": 101,
+      "logRef": "logs/integration-continue-spawn/focused-vitest.log",
+      "logSha256": "30cfb58b8eefebfe6f77d12e4865b7fc008c1ce3578b712a3cac1705cd1d05bc",
+      "exitCode": 0
+    },
+    "counterfactual": {
+      "actualExtractRef": "producer-continue-spawn-counterfactual-extract.json",
+      "oldPrecedenceFailed": 4,
+      "oldPrecedencePassed": 11,
+      "restoredCandidatePassed": 15,
+      "sourceRestoredHashVerified": true,
+      "qualification": "Actual helper temporarily used old unconditional precedence, then restored. This is the selection-rule counterfactual, not a mounted full old EfficientScene runtime. Baseline live causal capture supplies actual old scene evidence."
+    }
+  },
+  "limits": [
+    "Pure helper tests model the lifecycle inputs; they do not prove React effects supply them at the right moment. Actual candidate Continue plus newly accepted F remains mandatory.",
+    "Coverage booleans for real boarding/disembark describe modeled helper inputs and source wiring, not a real new flight capture.",
+    "Main app typecheck/101 focused tests are current candidate evidence; old3192 full suite is baseline only. No candidate build yet.",
+    "World/actor pose scope on real bootstrap and later actual egress remain independently verified behavior, not inferred from pure truth tables."
+  ],
+  "nextAction": "Compile exact candidate manifest, then independent build/missing node typecheck and actual earned Continue plus F under fresh root preview. One stable full suite after runtime passes.",
+  "defectClosure": false,
+  "chapterAcceptance": false,
+  "publicationAuthorized": false
+}

@@ -1,0 +1,121 @@
+{
+  "schema": "paravoxia.verifier.commonManualProbeClosure.v1",
+  "role": "common-manual-focused",
+  "kind": "harness instrumentation closure only — NOT gameplay proof, NO capture was run",
+  "startedAt": "2026-09-06T12:04:12-04:00",
+  "finishedAt": "2026-09-06T12:13:00-04:00",
+  "sourceFrozen": {
+    "expected": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "measuredBefore": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "measuredAfter": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "gameFilesModified": 0,
+    "evidence": "find main/src main/tools main/*.json -newermt '2026-09-06 12:03' -> empty"
+  },
+  "gpu": { "browserLaunched": false, "captureRun": false, "gpuLockTouched": false, "sharedHeavyLockTouched": false },
+  "ownedFiles": [
+    { "path": "verifier/probes/common-manual-focused/common-passage-probe.mjs", "beforeSha256": "11c4a7d1373ae0aee603f80d828f487d284311244457696b9d4a8d6100b2cdc5", "afterSha256": "06e2c54d69ff5edde81d54fc6228b7521575fdb7be6a3f69b5012472fada4afb", "linesBefore": 579, "linesAfter": 718 },
+    { "path": "verifier/probes/common-manual-focused/commonPassageLogic.mjs", "beforeSha256": "6e7cf4f155f28d9205705ce40a4c586eae589fc08a238f30dbb4573300cbfd34", "afterSha256": "79f3e00259b0579e4a8a3383951f99c345954be459158f021ddc506b45cd3f32", "linesBefore": 697, "linesAfter": 717, "note": "prior-closure logic PRESERVED; one targeted correction only (lock ownership authority moved to fdinfo)" },
+    { "path": "verifier/probes/common-manual-focused/selftest.mjs", "beforeSha256": "52b2ba18368421174eb0f97172f7810197c90e4c3a0f8dc17b742dfdf4ffbce1", "afterSha256": "116f7d18cfbb7b6268950e9dff1d4812b6247647a21486939095eeb8ed19fd02", "linesBefore": 204, "linesAfter": 506 }
+  ],
+  "commandsRun": [
+    { "cmd": "node --check common-passage-probe.mjs && node --check commonPassageLogic.mjs && node --check selftest.mjs", "result": "CHECK-OK" },
+    { "cmd": "node selftest.mjs", "log": "logs/common-manual-focused-closure/selftest-run-1.log", "result": "FAIL 82/83 — the injected-flag lock model contradicted real kernel semantics" },
+    { "cmd": "node selftest.mjs", "log": "logs/common-manual-focused-closure/selftest-run-2.log", "result": "OK 83/83", "at": "2026-09-06T12:11:19-04:00" },
+    { "cmd": "node common-passage-probe.mjs", "log": "logs/common-manual-focused-closure/probe-refusal-A-noargs.log", "exit": 3, "result": "REFUSED before any browser launch (6 refusals)" },
+    { "cmd": "node common-passage-probe.mjs --heavy-lock <tmp>/task-private.lock --heavy-lock-fd 3 --url http://127.0.0.1:1/ --out <tmp>/outB --expect-source-manifest dc63...", "log": "logs/common-manual-focused-closure/probe-refusal-B-unlocked.log", "exit": 3, "result": "REFUSED; heavyLock.owned=false (fd 3 is a different dev/ino, not the lock file)" },
+    { "cmd": "bash -c 'exec 9><tmp>/task-private.lock; exec node common-passage-probe.mjs --heavy-lock <tmp>/task-private.lock --heavy-lock-fd 9 --url http://127.0.0.1:1/ --out <tmp>/outB2 --expect-source-manifest dc63...'", "log": "logs/common-manual-focused-closure/probe-refusal-B2-open-but-unlocked.log", "exit": 3, "result": "REFUSED; owned=false: 'no FLOCK WRITE entry in /proc/locks ... the file exists but NO exclusive lock is held'" },
+    { "cmd": "bash -c 'exec 9><tmp>/task-private.lock; flock -n -x 9 || exit 9; exec node common-passage-probe.mjs --heavy-lock <tmp>/task-private.lock --heavy-lock-fd 9 --url http://127.0.0.1:1/ --out <tmp>/outC --expect-source-manifest dc63...'", "log": "logs/common-manual-focused-closure/probe-refusal-C-reallock.log", "exit": 3, "result": "heavyLock.owned=TRUE, lock refusal GONE; still refused only on activeRole=handoff-standby-verifier and on the unbound URL" }
+  ],
+  "wiring": {
+    "lockOwnership": {
+      "done": true,
+      "requires": "--heavy-lock <path> AND --heavy-lock-fd <n> (an already-acquired, inherited exclusive flock)",
+      "checks": "fstat(fd)==stat(path) dev+ino; FLOCK WRITE line for that inode in /proc/<pid>/fdinfo/<fd> (OWNERSHIP); FLOCK WRITE for the inode in /proc/locks (liveness); optional --probe-lock-contention independent flock -n -x must be REFUSED",
+      "correctionMade": "The prior closure required the /proc/locks holder pid to be self-or-ancestor. MEASURED on this kernel (6.17.0-1026-nvidia): a flock belongs to the OPEN FILE DESCRIPTION and /proc/locks records the pid that CREATED it — the transient flock(1), already dead — so a genuinely inherited lock was misread as 'somebody else's'. Ownership authority moved to /proc/<pid>/fdinfo/<fd>; the /proc/locks pid is now recorded (procLock, procLockCreatorInAncestry) but is not the test.",
+      "failureCasesProved": [
+        "no --heavy-lock path -> refused",
+        "no --heavy-lock-fd -> refused ('a file existing is not a lock')",
+        "non-inherited fd (fstat fails) -> refused",
+        "fd for a DIFFERENT file -> refused (dev/ino mismatch)",
+        "existing file, fd open, NEVER flock'd -> refused (selftest + probe run B2)",
+        "live exclusive flock held by an UNRELATED process -> refused ('SOMEBODY ELSE'S open file description'); the kernel entry is still SEEN, just not ours",
+        "externally acquired inherited exclusive flock -> owned=true, contention probe 'refused (lock is live)', raw fdinfo shows 'lock: N: FLOCK ... WRITE'"
+      ],
+      "testLockScope": "task-private mkdtemp lock files only; the shared GPU/heavy lock was never opened, locked or probed"
+    },
+    "previewIdentity": {
+      "done": true,
+      "detail": "Before any browser: fetchServedIdentity() FETCHES and sha256s the actual served index and the actual served bundle; previewBindingDecision() binds them to verifier/artifacts/preview-ownership.json (state=running, url, bundlePath, indexSha256, bundleSha256, sourceManifestSha256, allBuildFilesMatched=99). preflightDecision refuses without an ok binding. identityVerdict now receives the MEASURED index sha and defaults requireIndexSha=true.",
+      "failureCasesProved": [
+        "title 'Paravoxia' + hardware ANGLE + headed but NO hashes -> FAIL (a previous build serves the same title on the same GPU)",
+        "measured index sha null while an expected hash is required -> FAIL",
+        "served index != owned index (port takeover / stale build) -> FAIL",
+        "served bundle != owned bundle while index matches -> FAIL",
+        "bundle 404 / unreachable url -> error, never a match",
+        "ownership publishes NO expected index/bundle hash -> FAIL (expectation is not optional)",
+        "served bytes never fetched -> FAIL",
+        "foreign url, state!=running, source-manifest drift, missing ownership file -> FAIL"
+      ],
+      "fixture": "task-private node:http server on 127.0.0.1:0, closed in a finally block; no public networking",
+      "sourceRehash": "probe writes writeSourceSnapshot() before and after the run (probeSnapshotBefore/After); the 99-file source manifest sha is re-read and compared in preflight"
+    },
+    "steering": {
+      "done": true,
+      "detail": "walkTo no longer uses the fixed max(120ms, distance*60) tap. The four calibration holds now also measure unitsPerMs and the post-release coastUnits (pose AT key-up vs settled pose); a new gate 'steering-is-calibrated-from-measured-motion' STOPS the probe if calibration is unavailable. Each pulse comes from planPulseMs(distance, arrive, unitsPerMs, coastUnits) aiming at the centre of the arrival radius minus measured coast, clamped 30..400ms. detectOscillation() over the distance history breaks the leg, legVerdict gets oscillating and reports status 'oscillating' with fatal=true. Stall detection is now judged against the units actually commanded, not a fixed 0.05.",
+      "failureCasesProved": [
+        "uncalibrated/NaN input -> no pulse may be planned (ms=null), leg stops",
+        "the old 120ms floor is 0.618u at the measured 0.00515 u/ms — wider than the 0.25-0.6u radii",
+        "a near-target 0.7u approach now plans a pulse < 120ms and never commands past the target",
+        "coast and half-radius are actually subtracted",
+        "a real ping-pong (>=4 flips, <=0.05u improvement over 6 pulses) is detected",
+        "steady closing is NOT called oscillation",
+        "an oscillating leg is NEVER an arrival"
+      ],
+      "preserved": "physical arrivals only, ordered full 18 units from the game's own credited terraUnits, real keyboard input, and a failed leg still STOPS all later actions (mustReach -> stop)"
+    },
+    "standClearAtE": {
+      "done": true,
+      "detail": "After the clean long survey and the [F] offer at E, the probe now MOVES by ordinary held keys to authored ground instead of waiting at E. Candidates go through standClearChoice(): must be an AUTHORED pose, must have been OBSERVED physically reached by ordinary controls in THIS session (derived from reached legs), and must be clear of the ACTUAL recorded span (her own sampled poses during the draw, drawnSpan) by >= 1 + 0.5 units. W is the admissible candidate (authored, and physically reached from E by ordinary keys earlier in the run — manual witness-2). Occupied-body clearance is then measured at the reached pose via minClearanceToSpan and gated.",
+      "refusedByDesign": [
+        "E.z-3 -> refused on PROVENANCE (unobserved arithmetic water goal), not on arithmetic",
+        "a point ON the LONG route -> refused: standing on his test IS the deadlock",
+        "waiting AT E -> measured clearance 0, fails",
+        "an authored pose never physically reached on this build -> refused"
+      ],
+      "witnessHandling": "a real witness objective/prompt is still respected (walks to the authored point and answers with the authored [F]); the run no longer depends on a hold appearing"
+    },
+    "fGate": {
+      "done": true,
+      "detail": "pressF() no longer accepts an ad-hoc verbPattern. It takes a contractKey into CG_F_CONTRACT (exact authored objectiveId + prompt verb quoted from frozen source) and an optional requires[] list of gate names that must ALREADY have passed. An unknown key, a wrong live objective, a missing authored verb, or an unmet prerequisite all STOP the probe.",
+      "callSites": {
+        "W-demonstrate-route": "W-offer-route (ch13:survey:offer)",
+        "S-begin-recording": "S-begin-recording (ch13:survey:start)",
+        "E-offer-the-walked-span": "E-offer-span (ch13:survey:offer-span), requires ['a-real-drawing-was-recorded','survey-actually-started']",
+        "witness offers": "witness-hold-this-end (ch13:survey:witness)",
+        "offer-the-far-reference": "T-offer-final-reference (ch13:common:offer-final-reference), requires ['terra-full-eighteen-unit-ordered-passage']"
+      },
+      "drawingGate": "'a-real-drawing-was-recorded' is now a hard STOP (survey.samples>0 AND survey.lengthUnits>0 AND her own recorded poses>0) and is an enforced prerequisite of the later F, not a note"
+    },
+    "preserved": [
+      "--mode reference and --mode deviation both intact",
+      "honest return to the missing COMMON corner near z=16 after the early z=15.82 cut, through the omitted ground, no extra F and no reset",
+      "full actual Terra 18 units and W's own 18 units (workerUnits)",
+      "real H reference held by W, T occupancy through W's pass, final complete/handback anchors",
+      "capsule-centre vs grounded-pose vs worker-snapshot readings kept distinct (poseReading)",
+      "labelled deep fixture ?story=ch13-survey; explicitly NOT survey free-recorder recovery, NOT full-story continuity, NOT first-time-naive usability"
+    ]
+  },
+  "exactInvocationForAFutureAuthORISEDCapture": "cd /home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/common-manual-focused && bash -c 'exec 9>\"$PARAVOXIA_HEAVY_LOCK\"; flock -n -x 9 || { echo \"heavy lock busy\"; exit 9; }; exec node common-passage-probe.mjs --mode reference --url http://127.0.0.1:38007/ --out ../../captures/common-manual-focused/reference-1 --heavy-lock \"$PARAVOXIA_HEAVY_LOCK\" --heavy-lock-fd 9 --expect-source-manifest dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c --probe-lock-contention'",
+  "invocationNotes": [
+    "`exec 9>lock; flock -n -x 9; exec node` is required: the shell acquires the lock and then EXECS node, so the lock is never dropped before node starts and node itself becomes the holder of the open file description.",
+    "`flock -x lock -c 'node ...'` is acceptable to the kernel but the fd number is undocumented; `flock -o` would CLOSE the descriptor and must never be used.",
+    "This invocation is NOT authorised now: verifier-control.json activeRole is handoff-standby-verifier and the probe correctly refuses (exit 3, no browser). It also needs the shared heavy lock, which belongs to that other role right now."
+  ],
+  "notRun": ["no preview", "no capture", "no browser", "no screenshots", "no GPU lock acquisition", "no game edit", "no source-manifest/gate/control/defect edit"],
+  "openInstrumentationItems": [
+    "previewBindingDecision measures the served index and the relevant bundle byte-exactly, but the remaining build files are covered only by root's published allBuildFilesMatched COUNT (=99); the probe does not itself re-fetch every dist file. Recorded in the decision's own `note` field rather than being claimed as full byte coverage.",
+    "planPulseMs/detectOscillation constants are calibrated LIVE at run time, but the closure could not validate them against real in-game motion because no capture was permitted. Their behaviour is proved only against the measured 0.00515 u/ms and 0.053u coast quoted from manual-focused-report.md."
+  ],
+  "cleanup": { "taskPrivateLockChildren": "none running", "taskPrivateHttpFixture": "closed in finally", "tempDirs": "removed (/tmp/cmp-* absent)" },
+  "verdict": "HARNESS-CLOSURE-COMPLETE-NO-GAMEPLAY-PROOF"
+}

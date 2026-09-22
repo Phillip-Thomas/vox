@@ -4,6 +4,16 @@ Status: operating contract
 Version: v1
 Date: 2026-07-13
 
+New chapter creation routing (adopted 2026-09-06): `docs/chapter-loop.md` is the
+operating procedure for NEW chapter runs. Its fixed three-peer recipe, bounded
+implementation, independent experience review and one refinement supersede
+the legacy chapter-mode artifact/signoff/reconciliation sequence in this file.
+The creative ownership principles remain. Standalone scenes and archived runs
+retain their applicable contracts; release certification stays separate.
+Chapter13 remains stopped by the owner. Historical post-arrival restrictions
+below do not override the authorization recorded in current `CLAUDE.md` or
+the owner's subsequent instructions.
+
 ## Mission
 
 Paravoxia's creative system is a three-director studio:
@@ -148,9 +158,14 @@ and a final score of at least 4.80/5 with no category below 4.50.
 2. **Extract current truth.** Reference exact shipped scenes, symbols, frame
    evidence, palette roles, score moods, and known defects. Future plans are
    labelled as plans, never confused with shipped behavior.
-3. **Frame story intent.** Chapter Director writes the player action,
-   emotional before/after, narrative information, intended ambiguity, agency
-   boundary, timing anchors, and non-negotiable canon.
+3. **Frame story intent, then ask the owner once.** Chapter Director writes
+   the player action, emotional before/after, narrative information, intended
+   ambiguity, agency boundary, timing anchors, and non-negotiable canon — and
+   closes with the **decision brief** (`decision-brief.json`): every creative,
+   mutation-boundary and release decision only the owner can make, with the
+   exact paths and symbols a boundary item needs. The run stops here until
+   every item is decided; no treatment is commissioned against an open
+   question.
 4. **Create independent first treatments.** Score and Cinematography work from
    story intent without seeing each other's first answer. Independence
    protects useful disagreement.
@@ -301,12 +316,22 @@ A scene cannot pass on artifact existence or director confidence. It requires:
 - score evidence when audio changes are permitted;
 - no critical/high defects and no unaccepted medium narrative/audiovisual
   alignment defects;
-- weighted score at least 4.75/5 and category floor at least 4.30, raised to
-  4.80/4.50 for flagship work;
+- weighted score and category floor at or above the run profile's `approval`
+  block (4.75/4.30 for scene and chapter, 4.80/4.50 for flagship today — the
+  profile is the single source; this page restates, the gate reads);
+- a perceptual verdict from the percept judge lane over the headed evidence
+  bundle (`npm run chapter:evidence`): HUD-suppressed frames of record, a
+  contact sheet whose red numbers are the frame indices a verdict cites,
+  adjacent-frame bursts reduced to flicker scalars, ≤9 frames per commission,
+  and a pairwise comparison against the previous accepted chapter, cited by
+  the cohesion judge under composition and palette/light;
 - headed real-GPU human taste approval for flagship or final release.
 
 Headless proof can certify logic and objective frame defects. It cannot certify
-beauty, feel, pointer lock, or final taste.
+beauty, feel, pointer lock, or final taste — which is why every frame a
+reviewer or a pixel law sees is captured headed on the real GPU, HUD
+suppressed, and why a scene contract's numeric acceptance bands carry their
+reachability (`evidence.acceptanceBands`) before they can be signed.
 
 ## Durable artifacts
 

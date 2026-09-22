@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 364130,
+  "stop_reason": "end_turn",
+  "session_id": "5de8dc3d-9521-4076-b4a4-5a05edfad027",
+  "total_cost_usd": 2.138665,
+  "usage": {
+    "input_tokens": 68,
+    "cache_creation_input_tokens": 66943,
+    "cache_read_input_tokens": 1408468,
+    "output_tokens": 30526,
+    "output_tokens_details": {
+      "thinking_tokens": 3137
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 66943,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1125,
+        "cache_read_input_tokens": 67195,
+        "cache_creation_input_tokens": 3815,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3815
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1436,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001511,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 68,
+      "outputTokens": 30526,
+      "cacheReadInputTokens": 1408468,
+      "cacheCreationInputTokens": 66943,
+      "webSearchRequests": 0,
+      "costUSD": 2.137154,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 3137,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 38,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "All three gaps are fixed, tested and reported inside budget.\n\n## What changed (private probe only)\n\n**F1 \u2014 failure-safe harvest.** The cleanup/harvest callable is now created *before* sampler install and before the click, as the shared factory `continueClosure.makeContinueSamplerHarvest`, together with every observation it reads (so no TDZ/undefined read). If the harvest `evaluate` throws, the error is recorded and a second best-effort `evaluate` still sets `rec.stopped` and deletes `window.__voxContinueSampler`; a cleanup failure is recorded separately. Frames that were returned are always retained; a failed or empty harvest reports `harvested:false` / `samplerPresentAtHarvest:false` and can never be complete.\n\n**F2 \u2014 no world-up guess on the directed path.** `cur.up ?? [0,1,0]` is gone from progress, re-measurement and restamp. New pure helpers `liveUpReading` (rejects null/malformed/non-finite/degenerate, no default) and `directedBurstMeasurement`. Invalid live up before a burst clears all key entries/dirs, records `unmeasured-no-live-up`, and stops; after a burst it clears that key and stops while still accumulating real foot displacement. A measured-but-failed restamp also clears the key, so no stale usable direction survives. Ordinary presses, pulse durations and all budgets unchanged.\n\n**F3 \u2014 completeness backed by data, not wall time.** `continueCaptureCompleteness` now requires a clean harvest, a present sampler, non-empty retained post-click frames, a last retained post-click frame at/past `firstValid + 5000ms`, and no cap hit. Each verdict carries `dataClass`: `unmeasured` (instrumentation missing/failed/capped) vs `game-failure` (frames retained, no valid runtime reading) vs `measured`. `lastObservedMs` is still reported but cannot complete anything alone.\n\n## Results\n\n- `preflightFaults.selftest.mjs` (new): **42/42**, driving real failure paths with a mocked page holding a real sampler record plus injected throws \u2014 not grep.\n- `continueClosure.selftest.mjs` **74/74**, `entryAdaptation.selftest.mjs` **48/48**, `liveCalibration.selftest.mjs` **36/36**. Two stale assertions encoding the *old* faulty contract were corrected (frames now required for completeness; cleanup asserted where the delete now lives). No unrelated suites re-run \u2014 the ground-frame/tangent/broad suites cover nothing that changed, and I make no coverage claim for them.\n- `node --check` syntax-ok on all six edited files.\n\nLogs and SHA-256 for probe files and logs are in `logs/continue-controller-final-preflight/` and `continue-controller-final-preflight-report.json`.\n\nUntouched: C1 signed-[F] `anc.cg.route-offered` acceptance, the separate savepoint-prefix equality gate, all budgets, all prior failed evidence. No game source (`find main/src main/tools -newermt` session start \u2192 0 files; other working-tree modifications are pre-existing and not mine), no browser, GPU, build, repin or publication. Everything proven here is instrumentation behaviour on CPU \u2014 no gameplay conclusion, and transport status is not gameplay proof.",
+  "ttft_ms": 1394,
+  "type": "result",
+  "duration_ms": 364826,
+  "uuid": "51c51459-8364-4914-b82e-a65859062384",
+  "ttft_stream_ms": 693,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 693,
+  "queued_turn_count": 0
+}

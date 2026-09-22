@@ -1,0 +1,706 @@
+{
+  "at": "2026-09-06T21:48:18.335822+00:00",
+  "captureRef": "verifier/captures/manual-credit-finale/cut-run9/summary.json",
+  "captureSha256": "be3637d49ef02fd0ba03378fb8c82ebfdf16377bd66073feb2f99770e1af102f",
+  "classification": "Observed incomplete credit retained after shortcut; recovery inconclusive",
+  "cutTurn": {
+    "observedFoot": [
+      -43.934291052518624,
+      50.50870695111988,
+      14.091646106658438
+    ],
+    "observedFootZ": 14.091646106658438,
+    "skippedCornerZ": 16,
+    "shortOfCornerBy": 1.9083538933415625,
+    "note": "ACTUAL observed foot at the early turn; not asserted to equal 15.82"
+  },
+  "cutOutcome": {
+    "common": {
+      "beat": "ch13-common",
+      "common": {
+        "stage": "holding-h",
+        "terraUnits": 2.091646122036698,
+        "comparisonProved": false,
+        "finalReferenceOffered": false,
+        "finalReferenceOccupied": false,
+        "workerUnits": 0,
+        "committed": false
+      },
+      "worker": {
+        "leg": "holding-h",
+        "travelled": 0,
+        "legLength": 0,
+        "held": false,
+        "sampledIndex": 0,
+        "permitted": null,
+        "position": {
+          "x": -40,
+          "y": 51.05,
+          "z": 12
+        }
+      },
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference"
+      ],
+      "shape": {
+        "hasDiagnostic": true,
+        "keys": [
+          "beat",
+          "installWatch",
+          "anchors",
+          "holdReason",
+          "worker",
+          "survey",
+          "common"
+        ]
+      }
+    },
+    "terraUnitsAfterCutRoute": 2.091646122036698,
+    "reachedC": true,
+    "cutTurn": {
+      "observedFoot": [
+        -43.934291052518624,
+        50.50870695111988,
+        14.091646106658438
+      ],
+      "observedFootZ": 14.091646106658438,
+      "skippedCornerZ": 16,
+      "shortOfCornerBy": 1.9083538933415625,
+      "note": "ACTUAL observed foot at the early turn; not asserted to equal 15.82"
+    }
+  },
+  "recovery": {
+    "returnLegs": [
+      {
+        "label": "return-to-(-48,16)",
+        "target": [
+          -48,
+          51.05,
+          16
+        ],
+        "reached": true,
+        "finalDistance": 0.3375261822625299,
+        "common": {
+          "beat": "ch13-common",
+          "common": {
+            "stage": "holding-h",
+            "terraUnits": 2.091646122036698,
+            "comparisonProved": false,
+            "finalReferenceOffered": false,
+            "finalReferenceOccupied": false,
+            "workerUnits": 0,
+            "committed": false
+          },
+          "worker": {
+            "leg": "holding-h",
+            "travelled": 0,
+            "legLength": 0,
+            "held": false,
+            "sampledIndex": 0,
+            "permitted": null,
+            "position": {
+              "x": -40,
+              "y": 51.05,
+              "z": 12
+            }
+          },
+          "anchors": [
+            "anc.cg.repeated-measure",
+            "anc.cg.demonstration-opened",
+            "anc.cg.survey-started",
+            "anc.cg.trace-drawn",
+            "anc.cg.route-offered",
+            "anc.cg.specific-hold",
+            "anc.cg.witness-held",
+            "anc.cg.revision-ready",
+            "anc.cg.route-tested",
+            "anc.cg.reciprocal-reference"
+          ],
+          "shape": {
+            "hasDiagnostic": true,
+            "keys": [
+              "beat",
+              "installWatch",
+              "anchors",
+              "holdReason",
+              "worker",
+              "survey",
+              "common"
+            ]
+          }
+        },
+        "pose": {
+          "foot": [
+            -47.560286153726764,
+            52.25556733573021,
+            16.057985208124023
+          ],
+          "bodyCentre": [
+            -47.6674919128418,
+            54.052371978759766,
+            16.057985305786133
+          ],
+          "up": [
+            -0.05955875506390776,
+            0.998224801683085,
+            5.425672736147895e-08
+          ],
+          "supported": false,
+          "groundOffsetUnits": 1.8
+        }
+      },
+      {
+        "label": "return-to-(-44,16)",
+        "target": [
+          -44,
+          51.05,
+          16
+        ],
+        "reached": true,
+        "finalDistance": 0.36934902987280444,
+        "common": {
+          "beat": "ch13-common",
+          "common": {
+            "stage": "holding-h",
+            "terraUnits": 2.091646122036698,
+            "comparisonProved": false,
+            "finalReferenceOffered": false,
+            "finalReferenceOccupied": false,
+            "workerUnits": 0,
+            "committed": false
+          },
+          "worker": {
+            "leg": "holding-h",
+            "travelled": 0,
+            "legLength": 0,
+            "held": false,
+            "sampledIndex": 0,
+            "permitted": null,
+            "position": {
+              "x": -40,
+              "y": 51.05,
+              "z": 12
+            }
+          },
+          "anchors": [
+            "anc.cg.repeated-measure",
+            "anc.cg.demonstration-opened",
+            "anc.cg.survey-started",
+            "anc.cg.trace-drawn",
+            "anc.cg.route-offered",
+            "anc.cg.specific-hold",
+            "anc.cg.witness-held",
+            "anc.cg.revision-ready",
+            "anc.cg.route-tested",
+            "anc.cg.reciprocal-reference"
+          ],
+          "shape": {
+            "hasDiagnostic": true,
+            "keys": [
+              "beat",
+              "installWatch",
+              "anchors",
+              "holdReason",
+              "worker",
+              "survey",
+              "common"
+            ]
+          }
+        },
+        "pose": {
+          "foot": [
+            -44.320566417301166,
+            50.98908652377646,
+            16.057985133473828
+          ],
+          "bodyCentre": [
+            -44.364768981933594,
+            52.788543701171875,
+            16.057985305786133
+          ],
+          "up": [
+            -0.024556980351350864,
+            0.9996984318863437,
+            9.572905776847568e-08
+          ],
+          "supported": true,
+          "groundOffsetUnits": 1.8
+        }
+      },
+      {
+        "label": "return-to-(-42,16)",
+        "target": [
+          -42,
+          51.05,
+          16
+        ],
+        "reached": true,
+        "finalDistance": 0.4641351629941855,
+        "common": {
+          "beat": "ch13-common",
+          "common": {
+            "stage": "holding-h",
+            "terraUnits": 2.091646122036698,
+            "comparisonProved": false,
+            "finalReferenceOffered": false,
+            "finalReferenceOccupied": false,
+            "workerUnits": 0,
+            "committed": false
+          },
+          "worker": {
+            "leg": "holding-h",
+            "travelled": 0,
+            "legLength": 0,
+            "held": false,
+            "sampledIndex": 0,
+            "permitted": null,
+            "position": {
+              "x": -40,
+              "y": 51.05,
+              "z": 12
+            }
+          },
+          "anchors": [
+            "anc.cg.repeated-measure",
+            "anc.cg.demonstration-opened",
+            "anc.cg.survey-started",
+            "anc.cg.trace-drawn",
+            "anc.cg.route-offered",
+            "anc.cg.specific-hold",
+            "anc.cg.witness-held",
+            "anc.cg.revision-ready",
+            "anc.cg.route-tested",
+            "anc.cg.reciprocal-reference"
+          ],
+          "shape": {
+            "hasDiagnostic": true,
+            "keys": [
+              "beat",
+              "installWatch",
+              "anchors",
+              "holdReason",
+              "worker",
+              "survey",
+              "common"
+            ]
+          }
+        },
+        "pose": {
+          "foot": [
+            -42.44137377810116,
+            50.98898862869289,
+            16.057985133457613
+          ],
+          "bodyCentre": [
+            -42.46049880981445,
+            52.78888702392578,
+            16.057985305786133
+          ],
+          "up": [
+            -0.010625017618498302,
+            0.9999435529071616,
+            9.573806657398147e-08
+          ],
+          "supported": true,
+          "groundOffsetUnits": 1.8
+        }
+      },
+      {
+        "label": "return-to-(-42,14)",
+        "target": [
+          -42,
+          51.05,
+          14
+        ],
+        "reached": true,
+        "finalDistance": 0.5168765625235261,
+        "common": {
+          "beat": "ch13-common",
+          "common": {
+            "stage": "holding-h",
+            "terraUnits": 2.091646122036698,
+            "comparisonProved": false,
+            "finalReferenceOffered": false,
+            "finalReferenceOccupied": false,
+            "workerUnits": 0,
+            "committed": false
+          },
+          "worker": {
+            "leg": "holding-h",
+            "travelled": 0,
+            "legLength": 0,
+            "held": false,
+            "sampledIndex": 0,
+            "permitted": null,
+            "position": {
+              "x": -40,
+              "y": 51.05,
+              "z": 12
+            }
+          },
+          "anchors": [
+            "anc.cg.repeated-measure",
+            "anc.cg.demonstration-opened",
+            "anc.cg.survey-started",
+            "anc.cg.trace-drawn",
+            "anc.cg.route-offered",
+            "anc.cg.specific-hold",
+            "anc.cg.witness-held",
+            "anc.cg.revision-ready",
+            "anc.cg.route-tested",
+            "anc.cg.reciprocal-reference"
+          ],
+          "shape": {
+            "hasDiagnostic": true,
+            "keys": [
+              "beat",
+              "installWatch",
+              "anchors",
+              "holdReason",
+              "worker",
+              "survey",
+              "common"
+            ]
+          }
+        },
+        "pose": {
+          "foot": [
+            -42.44066819856223,
+            50.989633189485716,
+            14.236140173874618
+          ],
+          "bodyCentre": [
+            -42.459781646728516,
+            52.78953170776367,
+            14.236140251159668
+          ],
+          "up": [
+            -0.010618582314602406,
+            0.9999436212655324,
+            4.2936138421967944e-08
+          ],
+          "supported": true,
+          "groundOffsetUnits": 1.8
+        }
+      }
+    ],
+    "retraverseLegs": [
+      {
+        "label": "retraverse-(-42,16)",
+        "target": [
+          -42,
+          51.05,
+          16
+        ],
+        "reached": true,
+        "finalDistance": 0.495891431689385,
+        "terraUnits": 2.091646122036698,
+        "pose": {
+          "foot": [
+            -42.44005018910726,
+            50.98991158168686,
+            15.812692487577905
+          ],
+          "bodyCentre": [
+            -42.45915603637695,
+            52.78981018066406,
+            15.812692642211914
+          ],
+          "up": [
+            -0.010614359594274913,
+            0.999943666098444,
+            8.590778277360245e-08
+          ],
+          "supported": true,
+          "groundOffsetUnits": 1.8
+        }
+      },
+      {
+        "label": "retraverse-(-44,16)",
+        "target": [
+          -44,
+          51.05,
+          16
+        ],
+        "reached": true,
+        "finalDistance": 0.2814984166765226,
+        "terraUnits": 2.091646122036698,
+        "pose": {
+          "foot": [
+            -43.755547290420274,
+            50.98959182206457,
+            15.812692487560184
+          ],
+          "bodyCentre": [
+            -43.78986358642578,
+            52.78926467895508,
+            15.812692642211914
+          ],
+          "up": [
+            -0.019064608891949213,
+            0.9998182538280594,
+            8.591762781552832e-08
+          ],
+          "supported": true,
+          "groundOffsetUnits": 1.8
+        }
+      },
+      {
+        "label": "retraverse-(-44,18)",
+        "target": [
+          -44,
+          51.05,
+          18
+        ],
+        "reached": true,
+        "finalDistance": 0.3535859028401509,
+        "terraUnits": 2.091646122036698,
+        "pose": {
+          "foot": [
+            -43.75440155345964,
+            50.98935504525057,
+            17.71649134178448
+          ],
+          "bodyCentre": [
+            -43.78870391845703,
+            52.78902816772461,
+            17.71649169921875
+          ],
+          "up": [
+            -0.019056869442998548,
+            0.9998184013744663,
+            1.985745941596771e-07
+          ],
+          "supported": true,
+          "groundOffsetUnits": 1.8
+        }
+      },
+      {
+        "label": "retraverse-(-46,18)",
+        "target": [
+          -46,
+          51.05,
+          18
+        ],
+        "reached": true,
+        "finalDistance": 0.3626891831207549,
+        "terraUnits": 2.091646122036698,
+        "pose": {
+          "foot": [
+            -45.69169619536322,
+            50.99047821622389,
+            17.71649134202511
+          ],
+          "bodyCentre": [
+            -45.773799896240234,
+            52.788604736328125,
+            17.71649169921875
+          ],
+          "up": [
+            -0.045613167153896475,
+            0.9989591778356868,
+            1.984409112496855e-07
+          ],
+          "supported": true,
+          "groundOffsetUnits": 1.8
+        }
+      },
+      {
+        "label": "retraverse-(-48,18)",
+        "target": [
+          -48,
+          51.05,
+          18
+        ],
+        "reached": true,
+        "finalDistance": 0.42806104653382687,
+        "terraUnits": 2.091646122036698,
+        "pose": {
+          "foot": [
+            -47.48961922708953,
+            50.99112145056708,
+            17.71649134243282
+          ],
+          "bodyCentre": [
+            -47.679283142089844,
+            52.78110122680664,
+            17.71649169921875
+          ],
+          "up": [
+            -0.1053688416668407,
+            0.9944332090219781,
+            1.9821440446045967e-07
+          ],
+          "supported": true,
+          "groundOffsetUnits": 1.8
+        }
+      },
+      {
+        "label": "retraverse-(-48,16)",
+        "target": [
+          -48,
+          51.05,
+          16
+        ],
+        "reached": true,
+        "finalDistance": 0.3949549690046943,
+        "terraUnits": 2.091646122036698,
+        "pose": {
+          "foot": [
+            -47.48437227917263,
+            50.99174212779032,
+            16.22220974561666
+          ],
+          "bodyCentre": [
+            -47.673484802246094,
+            52.78178024291992,
+            16.222209930419922
+          ],
+          "up": [
+            -0.10506251281858797,
+            0.9944656195164485,
+            1.0266847908128159e-07
+          ],
+          "supported": false,
+          "groundOffsetUnits": 1.8
+        }
+      },
+      {
+        "label": "retraverse-(-48,14)",
+        "target": [
+          -48,
+          51.05,
+          14
+        ],
+        "reached": true,
+        "finalDistance": 0.4613896727319799,
+        "terraUnits": 2.091646122036698,
+        "pose": {
+          "foot": [
+            -47.477873875642736,
+            50.99239110542973,
+            14.318671146547265
+          ],
+          "bodyCentre": [
+            -47.66633987426758,
+            52.78249740600586,
+            14.318671226501465
+          ],
+          "up": [
+            -0.10470333256935521,
+            0.9945035003200688,
+            4.441899974165088e-08
+          ],
+          "supported": false,
+          "groundOffsetUnits": 1.8
+        }
+      },
+      {
+        "label": "retraverse-(-48,12)",
+        "target": [
+          -48,
+          51.05,
+          12
+        ],
+        "reached": true,
+        "finalDistance": 0.3724835612107827,
+        "terraUnits": 2.091646122036698,
+        "pose": {
+          "foot": [
+            -47.47012590239092,
+            50.99252257400249,
+            12.14730831885583
+          ],
+          "bodyCentre": [
+            -47.65788269042969,
+            52.7827033996582,
+            12.147308349609375
+          ],
+          "up": [
+            -0.10430932668820415,
+            0.994544903142062,
+            1.7085303128036767e-08
+          ],
+          "supported": false,
+          "groundOffsetUnits": 1.8
+        }
+      }
+    ],
+    "common": {
+      "beat": "ch13-common",
+      "common": {
+        "stage": "holding-h",
+        "terraUnits": 2.091646122036698,
+        "comparisonProved": false,
+        "finalReferenceOffered": false,
+        "finalReferenceOccupied": false,
+        "workerUnits": 0,
+        "committed": false
+      },
+      "worker": {
+        "leg": "holding-h",
+        "travelled": 0,
+        "legLength": 0,
+        "held": false,
+        "sampledIndex": 0,
+        "permitted": null,
+        "position": {
+          "x": -40,
+          "y": 51.05,
+          "z": 12
+        }
+      },
+      "anchors": [
+        "anc.cg.repeated-measure",
+        "anc.cg.demonstration-opened",
+        "anc.cg.survey-started",
+        "anc.cg.trace-drawn",
+        "anc.cg.route-offered",
+        "anc.cg.specific-hold",
+        "anc.cg.witness-held",
+        "anc.cg.revision-ready",
+        "anc.cg.route-tested",
+        "anc.cg.reciprocal-reference"
+      ],
+      "shape": {
+        "hasDiagnostic": true,
+        "keys": [
+          "beat",
+          "installWatch",
+          "anchors",
+          "holdReason",
+          "worker",
+          "survey",
+          "common"
+        ]
+      }
+    },
+    "usedReset": false,
+    "usedSecondGrant": false,
+    "usedRail": false
+  },
+  "failedGates": [
+    "vertex-3-crossed-with-bounded-positive-overshoot-AND-bounded-full-horizontal",
+    "physical-return-and-ordinary-retraversal-completed-18-with-no-reset-or-second-grant",
+    "actual-Terra-walked-the-full-18-unit-common-span"
+  ],
+  "closing": {
+    "ok": true,
+    "problems": []
+  },
+  "qualifications": [
+    "Do not call this exact15.82 turn unless observed coordinates establish it. Freeze at2.0916 is not the exact4unit static scenario.",
+    "Recovery thirdcorner was unsupported, and coarse approach did not establish all required incoming crossings. No source recovery-failure conclusion.",
+    "No route/predicate/source change authorized from confounded recovery; preserve raw failed attempt and prove corrected ordinary return."
+  ],
+  "publicationAuthorized": false
+}

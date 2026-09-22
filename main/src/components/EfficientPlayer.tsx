@@ -1,3 +1,4 @@
+import { bindAutopilotPlayer } from '../story/autopilot/worldAccess.ts';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
@@ -48,6 +49,7 @@ import {
 } from '../utils/surfaceControls';
 import { resolveSurfaceFrame } from '../utils/surfaceResolver';
 import { smoothUpForPosition } from '../utils/gravityField';
+import { canStepUp, STEP_UP_HEIGHT, STEP_PROBE_FORWARD } from '../utils/playerStepProbe';
 import { getPlayerLook, getPlayerUp, setPlayerUp, setPlayerWorldPosition } from '../state/playerFrame';
 import { setPlayerSubmerged, setCameraSubmersion } from '../state/playerSubmersion';
 import {
@@ -135,7 +137,8 @@ import {
 import { setPlayerPose } from '../game/systems/playerPoseSystem.ts';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { resolveStoryInteraction } from '../story/storyInteractions.ts';
-import { axisBandVelocityDelta, getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing, sideHarvestProbePointsOffRow } from '../story/sideLens.ts';
+import { pickSideHarvestVoxel } from '../story/feed/surveyBrackets.ts';
+import { axisBandVelocityDelta, getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing } from '../story/sideLens.ts';
 import { BLOCKS, type BlockId } from '../game/data/blocks.ts';
 import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts';
 import { commitMawHarmlessTestFromAcceptedMine } from '../story/emergentMawRepair.ts';
@@ -283,10 +286,6 @@ const _feet = new THREE.Vector3(); // per-step lava feet-cell test scratch
 const _lavaBottom = new THREE.Vector3(); // capsule bottom-tip probe (lava bed lock)
 const _fluidMantleForward = new THREE.Vector3();
 const _fluidMantleLandingFeet = new THREE.Vector3();
-const STEP_UP_HEIGHT = VOXEL_SCALE;
-const STEP_PROBE_FORWARD = PLAYER_CAPSULE_RADIUS + 1.15;
-const STEP_PROBE_LOW_OFFSET = -0.6;
-const FLUID_MANTLE_PROBE_LOW_OFFSET = -PLAYER_CAPSULE_HALF_HEIGHT;
 const STEP_ASSIST_UP_SPEED = STEP_UP_HEIGHT / 0.24;
 
 // Rotation taking oldUp -> newUp, robust for the ANTIPARALLEL case (top<->bottom
@@ -370,17 +369,6 @@ export default function EfficientPlayer({
   const rotationAnimation = useRef<RotationAnimation | null>(null);
   const lastPlanarForward = useRef(new THREE.Vector3(0, 0, -1));
   const controlsActive = useRef(false);
-  // Raster side-scroller: reusable probe points for the adjacency harvest scan.
-  const sideProbePoints = useMemo(
-    () => Array.from({ length: 6 }, () => new THREE.Vector3()),
-    []
-  );
-  // The screening's own scratch buffer for the same off-row probe set (the
-  // two actors can tick in the same frame, so they never share one array).
-  const sideMovieProbePoints = useMemo(
-    () => Array.from({ length: 6 }, () => new THREE.Vector3()),
-    []
-  );
   // Hold-to-mine accumulator: the voxel being mined (coord key), elapsed/needed
   // time, and when the last chip sound played. Reset when the key is released,
   // the crosshair leaves the voxel, or the block breaks.
@@ -408,6 +396,7 @@ export default function EfficientPlayer({
   const transitionCooldown = useRef(0);
   const lastGrounded = useRef(false);
   const lastGroundedNotification = useRef<boolean | null>(null);
+  const footstepTravel = useRef({ position: new THREE.Vector3(), initialized: false, distance: 0 });
   const lastJetpackActive = useRef(false);
   const jetpackLaunchAuthorized = useRef(false);
   const lastOnLadder = useRef(false);
@@ -561,41 +550,6 @@ export default function EfficientPlayer({
     }
 
     return false;
-  }, [rapier, world]);
-
-  const canStepUp = useCallback((
-    position: THREE.Vector3,
-    up: THREE.Vector3,
-    moveDirection: THREE.Vector3,
-    lowOffset = STEP_PROBE_LOW_OFFSET
-  ) => {
-    const body = ref.current;
-    if (!body || moveDirection.lengthSq() < 0.0001) return false;
-
-    const forward = moveDirection.clone().normalize();
-    const probeDistance = STEP_PROBE_FORWARD;
-    // Dry steps probe at shin height. A fluid mantle supplies the bottom-sphere
-    // offset so a capsule corner-hung at the waterline keeps seeing the bank
-    // until its inward tip has actually cleared the lip.
-    const lowOrigin = position.clone().addScaledVector(up, lowOffset);
-    const highOrigin = lowOrigin.clone().addScaledVector(up, STEP_UP_HEIGHT);
-    const lowRay = new rapier.Ray(vectorToRapier(lowOrigin), vectorToRapier(forward));
-    const highRay = new rapier.Ray(vectorToRapier(highOrigin), vectorToRapier(forward));
-    const lowHit = world.castRayAndGetNormal(lowRay, probeDistance, true, undefined, undefined, undefined, body);
-    if (!lowHit) return false;
-
-    // If one-block-up is also blocked, this is a taller obstacle. Do not climb it.
-    const highHit = world.castRayAndGetNormal(highRay, probeDistance, true, undefined, undefined, undefined, body);
-    if (highHit) return false;
-
-    const stepped = position.clone().addScaledVector(up, STEP_UP_HEIGHT);
-    const groundProbeOrigin = stepped.clone().addScaledVector(forward, probeDistance).addScaledVector(up, GROUND_PROBE_LIFT);
-    const groundRay = new rapier.Ray(vectorToRapier(groundProbeOrigin), vectorToRapier(up.clone().multiplyScalar(-1)));
-    const groundHit = world.castRayAndGetNormal(groundRay, GROUND_PROBE_LENGTH + STEP_UP_HEIGHT, true, undefined, undefined, undefined, body);
-    if (!groundHit) return false;
-
-    const groundNormal = vectorFromRapier(groundHit.normal).normalize();
-    return groundNormal.dot(up) >= GROUND_NORMAL_MIN_DOT;
   }, [rapier, world]);
 
   const beginTransition = useCallback((
@@ -817,37 +771,14 @@ export default function EfficientPlayer({
     // let a stationary HOLD [E] — the exact input ch1-fixed orders — bury the
     // player in a self-dug shaft. See sideHarvestProbePointsOffRow.
     const screening = isAutopilotDriving();
-    const probes = sideHarvestProbePointsOffRow(
-      position,
-      lens,
-      getSideFacing(),
-      screening ? sideMovieProbePoints : sideProbePoints
-    );
-    // Prefer a block that actually PAYS the quota, then fall back to any
-    // harvestable one. In the 1-bit era grass and dirt are the same grey slab
-    // and dirt drops nothing, so a probe order that happened to find dirt
-    // first made HOLD [E] look broken while the player stood beside grass.
-    // The screening keeps the hard filter (it must never spend its budget on
-    // a non-yielding block); the player keeps the fallback so the verb always
-    // does something and the world still deforms where they aimed it.
-    let fallback: HarvestTarget | null = null;
-    for (let p = 0; p < probes.length; p++) {
-      const point = probes[p];
-      const vx = Math.round(point.x / VOXEL_SCALE);
-      const vy = Math.round(point.y / VOXEL_SCALE);
-      const vz = Math.round(point.z / VOXEL_SCALE);
-      const voxel = voxelSystem.getVoxel(vx, vy, vz);
-      if (!voxel) continue;
-      // Skip blocks the current tool can't break (the era's hand can't chew
-      // stone) — the next probe usually has grass/dirt, so extraction keeps
-      // flowing instead of chirping "blocked" at a wall.
-      if (!canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: getEquippedToolTier() })) continue;
-      const target: HarvestTarget = { kind: 'voxel', coord: { x: vx, y: vy, z: vz }, voxel };
-      if (BLOCKS[voxel.blockId]?.drops.includes('biofiber')) return target;
-      if (screening) continue;
-      if (!fallback) fallback = target;
-    }
-    return fallback;
+    const coord = pickSideHarvestVoxel(position, lens, getSideFacing(), (x, y, z) => {
+      const voxel = voxelSystem.getVoxel(x, y, z);
+      if (!voxel || !canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: getEquippedToolTier() })) return null;
+      return { yields: BLOCKS[voxel.blockId]?.drops.includes('biofiber') ?? false };
+    }, screening);
+    if (!coord) return null;
+    const voxel = voxelSystem.getVoxel(coord.x, coord.y, coord.z);
+    return voxel ? { kind: 'voxel', coord, voxel } : null;
   }, []);
 
   const pickHarvestTarget = useCallback((camera: THREE.Camera | null): HarvestTarget | null => {
@@ -917,6 +848,9 @@ export default function EfficientPlayer({
     return best;
   }, [pickSideTarget]);
 
+  useEffect(() => bindAutopilotPlayer(commandContext, () => pickHarvestTarget(cameraRef.current)),
+    [commandContext, pickHarvestTarget]);
+
   // Actually break + harvest a voxel once mining has charged to completion.
   const commitMine = useCallback((
     coord: { x: number; y: number; z: number },
@@ -939,9 +873,9 @@ export default function EfficientPlayer({
         toolId,
         blockId
       });
-      playSfx('mine');
+      playSfx('mine', { position: { x: coord.x * VOXEL_SCALE, y: coord.y * VOXEL_SCALE, z: coord.z * VOXEL_SCALE } });
     } else {
-      playSfx('blocked');
+      playSfx('blocked', { position: { x: coord.x * VOXEL_SCALE, y: coord.y * VOXEL_SCALE, z: coord.z * VOXEL_SCALE } });
     }
   }, [commandContext, waterGen]);
 
@@ -981,8 +915,9 @@ export default function EfficientPlayer({
     // Debounced trigger/retarget decision (pure). Only a true acquisition edge
     // (no-target -> target) chips; boundary jitter and quiet retargets do not.
     const decision = advanceMiningTrigger(ms.trigger, candidate);
-    if (decision.chip === 'acquire') playSfx('mine');
-    else if (decision.chip === 'blocked') playSfx('blocked');
+    const targetPosition = target ? { x: target.coord.x * VOXEL_SCALE, y: target.coord.y * VOXEL_SCALE, z: target.coord.z * VOXEL_SCALE } : undefined;
+    if (decision.chip === 'acquire') playSfx('mine', { position: targetPosition });
+    else if (decision.chip === 'blocked') playSfx('blocked', { position: targetPosition });
 
     const committed = decision.committedKey;
 
@@ -1060,10 +995,10 @@ export default function EfficientPlayer({
     if (ms.elapsed >= ms.duration) {
       if (target.kind === 'tree') {
         const result = dispatchGameplayCommand(() => harvestTreeCommand(commandContext, { x: coord.x, y: coord.y, z: coord.z }));
-        if (result.ok) { playSfx('mine'); }
+        if (result.ok) { playSfx('mine', { position: targetPosition }); }
       } else if (target.kind === 'stone') {
         const result = dispatchGameplayCommand(() => collectStoneCommand(commandContext, { x: coord.x, y: coord.y, z: coord.z }));
-        if (result.ok) { playSfx('mine'); }
+        if (result.ok) { playSfx('inventoryAcquire', { position: targetPosition }); }
       } else if (target.kind === 'flora') {
         const result = dispatchGameplayCommand(() => harvestFloraCommand(commandContext, {
           x: coord.x,
@@ -1071,7 +1006,7 @@ export default function EfficientPlayer({
           z: coord.z,
           kind: target.floraKind
         }));
-        if (result.ok) { playSfx('mine'); }
+        if (result.ok) { playSfx('mine', { position: targetPosition }); }
       } else {
         commitMine(
           coord,
@@ -1090,7 +1025,7 @@ export default function EfficientPlayer({
     }
 
     if (ms.elapsed - ms.tickAt >= MINE_TICK_MS) {
-      playSfx('mine');
+      playSfx('mine', { position: targetPosition });
       ms.tickAt = ms.elapsed;
     }
     setMiningProgress(true, Math.min(1, ms.elapsed / ms.duration), false);
@@ -1197,7 +1132,7 @@ export default function EfficientPlayer({
         else result = dispatchGameplayCommand(() => placeStructureCommand(commandContext, { cell: target.cell, face: target.face, type: piece, material, up: upIdx }));
         placed = result.ok;
       }
-      playSfx(placed ? 'mine' : 'blocked');
+      playSfx(placed ? 'buildSuccess' : 'blocked', { position: { x: target.cell[0] * VOXEL_SCALE, y: target.cell[1] * VOXEL_SCALE, z: target.cell[2] * VOXEL_SCALE } });
     }
   }, [commandContext]);
 
@@ -1247,7 +1182,7 @@ export default function EfficientPlayer({
           { multiplayer: { predict: true } }
         );
         if (result.ok) {
-          playSfx('mine');
+          playSfx('hatch', { position: h.point });
           return true;
         }
       }
@@ -1818,10 +1753,12 @@ export default function EfficientPlayer({
     }
     const stepAssistAvailable = dryStepAssist || (fluidMantle && safeFluidMantleLanding);
     if (moving && stepAssistAvailable && !onLadder && !transitionLocked && canStepUp(
+      world,
+      rapier,
+      body,
       position,
       activeUp,
-      moveDirection,
-      fluidMantle ? FLUID_MANTLE_PROBE_LOW_OFFSET : STEP_PROBE_LOW_OFFSET
+      moveDirection
     )) {
       if (dryStepAssist) {
         const upSpeed = nextVelocity.dot(activeUp);
@@ -1941,6 +1878,22 @@ export default function EfficientPlayer({
     }
 
     const controls = withAutopilot(get());
+    const foot = footstepTravel.current;
+    const storyForSteps = getStoryStateSnapshot();
+    const stepsAudible = !storyForSteps.active || (storyForSteps.chapter !== 'prologue' && !['descent', 'ch1-fixed', 'ch1-track', 'ch1-raster', 'ch1-depth', 'ch1-nav', 'ch1-iso'].includes(storyForSteps.beat ?? ''));
+    if (foot.initialized) {
+      const distance = position.distanceTo(foot.position);
+      if (lastGrounded.current && submergence.current < 0.1 && stepsAudible && distance < 1) {
+        foot.distance += distance;
+        if (foot.distance >= 1.6) {
+          foot.distance %= 1.6;
+          const below = position.clone().addScaledVector(surfaceRef.current.up, -(PLAYER_CAPSULE_HALF_HEIGHT + PLAYER_CAPSULE_RADIUS + 0.05));
+          const material = voxelSystem.getVoxel(Math.round(below.x / VOXEL_SCALE), Math.round(below.y / VOXEL_SCALE), Math.round(below.z / VOXEL_SCALE))?.blockId;
+          playSfx('footstep', { material });
+        }
+      } else foot.distance = 0;
+    }
+    foot.position.copy(position); foot.initialized = true;
     const deleteActive = controlsActive.current || isTouchActive() || isAutopilotDriving();
     const harvestHeld = deleteActive && controls.delete;
     if (isBuildEnabled()) {

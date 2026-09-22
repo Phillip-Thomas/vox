@@ -1,0 +1,87 @@
+{
+  "schema": "judge-verdict-absolute-v1",
+  "bundleSha256": "e61b4fa963c3f8c3f014ba22ccccffbe3921e23dfef394c4198ff645392f90a8",
+  "rubricId": "paravoxia-chapter-v1",
+  "dimensions": {
+    "audiovisual_emotional_alignment": {
+      "probs": [0.05, 0.25, 0.45, 0.22, 0.03],
+      "evidence": [
+        {"frames": [0, 2, 3], "observation": "ch10-ask (t=4.80-13.40s): a dark cockpit with a tiny green cube growing in the window; the approach is legible as 'something is coming' but the cube reads as a placeholder marker, not an object with emotional weight. In frame 3 it has become a flat pixel map that fills a third of the window without any sense of scale or atmosphere."},
+        {"frames": [4], "observation": "The landfall objective (t=14.40s) is carried by the picture: the window fills with voxel terrain under a pale sky, luma steps 0.225 to 0.461. This is the one frame where image and story turn agree."},
+        {"frames": [5, 6, 7, 8], "observation": "The bearing-claim beat (t=25.80s) arrives as a bright meadow with grey deer and palms (bright 0.877), a pastoral relief after the dark approach; but frames 5 and 6 between are an incoherent jumble of rock texture, voxel wall and clipping tree trunk, so the arrival is a lurch rather than a build."},
+        {"frames": [22], "observation": "Transit (t=61.10s): back in the dark cockpit with a small capsule drifting in the starfield. Reads as departure/withholding, but the 25 s of transit from 36.7 to 61.1 s sits at a flat luma of ~0.07 with no visible turn at the 52.90 s resolve."}
+      ],
+      "confidence": "medium"
+    },
+    "narrative_and_player_causality": {
+      "probs": [0.05, 0.3, 0.45, 0.18, 0.02],
+      "evidence": [
+        {"frames": [0, 4, 7], "observation": "Digest chain: crossing (4.80s) -> landfall (14.40s) -> bearing-claim (25.80s) -> transit:hold (30.20s) -> transit:resolve (52.90s). Objectives do change on a timeline and frame 4 confirms landfall shows a planet surface, frame 7 confirms the claim is made on the ground."},
+        {"frames": [7, 8], "observation": "Caption text from the digest is delivered as fragments: '(i' at 25.80s then '(issued, not of' at 26.20s, completing only at 30.20s; the opening caption at 4.80s is an unclosed parenthesis. The captions read as a typing effect caught mid-word rather than a finished line at the latch."},
+        {"frames": [7], "observation": "The frame at bearing-claim shows a grey signpost/cross pole centred in a meadow with deer; nothing in the picture visibly marks what 'bearing' was claimed or what the player did to claim it. The digest also states the exit milestone ch10-fabrication-refused was NOT reached, so the chain is left open."}
+      ],
+      "confidence": "medium"
+    },
+    "cinematic_composition_and_lens": {
+      "probs": [0.1, 0.4, 0.38, 0.11, 0.01],
+      "evidence": [
+        {"frames": [0], "observation": "Opening-2.0s hero still: cockpit furniture occupies roughly 60% of the frame and the ostensible subject is a small green cube at dead centre with a few gold dots around it. A stranger would name 'cockpit' before 'cube'. Centred small nothing; does not hold up alone."},
+        {"frames": [4], "observation": "Best-composed frame: the octagonal window frames a voxel planet edge-to-edge with the pale sky as negative space; one subject, one frame."},
+        {"frames": [7, 8], "observation": "Anchor hero still (bearing-claimed): the camera is now outside the hull. A grey pole is centred in the foreground, deer sit at the horizon line, a grey rock blob intrudes bottom-right and a blue strut fragment intrudes at left. Cluttered, no focal hierarchy, horizon exactly at mid-height."},
+        {"frames": [5, 6], "observation": "Frame 5 has no nameable subject (rock texture beside a voxel cliff); frame 6 has a tree trunk covering the left 12% of the image inside the cockpit."},
+        {"frames": [22], "observation": "Transit frame: small capsule centred in a starfield, cockpit furniture again dominant. Legible but flat."}
+      ],
+      "confidence": "high"
+    },
+    "score_coherence_and_sync": {
+      "probs": [0.05, 0.2, 0.45, 0.27, 0.03],
+      "evidence": [
+        {"frames": [7], "observation": "anc.ch10.bearing-claimed at 25.80s lands exactly on the objective change to station:bearing-claim and the caption-first event; the picture turns there too (bright 0.517 at 21.70s to 0.877 at 25.80s)."},
+        {"frames": [8], "observation": "anc.ch10.transit-ignite at 30.20s lands exactly on the ch10-transit beat boundary, the objective change to transit:hold and the caption completion; the picture drops from 0.875 to 0.473 between 26.20 and 30.20s, so the anchor sits at a visible turn."},
+        {"frames": [22], "observation": "anc.ch10.seam-of-light at 52.90s coincides with objective transit:resolve, but telemetry shows no picture turn: bright 0.183-0.184 and colorful 0.66 at 48.90, 52.90 and 57.00s. The third anchor is authored to the timeline but the image does not answer it."}
+      ],
+      "confidence": "medium"
+    },
+    "palette_light_and_render_cohesion": {
+      "probs": [0.05, 0.3, 0.45, 0.18, 0.02],
+      "evidence": [
+        {"frames": [0, 2, 22], "observation": "Cockpit frames hold a coherent deep-blue/violet palette with orange and blue console accents, warm gold orbs against cool starfield; consistent grade across the ask and transit beats."},
+        {"frames": [3], "observation": "The approaching world is a flat, low-resolution green/blue/brown pixel plane with a hard rectangular edge; it reads as a billboard texture rather than an object in the same render as the cockpit."},
+        {"frames": [4, 5, 6, 7, 8], "observation": "The surface beats switch to a pale greenish-white sky that is near-clipping (maxLuma 0.95-0.97, bright up to 0.877) and reads as grey-green mush with no light direction; the cockpit trim also shifts hue from blue/orange to cyan between frames 3 and 4."},
+        {"frames": [6, 7, 8], "observation": "Render seams: a tree trunk penetrates the cockpit interior in frame 6; in frames 7-8 a rock and a strut fragment intersect the camera. Capture is hardware-high, so these are not tier artifacts."}
+      ],
+      "confidence": "high"
+    },
+    "transition_and_state_integrity": {
+      "probs": [0.05, 0.25, 0.45, 0.22, 0.03],
+      "evidence": [
+        {"frames": [], "observation": "Burst @30.60s (frames 10-15): meanAdjDelta 0.0023, netPerFrame 0.0009, flickerRatio 2.6, signFlips 0.75, changed 0.01, pops 0. The oscillation signature is present (ratio > 2 with high sign flips) but the amplitude is a fraction of a percent of luma over 1% of pixels, so it is a measurement-level flicker, not a perceptible one. 0 blank frames, 23/23 distinct, not frozen."},
+        {"frames": [6, 7], "observation": "Between 21.70s and 25.80s the camera goes from inside the cockpit to outside on the ground and luma jumps 0.517 to 0.877; no burst covers this boundary, so whether it is a cut, a snap or a transition is unmeasured."},
+        {"frames": [8], "observation": "The ch10-transit beat boundary at 30.20s (luma 0.875 to 0.473) is likewise not bracketed by consecutive frames; the burst begins 0.4 s after the boundary and shows an already-settled scene."},
+        {"frames": [22], "observation": "From 36.70 to 61.10s the scene sits at meanLuma 0.0688-0.0709 with identical bright/contrast/colorful scalars; frames are distinct, so it is not frozen, but the transit hold is nearly static for 25 s."}
+      ],
+      "confidence": "medium"
+    },
+    "creative_ambition_and_specificity": {
+      "probs": [0.05, 0.25, 0.45, 0.22, 0.03],
+      "evidence": [
+        {"frames": [7, 8], "observation": "A voxel world with palms, grey deer, a pond and a grey signpost is a particular place; it is more than a generic space scene."},
+        {"frames": [0, 22], "observation": "The cockpit, starfield, gold orbs and drifting capsule are generic spaceflight furniture that could belong to any chapter."},
+        {"frames": [3, 4], "observation": "The planet as a flat pixel map that then becomes voxel terrain is a distinctive idea, but the billboard stage undercuts it."}
+      ],
+      "confidence": "medium"
+    }
+  },
+  "severeIssues": [
+    {"frames": [6, 7, 8], "description": "Geometry interpenetration: a tree trunk fills the left edge of the cockpit interior in frame 6, and in frames 7-8 (the bearing-claimed anchor still) the camera sits outside the hull with a rock and a strut fragment intersecting the view. The anchor hero frame is corrupted by clipping.", "severity": "major"},
+    {"frames": [3], "description": "The approaching world renders as a hard-edged flat pixel billboard in the window before becoming 3D terrain in frame 4; reads as a popping placeholder.", "severity": "minor"}
+  ],
+  "namedStrongest": "Frame 4 at landfall (t=14.40s): the octagonal cockpit window filled edge-to-edge with voxel terrain under a pale sky, the one frame where a single subject, the objective change and the light all agree.",
+  "namedWeakest": "Frames 6-8: the transition from cockpit to ground passes through the hull, leaving a tree trunk, a rock and strut fragments clipping into the image at the exact moment the bearing-claimed anchor fires, so the chapter's key still is its messiest.",
+  "injectionFlag": false,
+  "requests": [
+    {"kind": "denser-window", "t0": 21.7, "t1": 30.2, "reason": "Two beat/objective boundaries (25.80s claim, 30.20s transit) with large luma steps are not bracketed by adjacent frames; need to know whether the inside-to-outside camera move is a cut, a snap or a transition."},
+    {"kind": "denser-window", "t0": 50.0, "t1": 56.0, "reason": "anc.ch10.seam-of-light at 52.90s shows no change in frame telemetry; a burst there would confirm whether any picture event accompanies the anchor."},
+    {"kind": "other", "reason": "Frames 9-21 (the whole ch10-transit beat except its last frame) are absent from the evidence list; only frame 22 represents 30 s of the capture."}
+  ]
+}

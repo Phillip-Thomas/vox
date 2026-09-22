@@ -1,0 +1,21 @@
+{
+  "reviewedAt": "2026-09-06T18:26:01.435442+00:00",
+  "reportRef": "arrival-common-manual-runtime-report.json",
+  "reportSha256": "9afbdbfcc0b563392956e2f2f0c18c6efab908537312b26a65ed4a0526264115",
+  "invocationRef": "arrival-common-manual-runtime-invocation.json",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "isAcceptance": false,
+  "sourceDrift": [],
+  "knownCleanupRef": "producer-manual-earned-gpu-handoff.json",
+  "qualifications": [
+    "Reference3 is a real session but not a valid grounded-entry strict passage test: its approach accepted XZarrival while unsupported then started corner1 airborne.",
+    "Deviation crossed nine geometric planes; it did not traverse nine certified game frontiers. Live credit remained6 after vertex3, so monotonic-unit helper is insufficient to certify each frontier.",
+    "Best6units belongs to Terra, not W. W full passage and T reference were never reached.",
+    "Actual early turn z15.754, not exact requested15.82. Early/shortcut/recovery behavior is measured only for actual sampled route.",
+    "Root authorized clamped-pulse/support-start corrections in targeted inbox; role did not consume these phase updates. Its report statement that no further correction was authorized does not describe current owner/root authorization. Next handoff carries the concrete direction directly.",
+    "Role reports reference2 start18:14:37 but exact command log starts18:14:43. Preserve log/trace actual times as authority.",
+    "CPU119 tests concern private instrumentation. All4 Node exits2; role shell0 only records receipt.",
+    "Viewed reference3/012-at-E-common-start.png and deviation1/018-at-C.png: rendered scene/HUD exist; static look direction and debug overlays do not establish naive usability or shot quality."
+  ],
+  "next": "Fresh bounded CPU manual-frontier-audit uses raw captured positions and source predicates; earnedContinue is active sole GPU. No new game patch or fullsuite."
+}

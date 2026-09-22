@@ -1,0 +1,114 @@
+# Early grid and mobile — successor production lock
+
+## Authority
+
+Existing owner instruction: owner-decisions.md. The initial planning-only lock remains byte-preserved at assembly/originals/production-lock.json and production-lock.md. This successor concretizes already authorized paths after the three independent treatments and preparatory recipient responses. Same-hash native signatures are still required before implementation.
+
+## Locked scope
+
+Each exact symbol restriction and conditional trigger in assembly/implementation-boundary.json remains binding; allowedPaths is a ceiling, not a blanket mutation grant. The immutable captured source revision is used, not the earlier planning manifest revision.
+
+## Protected paths
+
+All protected audio paths remain closed, as do changes beyond the bounded original early-story repair.
+
+## Stop conditions
+
+No implementation until the original three directors complete native exchange and actual-hash signatures. Missing lifecycle, media and independent-review evidence is not waived. No publishing authority.
+
+## Lock disposition
+
+Unsigned scene bytes can be frozen for authentic review; this is no approval or acceptance. Exact machine-lock mirror follows.
+
+```json
+{
+  "schema": "paravoxia.productionLock.v1",
+  "runId": "2026-09-05-early-grid-mobile",
+  "mode": "scene",
+  "status": "locked",
+  "sourceRevision": "working-tree:1eb27bf00229c442169280f126f0f3f15bcad63d3581af76f5c0b8e4d3d0d1a8",
+  "runProfileRef": "paravoxia-creative-scene@v1",
+  "releaseCandidate": false,
+  "authority": [
+    {
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "section": "Owner gate lift; bounded existing-story repair; current owner early-grid/mobile instruction",
+      "sha256": "88f85610c81eb3deae605ea01c0d2f53994487048e0d6029fb3240b1d51909de"
+    }
+  ],
+  "mutationBoundary": "bounded-runtime",
+  "allowedPaths": [
+    ".codex/production-runs/2026-09-05-early-grid-mobile/",
+    "main/src/story/beats/ch1/ch1-fixed.ts",
+    "main/src/story/beats/ch1/ch1-track.ts",
+    "main/src/story/beats/ch1/ch1-raster.ts",
+    "main/src/story/beats/ch1/rail-ch1-fixed.ts",
+    "main/src/story/beats/ch1/rail-ch1-raster.ts",
+    "main/src/story/beats/objectivePrimitives.ts",
+    "main/src/story/storyDirector.ts",
+    "main/src/story/storyScript.ts",
+    "main/src/story/debrisSalvage.ts",
+    "main/src/story/world/DebrisField.tsx",
+    "main/src/story/world/storyAnchorResolver.ts",
+    "main/src/story/world/SideWorkerAvatar.tsx",
+    "main/src/story/sideLens.ts",
+    "main/src/story/feed/surveyBrackets.ts",
+    "main/src/story/feed/SurveyBracketDriver.tsx",
+    "main/src/story/feed/regulationVoice.ts",
+    "main/src/story/feed/RegulationFeedHud.tsx",
+    "main/src/story/ux/storyHudLayout.ts",
+    "main/src/story/feedRuntime.ts",
+    "main/src/story/feed/FeedOverlay.tsx",
+    "main/src/story/storyState.ts",
+    "main/src/story/StoryDirectorDriver.tsx",
+    "main/src/story/ux/objectiveDirector.ts",
+    "main/src/story/ux/inputGlyphs.ts",
+    "main/src/story/autopilot.ts",
+    "main/src/components/EfficientPlayer.tsx",
+    "main/src/story/storyText.ts",
+    "main/src/story/feed/RegulationFeedHud.test.tsx",
+    "main/src/story/storyText.test.ts",
+    "main/src/story/StoryCaptions.tsx",
+    "main/src/story/ux/objectiveCommandFeedback.ts",
+    "main/src/story/ux/feedbackCues.ts",
+    "main/src/story/ux/objectiveRestore.ts",
+    "main/src/story/ux/objectiveCommandFeedback.test.ts",
+    "main/src/story/ux/objectiveDirector.test.ts",
+    "main/src/story/ux/feedbackCues.test.ts",
+    "main/src/story/feed/SurveyBracketOverlay.tsx",
+    "main/src/components/CameraControls.tsx"
+  ],
+  "protectedPaths": [
+    "main/src/audio/",
+    "main/src/components/audio/",
+    "main/public/audio/"
+  ],
+  "lockedBeats": [
+    "ch1-fixed",
+    "ch1-track",
+    "ch1-raster",
+    "ch1-depth"
+  ],
+  "currentRestrictions": {
+    "storyCeiling": "ch4-arrival",
+    "postArrivalStoryMutationAllowed": false,
+    "copyChangeDecisionRefs": [
+      "owner-decisions.md#current-owner-instruction"
+    ],
+    "protectedAudioPaths": [
+      "main/src/audio/",
+      "main/src/components/audio/",
+      "main/public/audio/"
+    ],
+    "openGateRefs": [
+      "current-shipped-visual-baseline",
+      "three-peer-director-contract",
+      "independent-player-audit",
+      "objective-lifecycle-and-variant-evidence"
+    ]
+  },
+  "canonicalPreviewUrl": null,
+  "publishAllowed": false,
+  "frozenAt": "2026-09-05T20:46:18.959199+00:00"
+}
+```

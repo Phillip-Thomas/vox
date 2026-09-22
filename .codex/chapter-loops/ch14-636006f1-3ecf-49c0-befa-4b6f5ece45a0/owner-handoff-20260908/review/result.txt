@@ -1,0 +1,28 @@
+```json
+{
+  "verdict": "PASS",
+  "scope": {
+    "read": [
+      "main/tools/chapter-loop/provider-handoff.mjs (1-70, full)",
+      "main/tools/chapter-loop/budget.mjs (firstPlayableDeadline 8-12, elapsedClock 36-42, beginChapter context)",
+      "main/tools/chapter-loop/runner.mjs (policySeal 20-27, stopReason 114-123, import 10) ~38 lines"
+    ],
+    "writes": "none; no tests run; no agents dispatched"
+  },
+  "blockers": [],
+  "findings": {
+    "guards_single_use": "provider-handoff.mjs:12-16 restricts to status BLOCKED_INFRASTRUCTURE, no active role, cursor at 'plan', no prior providerHandoffs, roleLaunches===1, all token counters 0, receipts only 'preflight' — correctly limits this to the first zero-content plan rejection.",
+    "quota_evidence": "20-27 binds transport session to transcript's last result with is_error, api_error_status===429, all four usage fields 0, and requestedModel===previous creative model. Earlier content-bearing results are excluded by the state-level zero-token check at 14-15.",
+    "checkpoint_integrity": "17 requires policySeal(state)===state.policySha256 and previousStateSha256===sha(state); no checkpoint reset. 46 structuredClone preserves id, queue, cursor, receipts, usage, activeMs, clock, limits. 66 re-seals; runner.mjs:20-25 includes providerHandoffs/brief/frozen/clock in the seal, so the mutation is covered.",
+    "accounting": "47 next.retries++ consumes an existing infrastructure allowance, gated at 18 against limits.infrastructureRetries (stricter than runner.mjs:27 recoveryAllowance). Spent token/launch counters retained, mirrored into retainedUsage (53). No cap or limit value is mutated.",
+    "deadlines": "50 firstPlayableDeadlineAt = min(a.requestedAt + limits.firstPlayableMs, elapsedClock deadlineAt) using the state's own firstPlayableMs, not caller input; 29 requires requestedAt finite, <= now, >= failure.at, and wall.remainingMs>0; 51 requires the renewed window to be in the future. Original 8h deadline is derived from clock.startedAt (budget.mjs:36-41) and is untouched, so it caps the renewed window. budget.mjs:8-11 applies the same min() at read time — no extension path.",
+    "no_game_writes": "34-43: every file differing from acceptedSource/frozen must be listed, and every listed path must match chapter-loop.mjs or provider-handoff|runner|budget|loop.test, with before/after hashes re-verified from disk. Game source, commissions and numeric limits cannot be altered. 45 binds a passing validation to sha(a.files). Runtime writes (62-67) stay under the run directory: archive with flag 'wx' mode 0o400, state.json, events.jsonl, under .runner.lock (58)."
+  },
+  "notes_non_blocking": [
+    "provider-handoff.mjs:46-47: next.failure is retained while status flips to RUNNING (it is copied into originalFailure at 53). Harmless for the guards reviewed, but any downstream reporting keyed on state.failure presence would show a stale failure; verifying that needed runner reads beyond the 40-line cap.",
+    "runner.mjs:121: first-playable stop also fires on state.activeMs + elapsed >= limits.firstPlayableMs. That active-time component is not renewed by the handoff, consistent with 'same spent counters', but it slightly shortens the effective 90min window by whatever active time the rejected plan role accrued.",
+    "35-37 correctness for added/deleted paths depends on differences()/snapshot() semantics in store.mjs, which was out of scope; assumed sound."
+  ],
+  "assessment": "Guards, accounting and write containment are correct for the authorized Codex handoff; no changes required."
+}
+```

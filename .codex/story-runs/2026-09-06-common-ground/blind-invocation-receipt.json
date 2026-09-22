@@ -1,0 +1,16 @@
+{
+  "corpusId": "common-ground-predecessor-selection-v1",
+  "corpusSha256": "d0fe844959ccdbbcd07b8df568f659633c760dede3515d1ddcf565b94e35e53e",
+  "allowedResourceHashes": [
+    "d0fe844959ccdbbcd07b8df568f659633c760dede3515d1ddcf565b94e35e53e"
+  ],
+  "tools": [],
+  "projectContextLoaded": false,
+  "canonExposure": false,
+  "transport": "Claude safe-mode; exact commission; no tools; /tmp cwd; no project discovery or MCP; actual invocation/result receipt to be attached",
+  "sessionId": "5c9ee119-38c8-4641-b4e9-9621c799a04a",
+  "model": "claude-opus-5",
+  "actualTools": [],
+  "completed": true,
+  "reportSha256": "b92da6948747ced273ae4998dc078cdf2709e11c733391c545bd1bb0869ff1a0"
+}

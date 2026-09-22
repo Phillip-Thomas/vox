@@ -1,0 +1,36 @@
+{
+  "schema": "paravoxia.producerProbeAbort.v1",
+  "requestedAt": "2026-09-06T15:01:52.106821+00:00",
+  "targetPid": 1412336,
+  "argv": [
+    "node",
+    "manual-survey-probe.mjs",
+    "--out",
+    "manual-2",
+    "--watch-ms",
+    "90000"
+  ],
+  "cwd": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-survey",
+  "signal": "SIGTERM",
+  "ownedDescendantPids": [
+    1412384,
+    1412491,
+    1412492,
+    1412526,
+    1412528,
+    1412531,
+    1412581,
+    1412616,
+    1412617,
+    1412710
+  ],
+  "reason": "Manual-2 issues keys without sustained movement, ignores failed arrival and labels arrived-W while still44.94units away. Continued later phases cannot establish route/corner/clearance proof. Stop invalid owned attempt and correct input/precondition harness before retry.",
+  "gameFailureClaim": false,
+  "chapterAcceptance": false,
+  "sourceMutation": false,
+  "unrelatedProcessesSignalled": false,
+  "cleanupVerified": true,
+  "checkedAt": "2026-09-06T15:02:09.355732+00:00",
+  "remainingLiveOwnedPids": [],
+  "reapedOrZombieOwnedPids": []
+}

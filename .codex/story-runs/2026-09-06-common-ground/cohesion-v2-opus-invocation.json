@@ -1,0 +1,25 @@
+{
+  "role": "story-cohesion-judge",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T06:38:25.423478+00:00",
+  "safeMode": true,
+  "permissionMode": "default",
+  "tools": [
+    "Read",
+    "Grep",
+    "Glob"
+  ],
+  "systemPromptSha256": "fd208aa1cd6f41ba3d6a3ba59e4de5275be4d77355e477a8c6d1b60540665b4a",
+  "commissionSha256": "63c975d18a5420e3133f7e2b7db1fa44d4b3ea91e70cc9f54037a78a53e22940",
+  "scope": "fresh independent council-v2 documentation judgment only; readonly",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T06:43:32.261798+00:00",
+  "sessionId": "fadd5905-5b06-43b7-bed3-5bab5278200d",
+  "model": "claude-opus-5",
+  "actualTools": [
+    "Glob",
+    "Grep",
+    "Read"
+  ],
+  "isError": false
+}

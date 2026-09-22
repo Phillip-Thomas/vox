@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 322925,
+  "stop_reason": "end_turn",
+  "session_id": "5766ee3d-5e88-453d-9876-88330328bdd0",
+  "total_cost_usd": 2.0636835,
+  "usage": {
+    "input_tokens": 68,
+    "cache_creation_input_tokens": 68036,
+    "cache_read_input_tokens": 1539799,
+    "output_tokens": 24428,
+    "output_tokens_details": {
+      "thinking_tokens": 4592
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 68036,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1911,
+        "cache_read_input_tokens": 74003,
+        "cache_creation_input_tokens": 339,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 339
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2319,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002384,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 68,
+      "outputTokens": 24428,
+      "cacheReadInputTokens": 1539799,
+      "cacheCreationInputTokens": 68036,
+      "webSearchRequests": 0,
+      "costUSD": 2.0612995,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 4592,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 42,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "No stray Chromium (the match was my own pgrep shell). Cleanup verified complete.\n\n**VERDICT: FAIL \u2014 INCONCLUSIVE. The C-endpoint negative was NOT proved. Zero route vertices ran.**\n\n## What happened\n\nThe one bounded attempt stopped at required gate `LP-A-and-LP-B-armed-without-relocation` at +66.1s, **before CUT_MODE route walking began**. No measured foot at or near C exists in this run.\n\nFailure class: **private-probe instrumentation**, distinct from source drift and from true game failure. **No game failure is established, and this is not an endpoint rejection.**\n\n## Blocking finding: served bundle \u2260 executed bundle\n\n| | |\n|---|---|\n| Preflight-fetched bundle | `/assets/index-Ddqg7x9Y.js` sha `4b41a7d5\u202683e9` \u2014 **matches control exactly** |\n| Bundle the page actually executed | `/assets/index-C1X65dZp.js` sha `68c8be84\u2026328b` |\n| Root index references | only `assets/index-Ddqg7x9Y.js` |\n| curl of the executed path | returns index.html bytes (`74025800\u2026`), i.e. SPA fallback, not the JS that ran |\n\nRoot control/readiness and served identity revalidated and matched before capture (index `74025800\u2026`, bundle `4b41a7d5\u2026`, manifest `2de3fa2a\u2026`, contract `5ef85a32\u2026`). The pinned callee offsets (line 7839, col 194730 / 220603) resolved to **zero locations** in the executed bundle, `exactResolution` false for both, `error: null`. That tripped `DISCRIMINATOR STAGE STOP: arming-failed`, and `downstreamPermitted` then refused every dependent act. I did **not** weaken that gate to force a pass.\n\n## Private corrections \u2014 applied, syntax/selftest clean, but NOT exercised\n\nCUT_MODE code was never entered, so all three remain **unvalidated by measurement**:\n1. **cut-mode negative is observation, not gate** \u2014 in CUT mode only, a `supported:false` vertex is recorded `required:false` as a retained raw negative; the walk continues ordinarily toward C without claiming the vertex valid. FULL repayment mode keeps the original required gate.\n2. **reachedC derived from measured foot** \u2014 vs C(-48,51.05,12), horizontal \u22640.35, vertical \u22640.35, `supported===true`; frame name follows the measurement instead of asserting \"at-C\".\n3. **unreached C \u21d2 INCONCLUSIVE** \u2014 records `endpointRejection:false`, never an endpoint rejection.\n\n## Not done (reported accurately, not substituted)\n\nC-endpoint negative **not proved**; repayment/full-18 **not attempted**; final F / Worker18 / commit **not attempted**; no positive-only run was substituted. Measured pre-E foot `[-42.0507, 50.9890, 11.9159]`, supported true \u2014 as far as the body got.\n\nUnchanged: game source, scene contract, route vertices, safety/range/occupancy predicates, arrival bound 0.35, control and receipt files. No reset, second grant, rail, teleport, rescue, or pumping. Full suite not run \u2014 reused receipt `final-0.log` sha `ad4b3f89\u2026` (353 files / 3207 tests / exit 0). Probe selftest shows 2 failures **identical in the untouched baseline** (stale path pins), not attributable to my edit.\n\n## GPU / lock\n\nHeadless **false**, real-headed via the existing owned helper; hardware ANGLE gate passed. FD9 on the shared heavy lock acquired by my own launcher shell (pid 2420715) and inherited by the node probe; kernel proof FLOCK/ADVISORY/WRITE inode 8397196 with fd dev/ino matching path dev/ino; contender on an independent fd blocked (`rc=1`). No new server, no headless, no foreign kill. Root preview survived (http 200) and lock released.\n\n## Cleanup\n\n`post-finally`, state `stopped`, `cleanupCompleted:true`, 1 stop invocation, `cleanupError:null`, `stopsRootPreview:false`, `killsProcesses:false` \u2014 recorded **inside `summary.json` .cleanup**, not a separate file. No stray Chromium.\n\n## Artifacts\n\n- Capture: `.../verifier/captures/manual-credit-finale/endpoint-negative-20260906T235236Z/` (no prior capture overwritten)\n- Probe: `.../verifier/probes/manual-credit-finale/endpoint-negative-candidate/` (same-depth sibling; relative import to `main/tools/lib/evidence.mjs` verified)\n- Logs: `.../verifier/logs/manual-endpoint-negative-runtime/`\n- Reports: `verifier-manual-endpoint-negative-report.json` `177c3eda\u2026`, `.md` `cbaf36ac\u2026`\n\nHashes: summary `0b13adc3\u2026`, trace `66b0d2b1\u2026`, preflight `399cb72d\u2026`, probe `dba768ac\u2026` (pre-edit snapshot `6772c511\u2026`), launcher `13164065\u2026`.\n\n**Next correction required:** re-derive LP-A/LP-B callee sites against the bundle the page actually executes, and resolve why that hash differs from the preflight-verified served bundle, before re-attempting.\n\ndefectClosure=false \u00b7 chapterAcceptance=false \u00b7 publicationAuthorized=false",
+  "ttft_ms": 1433,
+  "type": "result",
+  "duration_ms": 389267,
+  "uuid": "32bda52c-e649-417f-bc69-6637cf94a507",
+  "ttft_stream_ms": 684,
+  "time_to_request_ms": 20,
+  "first_content_frame_ms": 685,
+  "queued_turn_count": 0
+}

@@ -1,0 +1,507 @@
+{
+ "schema": "paravoxia.verifier.arrivalCommonShortRuntime.v1",
+ "role": "arrival-common-short-runtime",
+ "writtenAt": "2026-09-06T18:42:54.014973+00:00",
+ "verdict": "SHORT-NOT-PROVEN-BY-THIS-LANE-PREDICATE",
+ "verdictScope": "One SHORT trial attempted and physically performed end to end. The lane's own signed completion predicate returned SHORT-NOT-PROVEN on two probe-side measurement-frame mismatches. No SHORT acceptance, no earned arrival, no COMMON, no chapter, no first-time-usability, no score/audibility/taste/defect-closure claim.",
+ "trialsRequested": 3,
+ "trialsCompletedSuccessfully": 0,
+ "additionalColdRunsWithheldBecause": "The commission conditions the two extra cold runs on the first SHORT really completing. It did not. The failure is deterministic geometry/counting in retained bytes, so a repeat would be an identical failed capture.",
+ "preflight": {
+  "activeRoleRequired": "arrival-common-short-runtime",
+  "activeRoleObserved": "arrival-common-short-runtime",
+  "controlAction": "continue",
+  "verificationReady": true,
+  "urlUsed": "http://127.0.0.1:34413/",
+  "servedTitle": "Paravoxia",
+  "servedIndexSha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207",
+  "servedBundlePath": "/assets/index-BiDWGouH.js",
+  "servedBundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+  "rootBuildHash": "aa52b0341b78d0931a5c91d431d9ba0ce81b5edde12b9b5b54449a5ee1c20d74",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesIndependentlyRehashed": 99,
+  "sourceDriftBefore": [],
+  "sourceDriftAfter": [],
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "contractVersion": "scene-v3",
+  "probeContractPinMatchedCurrentV3": true,
+  "auxiliaryHashes": {
+   "main/package.json": "match",
+   ".claude/policy-versions.json": "match",
+   ".claude/policy-versions/d47d2f0b...md": "match",
+   ".claude/policy-versions/49ba4848...md": "match",
+   "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-delta.run-profile.json": "MISMATCH a0b0ecdd->605fb2ef \u2014 EXACTLY the recorded producer-nonbinding-auxiliary-observation.json. Unused, not a build input, preserved, no fullverify rerun."
+  },
+  "unpinnedSharedDependency": {
+   "main/tools/lib/evidence.mjs": "1997cf2a3e9db88ae6e1e474b76232a2589c78a58fe69a579b493b44e5aa5328 \u2014 matches prep record, no drift"
+  },
+  "heavyLock": {
+   "path": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+   "fd": 9,
+   "mode": "EXCLUSIVE flock acquired by the invoking shell and INHERITED by node on fd 9",
+   "contentionBefore": "no holder observed",
+   "releasedAfter": true,
+   "serialWithAllOtherGpuRoles": true
+  }
+ },
+ "hardware": {
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "headed": true,
+  "swiftshader": false,
+  "browsersConcurrent": 1
+ },
+ "attempts": [
+  {
+   "id": "short-1",
+   "dir": "verifier/captures/arrival-common-short-runtime/short-1",
+   "exit": 2,
+   "verdict": "STOPPED-PREREQUISITE",
+   "browserLaunched": true,
+   "elapsedMs": 2411,
+   "stoppedAtGate": "fixture-boot-seeds-no-short-completion",
+   "cause": "HARNESS FAULT (not gameplay): the clean-fixture read was taken at +1953ms, before window.__paravoxiaCommonGround published anything. cgSnap returned null (beat/body/supported/anchors/survey all null) and the predicate scored 'diagnostic not published yet' as an unclean fixture. The UX layer was already correct at that instant (ch13:survey:offer / 'W-7744 \u00b7 offer a route').",
+   "preserved": true,
+   "summarySha256": "1650cca005bd459a4ea493ae9761edca346b9d61bcfac6fdad32550d77ccf518"
+  },
+  {
+   "id": "short-2",
+   "dir": "verifier/captures/arrival-common-short-runtime/short-2",
+   "exit": 0,
+   "verdict": "SHORT-NOT-PROVEN",
+   "elapsedMs": 52504,
+   "summarySha256": "c3effdc5a7cf0bc735adfe932e419e8ad19f3240bafe8576adac0b137feceb0d"
+  }
+ ],
+ "instrumentationCorrection": {
+  "permittedBudget": "one bounded owned-instrumentation correction for a demonstrated harness fault",
+  "used": 1,
+  "file": "verifier/probes/arrival-common-short/short-survey-probe.mjs",
+  "beforeSha256": "03931214d21fe84219c0cd1b8fef9bbf3a7e4c54293787ca96fc831c9a9ffc4a",
+  "afterSha256": "82a49ba5787bcc113bf6d066e538df1876b214c612792c9413fb21008b796747",
+  "change": "Before the UNCHANGED fixtureBootIsClean gate, wait (bounded by the existing --ready-ms budget, with NO input of any kind) for the cg diagnostic to be published, then read boot.",
+  "loosensNothing": "The predicate itself is byte-unchanged. A fixture that actually boots with samples, a tested prefix, an accepted class, a held/occupied witness, a tail revision or a survey anchor still fails exactly as before. No game predicate, no timeout increase, no shared helper touched.",
+  "otherFilesChanged": [],
+  "cpuSuitesAfter": {
+   "shortSurveyLogic --self-test": 0,
+   "selftest.mjs": 0,
+   "node --check": 0
+  },
+  "failedAttemptPreserved": "verifier/captures/arrival-common-short-runtime/short-1"
+ },
+ "entryHarnessEvidenceInspection": {
+  "staleCanvasRectangleDefect": {
+   "presentInThisProbe": false,
+   "evidence": "short-survey-probe.mjs reads ctl = await controlProbe(page) AFTER the settled-grounded-body wait and uses that live ctl.canvasRect for the click; it is not a pre-settle read.",
+   "measured": "canvasRect 1280x720, click at centre, pointer lock acquired via one ordinary click; gate pointer-lock-active-via-ordinary-click PASS",
+   "patched": false,
+   "reason": "the defect pattern is absent; no keyword patch applied"
+  },
+  "fullResidualCommandedUnitsStallDetector": {
+   "presentInThisProbe": false,
+   "evidence": "walkTo scores a stall on an ABSOLUTE measured step (step < 0.05u) per executed pulse, not on commandedUnits versus 25% of full remaining distance. planPulseMs clamping cannot produce a false stall against this test.",
+   "patched": false,
+   "measuredStalls": 0
+  }
+ },
+ "fixtureFacts": {
+  "entryUrl": "http://127.0.0.1:34413/?story=ch13-survey&journeyprobe=1&debug=1",
+  "deepLinked": true,
+  "movieRail": false,
+  "beat": "ch13-survey",
+  "label": "LABELLED-FIXTURE",
+  "isEarnedContinuousArrival": false,
+  "mayClaimEarnedArrival": false,
+  "claim": "LABELLED ch13-survey FIXTURE (ch13-survey). Isolated survey proof only. NOT an earned continuous arrival, not first-time naive UX, and no continuity claim of any kind.",
+  "manualLane": true
+ },
+ "routeGeometryAndClass": {
+  "issuedRoute": "SHORT",
+  "drawn": {
+   "issued": "SHORT",
+   "actual": "SHORT",
+   "agrees": true,
+   "sampleCount": 8,
+   "polylineUnits": 13.815231929400245,
+   "walkedUnits": 15.648523456831787,
+   "shortDeviation": 0.500229756646015,
+   "longDeviation": 6.395328145344818,
+   "why": null
+  },
+  "straight16UnitRecordedPath": {
+   "walkedUnitsByProbe": 15.648523456831787,
+   "runtimeWalkedUnits": 15.648622636526312,
+   "runtimeLengthUnits": 15.287738964559606,
+   "runtimeSamples": 16,
+   "axis": "z=12 constant, x -26 -> -42",
+   "shortDeviation": 0.500229756646015,
+   "longDeviation": 6.395328145344818,
+   "classAgrees": true
+  },
+  "acceptedClassPublishedByRuntime": "held-reference",
+  "finalSurveyPhase": "tested",
+  "labelledLONG": false,
+  "mislabel": false
+ },
+ "transitions": {
+  "input": "ordinary only \u2014 4 calibration key holds (W/A/S/D 700ms), held WASD pulses per leg, one real canvas click for pointer lock, four authored [F] presses on shipped prompts. No force-click, no requestPointerLock, no pose/store/camera/actor write, no movie rail, no autopilot (autopilotPresent false).",
+  "calibration": {
+   "KeyW": [
+    0,
+    -1
+   ],
+   "KeyA": [
+    -0.9999750175199719,
+    -0.00706854553157588
+   ],
+   "KeyS": [
+    0,
+    1
+   ],
+   "KeyD": [
+    1,
+    0
+   ]
+  },
+  "unitsPerMs": 0.005028790065220424,
+  "fPresses": [
+   {
+    "n": 1,
+    "prompt": "F | Offer to demonstrate a route",
+    "objectiveBefore": "ch13:survey:offer",
+    "objectiveAfter": "ch13:survey:start",
+    "phase": "idle -> awaiting-start",
+    "anchorsAdded": [
+     "anc.cg.repeated-measure",
+     "anc.cg.demonstration-opened"
+    ],
+    "atMs": 28056
+   },
+   {
+    "n": 2,
+    "prompt": "F | Begin recording your route",
+    "objectiveAfter": "ch13:survey:draw",
+    "phase": "awaiting-start -> drawing",
+    "anchorsAdded": [
+     "anc.cg.survey-started"
+    ],
+    "atMs": 32347
+   },
+   {
+    "n": 3,
+    "prompt": "F | Offer the walked span",
+    "objectiveAfter": "ch13:survey:test",
+    "phase": "drawing -> offered",
+    "anchorsAdded": [
+     "anc.cg.trace-drawn",
+     "anc.cg.route-offered"
+    ],
+    "atMs": 38387
+   },
+   {
+    "n": 4,
+    "prompt": "F | Offer this end",
+    "objectiveBefore": "ch13:survey:witness",
+    "objectiveAfter": "ch13:survey:test",
+    "phase": "held -> testing",
+    "anchorsAdded": [
+     "anc.cg.witness-held"
+    ],
+    "atMs": 45872,
+    "newOffer": true
+   }
+  ],
+  "actorW7744": [
+   {
+    "atMs": 41623,
+    "leg": "testing-span",
+    "held": true,
+    "position": {
+     "x": -26.336671220232567,
+     "y": 50.98897476203283,
+     "z": 11.322514512544751
+    }
+   },
+   {
+    "atMs": 52131,
+    "leg": "holding-h",
+    "held": false,
+    "position": {
+     "x": -40,
+     "y": 51.05,
+     "z": 12
+    }
+   }
+  ],
+  "prefix": {
+   "testedPrefixDuringHold": 0,
+   "testedPrefixAtCompletion": 0,
+   "acceptedSamplesAtCompletion": 16,
+   "tailRevision": 0,
+   "note": "W's supported-prefix never advanced past 0 while the span was held; on the held reference the whole 16-sample span was accepted at once."
+  },
+  "occupancy": {
+   "witnessOfferedBefore": false,
+   "witnessOfferedAfter": true,
+   "witnessOccupiedAtCompletion": true,
+   "occupiedThroughout": true,
+   "anyVacant": false,
+   "standPointBody": [
+    -34.44068145751953,
+    52.78897476196289,
+    9.768296241760254
+   ],
+   "witnessPose": [
+    -34,
+    51.05,
+    10
+   ],
+   "radialUnits": 0.4978822939048557,
+   "verticalUnits": 1.73897476196289
+  },
+  "anchorsFinal": [
+   "anc.cg.repeated-measure",
+   "anc.cg.demonstration-opened",
+   "anc.cg.survey-started",
+   "anc.cg.trace-drawn",
+   "anc.cg.route-offered",
+   "anc.cg.specific-hold",
+   "anc.cg.witness-held",
+   "anc.cg.route-tested",
+   "anc.cg.reciprocal-reference"
+  ],
+  "world": {
+   "holdReasonAtFirstTest": "reference-occluded-survey-housing",
+   "footingInvalidObserved": false,
+   "footingFinding": "Footing was VALID. The published hold was a named occlusion cause (reference-occluded-survey-housing), matching the shipped predicate snapshot. The tail-revision branch was therefore neither needed nor exercised; tailRevision stayed 0. No occupancy laundering of invalid footing occurred or could occur here."
+  }
+ },
+ "failedGates": [
+  {
+   "gate": "the-reference-was-actually-held-throughout",
+   "detail": {
+    "ok": false,
+    "occupiedThroughout": true,
+    "anyVacant": false,
+    "insideOccupancy": false,
+    "problems": [
+     "stand point is 0.50u/1.74u from the witness pose, outside the 1.25/0.6 occupancy cylinder"
+    ]
+   },
+   "classification": "PROBE-SIDE MEASUREMENT-FRAME MISMATCH (candidate instrumentation defect, NOT a measured gameplay failure and NOT closed)",
+   "causalEvidence": "The radial term passes (0.498u <= 1.25u). The vertical term compares the BODY CENTRE y (52.78897476196289, constant for the whole run from spawn) against the AUTHORED GROUND pose y (51.05); the residual 1.73897 exceeds the 0.6 vertical allowance. The same body-centre-versus-foot frame gap root already recorded for the earned lane. The runtime's OWN occupancy judgement disagreed with the probe's: witnessOccupied was true at every sample and at the completing tick (occupiedThroughout true, anyVacant false), and the moments-earlier gate arrived-inside-the-occupancy-cylinder PASSED on the same 0.4979u reading.",
+   "notRepaired": "This is the acceptance criterion of the very claim under test, and my one bounded correction is spent. Relaxing it would launder the claim. Referred to the producer, unresolved."
+  },
+  {
+   "gate": "SHORT-completed-as-the-held-reference-class",
+   "detail": {
+    "ok": false,
+    "mislabel": false,
+    "verdict": "SHORT-NOT-PROVEN",
+    "acceptedClass": "held-reference",
+    "problems": [
+     "accepted slot holds 16 samples but 8 were observed while drawing"
+    ]
+   },
+   "classification": "PROBE-SIDE UNIT MISMATCH (candidate instrumentation defect, NOT a measured gameplay failure and NOT closed)",
+   "causalEvidence": "shortCompletionVerdict compares acceptedSamples (16, the runtime free-recorder's own sample count, which is also exactly what it recorded while drawing) against drawn.sampleCount (8, the number of WAYPOINT LEGS this probe walked after S). These are different quantities: CG_ROUTE_SHORT has 9 vertices, so 8 legs, while the free recorder sampled 16 points over the 15.65 walked units. The runtime is internally consistent: 16 recorded, 16 accepted. Every other clause of the verdict PASSED \u2014 anc.cg.route-tested fired, phase == 'tested', acceptedClass == 'held-reference', and drawn.actual == 'SHORT'.",
+   "notRepaired": "Same reason as above; referred to the producer, unresolved."
+  }
+ ],
+ "passedGates": [
+  "current-build-identity-and-hardware-angle",
+  "fixture-boot-seeds-no-short-completion",
+  "world-bound-and-body",
+  "settled-grounded-body",
+  "policy-permits-movement",
+  "pointer-lock-active-via-ordinary-click",
+  "manual-lane-no-autopilot",
+  "four-key-calibration-is-directional",
+  "arrived-at-W",
+  "survey-opened-by-authored-F",
+  "arrived-at-survey-start",
+  "survey-actually-started",
+  "the-body-actually-walked-the-SHORT-span",
+  "a-real-trace-was-recorded",
+  "span-offered",
+  "short-span-holds-as-the-shipped-suite-expects",
+  "arrived-inside-the-occupancy-cylinder",
+  "a-NEW-authored-reference-was-offered-by-this-F"
+ ],
+ "allGates": [
+  {
+   "name": "current-build-identity-and-hardware-angle",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "fixture-boot-seeds-no-short-completion",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "world-bound-and-body",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "settled-grounded-body",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "policy-permits-movement",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "pointer-lock-active-via-ordinary-click",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "manual-lane-no-autopilot",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "four-key-calibration-is-directional",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "arrived-at-W",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "survey-opened-by-authored-F",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "arrived-at-survey-start",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "survey-actually-started",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "the-body-actually-walked-the-SHORT-span",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "a-real-trace-was-recorded",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "span-offered",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "short-span-holds-as-the-shipped-suite-expects",
+   "ok": true,
+   "required": false
+  },
+  {
+   "name": "arrived-inside-the-occupancy-cylinder",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "a-NEW-authored-reference-was-offered-by-this-F",
+   "ok": true,
+   "required": true
+  },
+  {
+   "name": "the-reference-was-actually-held-throughout",
+   "ok": false,
+   "required": true
+  },
+  {
+   "name": "SHORT-completed-as-the-held-reference-class",
+   "ok": false,
+   "required": true
+  }
+ ],
+ "stalls": [],
+ "exits": {
+  "short-1": 2,
+  "short-2": 0,
+  "cpuLogicSelfTest": 0,
+  "laneSelfTest": 0,
+  "nodeCheck": 0
+ },
+ "cleanup": {
+  "short-2": {
+   "schema": "paravoxia.verifier.ownedSessionGuard.v1",
+   "probe": "short-survey-probe.mjs",
+   "writtenAt": "2026-09-06T18:39:31.345Z",
+   "phase": "post-finally",
+   "supersedesForCleanupState": "summary.json .cleanup (captured pre-finally; its sessionStopped is a pre-cleanup value, not the outcome)",
+   "state": "stopped",
+   "cleanupCompleted": true,
+   "label": "arrival-common-short session",
+   "adopted": true,
+   "adoptedAtMs": 1788719920758,
+   "cleanupRequests": 1,
+   "sessionStopInvocations": 1,
+   "sessionStopped": true,
+   "cleanupError": null,
+   "cleanupReason": "probe-finally",
+   "stopsOnlyProbeOwnedSession": true,
+   "stopsRootPreview": false,
+   "killsProcesses": false,
+   "hidesFailureExitCode": false,
+   "note": "Recorded AFTER the finally block ran. This is the actual cleanup outcome of the browser session this probe owned. A stop-failed or never-requested state is reported honestly and does NOT alter the capture outcome, the retained evidence, or the process exit code. It says nothing about the game.",
+   "outcomeUnchanged": true
+  },
+  "closingReceipt": {
+   "ok": true,
+   "problems": []
+  },
+  "postFinallyVerified": true,
+  "probeOwnedBrowserTerminated": true,
+  "rootPreviewUntouched": true,
+  "rootPreviewStillServing": "HTTP 200 at http://127.0.0.1:34413/ after the run",
+  "rootPreviewDaemonPid": 1802787,
+  "abandonedBrowsers": "none \u2014 no ms-playwright renderer from this lane survives; the two surviving chrome_crashpad_handler PIDs 3583125/3583127 pre-date this role and are not mine",
+  "abandonedProbes": "none",
+  "heavyLockReleased": true
+ },
+ "sourceUnchanged": {
+  "filesRehashedAfterRun": 99,
+  "drift": [],
+  "contractAfterRun": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "gameSourceEdited": false,
+  "contractEdited": false,
+  "sharedProbeLibEdited": false,
+  "onlyOwnedFileEdited": "verifier/probes/arrival-common-short/short-survey-probe.mjs"
+ },
+ "independentUnknowns": [
+  "cgSnap reads bodyPose but snapStep does not retain it in the step records, so the projected FOOT pose at the witness stand point was not captured. Whether a foot-frame vertical would fall inside 0.6u is UNMEASURED here.",
+  "The 1.73897u body-centre offset was constant from spawn; whether the shipped runtime's own occupancy test uses a foot frame, a radial-only test, or a different vertical allowance was NOT read from source by this lane.",
+  "The reference leave/re-enter (witness-return) contingency was NOT exercised or measured.",
+  "Only ONE physical trial exists. Run-to-run variance of the SHORT draw, the hold reason and the acceptance is UNMEASURED.",
+  "No FPS, screenshot-strip, audio, score, continuity, variant, or reset-matrix measurement was in scope or performed.",
+  "supported was false on all four calibration key holds (spawn settling); the settled-grounded-body gate passed separately. Not investigated."
+ ],
+ "blockade": "No external blockade. The lane is stopped by two of its own unresolved verdict predicates, which only the producer may authorize correcting.",
+ "claimsExplicitlyNotMade": [
+  "earned arrival",
+  "first-time usability / naive UX",
+  "COMMON",
+  "whole chapter",
+  "SHORT acceptance",
+  "LONG anything",
+  "score/audibility",
+  "taste",
+  "defect closure",
+  "publication"
+ ]
+}

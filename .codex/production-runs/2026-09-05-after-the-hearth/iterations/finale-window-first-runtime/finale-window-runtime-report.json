@@ -1,0 +1,167 @@
+{
+ "schema": "paravoxia.verifier.finaleWindowRuntime.report.v1",
+ "role": "finale-window-runtime",
+ "invocationStartedAt": "2026-09-06T19:58:23.187670+00:00",
+ "finishedAt": "2026-09-06T20:06:30Z",
+ "elapsedMinutesFromClock": 8.1,
+ "clockSource": "date -u at invocation start 19:58:26Z and at finish; not token-estimated",
+ "capMinutes": 20,
+ "verdict": "FAIL - REAL ROUTE NOT REACHED; FRONTIER REPORTED; EVIDENCE RETAINED",
+ "isAcceptance": false,
+ "gateFilesReadFirst": [
+  "finale-wrapper-transport-report.json",
+  "producer-finale-wrapper-transport-review.json"
+ ],
+ "gateResult": "acceptedForBoundedRuntime=true; verifier-control activeRole=finale-window-runtime action=continue; verification-ready.ready=true; launch authorized",
+ "measuredOutcome": {
+  "browserLaunched": false,
+  "gpuUsed": false,
+  "canvasClickUsed": false,
+  "sinkCreated": true,
+  "recorderStarted": false,
+  "wavProduced": false,
+  "atomicStateSamples": 0,
+  "completionEdgeObserved": false,
+  "reason": "both attempts aborted in the probe's PRE-BROWSER guard chain (heavy-lock verification), before any page load"
+ },
+ "notMeasured": {
+  "finalTextureTokenTiming": "NOT MEASURED - no browser turn ever executed",
+  "scoreCueState": "NOT MEASURED",
+  "avAnchors": "NOT MEASURED",
+  "storyActive": "NOT MEASURED",
+  "visible": "NOT MEASURED",
+  "focus": "NOT MEASURED",
+  "done": "NOT MEASURED",
+  "pauseContextMuteCancelReason": "STILL MISSING BY CONSTRUCTION (no shipped read-only hook); unchanged by this lane",
+  "audioDurationPeakEnergy": "NOT MEASURED - no WAV was ever recorded; ffprobe not run",
+  "outputCoverage": "NOT MEASURED - coverage.reason=no-completion-edge-in-window on both attempts"
+ },
+ "attempts": [
+  {
+   "trial": "window-1",
+   "sink": "paravoxia_finale_window_20260906",
+   "sinkIndex": 16082,
+   "moduleId": "536870913",
+   "wrapperExit": 1,
+   "probeExit": 1,
+   "probeElapsedMs": 276,
+   "wrapperError": "probe never published browser-pid.json; refusing to record without a verified owner",
+   "probeErrorRetained": false,
+   "note": "ORIGINAL ATTEMPT, PRESERVED. Child stdout/stderr was DISCARDED by the wrapper (probeLog persisted only on the success path), so the probe's own refusal reason was unavailable."
+  },
+  {
+   "trial": "window-2",
+   "sink": "paravoxia_finale_window_20260906_w2",
+   "sinkIndex": 16094,
+   "moduleId": "536870913",
+   "wrapperExit": 1,
+   "probeExit": 1,
+   "wrapperError": "probe never published browser-pid.json; refusing to record without a verified owner",
+   "probeErrorRetained": true,
+   "probeError": "heavy lock: fd 9 points at /proc/2002183/fd/9, not /home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+   "note": "THE SINGLE AUTHORIZED CORRECTION+RETRY. Not an identical-fault rerun: the harness was corrected to retain the child console, which is what exposed the actual refusal."
+  }
+ ],
+ "authorizedPrivateCorrectionsApplied": [
+  {
+   "id": "root-required-1",
+   "file": "finale-window-runtime.mjs",
+   "what": "stopProbe validated receipt.stopped/stopError, fields the real receipt never publishes, so a MISSING field read as success. Now requires the actual ownedSessionCleanupReceipt.v1 shape: state==='stopped' AND cleanupCompleted===true AND sessionStopped===true AND cleanupError===null (strictly null; absent is not success). no-session / stop-failed / stop-invoked-not-confirmed / never-requested are retained as unproved without claiming browser teardown.",
+   "fixturesUpdated": "closure-checks.mjs C17a/C17c fixtures now emit the real receipt shape"
+  },
+  {
+   "id": "root-required-2",
+   "file": "finale-window-probe.mjs --self-test",
+   "what": "3 stale expectations corrected to the actual sampler shape: installer-reads-avFullHasComplete/avFullHasHandback -> avHasCgComplete/avHasCgHandback/signedSceneAv/activationHistoryAnchorIds; edge-on-done-plus-history now supplies the dual-18 committed COMMON route (terraUnits 18 AND workerUnits 18 AND committed) alongside both AV anchors.",
+   "negativesPreserved": "edge-needs-av-history, edge-needs-handback, edge-not-on-live-beat retained, plus 4 ADDED negatives: edge-needs-terra-18, edge-needs-worker-18, edge-needs-committed, edge-absent-units-are-not-false",
+   "before": "33 checks / 3 failed",
+   "after": "37 checks / 0 failed"
+  },
+  {
+   "id": "verifier-harness-correction",
+   "file": "finale-window-runtime.mjs",
+   "what": "THE SINGLE AUTHORIZED CONCRETE HARNESS CORRECTION. probeLog was declared inside the try and written only on the success path, so an early abort discarded the child console - the only record of why the probe refused. probeLog is now owned before the try and probe-console.log is written inside stopProbe on EVERY path.",
+   "justification": "the actual failure was undiagnosable private instrumentation; this correction is what produced the finding below"
+  }
+ ],
+ "selfTestAfter": {
+  "command": "node verifier/probes/finale-window/finale-window-probe.mjs --self-test",
+  "checks": 37,
+  "failed": 0
+ },
+ "closureChecksAfter": {
+  "command": "node verifier/probes/finale-window/closure-checks.mjs",
+  "passed": 31,
+  "total": 31,
+  "note": "applying root-required-1 first turned C17a and C17c RED because their fixtures still emitted the obsolete {stopped:true}; that is the intended rejection of an unproved shape. Fixtures corrected to the real receipt, then 31/31."
+ },
+ "frontier": {
+  "blocked": "the probe's PRE-BROWSER heavy-lock guard (finale-window-probe.mjs:357 via verifyHeavyLock)",
+  "observed": [
+   "the wrapper's OWN fd 9 validated clean: fdTarget == the heavy lock path (phase heavy-lock-fd-validated, both attempts)",
+   "the probe child refused with: fd 9 points at /proc/<pid>/fd/9, not the lock path",
+   "/proc/2002183 no longer exists; it was a short-lived process, not the wrapper"
+  ],
+  "isolatedDiagnostic": "logs/finale-window-runtime/fd-transport-diagnostic.mjs drives the wrapper's OWN buildStdio with a REAL 'exec 9>LOCK; flock -x 9' and a real node child",
+  "diagnosticResult": {
+   "childInProcessReadlinkFd9": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+   "childViaSpawnedReadlink": "/proc/2004685/fd/9 (the READLINK process's own pid, not the probe's)",
+   "childProcLocksForLockInode": "203: FLOCK  ADVISORY  WRITE 2004669 103:02:8397196 0 EOF",
+   "childContentionProbe": "second flock -n -x REFUSED => the exclusive lock is genuinely held"
+  },
+  "observedConclusion": "THE FD TRANSPORT IS CORRECT. The child really does inherit fd 9 pointing at the heavy lock, and the exclusive FLOCK WRITE is genuinely held across wrapper AND child (an independent non-blocking flock is refused).",
+  "inferredCause": "verifyHeavyLock resolves the descriptor with execFileSync('readlink',['-f','/proc/self/fd/9']). In that SPAWNED readlink, '/proc/self' is the readlink process, whose own fd 9 is not the inherited lock (node's duped stdio fd is close-on-exec), so readlink echoes the unresolved path and the probe refuses its own valid lock. INFERRED (close-on-exec is the consistent explanation, not directly instrumented); the OBSERVED facts above stand on their own.",
+  "oneLineFix": "in verifyHeavyLock, resolve the fd with in-process fs.readlinkSync('/proc/self/fd/'+fd) instead of a spawned readlink; the in-process call returns the correct lock path.",
+  "notDone": "NOT APPLIED. The single authorized correction/retry was already spent, and the transport lane pinned 'verifyHeavyLock in the probe is unchanged and not weakened' as a retained prior fix. Changing it is root's call, not a routine instrumentation fix."
+ },
+ "isolationAndCleanup": {
+  "defaultSinkBefore": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+  "defaultSinkAfter": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+  "defaultSinkChanged": false,
+  "ownedSinksRemaining": "none",
+  "ownedModulesRemaining": "none",
+  "recorderStarted": false,
+  "microphoneTouched": false,
+  "foreignStreamsRecorded": false,
+  "foreignProcessesKilled": "none - only the wrapper's own child handle was ever signalled (no signal was even needed; the probe self-exited)",
+  "browserTeardownProven": false,
+  "browserTeardownHonesty": "reported UNPROVEN via the corrected receipt check, and honestly so: no browser was ever launched, so there was no session to tear down and no cleanup-receipt.json was written",
+  "rootPreview34413": "untouched, still serving the pinned index/bundle"
+ },
+ "identityVerified": {
+  "previewUrl": "http://127.0.0.1:34413/",
+  "httpCode": 200,
+  "indexSha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207",
+  "indexMatchesPinned": true,
+  "bundlePath": "/assets/index-BiDWGouH.js",
+  "bundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+  "bundleMatchesPinned": true,
+  "previewOwnershipState": "running",
+  "gameSourceFiles": 99
+ },
+ "sourceHashes": {
+  "gameFilesBefore": {
+   "count": 99,
+   "manifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+   "mismatches": 0
+  },
+  "gameFilesAfter": {
+   "count": 99,
+   "mismatches": 0
+  },
+  "gameSourceMutated": false,
+  "probeArtifactsAfter": {
+   "verifier/probes/finale-window/finale-window-runtime.mjs": "a7f2056efb5ce49ce9e3c22f5c62f1be8bae2555f624ffc6cd55b647b81cd458",
+   "verifier/probes/finale-window/finale-window-probe.mjs": "405ccee382d27e9ba0fb6194db365bb1ff84c499ab254998d56fabaf67ccdaeb",
+   "verifier/probes/finale-window/closure-checks.mjs": "d76fdd0be358e9a84a4cf37fd92ff74af023dedff6106d79f40160ea42ef2e78",
+   "verifier/probes/finale-window/windowSampler.mjs": "c984535db45b4f8717b57e335d2cb2b1f6e93dfa579485f651b24a5b79ff5c68"
+  }
+ },
+ "notClaimed": [
+  "no audible, causal, repair or acceptance claim",
+  "no claim about the final texture's audibility, lifetime or cancellation cause - nothing was measured in a browser",
+  "no claim that StoryDirectorDriver treats normal done as visibility-loss; that source-audit suspicion is neither supported nor refuted by this lane",
+  "no claim that the heavy-lock transport is broken - the observed evidence says it works",
+  "no gesture proof: no canvas click was performed because no page was ever loaded"
+ ]
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "paravoxia.verifier.arrivalCommonProbe.pin.v1",
+  "role": "arrival-common-earned",
+  "pinnedAtUtc": "2026-09-06T17:01:01.991327+00:00",
+  "why": "Concurrent roles (including the game integration engineer) may edit verifier/probes/lib/* and the manual COMMON helper while this lane is prepared. This lane imports ONLY these pinned bytes; the originals were not edited.",
+  "pins": [
+    {
+      "pinned": "verifier/probes/arrival-common-earned/pinned/commonPassageLogic.pinned.mjs",
+      "copiedFrom": "verifier/probes/earned-continue/pinned/commonPassageLogic.pinned.mjs (itself a byte pin of verifier/probes/common-manual-focused/commonPassageLogic.mjs)",
+      "sourceSha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+      "pinnedSha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+      "byteIdentical": true
+    },
+    {
+      "pinned": "verifier/probes/arrival-common-earned/cgContract.pinned.mjs",
+      "copiedFrom": "verifier/probes/lib/cgContract.mjs",
+      "sourceSha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+      "pinnedSha256": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5",
+      "byteIdentical": false,
+      "divergence": {
+        "at": "2026-09-06T18:26:00Z",
+        "by": "arrival-common-earned runtime verifier",
+        "kind": "instrumentation (owned private dependency), NOT a game repair",
+        "beforeSha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+        "afterSha256": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5",
+        "beforeCopy": "logs/arrival-common-earned-runtime/cgContract.pinned.mjs.before",
+        "change": "SIGNED_CONTRACT_SHA256 updated from the stale scene-v2 4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e to the signed scene-v3 5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54, plus the two matching scene-v2 -> scene-v3 words in the header comment and the error string. Nothing else in the file changed.",
+        "authorisedBy": "arrival-common-earned-runtime-commission.txt (CURRENT SOURCE/PINS: bounded exact scene-v3 update in the OWN private dependency is authorized)",
+        "runtimeEffect": "NONE for this lane: earned-continue-probe.mjs imports only ART/CAPTURES/RUN_DIR/REPO_ROOT/MAIN from this module and never calls loadContract(). The stale constant was corrected so no future read of this pinned module can assert a superseded contract.",
+        "sharedOriginalUnchanged": "verifier/probes/lib/cgContract.mjs was NOT edited (still 5f447ebd...)."
+      },
+      "depthNote": "placed at the SAME directory depth as verifier/probes/lib/* so cgContract's RUN_DIR/REPO_ROOT/CAPTURES resolution is unchanged"
+    },
+    {
+      "pinned": "verifier/probes/arrival-common-earned/ownedSession.pinned.mjs",
+      "copiedFrom": "verifier/probes/lib/ownedSession.mjs",
+      "sourceSha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "pinnedSha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "byteIdentical": true,
+      "depthNote": "placed at the SAME directory depth as verifier/probes/lib/* so cgContract's RUN_DIR/REPO_ROOT/CAPTURES resolution is unchanged"
+    },
+    {
+      "pinned": "verifier/probes/arrival-common-earned/sourceSnapshot.pinned.mjs",
+      "copiedFrom": "verifier/probes/lib/sourceSnapshot.mjs",
+      "sourceSha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "pinnedSha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "byteIdentical": true,
+      "depthNote": "placed at the SAME directory depth as verifier/probes/lib/* so cgContract's RUN_DIR/REPO_ROOT/CAPTURES resolution is unchanged"
+    }
+  ],
+  "copiedProbeFolder": {
+    "from": "verifier/probes/earned-continue",
+    "note": "byte copy taken 2026-09-06; the original folder is preserved byte-exactly (hashed before and after this preparation)."
+  },
+  "unpinnedDependency": {
+    "path": "main/tools/lib/evidence.mjs",
+    "sha256AtPrep": "1997cf2a3e9db88ae6e1e474b76232a2589c78a58fe69a579b493b44e5aa5328",
+    "why": "Deliberately NOT copied: it transitively imports sibling main tooling (previewServer.mjs, pixel-laws.mjs) whose relative paths a copy would break. Its hash is recorded here so drift is detectable; it is read-only shared tooling, not edited by this role."
+  },
+  "supersedesPin": {
+    "path": "verifier/probes/earned-continue/pinned/pin.json",
+    "sha256": "9adaa45f63cf1de433956eba6b7f259c1acf23be3f027c6615b03c21e7d40577"
+  }
+}

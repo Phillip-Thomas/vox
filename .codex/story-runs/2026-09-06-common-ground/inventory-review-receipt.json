@@ -1,0 +1,14 @@
+{
+  "role": "inventory",
+  "sessionId": "0a872f6e-5f03-4092-82f4-e1963a5bb88f",
+  "model": "claude-opus-5",
+  "actualTools": [
+    "Glob",
+    "Grep",
+    "Read"
+  ],
+  "status": "authored-report-harvested",
+  "method": "Lossless authored assistant text or attempted Write content. Plan-mode finalization attempted an unavailable write tool; no source writes occurred. Full stream preserved in scratch.",
+  "streamSha256": "f84b61241444330540c2a54ebfa9f23689ccb822015cc3382b42f7a4e92d2f9d",
+  "harvestedAt": "2026-09-06T04:34:33.481444+00:00"
+}

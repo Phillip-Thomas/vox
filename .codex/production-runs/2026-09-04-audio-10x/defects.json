@@ -1,0 +1,901 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-09-04-audio-10x",
+  "stage": "1+2",
+  "stageBeat": "audio-stage-1-bed-timbre-mastering; audio-stage-2-game-mix",
+  "contractVersion": "draft-v2",
+  "contractSha256": "384120dc02b2ea46d855c4d0a360fbd31a93eb47624c00d954eaac7f494a9a6d",
+  "compiledAt": "2026-09-05T05:28:43-04:00",
+  "compiledBy": "scene-cohesion-judge (Claude Fable 5.1)",
+  "sourceReports": [
+    {
+      "path": "score-audit.md",
+      "sha256": "0e548602fb86c0ecff11c0dc60701ef4038c61ba217ff6fafa796fe54ce7a2b5"
+    },
+    {
+      "path": "naive-audience-report.md",
+      "sha256": "1996d6bad6ad3ee7b9908cccf58fd08dc7c49ec4e7c80770a0780d93bfd9c692"
+    },
+    {
+      "path": "verification-report.json",
+      "sha256": "cda0a04314660d2e2185090f00d807df9b0b5807d6e4fa3434d3fb7a95d1a58f"
+    },
+    {
+      "path": "evidence/stage-1/README.md",
+      "sha256": "369b6b2873c0b306f1df46e5c6a189666198d5062a1e8d73c7d8e21b70ca03d5"
+    },
+    {
+      "path": "evidence/stage-1/ab-results.md",
+      "sha256": "93af3c235277e96ae5569a87292ba900fc6d2994839340254658417b61099adf"
+    },
+    {
+      "path": "dissent-register.md",
+      "sha256": "945e4b8d490e7d3c95bf9b0025930372a7aff7cc62c8c2efaaa8a843749b403a"
+    },
+    {
+      "path": "story-audit.md",
+      "sha256": null,
+      "note": "unfilled template; skip unrecorded (D14)"
+    },
+    {
+      "path": "cinematography-audit.md",
+      "sha256": null,
+      "note": "skipped by recorded scope decision; diff touches no image term"
+    },
+    {
+      "path": "ux-audit.md",
+      "sha256": null,
+      "note": "skipped by recorded scope decision; diff touches no objective, marker or HUD term"
+    },
+    {
+      "path": "critic-report.md",
+      "sha256": null,
+      "note": "unfilled template (D14)"
+    }
+  ],
+  "requiresHumanTaste": true,
+  "skippedReviewsDisposition": "Cinematography-continuity and player-experience audits skipped for Stage 1 are accepted by the judge: implementation.diff is confined to main/src/audio/**, main/tools/ and tests; no camera, HUD, objective, marker, copy or feedback term moves. Both are mandatory from Stage 3 (call sites) and Stage 4 (feedbackCues.ts) respectively.",
+  "stage2GoCondition": "Stage 2 may begin only when draft-v3 (D1 amendment, D13 decision) is signed by all three directors AND D4 is closed, so Stage 1 after/ renders are pinned as Stage 2 before/ and the shared audioCore bus tail has one owner at a time. D3, D5, D6, D7, D12 may run in parallel but must close before the Stage 2 cohesion gate. No Stage 2 edit to audioCore.ts before both conditions hold.",
+  "defects": [
+    {
+      "id": "D1",
+      "severity": "high",
+      "category": "score_coherence_and_sync",
+      "status": "open",
+      "owner": "human",
+      "anchor": "stage-1/bloom-short-term",
+      "statement": "Stage 1 acceptance term BLOOM short-term -14 +/-1 LU unmet: S-max -18.12 / -16.95 / -16.88 / -18.94 (excerpts), -18.75 (bed-check). Mechanism (safety compressor -20 dB, 8:1, 30 dB knee) confirmed by builder and auditor; the Stage 2 treatment as written (compressor kept, subtract-only limiter) cannot deliver the window. Judge ruling: Stage 2 dependency requiring contract amendment draft-v3; not a Stage 1 patch, not a retarget (owner loudness decision).",
+      "evidenceRefs": [
+        "evidence/stage-1/ab-results.md",
+        "evidence/stage-1/README.md#deviation-1",
+        "score-audit.md#D1",
+        "score-treatment.md#2",
+        "human-decision.json#owner-2026-09-04-loudness-minus18-lufs-minus1-dbtp"
+      ],
+      "requestedRepair": "Full triad signs draft-v3: move the BLOOM term to Stage 2 acceptance; authorise Stage 2 to retune or replace the safety compressor as part of the limiter change; restate the bare-era regression as 'identical except the mastering tail' with a newly pinned before hash; record in human-decision.json under delegated taste. Until signed, open-high against Stage 1.",
+      "verificationRoute": "contract gate on draft-v3 signatures; Stage 2 combined render S-max on a BLOOM excerpt; re-judge",
+      "sourceReportRefs": [
+        "score-audit.md",
+        "evidence/stage-1/README.md",
+        "verification-report.json"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D2",
+      "severity": "low",
+      "category": "interaction_accessibility_and_variants",
+      "status": "open",
+      "owner": "human",
+      "anchor": "stage-1/lean-tier",
+      "statement": "Lean tier sounds tones.slice(1,4): three chord tones where full hears five. Contracted (performancePlan: 'Lean: three voices'), equal to the shipped voice count, and rendered in band by the verifier (-19.85 LUFS, corr 0.892). Residual is an owner-audition taste risk only.",
+      "evidenceRefs": [
+        "verification-report.json#variants.lowestQuality",
+        "evidence/stage-1/verify-rerun/lean/summary.json",
+        "score-audit.md#D2",
+        "scene-contract.json#score.performancePlan"
+      ],
+      "requestedRepair": "None mechanical. Owner auditions the lean bed-sandbox-day render beside full at the Stage 1 audition.",
+      "verificationRoute": "headed owner audition",
+      "sourceReportRefs": [
+        "score-audit.md",
+        "verification-report.json"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D3",
+      "severity": "medium",
+      "category": "performance_and_implementation_fidelity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-1/audio-thread-cost",
+      "statement": "Contract names audio main-thread cost <= 1.5 ms/frame full and <= 3 ms/frame lean at 4x CPU throttle on the SwiftShader gate; no such measurement exists. fps.txt is vsync-capped (60.39 vs 60.38 baseline) and proves no regression below vsync, not headroom, against a measured 1.7x offline DSP cost.",
+      "evidenceRefs": [
+        "evidence/stage-1/fps.txt",
+        "evidence/stage-1/verify-rerun/fps.log",
+        "evidence/stage-1/README.md#deviation-8",
+        "score-audit.md#D3",
+        "scene-contract.json#performance.measurementPlan"
+      ],
+      "requestedRepair": "Measure audio-thread ms/frame for full and lean; run lean on the SwiftShader gate at 4x CPU throttle; file under evidence/stage-1/.",
+      "verificationRoute": "story-verifier re-runs the probe and records the numbers in verification-report.json",
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D4",
+      "severity": "medium",
+      "category": "score_coherence_and_sync",
+      "status": "open",
+      "owner": "score",
+      "anchor": "stage-1/bed-alive-night",
+      "statement": "Bed at alive alone must be -20.5 +/-1 LU; bed-sandbox-night measures -18.99 (+0.51 over band). README grades itself 'met on the daylight reference', narrowing an unconditional term. Night was +1.6 LU over day before Stage 1 (pre-existing world mapping), +1.5 after.",
+      "evidenceRefs": [
+        "evidence/stage-1/ab-results.md",
+        "evidence/stage-1/README.md#acceptance-terms",
+        "verification-report.json#openDeviations.bed-alive-night",
+        "score-audit.md#D4"
+      ],
+      "requestedRepair": "Score Director: an era-gated night trim on the night sub/shimmer lift (~0.5 dB) so night lands inside the band, or propose a draft-v3 amendment naming daylight as the reference. Must close before Stage 1 after/ is pinned as Stage 2 before/.",
+      "verificationRoute": "re-render bed-sandbox-night; verifier ebur128; re-judge",
+      "sourceReportRefs": [
+        "score-audit.md",
+        "evidence/stage-1/README.md",
+        "verification-report.json"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D5",
+      "severity": "medium",
+      "category": "audiovisual_emotional_alignment",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-1/calm-law-floors",
+      "statement": "Bed is +4 LU at alive; no ch4-defy / refused / seam-ebb before/after render exists at Stage 1 to prove no authored floor was raised (that check is listed only under Stage 2). Mitigating: story score levels untouched (story-beat delta I -0.23), floors live in unmodified storyScore.ts.",
+      "evidenceRefs": [
+        "evidence/stage-1/ab-results.md#story-beat",
+        "score-audit.md#D5",
+        "story-intent.md#1"
+      ],
+      "requestedRepair": "Render the ch4-defy, refused and seam-ebb hand-back excerpts before/after through the existing harness; confirm the floor is unchanged within 0.25 LU.",
+      "verificationRoute": "story-verifier; Score Director reads the result",
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D6",
+      "severity": "medium",
+      "category": "transition_and_state_integrity",
+      "status": "open",
+      "owner": "score",
+      "anchor": "stage-1/era-gate-law-tests",
+      "statement": "The era-gate law is protected only by rendered hashes of two excerpts. No unit test asserts the Stage 1 rails resolve to exactly 0 at padChoir = 0, nor that the glue sits between visibilityGain and the safety compressor with the compressor parameters unchanged.",
+      "evidenceRefs": [
+        "score-audit.md#D6",
+        "main/src/audio/audioCore.test.ts",
+        "main/src/audio/generative/tuning.stage1.test.ts"
+      ],
+      "requestedRepair": "Extract a pure rail resolver and assert zero at padChoir 0; add a topology test for glue placement and safety-compressor constants.",
+      "verificationRoute": "vitest in verify; verifier confirms",
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D7",
+      "severity": "low",
+      "category": "performance_and_implementation_fidelity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-1/glue-static-gain",
+      "statement": "GLUE_MAKEUP_COMP_DB -4.27 is a one-time Chrome measurement hard-coded into the shipped path; measureGlueStaticGainDb exists only on the soak page and is not a gate.",
+      "evidenceRefs": [
+        "score-audit.md#D7",
+        "evidence/stage-1/README.md#deviation-3"
+      ],
+      "requestedRepair": "Assert unity static gain (|gain| < 0.05 dB) for the glue stage inside audio:check.",
+      "verificationRoute": "audio:check in verify",
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D8",
+      "severity": "low",
+      "category": "evidence_review_and_learning",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-1/readme",
+      "statement": "README deviation 4 says BED_ALIVE_LIFT 1.2; code is 1.1 (tuning.ts:689).",
+      "evidenceRefs": [
+        "evidence/stage-1/README.md#deviation-4",
+        "score-audit.md#D8"
+      ],
+      "requestedRepair": "Correct the README.",
+      "verificationRoute": "review of the corrected README",
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D9",
+      "severity": "low",
+      "category": "score_coherence_and_sync",
+      "status": "open",
+      "owner": "score",
+      "anchor": "stage-1/treatment-drift",
+      "statement": "Three graph deviations from the signed treatment (two side panners per voice; oversample 'none' on family drives; mono-below/sub-design gated by padChoir rather than gates.sub) were never reconciled into score-treatment.md; and 'inaudible at colour' is proven to era 0.35 and holds by construction only to 0.38 (padChoir onset), not to 0.5. Judge keeps the stricter shipped gate.",
+      "evidenceRefs": [
+        "score-audit.md#contract-fidelity",
+        "score-audit.md#era-gates",
+        "evidence/stage-1/README.md"
+      ],
+      "requestedRepair": "Score Director files a reconciliation note; fold into draft-v3 with the colour-to-0.38 wording.",
+      "verificationRoute": "contract gate on draft-v3",
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D10",
+      "severity": "low",
+      "category": "transition_and_state_integrity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-1/music-path-latency",
+      "statement": "Glue adds ~6 ms look-ahead; the music path already carried the safety compressor's look-ahead, so cumulative music-vs-SFX offset is ~12 ms. Below perceptual threshold now; Stage 3 grid claims (+/-1 ms) and Stage 4 layered hits must compensate the full path.",
+      "evidenceRefs": [
+        "evidence/stage-1/README.md#deviation-2",
+        "score-audit.md#D10"
+      ],
+      "requestedRepair": "Define LATENCY_COMP as the measured full-path figure before Stage 3.",
+      "verificationRoute": "Stage 3 verification",
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D11",
+      "severity": "low",
+      "category": "evidence_review_and_learning",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-1/story-convolver-coverage",
+      "statement": "Story convolver impulse reshapes the room for every material+ story mood but was auditioned on one excerpt (story-beat_a3-dawn).",
+      "evidenceRefs": [
+        "evidence/stage-1/ab-results.md#story-beat",
+        "score-audit.md#D11"
+      ],
+      "requestedRepair": "Add one more story-mood A/B render (a ch4 or ch5 mood).",
+      "verificationRoute": "story-verifier",
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D12",
+      "severity": "low",
+      "category": "evidence_review_and_learning",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-1/bare-era-lsb-wording",
+      "statement": "Verification disagreement: README/ab-results claim bare-era max delta 1 LSB / 6 samples; independent re-render measures 2 LSB / 3634 samples at -84.29 dBFS on bare-story-ch1-fixed, fingerprint still identical. The render is not bit-deterministic at the float floor across runs. Related: audio:check replay delta 8.91e-5 against the 1e-4 gate (builder 3.05e-5), 89% of gate with ~3x run variance.",
+      "evidenceRefs": [
+        "evidence/stage-1/verify-rerun/bare-era-lsb-delta.txt",
+        "verification-report.json#openDeviations.bare-era-lsb",
+        "evidence/stage-1/verify-rerun/audio-check.log",
+        "evidence/stage-1/ab-results.md#bare-colour-era-regression"
+      ],
+      "requestedRepair": "Reword the acceptance evidence to 'windowed fingerprint identical; sample delta at the renderer float floor (<= 2 LSB, <= -84 dBFS)'; make the gate assert fingerprint parity plus an LSB ceiling rather than a run-specific count; record the replay-delta variance. Do not loosen the 1e-4 gate.",
+      "verificationRoute": "story-verifier re-runs the no-glue comparison twice",
+      "sourceReportRefs": [
+        "verification-report.json",
+        "evidence/stage-1/README.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D13",
+      "severity": "low",
+      "category": "score_coherence_and_sync",
+      "status": "open",
+      "owner": "human",
+      "anchor": "stage-1/streamed-loops-drone-bank",
+      "statement": "Streamed loops and the drone bank (musicEngine.ts) were not retired. The treatment ties retirement to the Stage 1 owner audition; the frozen contract's Stage 1 text omits it. Not a contract defect; treatment/contract drift and an open audition decision.",
+      "evidenceRefs": [
+        "evidence/stage-1/README.md#deviation-5",
+        "score-treatment.md#1",
+        "score-audit.md#taste-risks"
+      ],
+      "requestedRepair": "Decide at the Stage 1 owner audition (delegated to the production lead); fold the decision into draft-v3 as a Stage 1 or Stage 2 term.",
+      "verificationRoute": "contract gate on draft-v3",
+      "sourceReportRefs": [
+        "score-audit.md",
+        "evidence/stage-1/README.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D14",
+      "severity": "low",
+      "category": "evidence_review_and_learning",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-1/review-record",
+      "statement": "story-audit.md and critic-report.md are unfilled templates; the ledger records the cinematography and player-experience skips but not the story-audit skip. The skips are acceptable for a diff confined to main/src/audio/** and tools, but every skip must be an explicit recorded scope decision.",
+      "evidenceRefs": [
+        "iteration-ledger.jsonl",
+        "story-audit.md",
+        "critic-report.md",
+        "implementation.diff"
+      ],
+      "requestedRepair": "Record the story-audit skip and its rationale in the ledger; mark the two templates 'skipped for Stage 1 by scope decision' and name the stage at which each becomes mandatory (story: Stage 3; cinematography: Stage 3; UX: Stage 4).",
+      "verificationRoute": "judge reads the ledger at the Stage 1 re-judge",
+      "sourceReportRefs": [],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "D15",
+      "severity": "low",
+      "category": "transition_and_state_integrity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-1/sandbox-no-op",
+      "statement": "mining-metronome-probe.mjs unchanged-result is a Stage 2 term, but Stage 1 already changed the music bus tail every sandbox session passes through; no Stage 1 run of the probe is on record.",
+      "evidenceRefs": [
+        "scene-contract.json#reset.sandboxNoOp",
+        "main/mining-metronome-probe.mjs"
+      ],
+      "requestedRepair": "Run mining-metronome-probe.mjs once against the Stage 1 tree and file the result.",
+      "verificationRoute": "story-verifier",
+      "sourceReportRefs": [],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-D1",
+      "stage": "2",
+      "severity": "high",
+      "category": "score_coherence_and_sync",
+      "status": "open-pending-amendment",
+      "owner": "human",
+      "anchor": "stage-2/tail-reference-gain",
+      "statement": "TAIL_REFERENCE_GAIN_DB +1.99 (mixTuning.ts:37, on the safety trim) contradicts acceptanceCriteria[5]/[6] and score.mixIntent \"no makeup exists anywhere\". Judge ruling: accept as the loudness architecture per HD-08(1) — level-preserving, named, tested, re-measured (-0.0074 dB); enforcing the letter drops the game 2 dB and voids four signed measurements. \"Unity-in-effect\" is a fiction: the contract must name it as +1.99 dB of static reference gain. Taste exception under delegation; open-high until draft-v4 is signed.",
+      "evidenceRefs": [
+        "evidence/stage-2/README.md#deviation-1",
+        "evidence/stage-2/ab-results.md#gain.tail",
+        "score-audit-stage-2.md#D1",
+        "human-decision.json#HD-08",
+        "main/src/audio/mix/mixTuning.ts:37"
+      ],
+      "requestedRepair": "draft-v4: evidence.acceptanceCriteria[5] and [6] no-makeup sentence; score.mixIntent names TAIL_REFERENCE_GAIN_DB; score.cues[0..9].mixIntent same sentence x10; human-decision.json acceptedExceptions gains HD-08(1) bound to the draft-v4 sha.",
+      "verificationRoute": "contract gate on draft-v4 signatures; audio:check tail-reference pin",
+      "sourceReportRefs": [
+        "score-audit-stage-2.md",
+        "evidence/stage-2/README.md",
+        "human-decision.json"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": "HD-08"
+    },
+    {
+      "id": "S2-D2",
+      "stage": "2",
+      "severity": "high",
+      "category": "audiovisual_emotional_alignment",
+      "status": "open-pending-amendment",
+      "owner": "human",
+      "anchor": "stage-2/bloom-short-term",
+      "statement": "BLOOM short-term -17.90 (bed-sandbox-day) / -18.08 (shipCrash-over-BLOOM) vs -14 +/-1. The subtract-only tail opened 0.21 LU; the composed spread is 2.5 LU against 6.5 required. Contract sentence \"opened by the mastering tail and never by an arrangement\" is physically wrong. Ruling: deferred to Stage 5 as a BLOOM-only arrangement rail per HD-08(2), NOT waived and NOT retargeted; Stage 5 rail must honour Chapter bloomBudget 0 after refusal.",
+      "evidenceRefs": [
+        "evidence/stage-2/ab-results.md#bloom.smax",
+        "verification-report.json#stage2.bloomShortTerm",
+        "score-audit-stage-2.md#D2",
+        "evidence/stage-2/README.md#deviation-2",
+        "human-decision.json#HD-08"
+      ],
+      "requestedRepair": "draft-v4: move the term out of evidence.acceptanceCriteria[5]; delete \"opened by that retune and by nothing upstream\" from score.mixIntent; add a Stage 5 criterion (S-max -14 +/-1 while bed I -20.5 +/-1 and TP <= -1 on four beds; owner A/B). Integration: publish composedSpread (pre-tail S-max minus I) in after/summary.json now.",
+      "verificationRoute": "Stage 5 offline probe; verifier ebur128; owner audition",
+      "sourceReportRefs": [
+        "score-audit-stage-2.md",
+        "evidence/stage-2/README.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": "HD-08"
+    },
+    {
+      "id": "S2-D3",
+      "stage": "2",
+      "severity": "high",
+      "category": "cinematic_composition_and_lens",
+      "status": "open-pending-amendment",
+      "owner": "cinematography",
+      "anchor": "stage-2/c6-latency-trigger",
+      "statement": "C6 literal trigger fires (LATENCY_COMP_MUSIC_PATH_S 25.215 ms > 16.7 ms) on a rationale Stage 2 made false: SFX also pass the post-join limiter, so the governing skew is LATENCY_COMP_MUSIC_VS_SFX_S 14.875 ms (0.89 frame). Ruling: c6-amendment.md adopted — image members target device + music-path; SFX members of the five playSfx-bearing bundles (storyAwaken x3, shipCrash, storyGlitch — census confirmed against the contract) are forward-scheduled by the skew; no global SFX delay. Shared anchor semantics change: three signatures.",
+      "evidenceRefs": [
+        "c6-amendment.md",
+        "score-audit-stage-2.md#D3",
+        "evidence/stage-2/README.md#deviation-5",
+        "main/src/audio/mix/mixTuning.ts:67-70",
+        "scene-contract.json#syncAnchors"
+      ],
+      "requestedRepair": "draft-v4: cinematography-contract-signoff.json C6 replaced by c6-amendment.md text; performance.measurementPlan sentence \"SFX join post-tail, so the music-versus-SFX offset equals that figure (about 12 ms today)\" corrected; acceptanceCriteria[5] latency sentence -> three per-rate constants; Stage 3 criterion gains SFX forward-scheduling at five bundle members with both onset lines in the overlay. README deviation 5 census \"three\" -> five.",
+      "verificationRoute": "draft-v4 tri-signature; Stage 3 capture overlay",
+      "sourceReportRefs": [
+        "c6-amendment.md",
+        "score-audit-stage-2.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-D4",
+      "stage": "2",
+      "severity": "medium",
+      "category": "transition_and_state_integrity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-2/latency-per-sample-rate",
+      "statement": "Latency constants published in seconds measured only at 44.1 kHz. Auditor proposed sample-count derivation (1112/456 samples); Cinematography dissents (D-2): DynamicsCompressor pre-delay is 6 ms in time in Chromium/Gecko, so ~18 ms of 25.2 ms is rate-invariant and the samples-derived 23.17 ms is ~1.4 ms wrong at 48 kHz. Judge rules for Cinematography on the physics: measure per rate, pin each, select by ctx.sampleRate. Dissent preserved until the 48 kHz render.",
+      "evidenceRefs": [
+        "score-audit-stage-2.md#D4",
+        "c6-amendment.md#ruling-4",
+        "dissent-register.md#D-2"
+      ],
+      "requestedRepair": "mixTuning.ts per-rate table (44100, 48000) each measured by measureTailLatencyS in an OfflineAudioContext at that rate; audio:check pins each entry; selection by ctx.sampleRate at arming. Contract path: the amended C6 text carries it.",
+      "verificationRoute": "audio:check at both rates; verifier re-measures",
+      "sourceReportRefs": [
+        "score-audit-stage-2.md",
+        "c6-amendment.md",
+        "dissent-register.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-D5",
+      "stage": "2",
+      "severity": "medium",
+      "category": "score_coherence_and_sync",
+      "status": "open-pending-amendment",
+      "owner": "human",
+      "anchor": "stage-2/summed-bus-minus-18",
+      "statement": "Stress scripts integrate -20.4..-21.7 LUFS vs -18 +/-1.5 (5 of 5 unmet). Bed alone is contracted at -20.5; shipped SFX recipes (0.012-0.09 linear) cannot carry the sum. Ruling: recorded, re-evaluated after Stage 4 per HD-08(3); condition: the re-asserted term must state SFX density per stress script or Stage 4 can meet it by making effects loud.",
+      "evidenceRefs": [
+        "evidence/stage-2/ab-results.md#stress.lufs",
+        "verification-report.json#stage2.stressScripts",
+        "score-audit-stage-2.md#D5",
+        "human-decision.json#HD-08"
+      ],
+      "requestedRepair": "draft-v4: acceptanceCriteria[5] integrated term -> \"recorded at Stage 2 (-20.4..-21.7); re-asserted at Stage 4\"; Stage 4 criterion with stated SFX density per script.",
+      "verificationRoute": "Stage 4 combined renders; verifier ebur128",
+      "sourceReportRefs": [
+        "score-audit-stage-2.md",
+        "evidence/stage-2/README.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": "HD-08"
+    },
+    {
+      "id": "S2-D6",
+      "stage": "2",
+      "severity": "medium",
+      "category": "performance_and_implementation_fidelity",
+      "status": "open",
+      "owner": "score",
+      "anchor": "stage-2/param-writes-per-second",
+      "statement": "Steady-state AudioParam writes 2276 -> 590/s (verifier 593.3) vs < 60. AudioDirector eliminated; residual is scoreEngine schedulers (verifier attribution: scoreEngine.ts:825-832 setTargetAtTime 1404, rampParamAt 1247x2, applyRails 351 since load), outside the Stage 2 lane. Contract \"roughly 1140\" was wrong. README deviation 11 double-counts applyRails (~468/s not 528). Routed to Stage 3 with an explicit term.",
+      "evidenceRefs": [
+        "evidence/stage-2/after-param-writes-trace.log",
+        "verification-report.json#stage2.paramWrites",
+        "score-audit-stage-2.md#D6",
+        "evidence/stage-2/README.md#deviation-11"
+      ],
+      "requestedRepair": "draft-v4: acceptanceCriteria[5] records 2276 -> 590 at Stage 2; Stage 3 criterion \"scoreEngine schedulers dirty-checked; audio-param-writes-probe ch4-vigil median < 60/s\"; performance.measurementPlan \"roughly 1140\" corrected. Integration: fix README arithmetic. Score Director owns scoreEngine.",
+      "verificationRoute": "audio-param-writes-probe at Stage 3 gate",
+      "sourceReportRefs": [
+        "score-audit-stage-2.md",
+        "verification-report.json"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-D7",
+      "stage": "2",
+      "severity": "low",
+      "category": "transition_and_state_integrity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-2/event-queue-dedupe",
+      "statement": "Treatment section 2 and README say \"deduped by (id, frame)\"; shipped dedupes per microtask flush (audioEventBus.ts:54-58, audioEventQueue.ts:53), so two posts of one id in the same frame from different tasks both sound. The phrase is NOT in the contract: documentation, not draft-v4. HD-09 defers the frame-clock keying; judge records that keying queuedThisFrame to the frame clock is a two-line change honouring the signed intent.",
+      "evidenceRefs": [
+        "score-audit-stage-2.md#D7",
+        "human-decision.json#HD-09",
+        "score-treatment.md#2",
+        "main/src/audio/mix/audioEventQueue.ts:53"
+      ],
+      "requestedRepair": "Documentation: treatment section 2 and README deviation 7 -> \"deduped per flush within a frame; held-level across frames\". Or code: key queuedThisFrame to the frame clock with a test.",
+      "verificationRoute": "vitest audioEventQueue; Stage 3/4 metronome probe",
+      "sourceReportRefs": [
+        "score-audit-stage-2.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-D8",
+      "stage": "2",
+      "severity": "low",
+      "category": "score_coherence_and_sync",
+      "status": "open",
+      "owner": "score",
+      "anchor": "stage-2/mixintent-tail-order",
+      "statement": "score.mixIntent names the tail \"glue, true-peak limiter, safety device\"; shipped and correct is glue -> safety -> musicDuck -> masterOutput (SFX join) -> limiter -> ceiling. Treatment section 2 also carried LIM_THRESH_DB -3 where shipped is -1 (matches the contract). Also per HD-09 \"true-peak limiter\" -> \"bounded ceiling with measured margin >= 0.5 dB at +12 dBFS\".",
+      "evidenceRefs": [
+        "evidence/stage-2/README.md#deviation-4",
+        "score-audit-stage-2.md#D8",
+        "human-decision.json#HD-09"
+      ],
+      "requestedRepair": "draft-v4: score.mixIntent tail order and limiter wording.",
+      "verificationRoute": "contract gate",
+      "sourceReportRefs": [
+        "score-audit-stage-2.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-D9",
+      "stage": "2",
+      "severity": "low",
+      "category": "evidence_review_and_learning",
+      "status": "open",
+      "owner": "score",
+      "anchor": "stage-2/inert-rows",
+      "statement": "voice duck row (-9 dB), lifecycleCue row, station snapshot state and roomPresetId have no live driver this run; the audition must not be credited for untested depths.",
+      "evidenceRefs": [
+        "score-audit-stage-2.md#D9",
+        "main/src/audio/mix/sfxCategories.ts:42-47",
+        "main/src/audio/mix/mixSnapshot.ts:62"
+      ],
+      "requestedRepair": "draft-v4: one sentence in score.mixIntent labelling them inert until Stage 4/6; README note.",
+      "verificationRoute": "contract gate",
+      "sourceReportRefs": [
+        "score-audit-stage-2.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-D10",
+      "stage": "2",
+      "severity": "low",
+      "category": "transition_and_state_integrity",
+      "status": "open",
+      "owner": "score",
+      "anchor": "stage-2/story-lead-cap-schedule-time",
+      "statement": "Story-lead -3 dB cap resolves at duck schedule time only; a beat beginning mid-duck leaves a -6 dB duck under the score for up to ~1.04 s.",
+      "evidenceRefs": [
+        "score-audit-stage-2.md#D10",
+        "main/src/audio/mix/duckMatrix.ts:74"
+      ],
+      "requestedRepair": "Score Director decides at Stage 3: accept-and-document, or re-resolve on story-lead onset.",
+      "verificationRoute": "Stage 3 duck trace under a mid-duck beat",
+      "sourceReportRefs": [
+        "score-audit-stage-2.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-D11",
+      "stage": "2",
+      "severity": "low",
+      "category": "transition_and_state_integrity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-2/sfx-muffle-two-doors",
+      "statement": "Two writers to the SFX submerge cutoff (setMixSnapshot and setSfxSubmerged, audioCore.ts:453/483); only the offline rim uses the second today.",
+      "evidenceRefs": [
+        "score-audit-stage-2.md#D11",
+        "main/src/audio/audioCore.ts:453"
+      ],
+      "requestedRepair": "Single-authority comment or collapse to one door.",
+      "verificationRoute": "code review",
+      "sourceReportRefs": [
+        "score-audit-stage-2.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-J1",
+      "stage": "2",
+      "severity": "low",
+      "category": "score_coherence_and_sync",
+      "status": "open",
+      "owner": "score",
+      "anchor": "stage-2/inherited-mining-burst-step",
+      "statement": "Blind: 0.51 sample-step at 20.013 s in stress-mining-burst, identical before and after (inherited). Cause: forty same-seed mine chips at STRESS_MINING_BURST_AT_S 20 summed coherently in the offline rim (no queue, no rate limiter; README deviation 6). Live, the frame queue collapses them to one chip; the per-chip onset step (~0.013) is a Stage 4 recipe onset question. Not a Stage 2 defect.",
+      "evidenceRefs": [
+        "naive-audience-report-stage-2.md#e",
+        "main/src/audio/soak/excerpts.ts:1376",
+        "evidence/stage-2/README.md#deviation-6"
+      ],
+      "requestedRepair": "Documentation now (README deviation 6 names the coherent sum); Stage 4: recipe onset check on the mine chip under the spectral-fingerprint regression.",
+      "verificationRoute": "Stage 4 recipe fingerprint; headed listen",
+      "sourceReportRefs": [
+        "naive-audience-report-stage-2.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-J2",
+      "stage": "2",
+      "severity": "low",
+      "category": "transition_and_state_integrity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-2/inherited-oxygen-dive-lowpass-edge",
+      "statement": "Blind: brick-wall ~6.3 kHz lowpass switching in at 8.5 s and out at 53.5 s in stress-oxygen-dive, both versions (inherited). Not edge-triggering in the music path: setMusicSubmerged slews 0.42 s enter / 0.65 s exit via rampParam. The stress script steps submergence 0 -> 0.85 at 8 s and back at 54 s (excerpts.ts:1515) where live play is a continuous scalar; the SFX muffle is edge-snapped by design (SFX_SUBMERGE_EDGE 0.5, 80 ms enter slew, sfxEngine.ts:356). \"6.3 kHz\" is where the 12 dB/oct roll-off from ~930 Hz (music at 0.85) / 560 Hz (SFX) crosses the spectrogram floor. Lane: Integration (script authoring); Score confirms the dive gesture at audition.",
+      "evidenceRefs": [
+        "naive-audience-report-stage-2.md#e",
+        "main/src/audio/soak/excerpts.ts:1515",
+        "main/src/audio/audioCore.ts:526-539",
+        "main/src/audio/audioCore.ts:1046-1053",
+        "main/src/audio/mix/mixSnapshot.ts:47-51"
+      ],
+      "requestedRepair": "Ramp submergence over >= 1 s in the dive stress script (or document the step); one spectrogram at 0.1 s resolution across the 8 s edge proving the 0.42 s music slew; owner listens to the 80 ms SFX snap.",
+      "verificationRoute": "verifier spectrogram; owner audition",
+      "sourceReportRefs": [
+        "naive-audience-report-stage-2.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-J3",
+      "stage": "2",
+      "severity": "low",
+      "category": "evidence_review_and_learning",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-2/duck-attack-margin",
+      "statement": "Duck attack \"passes with 0.34 ms margin\" is a 5 ms-bin artefact: raw full depth lies in (45, 50] ms so the true margin is 0.3-5.3 ms after the legitimate 10.34 ms shared-latency subtraction (impact and duck both pass the limiter). The 40 ms term equals the row attack constant, so it is met and marginal by construction.",
+      "evidenceRefs": [
+        "verification-report.json#stage2.duckTraces",
+        "evidence/stage-2/ab-results.md#duck.attack.shipCrash",
+        "evidence/stage-2/README.md#duck-traces"
+      ],
+      "requestedRepair": "Integration: 1 ms duck-trace resolution. draft-v4: acceptanceCriteria[5] duck wording \"within 1 dB of table depth inside the row attack time, measured from the audible impact onset\".",
+      "verificationRoute": "verifier recompute",
+      "sourceReportRefs": [
+        "verification-report.json"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-J4",
+      "stage": "2",
+      "severity": "medium",
+      "category": "transition_and_state_integrity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-2/metronome-probe-instrument",
+      "statement": "acceptanceCriteria[5] \"mining-metronome-probe.mjs returns an unchanged result\" is literally false (max suppressed/3 s 5 -> 0) and correctly so (the queue absorbs retriggers). Worse, the probe's own PASS criterion (completion cycles at each stance) is unmet before and after: activeMine=0s, cycles=0 on every stance — the sandbox-no-op instrument (reset.sandboxNoOp) cannot engage mining and proves only the pickup admit path. Pre-existing.",
+      "evidenceRefs": [
+        "verification-report.json#stage2.metronome",
+        "evidence/stage-2/after-metronome.log",
+        "evidence/stage-2/before-metronome.log",
+        "main/mining-metronome-probe.mjs:15-17"
+      ],
+      "requestedRepair": "draft-v4: acceptanceCriteria[5] names the fields (loop guard never engaged; admit <= 1.33/s; 0 errors; inventory grows each stance; suppressed/3 s may fall). Integration: make the probe engage mining (pointer-lock/stance) before Stage 4 changes SFX.",
+      "verificationRoute": "probe re-run showing cycles > 0 at each stance",
+      "sourceReportRefs": [
+        "verification-report.json",
+        "evidence/stage-2/README.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-J5",
+      "stage": "2",
+      "severity": "low",
+      "category": "score_coherence_and_sync",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-2/oxygen-critical-duck-unmeasured",
+      "statement": "Blind detects a -3.1 dB music dip in stress-oxygen-dive fading over ~4.9 s and releasing over 5.7 s (17% of the file; delta I -0.24; LRA 2.8 -> 4.5). This is the oxygen-critical duck row (-3 / 0.2 / 2.0) engaging on repeated critical pulses; it is the only active duck row with no measured trace in ab-results. Blind reads it as mood, not a ducker.",
+      "evidenceRefs": [
+        "naive-audience-report-stage-2.md#a",
+        "evidence/stage-2/ab-results.md#duck",
+        "score-treatment.md#2"
+      ],
+      "requestedRepair": "Add an oxygenCritical duck trace to the evidence probe; Score confirms the sustained shape is the intended dive gesture.",
+      "verificationRoute": "verifier duck recompute",
+      "sourceReportRefs": [
+        "naive-audience-report-stage-2.md"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-J6",
+      "stage": "2",
+      "severity": "low",
+      "category": "evidence_review_and_learning",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-2/human-decision-binding",
+      "statement": "human-decision.json still binds contractVersion \"unfrozen\" / sha null and acceptedExceptions [] although HD-08(1) is a de facto accepted exception and HD-09 is a wording decision; decisionNote promises a rewrite on signature.",
+      "evidenceRefs": [
+        "human-decision.json"
+      ],
+      "requestedRepair": "Bind to the draft-v4 sha; move HD-08(1) into acceptedExceptions; keep HD-08(2)/(3) and HD-09 as decisions.",
+      "verificationRoute": "contract gate",
+      "sourceReportRefs": [
+        "human-decision.json"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-J7",
+      "stage": "2",
+      "severity": "medium",
+      "category": "interaction_accessibility_and_variants",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-2/lean-and-cost-not-remeasured",
+      "statement": "Stage 2 adds five buses, a limiter and a 4x shaper to every tier and removes ~1690 writes/s, but no lean-tier render and no audio-thread-cost-probe run exists for the Stage 2 tree (verification-report.json#stage2.commands lists neither). Stage 1 was held to in-loop measurement; Stage 2 must be independently shippable too.",
+      "evidenceRefs": [
+        "verification-report.json#stage2.commands",
+        "scene-contract.json#performance.measurementPlan"
+      ],
+      "requestedRepair": "Render bed-sandbox-day and story-beat lean through the new tail; run audio-thread-cost-probe main --tier lean --throttle 4 and full 1x/4x; file under evidence/stage-2/.",
+      "verificationRoute": "story-verifier",
+      "sourceReportRefs": [
+        "verification-report.json"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "S2-J8",
+      "stage": "2",
+      "severity": "low",
+      "category": "evidence_review_and_learning",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "stage-2/stage-3-parallel-start",
+      "statement": "Ledger iteration 7 (07:09) records Stage 3 build started before the Stage 2 judgement. No file under main/src or main/tools changed after 07:05, so the verifier's 07:18 measurement is uncontaminated. Acceptable in effect, not in principle: C6 (Stage 3 anchor semantics) and the writes/s Stage 3 term are unsigned.",
+      "evidenceRefs": [
+        "iteration-ledger.jsonl#iteration-7"
+      ],
+      "requestedRepair": "Conditions in defects.json#stage2.stage3Conditions; record them in the ledger.",
+      "verificationRoute": "ledger review at the Stage 3 gate",
+      "sourceReportRefs": [
+        "iteration-ledger.jsonl"
+      ],
+      "iterationIntroduced": 7,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    }
+  ],
+  "stage2": {
+    "contractVersion": "draft-v3",
+    "contractSha256": "776d676b90cc9c1007694b26f0000cfc61ecf85c256c81a72a0cdd324ea26ba1",
+    "compiledAt": "2026-09-05T07:40:00-04:00",
+    "compiledBy": "scene-cohesion-judge (Claude Fable 5.1)",
+    "sourceReports": [
+      {
+        "path": "score-audit-stage-2.md",
+        "sha256": "01bc70c13fd3c8b0ee95c065b0535da5cbc5c2eb8e85969e9e169423fd8f3b6a"
+      },
+      {
+        "path": "naive-audience-report-stage-2.md",
+        "sha256": "8abe5e237a6247e3a55f00034e8f4cd30affc857d338293c9040722ac8b8aad8"
+      },
+      {
+        "path": "verification-report.json",
+        "sha256": "bfd8e8b3fab1039384a41daf9e4ce8ab24e1ed1eee5b62e9b4f4fff35fbd98e1"
+      },
+      {
+        "path": "evidence/stage-2/README.md",
+        "sha256": "38fd758c6b65af8ba34062fba30bd8165b01fb3d2d75b7e63f43f179cd15c4fe"
+      },
+      {
+        "path": "evidence/stage-2/ab-results.md",
+        "sha256": "baec1ee732c49a42b762f43642373292782acc50df7f44bbba078783951482be"
+      },
+      {
+        "path": "c6-amendment.md",
+        "sha256": "0799b769746e3bb1a3ad65edd3cbbc89a1b2c1dc1cea445879d0a1e69d447209"
+      },
+      {
+        "path": "dissent-register.md",
+        "sha256": "0d3a7891db19049e30b0313a3ea8e1018716775126708d9172b6464f9f4bb1a5"
+      },
+      {
+        "path": "human-decision.json",
+        "sha256": "d147abfbad88ab28b4dc042e4462149c46048daba81cc8d17e1a1296513ebbed"
+      },
+      {
+        "path": "iteration-ledger.jsonl",
+        "sha256": "8b7e261b1fbfdf4d44efc4a33fc6a42456ed0d9711c9a2a44e55a75842c2a2ff"
+      }
+    ],
+    "skippedReviewsDisposition": "Cinematography-continuity and player-experience audits skipped for Stage 2: accepted. No image, camera, HUD, objective, marker, copy or feedback-lifecycle term moves. Condition recorded: playSfx now routes every shipped acknowledgement cue through the frame queue held-level law and a 10.34 ms post-join delay (sfxEngine.ts:290); the Stage 3 player-experience audit must cover acknowledgement latency and the held-level law on mining/pickup. Both audits mandatory from Stage 3.",
+    "stage3Conditions": "Stage 3 may continue on scoreEngine/storyScore MOODS voicing and the applyRails dirty-check ONLY. No bundleAt latency or SFX-forward-scheduling code before the C6 draft-v4 text is tri-signed; no edit to main/src/audio/audioCore.ts or main/src/audio/mix/** (Stage 2 surface, single owner until the amendment closes); Stage 3 before/ pins Stage 2 after/. The parallel start recorded at ledger iteration 7 (07:09) is accepted in effect because no file under main/src or main/tools changed after 07:05 (verifier measurement at 07:18 uncontaminated)."
+  },
+  "openDefectsStage2": {
+    "critical": 0,
+    "high": 3,
+    "mediumUnaccepted": 5,
+    "low": 11,
+    "note": "S2-D1, S2-D2, S2-D5 are accepted-exception-pending-signature (HD-08); they close when draft-v4 is tri-signed and human-decision.json binds it."
+  }
+}

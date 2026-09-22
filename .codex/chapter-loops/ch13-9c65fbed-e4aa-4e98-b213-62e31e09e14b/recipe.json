@@ -1,0 +1,375 @@
+{
+  "schema": "paravoxia.chapterRecipe.v1",
+  "chapter": "ch13",
+  "imported": true,
+  "contract": {
+    "path": ".codex/production-runs/2026-09-05-after-the-hearth/scene-contract.json",
+    "sha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54"
+  },
+  "signoffs": [
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/chapter-v3-contract-signoff.json",
+      "sha256": "c10ebc505864ed359e082f3508f3734e1f8aa39933076b68247decf463ddbe18"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/score-v3-contract-signoff.json",
+      "sha256": "4fc22a69da9fd575bca43a46f200ae5fc297864cb351f05b9324ac84cfdad3f1"
+    },
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/cinematography-v3-contract-signoff.json",
+      "sha256": "3d94ddadc099bee9d2ed0cf61933c7711847c6fdb75a6a849aec2f9ff1059954"
+    }
+  ],
+  "anchors": [
+    {
+      "id": "anc.cg.cell-installed",
+      "event": "CG-B0 boundary: the actual live install receipt from the prior station-continuation contract consumes one sealed cell, reactivates ch13-home at the real core, and may fire the one authored live hearth acknowledgement there."
+    },
+    {
+      "id": "anc.cg.home-steady",
+      "event": "Entry to ch13-home at the real restored Tidegarden core: the home keeps working and the stored audit fault is visibly archived."
+    },
+    {
+      "id": "anc.cg.fault-reviewed",
+      "event": "Terra reviews the stored audit fault at the core; no new fault, summons or transmission cue is introduced."
+    },
+    {
+      "id": "anc.cg.return-chosen",
+      "event": "Explicit F accepts the invitation to revisit the Origin audit site; the invitation could have stayed pending."
+    },
+    {
+      "id": "anc.cg.hatch-boarded",
+      "event": "The player boards the Kestrel through the shipped boarding interaction."
+    },
+    {
+      "id": "anc.cg.lift-committed",
+      "event": "Ignition and lift commit through the existing held-input flight control."
+    },
+    {
+      "id": "anc.cg.origin-landed",
+      "event": "The Kestrel lands at the Origin audit site and the player disembarks and approaches on foot."
+    },
+    {
+      "id": "anc.cg.repeated-measure",
+      "event": "W-7744 is physically mounted at W and performs the repeated unresolved local measurement: UNRESOLVED FAULT. REPEATING LOCAL MEASUREMENT."
+    },
+    {
+      "id": "anc.cg.demonstration-opened",
+      "event": "Terra offers to demonstrate a route; the survey opens actor-scoped and world-scoped."
+    },
+    {
+      "id": "anc.cg.survey-started",
+      "event": "Actual grounded F at the survey start S begins the quiet trace and records the first sample; nothing was recorded beside the inspecting actor."
+    },
+    {
+      "id": "anc.cg.trace-drawn",
+      "event": "Continuous grounded walking forms a finite valid trace to the survey end; growth is quiet."
+    },
+    {
+      "id": "anc.cg.route-offered",
+      "event": "Terra offers the walked span for W-7744 to test; the proposal becomes physical, not proof."
+    },
+    {
+      "id": "anc.cg.revision-ready",
+      "event": "The player selects the available unverified-tail revision at its actual last tested point; the unchanged return/F work order is presented before any edit."
+    },
+    {
+      "id": "anc.cg.specific-hold",
+      "event": "Contingent: an actually offered span reaches its first unsupported reference or footing relation, so W-7744 holds at the last safe sample and reports the literal cause."
+    },
+    {
+      "id": "anc.cg.witness-held",
+      "event": "Contingent: the player stands at the intermediate reference, explicitly offers that end, and the test proceeds."
+    },
+    {
+      "id": "anc.cg.witness-vacated",
+      "event": "Contingent: the holder leaves the release cylinder, so the test holds at the last safe sample and keeps the proof."
+    },
+    {
+      "id": "anc.cg.test-resumed",
+      "event": "Contingent: reentry to the inner cylinder revalidates geometry and resumes the test without a second F."
+    },
+    {
+      "id": "anc.cg.tail-reopened",
+      "event": "Contingent: the player explicitly presses F at the actual last tested point to reopen only the unverified tail; a refusal alone never edits the proposal."
+    },
+    {
+      "id": "anc.cg.route-revised",
+      "event": "Contingent: the unverified suffix is replaced at no cost; the tested prefix survives."
+    },
+    {
+      "id": "anc.cg.route-tested",
+      "event": "W-7744 completes his grounded test of the offered span; the chosen survey class is saved."
+    },
+    {
+      "id": "anc.cg.reciprocal-reference",
+      "event": "W-7744 physically walks the uncredited two-unit E to H leg and actually reaches and maintains the held reference at H (-40, 51.05, 12) before Terra starts her comparison."
+    },
+    {
+      "id": "anc.cg.reciprocal-crossed",
+      "event": "W-7744 actually maintains the reference at distinct H=(-40,51.05,12) while Terra completes the full 18-unit E-to-C common passage for her own comparison."
+    },
+    {
+      "id": "anc.cg.final-reference-offered",
+      "event": "Terra explicitly offers the separate far reference, clear of the tested span; conditions for his choice, not a command."
+    },
+    {
+      "id": "anc.cg.reference-vacated",
+      "event": "Contingent: Terra leaves the release cylinder during his test, so it holds at the last safe sample."
+    },
+    {
+      "id": "anc.cg.reference-resumed",
+      "event": "Contingent: reentry and live revalidation resume his test without another F."
+    },
+    {
+      "id": "anc.cg.independent-test",
+      "event": "CG-06: after the actual uncredited two-unit H to E return and a valid far Terra reference at T (-44, 51.05, 12), W-7744 begins his independent full 18-unit E to C test."
+    },
+    {
+      "id": "anc.cg.complete",
+      "event": "CG-07: W-7744 actually arrives at the far end of his independent full E to C test and the reciprocal proof commits exactly once."
+    },
+    {
+      "id": "anc.cg.handback",
+      "event": "CG-08: mandatory guidance retires and full controls and progression are immediately free; his record stays incomplete."
+    }
+  ],
+  "lanes": {
+    "plan": {
+      "purpose": "Terra returns to Origin by choice and learns to tell traversability from demonstrability: she must depend on a reference another body maintains, and then maintain one for him.",
+      "emotionalBefore": "Having crossed feels like having finished the proof; the home is repaired and the old fault is a loose end she owns.",
+      "emotionalAfter": "She accepts another body's necessary contribution to a result she wants, while their accounts remain different and his record stays incomplete.",
+      "intendedAmbiguity": "His interiority, larger allegiance and later awakening remain unknown. Local usefulness is not friendship, and no cosmology is disclosed.",
+      "nonNegotiableCanon": [
+        "W-7744 retains LOCAL RECORD: PASSAGE OBSERVED. MODEL INCOMPLETE. and gains no interior monologue.",
+        "Worker 9 and the third consciousness gain no new attributed voice, act or motif.",
+        "The A5 Light, the later offworld and A5 return question, and all later reveals stay protected and unmentioned.",
+        "Existing shipped chapter copy and receipt identities remain unchanged. New ch13 copy follows the signed council-v2 candidate and its register, including the two added Terra comparison lines; this is not a limit of two new lines in the entire chapter.",
+        "Sensory or involuntary thought is lowercase parenthetical, deliberate intent is bare lowercase, and W-7744 stays procedural capitals.",
+        "The public demo release surface remains ch4-arrival and no publication or redeployment is authorized here; separately, the formal runtime chapter ceiling is authorized to advance to ch13-common once these four beats are registered under this signed contract and the registry gate, so the release boundary and the runtime ceiling are distinct and must not be conflated.",
+        "The reality stage ceiling is alive on all four beats, resume, diagnostic entry and completed visits."
+      ]
+    },
+    "cinema": {
+      "direction": {
+        "treatmentRef": "cinematography-treatment.md",
+        "thesis": "From the accepted Cinematography lane: keep feet, the socket to housing relation, the trace break and both reference exchanges legible inside the existing free 75 degree embodied player view, with fixed lights, an unchanged grade and no forced camera, so the dependence between two bodies is read physically rather than announced.",
+        "currentCutRefs": [
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t006s.png#sha256=a6702d2dd2d966342632dd208d733faafecc7faa56f7211b47a2d3fb05a140bb",
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t014s.png#sha256=335ea30165082186c1f26b1cf3bed4e6700c91c3085c557c6e029d14638f56e7",
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t022s.png#sha256=6b9ecf375486f3ee91512e55ce80a99d9c7e03379d89a09c9b98ac782df94475",
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t030s.png#sha256=6981aed13ab34ae71766575c6a17ec3e976dcb8d0874fdb6575c4174e84f7cf9",
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t040s.png#sha256=10bd6b6fc98a00f80c586ada77b1c2e6d9aafe2c182899ecd392f0d3cc1cf114",
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t052s.png#sha256=5184791c68b89809f88be633edb925f6737d8911275b8000d12c8518424306bb",
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/origin-a4-worker-w7744/origin-a4-worker-w7744_t066s.png#sha256=43cbe5009562f6976e97b9abed6125b741f72fc8c6e0ed33cfc3755c5dec9862",
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/tidegarden-home-core/tidegarden-home-core_t006s.png#sha256=b8536c91419d68195865d9bf1b3cf48421ee7052d6dc921f85755ad1358d7b0b",
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/tidegarden-home-core/tidegarden-home-core_t018s.png#sha256=3798a5f6089fe0091ef394624155e678fd208d11b2cba01f84908f24181dfdc8",
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/tidegarden-home-core/tidegarden-home-core_t032s.png#sha256=9049fbbd999f5b57d2a381ae6bf26bc20b68e1ca998f22aa07bf419a86b77587",
+          ".codex/story-runs/2026-09-06-common-ground/evidence/targeted-baseline/tidegarden-home-core/tidegarden-home-core_t046s.png#sha256=6b75db88597ab1be04988b5b802249c6c00376e8bf3bbd984aeddf136b877486"
+        ],
+        "adjacentSceneRefs": [
+          "../../production-runs/2026-08-11-ch10-station-introduction/scene-contract.json",
+          "../../production-runs/2026-08-11-ch10-station-introduction/station-continuation-contract.md",
+          "shipped-visual-baseline.json#cameraStates"
+        ],
+        "cameraLineage": [
+          "player-camera"
+        ],
+        "paletteRef": "pal.cg.origin-tidegarden",
+        "shotOrder": [
+          "shot.cg.home",
+          "shot.cg.choose",
+          "shot.cg.return",
+          "shot.cg.draw",
+          "shot.cg.hold",
+          "shot.cg.witness",
+          "shot.cg.other-end",
+          "shot.cg.his-test",
+          "shot.cg.complete"
+        ]
+      },
+      "palette": {
+        "id": "pal.cg.origin-tidegarden",
+        "family": "planet-derived",
+        "sourceRefs": [
+          "main/src/utils/planetArtDirection.ts",
+          "main/src/utils/planetVisualProfile.ts",
+          "shipped-visual-baseline.json#paletteStates"
+        ],
+        "semanticRoles": [
+          {
+            "id": "pr.cg.ground",
+            "role": "Walkable dry ground and the survey corridor",
+            "valueRef": "main/src/utils/planetArtDirection.ts: existing planet ground family",
+            "hex": null,
+            "usage": "Carries the whole survey; never recoloured to mark a route class."
+          },
+          {
+            "id": "pr.cg.instrument",
+            "role": "The passive instrument, its bracket, stand and opaque backing",
+            "valueRef": "main/src/utils/planetVisualProfile.ts: existing material family",
+            "hex": null,
+            "usage": "Reads as physical apparatus at every tier; the backing is never treated as decoration."
+          },
+          {
+            "id": "pr.cg.trace",
+            "role": "The walked trace, proposed versus tested",
+            "valueRef": "Existing story trace material family",
+            "hex": null,
+            "usage": "Actual walked survey traces differ by stable shape/value: proposed is a single broken stroke, tested is paired/notched, and a held endpoint is an open transverse stop. They remain depth tested and never preview the S-to-E route. Only the separately declared common guide may depict the planned, unverified E-to-C polyline before it is walked; it is not trace evidence."
+          },
+          {
+            "id": "pr.cg.accent",
+            "role": "Scarce focal accent on whichever reference is currently held",
+            "valueRef": "Existing story accent family",
+            "hex": null,
+            "usage": "Applied to at most one reference at a time and never used to rank a route."
+          },
+          {
+            "id": "pr.cg.common-guide",
+            "role": "The planned and unverified common E-to-C comparison line",
+            "valueRef": "Same prewarmed trace material and instance pool; no new palette family or focal accent",
+            "hex": null,
+            "usage": "Thin continuous single ground line, with no arrows, waypoint symbols or endpoint icons; stable shape distinguishes it from broken walked and paired tested traces. It grants no proof. Survey S-to-E keeps no future preview."
+          }
+        ],
+        "continuityRefs": [
+          "shipped-visual-baseline.json#paletteStates",
+          "../../production-runs/2026-08-11-ch10-station-introduction/scene-contract.json"
+        ],
+        "focalAccent": {
+          "roleRef": "pr.cg.accent",
+          "scarcityIntent": "Exactly one held reference may carry the accent at a time; the fixed instrument and the ground never do."
+        },
+        "anomaly": null
+      }
+    },
+    "score-plan": {
+      "direction": {
+        "treatmentRef": "score-treatment.md",
+        "mood": "From the accepted Score lane: settled home and archive, the audit square only at the actual Origin reinspection, restrained demonstration through the reciprocal exchange, one quiet refusal, and changed spacing reserved for the actual live completion. Exactly six mood bindings exist and no separate mood is published per UX event.",
+        "eraFidelity": "Existing chapter score authority and shipped material only; no new graph, engine change or era shift.",
+        "cues": [
+          {
+            "id": "sc.cg.hearth-held",
+            "cueRef": "restored-home",
+            "type": "music",
+            "anchorRef": "anc.cg.cell-installed",
+            "relation": "after",
+            "offsetMs": 0,
+            "phraseIntent": "Settled home and archive. One live restored-home acknowledgement at the actual install boundary when a home score host is available; a hydrated entry restores the steady variant silently.",
+            "barIntent": "The home quotation is released at anc.cg.return-chosen; the archived fault does not change the music.",
+            "mixIntent": "Below the world bed; nothing in the home is required to understand the invitation.",
+            "silenceIntent": "No listen gate exists before the invitation and no completion transient exists on restore.",
+            "resetRef": "reset-score",
+            "evidenceRefs": [
+              "audio-report.md#sc.cg.hearth-held",
+              "scene-score-lane.json#/cueBindings (sc.cg.hearth-held)"
+            ]
+          },
+          {
+            "id": "sc.cg.unreconciled",
+            "cueRef": "unreconciled",
+            "type": "music",
+            "anchorRef": "anc.cg.repeated-measure",
+            "relation": "after",
+            "offsetMs": 0,
+            "phraseIntent": "The audit square enters only at the actual mounted and performed reinspection, never on camera visibility, the home archive or a remote approach.",
+            "barIntent": "Holds unchanged through the whole quiet trace: the survey opening, the S start and every sample carry no cue.",
+            "mixIntent": "Below the world bed and below the player’s own feet.",
+            "silenceIntent": "Deliberate absence of reward while tracing: walking is not scored as progress.",
+            "resetRef": "reset-score",
+            "evidenceRefs": [
+              "audio-report.md#sc.cg.unreconciled",
+              "scene-score-lane.json#/cueBindings (sc.cg.unreconciled)"
+            ]
+          },
+          {
+            "id": "sc.cg.demonstrating",
+            "cueRef": "demonstrating",
+            "type": "music",
+            "anchorRef": "anc.cg.route-offered",
+            "relation": "after",
+            "offsetMs": 0,
+            "phraseIntent": "Restrained demonstration on a real offered span, on the reciprocal crossing and on the initiation of his final test; duplicate same-variant publication is suppressed.",
+            "barIntent": "One continuous texture across CG-03, CG-05 and CG-06; the uncredited E to H and H to E positioning legs add no cue and no phrase restart.",
+            "mixIntent": "Below the world bed; the physical cause is always legible muted.",
+            "silenceIntent": "No route ranking, proximity ramp, in-range attack or guaranteed attack exists.",
+            "resetRef": "reset-score",
+            "evidenceRefs": [
+              "audio-report.md#sc.cg.demonstrating",
+              "scene-score-lane.json#/cueBindings (sc.cg.demonstrating)"
+            ]
+          },
+          {
+            "id": "sc.cg.refused",
+            "cueRef": "refused-hold",
+            "type": "music",
+            "anchorRef": "anc.cg.specific-hold",
+            "relation": "after",
+            "offsetMs": 0,
+            "phraseIntent": "The quiet refusal enters exactly once, on the first actual unsupported offered span, carrying the literal physical reason.",
+            "barIntent": "De-duplicated within a held test; the currently visible failure reason never schedules another cue.",
+            "mixIntent": "Below the world bed; the refusal is never a sting.",
+            "silenceIntent": "Repeated reference loss and temporary occupancy suspension retain the current texture with no mood restart.",
+            "resetRef": "reset-score",
+            "evidenceRefs": [
+              "audio-report.md#sc.cg.refused",
+              "scene-score-lane.json#/cueBindings (sc.cg.refused)"
+            ]
+          },
+          {
+            "id": "sc.cg.revised",
+            "cueRef": "revised",
+            "type": "music",
+            "anchorRef": "anc.cg.route-revised",
+            "relation": "after",
+            "offsetMs": 0,
+            "phraseIntent": "Enters on the real changed-tail or new-offer state only.",
+            "barIntent": "No sample, corner or valid coordinate is rewarded; both route classes end unranked.",
+            "mixIntent": "Below the world bed.",
+            "silenceIntent": "A first-try success skips the unexperienced refused and revised states entirely.",
+            "resetRef": "reset-score",
+            "evidenceRefs": [
+              "audio-report.md#sc.cg.revised",
+              "scene-score-lane.json#/cueBindings (sc.cg.revised)"
+            ]
+          },
+          {
+            "id": "sc.cg.independent-settled",
+            "cueRef": "independent-action-settled",
+            "type": "music",
+            "anchorRef": "anc.cg.complete",
+            "relation": "after",
+            "offsetMs": 0,
+            "phraseIntent": "Only the actual live first completion, from his real arrival plus the earned reciprocal proof, changes spacing.",
+            "barIntent": "Live only for at most five seconds measured on a monotonic clock from the live completion, then the existing 4.5 second release through the existing complementary authority fade; never restored, never repeated.",
+            "mixIntent": "The release tail never owns camera, controls or progression; handback at anc.cg.handback is immediate and independent of it.",
+            "silenceIntent": "No separate coda, no hydration, no replay, no deferral until unlock and no intensity boost to force an attack; new story, optional survey action, actor change, world change, reset, exit, pause, visibility loss, music mute and unavailable audio each invalidate the live token and release immediately.",
+            "resetRef": "reset-score",
+            "evidenceRefs": [
+              "audio-report.md#sc.cg.independent-settled",
+              "scene-score-lane.json#/cueBindings (sc.cg.independent-settled)"
+            ]
+          }
+        ],
+        "mixIntent": "The world bed and the player’s own feet stay above every chapter cue; nothing in the score is required to understand a physical cause, and the offset is a mood target request rather than a guaranteed note onset.",
+        "performancePlan": "No new audio graph, node, hit bundle or note scheduler is added; the chapter reuses the existing score authority through a proposed chapter-local adapter, publishes a mood once per semantic variant edge, and adds one bounded transient-state exception at the existing inactive-score cleanup. Voice count, node count and soak behaviour are expected to be unchanged from the shipped baseline and are to be measured after signed implementation; no measured result is claimed here.",
+        "evidenceRefs": [
+          "audio-report.md",
+          "scene-score-lane.json#sha256=6ef83950ca0698663800c7aea61fe04de3546eefad7cdef23ce15214e7381fdf"
+        ]
+      }
+    }
+  },
+  "scope": {
+    "title": "Common Ground: the ch13 return to Origin and the reciprocal survey proof, entered at the actual restored Tidegarden core under the prior station-continuation contract.",
+    "beats": [
+      "ch13-home",
+      "ch13-return",
+      "ch13-survey",
+      "ch13-common"
+    ]
+  },
+  "note": "Exact approved direction imported. Existing implementation and evidence remain provisional until the new loop verifies them."
+}

@@ -1,0 +1,16 @@
+{
+  "role": "finale-lifecycle-auditor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T18:00:50.766588+00:00",
+  "commissionSha256": "8cec2d8f988824f07344fdab104ba71a9dc0741c4d68c9e0e11769bced8310d2",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFrozen": true,
+  "sourceReference": "iterations/implemented-arrival-common-repair/source",
+  "scope": "Read-only causal audit of final texture/ending display lifecycle; no GPU or game edits or acceptance",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T18:09:25.101295+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "2606006d-cff6-410d-a3c4-8118bab5f5a6",
+  "isError": false,
+  "gameSourceMutationAuthorized": false
+}

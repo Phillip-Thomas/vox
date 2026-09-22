@@ -4,16 +4,19 @@ export interface AudioSettingsSnapshot {
   musicVolume: number;
   sfxVolume: number;
   muted: boolean;
+  soundCaptions: boolean;
 }
 
 const VOLUME_KEY = 'paravoxia.audio.musicVolume';
 const SFX_VOLUME_KEY = 'paravoxia.audio.sfxVolume';
 const MUTED_KEY = 'paravoxia.audio.muted';
+const CAPTIONS_KEY = 'paravoxia.audio.soundCaptions';
 
 const DEFAULT_SETTINGS: AudioSettingsSnapshot = {
   musicVolume: 0.72,
   sfxVolume: 0.78,
-  muted: false
+  muted: false,
+  soundCaptions: false
 };
 
 let snapshot = readStoredSettings();
@@ -34,7 +37,8 @@ function readStoredSettings(): AudioSettingsSnapshot {
     return {
       musicVolume: rawVolume === null ? DEFAULT_SETTINGS.musicVolume : clamp01(Number(rawVolume)),
       sfxVolume: rawSfxVolume === null ? DEFAULT_SETTINGS.sfxVolume : clamp01(Number(rawSfxVolume)),
-      muted: rawMuted === null ? DEFAULT_SETTINGS.muted : rawMuted === 'true'
+      muted: rawMuted === null ? DEFAULT_SETTINGS.muted : rawMuted === 'true',
+      soundCaptions: window.localStorage.getItem(CAPTIONS_KEY) === 'true'
     };
   } catch {
     return DEFAULT_SETTINGS;
@@ -47,6 +51,7 @@ function persistSettings(next: AudioSettingsSnapshot): void {
     window.localStorage.setItem(VOLUME_KEY, String(next.musicVolume));
     window.localStorage.setItem(SFX_VOLUME_KEY, String(next.sfxVolume));
     window.localStorage.setItem(MUTED_KEY, String(next.muted));
+    window.localStorage.setItem(CAPTIONS_KEY, String(next.soundCaptions));
   } catch {
     // Storage can be unavailable in hardened/private contexts.
   }
@@ -70,7 +75,7 @@ function setSnapshot(patch: Partial<AudioSettingsSnapshot>): void {
   if (
     next.musicVolume === snapshot.musicVolume &&
     next.sfxVolume === snapshot.sfxVolume &&
-    next.muted === snapshot.muted
+    next.muted === snapshot.muted && next.soundCaptions === snapshot.soundCaptions
   ) {
     return;
   }
@@ -98,3 +103,5 @@ export function setSfxVolume(value: number): void {
 export function setMusicMuted(muted: boolean): void {
   setSnapshot({ muted });
 }
+
+export function setSoundCaptions(soundCaptions: boolean): void { setSnapshot({ soundCaptions }); }

@@ -1,0 +1,57 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "b3c09da4612e74b2fe2b206fa140ca36215c54ae311c786cc9309c5b11ccb10a",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": false,
+    "acceptedAction": 0,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [
+    "ordinaryControls",
+    "acceptedAction",
+    "completePath"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9ebc8f51-6394-468f-b6f8-dfa22d7dd461/manual/raw/cleanup.json",
+      "sha256": "73f0c4f2177edd744ba46d1508bd0b0504452a0bcdcfa8a5ce2c847d95383e83"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9ebc8f51-6394-468f-b6f8-dfa22d7dd461/manual/raw/observations.json",
+      "sha256": "4d2d4976dc839db16be96611bf9ec64ff032e623118b0d6e704b76353d826260"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9ebc8f51-6394-468f-b6f8-dfa22d7dd461/manual/raw/provenance.json",
+      "sha256": "620577264dc3695cd33d0aa05c89e54f100305c65f1b2a91fbd2408969187617"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9ebc8f51-6394-468f-b6f8-dfa22d7dd461/manual/raw/trace.ndjson",
+      "sha256": "43e2d5f8baa2c81bbe0072790062f503aac8da1f36ab1cf139cc1a4c82c98dec"
+    }
+  ],
+  "media": [],
+  "mediaTimeline": null,
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "page.evaluate: Execution context was destroyed, most likely because of a navigation"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "2192221f7bd3176542d4e192f925ce32744e562f26a2009d4e25d8c5678f8a4e",
+    "buildSha256": "322030545cb3b38a54040863b92cdff886eaa1513ed891480818bb85f97c3d7c",
+    "transportSha256": "753ff94568c813b6e0f360b510de67f3c570a0d0107ed71c4ac317bba2c89acd"
+  }
+}

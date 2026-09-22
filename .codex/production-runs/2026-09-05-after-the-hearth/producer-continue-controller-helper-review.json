@@ -1,0 +1,20 @@
+{
+  "schema": "paravoxia.producerProbePrepReview.v1",
+  "at": "2026-09-06T20:48:07.464548+00:00",
+  "readyForRuntime": false,
+  "acceptedGameClaim": false,
+  "reportRef": "continue-controller-closure-report.json",
+  "reportSha256": "b8521f7f27f72a0247748e8d7af631fa95bfac487d49243dfbbfd54739c0b75f",
+  "confirmed": [
+    "Helper34checks passed and originalprobe preserved.",
+    "Exact span verb differs from neighbouring witness verb."
+  ],
+  "mandatoryCorrections": [
+    "Copied entrypoint byte-identical2a9c9... stillcontainsactualbugs; wirehelpers into executablepath before PREPARED.",
+    "signedSpanOfferAuthorization currently compares live objectiveId with INTERACTION actionId story-ch13-offer-span. These are distinct namespaces; obtain exact HUDguidance objectiveId from source/currentraw and keep actioncandidateID separate. Do not manufacture missing observation gap.",
+    "newAction.offer.accepted stillgenericphasechange OR anchorpresence; require actual new signedspan-offer event/transition relative to preF baseline.",
+    "Runtime needs actual beat/world/seed/pose samples acrossContinue; read producer-continue-pose-scope-review. :p1 isPLANET notactor.",
+    "301 dirty main paths were pre-existing worktree changes, not this engineer; all99stillbaseline atroot handoff. No attribution from gitstatuscounts."
+  ],
+  "next": "Continue within original50554deadline20:59:21.964214; no reset budget or GPU. Apply realentrypoint adaptation and targeted tests now."
+}

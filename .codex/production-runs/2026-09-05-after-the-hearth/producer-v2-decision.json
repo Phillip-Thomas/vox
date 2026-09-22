@@ -1,0 +1,19 @@
+{
+  "author": "creative-producer",
+  "decidedAt": "2026-09-06T08:17:22.166152+00:00",
+  "authority": "Direct user instruction to continue the story creatively and auto approve everything; necessary in-scope decisions delegated",
+  "briefItemRef": "CG-S1-creative",
+  "baseContractVersion": "scene-v1",
+  "baseContractSha256": "ecce3e98270a9041b071e3c627090b228cfaab8a34e6c847296bd775baac3a74",
+  "decision": "Accept Chapter and Cinematography bounded scene-v2 amendment: common-only planned/unverified ground guide after actual H readiness, exact neutral offered-route label, explicit preparing/ready copy within existing seventeen objective IDs; preserve actual traversal and all existing proof conditions. Correct trace shapes within existing pool.",
+  "contractChangeRequired": true,
+  "personallyReviewedByUser": false,
+  "publicationAuthorized": false,
+  "directionSources": {
+    "chapter-common-trace-clarification.md": "e24fba612e04e474b74f15ecb13b5961eeb57d6361fec86bd117409ac2c1a532",
+    "chapter-common-trace-patch.json": "23d6e0e4f25b9ba23bebafdc0026ae2c9e77fdf8b4515f51150f7ceaf2039891",
+    "cinema-common-trace-clarification.md": "68f084b60176dfda9fba8da5ece157cdaf970fa05ed0f44bc04a126c26e6937e"
+  },
+  "implementationPermission": "The new guide/copy direction may be integrated only after three exact scene-v2 signatures and its contract gate. Existing independent corrections continue under the earlier signed scope.",
+  "acceptance": "No claim of rendered discoverability, audio listening, hardware performance or final scene approval."
+}

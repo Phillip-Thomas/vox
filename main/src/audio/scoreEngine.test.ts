@@ -1,7 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { ERA_ALIVE, ERA_COLOR, ERA_MATERIAL } from './generative/tuning.ts';
 import {
   partitionScheduledBedHits,
+  pruneScheduledHitHandles,
+  registerBedTonicHandback,
+  setGenerativeBedLead,
+  setScoreMood,
   resolveLegacyScoreHitRenderPlan,
   resolveScoreHitPitchPlan,
   resolveScoreHitPalette,
@@ -16,6 +20,7 @@ import {
   resolveScheduledScoreHitRenderPlan,
   resolveTimedScoreHitRenderPlan
 } from './scoreEngine.ts';
+import { createHarmonyBrain, retargetHarmonyKey } from './generative/harmonyBrain.ts';
 
 const SEMITONES_PER_OCTAVE = 12;
 const BARE_ERA = 0;
@@ -27,6 +32,34 @@ const TEST_STORY_TEMPO = 88;
 
 const pitchClass = (semis: number): number =>
   ((semis % SEMITONES_PER_OCTAVE) + SEMITONES_PER_OCTAVE) % SEMITONES_PER_OCTAVE;
+
+describe('interrupted audio lifetime and tonic recovery', () => {
+  it('bounds retained hit handles during uninterrupted sandbox punctuation without cutting sounding tails', () => {
+    let handles: { audioTime: number }[] = [];
+    for (let now = 0; now < 3600; now += 0.25) {
+      handles = pruneScheduledHitHandles(handles, now);
+      handles.push({ audioTime: now + 0.2 });
+      expect(handles.length).toBeLessThanOrEqual(34);
+    }
+    expect(pruneScheduledHitHandles([{ audioTime: 99 }, { audioTime: 110 }], 100)).toHaveLength(2);
+  });
+
+  it('hands a seed-pinned chain back to an approach-retargeted bed without snapping its held voicing', () => {
+    const harmony = createHarmonyBrain(5);
+    retargetHarmonyKey(harmony, 9, 'dorian');
+    const before = structuredClone(harmony.voicing);
+    const handback = vi.fn((tonic: number) => retargetHarmonyKey(harmony, tonic, harmony.mode));
+    registerBedTonicHandback(handback);
+    setGenerativeBedLead(true);
+    setScoreMood({ chord: [0, 3, 7], pattern: [], octave: 12, tempo: 88, wave: 'triangle', pad: 0.1, sub: 0.1, ost: 0, riser: 0, baseline: 0.3 }, { tonicSemis: 2 });
+    setScoreMood(null);
+    expect(handback).toHaveBeenCalledExactlyOnceWith(2);
+    expect(harmony.tonicPc).toBe(2);
+    expect(harmony.voicing).toEqual(before);
+    registerBedTonicHandback(null);
+    setGenerativeBedLead(false);
+  });
+});
 
 describe('scoreEngine pitched-hit law', () => {
   const harmonies = [

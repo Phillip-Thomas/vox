@@ -1,5 +1,12 @@
 # Paravoxia creative-triad workflow
 
+For **new chapter creation**, start with [Chapter Loop](../../chapter-loop.md)
+and `npm --prefix main run chapter:loop`. That bounded project runner replaces
+the chapter creation procedure, rather than adding another orchestration layer.
+The portable legacy contracts below remain available for archived runs,
+standalone scenes, and separate release certification. Their review stages do
+not run automatically after each Chapter Loop role or refinement.
+
 This directory is the portable, tool-neutral orchestration package for the
 Chapter, Score, and Cinematography Directors. The human-readable operating
 contract is [`PARAVOXIA_CREATIVE_COUNCIL.md`](../../../PARAVOXIA_CREATIVE_COUNCIL.md),
@@ -145,11 +152,15 @@ npm --prefix main run chapter:accept:workflow -- \
   --continue
 ```
 
-The current binding set has safe command bindings, but it does not yet have an
-evidence-backed deterministic step executor that can produce the exact
-inventory, conformance, AV-capture, integrity, and quality artifact sets.
-Those steps therefore stop honestly with `missing_deterministic_adapter`;
-commands are never treated as if they produced undeclared evidence. Likewise,
+The current binding set has safe command bindings. The AV-capture step
+(`capture-chapter-boundary-and-av`) now has a deterministic adapter —
+`main/tools/chapter-evidence.mjs` (`npm run chapter:evidence`) produces the
+headed real-GPU `evidence/bundle/` (percept `capture-bundle-v1`: HUD-suppressed
+frames, contact sheet, burst scalars, digest, continuous video) and writes
+`raw-audiovisual-evidence.json` plus registry rows for it. The inventory,
+conformance, integrity and quality artifact sets still have no executor, so
+those steps stop honestly with `missing_deterministic_adapter`; commands are
+never treated as if they produced undeclared evidence. Likewise,
 `human_decision` stops with `human_operator_required` and can never be emitted
 by a model or automated reviewer. This means the operator is executable and
 resumable, but it is not yet an unattended end-to-end council.
@@ -214,9 +225,54 @@ are rejected.
 
 Chapter mode is a parent fan-out: run these three executable gates inside every
 child scene run, then collect their quality reports and the cross-scene
-continuity matrix in the parent. Delta mode narrows exploration and patch scope,
-not the final independent review network.
+continuity matrix in the parent. Delta mode narrows exploration and patch scope. Under an unchanged signed contract,
+a repair reuses unaffected signed artifacts and independent reviews; only affected
+reviewers rerun before cohesion judgement. The final evidence set and quality
+thresholds remain required. A changed creative contract requires re-signing.
 
 Creative approval is not release authority. Flagship work also requires
 headed real-GPU taste approval, and publishing always remains a separate owner
 decision.
+
+## Repair an unchanged contract
+
+Keep the existing run and its signed artifacts. Do not clone a new production
+folder or recommission treatments for a repair that preserves the contract.
+Use the delta profile's `repairPolicy`; changed creative meaning requires the
+normal signing path. The integration engineer, affected independent reviewer,
+and cohesion judge form the default repair path. Evidence affected by the patch
+must be replaced; unchanged evidence stays linked to its original source.
+
+Create a small `paravoxia.repairChecks.v1` JSON plan in the run's evidence folder:
+
+```json
+{
+  "schema": "paravoxia.repairChecks.v1",
+  "prepare": [["npm", "run", "build"]],
+  "runtime": [["node", "tools/your-affected-player-probe.mjs"]],
+  "checks": [["npx", "vitest", "run", "src/your-affected.test.ts"]]
+}
+```
+
+Replace the example probe and test paths with the actual affected player action
+and tests. Commands are argv arrays executed from `main/`. Cover both manual
+and movie routes when the repaired action is shared. Run:
+
+```bash
+npm --prefix main run creative:repair:check -- --plan path/to/check-plan.json --out path/to/check-evidence
+npm --prefix main run creative:repair:check -- --plan path/to/check-plan.json --out path/to/check-evidence --final
+```
+
+Paths are relative to `main/` when invoked through npm. Preparation and runtime
+probes always run afresh. Successful static checks are reused only with identical
+source, assets, tools, commands, environment and unchanged log bytes. The final
+command always includes `npm run verify`; a plan cannot omit that gate. A failing
+runtime probe stops broad checks. Source drift invalidates the attempt. The
+report is verification evidence and never grants creative acceptance.
+
+The decision brief lists real unresolved choices. Standing owner delegation may
+settle in-scope choices when its current file/hash appears in the production
+lock; publication still requires the owner. Existing signed runs can retain the
+exact instruction versions in `.claude/policy-versions.json`. This applies only
+to CLAUDE.md and the creative-triad skill; canon and production authority still
+require current exact bytes.

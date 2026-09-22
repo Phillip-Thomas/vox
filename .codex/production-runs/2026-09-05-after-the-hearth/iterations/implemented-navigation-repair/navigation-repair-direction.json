@@ -1,0 +1,29 @@
+{
+  "schema": "paravoxia.implementationRepairDirection.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "recordedAt": "2026-09-06T13:10:09.741206+00:00",
+  "author": "creative-producer under explicit standing user delegation",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceManifestSha256": "d9e36ae314ba547a292e55376d54eecbf0ff47dc3d6710c4f9b5ae3fee96caf2",
+  "defectRegisterSha256": "206ab59390baef7fa68732ed8dad0dc68ef72a7a67fb8bb8393e66a446eb084d",
+  "defectIds": [
+    "CG-IMPL-010",
+    "CG-IMPL-011",
+    "CG-IMPL-008"
+  ],
+  "owner": "integration-engineer",
+  "contractChangeRequired": false,
+  "boundedAction": "Fix demonstrated terminal-cell versus exact-goal navigation and actual Continue world/state loss under unchanged scene-v2. Preserve physical proof, terrain safety, actual saved actor/world/route/pose/construction, signed AV eligibility and all prior repairs. No creative changes.",
+  "evidenceRefs": [
+    "producer-world-final-review.json",
+    "verification-world-final-report.json",
+    "producer-partial-continue-review.json",
+    "verifier/captures/partial-continue/run-4/summary.json"
+  ],
+  "scope": "Existing production-lock allowed paths only; exact new path must be routed before mutation. No protected/global-engine/publication changes.",
+  "budgetDispositionRef": "producer-navigation-budget-decision.json",
+  "sourceMutationAuthorized": true,
+  "sourceOwnership": "integration-navigation-repair only after launcher invocation; all prior source writers finished and run4 browser cleanup verified",
+  "verificationRequirementsUnchanged": true
+}

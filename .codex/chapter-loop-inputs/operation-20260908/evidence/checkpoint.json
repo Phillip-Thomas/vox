@@ -1,0 +1,107 @@
+{
+  "schema": "paravoxia.operationCheckpoint.v1",
+  "at": "2026-09-08T01:28:24.085261+00:00",
+  "status": "BLOCKED_PROVIDER_QUOTA",
+  "rootTask": "do it all; full child permissions and no routine approval questions",
+  "permissions": {
+    "providerBinding": "full",
+    "observedClaudePermissionMode": "bypassPermissions",
+    "permissionDenials": [],
+    "parent": "managed workspace sandbox; unchanged by child flags"
+  },
+  "installedReceipt": "/home/thomasphillip/Projects/vox/.codex/chapter-loop-inputs/operation-20260908/installation/receipt.json",
+  "startup": {
+    "movieProof": "/tmp/paravoxia-all-20260908/startup-proof/result.json",
+    "manualProof": "/tmp/paravoxia-all-20260908/manual-startup-proof/report.json",
+    "gpu": "NVIDIA GB10",
+    "passed": true
+  },
+  "tests": {
+    "chapterLoop": 99,
+    "appState": 4,
+    "passed": true,
+    "note": "Aggregate subprocess suite passed outside parent sandbox; earlier sandbox attempts retained as failures."
+  },
+  "chapter13": {
+    "run": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b",
+    "status": "Existing expired BLOCKED_INFRASTRUCTURE checkpoint unchanged; renewal API installed but not invoked; verification and acceptance unfinished."
+  },
+  "chapter14": {
+    "run": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+    "status": "BLOCKED_INFRASTRUCTURE",
+    "stage": "plan",
+    "failure": "HTTP429 Fable limit; seven_day_overage_included utilization1; overage org_level_disabled",
+    "providerResetAt": "2026-09-11T03:00:00+00:00",
+    "planCreated": false,
+    "publishing": false
+  },
+  "clock": {
+    "startedAt": "2026-09-08T00:06:46+00:00",
+    "deadlineAt": "2026-09-08T08:06:46+00:00",
+    "elapsedMs": 4898085,
+    "remainingMs": 23901914
+  },
+  "usage": {
+    "roleLaunches": 5,
+    "modelTurns": 37,
+    "inputTokens": 124610,
+    "cacheReadTokens": 409010,
+    "outputTokens": 40122
+  },
+  "usageScope": "Reported child-provider telemetry only. Includes 3 context-cap stops, 1 completed engineering review and the quota-rejected creative launch; excludes root conversation and earlier historical runs. Not exact billing.",
+  "roles": [
+    {
+      "id": "repair-review",
+      "session": "7956dd4d-3a6c-46e2-a249-7234098c16bf",
+      "completed": true,
+      "reason": null,
+      "usage": {
+        "roleLaunches": 0,
+        "modelTurns": 9,
+        "inputTokens": 16265,
+        "cacheReadTokens": 44489,
+        "outputTokens": 10745
+      }
+    },
+    {
+      "id": "renew-chapter",
+      "session": "6c124e1a-19e1-4833-bf10-8895a3158512",
+      "completed": false,
+      "reason": "budget:role",
+      "usage": {
+        "roleLaunches": 0,
+        "modelTurns": 6,
+        "inputTokens": 33567,
+        "cacheReadTokens": 64870,
+        "outputTokens": 1519
+      }
+    },
+    {
+      "id": "chapter-bindings",
+      "session": "d41d7072-a98a-466f-827d-4a4f46732144",
+      "completed": false,
+      "reason": "budget:role",
+      "usage": {
+        "roleLaunches": 0,
+        "modelTurns": 8,
+        "inputTokens": 33345,
+        "cacheReadTokens": 110424,
+        "outputTokens": 3590
+      }
+    },
+    {
+      "id": "control-capture",
+      "session": "306a216e-87a0-42c9-a276-8972a0c95486",
+      "completed": false,
+      "reason": "budget:role",
+      "usage": {
+        "roleLaunches": 0,
+        "modelTurns": 13,
+        "inputTokens": 41433,
+        "cacheReadTokens": 189227,
+        "outputTokens": 24268
+      }
+    }
+  ],
+  "remaining": "Chapter13 runtime/source handoff and independent acceptance; Chapter14 creative plan/build/reviews. Required Fable creative quota is unavailable within this operation deadline. No automatic retries, model substitution, new checkpoint or deadline extension."
+}

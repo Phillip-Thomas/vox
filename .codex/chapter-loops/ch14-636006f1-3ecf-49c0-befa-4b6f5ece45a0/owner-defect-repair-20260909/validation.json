@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "command": "npm --prefix main run chapter:loop:test",
+  "filesSha256": "8ce8915be9150b15bfa4c3ca3aa95227068ab76979d8f973549ee11e99b55370",
+  "log": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-defect-repair-20260909/tests-final.log",
+    "sha256": "9449b774868202fdb723fbfaafe75a0f3d18da9df3d1c3d53c0f333f232cb203"
+  }
+}

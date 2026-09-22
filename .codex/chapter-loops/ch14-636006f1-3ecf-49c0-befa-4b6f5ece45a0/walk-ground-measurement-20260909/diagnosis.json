@@ -1,0 +1,14 @@
+{
+  "failure": {
+    "stage": "verify-final",
+    "message": "Probe manual failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T01:09:09.442Z"
+  },
+  "report": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-db814dcf-587a-493c-8267-73cda6120dab/manual/report.json",
+    "sha256": "87d483f48d87551420378367a0ad683d1d62aff916c224bd279299f87ffb8763"
+  },
+  "observations": "Manual capture reached bootstrap[36], then stopped with Calibrated movement cannot approach the target. The body was above the target height. Navigation log records only initial load; no page errors. Four-direction measurements included vertical body displacement, invalidating the walking basis on uneven terrain.",
+  "fix": "Project measured control displacement onto the live read-only ground-up plane, preserve full 3D arrival checks, settle before measuring after held motion and require sustained direction disagreement before invalidation. Record measured bases. Same game source, ordinary keys, no accepted action/route predicates weakened."
+}

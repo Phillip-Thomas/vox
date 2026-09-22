@@ -1,0 +1,25 @@
+{
+  "before": {
+    "label": "before",
+    "manifestPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/implementation-source-manifest.json",
+    "expectManifestSha": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+    "manifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+    "filesChecked": 103,
+    "mismatches": [],
+    "unreadable": [],
+    "intact": true,
+    "manifestMatchesExpected": true
+  },
+  "after": {
+    "label": "after",
+    "manifestPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/implementation-source-manifest.json",
+    "expectManifestSha": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+    "manifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+    "filesChecked": 103,
+    "mismatches": [],
+    "unreadable": [],
+    "intact": true,
+    "manifestMatchesExpected": true
+  },
+  "stableAcrossCapture": true
+}

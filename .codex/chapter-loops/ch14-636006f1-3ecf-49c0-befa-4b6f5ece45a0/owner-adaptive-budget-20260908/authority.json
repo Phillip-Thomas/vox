@@ -1,0 +1,86 @@
+{
+  "schema": "paravoxia.chapterBudgetPolicyChange.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "policy": "adaptive",
+  "request": "these things added to ensure time constraints shouldnt just hard gate if it doesnt finsih lol, it should influence it but not just stop the generation, thats an even bigger waste of time and tokens dont you think?",
+  "requestedAt": "2026-09-08T21:18:19.899934+00:00",
+  "previousStateSha256": "698932ef5be2118436d65aac56586f6331fb30dfcff5804bb6c55a6c6f97ee18",
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "before": "c137b7a29c8d1683ea898337de4acfe2c3c35bcb749d24fd917c4cfc77b3cf3a",
+      "after": "234a2117bb2c28a5dcd4ab4b254601874f8ca2dcd69aea111eaba4642f35573b"
+    },
+    {
+      "path": "docs/chapter-loop.md",
+      "before": "c65499c6ff485590a898560da4a51672837ae8b3fe13a272bcc4ccfeb41acb6d",
+      "after": "0f2a4882e3e95f680df2c0371cfa427edf6d4ead72ababc9dc2ea77afff44b3b"
+    },
+    {
+      "path": "main/tools/chapter-loop.mjs",
+      "before": "8dd26720eaf6ddb052299af1c30283dffa0a19b77aefaf95a9ba681d838fee65",
+      "after": "99a51efa17456f19e7e25f483f00bb2e0410deee87c530063e1e9d4f7c97973f"
+    },
+    {
+      "path": "main/tools/chapter-loop/adaptive-budget.mjs",
+      "before": null,
+      "after": "6f38db12fbb58bc22c7dc012076458a1760c70244c822b522b02c7a0dcd7763d"
+    },
+    {
+      "path": "main/tools/chapter-loop/budget.mjs",
+      "before": "a866f18fddc6e2d1336caa19983718f5a74afc48cd47b78a5f3773c08c0ed294",
+      "after": "44166541c5f7e02377ec0d02967f78b5c095fcf4891eedbfba5b76eae76785f7"
+    },
+    {
+      "path": "main/tools/chapter-loop/contract.mjs",
+      "before": "75eeba4252cd3f806871f97a1f101f6f9eb08f551a111255791c6cafb4dd967e",
+      "after": "8838b601ac7043b2fd9219ea4636392c30f118041644dea6f4ee443ceb7b009c"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "2d331708ea4662c443e5c7306d97fd72d0b7265d49a4121b9af3805ec9935f74",
+      "after": "cb652778a97e74e777fcbe9a5514a2ec26c5e7cfed06c8c9f99c062bf48cae4a"
+    },
+    {
+      "path": "main/tools/chapter-loop/process.mjs",
+      "before": "b375cfe851999d46bdb42e84323919852620e409e416746af81617428b941273",
+      "after": "8ea4a9a574b37ba16767ce30cd70af50840e4ab697cdd878fe4c65e3b2483e72"
+    },
+    {
+      "path": "main/tools/chapter-loop/release-review.mjs",
+      "before": "c9488dc431d7ca41afcd870d24b7eb82ff60bdef47752a823be945354cb1580c",
+      "after": "67db2084d90239b81c03247a82f47f7a3ec1c2584cca1c320c3c5b43d7d2b822"
+    },
+    {
+      "path": "main/tools/chapter-loop/release-review.test.mjs",
+      "before": "bccdef2c85c930a8a41e6ce96ee72f22f77509fdc63f08f01a4514b96de32eb2",
+      "after": "f0f3336c01c9190d277a0c21168e9293cc939ca464aa8a2c23ee7dcf8b25e755"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "7dc211021965d004daae6d045424c82c592f50c81e4eadfaeb7aa2af8a1c9e1f",
+      "after": "1c533de268de7416210b604363128c8392def317e1e9cf8869121b6bf35da454"
+    }
+  ],
+  "validation": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-adaptive-budget-20260908/validation.json",
+    "sha256": "27f5b003edba559e3df34aba6a5db9c29acf9223d9b035bf3143fad4eb5aeacc"
+  },
+  "handoff": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-adaptive-budget-20260908/handoff.json",
+    "sha256": "bc38f06833d8bbbc9c07b435865a3a423ee82fd732c6b6db180654a411392663"
+  },
+  "additionalOwnedPaths": [
+    "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json"
+  ],
+  "preserve": [
+    "clock",
+    "usage",
+    "failed observations",
+    "recipe",
+    "game source",
+    "independent reviews",
+    "release policy"
+  ],
+  "noPublishing": true
+}

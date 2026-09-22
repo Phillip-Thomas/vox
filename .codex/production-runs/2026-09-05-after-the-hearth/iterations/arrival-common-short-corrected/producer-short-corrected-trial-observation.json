@@ -1,0 +1,62 @@
+{
+  "schema": "paravoxia.producer.evidenceReview.v1",
+  "at": "2026-09-06T19:46:54.982707+00:00",
+  "isChapterAcceptance": false,
+  "trials": [
+    {
+      "trial": 1,
+      "summaryRef": "verifier/captures/arrival-common-short-corrected/trial-1/summary.json",
+      "sha256": "188d32805d895d2fdcf53f462d51a6e5b95899d097c509052d7e668b0707caf4",
+      "reportedVerdict": "SHORT-HELD-REFERENCE-PROVEN",
+      "footHorizontalDistance": 0.5365381694059578,
+      "footVerticalDistance": 0.06007909969270031,
+      "footWithinSignedInnerCylinder": true,
+      "acceptedPoints": 16,
+      "recordedAtOffer": 16,
+      "acceptedMatchesRecorded": true,
+      "actualOfferedLength": 15.27895182300832,
+      "actualWalkedUnits": 15.651240584884379,
+      "cleanup": "stopped",
+      "cleanupError": null,
+      "finishedAt": "2026-09-06T19:44:08.918Z",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)"
+    },
+    {
+      "trial": 2,
+      "summaryRef": "verifier/captures/arrival-common-short-corrected/trial-2/summary.json",
+      "sha256": "8417ef0c617ae7b049a035385a20c79d06ec17221c588d94f4e05c324adbcf14",
+      "reportedVerdict": "SHORT-HELD-REFERENCE-PROVEN",
+      "footHorizontalDistance": 0.4662272049431758,
+      "footVerticalDistance": 0.06054449811171736,
+      "footWithinSignedInnerCylinder": true,
+      "acceptedPoints": 15,
+      "recordedAtOffer": 15,
+      "acceptedMatchesRecorded": true,
+      "actualOfferedLength": 14.29810234435034,
+      "actualWalkedUnits": 15.648585836986518,
+      "cleanup": "stopped",
+      "cleanupError": null,
+      "finishedAt": "2026-09-06T19:45:00.579Z",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)"
+    },
+    {
+      "trial": 3,
+      "summaryRef": "verifier/captures/arrival-common-short-corrected/trial-3/summary.json",
+      "sha256": "3708c363154f2f9cfbeac3333f1b105c14b68bf74b293298c0b7f0f54ab566c3",
+      "reportedVerdict": "SHORT-HELD-REFERENCE-PROVEN",
+      "footHorizontalDistance": 0.5394394107505521,
+      "footVerticalDistance": 0.06191400896486243,
+      "footWithinSignedInnerCylinder": true,
+      "acceptedPoints": 16,
+      "recordedAtOffer": 16,
+      "acceptedMatchesRecorded": true,
+      "actualOfferedLength": 15.367241449029562,
+      "actualWalkedUnits": 15.731959293181141,
+      "cleanup": "stopped",
+      "cleanupError": null,
+      "finishedAt": "2026-09-06T19:45:53.891Z",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)"
+    }
+  ],
+  "qualification": "All3 runtime-accepted held-reference trials; accepted/recorded counts16,15,16 respectively. Actual offered lengths15.27895/14.29810/15.36724 units, not exactly nominal16. Working recordedAtCompletion0/freezeHeldfalse occur after survey beat retires working buffer; compare acceptedAtCompletion to original offer count, not cleared working0. No leave/reenter or footing-revision proof from these stable witness runs. Role report still pending. Full signed literal16 route evidence must be distinguished from runtime acceptance."
+}

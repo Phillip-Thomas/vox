@@ -1,0 +1,10 @@
+{
+  "phase": "done",
+  "errors": [],
+  "closed": {
+    "page": "closed",
+    "context": "closed",
+    "browser": "closed",
+    "browserServer": "closed"
+  }
+}

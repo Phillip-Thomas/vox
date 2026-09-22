@@ -1,0 +1,51 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "failureSha256": "54debe7f3b73f20fd101dca60f3d4c2609737ba72cd299d41043c9890473b03e",
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/capture-case.test.mjs",
+      "before": "f516f43310660e2289740836ea8ea1b4d8fddc28c963ffd75f307b4919262d14",
+      "after": "72872df96c4af7ef8ce78d822909972aab9e7689e8b5499b6e8def64f25d1e2e"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": "6548542a5ebac2f6bc17003bd3d53643890bc0c19689ef0ed889ad52a64fa791",
+      "after": "b00a44117c71ed1c23a0983e8a7a39530f5da20b1f4a037e4cf1b5241adc365d"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "d50d457eee57f96124fd9aa9ab80aa8ef63e03017950e3b3b591b53ff1105c58",
+      "after": "016c780e5af751d8dd0f757a7ba45a9d1ba7c18decfd399908b8c531f3a22d96"
+    },
+    {
+      "path": "main/tools/chapter-loop/review-entry.mjs",
+      "before": "fec417b1869db6408fc86058549b43969e434264efe8f26dad022678e64e1e40",
+      "after": "4362351c98a3f061e5cb2f06ad39daaedf64a5012918d5b8ca1bed8e11ee366f"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "971afc794a7626954c1507e7cab33e0aaab6efb22eceaa0c5fbe6ad904454348",
+      "after": "0792e0853a88246486dc4e4c5ffe4529e7f95c12484c2ddaf0618633b8e68cff"
+    }
+  ],
+  "prioritizeCase": "continue",
+  "ownerAuthorization": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/route-follow-repair-20260909/owner-authorization.json",
+    "sha256": "ff2cb737e51fc38b638a12626bd230ad2cd9d622af7189f3eb9420b32a7d948e"
+  },
+  "diagnosis": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/route-follow-repair-20260909/diagnosis.json",
+    "sha256": "a56a785116c190d77f6bce79d72fdc450de90bb5fff9e5831cf48b9df255033a"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run chapter:loop:test",
+    "actualCommand": "npm --prefix main run chapter:loop:test",
+    "log": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/route-follow-repair-20260909/tests.log",
+      "sha256": "2699f94b44d651e052219d0b175810419b2a354b91a02960773891dea7de25a2"
+    },
+    "filesSha256": "94ca7ae041cd9dcacdc69dee3f9b9d4e4d0f169166d2cebd78d3010d2956e832"
+  }
+}

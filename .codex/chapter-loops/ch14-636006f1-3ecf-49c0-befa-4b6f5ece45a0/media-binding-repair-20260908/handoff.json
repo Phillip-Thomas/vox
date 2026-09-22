@@ -1,0 +1,28 @@
+{
+  "schema": "paravoxia.chapterContinuationHandoff.v1",
+  "stage": "compose",
+  "purpose": "Continue the existing composer after repaired native media binding and full chapter capture. Do not replay planning or the passing build.",
+  "prior": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/9-compose/result.json",
+    "sha256": "ee186377f7a7fce4fcc68beadb6b473a96fac352c168e52341622a8eac5fb7d2"
+  },
+  "build": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/8-build/result.json",
+    "sha256": "255c379d5859e21a49a9fdae4b5ff92e3e240d91ae87eff3ce44dad4c1f80966"
+  },
+  "firstPlayable": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/report.json",
+    "sha256": "95ad13ad14a2de5655c99ce77162807aa7deeba38f75ec56de7dee33263c61e6"
+  },
+  "corrections": [
+    "Use supplied mediaPerception command for actual native audio/video perception. It is a tool; keep the original composer role and signed score/cinema decisions.",
+    "Use the supplied listen gateway once for fresh complete AV. It now requires newly earned chapter completion plus a 3-second tail; the prior 12-second capture was incomplete.",
+    "If needed, inspect source only for named score anchors or a specific audible/staging defect. Avoid broad reading and redundant verification. Preserve all existing gameplay and route predicates."
+  ],
+  "remaining": [
+    "Composition realization and audible handback proof",
+    "Verifier recovery, real Continue plus new action, earned continuity, AV",
+    "Independent player/AV/canon review and release checks"
+  ],
+  "retainedUncertainty": "A prior observation returned fetch failed after its internal report passed. If it recurs, retain exact command and report evidence; do not call it a game defect or fabricate success."
+}

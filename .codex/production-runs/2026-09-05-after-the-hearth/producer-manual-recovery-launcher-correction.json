@@ -1,0 +1,10 @@
+{
+  "at": "2026-09-06T23:09:36.950868+00:00",
+  "priorReceipt": "manual-recovery-candidate-runtime-invocation.json",
+  "originalDeadline": "2026-09-06T23:16:59.340686+00:00",
+  "remainingSeconds": 442,
+  "additionalBudgetSeconds": 0,
+  "classification": "Private launch misunderstanding, no browser/test/game failure. Acquire FD9 in the owned shell launcher; its node child inherits lock.",
+  "readyLauncher": "run-recovery-candidate.sh",
+  "sourceRepairAuthorized": false
+}

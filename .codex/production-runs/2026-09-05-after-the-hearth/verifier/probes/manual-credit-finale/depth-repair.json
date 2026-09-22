@@ -1,0 +1,102 @@
+{
+  "schema": "paravoxia.verifier.privateProbeDepthRepair.v1",
+  "why": "Private copies live one directory deeper than the originals (verifier/probes/manual-credit-finale/<name>/), so every HERE-relative RUN_DIR/REPO_ROOT/import path needed exactly one extra parent segment. Instrumentation-only; no predicate, threshold, geometry or source change.",
+  "edits": [
+    {
+      "file": "common-entry-crossing/cgContract.pinned.mjs",
+      "occurrences": 1,
+      "from": "export const RUN_DIR = resolve(HERE, '..', '..', '..');",
+      "to": "export const RUN_DIR = resolve(HERE, '..', '..', '..', '..');"
+    },
+    {
+      "file": "common-entry-crossing/selftest.mjs",
+      "occurrences": 1,
+      "from": "const RUN_DIR = resolve(HERE, '..', '..', '..');",
+      "to": "const RUN_DIR = resolve(HERE, '..', '..', '..', '..');"
+    },
+    {
+      "file": "common-entry-crossing/common-entry-crossing-probe.mjs",
+      "occurrences": 1,
+      "from": "'../../../../../../main/tools/lib/evidence.mjs'",
+      "to": "'../../../../../../../main/tools/lib/evidence.mjs'"
+    },
+    {
+      "file": "finale-window/finale-window-probe.mjs",
+      "occurrences": 1,
+      "from": "const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..');",
+      "to": "const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..', '..');"
+    },
+    {
+      "file": "finale-window/finale-window-probe.mjs",
+      "occurrences": 1,
+      "from": "const RUN_DIR = resolve(HERE, '..', '..', '..');",
+      "to": "const RUN_DIR = resolve(HERE, '..', '..', '..', '..');"
+    },
+    {
+      "file": "finale-window/finale-window-probe.mjs",
+      "occurrences": 1,
+      "from": "'../../../../../../main/tools/lib/evidence.mjs'",
+      "to": "'../../../../../../../main/tools/lib/evidence.mjs'"
+    },
+    {
+      "file": "finale-window/finale-window-probe.mjs",
+      "occurrences": 1,
+      "from": "'../../../../../../main/tools/lib/previewServer.mjs'",
+      "to": "'../../../../../../../main/tools/lib/previewServer.mjs'"
+    },
+    {
+      "file": "finale-window/finale-window-runtime.mjs",
+      "occurrences": 1,
+      "from": "const RUN_DIR = resolve(HERE, '..', '..', '..');",
+      "to": "const RUN_DIR = resolve(HERE, '..', '..', '..', '..');"
+    },
+    {
+      "file": "finale-window/closure-checks.mjs",
+      "occurrences": 1,
+      "from": "'../../../../../../main/tools/lib/evidence.mjs'",
+      "to": "'../../../../../../../main/tools/lib/evidence.mjs'"
+    },
+    {
+      "file": "finale-window/closure-checks.mjs",
+      "occurrences": 1,
+      "from": "'../../../../../../main/tools/lib/previewServer.mjs'",
+      "to": "'../../../../../../../main/tools/lib/previewServer.mjs'"
+    },
+    {
+      "file": "finale-window/closure-checks.mjs",
+      "occurrences": 1,
+      "from": "resolve(HERE, '..', '..', '..', '..', '..', '..', 'main/node_modules/playwright-core/index.mjs')",
+      "to": "resolve(HERE, '..', '..', '..', '..', '..', '..', '..', 'main/node_modules/playwright-core/index.mjs')"
+    },
+    {
+      "file": "finale-window/closure-checks.mjs",
+      "occurrences": 1,
+      "from": "const bad = resolve(HERE, '..', '..', '..', '..', '..', 'main/tools/lib/evidence.mjs');",
+      "to": "const bad = resolve(HERE, '..', '..', '..', '..', '..', '..', 'main/tools/lib/evidence.mjs');"
+    },
+    {
+      "file": "finale-window/closure-checks.mjs",
+      "occurrences": 1,
+      "from": "const good = resolve(HERE, '..', '..', '..', '..', '..', '..', 'main/tools/lib/evidence.mjs');",
+      "to": "const good = resolve(HERE, '..', '..', '..', '..', '..', '..', '..', 'main/tools/lib/evidence.mjs');"
+    },
+    {
+      "file": "finale-window/closure-checks.mjs",
+      "occurrences": 1,
+      "from": "const wdir = resolve(HERE, '..', '..', '..', 'logs', 'finale-wrapper-transport');",
+      "to": "const wdir = resolve(HERE, '..', '..', '..', '..', 'logs', 'finale-wrapper-transport');"
+    },
+    {
+      "file": "finale-window/closure-checks.mjs",
+      "occurrences": 1,
+      "from": "const CAPTURES_DIR = resolve(HERE, '..', '..', 'captures');",
+      "to": "const CAPTURES_DIR = resolve(HERE, '..', '..', '..', 'captures');"
+    },
+    {
+      "file": "finale-window/closure-checks.mjs",
+      "occurrences": 1,
+      "from": "const logDir = resolve(HERE, '..', '..', '..', 'logs', 'finale-window-closure');",
+      "to": "const logDir = resolve(HERE, '..', '..', '..', '..', 'logs', 'finale-window-closure');"
+    }
+  ]
+}

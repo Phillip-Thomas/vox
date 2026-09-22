@@ -1,0 +1,12 @@
+{
+  "updatedAt": "2026-09-06T21:22:01.124476+00:00",
+  "action": "resume",
+  "activeRole": "story-verifier-manual-credit-finale",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "instruction": "CURRENT100file candidate source frozen; implementation1756gate and independent typecheck/build passed. Root preview2490 owns37395; all11 HTTP files rehashed to built bytes. Authorized sole GPU role manual-credit-finale verifier under shared exclusive lock. Prove actual affected actions first; no old34413 or source edits. Private Continue preflight91856 CPU only, separate folder.",
+  "currentPreviewUrl": "http://127.0.0.1:37395/",
+  "previewOwnershipRef": "verifier/artifacts/preview-ownership.json",
+  "currentIndexSha256": "a9b880389deff7717b3d76b0f4a962beff1031a2ffa44fde427a5f0022353d8f",
+  "currentBuildHash": "0a18affc2fc5940ad87671cebacacd35ac3cda79bfb717f51cb9a66e9d4bfce0",
+  "nonbindingAuxiliaryObservationRef": "producer-nonbinding-auxiliary-observation.json"
+}

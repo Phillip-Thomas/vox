@@ -1,0 +1,16 @@
+{
+  "schema": "paravoxia.directorSignoff.v1",
+  "director": "cinematography",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "disposition": "approve",
+  "signedBy": "Cinematography Director (/root/cinematography_director)",
+  "signedAt": "2026-09-06T16:20:00.624476+00:00",
+  "notes": [
+    "Signed the exact arrival-v3-candidate/scene-contract.json bytes. Compared against current scene-v2 4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e and approved Chapter proposal c470b753cd4081d1d3d97e0bd6baa932b3dba9309eabd4ef3ef62e5b100f4315: all seven asserted groups and the single intent replacement match exactly. Other contract differences are the declared version/supersedes/frozenAt and authority-reference rebinding; candidate lane differs only at objectiveBindings/4/realTransition. Assembly file hashes and appended proposal/peer-review hashes were verified.",
+    "The existing ch13:return:origin ID and Origin · audit site destination carry exact flight, grounded-boarded and grounded-on-foot standing-copy phases. Copy changes are silent within that ID. Grounded Origin, actual embodied control and physical W-7744 reach remain the arrival boundary; landing or world activation alone cannot grant it. The on-foot destination resolves the actual worker approach, without a mandatory hatch regression or competing marker.",
+    "Existing vehicle control ownership and free 75-degree on-foot camera continue through the physical handback. Nine shots, seventeen objectives, twenty-eight anchors, geometry, common guide and trace semantics, score, palette, resources and existing acceptance obligations are unchanged. This amendment does not add a camera takeover, control hold, new input or arrival cue.",
+    "producer-v3-decision.json is an explicit forward reference scheduled by the producer after all signatures; it does not exist at this signing and is not claimed as reviewed evidence. This signoff approves the exact documentation candidate. Live v2 remains unchanged until the producer completes the current verification and promotion workflow; this file does not itself promote the candidate or authorize additional source changes.",
+    "No new GPU work, screenshot inspection, listening, manual play or rendered/taste acceptance was performed in this signature check. Actual arrival guidance, destination/control/input lifecycle, same-ID silence, Continue/reset and all required independent hardware/UX acceptance remain to be verified under the existing gates."
+  ]
+}

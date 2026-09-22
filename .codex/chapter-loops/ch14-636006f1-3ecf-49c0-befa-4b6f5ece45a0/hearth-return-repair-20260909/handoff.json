@@ -1,0 +1,111 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "continue",
+  "standingAuthorization": "well keep grinding through the blockers, being sure to eliminate stuff that doesnty make sense rather than add to the pile",
+  "contributor": "root mechanical repair",
+  "scope": "Use existing station approach corridor and berth with unchanged docking gates; resume earned save on movie-only navigation; select undocking world at initial mount so cleanup cannot overwrite an unloaded hearth. No state grants, teleports, new creative pass, provider change, publishing or budget reset.",
+  "status": "focused-hardware-pass-final-verification-pending",
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/previous-state.json",
+    "sha256": "29fb911123b8f11c0c18207f5b11569192432221b2df94891aeff9ece200359c"
+  },
+  "priorFailure": {
+    "stage": "verify-final",
+    "message": "Probe continuity failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T04:49:47.697Z"
+  },
+  "files": [
+    {
+      "path": "main/src/App.tsx",
+      "before": "0833482ed11b753289f1cb25b15f73b359f84af661be8458c52e408467671054",
+      "after": "b937fc35321ae2d0db0f0b7dfb9fef2eec9cbe1be27d4c818a3c86ad5ec8eeca"
+    },
+    {
+      "path": "main/src/story/autopilot/primitives.ts",
+      "before": "91a2a321bdfdcc078465dde47494e1b1ec3fd9602f901286b05a10f1172d78c5",
+      "after": "f3a8787699bbec8c82a9b470734cc4f130b800172a5ddc9fd81a86ddd3a28b0a"
+    },
+    {
+      "path": "main/src/story/storyState.ts",
+      "before": "40bc6d1d634385ec5814c4284f37d5cc5fb9014a320247ee29d190231a86a81d",
+      "after": "702bf903e89a3516e6d55b8f96d328e48d2f2c80e314eb2205d9f12b382214f0"
+    },
+    {
+      "path": "main/src/story/autopilot/stationApproach.test.ts",
+      "before": null,
+      "after": "5d5e21d1546d8b50c2928574330b8aba2ea7d60e7c7ba70fb13d582b585c4889"
+    },
+    {
+      "path": "main/src/story/autopilot/stationApproach.ts",
+      "before": null,
+      "after": "ca7da7e8adde46980a9f5d935782d44392a34b9077cc74a9d0cdcce3713365f0"
+    },
+    {
+      "path": "main/src/story/storyMovieResume.test.ts",
+      "before": null,
+      "after": "8e9d054df04f8d3eed780a46ce782f9b53a61d83dc43012577f6ca5756205ea8"
+    }
+  ],
+  "diagnosis": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/diagnosis.json",
+    "sha256": "d3564fdc73acab6c7a8dcadebe4b2cb11449724aef0a357c15f07be434a5732b"
+  },
+  "tests": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/tests.log",
+    "sha256": "7971feb8ebdba3a6c26e4788cb8bcb5d50e677530e7031a6a425648a992815e0"
+  },
+  "priorRelatedTests": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-return-repair-20260909/tests-after.log",
+    "sha256": "d7607916a0ffe6ce269c86fccdb12fd0649161addd4fb6a62d90265ff783eca8"
+  },
+  "coldRegression": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/station-return-repair-20260909/tests-cold-before.log",
+    "sha256": "116c082fddbccd63f29f09ca5a9e95c8b7d8854eb6fd10704dde839dc8c84fd1"
+  },
+  "typescript": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/typescript.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "build": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/build.log",
+    "sha256": "5e8d85f6fb78927bcd7563b944161a771f1c4ef77c20f03a0fdc95aad15d9878"
+  },
+  "source": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/source.json",
+    "sha256": "2037d6e4ae27a4a7dfa02e2e940a1e54a9200309d1ab4c206f6a48fd0dcfcdad"
+  },
+  "preview": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/preview-owner.json",
+    "sha256": "1f415c1ac422d341eba488a9c6a3223bc8aec69dfac155b710d82250fbe0939c"
+  },
+  "runtime": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/station-forward/result.json",
+    "sha256": "417f4b0b1859b4abac6546ccd86076fd04ce2f4e9a5d211411cdabae8a237185"
+  },
+  "focusedProof": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/focused-proof.json",
+    "sha256": "96f8b8600eb9189c792b5953fe019581b57fa040eb40b4ce68c61c3db1c913dc"
+  },
+  "reviewBlocker": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/hearth-return-repair-20260909/diagnostic-attempt.json",
+    "sha256": "c5a9ecfecc65e381506d20db83be323648826d669e01043d40ba87dbf411aed7"
+  },
+  "retainedUsage": {
+    "roleLaunches": 16,
+    "modelTurns": 423,
+    "inputTokens": 846529,
+    "cacheReadTokens": 23679131,
+    "outputTokens": 174567
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "remaining": "Original Chapter9 collector cause and later local path remain unaccepted; final continuity, controls, Continue, AV, independent reviews and release certification still required. Keep inactive blocked checkpoint until ready; OAuth failure is separate from deterministic checks.",
+  "at": "2026-09-09T16:15:10.192Z"
+}

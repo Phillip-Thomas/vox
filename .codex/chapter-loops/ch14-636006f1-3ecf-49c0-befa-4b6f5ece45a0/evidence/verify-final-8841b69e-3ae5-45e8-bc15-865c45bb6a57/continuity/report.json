@@ -1,0 +1,59 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "708d088fbcbac756bc7161134152479bd3e392689eaab5c36e08e6b718d40fba",
+  "kind": "continuity",
+  "chapter": "ch14",
+  "proof": {
+    "earnedEntry": false,
+    "earnedExit": false,
+    "chapterWindowComplete": false,
+    "noFixtures": true,
+    "priorIndex": -1,
+    "entryIndex": -1,
+    "beatIndices": [
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "exitIndex": -1,
+    "sampleCount": 4308,
+    "hardware": true,
+    "cleanup": false,
+    "videoDecodes": false,
+    "audioDecodes": false,
+    "framesNonblank": false
+  },
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-8841b69e-3ae5-45e8-bc15-865c45bb6a57/continuity/raw/cleanup.json",
+      "sha256": "0a1cd3eeef0484d316fb8d3575dfe92d58236a2dd0997a51ff8f95b40f7ac892"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-8841b69e-3ae5-45e8-bc15-865c45bb6a57/continuity/raw/media-proof.json",
+      "sha256": "8e94a5c1b6e3147435d68a5b751a0e51acec38270440312bc22b6e515c0c7ea7"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-8841b69e-3ae5-45e8-bc15-865c45bb6a57/continuity/raw/provenance.json",
+      "sha256": "ddebd09890c30ffac566e286f4d938174c8509272564e51e8dab1785b8283a15"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-8841b69e-3ae5-45e8-bc15-865c45bb6a57/continuity/raw/trace.ndjson",
+      "sha256": "dfec4e3393cbba61d5eaae99bd4585bf7735da0521b7e01c8ffa628661ab6c60"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "Capture interrupted by SIGTERM",
+    "Chapter video: Chapter-ready video window was not observed"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "49bde2e8e3180283f5a2c4df884539fde426b4c7dc3b339446c190d497aa0039",
+    "buildSha256": "030876e4113432138c26ee8a3885d3043c1d4b3d880b964c6122a83e1869dd53",
+    "transportSha256": "eb547dcc7d73478b95545a09f2c01eaeb154c1b7ea47b8d73e6e70944e9868dc"
+  }
+}

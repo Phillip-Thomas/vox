@@ -1,0 +1,61 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "b3c09da4612e74b2fe2b206fa140ca36215c54ae311c786cc9309c5b11ccb10a",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": false,
+    "acceptedAction": 0,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [
+    "ordinaryControls",
+    "acceptedAction",
+    "completePath"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-149572c5-c98e-4af1-944f-0f5e27c8cdf8/manual/raw/cleanup.json",
+      "sha256": "73f0c4f2177edd744ba46d1508bd0b0504452a0bcdcfa8a5ce2c847d95383e83"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-149572c5-c98e-4af1-944f-0f5e27c8cdf8/manual/raw/observations.json",
+      "sha256": "6b7218fcab560740938f240bfcf21ec8d7f88ae66023e87c7fe41d2b40034b65"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-149572c5-c98e-4af1-944f-0f5e27c8cdf8/manual/raw/provenance.json",
+      "sha256": "c3ccab2e876bad4b422a215c92b4169611cc826bef62f7d9e2c17003dd7dc15f"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-149572c5-c98e-4af1-944f-0f5e27c8cdf8/manual/raw/trace.ndjson",
+      "sha256": "ea7efd0bc1981163474e4ea34fc2dbafd8a1e709b0137e26b8b7cba0c33189f3"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-149572c5-c98e-4af1-944f-0f5e27c8cdf8/manual/raw/walk-calibration.ndjson",
+      "sha256": "3692cc464ce39ca07153b6c2101a4177eeeed09d635dac2302ac71e7049fc05d"
+    }
+  ],
+  "media": [],
+  "mediaTimeline": null,
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "Walk stopped making progress toward its target"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "2192221f7bd3176542d4e192f925ce32744e562f26a2009d4e25d8c5678f8a4e",
+    "buildSha256": "322030545cb3b38a54040863b92cdff886eaa1513ed891480818bb85f97c3d7c",
+    "transportSha256": "00650836b95f7b08fa59d89e133f46fd621b555567288604993b926490085e43"
+  }
+}

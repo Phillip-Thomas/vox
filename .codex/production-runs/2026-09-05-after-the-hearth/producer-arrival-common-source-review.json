@@ -1,0 +1,26 @@
+{
+  "schema": "paravoxia.producerSourceReview.v1",
+  "at": "2026-09-06T17:44:25.273671+00:00",
+  "author": "creative-producer",
+  "acceptedForIndependentVerification": true,
+  "isChapterAcceptance": false,
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "integrationReportSha256": "85c75cf79005a48fa34df8aeb154dacf52f8f49d59ce79a4ecc6135c554b7d32",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "finalInvocationRef": "integration-arrival-common-metadata-invocation.json",
+  "verified": [
+    "All ten owned changed paths rehashed against before/after report; remaining manifest paths accounted for including separately adopted external gate. Original958 source preservation check has zero unexpected drift.",
+    "Read the functional arrival/controller and exact v3 metadata diffs. Shared autopilot primitives unchanged, original route, C,18units and vertex tolerance unchanged.",
+    "All8 positive log hashes verified. Fullverify351files3172tests; repository-runner counterfactual10fail149pass and restored gameplay hashes verified.",
+    "Fresh current-tool contract gate1714 and implementation gate1756 pass. Original release receipt remains intact."
+  ],
+  "qualifications": [
+    "Report changedPaths includes one explicitly EXTERNAL row despite prose saying excluded. Compiler separates that labelled row using root-owned archived historical bytes and current reviewed hash. Ten own changes plus one external among99 means88 unchanged overall,89 unchanged by integrators.",
+    "The target-standoff assertion changed from >0.35 to >0.2; it is a recalculated controller expectation, not a numerically tighter bound. An inherited test comment claiming all bounds tighter is inaccurate; runtime physical predicates remain unchanged.",
+    "CPU route tests use real planner/terrain/published goals but simulate body movement and transcribe some glue. Actual runtime remains mandatory.",
+    "Original initial metadata failures were unfinished bindings in this seventh repair, not unrelated pre-existing failures. Combined report now retains original failures and final passing closure.",
+    "Concurrent package only changes creative:repair:test, outside the unchanged verify chain; compiler preserves exact package snapshot used by measured command."
+  ],
+  "nextAction": "Fresh independent verifier, exact new immutable preview, actual arrival and3cold COMMON. Manual/Continue/fullstory/AV/reviews remain pending.",
+  "publicationAuthorized": false
+}

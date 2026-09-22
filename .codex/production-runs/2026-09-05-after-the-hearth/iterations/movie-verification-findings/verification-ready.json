@@ -1,0 +1,30 @@
+{
+  "schema": "paravoxia.verificationReadiness.v1",
+  "ready": true,
+  "readyAt": "2026-09-06T09:01:42.898617+00:00",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "integrationInvocationRef": "integration-v2-invocation.json",
+  "integrationFinishedAt": "2026-09-06T09:00:46.756824+00:00",
+  "sourceManifestRef": "implementation-source-manifest.json",
+  "sourceManifestSha256": "ee4da0e63c5092a9946edacbda06d9dd737e8ade09dcc5b8f20ded636bb9133e",
+  "implementationGateRef": "implementation-gate-pass.json",
+  "implementationGateChecks": 1708,
+  "checkResultsRef": "check-results.json",
+  "instructions": "Proceed with independent full verify then owned immutable preview and headed actual hardware playthroughs/captures under the shared lock. No game-source edits. Read current integration-report and run-local harness. Preserve exact source state during measurements; report actionable failures via verifier-findings and progress.",
+  "producerNotes": [
+    "Completion of these implementation checks is not gameplay/rendered/listened/hardware or creative acceptance.",
+    "SFX queue counts alone do not prove acknowledgement in muted/unavailable modes; preserve measurement limitations.",
+    "Root source snapshot checked 958 initial source hashes: zero unexpected changes, 61 total authorized changed/new files relative to the preimplementation snapshots.",
+    "Existing chapter imagery bundles are in 2026-09-05-ch9-baseline and 2026-09-05-evidence-smoke, both hardware-high. Smoke ch10 percept score is low; do not call it an approved quality reference. Preserve those protected originals. Fresh chapter13 evidence is required.",
+    "Director repair evidence-path metadata was corrected without changing actions/contract/signatures. Canonical defects remain pre-review/open pending actual proof."
+  ],
+  "publicationAuthorized": false,
+  "producerUpdatedAt": "2026-09-06T09:14:59.034062+00:00",
+  "producerFindingRefs": [
+    "producer-movie-interaction-finding.json",
+    "producer-movie-waypoint-finding.json"
+  ],
+  "producerCoordination": "Root has source-backed CG-IMPL-004 double cadence consumption and CG-IMPL-005 waypoint retargeting findings. Please finish the current control probe, independently confirm or reject these, preserve raw evidence, report an interim actionable failure checkpoint and pause expensive old-build journeys so the single engineer can repair. Source is still frozen; no patch has started. Read integration-inbox.md final two findings for exact locations and terminal-precision requirement. Future continuation will retain this verifier evidence and will not restart preproduction."
+}

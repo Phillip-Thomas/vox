@@ -1,0 +1,6 @@
+{
+  "at": "2026-09-06T18:16:14.981967+00:00",
+  "to": "arrival-common-manual",
+  "from": "creative-producer",
+  "instruction": "Root inspected reference-2: ordinary live-rectangle click succeeded; actual motion progressed 19.836 units in 5.19s, yet leg called stalled. Source walkTo expected=pulse.commandedUnits*.25 uses full unclamped residual 28..43 units while actual pulse is clamped400ms and moves1.98 units. This is a distinct demonstrated harness false stall, not game failure. Standing owner authorization permits a bounded correction in YOUR private probe/logic/selftest, matching expected movement and stall elapsed time to actual clamped pulse; preserve genuine zero-motion/oscillation refusal and all proof/geometry. Do not merely raise timeout or bypass stall. Retain reference-2 raw evidence, add focused clamped-pulse vs zero-motion regression, then new reference-3 and deviation if reached. This supplements prior one-correction allowance on this concrete new diagnosis, not a new material game repair or request for permission. Use same remaining transport budget; source frozen. In report distinguish two instrument-invalid entry/approach attempts from a valid COMMON test."
+}

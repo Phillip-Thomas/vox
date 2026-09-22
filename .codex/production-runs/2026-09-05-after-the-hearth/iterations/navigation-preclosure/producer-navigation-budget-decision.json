@@ -1,0 +1,52 @@
+{
+  "schema": "paravoxia.producerDelegatedBudgetDecision.v1",
+  "author": "creative-producer",
+  "decidedAt": "2026-09-06T12:56:46.357881+00:00",
+  "authority": "Direct user instruction to continue the story and auto approve everything; necessary in-scope implementation and verification decisions delegated.",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "directUserInstruction": "yes continue, and please auto approve everything",
+  "briefItemRef": "CG-S1-boundary-state",
+  "personallyReviewedByUser": false,
+  "productionRunUnchanged": true,
+  "baseRunProfileRef": "paravoxia-creative-chapter@v1",
+  "baseProfilePath": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-chapter.run-profile.json",
+  "baseProfileSha256": "f6ce3f3cea205b307fb0f19beb5c0390947c5d854b8090254c7b8f5c28ae1654",
+  "baseProfileEdited": false,
+  "completedMaterialRepairLoops": 4,
+  "runLocalBudgetOverride": {
+    "field": "executionBudget.maxPatchLoops",
+    "baseValue": 4,
+    "valueForThisRun": 5,
+    "additionalMaterialRepairsAuthorized": 1
+  },
+  "decision": "Authorize one additional bounded material integration repair in this existing run, after the active actual partial-Continue verifier finishes. Scope is CG-IMPL-010 exact-navigation arrival and any directly demonstrated related Continue defect explicitly compiled into the same repair direction. Preserve the signed scene and complete independent verification afterward.",
+  "stallClassification": {
+    "kind": "implementation defects exposed at successive newly reachable runtime states",
+    "evidence": [
+      "Grounded start previously refused all200F attempts; current source records real samples on hardware.",
+      "Home AV previously had empty history; current source activates home-steady/fault-reviewed/return-chosen.",
+      "The now-reachable drawing reveals a repeated off-grid navigator/control deadzone in two cold runs.",
+      "No weighted creative scores exist yet; this is not two measured flat creative-score iterations or an authorization to extend creative exploration."
+    ],
+    "sourceRefs": [
+      "verification-world-final-report.json",
+      "producer-world-final-review.json",
+      "iterations/navigation-findings/defects.json"
+    ]
+  },
+  "conditions": [
+    "Wait for partial-continue-verifier to finish before source mutation.",
+    "Compile exact current defects and repair-contract disposition; current scene-v2 SHA and three signatures stay unchanged unless a genuinely creative change is separately routed.",
+    "One source integration engineer, task-private byte preservation, meaningful real-navigation regressions, fresh independent verification.",
+    "No widened route/arrival/proof predicates, endpoint pumping, grants, automatic rescue, or acceptance by exception.",
+    "No change to shared/global workflow files, the independent review requirements, score thresholds, variant/hardware/audio evidence or publication authority.",
+    "Record actual further findings and remaining work; do not silently treat this bounded extension as unlimited repairs."
+  ],
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "contractChangeRequired": false,
+  "acceptedDefectExceptions": [],
+  "publicationAuthorized": false,
+  "sourceMutationAuthorizedNow": false,
+  "sourceMutationPending": "Bounded partial-Continue verification, final defect/direction compilation and source ownership handoff."
+}

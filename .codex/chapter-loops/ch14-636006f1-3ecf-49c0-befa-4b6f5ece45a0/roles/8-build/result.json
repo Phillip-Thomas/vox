@@ -1,0 +1,29 @@
+{
+  "schema": "paravoxia.chapterLoopRole.v1",
+  "summary": "Complete rough ch14 path proved through the checked hardware gateway: earned Common Ground handback, both observations, retained question and physical return; 8 accepted actions. Fixed integration gates; TypeScript and 238 affected tests pass. Affected paths and hashes are recorded below. Resume, Continue, fresh continuity, AV and independent acceptance remain open; nothing published.",
+  "verdict": "PASS",
+  "evidence": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/8-build/implementation.json",
+      "sha256": "761e636cf256e1a12e0e8a2d5c9c9596000c545f1ad6ed6a7d9dbd7fb96bcd94"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/report.json",
+      "sha256": "95ad13ad14a2de5655c99ce77162807aa7deeba38f75ec56de7dee33263c61e6"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/frame.png",
+      "sha256": "b425b455dd32140606e8cadffd0b34c410bb8c6710af49dcc3ac89be2236c10d"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-13/raw/frame-7.png",
+      "sha256": "7d4f555eb80211ecfce691a53b208e7397c7d2ecad9173205dd315360cbc5d2b"
+    }
+  ],
+  "findings": [],
+  "keep": [
+    "Physical attendance and ordered reciprocal crossings remain mandatory; no acceptance predicates weakened.",
+    "The unanswered question persists beside attributed observations, with immediate handback after the actual return."
+  ],
+  "session": "01a082e6-eb09-7c52-887b-227ae8d03ff0"
+}

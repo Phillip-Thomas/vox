@@ -1,0 +1,37 @@
+{
+  "schema": "paravoxia.mediaPerception.v1",
+  "model": "gemini-3.8-flash",
+  "source": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-2/video.webm",
+    "sha256": "be13b9916a5350bfe3bd0a022b621c3206e994d694f6b7fca001eb9446ead281",
+    "kind": "video"
+  },
+  "segment": {
+    "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/10-compose/perception/178b9689-94f0-4390-8970-ed86426da906.mp4",
+    "sha256": "aecc33891f674ac5105c33c09e1800a9940c43ad0585405d0f915a68bf2f4dc2",
+    "startSeconds": 0,
+    "seconds": 31.72
+  },
+  "question": "Inspect this complete chapter segment for staging: does the record panel leave the world visible, are distinct attributed entries and retained unanswered question readable at the repaired hull, is the scar physically visible, does closing the panel restore movement, and is completion an immediate handback without forced framing? Describe actual visible evidence with approximate timestamps and limitations. Do not infer audio.",
+  "at": "2026-09-08T22:21:30.387Z",
+  "status": "observed",
+  "usage": {
+    "promptTokenCount": 2237,
+    "candidatesTokenCount": 520,
+    "totalTokenCount": 3611,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 125
+      },
+      {
+        "modality": "VIDEO",
+        "tokenCount": 2112
+      }
+    ],
+    "thoughtsTokenCount": 854,
+    "serviceTier": "standard"
+  },
+  "resolvedModel": "gemini-3.8-flash",
+  "description": "Visible evidence across the segment reveals the following regarding staging:\n\n- **Visibility of the World During Record Panel Interaction (~00:12 – 00:15):**  \n  When the record menu opens at ~00:12, it is rendered as a partial overlay window docked on the right side of the screen. The left portion of the screen and background elements (trees, terrain, and the hull structure) remain visible in real-time.\n\n- **Distinct Attributed Entries and Retained Unanswered Question at Repaired Hull (~00:12 – 00:15):**  \n  - At ~00:12–00:13, under `02 / repaired hull`, the text attributes the entry (`TERRA PRESENT OBSERVATION AT 0885M`, `the repair works. the scar remains...`).  \n  - Question options are presented (`what survived the repair?`, `what did the repair change?`). Selecting/confirming displays the text *\"i can keep the question with the thing.\"*  \n  - At ~00:14, entry `01 / retained common passage` shows separate attribution (`TERRA OBSERVED AT ORIGIN` and `W-7741 ATTRIBUTED LOCAL RESULT`). Both entries remain accessible in the tabbed interface.\n\n- **Physical Visibility of the Scar (~00:10 – 00:13):**  \n  On the white mechanical hull structure standing on legs directly in front of the player, distinct dark/black seam sections and altered block textures are physically visible across the surface where the objective text indicates the scar.\n\n- **Restoration of Movement After Closing Panel (~00:15 – 00:17):**  \n  The panel closes at ~00:15. By ~00:16–00:17, the player turns the camera and actively walks away across the landscape toward the next waypoint (`retained common passage`), confirming movement and control are immediately restored.\n\n- **Completion Handback and Camera Framing (~00:27 – 00:31):**  \n  Upon returning and interacting at the passage post (~00:28), text displays: *\"return visit recorded. the question remains open.\"* The view remains in first-person gameplay perspective without any forced camera cuts, letterboxing, or automated camera repositioning. Full player orientation and HUD elements persist continuously."
+}

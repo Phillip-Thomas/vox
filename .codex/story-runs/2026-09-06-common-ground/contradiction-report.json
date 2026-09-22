@@ -1,0 +1,70 @@
+{
+  "schema": "paravoxia.storyCouncilContradictions.v1",
+  "preserveReportsVerbatim": true,
+  "items": [
+    {
+      "id": "CG-C01",
+      "sourceFinding": "GAP-01",
+      "status": "confirmed-source-gap",
+      "fact": "Bonded-cell installation commits inventory/save state without an authored restoration cue.",
+      "route": "Chapter and Score consider a bounded completion acknowledgement/next-chapter bridge; preserve existing completed saves and do not replay old transactions.",
+      "severityForThisRun": "high"
+    },
+    {
+      "id": "CG-C02",
+      "sourceFinding": "VO-01",
+      "status": "recorded-policy-runtime-divergence",
+      "fact": "Post-lift parenthetical sensory lines coexist with bare agency lines in reachable runtime; a older Bible sentence forbids parentheses.",
+      "route": "Three peers must agree bounded current voice policy and candidate records; do not mass rewrite prior chapters.",
+      "severityForThisRun": "medium"
+    },
+    {
+      "id": "CG-C03",
+      "sourceFinding": "SA-02/SA-03/DD-01/DD-02/DD-03/SA-01",
+      "status": "confirmed-record-drift",
+      "fact": "Current beat/autopilot modules and Chapter10/R12 sidecar exceed several older document maps.",
+      "route": "Update exact affected source authority and continuation status after signature; preserve the active refactor, original chronology and public ceiling.",
+      "severityForThisRun": "high"
+    },
+    {
+      "id": "CG-C04",
+      "sourceFinding": "RG-01",
+      "status": "protected-correct-distinction",
+      "fact": "ch11/ch12 receipts reserve chronology but sidecar is not registered StoryBeat sequence.",
+      "route": "New chapter ch13; explicitly validated external transition contract or real execution-host adapters. Never weaken direct adjacency or fabricate ch10 guarantees.",
+      "severityForThisRun": "high"
+    },
+    {
+      "id": "CG-C05",
+      "sourceFinding": "RG-02",
+      "status": "producer-disambiguation",
+      "fact": "Signed Chapter10 reveal ends before station interior; R12 is an expressly separate postterminal extension.",
+      "route": "Do not rewrite historical signed reveal records to describe later interior. Record correct boundaries for new chapter.",
+      "severityForThisRun": "informational"
+    },
+    {
+      "id": "CG-C06",
+      "sourceFinding": "CT-01/VO-03/TL-02/GAP-02/GAP-03/DD-04/DD-05/DD-06",
+      "status": "independent-findings-not-automatically-in-scope",
+      "fact": "Audit raises vendor naming/voice and station-copy/perception questions; the run must not infer a mandatory broad station rewrite.",
+      "route": "Peers assess relevance and evidence; preserve unrelated copy unless a concrete continuation requirement needs a bounded decision.",
+      "severityForThisRun": "untriaged"
+    },
+    {
+      "id": "CG-C07",
+      "sourceFinding": "inventory OI-7",
+      "status": "precision-correction",
+      "fact": "Vendor greeting is procedurally selected; this alone does not prove nondeterminism.",
+      "route": "Treat as seed-dependent and omit unverified opening greeting from blind corpus.",
+      "severityForThisRun": "informational"
+    },
+    {
+      "id": "CG-C08",
+      "sourceFinding": "audit L-1/L-4",
+      "status": "producer-provenance-clarification",
+      "fact": "Initial status was captured in this session, not verified to be a day old. Scene-run scorecards/reports are inherited unfilled templates.",
+      "route": "Never cite template existence as completion evidence. No new runtime has been implemented.",
+      "severityForThisRun": "informational"
+    }
+  ]
+}

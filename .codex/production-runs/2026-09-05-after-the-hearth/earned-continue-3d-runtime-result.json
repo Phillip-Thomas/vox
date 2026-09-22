@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 590747,
+  "stop_reason": "end_turn",
+  "session_id": "bdda4821-8ced-4f72-96ca-1d15c8d608df",
+  "total_cost_usd": 3.637899500000001,
+  "usage": {
+    "input_tokens": 100,
+    "cache_creation_input_tokens": 96947,
+    "cache_read_input_tokens": 2930767,
+    "output_tokens": 48003,
+    "output_tokens_details": {
+      "thinking_tokens": 6016
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 96947,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2071,
+        "cache_read_input_tokens": 101140,
+        "cache_creation_input_tokens": 2113,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2113
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2381,
+      "outputTokens": 18,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0024709999999999997,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 100,
+      "outputTokens": 48003,
+      "cacheReadInputTokens": 2930767,
+      "cacheCreationInputTokens": 96947,
+      "webSearchRequests": 0,
+      "costUSD": 3.635428500000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 6016,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 58,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Verified: **no `main/src` file was modified in my window** (newest is 13:35, my window started 16:14). The `M` entries in git status pre-date me and belong to other roles. My writes stayed inside my owned paths.\n\n---\n\n## VERDICT: **FAIL** \u2014 bounded restore proved; the new accepted action was **not** achieved. Not an acceptance; Chapter 13 remains unverified.\n\n**Actual UTC clock** (host `date -u`, never inferred): started `20:14:21` \u00b7 GPU granted `20:22:35` \u00b7 probe `20:23:18 \u2192 20:26:30` (exit 1) \u00b7 reports `20:28`. CPU wait before GPU was 8m20s of mandated corrections plus \u226430s control polls \u2014 no browser, lock or audio in that window.\n\nEnvironment: headed Chromium on `ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe)` \u2014 real NVIDIA, not headless; root immutable preview `127.0.0.1:34413` (not launched by me); heavy lock held exclusively through inherited **fd 9**.\n\n### Pre-GPU corrections \u2014 all applied, all effective\n| Correction | Outcome |\n|---|---|\n| Foot (`bodyPose`) not `bodyCentre` for all ground targets | **Effective.** Reported separately every burst: footDistToE **90.053** vs centreDistToE **90.825**. Radius left at **1.2**, no Y dropped. |\n| Focused helper test with the producer's exact vectors | **25 checks, 0 failed** \u2014 including proof the prepared centre gate was arithmetically impossible (1.8u offset > 1.2u radius). |\n| Caller uses the tested helper | Verified; residual centre uses all suffixed `_diagnosticOnly`. |\n| Lateral keys | **Fixed and confirmed live.** earned-1 had `KeyA=null, KeyD=null` on +X; here A and D were `usable=true` in every round. |\n| exec-9 FD form vs prep's path-form `flock` | Verified pre-GPU on a scratch lock (`owned=true`), then used for the real run. |\n| Pre-[F] grounding gate | **Effective \u2014 it correctly refused.** No [F] was pressed. |\n\n### Proved\nOrigin physically earned from the labelled prerequisite (fps 60) \u2192 unfinished drawing \u2192 real `beforeunload` save \u2192 **real Continue CTA** (waited before story runtime, no deep link) \u2192 `worldSaveEquality`, `worldActorIdentity`, `milestonesPreserved`, `noAnchorReplay` **all true**. Saved **19** samples \u2192 **20** on disk; the saved prefix survived. I do **not** call that growth data loss, nor assert equality from count alone.\n\n### The blocking finding \u2014 pose overwritten (data, not steering)\n`pvx.v1.world.-1,-1.player` did not survive: earned `[-26.54, 52.79, 12.60]` (168B) \u2192 15 ms later, mid-navigation, `[-31.99, 52.79, 21.42]` (171B) \u2192 after Continue `[53.75, 13.5, -14]` (122B), ~93 u away. The body resumed **~90 u from E**, so the ordinary route began 90 u out and couldn't close in its 90 s budget (36 bursts; ~22 s lost to 7 forced recalibrations as `up` changed face).\n\nHypothesis only, no patch, no source edited: the overwrite window is `App.tsx:1419-1462` (`doSave \u2192 savePlayerPose` from cleanup/`beforeunload`), and the ~93 u displacement is far outside `findValidSpawnSite`'s radius 12, consistent with `EfficientScene.tsx:336-380` rejecting the saved pose and taking the `arrivalPose` branch. The branch actually taken was not instrumented and is **not asserted**.\n\n### Private probe fault found, recorded not silently patched\n`EC3D-PROBE-OFFERSF-OBJECT` \u2014 `promptOffersF()` returns an object, not a boolean (logged as `[object Object]`). **No effect on this verdict** (the gate refused on foot-distance and audit-support, which are independent), but it would read as \"offering [F]\" had the other conditions held. Must be fixed before any lane that can reach E. I did not rerun: it surfaced after the single bounded attempt with insufficient actual clock left, and I would not report an uncorrected-then-rerun lane as if it were clean.\n\n### Integrity\nOne attempt, **no identical retry**. No pose setter, rail grant, milestone write, forced interaction, endpoint-near success, or fake physics. Browser closed, owned session only, root preview untouched, source intact after capture, raw failure retained. No game/source/contract/build/producer-control/invocation file touched.\n\n**Artifacts** \u2014 `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/`: `earned-continue-3d-runtime-ready.json`, `earned-continue-3d-runtime-report.{json,md}`, `verifier/captures/earned-continue-3d/attempt-1/` (6 frames, summary, trace, failure, 4 pose files, DOMStorage events, cleanup receipt), `logs/earned-continue-3d-runtime/` (pre-correction originals at the producer-verified hashes, selftest and fd-9 logs, launch script).\n\nNot claimed: full chapter verification, full UX or taste, accepted new action, or correct pose restore beyond the storage events shown.",
+  "ttft_ms": 1383,
+  "type": "result",
+  "duration_ms": 913175,
+  "uuid": "7653c57e-4073-416b-abd0-0f0426deb15e",
+  "ttft_stream_ms": 755,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 755,
+  "queued_turn_count": 0
+}

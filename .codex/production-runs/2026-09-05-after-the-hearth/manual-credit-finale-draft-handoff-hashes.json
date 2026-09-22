@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-06T20:56:10.020628+00:00",
+  "hashes": {
+    "main/src/story/commonGroundRoute.ts": "778c1ad1c78e8889b9956ab1d3b24c26f8ff51409ce9b809fa500678abd12105",
+    "main/src/story/commonGroundRoute.test.ts": "079e43f27355d5f65bd286713dffad1515b7062a0f40ac293373ecada09625b2",
+    "main/src/story/commonGroundDirector.ts": "8da64d1d1a564e454156133ec7e8740976f4db78beaebb9fb4dea8622b163fff",
+    "main/src/story/commonGroundDirector.test.ts": "54f9f76781e00325d63a3d187184827fcfaf9d444e4d98a8ec9a98356bd30023",
+    "main/src/story/StoryDirectorDriver.tsx": "85327128819f44f745f58f72300da1595a5a2e0283bcdf8777f9495e608f493c",
+    "main/src/story/StoryDirectorDriver.test.tsx": null,
+    "main/src/story/commonGroundScore.ts": "e631295d4bc90b6cac67d2c0703c6e1ab673bf34a795ec9083cdf1dac2e64c0d",
+    "main/src/story/commonGroundScore.test.ts": "70630be669128d832814a82491d23c61f56927668f085f564920f4063fa3d535"
+  }
+}

@@ -1,0 +1,18 @@
+
+ RUN  v3.2.4 /home/thomasphillip/Projects/vox/main
+
+ ✓ src/story/unfinishedMapState.test.ts (12 tests) 2ms
+ ✓ src/story/commonGroundRoute.test.ts (62 tests) 22ms
+(node:3730994) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/story/storyState.test.ts (34 tests) 816ms
+   ✓ storyState — beat order (drives debug jumps + seeding) > stands the rehearsal hearth on Tidegarden's real surface, not inside it  762ms
+ ✓ src/story/commonGroundDirector.test.ts (130 tests) 1316ms
+   ✓ the standby she is sent to is ground she can actually stand on > REPRODUCES the stall: the pre-repair standby is over water, not ground  671ms
+   ✓ the standby she is sent to is ground she can actually stand on > keeps his body-clearance hold, and clears it when she has actually moved  407ms
+
+ Test Files  4 passed (4)
+      Tests  238 passed (238)
+   Start at  16:55:58
+   Duration  4.39s (transform 2.09s, setup 0ms, collect 4.34s, tests 2.16s, environment 0ms, prepare 235ms)
+

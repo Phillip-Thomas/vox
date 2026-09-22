@@ -1,0 +1,56 @@
+{
+  "schema": "paravoxia.chapterProviderHandoffAuthority.v1",
+  "runId": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0",
+  "request": "RUN THAT BITCH",
+  "resume": true,
+  "requestedAt": "2026-09-08T02:13:32.362Z",
+  "previousStateSha256": "1f9bb65aa5a120133311fcb169bc082f30653a67ff2ad203096ed667bd6b4513",
+  "provider": {
+    "provider": "codex",
+    "permissionMode": "full",
+    "models": {
+      "creative": "gpt-6-astra",
+      "mechanical": "gpt-5.6-sol"
+    }
+  },
+  "transport": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/1-plan/transport.json",
+    "sha256": "abf0918529d7a83b47d08cfb751992d266f122e0bca5600c7239973bcdf4d34a"
+  },
+  "transcript": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/roles/1-plan/transcript.jsonl",
+    "sha256": "214f0d92d1f18ab2fed6116c4b8c0381809320bea0665d8a4c57349b65dbad00"
+  },
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "9e54a81f73046e6869a464ccbc66c56eb734abdce0275c2a60acdb1f561a2670",
+      "after": "a6f07511ce6058659b3bdfc287a299775787f590e23539fe73b8e9d766734215"
+    },
+    {
+      "path": "main/tools/chapter-loop/budget.mjs",
+      "before": "2e49de1a8331d7e69e356d01edc25783dedf6847c07e74e03c87a2f104076204",
+      "after": "f49f0483f14c2b270d3a03405193c895708cbd3a8379e186bb6a287b43d2e033"
+    },
+    {
+      "path": "main/tools/chapter-loop.mjs",
+      "before": "724fdb9cd256454a21845f33475b8e17c5ab840bbe8cab78d73642f244204006",
+      "after": "9a24402947c3bf8f22d4d76b864935f488f2ccfa731820be4f59407aaaa72d0c"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "4069ee8770bb8de8e2f78e73c9cc69d54c697026805d3a838b836566e27b1b29",
+      "after": "2d331708ea4662c443e5c7306d97fd72d0b7265d49a4121b9af3805ec9935f74"
+    },
+    {
+      "path": "main/tools/chapter-loop/provider-handoff.mjs",
+      "before": null,
+      "after": "dde6cd29af831572add9c282dfa6bd61b88025bfcf1b1a459811773705e9dfca"
+    }
+  ],
+  "validation": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/owner-handoff-20260908/validation.json",
+    "sha256": "62e3096549be99b2e3b920c07ce4041592e5b5c3f79c9a67df893671e8f1d2e7"
+  },
+  "scope": "Announced this-run provider change after quota rejection, with new first-playable window but unchanged original whole-operation deadline and spend. No publishing."
+}

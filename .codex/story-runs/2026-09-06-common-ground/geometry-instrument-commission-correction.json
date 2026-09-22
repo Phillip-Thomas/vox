@@ -1,0 +1,8 @@
+{
+  "at": "2026-09-06T05:49:10.662387+00:00",
+  "reason": "Producer removes accidental new acceptance threshold: reciprocal comparison must be materially dependent and have actual out-of-range/occluded portion; original peers did not require six full units outside the fixed range. Keep six-unit unsupported SHORT SURVEY trace threshold unchanged.",
+  "ownRunnerPids": [
+    4112190
+  ],
+  "noRuntimeOrExternalProcessTouched": true
+}

@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-09-05T17:27:44.544208+00:00",
+  "sourceRevision": "working-tree:846b658bb386a2defd80693513705fc74010c4c35cc4daf7aa241d10f39232e9",
+  "files": {
+    "main/src/story/world/SideWorkerAvatar.tsx": "c0b0c82a351c3db3e04bbe602986175cce3fa263407691c421a694b7f83c106f",
+    "main/src/story/sideLens.ts": "fc7df685de532005cefaeb2c94f57c1d2575740c8ce6a8f381dfe9cc9e06f10b",
+    "main/src/story/feedCamera.ts": "ee21b9f8f210b67d50526806aae4d776d5b684765f20c596dace3abb90b44acd",
+    "main/src/story/storyDirector.ts": "2b4e84770cd6ff0f986ad0e6c9a835d441b6696897de543d15da1aaa99d91e1b",
+    "main/src/story/storyScript.ts": "4b72dfa71a9c31b49f1d1442d57f3dd3a8861adf62af99ba2343277146360b1f",
+    "main/src/story/beats/ch1/ch1-fixed.ts": "f25bea6ca7ca18e54bc0c918f39b3dc1ba46da2fcc83711de7d09c93d4c50474",
+    "main/src/story/beats/ch1/ch1-raster.ts": "bcf3f28a258ecc367adf24cfcd25a0e497ab5010ecba9fd80d3e5a4ac5395e99",
+    "main/src/story/beats/objectivePrimitives.ts": "7a46856f33fe4e51cd9f1015627e6ef45dc90f1b506fda8942eaa6cacbb10d3c",
+    "main/src/story/feed/surveyBrackets.ts": "63472544657dee31e7f4922d089135b1eac9c3b91e1a6c132631bd7447702124",
+    "main/src/story/feed/SurveyBracketDriver.tsx": "cc7095b17df6b2e0cf8bb13da4e5ee77af6c864861c471bf410d70085ca35bdb",
+    "main/src/story/feed/SurveyBracketOverlay.tsx": "554c2f1b7ecf0fe503f825101b5849af4af5bb4bfe1933d43274c8f9ebfcd6fc",
+    "main/src/story/feed/RegulationFeedHud.tsx": "80188c72ea6603bfd03758c577a886c6b54d0b00fece4f51a782f297a929bbb0",
+    "main/src/story/feed/regulationVoice.ts": "8306b3ddc0b1bac1dd321cb6830db1c9cdc28380fe720c0db9d0368ab9e12182",
+    "main/src/story/ux/storyHudLayout.ts": "6e7e124158e01a38ccb070eed4e872177b47063e57347437b2d82259a53c05af",
+    "main/src/story/debrisSalvage.ts": "53b03bf890f6f2a500beb20e4a322452b577fc2e56f099fab0b89e2a483309de",
+    "main/src/story/world/DebrisField.tsx": "47765bf875a495d24a334212c54bdcc498cbffa5b9e5640f3fa14516520fcf9e",
+    "main/src/components/EfficientPlayer.tsx": "e2742c6516db572c6493d4e377792550ac75631ac26a39e0acb96157baa36cba",
+    "main/src/components/CameraControls.tsx": "818e6783a7647ebd459f3ff033a796371fa204b413049e99437273f11dccb021",
+    "main/src/utils/cubeGravityConstants.ts": "c0a71ab046b5d5324a7a0562b4a7b0db720cba4451ac51aabd9336f5a133c399"
+  }
+}

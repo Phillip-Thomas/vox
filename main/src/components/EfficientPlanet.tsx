@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { CuboidCollider, RapierRigidBody, RigidBody } from '@react-three/rapier';
+import { createCollisionRangeScratch, withinCollisionRange } from './collisionRange.ts';
+import { CuboidCollider, RapierCollider, RigidBody } from '@react-three/rapier';
 import {
   createVoxelMaterial,
   updateVoxelMaterial,
@@ -34,6 +35,8 @@ import { getMoonDirection, getSunDirection } from './SkyController';
 import { isLiquidBlock } from '../game/data/blocks';
 import type { PlanetProfile } from '../game/PlanetProfile.ts';
 import { preserveUnchangedCollisionBodies } from '../utils/collisionBodyState.ts';
+
+const collisionRangeScratch = createCollisionRangeScratch();
 
 export const efficientPlanetMesh = { current: null as THREE.InstancedMesh | null };
 
@@ -90,7 +93,7 @@ function VoxelCollisionBody({
   debug: boolean;
   onRef: (ref: { setEnabled?: (enabled: boolean) => void } | null) => void;
 }) {
-  const ref = useRef<RapierRigidBody | null>(null);
+  const ref = useRef<RapierCollider | null>(null);
   const voxelData = voxelSystem.getVoxel(x, y, z);
 
   useEffect(() => {
@@ -104,13 +107,13 @@ function VoxelCollisionBody({
   const position = voxelCoordToWorld(x, y, z);
 
   return (
-    <RigidBody ref={ref} type="fixed" position={[position.x, position.y, position.z]} colliders={false}>
-      <CuboidCollider args={[COLLIDER_HALF_EXTENT, COLLIDER_HALF_EXTENT, COLLIDER_HALF_EXTENT]} />
-      <mesh visible={debug}>
+    <>
+      <CuboidCollider ref={ref} position={[position.x, position.y, position.z]} args={[COLLIDER_HALF_EXTENT, COLLIDER_HALF_EXTENT, COLLIDER_HALF_EXTENT]} />
+      {debug && <mesh position={[position.x, position.y, position.z]}>
         <boxGeometry args={[1.98, 1.98, 1.98]} />
         <meshBasicMaterial color={voxelData.color} transparent opacity={0.28} />
-      </mesh>
-    </RigidBody>
+      </mesh>}
+    </>
   );
 }
 
@@ -183,21 +186,16 @@ export default function EfficientPlanet({
     return Math.max(5000, initialVoxels.length + editHeadroom);
   }, [initialVoxels.length, originalTerrain.length]);
 
+  // Pure and allocation-free; see collisionRange.ts for why that matters here.
   const isWithinCollisionRange = useCallback((x: number, y: number, z: number) => {
-    const position = latestPlayerPosition.current;
-    if (!position) return true;
-
-    const voxelWorld = voxelCoordToWorld(x, y, z);
-    const offset = voxelWorld.sub(position);
-    const distanceSq = offset.lengthSq();
-    if (distanceSq > COLLISION_STREAM_RANGE * COLLISION_STREAM_RANGE) return false;
-
-    const distance = Math.sqrt(distanceSq);
-    if (distance >= COLLISION_MIN_DISTANCE_FROM_PLAYER) return true;
-
-    const gravityDirection = latestSurfaceUp.current.clone().multiplyScalar(-1);
-    const supportDistance = offset.dot(gravityDirection);
-    return supportDistance > 0.4 && supportDistance < 5;
+    return withinCollisionRange(
+      x, y, z,
+      latestPlayerPosition.current ?? null,
+      latestSurfaceUp.current,
+      COLLISION_STREAM_RANGE,
+      COLLISION_MIN_DISTANCE_FROM_PLAYER,
+      collisionRangeScratch
+    );
   }, []);
 
   const removeCollisionBody = useCallback((x: number, y: number, z: number, worldId: number) => {
@@ -274,7 +272,7 @@ export default function EfficientPlanet({
     const activeWorldId = voxelSystem.getWorldId();
     let queued = 0;
 
-    for (const [key, voxelData] of voxelSystem.getAllVoxels()) {
+    for (const [key, voxelData] of voxelSystem.voxelEntries()) {
       if (voxelData.worldId !== activeWorldId) continue;
       if (isLiquidBlock(voxelData.blockId)) continue;
       const [x, y, z] = voxelData.position;
@@ -381,11 +379,14 @@ export default function EfficientPlanet({
 
   const syncCollisionBodies = useCallback(() => {
     const activeWorldId = voxelSystem.getWorldId();
-    const allVoxels = voxelSystem.getAllVoxels();
     const shouldHaveCollision = new Set<string>();
 
-    for (const [key, voxelData] of allVoxels) {
-      const [x, y, z] = key.split(',').map(Number);
+    // Iterates the live map: this runs on every collision resync, and copying
+    // every exposed voxel first was ~160ms of main-thread time per boot.
+    for (const [key, voxelData] of voxelSystem.voxelEntries()) {
+      // The voxel already carries its coordinates; parsing them back out of the
+      // key was a string split and an array per voxel, per resync.
+      const [x, y, z] = voxelData.position;
       if (voxelData.worldId === activeWorldId && !isLiquidBlock(voxelData.blockId) && isWithinCollisionRange(x, y, z)) {
         shouldHaveCollision.add(key);
       }
@@ -447,6 +448,10 @@ export default function EfficientPlanet({
         <primitive object={voxelMaterial} attach="material" />
       </instancedMesh>
 
+      {/* Fixed terrain shares one immovable body. Each voxel keeps its own
+          collider ref, so mining disables exactly that cell before React removes
+          it. All initial colliders still commit together; no support is delayed. */}
+      <RigidBody type="fixed" colliders={false}>
       {collisionBodies.map(body => (
         <VoxelCollisionBody
           key={body.key}
@@ -472,6 +477,7 @@ export default function EfficientPlanet({
           }}
         />
       ))}
+      </RigidBody>
     </>
   );
 }

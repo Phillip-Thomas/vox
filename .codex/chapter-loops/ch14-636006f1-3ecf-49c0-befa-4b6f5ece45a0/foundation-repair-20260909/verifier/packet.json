@@ -1,0 +1,12 @@
+{
+  "task": "Give a focused independent source diagnosis of one Chapter9 construction collector stall. Read-only; no browser/GPU/server, no agents, no source edits, no policy/state edits. Root owns a GPU forward-discovery run independently. Do not rerun tests or whole-story playback.",
+  "scope": "Limit source reads to the current resourceGathering.ts and constructionTreePlan.ts, walkToward/lookNaturallyToward in autopilot/primitives.ts, pickHarvestTarget in EfficientPlayer.tsx, and directly necessary imports only if a concrete hypothesis requires them. Use narrow line windows, never whole large modules or whole raw traces. Aim8 work items and return a concise JSON diagnosis, confidence, evidence paths and one decisive next check. Unknown cause is acceptable; do not invent a fix.",
+  "observed": "Fresh whole-story run crossed/landed correctly, reached settle:foundation, then stood with controls all false for over120s at rounded published player [1.89,50.79,11.61]. Full capture omitted construction and detailed camera debug, so exact picker result is unknown. A local ch9-settle diagnostic gathered wood and reached ch9-hearth in41s. A replay from that real captured save used ordinary keyboard walking to approximately the stalled location before real Continue with movie; it also reached ch9-hearth in27s. No new game fix has been applied. Hypothesis to assess, not a fact: low trunk aim / foreground obstruction / stale target after world transition.",
+  "artifacts": {
+    "currentPreviewOwner": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/flight-recovery-repair-20260909/preview-owner.json",
+    "baseline": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/foundation-repair-20260909/baseline/raw-samples.json",
+    "positionedReplay": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/foundation-repair-20260909/saved-harvest-2/result.json",
+    "originalTrace": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-8841b69e-3ae5-45e8-bc15-865c45bb6a57/continuity/raw/trace.ndjson"
+  },
+  "requirements": "Extract only selected samples/fields with a script. All routine read-only actions authorized; no owner questions. Distinguish diagnostic evidence from fresh continuity. Current source is stable. Do not assume a shared engine defect from an unreproduced pose. Save result.json and return the same compact JSON."
+}

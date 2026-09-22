@@ -1,0 +1,45 @@
+{
+  "schema": "paravoxia.producerScopeCompletion.v1",
+  "at": "2026-09-06T23:15:21.182511+00:00",
+  "decidedBy": "delegate",
+  "authorityRef": {
+    "path": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+    "sha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338"
+  },
+  "sameRun": true,
+  "materialRepairIteration": 9,
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "contractChanged": false,
+  "personallyReviewedByUser": false,
+  "sourceHandoffBeforeMutation": true,
+  "reason": "Actual Continue passes parked-ship egress to player initialization despite correctly loaded matching saved on-foot pose. Necessary narrow repair to existing CG-IMPL-011; routine user delegation covers implementation.",
+  "removedFromProtected": [
+    "main/src/components/EfficientScene.tsx"
+  ],
+  "addedPaths": [
+    {
+      "path": "main/src/components/EfficientScene.tsx",
+      "preimplementationSha256": "ab95dfe4d2dbb59bbaa22e4fdf60faf8f4fa4f9fd959040bfe17fdb4a776f995",
+      "baselineRecovery": "Live bytes equal original initial-source-hashes.json; copied before mutation into evidence/integration-before and immutable findings/source."
+    }
+  ],
+  "addedAbsentPaths": [
+    "main/src/components/EfficientScene.test.tsx",
+    "main/src/utils/playerSpawnSelection.ts",
+    "main/src/utils/playerSpawnSelection.test.ts"
+  ],
+  "allowedOnlyForThisRepair": [
+    "main/src/components/EfficientScene.tsx",
+    "main/src/components/EfficientScene.test.tsx",
+    "main/src/utils/playerSpawnSelection.ts",
+    "main/src/utils/playerSpawnSelection.test.ts"
+  ],
+  "preserve": [
+    "EfficientPlayer, App, persistence, flight and all other protected paths",
+    "Safe spawn validation, real later disembark, actor/world scope",
+    "Every signed arrival/route/score predicate"
+  ],
+  "publicationAuthorized": false,
+  "protectedPrefixCorrectionRef": "producer-continue-spawn-boundary-prefix-correction.json",
+  "protectedPrefixCorrectionAt": "2026-09-06T23:24:58.923856+00:00"
+}

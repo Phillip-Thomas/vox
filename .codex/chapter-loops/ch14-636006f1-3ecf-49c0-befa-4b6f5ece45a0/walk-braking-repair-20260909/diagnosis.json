@@ -1,0 +1,14 @@
+{
+  "failure": {
+    "stage": "verify-final",
+    "message": "Probe manual failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T01:13:39.540Z"
+  },
+  "report": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-149572c5-c98e-4af1-944f-0f5e27c8cdf8/manual/report.json",
+    "sha256": "4da439951e04509df677d6ed66e9b74f9e30bd6414ad22257f94aae3be67e50c"
+  },
+  "observations": "Manual steps[7] oscillated around target z18 at x-47.67; z repeatedly crossed17.71..18.28 with alternating W/S. Target arriveWithin0.16 was unchanged. Key remained held during multiple browser snapshot roundtrips, causing movement beyond the requested pulse duration near the target.",
+  "fix": "Brake before browser observations within the measured stopping window. Preserve continuous held input for longer travel, existing calibration cache, ground-plane measurements, ordinary keys, full3D arrival, stable settle and exact route predicates. Meaningful latency simulation reproduces held-input overshoot and passes with braking."
+}

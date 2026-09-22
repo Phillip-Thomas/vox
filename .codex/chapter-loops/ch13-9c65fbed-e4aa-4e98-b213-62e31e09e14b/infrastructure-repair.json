@@ -1,0 +1,41 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b",
+  "failureSha256": "1935bfa9cfcc3244ecd43555edc51551bc3689984a165a5d5c8c37bfbe7fba8e",
+  "at": "2026-09-07T01:02:48.802Z",
+  "diagnosis": "Legacy auxiliary package pin differs only by the two new workflow commands; bool false stop reason crashed infrastructure classification and skipped owned preview teardown.",
+  "files": [
+    {
+      "path": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/finale-cancellation-candidate/finale-window-probe.mjs",
+      "before": "e00be580efb78eb19037a308b43387a9a2c1a445d3f0fbad5f6bdc9c2655297b",
+      "after": "1725d41943add8c37a1351afc483468bb2b7b1a75c76bdf82ac4bc7281469b2d"
+    },
+    {
+      "path": "main/tools/chapter-loop.mjs",
+      "before": "707b688315e990741ea341b4e64650413219546bd5b5ad391fb705bd10b2165a",
+      "after": "599eb2a445cbce7c167eb48f51109882868d82144ce3f23706b41718f101e3a1"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "cbda25a36a5e91d3d0815b38b7af63c6816906eb157e9480b7ac4df5855cc0f6",
+      "after": "f107927f9e6903247d895b5cb97eb29848ef2ee3fb304aa1eb73dc5f464c2f86"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "e54cf7de867c0c7de15da917b77139b1b5cb8d9e1a8835d20a4adc558ee45119",
+      "after": "51f4d493dd35aaee95c5f95ff54e04c45b012373111c46c9f638b690be59a9a1"
+    }
+  ],
+  "validation": {
+    "command": "npm run chapter:loop:test",
+    "passed": true,
+    "tests": 22,
+    "failed": 0,
+    "sourceGuard": {
+      "clean": true,
+      "gameFiles": 103,
+      "onlyAuxiliaryChange": "main/package.json: exact two workflow script additions"
+    }
+  },
+  "budgetPolicy": "Same checkpoint and counters; consumes the one infrastructure recovery; no game, recipe, model, deadline or token allowance changes."
+}

@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 91593,
+  "stop_reason": "end_turn",
+  "session_id": "20a19e96-f1e4-42ae-9cf9-84591e0b7477",
+  "total_cost_usd": 0.5105459999999999,
+  "usage": {
+    "input_tokens": 20,
+    "cache_creation_input_tokens": 26546,
+    "cache_read_input_tokens": 153986,
+    "output_tokens": 6645,
+    "output_tokens_details": {
+      "thinking_tokens": 988
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 26546,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1123,
+        "cache_read_input_tokens": 30660,
+        "cache_creation_input_tokens": 2192,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2192
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1798,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0018679999999999999,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 20,
+      "outputTokens": 6645,
+      "cacheReadInputTokens": 153986,
+      "cacheCreationInputTokens": 26546,
+      "webSearchRequests": 0,
+      "costUSD": 0.508678,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 988,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 10,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: not an endpoint pass \u2014 instrumentation repin succeeded, runtime target incomplete. Chapter/defect stay OPEN.**\n\nRan the prepared launcher (attempt 1 rc=1 was my own error: I wrote the snapshot inside `--out`, tripping `assertFreshOutputDir`; retained). Attempt 2 rc=0, 23:59:45Z\u219200:01:05Z, headed GB10, exclusive FD9 held (contender blocked rc=1), no swiftshader.\n\n**Repin is real**\n- bundle `index-Ddqg7x9Y.js`, sha `4b41a7d5\u2026`; regex matches actual and rejects wrong\n- `LP-A-and-LP-B-armed-without-relocation` PASS at 7839:194730 and 7839:220603, sinkState=installed\n- 936 records / 0 dropped, 299 callee calls, 637 caller guards; forward E-plane crossing observed by armed callee (3\u219237 records, footZ 11.5535\u219212.1477, supported); replay ok n=299 from frozen copy; both breakpoints removed, debugger disabled. The old C1X65dZp arming failure is gone.\n\n**Measured C** \u2014 foot [-48.1022, 50.9916, 11.9224], horizontalToC 0.1283, terraUnits **2.3426 of 18**, comparisonProved=false. `early-cut-route-REFUSED-credit-at-MEASURED-C-without-returning` PASS. Cut turn footZ 14.4129, 1.5871 short of corner z=16 (observed, not asserted). No hardcoded C.\n\n**Stopper** \u2014 `return-foot-support-and-retained-credit-measured-before-forward-traversal` FAIL: foot [-42.4605, **51.9538**, 12.2772], **supported=false** (walked ground \u224850.989). Margin itself is clean (retainedCredit 2.3426, creditedFrontierZ 14.3426, marginBeforeFrontier 2.0653) but the return is not a supported physical stand. Same signature in cut-mode observation gates vertex-3/4/5 (supported=false, foot y 55.33/54.94/51.72); vertices 1,6,7,8,9 pass within the 0.35 bound. Whether this is an instrumented-walk artifact or a game fault is **not** established \u2192 inconclusive, not a game defect.\n\n**Not reached**: ordered retraversal to 18, eligible held 80ms F, Worker 18 (commonAfterHold: positioning-to-h, terraUnits 0, workerUnits 0, committed false), `discriminator.atE = null`.\n\n**Cleanup/source**: post-finally cleanup state=stopped, cleanupCompleted=true, sessionStopped=true, cleanupError=null, stopsRootPreview=false, killsProcesses=false \u2014 root preview untouched. Source manifest `2de3fa2a\u2026` accepted; prior static evidence reused, nothing rebuilt.\n\nArtifacts: `.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/manual-credit-finale/endpoint-negative-repin-20260906T2400Z` (+ `-probe-snapshot`), report at `verifier/logs/manual-endpoint-negative-runtime/repin-report.md`.",
+  "ttft_ms": 1538,
+  "type": "result",
+  "duration_ms": 171020,
+  "uuid": "8a1740c2-eaa1-4a1f-a2ef-906548fafc1c",
+  "ttft_stream_ms": 685,
+  "time_to_request_ms": 19,
+  "first_content_frame_ms": 686,
+  "queued_turn_count": 0
+}

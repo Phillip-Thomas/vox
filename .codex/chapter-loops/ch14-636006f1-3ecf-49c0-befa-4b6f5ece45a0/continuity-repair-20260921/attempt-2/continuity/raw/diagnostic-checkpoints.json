@@ -1,0 +1,863 @@
+[
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/0.json",
+    "sha256": "bdd5f7f6bd2f72325b03430f6ac4eefbd3611af163f0c4846e8597545fb8534a",
+    "wallMs": 1790046971012,
+    "beat": "crawl",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/1.json",
+    "sha256": "f79d4c0a974a87b15f8487d350fa92dabe340b8382c956f6507bfa8ba3280b49",
+    "wallMs": 1790047039507,
+    "beat": "manifest",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/2.json",
+    "sha256": "172e9ad5c3f1b5a5831b60aac5c9b4e503196e4133b5320029ba037f7ffc2b32",
+    "wallMs": 1790047067566,
+    "beat": "voyage",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/3.json",
+    "sha256": "1302a4aca01e706c17ef2867424b25cb87edae808438f7f69092bcf939faaaab",
+    "wallMs": 1790047165331,
+    "beat": "deflect",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/4.json",
+    "sha256": "45569409790fcb24e799f083b58077ae4f5e4ad5f79f317aabdf81d0c937c3cb",
+    "wallMs": 1790047183141,
+    "beat": "crash",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/5.json",
+    "sha256": "eaea1a765349ba1f78dd08f8adbab271df7895ae7546dbb9f3480e9457cca598",
+    "wallMs": 1790047193290,
+    "beat": "descent",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/6.json",
+    "sha256": "c6585ea07616eb98f0f61f02adecab87b7949dff55d5e4912ecfd5d175171c36",
+    "wallMs": 1790047201464,
+    "beat": "ch1-fixed",
+    "objectiveId": "ch1:fixed:recover-first-debris"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/7.json",
+    "sha256": "f0dc5bd0ab0c2742c70bef95f1228d73c382fb496c8425ef6ab4a15b6dcbd081",
+    "wallMs": 1790047202240,
+    "beat": "ch1-fixed",
+    "objectiveId": "ch1:fixed:calibrate-extractor"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/8.json",
+    "sha256": "66a9e1156271431682a5d77ca77b3ef64cfe819feb712ae1fe5fd5d41a601cd4",
+    "wallMs": 1790047203358,
+    "beat": "ch1-fixed",
+    "objectiveId": "ch1:fixed:cross-camera-cell"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/9.json",
+    "sha256": "64a7def266ab7d6d863e81a857647c4fb65c2bca932c81c52f2180b1269c4556",
+    "wallMs": 1790047210106,
+    "beat": "ch1-track",
+    "objectiveId": "ch1:track:tracking-transfer"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/10.json",
+    "sha256": "44441d3387e2eaa6bbaaa5b69f087d0c68071a0c038ce76944d7febb6944522f",
+    "wallMs": 1790047217893,
+    "beat": "ch1-raster",
+    "objectiveId": "ch1:raster:recover-quota"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/11.json",
+    "sha256": "d03caddabe67ec56bf58fee812e98de126fbe137689ff1059bed40afc3383e6f",
+    "wallMs": 1790047236920,
+    "beat": "ch1-raster",
+    "objectiveId": "ch1:raster:extract-fiber-quota"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/12.json",
+    "sha256": "ad40b765acfc16b003de56d44f7f80518a89433a74e7ffd7401219e0df609be5",
+    "wallMs": 1790047243197,
+    "beat": "ch1-raster",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/13.json",
+    "sha256": "ba991400d9dc98332baf5e79be124d607fc8849aaafe3734e0fbb36e8db0ae12",
+    "wallMs": 1790047245786,
+    "beat": "ch1-depth",
+    "objectiveId": "ch1:depth:recover-supply-pods"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/14.json",
+    "sha256": "1f2e1ca2b263ab9eccbe722b224a116e117d79a5d4c6f00a631275c85487dca2",
+    "wallMs": 1790047267976,
+    "beat": "ch1-nav",
+    "objectiveId": "ch1:nav:triangulation-1-of-3"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/15.json",
+    "sha256": "155a8ea758a1c8296c268e39a37b9971f0103db6fa2995bb1ad63893ebfed9b8",
+    "wallMs": 1790047274220,
+    "beat": "ch1-nav",
+    "objectiveId": "ch1:nav:triangulation-2-of-3"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/16.json",
+    "sha256": "f2044065caa5ab5fd345c62816508a6732b6b8ca268d719ba09fadea50dff434",
+    "wallMs": 1790047281254,
+    "beat": "ch1-nav",
+    "objectiveId": "ch1:nav:triangulation-3-of-3"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/17.json",
+    "sha256": "3a61e4e024a12c33ee848c948167b2e6f2da1740f85f48c3720b6d80f8fa8adf",
+    "wallMs": 1790047285182,
+    "beat": "ch1-iso",
+    "objectiveId": "ch1:iso:reach-signal-source"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/18.json",
+    "sha256": "55857c3dbcc41618d460005d36a7ac747b8c5146e4334ef7ac7caa6f21488b01",
+    "wallMs": 1790047294285,
+    "beat": "ch1-lift",
+    "objectiveId": "ch1:lift:perspective-transfer"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/19.json",
+    "sha256": "514ed17b87589d586aa91a27d92267ad7b762ef34faa6f7472735b5493834a3e",
+    "wallMs": 1790047301296,
+    "beat": "ch1-anomaly",
+    "objectiveId": "ch1:anomaly:calibrate-pan-tilt"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/20.json",
+    "sha256": "ead9ecacc70b588170e50c54239a064709f81e4e4618431b503bc22cd8cd2823",
+    "wallMs": 1790047309342,
+    "beat": "ch1-anomaly",
+    "objectiveId": "ch1:anomaly:classify-mass"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/21.json",
+    "sha256": "39631c9548afadabe43c9c24a0dbc5deaa3d3d66f6bc74cbefabeddb8dd8a32b",
+    "wallMs": 1790047325430,
+    "beat": "a1-ramp",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/22.json",
+    "sha256": "cbbf55fce26e1c1bc6521c69b186c1ab6578ddabe47098590075509f75011ceb",
+    "wallMs": 1790047333804,
+    "beat": "ch2-color",
+    "objectiveId": "ch2:color:approach-redaction"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/23.json",
+    "sha256": "453ce40327f29b4ebc6baf0b215a2f5b929da249f9d1d873ddb2e72b81b2e96a",
+    "wallMs": 1790047392837,
+    "beat": "ch2-approach",
+    "objectiveId": "ch2:approach:eat-fruit"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/24.json",
+    "sha256": "ea5993a329bb8426984cef887a8db812f67e3bed9daff47884e698f2c0524805",
+    "wallMs": 1790047410542,
+    "beat": "a2-awakening",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/25.json",
+    "sha256": "41f8bde69539cbeb24949c4937d28c104af22fbd1a0e479c0d8734ce810798b1",
+    "wallMs": 1790047420702,
+    "beat": "ch3-gather",
+    "objectiveId": "ch3:gather:craft-hatchet"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/26.json",
+    "sha256": "65c0956f75fd5f0a37adca32e534c5db33712c1a4d2dd03758aabc549cd60e3d",
+    "wallMs": 1790047441850,
+    "beat": "ch3-dusk",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/27.json",
+    "sha256": "93b07494d5ceb6e9b034264e3b9b1475ab7e02fda6c6f27579a766a6a17c9447",
+    "wallMs": 1790047487005,
+    "beat": "ch3-await-rest",
+    "objectiveId": "ch3:rest:wait-for-night"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/28.json",
+    "sha256": "0060e2ff9097a599814b49e2de7e1a95036a8c797ca72256f264bcbdc4ef6319",
+    "wallMs": 1790047488322,
+    "beat": "ch3-await-rest",
+    "objectiveId": "ch3:rest:rest-at-fire"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/29.json",
+    "sha256": "9ca80676f7cc834458b991f0009507817bb3c2593673f18f9871210cf4642367",
+    "wallMs": 1790047488841,
+    "beat": "a3-dawn",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/30.json",
+    "sha256": "5629a6c395c6c6bc3695ea02716f78f227bd32c4ff1da7df29e8d4f5860c7e2a",
+    "wallMs": 1790047519429,
+    "beat": "ch3-thirst",
+    "objectiveId": "ch3:thirst:drink-water"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/31.json",
+    "sha256": "fda3d08553dbda26ca53fa80ff32a3bbee0490b49c9db5e050424b0b9a409125",
+    "wallMs": 1790047566195,
+    "beat": "ch3-forage",
+    "objectiveId": "ch3:forage:eat-held-food"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/32.json",
+    "sha256": "fa3430341325ce6690e32de91f0982a30261b17e08afa0740ad3c1230fdab6dc",
+    "wallMs": 1790047586079,
+    "beat": "ch3-forage",
+    "objectiveId": "ch3:forage:first-meal-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/33.json",
+    "sha256": "5c41a2ba6c4007b4ec1106907e638727d6d1ac8fda5d057e739929e7ad71fda5",
+    "wallMs": 1790047604136,
+    "beat": "ch3-signal",
+    "objectiveId": "ch3:signal:report-to-wreck"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/34.json",
+    "sha256": "6ec84f67dfd1aebf04611f944a2815850b710c28f2c908fccea709a27b49e90f",
+    "wallMs": 1790047617461,
+    "beat": "ch4-vigil",
+    "objectiveId": "ch4:vigil:remain-at-wreck"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/35.json",
+    "sha256": "1765dd8542f1c5c93b8c404cb45c72457367944240cfb4cf3aab6b43238419d6",
+    "wallMs": 1790047648985,
+    "beat": "ch4-vigil",
+    "objectiveId": "ch4:vigil:observe-night-sky"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/36.json",
+    "sha256": "0f2a2d870a50f46faf33418cb185e9c5df4026d14b61b7763f8faade06dbf387",
+    "wallMs": 1790047703992,
+    "beat": "ch4-arrival",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/37.json",
+    "sha256": "8de678fa45bdf28e6b08aa5fee8f7fd27ab19436e4ca1482ed2bcb0359519a4c",
+    "wallMs": 1790047755347,
+    "beat": "ch4-audit",
+    "objectiveId": "ch4:audit:attend-fire"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/38.json",
+    "sha256": "94ff35a4ba20a6fc64b7391ec5d681d2a96df44463c828dac9bb33918ef1e979",
+    "wallMs": 1790047756405,
+    "beat": "ch4-audit",
+    "objectiveId": "ch4:audit:attend-life"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/39.json",
+    "sha256": "f12eb220b4a74b4b1bf4f6929741eb4447db7653bbda4bf58377763b5a9e1891",
+    "wallMs": 1790047766247,
+    "beat": "ch4-audit",
+    "objectiveId": "ch4:audit:attend-tree"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/40.json",
+    "sha256": "a2e4367be5e37f85c3ce1d737a77fd51c63f060266450f74e8fdfb5391958b5a",
+    "wallMs": 1790047776686,
+    "beat": "ch4-audit",
+    "objectiveId": "ch4:audit:directive-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/41.json",
+    "sha256": "467f6a6dbb2adc9b6221825de778c4f5aeddc525f9a6d395252c126aa9d5f755",
+    "wallMs": 1790047777954,
+    "beat": "ch4-comply",
+    "objectiveId": "ch4:comply:resolve-organics"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/42.json",
+    "sha256": "0617743e0aeff5b8eae6e58323977cac750c64aa7089e4049b0f5a2baafee32c",
+    "wallMs": 1790047786687,
+    "beat": "ch4-comply",
+    "objectiveId": "ch4:comply:regression-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/43.json",
+    "sha256": "c1be60c791456253c7a3487460dc5e67cfbb54e6c07c649e2b72079ae53bf679",
+    "wallMs": 1790047788112,
+    "beat": "ch4-defy",
+    "objectiveId": "ch4:defy:test-protected-tree"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/44.json",
+    "sha256": "d11afa65336cbbdbfc4e627881f97cfda92fcc19776cf94fbf562666f47b593d",
+    "wallMs": 1790047796609,
+    "beat": "ch4-defy",
+    "objectiveId": "ch4:defy:refuse-order"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/45.json",
+    "sha256": "9545721195856bb471a5ceb87285cdc65e2c8e660d7f6662f9b045bf035745f1",
+    "wallMs": 1790047797418,
+    "beat": "ch4-defy",
+    "objectiveId": "ch4:defy:refusal-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/46.json",
+    "sha256": "6db484cb103c861eefddb0dcc63242050119be3176719eae8193b0f04439387f",
+    "wallMs": 1790047799803,
+    "beat": "a4-exhale",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/47.json",
+    "sha256": "a962bcdb6612c897e840910350226b752f9b8288ea0802dcbd9ec30ae5b2d955",
+    "wallMs": 1790047810222,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:recover-field-kit"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/48.json",
+    "sha256": "f8f2703ac2d51ad3504d692ecfab7f602768b580fa71ef70d58ad573053970dc",
+    "wallMs": 1790047811303,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:begin-repair"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/49.json",
+    "sha256": "1bba3ddf29ae8812fca655ac20b46be67b4f7e70a70248164738b8a13bfa0f7e",
+    "wallMs": 1790047812091,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:attend-repair"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/50.json",
+    "sha256": "929098215b6fd793fa8c6b0e9fe631c10c198f9958f247a2dda626a028ea7a6e",
+    "wallMs": 1790047820091,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:purpose-gap"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/51.json",
+    "sha256": "3a684674190b6a5d92e6bcd970451949bbc4f44402c859bff746ec8e71fdb497",
+    "wallMs": 1790047822246,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:observe-pond-response"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/52.json",
+    "sha256": "3f431c8caa68d03862c0f6b037351f3febcb51465764dbe367813c9d3067c2b2",
+    "wallMs": 1790047831611,
+    "beat": "ch5-maw",
+    "objectiveId": "maw:resonance-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/53.json",
+    "sha256": "a01e34f3dc8e6da7dd20150e155a84d5f2e2da92326a405fd2c3bfcc03b5426c",
+    "wallMs": 1790047832698,
+    "beat": "ch6-dive",
+    "objectiveId": "dive:recover-keel-memory"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/54.json",
+    "sha256": "5106643959357f4b40902ba6cfb251aef4e6bfcab44954d942a8b5e06d9c3f15",
+    "wallMs": 1790047836157,
+    "beat": "ch6-dive",
+    "objectiveId": "dive:surface-with-keel"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/55.json",
+    "sha256": "9036dbd0cc27eecb5a416dd2fb07181f39cf24b32b01f8903ea3ef361382ebf5",
+    "wallMs": 1790047837483,
+    "beat": "ch6-dive",
+    "objectiveId": "dive:return-to-shore"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/56.json",
+    "sha256": "504dfa61b2d2ae0cb3f9e974a4de6df740ecba90828583cad5d6f10b7dff0114",
+    "wallMs": 1790047839636,
+    "beat": "ch6-dive",
+    "objectiveId": "dive:shore-handoff"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/57.json",
+    "sha256": "cd7c772528d4e15d9f542b7c6660df1e642c9e0de08bd5fc043d84bad0d5b388",
+    "wallMs": 1790047842324,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:diagnose"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/58.json",
+    "sha256": "754a186a094dbabe80098e8dd319e3b39d32ca38083cf163f3d78ccae9d35f3e",
+    "wallMs": 1790047842610,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:repair:bench_online"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/59.json",
+    "sha256": "75182f619e1c13e2e19dab54932379becbd00e1ef01d2b0baf62196e92a6e3c7",
+    "wallMs": 1790047844503,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:repair:frame_restored"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/60.json",
+    "sha256": "008e18b44fc93b57b9043d835a16b9fdbe92e10c370e6fdb7c1d46b01d02c29f",
+    "wallMs": 1790047845306,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:repair:hull_sealed"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/61.json",
+    "sha256": "e4d2600de4a7c196463ce3964921daa67371652665823661ecc8906c74f8373e",
+    "wallMs": 1790047846126,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:repair:lift_online"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/62.json",
+    "sha256": "57f2472f89cb03d830a5b33b3fb3a0f109ba00a164602b24b2e62a965268084b",
+    "wallMs": 1790047846943,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:craft:flight_ready"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/63.json",
+    "sha256": "4e7b59e72440253f3f9ab9845daf11ab23fb7ec8725ca9b7110f2b3fd6e6c2d5",
+    "wallMs": 1790047847224,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:repair:flight_ready"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/64.json",
+    "sha256": "e046df7fefa26f4171091ad63bef6d06d7e3543fde923e1a2947f7f20a3a1420",
+    "wallMs": 1790047847780,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:calibrating"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/65.json",
+    "sha256": "48d6d4d888bd3e8dfc3df7004c6b29593724f91f9d9e9e7703e5efbb669b3c4b",
+    "wallMs": 1790047855830,
+    "beat": "ch7-reconstruct",
+    "objectiveId": "reconstruct:ready"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/66.json",
+    "sha256": "e5b4d7f0886a0712de919adf0fb1f1d7f539bc59151da3ba1e146c1996a80c32",
+    "wallMs": 1790047864641,
+    "beat": "ch7-board",
+    "objectiveId": "board:enter-hatch"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/67.json",
+    "sha256": "8b5d8e7726b63ff0a75284aed159cc7e724532914311a54351a501f8ffc3aa6c",
+    "wallMs": 1790047865191,
+    "beat": "ch7-board",
+    "objectiveId": "board:hatch-in-progress"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/68.json",
+    "sha256": "a3e8a4b00857ba585220aaa87fe1502614ebc247895ec38cedf42bf0a3d5ddd6",
+    "wallMs": 1790047866003,
+    "beat": "ch7-board",
+    "objectiveId": "board:pressure-seal"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/69.json",
+    "sha256": "ab0356840539130e0574f25b74a7262e198a73c7033e480d7abe69341296c0a8",
+    "wallMs": 1790047866574,
+    "beat": "ch8-launch",
+    "objectiveId": "ch8:launch:ignite"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/70.json",
+    "sha256": "a57d55b296b2216de0d7aa1e25668ae53ecb21a45834c501a94a0c5a9ee322fd",
+    "wallMs": 1790047870128,
+    "beat": "ch8-launch",
+    "objectiveId": "ch8:launch:climb"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/71.json",
+    "sha256": "fd3bbdcc58d8b870e8e5f5feeb7ccd3b38baa4af363ace03b736d399cdd05542",
+    "wallMs": 1790047872005,
+    "beat": "ch8-launch",
+    "objectiveId": "ch8:launch:orbital-handoff"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/72.json",
+    "sha256": "e513afd67fc83190c51dafe74db637281eedec725b29d2f4eae9ffa70b75b25f",
+    "wallMs": 1790047887308,
+    "beat": "ch8-crossing",
+    "objectiveId": "ch8:crossing:acquire-sibling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/73.json",
+    "sha256": "155813afb6d6a9ef09731babb0814061817f001428d6b485c90cc75d5f2d2208",
+    "wallMs": 1790047890521,
+    "beat": "ch8-crossing",
+    "objectiveId": "ch8:crossing:hold-course"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/74.json",
+    "sha256": "cbf93b7a66143b6008108223b6a454a9ae003d0f02ef77b473a0cf917be2f9c5",
+    "wallMs": 1790047913866,
+    "beat": "ch8-landfall",
+    "objectiveId": "ch8:landfall:land-dry-level"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/75.json",
+    "sha256": "f78ac2ddfb37a2402b237cafb4a1a265b7f54dcd7bf64521535d76aa676b9cf5",
+    "wallMs": 1790047928119,
+    "beat": "ch8-landfall",
+    "objectiveId": "ch8:landfall:first-footfall"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/76.json",
+    "sha256": "fa6c230d07a04c4286eb2bc56fc3e26a9d076bc846a857686182ddf80417394c",
+    "wallMs": 1790047929379,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:scan-waterline"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/77.json",
+    "sha256": "5c909920a1e53fe65a450ef4717d3816ed192ba56830f72a4a16c6f3fde398ee",
+    "wallMs": 1790047961827,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:attend-waterline"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/78.json",
+    "sha256": "c457403d6bbbc1e6f5cd2d87b066ee33da931b84346259c4b20c952353ac6a05",
+    "wallMs": 1790047962359,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:choose-site"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/79.json",
+    "sha256": "881ee4e5be45058c773d2eb468de9fb4a1c3a807aec60f64267208d724d92b73",
+    "wallMs": 1790047996838,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/80.json",
+    "sha256": "3e3d2296360c9f3cdeec67c38a4959a776c1ceae11e0b4c75afb73a2761a4d79",
+    "wallMs": 1790048004172,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/81.json",
+    "sha256": "87422383b8ecb5e1c73b34d76da0f1c941fa39dd39d73c64c599011f86328309",
+    "wallMs": 1790048009360,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/82.json",
+    "sha256": "fb32ca3ab449dbbce0526b8958e094d4a0a6eda17868bb645d1bb620d9af14ee",
+    "wallMs": 1790048015314,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/83.json",
+    "sha256": "2a22edfe152067860141239d7c503ebb8de6d1ed7405725b2885af48a1cfd057",
+    "wallMs": 1790048019115,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/84.json",
+    "sha256": "077d1d6949e2c634e25c993f93d15d51031fa4883d80d550266b734ad0085329",
+    "wallMs": 1790048021285,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/85.json",
+    "sha256": "9c767d4593dff5cb014f13c3a47cf96512e81d6349d0c94c7ce50bc025c83833",
+    "wallMs": 1790048023452,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:foundation"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/86.json",
+    "sha256": "fc9f07e062252f18c7f8d0b12c5cca777519fc4336b82772a43326a75f112068",
+    "wallMs": 1790048031820,
+    "beat": "ch9-settle",
+    "objectiveId": "settle:wait-night"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/87.json",
+    "sha256": "e07acaa0a491a21ea42c6a2798b7d31743beee16e062387f9105f3807e0537bc",
+    "wallMs": 1790048034251,
+    "beat": "ch9-hearth",
+    "objectiveId": "settle:wait-night"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/88.json",
+    "sha256": "dace62bd126a89462bcfa66fe35694ea5b08b0f233cd1e13b06f6a14dfda0acd",
+    "wallMs": 1790048071436,
+    "beat": "ch9-hearth",
+    "objectiveId": "settle:second-hearth-settling"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/89.json",
+    "sha256": "b1d688b4dbe145202442db61520270c72af392244b3895b58653313474c41108",
+    "wallMs": 1790048076808,
+    "beat": "done",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/90.json",
+    "sha256": "c4475f66d6cbed8b60ad81ca707864296f007a26dbbf995d461e7fcad9f88e24",
+    "wallMs": 1790048091087,
+    "beat": "ch10-cold",
+    "objectiveId": "station:fault-read"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/91.json",
+    "sha256": "cbb42014aea4eea93d7012fcd07659bbbc11657be6122a44daef6fd856c20f37",
+    "wallMs": 1790048092165,
+    "beat": "ch10-cold",
+    "objectiveId": "station:fabrication-attempt"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/92.json",
+    "sha256": "683ab82513895e7f8bf7b386f1ac70e9f20dcbdef570a171840a24176cafc896",
+    "wallMs": 1790048095408,
+    "beat": "ch10-ask",
+    "objectiveId": "station:return:crossing"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/93.json",
+    "sha256": "5adab7cb9bed65a9d65d8f8f54ac195691454032e1af795479fa29b5f59ab53c",
+    "wallMs": 1790048108705,
+    "beat": "ch10-ask",
+    "objectiveId": "station:return:landfall"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/94.json",
+    "sha256": "10c58ed0761aef1d6087b12b33850b150bddf26ce4b4c817761a0c241e0c1dfd",
+    "wallMs": 1790048111757,
+    "beat": "ch10-ask",
+    "objectiveId": "station:relay-query"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/95.json",
+    "sha256": "686da39da2a30037692d90bae16406f514cfa1bd8109bcc0f4759e49b41d5a80",
+    "wallMs": 1790048160120,
+    "beat": "ch10-ask",
+    "objectiveId": "station:bearing-claim"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/96.json",
+    "sha256": "b68ee85381c28a184023340402b7ba8c029a7dde635d8c826aebdb3eab436868",
+    "wallMs": 1790048161762,
+    "beat": "ch10-transit",
+    "objectiveId": "station:transit:reboard"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/97.json",
+    "sha256": "fad08037e15fd1e7d687d7d72c2a24bcedd1ae5eae899f091dfedd18b258a9d2",
+    "wallMs": 1790048162101,
+    "beat": "ch10-transit",
+    "objectiveId": "station:transit:ignite"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/98.json",
+    "sha256": "e85d32508d0868b09ffd07ff66a69da057590ec1c79280208b714f292cff9dc1",
+    "wallMs": 1790048163727,
+    "beat": "ch10-transit",
+    "objectiveId": "station:transit:hold"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/99.json",
+    "sha256": "51e0bf680752f3fb09a59ddd48bb879bd9de2e33e98d40f62748c49c2d014389",
+    "wallMs": 1790048180550,
+    "beat": "ch10-transit",
+    "objectiveId": "station:transit:resolve"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/100.json",
+    "sha256": "2abb8e869679a385b33ad9973416c1bc3666045c4304dd87651873415c2c6c52",
+    "wallMs": 1790048215484,
+    "beat": "done",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/101.json",
+    "sha256": "fa1a829f5a779e827f44a156d3eeff4b749505d65126328b31a122c4e2735bb5",
+    "wallMs": 1790048409865,
+    "beat": "done",
+    "objectiveId": "station:return:tidegarden"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/102.json",
+    "sha256": "ddeb30262895c7d3b63a169ce8c724ebbf74195476f09cd0130865089778d26e",
+    "wallMs": 1790048490376,
+    "beat": "done",
+    "objectiveId": "hearth:return:install-cell"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/103.json",
+    "sha256": "2baa41209ae83d380c503efe548320f622e853e81a425115d954425f29b45d3c",
+    "wallMs": 1790048493377,
+    "beat": "ch13-home",
+    "objectiveId": "ch13:home:review"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/104.json",
+    "sha256": "218e2c9ccfcf98261b214df73264ad4a30c6656341ddad6a53b57826749413b1",
+    "wallMs": 1790048494177,
+    "beat": "ch13-home",
+    "objectiveId": "ch13:home:choose-return"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/105.json",
+    "sha256": "540bf793cf7366c576dd3f2dc2b8689ae516b1f782dc1e045962a74b9e728596",
+    "wallMs": 1790048494983,
+    "beat": "ch13-return",
+    "objectiveId": "ch13:return:board"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/106.json",
+    "sha256": "a48f6d8b98cbf3ce36ffd7c4023c37e9695914337bfaa2d358c4f8c935dabc80",
+    "wallMs": 1790048498292,
+    "beat": "ch13-return",
+    "objectiveId": "ch13:return:launch"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/107.json",
+    "sha256": "c10b782030ce24fa300da469d98455a2ddd9aad3deff38981b7f53d8580df5b7",
+    "wallMs": 1790048499932,
+    "beat": "ch13-return",
+    "objectiveId": "ch13:return:origin"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/108.json",
+    "sha256": "986da39ebd9b1573e741a62d8eadcdace0ec9e6cfacb37c6657005d8181e09eb",
+    "wallMs": 1790048557897,
+    "beat": "ch13-survey",
+    "objectiveId": "ch13:survey:start"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/109.json",
+    "sha256": "816b4a3c1246ba76819ce13ef76cbb14fbeede62b04668ac0abf3e6f648e4acb",
+    "wallMs": 1790048560834,
+    "beat": "ch13-survey",
+    "objectiveId": "ch13:survey:draw"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/110.json",
+    "sha256": "1731809fd3b79adb25433c697475ce9128328232e1a508195ecfb1c7bb43d054",
+    "wallMs": 1790048568341,
+    "beat": "ch13-survey",
+    "objectiveId": "ch13:survey:offer-span"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/111.json",
+    "sha256": "417ba4fec74df5b47192ab1f789658d94192848b6613754eba796c531c1e3379",
+    "wallMs": 1790048568611,
+    "beat": "ch13-survey",
+    "objectiveId": "ch13:survey:test"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/112.json",
+    "sha256": "3a3f99e53ae1dd091f42fb94d87c00fcb1a8b459ecd0d75be1d1c7c7b454ab88",
+    "wallMs": 1790048585526,
+    "beat": "ch13-survey",
+    "objectiveId": "ch13:survey:revise"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/113.json",
+    "sha256": "e74f93c4089043ff16711ff6262d0a5743c5340bed468ac966dd850cc90b96b2",
+    "wallMs": 1790048586059,
+    "beat": "ch13-common",
+    "objectiveId": "ch13:common:reciprocal"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/114.json",
+    "sha256": "3daa17320965a5e56ef22bf7cf5a3d8fcca61bb8e67224a7a98f21ed2f3a2bfb",
+    "wallMs": 1790048591980,
+    "beat": "ch13-common",
+    "objectiveId": "ch13:common:offer-final-reference"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/115.json",
+    "sha256": "119992a1404998256e40a19ead02f1a753301dd076f98afa09c739b13b80dba8",
+    "wallMs": 1790048597644,
+    "beat": "ch13-common",
+    "objectiveId": "ch13:common:release"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/116.json",
+    "sha256": "6156a8497d9e7588516f2c11ab3388a45ef0a5bdb0ee5da2c1fb726db3990ead",
+    "wallMs": 1790048605732,
+    "beat": "ch14-record",
+    "objectiveId": "objective:ch14:ch14-record:pending:origin:scar"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/117.json",
+    "sha256": "01d8d7bdec0c3ddd97645f729ab577b3fb2447cc53cde8820830f03852fb1689",
+    "wallMs": 1790048606659,
+    "beat": "ch14-scar",
+    "objectiveId": "objective:ch14:ch14-scar:pending:origin:scar"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/118.json",
+    "sha256": "234d8e2650258ea2428889cad0a245e876aa48dad42545380f3682728bf3af9e",
+    "wallMs": 1790048618640,
+    "beat": "ch14-question",
+    "objectiveId": null
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/119.json",
+    "sha256": "5beb8475f68e92e8ba89d15df5541b48e27f1fe4dd8aa2b65fff77f04cfd072a",
+    "wallMs": 1790048618911,
+    "beat": "ch14-question",
+    "objectiveId": "objective:ch14:ch14-question:pending:origin:record"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/120.json",
+    "sha256": "45c8d557b27abf5e29405caa3e44719327f86d1cf21e45c3360bff1a92646fae",
+    "wallMs": 1790048619713,
+    "beat": "ch14-return",
+    "objectiveId": "objective:ch14:ch14-return:pending:origin:record"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/121.json",
+    "sha256": "10cd5c147282f219970fbdbf0cb92945d05e9022307eefd2d0e23f32d3b4255b",
+    "wallMs": 1790048621412,
+    "beat": "ch14-return",
+    "objectiveId": "objective:ch14:ch14-return:selected:origin:survey"
+  },
+  {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/continuity-repair-20260921/attempt-2/continuity/raw/diagnostic-checkpoints/122.json",
+    "sha256": "0929ce724c61ce0e274830c6932e67d8a77f73e1e8446f6d4a5646799c53573f",
+    "wallMs": 1790048633758,
+    "beat": "done",
+    "objectiveId": null
+  }
+]

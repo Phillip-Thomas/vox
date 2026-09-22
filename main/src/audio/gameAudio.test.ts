@@ -11,7 +11,8 @@ vi.mock('./musicEngine.ts', () => ({ unlockMusicAudio: mocks.unlockMusicAudio })
 vi.mock('./sfxEngine.ts', () => ({ unlockSfxAudio: mocks.unlockSfxAudio }));
 vi.mock('../story/storyScore.ts', () => ({ unlockStoryScore: mocks.unlockStoryScore }));
 vi.mock('./audioCore.ts', () => ({
-  areGameAudioRoutesConfirmed: mocks.areGameAudioRoutesConfirmed
+  areGameAudioRoutesConfirmed: mocks.areGameAudioRoutesConfirmed,
+  peekAudioContext: () => null
 }));
 
 interface FakeGestureTarget {

@@ -1,0 +1,152 @@
+{
+  "schema": "paravoxia.verifier.sourceSnapshot.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "createdAt": "2026-09-07T00:10:36.483Z",
+  "purpose": "Retain the exact probe/library bytes this capture ran, so its probeSha256 stays reconstructable after later harness edits.",
+  "appliesTo": "THIS capture only. It says nothing about, and changes nothing in, earlier captures — those were taken before this feature existed.",
+  "repoRoot": "/home/thomasphillip/Projects/vox",
+  "entry": {
+    "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+    "absPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+    "sha256": "4e68b0563ed74cbfbebe38df9b1222472dd29aec4f8a5fd1a68d5cb5686cf0b3"
+  },
+  "manifestSha256": "82b7354d8697a0f53668f06d5b41102668561630adc57fecc28cf3d0aeff36da",
+  "manifestSha256Covers": "sha256 of {schema, files:[{path,sha256,bytes}]} ordered by path — source bytes only, no timestamps, no absolute paths",
+  "fileCount": 12,
+  "files": [
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/cgContract.pinned.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/cgContract.pinned.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/cgContract.pinned.mjs",
+      "bytes": 3626,
+      "sha256": "c9fa84cf77edc4126725f3cea29ef8241341f715874adf84115966877935c4ca",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "bytes": 100520,
+      "sha256": "4e68b0563ed74cbfbebe38df9b1222472dd29aec4f8a5fd1a68d5cb5686cf0b3",
+      "importedBy": null,
+      "role": "entry"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/commonPassageLogic.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/commonPassageLogic.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/commonPassageLogic.mjs",
+      "bytes": 45333,
+      "sha256": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/creditCallLogpoints.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/creditCallLogpoints.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/creditCallLogpoints.mjs",
+      "bytes": 8940,
+      "sha256": "5b31a347dd6bdc8a9bcfe3bf9ec0d19b9c0cb9523d2dba521a630e7173dd60f6",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/entryObservation.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/entryObservation.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/entryObservation.mjs",
+      "bytes": 15207,
+      "sha256": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/ownedSession.pinned.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/ownedSession.pinned.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/ownedSession.pinned.mjs",
+      "bytes": 8253,
+      "sha256": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/shortSurveyLogic.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/shortSurveyLogic.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/shortSurveyLogic.mjs",
+      "bytes": 33363,
+      "sha256": "7e6fb3626d3b3dca9aeb49e6ee27f6be7a45512eefa2c7aebe76a100d6878d5b",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/sourceSnapshot.pinned.mjs",
+      "snapshotPath": "files/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/sourceSnapshot.pinned.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/sourceSnapshot.pinned.mjs",
+      "bytes": 15542,
+      "sha256": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": "main/tools/lib/evidence.mjs",
+      "snapshotPath": "files/main/tools/lib/evidence.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/main/tools/lib/evidence.mjs",
+      "bytes": 32877,
+      "sha256": "1997cf2a3e9db88ae6e1e474b76232a2589c78a58fe69a579b493b44e5aa5328",
+      "importedBy": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-credit-finale/grounded-recovery-candidate/common-entry-crossing-probe.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": "main/tools/lib/pixel-laws.mjs",
+      "snapshotPath": "files/main/tools/lib/pixel-laws.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/main/tools/lib/pixel-laws.mjs",
+      "bytes": 13137,
+      "sha256": "300cb62e4a1f00b4ecdeee9a3c2a20858646be59602a3ed03c8e8377e79a423c",
+      "importedBy": "main/tools/lib/evidence.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": "main/tools/lib/previewServer.mjs",
+      "snapshotPath": "files/main/tools/lib/previewServer.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/main/tools/lib/previewServer.mjs",
+      "bytes": 6816,
+      "sha256": "b227bdaf92dc2ddd554a62746d96cd96625321f2ce7d94bc86265702346dedb2",
+      "importedBy": "main/tools/lib/evidence.mjs",
+      "role": "imported-module"
+    },
+    {
+      "relPath": "main/tools/lib/previewSnapshot.mjs",
+      "snapshotPath": "files/main/tools/lib/previewSnapshot.mjs",
+      "originalAbsPath": "/home/thomasphillip/Projects/vox/main/tools/lib/previewSnapshot.mjs",
+      "bytes": 2032,
+      "sha256": "de472f5bc8229730c35034851695d4ac267c57fc412e6de656210a65503cd977",
+      "importedBy": "main/tools/lib/previewServer.mjs",
+      "role": "imported-module"
+    }
+  ],
+  "externalSpecifiers": [
+    "node:fs",
+    "node:path",
+    "node:crypto",
+    "node:process",
+    "node:url",
+    "x",
+    "node:child_process",
+    "playwright-core",
+    "node:net",
+    "node:zlib",
+    "node:os"
+  ],
+  "unresolved": [],
+  "dynamicComputedImportSeen": true,
+  "excluded": [
+    "bare/package specifiers and node_modules (recorded in externalSpecifiers, not copied)",
+    "credentials, .env files, config secrets — none are in the probe import graph and none are read",
+    "game sources, build output, captures, and any whole-workspace copy"
+  ],
+  "limits": [
+    "Only statically resolvable relative/absolute imports are followed; a computed dynamic import cannot be resolved and is flagged by dynamicComputedImportSeen.",
+    "Specifiers are matched textually and comments/strings are NOT stripped, so an import-shaped phrase inside a comment can add a phantom entry to externalSpecifiers, or a commented-out local import to files/unresolved. The bias is deliberately toward over-recording: a snapshot may contain a module that was not executed, but it never omits one that was.",
+    "This is source provenance only. It proves nothing about the browser, the renderer, the game, or the outcome of the capture."
+  ],
+  "note": "Exact bytes of the SHORT survey probe and every helper it imports, including the pinned copies."
+}

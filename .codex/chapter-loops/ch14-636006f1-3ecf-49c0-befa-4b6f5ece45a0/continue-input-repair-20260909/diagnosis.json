@@ -1,0 +1,14 @@
+{
+  "failure": {
+    "stage": "verify-final",
+    "message": "Probe continue failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T02:15:48.590Z"
+  },
+  "report": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-e07cf9d1-194d-4f1e-ade8-109c6e0b9cef/continue/report.json",
+    "sha256": "814af42233e3b6bac3e51d3151ffcb9b2a78a72fef0c6d05a6604b12a615120b"
+  },
+  "findings": "Real Continue retained equality, Origin, playing shell, and restored prerequisite proof: unfinishedMap.ready true and paused false. The walker then sent keyboard input without reacquiring mouse control. The existing visible Click to resume control affordance and canvas click both provide ordinary pointer capture. Add only an ordinary canvas click after readiness before the unchanged movement/action steps.",
+  "configValidation": "All three configs validate; removing the one added click produces the exact prior config. All route/arrival/new-action predicates unchanged."
+}

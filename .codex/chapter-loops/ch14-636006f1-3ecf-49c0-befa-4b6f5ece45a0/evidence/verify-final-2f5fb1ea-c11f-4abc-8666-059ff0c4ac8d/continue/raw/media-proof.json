@@ -1,0 +1,1564 @@
+{
+  "video": {
+    "decoded": true,
+    "path": "video.webm",
+    "frames": 3600,
+    "durationSeconds": 144,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "nb_read_frames": "3600"
+        }
+      ],
+      "format": {
+        "duration": "144.000000"
+      }
+    }
+  },
+  "audio": {
+    "decoded": true,
+    "path": "audio.wav",
+    "durationSeconds": 141.994667,
+    "rms": 0.04794155239379538,
+    "peak": 0.29787111282348633,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "pcm_s16le",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "format": {
+        "duration": "141.994667"
+      }
+    }
+  },
+  "isolation": [
+    {
+      "wallMs": 1788919349297,
+      "ok": false,
+      "foreign": [],
+      "streams": []
+    },
+    {
+      "wallMs": 1788919350387,
+      "ok": false,
+      "foreign": [],
+      "streams": []
+    },
+    {
+      "wallMs": 1788919351468,
+      "ok": false,
+      "foreign": [],
+      "streams": []
+    },
+    {
+      "wallMs": 1788919352567,
+      "ok": false,
+      "foreign": [],
+      "streams": []
+    },
+    {
+      "wallMs": 1788919353830,
+      "ok": false,
+      "foreign": [],
+      "streams": []
+    },
+    {
+      "wallMs": 1788919355873,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919357011,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919358044,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919359082,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919360166,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919361300,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919362364,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919363477,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919364554,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919365597,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919366676,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919367681,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919368741,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919369773,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919371044,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919372107,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919373205,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919374451,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919375491,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919376627,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919377923,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919378925,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919380059,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919381132,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919382265,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919383383,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919384488,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919385525,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919386528,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919387603,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919388670,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919389771,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919390860,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919391933,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919392999,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919394837,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919395857,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919396997,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919398004,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919399071,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919400242,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919401442,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919402781,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919403994,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919405214,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919406393,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919407531,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919408749,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919409960,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919411138,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919412325,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919413328,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919414457,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919415678,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919416811,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919417904,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919419138,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919420289,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919421532,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919422673,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919424089,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919425321,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919426504,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919427644,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919428648,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919429855,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919431065,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919432238,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919433328,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919434564,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919435770,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919436834,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919437936,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919439117,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919440277,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919441286,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919442408,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919443810,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919444853,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919445921,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919446933,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919448003,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919449076,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919450186,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919451251,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919452323,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919453405,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919454478,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919455479,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919456632,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919457920,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919459091,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919460182,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919461208,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919462296,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919465403,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919466493,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919467558,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919468580,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919469604,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919470658,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919471756,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919472851,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919473948,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919475045,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919476139,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919477232,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919478329,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919479412,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919480512,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919481606,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919482686,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919483761,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919484857,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919485959,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919487053,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919488142,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919489234,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919490322,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    },
+    {
+      "wallMs": 1788919491426,
+      "ok": true,
+      "foreign": [],
+      "streams": [
+        {
+          "index": 18881,
+          "sink": 18860,
+          "pid": "4192339"
+        }
+      ]
+    }
+  ],
+  "timeline": {
+    "clock": "host wall clock (Date.now)",
+    "alignment": "approximate; audio and video are separate unsynchronized recordings",
+    "uncertainty": "Offsets are host wall-clock differences between the recorder/context start and the observed gesture. The Playwright video timeline is frame-driven and the parec stream begins only after process spawn plus PulseAudio scheduling latency (unmeasured here). Audio and video are two independent recordings and are NOT muxed or sample-aligned: treat every offset as approximate guidance for seeking (order is reliable, absolute position is not), never as a synchronization claim.",
+    "audio": {
+      "startedAtWallMs": 1788919348245,
+      "stoppedAtWallMs": 1788919492080
+    },
+    "video": {
+      "startedAtWallMs": 1788919347753,
+      "stoppedAtWallMs": 1788919494035
+    },
+    "marks": [
+      {
+        "mark": "recording-started",
+        "note": null,
+        "wallMs": 1788919348245,
+        "audioOffsetSeconds": 0,
+        "videoOffsetSeconds": 0.492
+      },
+      {
+        "mark": "interruption",
+        "note": "ordinary page reload",
+        "wallMs": 1788919458258,
+        "audioOffsetSeconds": 110.013,
+        "videoOffsetSeconds": 110.505
+      },
+      {
+        "mark": "continue-cta",
+        "note": "click button:has-text(\"Continue\")",
+        "wallMs": 1788919461587,
+        "audioOffsetSeconds": 113.342,
+        "videoOffsetSeconds": 113.834
+      },
+      {
+        "mark": "new-action-start",
+        "note": null,
+        "wallMs": 1788919461970,
+        "audioOffsetSeconds": 113.725,
+        "videoOffsetSeconds": 114.217
+      }
+    ]
+  },
+  "cleanup": {
+    "requested": true,
+    "recorderStopped": true,
+    "moduleRemoved": true,
+    "defaultSinkAfter": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+    "defaultSinkUnchanged": true
+  }
+}

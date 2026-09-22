@@ -55,7 +55,17 @@ function stubAudioEnv(opts: EnvOptions = {}) {
       ctx.state = 'running';
       return Promise.resolve();
     }),
-    createDynamicsCompressor: vi.fn(() => fakeNode({ threshold: fakeParam(), ratio: fakeParam() })),
+    createDynamicsCompressor: vi.fn(() =>
+      fakeNode({
+        threshold: fakeParam(),
+        ratio: fakeParam(),
+        attack: fakeParam(),
+        release: fakeParam(),
+        knee: fakeParam()
+      })
+    ),
+    // Stage 1 glue soft clip.
+    createWaveShaper: vi.fn(() => fakeNode({ curve: null, oversample: 'none' })),
     createGain: vi.fn(() => fakeNode({ gain: fakeParam() })),
     createBiquadFilter: vi.fn(() => fakeNode({ frequency: fakeParam(), Q: fakeParam(), type: 'lowpass' })),
     ...(opts.media

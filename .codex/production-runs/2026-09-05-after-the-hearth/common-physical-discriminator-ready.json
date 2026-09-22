@@ -1,0 +1,84 @@
+{
+  "schema": "paravoxia.verifier.ready.v1",
+  "role": "common-physical-discriminator",
+  "at": "2026-09-06T20:12:08.080525+00:00",
+  "startedAt": "2026-09-06T19:59:37.252325+00:00",
+  "actualDeadlineUtc": "2026-09-06T20:19:37Z",
+  "state": "ARMED-after-second-root-preflight-corrections-awaiting-gpu-handoff",
+  "gpuHeldBy": "finale-window-runtime",
+  "pollIntervalSeconds": 15,
+  "requiredHandoff": {
+    "activeRole": "common-physical-discriminator",
+    "action": "continue"
+  },
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "previewUrl": "http://127.0.0.1:34413/",
+  "launchRoute": "shipped headed openParavoxia + assertHardwareGl (headless FORBIDDEN)",
+  "heavyLock": "exclusive FD9 shared lock via heavyLockOwnership",
+  "ownedArtifacts": [
+    "verifier/probes/common-physical-discriminator/",
+    "verifier/logs/common-physical-discriminator/",
+    "verifier/captures/common-physical-discriminator/",
+    "common-physical-discriminator-report.json",
+    "common-physical-discriminator-report.md"
+  ],
+  "basisProbe": "verifier/probes/arrival-common-short/short-survey-probe.mjs (reaches COMMON ~53s with ordinary keys)",
+  "cdpSites": {
+    "callee": "7839:193729",
+    "caller": "7839:219885"
+  },
+  "plan": [
+    "survey prerequisite",
+    "COMMON via ordinary W/S/E/F",
+    "W-held H",
+    "grounded E via S(-26,12)->(-26,22)->(-42,22)->(-44,12) style verified route",
+    "arm LP-A/LP-B",
+    "walk vertices 1/2/3/4 with >=30ms WASD pulses, overshoot <=0.35"
+  ],
+  "cpuVerification": {
+    "nodeSyntaxCheck": "PASS",
+    "logicSelftest": "PASS",
+    "urlRegexTest": "PASS",
+    "preflightRefusalAtCpu": "PASS at 20:11:57Z"
+  },
+  "probe": "verifier/probes/common-physical-discriminator/common-physical-discriminator-probe.mjs",
+  "launcher": "verifier/probes/common-physical-discriminator/run-gpu.sh (polls 15s, fires on handoff, exclusive fd9 flock, headed)",
+  "directionConsumed": "producer-common-physical-preflight-direction.json (2026-09-06T20:05:34Z)",
+  "fixesApplied": [
+    {
+      "fix": "urlRegex escaping",
+      "done": "Breakpoints now bind by EXACT url http://127.0.0.1:34413/assets/index-BiDWGouH.js; a CPU regex test proves match + wrong-bundle rejection (logs/common-physical-discriminator/url-regex-cpu-test.json)."
+    },
+    {
+      "fix": "provider shape",
+      "done": "rawCommon now reads snapshot.diagnostic.common/.worker. New pre-arm gate requires ACTUAL beat ch13-common, common.stage holding-h, reciprocal-reference anchor and worker atH, re-checked live because the prior holding may finish during approach."
+    },
+    {
+      "fix": "armed-without-relocation",
+      "done": "Requires exact scriptId+lineNumber+columnNumber on ALL resolved locations for LP-A and LP-B, and Debugger.paused count is OBSERVED (listener + resume), not assumed false. No page reload is issued (it would destroy earned state)."
+    },
+    {
+      "fix": "vertex aim",
+      "done": "Aim point is vertex + incoming*0.15, so a body past the vertex but under 0.05 keeps moving FORWARD; positive overshoot <=0.35 and >=30ms ordinary pulses preserved; no before-plane substitution."
+    },
+    {
+      "fix": "dependent walk + drain",
+      "done": "A failed bounded vertex/support gate is now REQUIRED and stops dependent walking. drainAndAnalyse() is idempotent and also runs from the stage catch whenever anything was armed, so a throw cannot lose evidence."
+    },
+    {
+      "fix": "causality",
+      "done": "chainReturns zero gain is labelled QUALIFIED accounting only. Causal claims come from an ACTUAL replay of the real callee (captured by reference from its own scope) on the EXACT captured args; no extra standalone binding browser."
+    }
+  ],
+  "directionsConsumed": [
+    "producer-common-physical-preflight-direction.json (20:05:34Z)",
+    "producer-common-physical-second-preflight-direction.json (20:11:17Z)"
+  ],
+  "secondRoundFixes": [
+    "worker position read as the ACTUAL CommonGroundPoint OBJECT {x,y,z} with finite-component check; H proximity uses the existing horizontal 1.25 / vertical 0.6 bounds. The Array.isArray fallback and the guessed wk.atH are gone.",
+    "ONE breakpoint at the exact callee site: the function capture and the LP-A record now share a single combined condition, so CDP cannot refuse a duplicate exact location. Combined condition bytes saved in arming.condition.lpACombined.",
+    "All breakpoints are removed and Debugger.disable is issued BEFORE the replay; records are frozen into an immutable copy first and the replay reads only that copy. liveGrewDuringReplay is reported.",
+    "Exact scriptId must be OBSERVED and equal; an unobserved scriptId is now a FAILURE rather than a pass. Debugger.paused count is captured after the walk, not only at arming."
+  ],
+  "awaiting": "verifier-control.json activeRole=common-physical-discriminator (sole authority); launcher polls 15s"
+}

@@ -1,3 +1,4 @@
+import { precompile } from '../../components/effects/shaderWarmup.ts';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { RigidBody, CuboidCollider } from '@react-three/rapier';
@@ -134,6 +135,8 @@ const HeroAppleTree: React.FC<HeroAppleTreeProps> = ({ planetSize, terrainSeed }
 
     return { group, profile, mats, crownRadius: params.crownRadius };
   }, []);
+
+  useEffect(() => precompile(built.group), [built]);
 
   useEffect(() => {
     heroTreeHandle.position = pose.position;

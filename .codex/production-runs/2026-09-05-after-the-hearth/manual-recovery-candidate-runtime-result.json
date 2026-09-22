@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 171966,
+  "stop_reason": "end_turn",
+  "session_id": "3681af30-dc90-4141-b7fb-42fbf5c5fdf0",
+  "total_cost_usd": 0.6639090000000001,
+  "usage": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 27214,
+    "cache_read_input_tokens": 254918,
+    "output_tokens": 10485,
+    "output_tokens_details": {
+      "thinking_tokens": 3089
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 27214,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 3033,
+        "cache_read_input_tokens": 31554,
+        "cache_creation_input_tokens": 1966,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1966
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1990,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002055,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 26,
+      "outputTokens": 10485,
+      "cacheReadInputTokens": 254918,
+      "cacheCreationInputTokens": 27214,
+      "webSearchRequests": 0,
+      "costUSD": 0.661854,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 3089,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 21,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: BLOCKED \u2014 INCONCLUSIVE. No GPU run performed. Not a game finding, not a defect closure, not a controller failure. A stated GPU precondition is falsified by kernel evidence.**\n\n## Gate evaluation (all measured, none assumed)\n\n| Precondition (commission, conjunctive) | Measured | Result |\n|---|---|---|\n| `verifier-control.json` `activeRole` | `manual-recovery-candidate-runtime` | PASS |\n| `verifier-control.json` `action` | `continue` | PASS |\n| Prior role finished + cleanup proven | `priorRoleFinishedAt=2026-09-06T23:04:41.233967Z`, `priorCaptureCleanupRef=verifier/captures/continue-pose-handoff/attempt2-closure-2026-09-06T2301Z/cleanup-receipt.json` | PASS (as declared) |\n| Root preview alive at `http://127.0.0.1:37395/` | HTTP 200 | PASS |\n| index sha256 `a9b8803\u202653d8f` | `a9b880389deff7717b3d76b0f4a962beff1031a2ffa44fde427a5f0022353d8f` | PASS (exact) |\n| bundle `index-C1X65dZp.js` sha256 `68c8be\u2026328b` | `68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b` | PASS (exact) |\n| **Inherited exclusive FD 9 on `.heavy.lock`, kernel + contender proof** | **absent** | **FAIL** |\n\n### FD 9 / lock failure \u2014 raw evidence\n- Bash-tool process FD table: only `0,1,2,10`. **No FD 9 exists**; `10 -> socket:[\u2026]`, not the lock.\n- Owning agent process `2329126` FD 9 = `anon_inode:[eventpoll]` \u2014 **not** `/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock`. Nothing to inherit.\n- Lock file exists but is inert: `ino=8397196 dev=66306 size=0`, mode `-rw-rw-r--`.\n- System-wide `/proc/*/fd/*` references to `heavy.lock`: **0**.\n- `/proc/locks`: 230 rows; rows matching inode `8397196` (dev `103:02`): **0**. `fuser -v` returns nothing.\n\nNo process anywhere holds this lock, and the required handoff never placed it on FD 9. Contender proof is therefore also unobtainable. I did not self-acquire the lock \u2014 the commission requires an *inherited* exclusive FD, and manufacturing my own would fabricate the gate and bypass orchestrator arbitration of exclusivity. Wall clock at decision: `2026-09-06T23:06:27Z` (invocation `23:05:03Z`, deadline `23:17:03Z`) \u2014 the block is a gate failure, not a budget exhaustion.\n\n## Work performed (read-only, non-GPU, no permission question)\n- Read both producer reviews; the causal correction is internalized: run10 credit `2.1703337873440898`, frontier `Z=14.17033378734409`, actual return foot `14.269255559712665`, unpaid `0.09892177236857513` \u2014 classified UNPAID INCOMING GAP, not a game defect, `gameSourceRepairAuthorized=false`.\n- Prior-evidence integrity re-verified byte-exact, nothing overwritten:\n  - `verifier/captures/manual-credit-finale/cut-run10/summary.json` = `31dd57b8305cbef5e42673f615bde242f1cd314d0286b37b2fb588c0c567cf65` (matches review).\n  - `verifier/captures/manual-credit-finale/full18-run8/summary.json` = `31226ddd5a0d167ae05ac86f90b0675354ef16d61dd9bef464aeaac0ac640e4d` (matches review).\n- Probe bytes snapshotted **before** any execution decision, `verifier/probes/manual-credit-finale/common-entry-crossing/` (12 files):\n  `common-entry-crossing-probe.mjs 40d8bbef42c5bad9ade175b24044b20ebad9fa70f4a22344fe82beaaa5279806` \u00b7 `ownedSession.pinned.mjs 9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b` \u00b7 `cgContract.pinned.mjs c9fa84cf77edc4126725f3cea29ef8241341f715874adf84115966877935c4ca` \u00b7 `sourceSnapshot.pinned.mjs b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20` \u00b7 `commonPassageLogic.mjs 24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c` \u00b7 `shortSurveyLogic.mjs 7e6fb3626d3b3dca9aeb49e6ee27f6be7a45512eefa2c7aebe76a100d6878d5b` \u00b7 `entryObservation.mjs 4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4` \u00b7 `creditCallLogpoints.mjs ed9cf83090e4977929c61826a61bbde69e98f1ad94abf8a2e7bf151faad943b1` \u00b7 `pin.json 7a3e4c8c927500f1ee86e42496f310ed39be9b9c9cc5564612f772f3f351fa10` \u00b7 `selftest.mjs 27f043e3173f1243a132b64827907535311e7ff71dd55663c2f3695f23e6e570` \u00b7 `run-once.sh 25eb7e7bb82eb0a8bb49aa7076261901bf162736ae476ad80e0c11bcfcafc3c0` \u00b7 `emit-report.py 033e3b7955cb4458c9cd6a392117c5fea87271fc4c637f287680f2534765b4ef`\n- `run-cut-closure.sh` (`041f285403b41c408bbf22c8fd268f4ecc56057b3e6a3cdef009035323f2f3bf`) hashed only; **not executed**, unchanged.\n- Corrected-recipe targets confirmed present in the existing probe for a future authorized attempt: `PRE_E = [-42, 51.05, 11.6]` (line 785, incoming \u2212z side of plane z=12), approach `S -> (-26,22) -> (-42,22) -> E(-42,12)` (line 847), ordered forward corner list beginning `[-42,51.05,12] -> [-42,51.05,14] -> [-42,51.05,16] -> \u2026` (lines 1054\u20131056) \u2014 i.e. first intermediate `(-42,14)` is in the ordered list.\n\n## Not done (blocked, deliberately, no partial substitutes)\nNo browser launched, headed or headless. No `recovery-candidate/` sibling probe created and no `captures/manual-credit-finale/recovery-candidate-<unique>/` directory created \u2014 unexecuted scaffolding would be indistinguishable from run evidence. No early-cut path to C, no measured turn Z (I make **no** claim that it is 15.82), no return-to-E foot/support/credit readings, no frontier or plane-crossing feet, no retraversal, no actual F / grounded T / Worker18 corroboration, no fps/beat/full-movie/static-gate figures.\n\n## Untouched\nNo game source, contract, build, full suite, production metadata, publishing, producer transport receipts, or control files were modified. Root preview process survives untouched. No foreign process signalled. Repo HEAD `b631a52065a1a69fecac0331e69515c306408641`; source manifest `8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962` (carried from control file, not recomputed \u2014 broad prep audit was excluded).\n\n## Artifacts\n- Gate evidence: `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/logs/manual-recovery-candidate-runtime/heavy-lock-gate-evidence.txt` \u2014 sha256 `3b8eed28b316835a3dc4d99065d0023e831db1f5e37a96076efc70684969fcc6` (only file I created).\n\n## Single unambiguous cause\nThe `manual-recovery-candidate-runtime` process was started without the exclusive `.heavy.lock` descriptor being placed on FD 9; the parent's FD 9 is an eventpoll and the lock has no holder kernel-wide. To retry, re-launch this role with the shipped helper holding the lock on FD 9 \u2014 the original deadline and this blocked attempt both stand and should be retained.",
+  "ttft_ms": 2313,
+  "type": "result",
+  "duration_ms": 172920,
+  "uuid": "15e9af85-1434-45df-8bcb-5e434aedd8c4",
+  "ttft_stream_ms": 1089,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 1334,
+  "queued_turn_count": 0
+}

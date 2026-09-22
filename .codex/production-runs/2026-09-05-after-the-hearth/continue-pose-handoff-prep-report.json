@@ -1,0 +1,61 @@
+{
+  "at": "2026-09-06T22:39:20Z",
+  "role": "continue-pose-handoff-prep (CPU-only private preparation, no GPU/browser/audio/lock)",
+  "budget": {"startedUtc": "2026-09-06T22:37:25Z", "wallMinutes": 4, "clockSource": "date -u"},
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "bundlePin": {"file": "index-C1X65dZp.js", "sha256": "68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b", "preview": 37395},
+  "reviewsRead": ["producer-continue-actual-handoff-audit-review.json", "producer-continue-candidate-observation-review.json"],
+  "ownedArtifacts": {
+    "probeDir": "verifier/probes/continue-pose-handoff",
+    "logDir": "logs/continue-pose-handoff-prep",
+    "originalPreserved": "verifier/probes/continue-candidate (byte-identical, copied once)"
+  },
+  "codeHashes": {
+    "verifier/probes/continue-pose-handoff/poseHandoffObservation.mjs": "e9646ffbf900d010fbef06ced8791a08ff168ae631d4b10f40ec50d00bd97607",
+    "verifier/probes/continue-pose-handoff/earned-continue-3d-probe.mjs": "c07d6c715118fb5a94c855816aaace2bdebfe98ba86d2c465db31d8fcda99640",
+    "verifier/probes/continue-candidate/earned-continue-3d-probe.mjs (unchanged original)": "46496492de0645c43e1a01537cb5cf3453c33f324c2607754da01d9b086bff22"
+  },
+  "cpuChecks": {"node --check earned-continue-3d-probe.mjs": "pass", "import poseHandoffObservation.mjs": "pass (8 exports)"},
+  "sourceProvenance": {
+    "EfficientScene.tsx:523-524": "landedPlayerSpawn = landedShipPos ? (landedPlayerEgress ?? arrivalPose.playerSurfacePosition) : initialPlayerPosition -- READ ONLY; parked egress is unconditional whenever landedShipPos is nonnull, so a correctly loaded saved on-foot pose can be bypassed. Leading hypothesis only; live activation UNMEASURED.",
+    "spawnValidation.ts:461-466": "resolveShipPlayerEgressPosition(terrain, planetSize, shipPosition, face?: CubeFace) -- face IS optional and EfficientScene calls it with THREE args, i.e. NO explicit face. Derived face is internal.",
+    "faceStance": "Egress face +X may be legitimate. No top-face expectation asserted or encoded anywhere in this prep."
+  },
+  "wiringStatus": {
+    "observerModuleWritten": true,
+    "importedByProbeEntryFile": true,
+    "installCalledOnActualEntryPath": true,
+    "installCallsite": "immediately after attachPassivePageSinks(page) on the owned session page, using its own page.context().newCDPSession(page)",
+    "finallyHarvestPresent": true,
+    "poseHandoffOnlyModeFlag": "--pose-handoff-only parsed; marks stop-before-further-walk-controller and records explicit non-claims",
+    "HONEST_GAP": "POSE_HANDOFF_POINTS is an EMPTY table. The 0-based executable CDP line/column positions on index-C1X65dZp.js have NOT been resolved yet (that needs a Debugger.scriptParsed + getPossibleBreakpoints pass against the running bundle, which is a browser step this CPU-only role may not take). With an empty table the observer installs, enables Debugger, harvests, and reports every site as unresolved -- it CANNOT and DOES NOT fabricate a hit.",
+    "SECOND_GAP": "--pose-handoff-only currently only annotates and does not yet hard-stop the subsequent walk-controller segment; the stop branch is declared, not enforced."
+  },
+  "safetyProperties": {
+    "noGameMonkeypatch": true,
+    "noSetterOrAudioParamPatch": true,
+    "conditionsAlwaysFalse": "every breakpoint condition is a try/catch IIFE ending in `return false`; no debugger pause is reachable",
+    "boundedOwnBuffer": "max 400 events, drops and errors counted, never silent",
+    "requestedVsActualPositions": "resolveExecutablePositions records requested vs actual location and a `relocated` flag",
+    "unmeasuredFieldsStayUnmeasured": "derived egress face and any missing field serialize as {unmeasured:true, reason}, never aliased to another value"
+  },
+  "inScopeFields": ["commandContext.world.worldId", "commandContext.world.actorId", "validatedPersistedParked", "landedShipPos", "initialPlayerPosition", "landedPlayerEgress", "landedPlayerSpawn", "EfficientPlayer body.setTranslation first target", "setTranslation caller/callsite", "resolveShipPlayerEgressPosition face argument", "derived face if exposed"],
+  "retained": ["read-only rAF beat/world/seed/foot window", "source pin / world / identity / full-save / cleanup gates", "ORIGINAL bounds 180s return / 120s earn / 90s walk"],
+  "claimsExplicitlyNotMade": {
+    "captureCompleted": false,
+    "newFPressed": false,
+    "continueActionAccepted": false,
+    "sourceChanged": false,
+    "gameFixApplied": false,
+    "gpuOrBrowserUsed": false,
+    "missingGlobalShipDataInvented": false
+  },
+  "remainingSteps": [
+    "1. Resolve POSE_HANDOFF_POINTS: attach Debugger, capture scriptParsed for index-C1X65dZp.js, run getPossibleBreakpoints over the minified EfficientScene landedPlayerSpawn / EfficientPlayer setTranslation / egress-resolve regions, pin 0-based line+column.",
+    "2. Enforce the --pose-handoff-only hard stop after realContinue + full point-prefix equality + 5s valid tail + event harvest.",
+    "3. Runtime role continue-pose-handoff-runtime / action continue on headed GB10 under shared lock FD9 /home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock (exact kernel + contender helper), existing owned helper, no new browser.",
+    "4. Compare before/after Continue values with monotonic + event order to decide whether the 100.898u jump at +711ms to [53.85,13.5,-16] is produced by the parked-egress override."
+  ],
+  "verdict": "PARTIAL HANDOFF -- explicit. Observer module and entry-path activation are real and syntax/import clean; CDP position table is unresolved and the only-mode stop is unenforced.",
+  "publicationAuthorized": false
+}

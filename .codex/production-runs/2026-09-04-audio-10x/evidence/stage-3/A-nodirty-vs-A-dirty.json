@@ -1,0 +1,631 @@
+{
+  "before": "../.codex/production-runs/2026-09-04-audio-10x/evidence/stage-3/wav/A-nodirty",
+  "after": "../.codex/production-runs/2026-09-04-audio-10x/evidence/stage-3/wav/A-dirty",
+  "moods": 62,
+  "identical": 0,
+  "changed": 62,
+  "maxAbsDeltaLsb": 26,
+  "worstResidualDbfs": -80.92608912596762,
+  "rows": [
+    {
+      "name": "a1-ramp",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 15,
+      "diffSampleFraction": 0.4025245653817082,
+      "firstDiffS": 0.19768707482993197,
+      "rmsDeltaDb": 0.006147626578507724,
+      "residualDbfs": -80.92608912596762,
+      "identical": false
+    },
+    {
+      "name": "a2-awakening",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 18,
+      "diffSampleFraction": 0.4117498110355253,
+      "firstDiffS": 0.20213151927437642,
+      "rmsDeltaDb": 0.005269349977476555,
+      "residualDbfs": -81.09451255058607,
+      "identical": false
+    },
+    {
+      "name": "a3-dawn",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 22,
+      "diffSampleFraction": 0.4091430461073318,
+      "firstDiffS": 0.20444444444444446,
+      "rmsDeltaDb": 0.0041154895044396,
+      "residualDbfs": -82.53810417301995,
+      "identical": false
+    },
+    {
+      "name": "a4-exhale",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 22,
+      "diffSampleFraction": 0.3838095238095238,
+      "firstDiffS": 0.20630385487528344,
+      "rmsDeltaDb": 0.005227503909725213,
+      "residualDbfs": -83.21714948781229,
+      "identical": false
+    },
+    {
+      "name": "ch1-anomaly",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 11,
+      "diffSampleFraction": 0.3365107709750567,
+      "firstDiffS": 0.10886621315192743,
+      "rmsDeltaDb": 0.005553303674339553,
+      "residualDbfs": -85.49849467542712,
+      "identical": false
+    },
+    {
+      "name": "ch1-depth",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 7,
+      "diffSampleFraction": 0.31313869992441423,
+      "firstDiffS": 0.13392290249433106,
+      "rmsDeltaDb": 0.0032868345716441207,
+      "residualDbfs": -90.7856823022274,
+      "identical": false
+    },
+    {
+      "name": "ch1-fixed",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 5,
+      "diffSampleFraction": 0.2750273998488284,
+      "firstDiffS": 0.1547845804988662,
+      "rmsDeltaDb": 0.004765531846613045,
+      "residualDbfs": -92.23606378016491,
+      "identical": false
+    },
+    {
+      "name": "ch1-iso",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.3588293650793651,
+      "firstDiffS": 0.12984126984126984,
+      "rmsDeltaDb": 0.005486911557301358,
+      "residualDbfs": -85.3831710747555,
+      "identical": false
+    },
+    {
+      "name": "ch1-lift",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.3596655328798186,
+      "firstDiffS": 0.22215419501133787,
+      "rmsDeltaDb": 0.005339388784122065,
+      "residualDbfs": -85.02256769434663,
+      "identical": false
+    },
+    {
+      "name": "ch1-nav",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 6,
+      "diffSampleFraction": 0.299995275888133,
+      "firstDiffS": 0.26972789115646256,
+      "rmsDeltaDb": 0.003352767314382478,
+      "residualDbfs": -91.07019374292163,
+      "identical": false
+    },
+    {
+      "name": "ch1-raster",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 6,
+      "diffSampleFraction": 0.3055952380952381,
+      "firstDiffS": 0.11603174603174603,
+      "rmsDeltaDb": 0.0034534919688727034,
+      "residualDbfs": -90.89983966413544,
+      "identical": false
+    },
+    {
+      "name": "ch1-track",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 11,
+      "diffSampleFraction": 0.344265873015873,
+      "firstDiffS": 0.4215419501133787,
+      "rmsDeltaDb": 0.007121550027111678,
+      "residualDbfs": -85.3905716383985,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__bearing-claimed",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 19,
+      "diffSampleFraction": 0.35981103552532123,
+      "firstDiffS": 0.6019727891156462,
+      "rmsDeltaDb": 0.00661390522119137,
+      "residualDbfs": -82.00712808308825,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__cold-settled",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 14,
+      "diffSampleFraction": 0.33629346182917613,
+      "firstDiffS": 0.8679365079365079,
+      "rmsDeltaDb": 0.003856467210966929,
+      "residualDbfs": -86.7878410413711,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__crossing-back",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 15,
+      "diffSampleFraction": 0.34840702947845803,
+      "firstDiffS": 0.40748299319727893,
+      "rmsDeltaDb": 0.004623806044439448,
+      "residualDbfs": -84.63524362264799,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__fault-ledger",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.3320890022675737,
+      "firstDiffS": 0.39111111111111113,
+      "rmsDeltaDb": 0.003821178159504983,
+      "residualDbfs": -87.52204367103818,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__refused",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 13,
+      "diffSampleFraction": 0.33944444444444444,
+      "firstDiffS": 0.42857142857142855,
+      "rmsDeltaDb": 0.004910822630606477,
+      "residualDbfs": -87.52411985661703,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__relay-answer",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 13,
+      "diffSampleFraction": 0.3325604686318972,
+      "firstDiffS": 0.2742176870748299,
+      "rmsDeltaDb": 0.0052674315483837095,
+      "residualDbfs": -85.36081625445604,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__relay-ask",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.33271825396825394,
+      "firstDiffS": 0.3455328798185941,
+      "rmsDeltaDb": 0.005342446742113435,
+      "residualDbfs": -85.36310568825178,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__seam-ebb",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 18,
+      "diffSampleFraction": 0.3537698412698413,
+      "firstDiffS": 0.3629251700680272,
+      "rmsDeltaDb": 0.005872747255787433,
+      "residualDbfs": -82.77365300834988,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__station-resolved",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 19,
+      "diffSampleFraction": 0.3512046485260771,
+      "firstDiffS": 0.41086167800453516,
+      "rmsDeltaDb": 0.007209429578498797,
+      "residualDbfs": -82.24239561309872,
+      "identical": false
+    },
+    {
+      "name": "ch10-ask__transit-hold",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 13,
+      "diffSampleFraction": 0.3485355253212396,
+      "firstDiffS": 0.411156462585034,
+      "rmsDeltaDb": 0.004375459009116506,
+      "residualDbfs": -84.75916076257703,
+      "identical": false
+    },
+    {
+      "name": "ch2-approach",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 11,
+      "diffSampleFraction": 0.3560015117157974,
+      "firstDiffS": 0.20276643990929705,
+      "rmsDeltaDb": 0.0055085557634280725,
+      "residualDbfs": -85.4268540871326,
+      "identical": false
+    },
+    {
+      "name": "ch2-color",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.33652777777777776,
+      "firstDiffS": 0.25945578231292515,
+      "rmsDeltaDb": 0.005653703633374903,
+      "residualDbfs": -85.40628907629163,
+      "identical": false
+    },
+    {
+      "name": "ch3-await-rest",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.34106103552532124,
+      "firstDiffS": 0.7953061224489796,
+      "rmsDeltaDb": 0.00669578199909792,
+      "residualDbfs": -85.35424101104508,
+      "identical": false
+    },
+    {
+      "name": "ch3-dusk",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 26,
+      "diffSampleFraction": 0.39940003779289496,
+      "firstDiffS": 0.10473922902494331,
+      "rmsDeltaDb": 0.0046628193625635255,
+      "residualDbfs": -82.01568073895208,
+      "identical": false
+    },
+    {
+      "name": "ch3-forage",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.3437972411186697,
+      "firstDiffS": 0.23950113378684806,
+      "rmsDeltaDb": 0.0056786734967233365,
+      "residualDbfs": -85.24922836525613,
+      "identical": false
+    },
+    {
+      "name": "ch3-gather",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 13,
+      "diffSampleFraction": 0.34379157218442935,
+      "firstDiffS": 0.2766439909297052,
+      "rmsDeltaDb": 0.005036005266456044,
+      "residualDbfs": -85.38396838716083,
+      "identical": false
+    },
+    {
+      "name": "ch3-signal",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 10,
+      "diffSampleFraction": 0.3591449357520786,
+      "firstDiffS": 0.16532879818594104,
+      "rmsDeltaDb": 0.004288599142800598,
+      "residualDbfs": -85.60740539765744,
+      "identical": false
+    },
+    {
+      "name": "ch3-thirst",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 13,
+      "diffSampleFraction": 0.34857520786092216,
+      "firstDiffS": 0.14993197278911566,
+      "rmsDeltaDb": 0.005298512460933267,
+      "residualDbfs": -85.13364116319127,
+      "identical": false
+    },
+    {
+      "name": "ch4-arrival",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 18,
+      "diffSampleFraction": 0.3802532123960695,
+      "firstDiffS": 0.2843310657596372,
+      "rmsDeltaDb": 0.0045144254276996846,
+      "residualDbfs": -84.84850466679791,
+      "identical": false
+    },
+    {
+      "name": "ch4-audit",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 11,
+      "diffSampleFraction": 0.3337329931972789,
+      "firstDiffS": 0.31011337868480726,
+      "rmsDeltaDb": 0.0047412611648638865,
+      "residualDbfs": -85.54104129756456,
+      "identical": false
+    },
+    {
+      "name": "ch4-comply",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 8,
+      "diffSampleFraction": 0.31891345427059714,
+      "firstDiffS": 0.20383219954648527,
+      "rmsDeltaDb": 0.006195273085678727,
+      "residualDbfs": -86.60448815211168,
+      "identical": false
+    },
+    {
+      "name": "ch4-defy",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 4,
+      "diffSampleFraction": 0.2762651171579743,
+      "firstDiffS": 0.24244897959183673,
+      "rmsDeltaDb": 0.006425938483148988,
+      "residualDbfs": -92.29011034494582,
+      "identical": false
+    },
+    {
+      "name": "ch4-vigil",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 13,
+      "diffSampleFraction": 0.34471371882086166,
+      "firstDiffS": 0.2848299319727891,
+      "rmsDeltaDb": 0.006079899478072498,
+      "residualDbfs": -85.24155863014614,
+      "identical": false
+    },
+    {
+      "name": "ch5-maw",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 11,
+      "diffSampleFraction": 0.34319822373393805,
+      "firstDiffS": 0.09857142857142857,
+      "rmsDeltaDb": 0.005624134909818349,
+      "residualDbfs": -85.34750158896352,
+      "identical": false
+    },
+    {
+      "name": "ch6-dive",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 14,
+      "diffSampleFraction": 0.34434901738473167,
+      "firstDiffS": 0.14229024943310659,
+      "rmsDeltaDb": 0.004392664995178608,
+      "residualDbfs": -85.16805097988819,
+      "identical": false
+    },
+    {
+      "name": "ch7-board",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 14,
+      "diffSampleFraction": 0.3635015117157974,
+      "firstDiffS": 0.13532879818594104,
+      "rmsDeltaDb": 0.0036004803652242632,
+      "residualDbfs": -85.30528489209163,
+      "identical": false
+    },
+    {
+      "name": "ch7-board__cockpit",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.3462018140589569,
+      "firstDiffS": 0.33294784580498865,
+      "rmsDeltaDb": 0.004824415421833354,
+      "residualDbfs": -85.06660425661448,
+      "identical": false
+    },
+    {
+      "name": "ch7-board__hatch",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.3410808767951625,
+      "firstDiffS": 0.2836054421768707,
+      "rmsDeltaDb": 0.004749343321971657,
+      "residualDbfs": -85.02461991302526,
+      "identical": false
+    },
+    {
+      "name": "ch7-board__outside",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 14,
+      "diffSampleFraction": 0.3635175736961451,
+      "firstDiffS": 0.10501133786848073,
+      "rmsDeltaDb": 0.0036005413011586064,
+      "residualDbfs": -85.3049167096867,
+      "identical": false
+    },
+    {
+      "name": "ch7-board__vehicle-owner",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 8,
+      "diffSampleFraction": 0.3293943688586546,
+      "firstDiffS": 0.31979591836734694,
+      "rmsDeltaDb": 0.004632490768790895,
+      "residualDbfs": -86.44996503389414,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 5,
+      "diffSampleFraction": 0.28194633408919123,
+      "firstDiffS": 0.3490249433106576,
+      "rmsDeltaDb": 0.005597812364756459,
+      "residualDbfs": -91.96066748023594,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__bench",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 6,
+      "diffSampleFraction": 0.28365457294028723,
+      "firstDiffS": 0.7418367346938776,
+      "rmsDeltaDb": 0.005171501934788235,
+      "residualDbfs": -91.02496372409189,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__calibration",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.36387377173091456,
+      "firstDiffS": 0.10501133786848073,
+      "rmsDeltaDb": 0.003606861507497335,
+      "residualDbfs": -85.26440694635176,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__diagnosis",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 5,
+      "diffSampleFraction": 0.28195956160241875,
+      "firstDiffS": 0.4763265306122449,
+      "rmsDeltaDb": 0.005597586705267701,
+      "residualDbfs": -91.9605714481109,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__frame",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 8,
+      "diffSampleFraction": 0.32362717309145883,
+      "firstDiffS": 0.33791383219954646,
+      "rmsDeltaDb": 0.006376792400708888,
+      "residualDbfs": -86.49689766571727,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__hover",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.3617932728647014,
+      "firstDiffS": 0.427891156462585,
+      "rmsDeltaDb": 0.004282686227804569,
+      "residualDbfs": -85.11096794248215,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__hull",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.34057445200302344,
+      "firstDiffS": 0.3923582766439909,
+      "rmsDeltaDb": 0.005888720664276242,
+      "residualDbfs": -84.90256552017841,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__lift",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 12,
+      "diffSampleFraction": 0.35343537414965986,
+      "firstDiffS": 0.4115192743764172,
+      "rmsDeltaDb": 0.004364664270847521,
+      "residualDbfs": -85.03969312364549,
+      "identical": false
+    },
+    {
+      "name": "ch7-reconstruct__route",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 14,
+      "diffSampleFraction": 0.36354780801209374,
+      "firstDiffS": 0.13532879818594104,
+      "rmsDeltaDb": 0.003600592680719997,
+      "residualDbfs": -85.30495171160084,
+      "identical": false
+    },
+    {
+      "name": "ch8-crossing",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 19,
+      "diffSampleFraction": 0.35996315192743766,
+      "firstDiffS": 0.16775510204081634,
+      "rmsDeltaDb": 0.005706093628145745,
+      "residualDbfs": -82.24019756056614,
+      "identical": false
+    },
+    {
+      "name": "ch8-landfall",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 13,
+      "diffSampleFraction": 0.36426965230536656,
+      "firstDiffS": 0.14668934240362813,
+      "rmsDeltaDb": 0.004440770367660729,
+      "residualDbfs": -84.75804164060882,
+      "identical": false
+    },
+    {
+      "name": "ch8-launch",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 13,
+      "diffSampleFraction": 0.3767422524565382,
+      "firstDiffS": 0.19417233560090702,
+      "rmsDeltaDb": 0.0035871364043533333,
+      "residualDbfs": -85.15957901496313,
+      "identical": false
+    },
+    {
+      "name": "ch9-hearth",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 13,
+      "diffSampleFraction": 0.3334155328798186,
+      "firstDiffS": 0.40993197278911564,
+      "rmsDeltaDb": 0.0037702721629798664,
+      "residualDbfs": -86.8147384082124,
+      "identical": false
+    },
+    {
+      "name": "ch9-settle",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 15,
+      "diffSampleFraction": 0.34927815570672716,
+      "firstDiffS": 0.09546485260770975,
+      "rmsDeltaDb": 0.005422449778077591,
+      "residualDbfs": -85.14671759724932,
+      "identical": false
+    },
+    {
+      "name": "crash",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 13,
+      "diffSampleFraction": 0.34715513983371127,
+      "firstDiffS": 0.3614512471655329,
+      "rmsDeltaDb": 0.005541549030200736,
+      "residualDbfs": -85.81014245888801,
+      "identical": false
+    },
+    {
+      "name": "crawl",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 6,
+      "diffSampleFraction": 0.2814625850340136,
+      "firstDiffS": 0.5569387755102041,
+      "rmsDeltaDb": 0.005240363152575405,
+      "residualDbfs": -91.45481591961652,
+      "identical": false
+    },
+    {
+      "name": "deflect",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 7,
+      "diffSampleFraction": 0.34708711262282693,
+      "firstDiffS": 0.5221088435374149,
+      "rmsDeltaDb": 0.006365104583746893,
+      "residualDbfs": -86.59780675636304,
+      "identical": false
+    },
+    {
+      "name": "descent",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 11,
+      "diffSampleFraction": 0.3451700680272109,
+      "firstDiffS": 0.2931972789115646,
+      "rmsDeltaDb": 0.006003231957323208,
+      "residualDbfs": -85.48521395387327,
+      "identical": false
+    },
+    {
+      "name": "manifest",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 6,
+      "diffSampleFraction": 0.2806188586545729,
+      "firstDiffS": 0.37743764172335603,
+      "rmsDeltaDb": 0.005030122344626445,
+      "residualDbfs": -91.50551388599239,
+      "identical": false
+    },
+    {
+      "name": "voyage",
+      "frames": 529200,
+      "maxAbsDeltaLsb": 7,
+      "diffSampleFraction": 0.2938265306122449,
+      "firstDiffS": 0.13782312925170068,
+      "rmsDeltaDb": 0.003352873219655463,
+      "residualDbfs": -90.769706929229,
+      "identical": false
+    }
+  ]
+}

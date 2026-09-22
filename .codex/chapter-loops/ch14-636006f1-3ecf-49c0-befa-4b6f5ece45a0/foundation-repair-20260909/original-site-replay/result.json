@@ -1,0 +1,561 @@
+{
+  "kind": "noncertifying replay of captured diagnostic save",
+  "storageFile": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/foundation-repair-20260909/pre-site-storage.json",
+  "sourcePreview": "http://127.0.0.1:46541/",
+  "steps": [
+    {
+      "facing": {
+        "turns": 18,
+        "owned": true,
+        "aligned": true,
+        "angleError": -0.031514143893491484
+      },
+      "walk": {
+        "arrived": true,
+        "distance": 0.021551258618026342,
+        "pulses": 126,
+        "calibrations": 0,
+        "settled": true
+      },
+      "after": {
+        "schema": "paravoxia.journeyRuntimeSnapshot.v1",
+        "unfinishedMap": {
+          "chapter": "ch14",
+          "opened": false,
+          "indexed": false,
+          "scar": false,
+          "question": null,
+          "retained": false,
+          "selected": false,
+          "returned": false,
+          "complete": false,
+          "beat": null,
+          "ready": false,
+          "panelOpen": false,
+          "paused": false,
+          "feedback": "",
+          "expanded": "survey",
+          "actorId": "local",
+          "worldId": "-1,-1:p1",
+          "destination": null,
+          "reach": {
+            "survey": false,
+            "scar": false
+          },
+          "targets": {
+            "survey": null,
+            "scar": null
+          },
+          "survey": {
+            "routeClass": null,
+            "lengthUnits": null,
+            "testedPrefixCount": null
+          },
+          "anchors": [],
+          "score": {
+            "cue": null,
+            "lastOutcome": "cancelled-without-replay",
+            "ownsEnvelope": false,
+            "release": "music-only-scene-envelope"
+          }
+        },
+        "commonGround": {
+          "beat": null,
+          "bodyCentre": [
+            -20.0073299407959,
+            50.789310455322266,
+            4.0202555656433105
+          ],
+          "bodyPose": [
+            -20.00732757947199,
+            48.98931045532382,
+            4.020255563562692
+          ],
+          "up": [
+            -0.0000013118466153273406,
+            0.9999999999991396,
+            1.1558989218175903e-9
+          ],
+          "groundOffsetUnits": 1.8,
+          "supported": null,
+          "worldBound": false,
+          "rail": null,
+          "railCursor": null,
+          "score": {
+            "beat": null,
+            "mood": null,
+            "finalTextureSeconds": null
+          },
+          "diagnostic": {
+            "beat": null,
+            "installWatch": "unknown",
+            "anchors": [],
+            "holdReason": null,
+            "attendance": null,
+            "coverage": {
+              "units": 0,
+              "reachedVertex": 0,
+              "foot": null
+            },
+            "worker": {
+              "leg": "inspecting",
+              "travelled": 0,
+              "legLength": 0,
+              "held": false,
+              "sampledIndex": -1,
+              "permitted": null,
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "survey": null,
+            "common": null
+          },
+          "pendingAnchors": []
+        },
+        "view": {
+          "forward": [
+            -0.84276308905005,
+            -0.0000011061943951254227,
+            0.5382846605037096
+          ],
+          "up": [
+            -0.0000013118466153273406,
+            0.9999999999991396,
+            1.1558989218175903e-9
+          ],
+          "ordinaryLook": true,
+          "pointerLocked": true
+        },
+        "shell": {
+          "phase": "playing",
+          "sceneReady": true
+        },
+        "sampledAt": 1788931322657,
+        "story": {
+          "active": true,
+          "chapter": "ch9",
+          "beat": "ch9-settle",
+          "runId": 0
+        },
+        "objective": {
+          "id": "settle:choose-site",
+          "kind": "interact",
+          "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+          "workOrder": [
+            "FOLLOW THE HABITAT SITE MARKER.",
+            "[F] CHOOSE THIS DRY, LEVEL SITE."
+          ],
+          "requiresMarker": true,
+          "health": "ready",
+          "revision": 1
+        },
+        "interaction": {
+          "revision": 591,
+          "resolvedAt": 1788931322644,
+          "candidates": [
+            {
+              "id": "story-tidegarden-choose-site",
+              "verb": "Choose Habitat Site",
+              "interactionClass": "required",
+              "priority": 500,
+              "owner": "story:story-tidegarden-choose-site"
+            }
+          ],
+          "winner": {
+            "id": "story-tidegarden-choose-site",
+            "verb": "Choose Habitat Site",
+            "interactionClass": "required",
+            "priority": 500,
+            "owner": "story:story-tidegarden-choose-site"
+          },
+          "published": {
+            "revision": 1,
+            "active": {
+              "id": "story-tidegarden-choose-site",
+              "verb": "Choose Habitat Site"
+            },
+            "changedAt": 1788931311474
+          },
+          "trace": {
+            "revision": 0,
+            "entries": [],
+            "latest": null
+          },
+          "effects": [],
+          "prompts": [
+            {
+              "id": "story-tidegarden-choose-site",
+              "owner": "embodied-hud",
+              "scope": "story",
+              "rect": {
+                "left": 544.7421875,
+                "top": 402,
+                "right": 735.2578125,
+                "bottom": 430,
+                "width": 190.515625,
+                "height": 28
+              }
+            }
+          ],
+          "visiblePromptCount": 1
+        },
+        "entities": {},
+        "entityEvents": [],
+        "entityRevision": 0,
+        "receipts": {
+          "local": {
+            "era": "emergent",
+            "milestones": [
+              "story:started",
+              "story:prologue-seen",
+              "story:ch1:track",
+              "story:ch1:quota",
+              "story:debris:0",
+              "story:debris:1",
+              "story:debris:2",
+              "story:debris:3",
+              "story:ch1:depth",
+              "story:pod:0",
+              "story:pod:1",
+              "story:pod:2",
+              "story:ch1:nav",
+              "story:ch1:iso",
+              "story:a1",
+              "story:a2",
+              "story:sense:health",
+              "story:sense:inventory",
+              "story:sense:temp",
+              "story:a3",
+              "story:sense:water",
+              "story:ch3:drank",
+              "story:sense:food",
+              "story:ch3:ate",
+              "story:ch3:signal",
+              "story:sense:stamina",
+              "story:ch4:vigil",
+              "story:ch4:arrived",
+              "story:ch4:audit-complete",
+              "story:audit:fire-mismatch",
+              "story:audit:life-mismatch",
+              "story:audit:tree-mismatch",
+              "story:ch4:compliance-complete",
+              "story:comply:fire-doused",
+              "story:comply:organics-resolved",
+              "story:comply:regression-settled",
+              "story:ch4:refusal-complete",
+              "story:defy:refusal-committed",
+              "story:a4",
+              "story:a4:handback",
+              "story:a4:field-pack-dropped",
+              "story:ch5:maw-repaired",
+              "maw_repaired",
+              "story:maw:first-direction-resolved",
+              "story:maw:pond-resonance-visible",
+              "story:sense:maw",
+              "story:ch6:keel-banked",
+              "story:capability:oxygen-online",
+              "story:sense:oxygen",
+              "story:dive:waterline-entered",
+              "story:dive:keel-sonar-revealed",
+              "story:dive:surfaced-with-keel",
+              "story:item:kestrel-keel-memory:acquired",
+              "story:item:kestrel-keel-memory:banked",
+              "story:ch7:flight-ready",
+              "story:capability:jet-installed",
+              "story:route:tidegarden:online",
+              "story:board:pressure-boundary-sealed",
+              "story:board:physical-transaction-complete",
+              "story:ch7:boarded",
+              "story:ch8:launched",
+              "story:ch8:crossed",
+              "story:ch8:landfall",
+              "story:kestrel:founding-reserve-claimed",
+              "story:tidegarden:scanner-overload",
+              "story:tidegarden:relationship-attended"
+            ]
+          }
+        },
+        "state": {
+          "localActor": {
+            "id": "local",
+            "era": "emergent",
+            "milestones": [
+              "story:started",
+              "story:prologue-seen",
+              "story:ch1:track",
+              "story:ch1:quota",
+              "story:debris:0",
+              "story:debris:1",
+              "story:debris:2",
+              "story:debris:3",
+              "story:ch1:depth",
+              "story:pod:0",
+              "story:pod:1",
+              "story:pod:2",
+              "story:ch1:nav",
+              "story:ch1:iso",
+              "story:a1",
+              "story:a2",
+              "story:sense:health",
+              "story:sense:inventory",
+              "story:sense:temp",
+              "story:a3",
+              "story:sense:water",
+              "story:ch3:drank",
+              "story:sense:food",
+              "story:ch3:ate",
+              "story:ch3:signal",
+              "story:sense:stamina",
+              "story:ch4:vigil",
+              "story:ch4:arrived",
+              "story:ch4:audit-complete",
+              "story:audit:fire-mismatch",
+              "story:audit:life-mismatch",
+              "story:audit:tree-mismatch",
+              "story:ch4:compliance-complete",
+              "story:comply:fire-doused",
+              "story:comply:organics-resolved",
+              "story:comply:regression-settled",
+              "story:ch4:refusal-complete",
+              "story:defy:refusal-committed",
+              "story:a4",
+              "story:a4:handback",
+              "story:a4:field-pack-dropped",
+              "story:ch5:maw-repaired",
+              "maw_repaired",
+              "story:maw:first-direction-resolved",
+              "story:maw:pond-resonance-visible",
+              "story:sense:maw",
+              "story:ch6:keel-banked",
+              "story:capability:oxygen-online",
+              "story:sense:oxygen",
+              "story:dive:waterline-entered",
+              "story:dive:keel-sonar-revealed",
+              "story:dive:surfaced-with-keel",
+              "story:item:kestrel-keel-memory:acquired",
+              "story:item:kestrel-keel-memory:banked",
+              "story:ch7:flight-ready",
+              "story:capability:jet-installed",
+              "story:route:tidegarden:online",
+              "story:board:pressure-boundary-sealed",
+              "story:board:physical-transaction-complete",
+              "story:ch7:boarded",
+              "story:ch8:launched",
+              "story:ch8:crossed",
+              "story:ch8:landfall",
+              "story:kestrel:founding-reserve-claimed",
+              "story:tidegarden:scanner-overload",
+              "story:tidegarden:relationship-attended"
+            ]
+          },
+          "spaceFlight": {
+            "phase": "surface",
+            "controlMode": "fps",
+            "destination": null,
+            "target": null
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "layoutVersion": 1,
+            "locationMode": "surface",
+            "activePlanetId": "-1,-1:p1",
+            "lastActivePlanetId": "-1,-1:p1",
+            "pose": {
+              "position": [
+                2180,
+                -110,
+                -1635
+              ],
+              "velocity": [
+                0,
+                0,
+                0
+              ],
+              "quaternion": [
+                0,
+                0,
+                0,
+                1
+              ]
+            },
+            "target": null,
+            "renderOrigin": [
+              2180,
+              -110,
+              -1635
+            ],
+            "activationEpoch": 1
+          },
+          "shipRestoration": {
+            "version": 1,
+            "repairStage": "flight_ready",
+            "currentSystemId": "-1,-1",
+            "currentWorldId": "-1,-1:p1",
+            "parkedPose": {
+              "position": [
+                8,
+                51.5,
+                -8
+              ],
+              "quaternion": [
+                0,
+                1,
+                0,
+                2.220446049250313e-16
+              ]
+            },
+            "systemPose": {
+              "position": [
+                2180,
+                -110,
+                -1635
+              ],
+              "velocity": [
+                0,
+                0,
+                0
+              ],
+              "quaternion": [
+                0,
+                0,
+                0,
+                1
+              ]
+            },
+            "locationMode": "surface",
+            "repairHistory": []
+          },
+          "signedSceneAv": {
+            "active": true,
+            "suspended": false,
+            "beat": "ch9-settle",
+            "anchorId": null,
+            "anchorEvent": null,
+            "activationSequence": 0,
+            "activationHistoryAnchorIds": []
+          },
+          "voyage": {
+            "worker-name": null
+          }
+        },
+        "input": {
+          "revision": 13,
+          "hotkeyActivations": 13,
+          "submitCount": 0,
+          "lastSubmittedValue": null,
+          "events": [
+            {
+              "sequence": 1,
+              "at": 1788931313364,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyW",
+              "targetEditable": false
+            },
+            {
+              "sequence": 2,
+              "at": 1788931315792,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyA",
+              "targetEditable": false
+            },
+            {
+              "sequence": 3,
+              "at": 1788931319989,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyA",
+              "targetEditable": false
+            },
+            {
+              "sequence": 4,
+              "at": 1788931321413,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyW",
+              "targetEditable": false
+            },
+            {
+              "sequence": 5,
+              "at": 1788931321415,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyA",
+              "targetEditable": false
+            },
+            {
+              "sequence": 6,
+              "at": 1788931321548,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyW",
+              "targetEditable": false
+            },
+            {
+              "sequence": 7,
+              "at": 1788931321549,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyA",
+              "targetEditable": false
+            },
+            {
+              "sequence": 8,
+              "at": 1788931321672,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyW",
+              "targetEditable": false
+            },
+            {
+              "sequence": 9,
+              "at": 1788931321672,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyA",
+              "targetEditable": false
+            },
+            {
+              "sequence": 10,
+              "at": 1788931321803,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyD",
+              "targetEditable": false
+            },
+            {
+              "sequence": 11,
+              "at": 1788931321931,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyA",
+              "targetEditable": false
+            },
+            {
+              "sequence": 12,
+              "at": 1788931322062,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyD",
+              "targetEditable": false
+            },
+            {
+              "sequence": 13,
+              "at": 1788931322198,
+              "type": "gameplay-hotkey-boundary",
+              "code": "KeyA",
+              "targetEditable": false
+            }
+          ],
+          "workerName": null,
+          "activeElement": {
+            "tag": "body",
+            "id": null,
+            "name": null,
+            "type": null,
+            "editable": false,
+            "voyageWorkerNameInput": false,
+            "value": null
+          }
+        },
+        "preparation": null
+      }
+    }
+  ],
+  "samples": [],
+  "errors": [],
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "error": "TimeoutError: page.waitForFunction: Timeout 15000ms exceeded."
+}

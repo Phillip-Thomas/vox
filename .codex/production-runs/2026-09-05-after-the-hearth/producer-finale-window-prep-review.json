@@ -1,0 +1,28 @@
+{
+  "reviewedAt": "2026-09-06T18:27:14.253393+00:00",
+  "reportRef": "finale-window-prep-report.json",
+  "reportSha256": "50204d49f5f42b31407a61fa72602173ca213ae8c703d7193dfaa6f1015c3553",
+  "ownedArtifactHashesVerified": 8,
+  "acceptedForDedicatedRuntime": false,
+  "gameSourceMutationAuthorized": false,
+  "requiredOwnedClosure": [
+    "Relative runtime imports use5parents; this folder needs6 to actual main. Verify every dependency resolves in CPU before browser, including playwright import.",
+    "Sampler reads state.avFull while actual journey bridge uses state.av. Inspect real provider and fixture-shaped data; use exact named anchor array membership, not broad JSON regex.",
+    "Completion edge must require actual CG common committed and strict18/18 in same atomic sample; existing detectEdge only checks done+regexanchors.",
+    "Adopt custom unmuted browser immediately after launch and guard context/page/goto/assert failure, not after goto. Current custom path can leak browser before runGuarded.",
+    "Replace illustrative lock command that reopensfd9 after an outer flock with actual inheritedfd9 acquisition.",
+    "Prepare runnable isolated audio wrapper with process-tree ownership verification, recorder lifetime covering actual completion+11.5s, failure cleanup and own runtime logs. A60s whole-run recording ends before observed62s completion."
+  ],
+  "acceptedDesign": [
+    "One synchronous in-page atomic sampler,3s prehistory+11.5s postcompletion.",
+    "Record only owned browser output in dedicated sink; no default/mic/foreign stream.",
+    "Choose ONE unmuted combined state+actualoutput run when closure ready; no duplicate state-only capture."
+  ],
+  "qualifications": [
+    "Existing muted-browser finding applies to inspected shared-helper journeys; not an unverified claim about every historical capture.",
+    "Monitor is intentionally an output-source device; no microphone/default-monitor capture.",
+    "Use actual Opus invocation for authorship; owner email is not evidence owner authored/reviewed preparation.",
+    "Prepared commands/33CPUchecks have not exercised a browser and do not validate actualhookshape orimports."
+  ],
+  "isAcceptance": false
+}

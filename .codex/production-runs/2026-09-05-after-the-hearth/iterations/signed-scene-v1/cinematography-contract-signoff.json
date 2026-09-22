@@ -1,0 +1,9 @@
+{
+  "schema": "paravoxia.directorSignoff.v1",
+  "director": "cinematography",
+  "contractVersion": "scene-v1",
+  "contractSha256": "ecce3e98270a9041b071e3c627090b228cfaab8a34e6c847296bd775baac3a74",
+  "disposition": "approve-with-notes",
+  "signedBy": "Cinematography Director (/root/cinematography_director)",
+  "signedAt": "2026-09-06T07:12:19.641023+00:00"
+}

@@ -1,0 +1,170 @@
+{
+ "documentKind": "finale-authority-seam-authority-pins-corrected",
+ "correctedAt": "2026-09-06T22:26Z",
+ "bundle": "main/dist/assets/index-Ddqg7x9Y.js",
+ "bundleSha256": "4b41a7d50f2da85a010eb534540187404bc10a7c2cd474c6653e5030923c83e9",
+ "coordinateConvention": "CDP setBreakpointByUrl lineNumber/columnNumber are 0-BASED and bind the FIRST EXECUTABLE STATEMENT, not the function declaration. line1based shown only for human cross-reference.",
+ "labelCorrections": {
+  "B4": "clearScoreIntensityOverride (prior file mislabelled it 'clear score beat/override')",
+  "E4": "setScoreBeat (prior file mislabelled it 'leadership set')",
+  "LY": "setScoreMood (source scoreEngine.ts setScoreMood; was NOT pinned before)",
+  "mMA": "scheduleStoryAuthority(storyLeads, atTime) (was declared UNRESOLVED before; it IS in the bundle)",
+  "$Z": "scheduled-hit cancellation sweep only (nk list disconnect); NOT audio authority crossfade",
+  "l4": "sets IQ={beat,mood} and forwards to LY when c4===beat"
+ },
+ "sourceCorrespondence": {
+  "file": "main/src/audio/scoreEngine.ts",
+  "lines": "1687-1735",
+  "scheduleStoryAuthority": "if(master){railTargets.delete(master.gain);rampParamAt(master.gain, storyLeads?SCORE_MASTER_LEVEL:0, atTime, STORY_AUTHORITY_CROSSFADE_S)} authorityFadeUntil=atTime+STORY_AUTHORITY_CROSSFADE_S; storyAuthorityCrossfade?.(storyLeads,atTime,STORY_AUTHORITY_CROSSFADE_S)",
+  "minifiedMap": {
+   "master": "na",
+   "railTargets": "bY",
+   "rampParamAt": "lg",
+   "SCORE_MASTER_LEVEL": "ZZ",
+   "STORY_AUTHORITY_CROSSFADE_S": "XF",
+   "authorityFadeUntil": "fMA",
+   "storyAuthorityCrossfade": "Gq",
+   "idle": "Ka",
+   "built": "jZ",
+   "activeScoreContext": "WI",
+   "bedLead": "hQ",
+   "bedTonicHandback": "Rq",
+   "moodTonicSemis": "AK"
+  }
+ },
+ "pins": {
+  "AUTHORITY_START_mMA_ENTRY": {
+   "line0": 5208,
+   "column0": 189356,
+   "line1based": 5209,
+   "statement": "na&&(bY.delete(na.gain),lg(na.gain,e?ZZ:0,A,XF))",
+   "note": "scheduleStoryAuthority entry; e=storyLeads,A=atTime",
+   "byteOffset": 3640778,
+   "verifiedUniqueOffline": true
+  },
+  "AUTHORITY_END_mMA_TAIL": {
+   "line0": 5208,
+   "column0": 189405,
+   "line1based": 5209,
+   "statement": "fMA=A+XF",
+   "note": "authorityFadeUntil assignment + complementary bed callback Gq(e,A,XF)",
+   "byteOffset": 3640827,
+   "verifiedUniqueOffline": true
+  },
+  "AUTHORITY_BEDCB_Gq": {
+   "line0": 5208,
+   "column0": 189414,
+   "line1based": 5209,
+   "statement": "Gq==null||Gq(e,A,XF)",
+   "note": "complementary bed automation callback invocation",
+   "byteOffset": 3640836,
+   "verifiedUniqueOffline": true
+  },
+  "MOOD_LY_ENTRY": {
+   "line0": 5208,
+   "column0": 189455,
+   "line1based": 5209,
+   "statement": "const t=!Ka",
+   "note": "setScoreMood entry; t=wasLeading(old leading), e=next mood or null",
+   "byteOffset": 3640877,
+   "verifiedUniqueOffline": true
+  },
+  "MOOD_LY_CTX": {
+   "line0": 5208,
+   "column0": 189686,
+   "line1based": 5209,
+   "statement": "const i=jZ?WI:null",
+   "note": "ctx = built(jZ) ? activeScoreContext(WI) : null",
+   "byteOffset": 3641108,
+   "verifiedUniqueOffline": true
+  },
+  "MOOD_LY_CALLS_mMA": {
+   "line0": 5208,
+   "column0": 189742,
+   "line1based": 5209,
+   "statement": "t!==!Ka&&mMA(!Ka,i.currentTime)",
+   "note": "transition discriminator + the ONLY scheduleStoryAuthority callsite",
+   "byteOffset": 3641164,
+   "verifiedUniqueOffline": true
+  },
+  "CANCEL_ngA_ENTRY": {
+   "line0": 7839,
+   "column0": 190515,
+   "line1based": 7840,
+   "statement": "return EI.finalTexture?(LKA(),!0):!1",
+   "note": "cancel(reason): raw param e observable at entry although discarded",
+   "byteOffset": 4439509,
+   "verifiedUniqueOffline": true
+  }
+ },
+ "scopeAvailabilityAtPin": {
+  "AUTHORITY_START_mMA_ENTRY": {
+   "e": "storyLeads (bool)",
+   "A": "atTime (context seconds)",
+   "XF": "crossfade seconds constant",
+   "na": "master gain node or undefined",
+   "ZZ": "master level constant"
+  },
+  "AUTHORITY_END_mMA_TAIL": {
+   "A+XF": "authorityFadeUntil endpoint",
+   "fMA": "prior authorityFadeUntil (pre-assignment read)"
+  },
+  "AUTHORITY_BEDCB_Gq": {
+   "Gq": "complementary bed automation callback or null",
+   "e": "storyLeads",
+   "A": "atTime",
+   "XF": "duration"
+  },
+  "MOOD_LY_ENTRY": {
+   "e": "next mood or null (raw entry param)",
+   "Ka": "idle BEFORE mutation -> t=!Ka is wasLeading",
+   "A": "options"
+  },
+  "MOOD_LY_CTX": {
+   "jZ": "built",
+   "WI": "activeScoreContext",
+   "i": "ctx after this statement"
+  },
+  "MOOD_LY_CALLS_mMA": {
+   "t": "wasLeading",
+   "Ka": "idle after mutation",
+   "i.currentTime": "atTime passed to mMA",
+   "note": "i is non-null here (guarded by i&&)"
+  },
+  "CANCEL_ngA_ENTRY": {
+   "e": "raw cancel reason ARGUMENT, observable at entry even though never persisted",
+   "EI.finalTexture": "token or null"
+  }
+ },
+ "guardedThrowRisks": [
+  "MOOD_LY_CALLS_mMA: reading i.currentTime in a logpoint is safe ONLY inside the i&& branch; any expression must still be wrapped typeof-guarded because a logpoint bound one statement early would hit TDZ on i (const).",
+  "MOOD_LY_ENTRY: A is defaulted ({}) at entry, safe. e may be null - property reads must be optional.",
+  "AUTHORITY_* : na may be undefined; do not read na.gain unguarded.",
+  "Every logpoint expression MUST be wrapped in try{...}catch(_){} and terminate in ,!1 (non-pausing). Caught errors must be counted and reported as evaluationErrors, never silently dropped.",
+  "Null-checks do NOT protect against undeclared/TDZ identifiers; only try/catch does."
+ ],
+ "samplingPolicy": {
+  "cap": 4000,
+  "problem": "per-frame/per-call logpoints on LY/mMA can exhaust the 4000 cap BEFORE the finale completes, producing a truncated buffer that looks like a clean run.",
+  "rule": "emit only when (a) the deadline observation age>=4.8s, or (b) it is the FIRST live occurrence of that pin id; all other hits increment a per-pin droppedCount that MUST be emitted in the final record.",
+  "flushing": "event buffer must be written through a finally block so a thrown/aborted capture still yields the partial buffer plus dropped counts."
+ },
+ "supersedes": {
+  "file": "candidate-pins.json",
+  "reason": "all prior pins carried 1-based line 7840 and bound function DECLARATIONS; authority chain was wrongly declared unresolved.",
+  "priorPinKeys": [
+   "CAP_CONST",
+   "BEGIN_Qwe",
+   "DEADLINE_hwe",
+   "RELEASE_LKA",
+   "CANCEL_ngA",
+   "DIAG_dwe",
+   "ELAPSED_vKA",
+   "SETBEAT_l4",
+   "CLEARBEAT_B4",
+   "AUTHORITY_E4"
+  ]
+ },
+ "repinnedAt": "2026-09-07T00:22Z",
+ "repinNote": "All pin line0/column0 re-resolved against index-Ddqg7x9Y.js and verified byte-identical to prior coordinates; only bundle identity was stale."
+}

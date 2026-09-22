@@ -439,8 +439,24 @@ export class EfficientVoxelSystem {
     return this.getVoxel(x, y, z)?.supportsSurfaceResources ?? false;
   }
 
+  /**
+   * A COPY of every exposed voxel. Callers that hold or mutate the result need
+   * this; callers that only iterate should use `voxelValues()` — a cold-boot
+   * profile attributed ~190ms of main-thread time to this copy alone, because
+   * ten field builders each took a full copy just to loop over it once.
+   */
   getAllVoxels() {
     return new Map(this.exposedVoxels);
+  }
+
+  /** Read-only iteration over the exposed voxels, without copying the map. */
+  voxelValues(): IterableIterator<VoxelData> {
+    return this.exposedVoxels.values();
+  }
+
+  /** Read-only `[coordKey, voxel]` iteration, without copying the map. */
+  voxelEntries(): IterableIterator<[string, VoxelData]> {
+    return this.exposedVoxels.entries();
   }
 
   getCoordForSlot(slot: number) {

@@ -29,6 +29,10 @@ import {
 // ?debug=1). Collapsed to a corner chip by default.
 
 const BEAT_LABELS: Record<StoryBeat, string> = {
+  'ch14-record': 'ch14 · field record (earned entry only)',
+  'ch14-scar': 'ch14 · surviving scar (earned entry only)',
+  'ch14-question': 'ch14 · retained question (earned entry only)',
+  'ch14-return': 'ch14 · return visit (earned entry only)',
   crawl: 'crawl (intro)',
   manifest: 'manifest (berthing)',
   voyage: 'voyage (oregon trail)',
@@ -72,6 +76,10 @@ const BEAT_LABELS: Record<StoryBeat, string> = {
   'ch10-ask': 'ch10 · the crossing back, and the ask',
   'ch10-transit': 'ch10 · the bearing, flown',
   'ch9-hearth': 'ch9 · safe rest / handback',
+  'ch13-home': 'ch13 · the working hearth, and the old fault',
+  'ch13-return': 'ch13 · the return to Origin',
+  'ch13-survey': 'ch13 · demonstrate a route',
+  'ch13-common': 'ch13 · the reciprocal proof',
   done: 'complete  [two-world free play]'
 };
 
@@ -178,6 +186,7 @@ const StoryDebugPanel: React.FC = () => {
   const chapters = useMemo(() => {
     const groups = new Map<string, StoryBeat[]>();
     for (const beat of STORY_BEAT_ORDER) {
+      if (beat.startsWith('ch14-')) continue; // No synthetic entry for the field record.
       const chapter = chapterForBeat(beat);
       if (!groups.has(chapter)) groups.set(chapter, []);
       groups.get(chapter)!.push(beat);

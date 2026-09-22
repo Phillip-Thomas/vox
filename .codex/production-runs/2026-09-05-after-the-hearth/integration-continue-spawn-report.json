@@ -1,0 +1,149 @@
+{
+  "schema": "paravoxia.integrationRepairReport.v1",
+  "author": "integration-engineer",
+  "at": "2026-09-06T23:22:00+00:00",
+  "runId": "2026-09-05-after-the-hearth",
+  "defectIds": ["CG-IMPL-011"],
+  "materialRepairIteration": 9,
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "contractChanged": false,
+  "directionRef": "continue-spawn-repair-direction.json",
+  "boundaryDecisionRef": "producer-continue-spawn-boundary-completion.json",
+  "budgetDecisionRef": "producer-continue-spawn-budget-decision.json",
+  "gatesCheckedBeforeMutation": {
+    "sourceMutationAuthorized": true,
+    "sourceHandoffAt": "2026-09-06T23:15:21.182511+00:00",
+    "verifierCleanupCompleted": true,
+    "cleanupEvidenceRef": "producer-continue-pose-handoff-closure-review.json#cleanup",
+    "livePreimplementationBytesMatchedRecordedBaseline": true
+  },
+  "boundedAction": "Preserve the existing safety-validated matching saved on-foot pose at Continue controller initialization instead of replacing it with persisted parked-ship egress.",
+  "rootCause": "EfficientScene computed landedPlayerSpawn as `landedShipPos ? landedPlayerEgress ?? arrivalFallback : initialPlayerPosition`. landedShipPos is seeded at mount from the validated persisted parked ship, so any Continue with a parked ship discarded the correctly loaded saved on-foot pose H before EfficientPlayer hydrated.",
+  "fixSummary": "Spawn precedence is now scoped by provenance. The initial on-foot position is tagged with how it was obtained; a ship pose is tagged as either rehydrated-from-persistence or earned-this-session; and a monotonic shipEgressClaimed flag is set the moment the player actually takes the ship. A safety-validated saved on-foot pose outranks only a merely persisted parked ship, and only until egress is claimed. Every other case resolves exactly as before.",
+  "touchedPaths": [
+    {
+      "path": "main/src/components/EfficientScene.tsx",
+      "state": "modified",
+      "beforeSha256": "ab95dfe4d2dbb59bbaa22e4fdf60faf8f4fa4f9fd959040bfe17fdb4a776f995",
+      "afterSha256": "9114c71a6b4d5c2502013c72b0a962a8955a1793bd4afc0c474dda92022f39a9",
+      "beforeMatchesBoundaryPreimplementationHash": true
+    },
+    {
+      "path": "main/src/utils/playerSpawnSelection.ts",
+      "state": "added",
+      "beforeSha256": null,
+      "afterSha256": "005e3b8f7a0acad7f934332bcadf765d987ec8b8e604133c4c90e8559c9e08b3"
+    },
+    {
+      "path": "main/src/utils/playerSpawnSelection.test.ts",
+      "state": "added",
+      "beforeSha256": null,
+      "afterSha256": "e5cc2f8f0d206e1df555ac53494adc0b246734eff50cf7650913de1f7cf7fe26"
+    }
+  ],
+  "allowedButNotUsed": ["main/src/components/EfficientScene.test.tsx"],
+  "protectedPathsUnchanged": [
+    {
+      "path": "main/src/components/EfficientPlayer.tsx",
+      "sha256": "c46bfd6771dd4dd29d779210183ba64a4e78cb1b60769f3a513e5c30294f0660",
+      "unchanged": true
+    }
+  ],
+  "dirtyWorkingTreePreserved": true,
+  "otherFilesTouched": "none; the pre-existing dirty tree (145 tracked modifications plus untracked work) was left exactly as found",
+  "actualCapturedValuesUsed": {
+    "captureRef": "verifier/captures/continue-pose-handoff/attempt2-closure-2026-09-06T2301Z",
+    "savedOnFootH": [-32.02875900268555, 52.788692474365234, 21.45030403137207],
+    "persistedParkedShipIA": [53.5, 24, -24],
+    "shipEgressFA": [53.85, 21.5, -24],
+    "observedPostContinueCentre": [53.849998474121094, 21.5, -24],
+    "arrivalPad": [8, 53.85, -6]
+  },
+  "focusedChecks": [
+    {
+      "command": "npx tsc --noEmit -p tsconfig.json --pretty false",
+      "cwd": "main",
+      "exit": 0,
+      "log": "logs/integration-continue-spawn/typecheck.log"
+    },
+    {
+      "command": "npx vitest run src/utils/playerSpawnSelection.test.ts src/utils/spawnValidation.test.ts src/utils/worldArrival.test.ts src/state/shipFlightContinuity.test.ts src/story/diveReloadRecovery.test.ts src/game/systems/persistence.test.ts src/utils/waterVoxels.test.ts src/App.test.tsx",
+      "cwd": "main",
+      "exit": 0,
+      "result": "8 files passed, 101 tests passed",
+      "log": "logs/integration-continue-spawn/focused-vitest.log"
+    }
+  ],
+  "counterfactual": {
+    "performed": true,
+    "method": "Temporarily reverted selectPlayerSpawnChoice to the pre-repair unconditional ship-wins rule, re-ran the focused suite, then restored the file and verified the restored sha256 equals the candidate hash.",
+    "oldSourceResult": "4 failed | 11 passed (15)",
+    "candidateResult": "15 passed (15)",
+    "restoredSha256": "005e3b8f7a0acad7f934332bcadf765d987ec8b8e604133c4c90e8559c9e08b3",
+    "exactRestorationVerified": true,
+    "alsoEncodedInTest": "oldSourceSpawn() reproduces the prior EfficientScene expression verbatim and demonstrates it selecting FA rather than H",
+    "log": "logs/integration-continue-spawn/counterfactual.md"
+  },
+  "coverage": {
+    "validSavedOnFootContinueVersusParkedShip": true,
+    "validatorRelocatedSavedPoseStillTakesPrecedence": true,
+    "missingOrUnsafeOrMismatchedSaveFallsBackSafely": true,
+    "noShipPoseUsesSceneInitialPosition": true,
+    "unresolvedEgressGeometryFallsBackToArrivalPad": true,
+    "subsequentRealBoardFlyLandDisembarkUsesCurrentLawfulEgress": true,
+    "restoreLatchCannotLeakForever": true,
+    "existingSafeSpawnValidatorTestsPreserved": true,
+    "noSourceStringTests": true,
+    "noGrantOnlyFakes": true
+  },
+  "preserved": {
+    "safeSpawnValidation": "isDryClearResumePosition and findValidSpawnSite are called exactly as before; no predicate, radius or tolerance changed.",
+    "shipPoseAndRendering": "landedShipPos/landedShipQuaternion still drive SpaceshipPlaceholder, ShipController boardingPosition, TidegardenSettlementWorld and persistShipFlightLocation unchanged. The ship remains parked on +X and correctly rendered even when the player resumes far away.",
+    "noForcedTopFace": "No face selection, pose projection or terrain-safety bypass was introduced.",
+    "resetSemantics": "resetPosition preserved byte-equivalently via landedPlayerResetPosition (ship known -> egress, otherwise arrival pad).",
+    "actorWorldMatching": "loadPlayerPose(commandContext.world) scoping is untouched; a mismatched save still returns null and yields the arrival source, which carries no precedence.",
+    "poseOrientationSemantics": "setPlayerLook(forward, pitch) call sites unchanged.",
+    "authoredDiveRecovery": "Chapter 6 dive reload recovery keeps its existing behavior and deliberately carries no new precedence.",
+    "storyAnchoredSpawn": "Anchored story chapters still suppress the saved pose entirely.",
+    "arrivalRouteScoreAudioPredicates": "untouched"
+  },
+  "unresolvedConcerns": [
+    {
+      "concern": "The lifecycle decision is proven at the selection seam, not by mounting EfficientScene. No test asserts that EfficientScene wires provenance/claim into the helper correctly.",
+      "why": "EfficientScene requires Physics plus ~50 module mocks to mount; building that harness inside the 20-minute bound would have produced a fragile, largely artificial fixture, and EfficientScene.test.tsx was optional in the direction.",
+      "mitigation": "Typecheck passes and the wiring diff is small and reviewable (logs/integration-continue-spawn/EfficientScene.diff). The independent verifier's real-browser Continue is the intended proof of the wired behavior.",
+      "severity": "medium",
+      "actionForRoot": "Treat the independent actual Continue capture as the binding proof that the wiring, not just the rule, is correct."
+    },
+    {
+      "concern": "shipEgressClaimed is seeded true when the scene mounts already in flight (Continue taken inside the ship). That is intended, but it means a flight-mode Continue never grants on-foot precedence even if a saved on-foot pose also exists.",
+      "why": "In flight mode the initial spawn source is 'system-restore', which carries no precedence anyway, so behavior is unchanged from baseline.",
+      "severity": "low",
+      "actionForRoot": "None; recorded for transparency."
+    },
+    {
+      "concern": "validatedPersistedParked local and derived face remain unmeasured in the capture and were NOT inferred or invented. The repair does not depend on them.",
+      "severity": "informational",
+      "actionForRoot": "None."
+    },
+    {
+      "concern": "No additional source seam was demonstrated as necessary. EfficientPlayer, App, persistence and flight required no change for this repair.",
+      "severity": "informational",
+      "actionForRoot": "None; no boundary broadening requested."
+    }
+  ],
+  "notRun": [
+    "npm run verify",
+    "npm run build",
+    "browser/GPU probes",
+    "full vitest suite",
+    "dist overwrite"
+  ],
+  "baselineNote": "The prior 3192-test figure is BASELINE context only and is not offered as candidate proof. The independent verifier owns the one stable full suite.",
+  "selfAcceptance": false,
+  "publicationAuthorized": false,
+  "defectClosure": false,
+  "chapterAcceptance": false,
+  "metadataOrManifestEdited": false
+}

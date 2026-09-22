@@ -1,0 +1,16 @@
+{
+  "role": "earned-continue-probe-prepor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T16:24:12.370384+00:00",
+  "commissionSha256": "8b8daa0e235932429341bbe00a005a61e5c71bc98662d5267224985de5aff288",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "Prepare copied primary earned Continue probe only; no game edits GPU or acceptance",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T16:37:47.281574+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "7b9bcdbc-ce22-42fe-a7fe-bda9c98dd6b3",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

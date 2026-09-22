@@ -1,0 +1,18 @@
+{
+  "role": "story-verifier",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T15:09:47.608811+00:00",
+  "commissionSha256": "b9571f68ceddfebdac406d0076d520942da4b31f6d5b33ba5db276b5b05fba4e",
+  "systemPromptSource": ".claude/agents/story-verifier.md",
+  "systemPromptSha256": "06216d09794dac2b5875897d6774a6b2aa11e851cb8a07d280123e5f0a96389f",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "sourceFilesRehashedBefore": 98,
+  "scope": "Bounded real manual-input, actual drawing-corner recovery and clearance proof after invalid harness attempts; no source/build/contract edits or full verification claim",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T15:28:19.386073+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "0cff3889-4cc0-4f8e-bec0-933f74f03562",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 98
+}

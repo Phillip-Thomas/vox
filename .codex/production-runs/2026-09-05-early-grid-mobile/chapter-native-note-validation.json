@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-09-05T21:00:52.548Z",
+  "contractVersion": "draft-v1",
+  "contractSha256": "2ef9a016f8c803a1fadbf456d75b7fe1e6a9ae79f072854024d29704ee346410",
+  "artifact": "chapter-peer-notes.jsonl",
+  "notes": [
+    "note.early.chapter-to-score.draft-v1",
+    "note.early.chapter-to-cinematography.draft-v1"
+  ],
+  "nativeNoteSchemaErrors": [],
+  "status": "pass",
+  "boundary": "Docs-only fragment validation; no full contract approval, runtime check or signature."
+}

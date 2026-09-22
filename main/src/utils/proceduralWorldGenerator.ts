@@ -12,8 +12,6 @@ import {
 } from '../game/generation/resourceDeposits';
 
 class SimpleNoise {
-  private gradients = new Map<string, [number, number]>();
-
   constructor(private seed: number) {}
 
   fractalNoise(x: number, y: number, octaves = 4, persistence = 0.5, scale = 1) {
@@ -45,17 +43,6 @@ class SimpleNoise {
     return this.interpolate(ix0, ix1, sy);
   }
 
-  private getGradient(x: number, y: number): [number, number] {
-    const key = `${x},${y}`;
-    const cached = this.gradients.get(key);
-    if (cached) return cached;
-
-    const angle = this.hashCoords(x, y) * Math.PI * 2;
-    const gradient: [number, number] = [Math.cos(angle), Math.sin(angle)];
-    this.gradients.set(key, gradient);
-    return gradient;
-  }
-
   private hashCoords(x: number, y: number) {
     let hash = Math.imul(x | 0, 374761393) ^
       Math.imul(y | 0, 668265263) ^
@@ -71,10 +58,80 @@ class SimpleNoise {
     return a + fade * (b - a);
   }
 
+  /**
+   * Perlin gradient dot product, computed rather than memoised.
+   *
+   * This used to route through a `getGradient` that built a `${ix},${iy}`
+   * STRING key, looked it up in a `Map<string, [number, number]>`, and on a miss
+   * allocated a two-element array to store. Four of those per `noise` call and
+   * sixteen per four-octave `fractalNoise`, over every voxel of a world load:
+   * a CPU profile of a cold boot put `getGradient` at 961ms of self time —
+   * 15.3% of the whole trace and the single most expensive function in the app.
+   * Almost none of that was the maths. It was string building, string hashing
+   * and the garbage they made.
+   *
+   * The cache was pure memoisation of a pure function — the gradient is fully
+   * determined by `hashCoords(ix, iy)` — so dropping it costs one `Math.cos`
+   * and one `Math.sin` and saves the allocation, the lookup and the collection.
+   * It also fixes an unbounded leak: that Map was never cleared, so it grew for
+   * every distinct lattice point a session ever touched.
+   *
+   * The arithmetic is unchanged and the output is bit-identical: same hash,
+   * same trig, same multiply-add order. `proceduralWorldGeneratorDeterminism`
+   * pins that.
+   */
   private dotGrid(ix: number, iy: number, x: number, y: number) {
-    const gradient = this.getGradient(ix, iy);
-    return (x - ix) * gradient[0] + (y - iy) * gradient[1];
+    const angle = this.hashCoords(ix, iy) * Math.PI * 2;
+    return (x - ix) * Math.cos(angle) + (y - iy) * Math.sin(angle);
   }
+}
+
+/**
+ * Half-extent of the voxel coordinate range a packed cache key can represent.
+ * 17 bits per axis, three axes: 51 bits, inside the 53 a double holds exactly.
+ */
+const VOXEL_KEY_LIMIT = 65536;
+const VOXEL_KEY_SPAN = VOXEL_KEY_LIMIT * 2;
+
+/**
+ * Pack a voxel coordinate into one number for the generator's memo caches, or
+ * return null when it will not fit.
+ *
+ * The caches used `${x},${y},${z}` string keys. The memoisation itself is
+ * worth keeping — the noise chain behind a surface height is genuinely
+ * expensive — but building and hashing a string for every lookup is not, and
+ * these sit directly under a cold world load.
+ *
+ * The null return is the important part. A silent wrap at the edge of the
+ * range would alias two different voxels onto one cache entry and quietly
+ * corrupt terrain, which is far worse than the cost it saves; out-of-range
+ * coordinates simply bypass the cache and recompute.
+ */
+export function voxelCacheKey(x: number, y: number, z: number): number | null {
+  if (!Number.isInteger(x) || !Number.isInteger(y) || !Number.isInteger(z)) return null;
+  if (Math.abs(x) >= VOXEL_KEY_LIMIT) return null;
+  if (Math.abs(y) >= VOXEL_KEY_LIMIT) return null;
+  if (Math.abs(z) >= VOXEL_KEY_LIMIT) return null;
+  return ((x + VOXEL_KEY_LIMIT) * VOXEL_KEY_SPAN + (y + VOXEL_KEY_LIMIT)) * VOXEL_KEY_SPAN
+    + (z + VOXEL_KEY_LIMIT);
+}
+
+export interface PreparedField<Values extends Float64Array | Uint8Array> {
+  /** Packed numeric voxel keys (see voxelCacheKey), exact in Float64. */
+  keys: Float64Array;
+  values: Values;
+}
+
+/**
+ * Heights and offsets are Float64 on purpose: a round-trip test on the default
+ * seed found EVERY one of 132,400 cached surface heights inexact in Float32.
+ * The terrain fingerprint forbids approximation, so the fields are exact by
+ * construction — about 1MB per field at planetRadius 25, transferred zero-copy.
+ */
+export interface PreparedTerrainFields {
+  existence: PreparedField<Uint8Array>;
+  surfaceHeight: PreparedField<Float64Array>;
+  landOffset: PreparedField<Float64Array>;
 }
 
 export class ProceduralWorldGenerator {
@@ -86,9 +143,9 @@ export class ProceduralWorldGenerator {
   // material skin and the ore distribution â€” see archetypeSurface + getOreMaterial.
   private profile: PlanetProfile;
 
-  private surfaceHeightCache = new Map<string, number>();
-  private landOffsetCache = new Map<string, number>();
-  private existenceCache = new Map<string, boolean>();
+  private surfaceHeightCache = new Map<number, number>();
+  private landOffsetCache = new Map<number, number>();
+  private existenceCache = new Map<number, boolean>();
   // Lazily-computed sea-level radius (coordinate units) derived from a chosen
   // PERCENTILE of the actual terrain surface-radius distribution.
   private seaLevelRadius: number | null = null;
@@ -635,23 +692,92 @@ export class ProceduralWorldGenerator {
     return Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
   }
 
+  // --- Prepared fields (world-gen off the main thread, Batch 2) --------------
+  //
+  // The three memo caches below are the expensive part of every terrain query:
+  // once a coordinate has been answered, answering it again is a Map lookup.
+  // The world-prep WORKER answers most of the planet while it scans, and then
+  // throws those answers away — the main thread receives voxel positions and
+  // rebuilds a generator whose caches are empty, so every later consumer
+  // (spawn validation, story anchors, water, the ship) recomputes the noise
+  // that was just computed off-thread. These two methods move the answers
+  // instead of the work. Keys are the packed numeric voxel keys, exported as
+  // Float64 because they exceed 2^31 and must survive exactly.
+
+  /** Snapshot of every memoised answer this generator holds. */
+  exportPreparedFields(): PreparedTerrainFields {
+    const pack = <T>(map: Map<number, T>, write: (value: T, index: number) => void, values: Float64Array | Uint8Array) => {
+      const keys = new Float64Array(map.size);
+      let index = 0;
+      for (const [key, value] of map) {
+        keys[index] = key;
+        write(value, index);
+        index++;
+      }
+      return { keys, values };
+    };
+    const existence = new Uint8Array(this.existenceCache.size);
+    const surfaceHeight = new Float64Array(this.surfaceHeightCache.size);
+    const landOffset = new Float64Array(this.landOffsetCache.size);
+    return {
+      existence: pack(this.existenceCache, (v, i) => { existence[i] = v ? 1 : 0; }, existence) as PreparedField<Uint8Array>,
+      surfaceHeight: pack(this.surfaceHeightCache, (v, i) => { surfaceHeight[i] = v; }, surfaceHeight) as PreparedField<Float64Array>,
+      landOffset: pack(this.landOffsetCache, (v, i) => { landOffset[i] = v; }, landOffset) as PreparedField<Float64Array>
+    };
+  }
+
+  /**
+   * Install prepared answers on a fresh generator. Only a FRESH one: seeding a
+   * generator that has already answered queries could alias a live edit. Every
+   * field is exact (see PreparedTerrainFields), so all three are installed.
+   */
+  hydratePreparedFields(fields: PreparedTerrainFields): void {
+    // Sync fallback and tools exhaust the identical map writes without yielding.
+    for (const chunk of this.hydratePreparedFieldsInChunks(fields)) void chunk;
+  }
+
+  /** Cooperative hydration; the caller publishes this fresh generator only after exhaustion. */
+  *hydratePreparedFieldsInChunks(fields: PreparedTerrainFields, chunkSize = 2048): Generator<void> {
+    if (!Number.isSafeInteger(chunkSize) || chunkSize <= 0) throw new Error('Prepared-field chunk size must be positive.');
+    if (this.existenceCache.size > 0 || this.surfaceHeightCache.size > 0 || this.landOffsetCache.size > 0) {
+      throw new Error('Prepared fields can only hydrate a fresh generator.');
+    }
+    let written = 0;
+    for (let i = 0; i < fields.existence.keys.length; i++) {
+      this.existenceCache.set(fields.existence.keys[i], fields.existence.values[i] !== 0);
+      if (++written % chunkSize === 0) yield;
+    }
+    for (let i = 0; i < fields.surfaceHeight.keys.length; i++) {
+      this.surfaceHeightCache.set(fields.surfaceHeight.keys[i], fields.surfaceHeight.values[i]);
+      if (++written % chunkSize === 0) yield;
+    }
+    for (let i = 0; i < fields.landOffset.keys.length; i++) {
+      this.landOffsetCache.set(fields.landOffset.keys[i], fields.landOffset.values[i]);
+      if (++written % chunkSize === 0) yield;
+    }
+  }
+
   // Public query: is there terrain at this voxel? (used by tools/tests + callers
   // that need existence without a material.)
   shouldVoxelExist(x: number, y: number, z: number) {
-    const key = `${x},${y},${z}`;
-    const cached = this.existenceCache.get(key);
-    if (cached !== undefined) return cached;
+    const key = voxelCacheKey(x, y, z);
+    if (key !== null) {
+      const cached = this.existenceCache.get(key);
+      if (cached !== undefined) return cached;
+    }
 
     const exists = this.getDistanceFromCenter(x, y, z) <= this.getCoreRadius() ||
       this.getProceduralSurfaceHeight(x, y, z) > 0;
-    this.existenceCache.set(key, exists);
+    if (key !== null) this.existenceCache.set(key, exists);
     return exists;
   }
 
   private getProceduralSurfaceHeight(x: number, y: number, z: number) {
-    const key = `${x},${y},${z}`;
-    const cached = this.surfaceHeightCache.get(key);
-    if (cached !== undefined) return cached;
+    const key = voxelCacheKey(x, y, z);
+    if (key !== null) {
+      const cached = this.surfaceHeightCache.get(key);
+      if (cached !== undefined) return cached;
+    }
 
     const planetRadius = this.getPlanetRadius();
     const absX = Math.abs(x);
@@ -686,7 +812,7 @@ export class ProceduralWorldGenerator {
     if (terrainOffset < minOffset) terrainOffset = minOffset;
 
     const height = surfaceDistance + terrainOffset;
-    this.surfaceHeightCache.set(key, height);
+    if (key !== null) this.surfaceHeightCache.set(key, height);
     return height;
   }
 
@@ -711,9 +837,11 @@ export class ProceduralWorldGenerator {
    * high above the carved ocean basins (the basins are explorably deep as a result).
    */
   private getLandOffset(x: number, y: number, z: number): number {
-    const key = `${x},${y},${z}`;
-    const cached = this.landOffsetCache.get(key);
-    if (cached !== undefined) return cached;
+    const key = voxelCacheKey(x, y, z);
+    if (key !== null) {
+      const cached = this.landOffsetCache.get(key);
+      if (cached !== undefined) return cached;
+    }
 
     const [noiseX, noiseY] = this.tangentNoiseCoords(x, y, z);
     const mountainNoise = this.noise.fractalNoise(
@@ -739,7 +867,7 @@ export class ProceduralWorldGenerator {
       offset -= this.terrainConfig.valleyDepth * Math.abs(valleyNoise + 0.1) * 5;
     }
 
-    this.landOffsetCache.set(key, offset);
+    if (key !== null) this.landOffsetCache.set(key, offset);
     return offset;
   }
 

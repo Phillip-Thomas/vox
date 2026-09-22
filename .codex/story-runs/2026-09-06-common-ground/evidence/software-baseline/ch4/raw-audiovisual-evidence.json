@@ -1,0 +1,130 @@
+{
+  "schema": "paravoxia.rawAudiovisualEvidence.v1",
+  "runId": ".codex/story-runs/2026-09-06-common-ground/evidence/software-baseline/ch4",
+  "contractVersion": null,
+  "contractSha256": null,
+  "sourceRevision": "b631a52",
+  "workingTree": "b631a52",
+  "chapter": "ch4",
+  "lane": "manual",
+  "compiledAt": "2026-09-06T04:58:51.342Z",
+  "containsCreativeIntent": false,
+  "intentFreeInstructions": "Open only the files listed here, in this order, and read nothing else first. Rows marked \"hud-suppressed frame of record\" are the frames to judge; rows marked \"audit only\" are the same instants with the HUD layer shown and exist for auditors, not reviewers. sheet.png is the chronological contact sheet and its red numbers are the frameIndex values in this list. digest.md answers every timing, order and causality question; frames are for shape, colour, composition and light.",
+  "playbackMetadata": {
+    "frameSize": "1280x720",
+    "frameFormat": "png",
+    "audioFormat": null,
+    "colourManagement": "none",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+    "tier": "swiftshader-low",
+    "headed": false,
+    "clock": "wall-since-settle",
+    "instructions": "View frames at 1280x720, one at a time, in list order; view the contact sheet whole; play the continuous video once before examining frames."
+  },
+  "continuousVideo": null,
+  "additionalVideo": [],
+  "contactSheet": {
+    "path": "evidence/bundle/sheet.png",
+    "bytes": 246441,
+    "sha256": "69abbae6232f0a7f959ec829f78506001f0473b1c09c3457f6c74dbd8a4b88d5",
+    "probe": {
+      "formatName": "png_pipe",
+      "durationSeconds": 0,
+      "video": {
+        "codec": "png",
+        "width": 496,
+        "height": 320
+      },
+      "audio": null
+    },
+    "kind": "contact-sheet"
+  },
+  "digest": {
+    "path": "evidence/bundle/digest.md",
+    "sha256": "6710035544c9e92f52afddaa462658d9f2098c2e917413ac613e02158b5a1843"
+  },
+  "frameStrips": [
+    {
+      "path": "evidence/bundle/frames/f0000_t2.01s_opening-2.0s.png",
+      "bytes": 953246,
+      "sha256": "e3969f53c809aea08873c4baf1a1e75302b7ce7fed29dc5b167f36d5ac752ef2",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "opening-2.0s",
+      "beat": "ch4-audit",
+      "role": "keyframe",
+      "frameIndex": 0,
+      "storyClockS": 2.008,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/frames/f0001_t66.97s_strip.png",
+      "bytes": 1193837,
+      "sha256": "f503338d77514177305c46a8ccff7aa7a17f751129a5b2acb438eb80fa160bae",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal",
+      "beat": "ch4-audit",
+      "role": "temporal",
+      "frameIndex": 1,
+      "storyClockS": 66.971,
+      "capture": "hud-suppressed frame of record"
+    },
+    {
+      "path": "evidence/bundle/hud/f0000_t2.01s_opening-2.0s.png",
+      "bytes": 1003684,
+      "sha256": "2983edb8a1c8ef37fcf4b4b34db82285eb58dda6b64d5197f6aa897e0d08c061",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "opening-2.0s-hud",
+      "beat": "ch4-audit",
+      "frameIndex": 0,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    },
+    {
+      "path": "evidence/bundle/hud/f0001_t66.97s_strip.png",
+      "bytes": 1036692,
+      "sha256": "ec9b7255b9921dd066cce9d084c4cd619e33d98feaa9133c41f037c477c6b1ef",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "label": "temporal-hud",
+      "beat": "ch4-audit",
+      "frameIndex": 1,
+      "capture": "hud composite (audit only — not reviewer evidence)"
+    }
+  ],
+  "audio": [],
+  "bursts": []
+}

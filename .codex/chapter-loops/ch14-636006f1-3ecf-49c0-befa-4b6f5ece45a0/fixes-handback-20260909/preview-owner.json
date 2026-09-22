@@ -1,0 +1,47 @@
+{
+  "ownerPid": 85644,
+  "serverPid": 85652,
+  "url": "http://127.0.0.1:46451/",
+  "diagnosticUrl": "http://127.0.0.1:46451/?story=ch13-survey&journeyprobe=1&profile=HIGH",
+  "entry": {
+    "kind": "normal-save",
+    "url": "http://127.0.0.1:46451/?journeyprobe=1&profile=HIGH",
+    "storageState": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/fixes-handback-20260909/player-storage.json",
+      "sha256": "c23a9402de7f2700cca0a37193f680357c520b22ebb8f54df40cf1a5dc1a188a"
+    },
+    "storageStateFile": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/fixes-handback-20260909/player-storage.json",
+    "browser": {
+      "playwrightModule": "/home/thomasphillip/Projects/vox/main/node_modules/playwright-core/index.mjs",
+      "executablePath": "/snap/bin/chromium",
+      "headless": false,
+      "env": {
+        "DISPLAY": ":0"
+      },
+      "args": [
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--ignore-gpu-blocklist",
+        "--enable-webgl",
+        "--use-gl=angle",
+        "--use-angle=gl",
+        "--disable-background-timer-throttling",
+        "--disable-renderer-backgrounding"
+      ]
+    },
+    "sourceCheckpoint": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-377e625e-73de-4c76-8e56-fe2b635737c2/continue/raw/review-storage.json",
+      "sha256": "02163460b8d17cee73d58af7d0548cc9de06180518ec031b4b91b79b711dc65a"
+    },
+    "sourceProof": {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-377e625e-73de-4c76-8e56-fe2b635737c2/continue/report.json",
+      "sha256": "c5e8fb7412885b9b515fbaaedbfc36e5d525d98e15ff851199d6afad750b577f"
+    },
+    "chapter": "ch14",
+    "beat": "ch14-scar",
+    "instructions": "Create your owned Playwright browser context with this storageState file, navigate to the URL, and click the visible Continue button. It is an actual checkpoint earned by normal inputs and verified by Continue. Do not edit saved values. Judge your own subsequent play; the supplied save does not prove fresh full-story entry."
+  },
+  "candidateSha256": "0f1cfb02ac521ef69bbc704cc99cd30682106397735e0fae447a1dfdf481bc93",
+  "build": "c96acb1da0ae117b5b0eb85ddf868f283e7c1960dc93915650e2de98880f6390",
+  "startedAt": "2026-09-09T02:37:53.508Z"
+}

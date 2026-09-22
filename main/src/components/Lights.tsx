@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getItemCount, subscribeInventory } from '../game/systems/inventorySystem';
@@ -68,7 +68,7 @@ export function Campfires({
   // World-relative — clear, then load this world's saved campfires. Isolated
   // story-beat rehearsals reconstruct their carried fire only AFTER hydration;
   // placing it in a sibling effect races this reset and leaves the audit inert.
-  useEffect(() => {
+  useLayoutEffect(() => {
     resetCampfires();
     restoreCampfiresForWorld(persistenceWorld ?? terrainSeed);
     if (hydrationPrerequisite && getCampfires().length === 0) {

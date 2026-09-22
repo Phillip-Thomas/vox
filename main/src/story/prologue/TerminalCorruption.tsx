@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { CRASH_LINES } from '../storyScript.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
+import { voiceVisibleText } from '../../audio/voice/voicePresentation.ts';
 import { PHOSPHOR, TERMINAL_BG } from './TerminalPrologue.tsx';
 
 // --- The crash, rendered as the terminal failing -------------------------------------
@@ -70,6 +71,7 @@ const TerminalCorruption: React.FC<{ onDone: () => void }> = ({ onDone }) => {
       const originY = h * 0.32;
       for (let i = 0; i < visibleLines; i++) {
         const line = CRASH_LINES[i];
+        voiceVisibleText(`crash:${i}`, line, line.length, 'terminal');
         let text = '';
         for (const ch of line) {
           text += ch !== ' ' && Math.random() < severity * 0.5

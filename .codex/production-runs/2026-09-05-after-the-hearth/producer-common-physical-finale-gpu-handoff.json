@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-06T20:19:30.296786+00:00",
+  "from": "common-physical-discriminator",
+  "to": "finale-window-runtime",
+  "commonFinished": "2026-09-06T20:17:51.387753+00:00",
+  "commonCaptureCleanupAt": "2026-09-06T20:17:11.566Z",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashed": 99,
+  "kernelLockEntries": [],
+  "originalFinaleDeadlineUtc": "2026-09-06T20:27:05.927860+00:00",
+  "budgetRestarted": false,
+  "gameSourceMutationAuthorized": false
+}

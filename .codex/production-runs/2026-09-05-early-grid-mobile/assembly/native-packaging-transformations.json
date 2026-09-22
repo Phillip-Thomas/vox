@@ -1,0 +1,51 @@
+[
+  {
+    "path": "story-intent.md",
+    "originalPath": "assembly/originals/story-intent.md",
+    "originalSha256": "63eca86bd673e0e26f68d18a48054f98ac7a6286e56d0bdf1bd34abcbc4582a2",
+    "nativeSha256": "ca0d4894e3a7d7a319fd94718c7718859aad7164ee380548953c7ae0bbf9a9bf",
+    "sectionIndex": {
+      "Dramatic contract": "Character, agency, and causal turn; Proposed action sequence"
+    },
+    "literalEscapeCount": 0
+  },
+  {
+    "path": "score-treatment.md",
+    "originalPath": "assembly/originals/score-treatment.md",
+    "originalSha256": "5314db77eda76a04a26df7fe32a017ad440f37a7b21f4bc7c4e93b0e08810c77",
+    "nativeSha256": "57883ba994b501e96ddd22bc6ce7aa089c33c7c663268d72b6b5a19988ae7460",
+    "sectionIndex": {
+      "Harmonic": "Grounding and protected sound; Proposed causal score contract",
+      "Cue ledger": "What the current calls actually mean; Proposed causal score contract",
+      "Performance": "Timing, cancellation and restoration; Bounded integration and evidence"
+    },
+    "literalEscapeCount": 1
+  },
+  {
+    "path": "cinematography-treatment.md",
+    "originalPath": "assembly/originals/cinematography-treatment.md",
+    "originalSha256": "04b04cd93632cefa0bf036306836e8e143dfb76ca286b111a0a593c35a603ef8",
+    "nativeSha256": "d6bb7ae9ddadd5ad4a3003e610b2ac64d0ca62f8484f03d13f443635d838a7d9",
+    "sectionIndex": {
+      "Current-cut": "Grounding and the current cut",
+      "Color script": "Chosen visual direction",
+      "Shot ledger": "Shot, anchor and continuity contract",
+      "Performance": "Capture and acceptance direction"
+    },
+    "literalEscapeCount": 0
+  },
+  {
+    "path": "shipped-visual-baseline.json",
+    "originalPath": "assembly/originals/shipped-visual-baseline.json",
+    "originalSha256": "46395cee350f1ee4a6b7c0c310d550baf7ce0e6f6630a5ece8a25a3ac19a434b",
+    "nativeSha256": "aba8da108b70aea647e63d768cd790f100c86d364fbfb370b03a8977a68ae135",
+    "excludedErrorExternalization": "Every failed attempt reason/path retained; exact original errors referenced by JSON pointer to preserved bytes. No failed attempt deleted or accepted."
+  },
+  {
+    "path": "shipped-ux-baseline.json",
+    "originalPath": "assembly/originals/shipped-ux-baseline.json",
+    "originalSha256": "3b388660d31ffe84ba5518f53429e22f423b206aa7e08f7cc27e9a99d0b374f8",
+    "nativeSha256": "9bfe7c9e8b61180a44218b57ef333aeacf46b141ad0fa27a579f6aeac8a85288",
+    "excludedErrorExternalization": "Every failed attempt reason/path retained; exact original errors referenced by JSON pointer to preserved bytes. No failed attempt deleted or accepted."
+  }
+]

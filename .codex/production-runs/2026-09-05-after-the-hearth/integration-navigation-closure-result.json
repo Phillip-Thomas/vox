@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 370148,
+  "stop_reason": "end_turn",
+  "session_id": "25a4c287-d95f-4fd1-90b0-822b3f9ec0ca",
+  "total_cost_usd": 2.718437,
+  "usage": {
+    "input_tokens": 72,
+    "cache_creation_input_tokens": 88166,
+    "cache_read_input_tokens": 2164676,
+    "output_tokens": 30080,
+    "output_tokens_details": {
+      "thinking_tokens": 6490
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 88166,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1131,
+        "cache_read_input_tokens": 91558,
+        "cache_creation_input_tokens": 675,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 675
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1984,
+      "outputTokens": 19,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002079,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 72,
+      "outputTokens": 30080,
+      "cacheReadInputTokens": 2164676,
+      "cacheCreationInputTokens": 88166,
+      "webSearchRequests": 0,
+      "costUSD": 2.716358,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 6490,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 42,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Closure complete. Summary:\n\n**Finding closed:** CG-IMPL-011 restore-ownership lifetime (the 13:47:57 SAVE-ENTRY item).\n\n**Pre-edit state:** rehashed `iterations/navigation-preclosure/source` \u2014 98/98 files matching the producer review, zero drift against the live worktree.\n\n**Failure reproduced before any source edit**, through the real persistence route and actual stored bytes (no hand-staging):\n- foreign payload read after an in-session empty restore \u2192 `isPristineCommonGround` false after rejection (exit 1)\n- malformed payload \u2192 the damaged stored field was literally replaced on disk by this actor's idle serialization (exit 1)\n\n**Cause:** `stageCommonGroundWorldPayload` set `pendingByWorld` but left the older `restoreSettledWorlds` membership earned by an *absent* read; once the rejected payload was consumed there was no pending, so the stale settled bit answered and `saveWorld` overwrote the just-read record.\n\n**Fix (1 behavioural line + comment):** a PRESENT staged payload now retires that stale settled membership. Ownership is re-earned only by real hydration or by a later read that genuinely finds nothing. `raw == null` is unchanged. No milestone, no F/ACK replay, no global progression field \u2014 a state-lifetime correction.\n\n**Changed exactly two lock-allowed files:** `commonGroundState.ts` (`681846b7\u2026`\u2192`900da8a2\u2026`) and `commonGroundDirector.test.ts` (`8584dc5c\u2026`\u2192`3dc70095\u2026`). The other 96 tracked files, including all navigation code, are byte-identical. No temp file under `main/src`; no destructive git.\n\n**Checks (cwd `main`, all after the last source edit):** focused regression 5 files/217 tests exit 0; counterfactual on pre-closure state source with final test bytes \u2192 both new cases fail, file restored with hash check; `npm run verify` exit 0 at **350 files / 3139 tests** (baseline 3137, +2/\u22120); `npm run story:ux:check` exit 0.\n\n**Artifacts:** `navigation-closure-report.json`/`.md`, `navigation-closure-progress.md`, logs and scripts under `logs/navigation-closure` and `tmp/navigation-closure`. No root-owned manifest, gate, readiness, ledger or the original engineer report was touched. Not an acceptance, no chapter-complete or hardware claim \u2014 evidence is source-level only.\n\nTwo honesty notes for root: (1) the malformed test's *trailing* assertion (post-rejection replay of new play) originally expected phase `idle`; the chapter really reaches `awaiting-start`, so that one assertion was corrected to observed behaviour \u2014 the retention assertion proving the defect was not weakened, and the counterfactual re-ran the final bytes. (2) No child test process of mine is running, but a pre-existing `vite preview` orphan (PID 1015158, started 12:24 UTC, before this session) is still alive on this repo; I left it alone rather than killing another session's process.",
+  "ttft_ms": 1442,
+  "type": "result",
+  "duration_ms": 453207,
+  "uuid": "e4b9f1e3-b8bc-4976-b589-2c1acf2838b3",
+  "ttft_stream_ms": 673,
+  "time_to_request_ms": 16,
+  "first_content_frame_ms": 673,
+  "queued_turn_count": 0
+}

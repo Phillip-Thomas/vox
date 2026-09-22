@@ -2,6 +2,13 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { FACE_NORMALS, dominantFaceForPosition } from './surfaceControls';
 import { seededUnit } from './worldCoordinates';
+import {
+  SURFACE_COMPOSITE,
+  SURFACE_INSET,
+  SURFACE_METAL,
+  SURFACE_PAD,
+  SURFACE_TRIM
+} from './cockpitSurface';
 
 // =============================================================================
 // SHIP DESIGN — the player's mini starfighter ("Kestrel").
@@ -291,102 +298,553 @@ export function createShipCanopyGeometry(): THREE.BufferGeometry {
   return geo;
 }
 
+
 // -----------------------------------------------------------------------------
-// Cockpit frame (one merged flat-shaded geometry, camera space, z negative)
+// Cockpit surface authoring
+//
+// Every cockpit part carries a four-channel `aSurf` attribute that the shared
+// cockpit shader (utils/cockpitSurface.ts) reads instead of a texture set:
+// which material it is, how occluded it is, a per-part variation seed, and the
+// object-space frequency of its procedural panelling. Authoring it here — next
+// to the geometry — keeps the two in step; a part cannot be added without
+// saying what it is made of.
+// -----------------------------------------------------------------------------
+
+export interface SurfaceSpec {
+  /** SURFACE_* material id from utils/cockpitSurface.ts. */
+  mat: number;
+  /** Object-space panel/seam frequency. Small parts want a higher number. */
+  scale: number;
+}
+
+const S_PANEL: SurfaceSpec = { mat: SURFACE_COMPOSITE, scale: 1.15 };
+const S_METAL: SurfaceSpec = { mat: SURFACE_METAL, scale: 2.6 };
+const S_INSET: SurfaceSpec = { mat: SURFACE_INSET, scale: 3.6 };
+const S_TRIM: SurfaceSpec = { mat: SURFACE_TRIM, scale: 5.0 };
+const S_PAD: SurfaceSpec = { mat: SURFACE_PAD, scale: 6.0 };
+
+let surfaceSeedCounter = 0;
+
+/**
+ * Reset the per-part variation sequence. Every builder calls this first so the
+ * same seed always produces the same panel breakup: a module-level counter that
+ * kept running across builds would make the cabin's finish depend on how many
+ * cockpits had been built before it, which is exactly the kind of drift that
+ * makes a screenshot diff meaningless.
+ */
+function beginSurfaceAssembly(): void {
+  surfaceSeedCounter = 0;
+}
+
+/**
+ * Tag a part with its surface identity. AO starts open and is replaced by the
+ * bake below once the whole assembly is known — a part cannot know what
+ * shadows it until it has neighbours.
+ */
+function surf(geo: THREE.BufferGeometry, spec: SurfaceSpec): THREE.BufferGeometry {
+  const count = (geo.attributes.position as THREE.BufferAttribute).count;
+  const data = new Float32Array(count * 4);
+  const seed = (surfaceSeedCounter = (surfaceSeedCounter * 1103515245 + 12345) & 0x7fffffff)
+    / 0x7fffffff;
+  for (let i = 0; i < count; i++) {
+    data[i * 4] = spec.mat;
+    data[i * 4 + 1] = 1;
+    data[i * 4 + 2] = seed;
+    data[i * 4 + 3] = spec.scale;
+  }
+  geo.setAttribute('aSurf', new THREE.BufferAttribute(data, 4));
+  return geo;
+}
+
+// Cosine-ish hemisphere taps in tangent space (+Z = surface normal). Six is
+// enough: this bake is for contact darkening and crevice grime, not GI.
+const AO_TAPS: Array<[number, number, number]> = [
+  [0, 0, 1],
+  [0.62, 0, 0.78],
+  [-0.62, 0, 0.78],
+  [0, 0.62, 0.78],
+  [0, -0.62, 0.78],
+  [0.45, 0.45, 0.77]
+];
+const AO_MAX_DISTANCE = 2.4;
+
+/** Slab test: distance to the first entry into `box`, or -1 for a miss. */
+function rayBox(
+  ox: number, oy: number, oz: number,
+  dx: number, dy: number, dz: number,
+  box: THREE.Box3
+): number {
+  let tmin = 0;
+  let tmax = AO_MAX_DISTANCE;
+  // X
+  if (Math.abs(dx) < 1e-8) {
+    if (ox < box.min.x || ox > box.max.x) return -1;
+  } else {
+    const inv = 1 / dx;
+    let t0 = (box.min.x - ox) * inv;
+    let t1 = (box.max.x - ox) * inv;
+    if (t0 > t1) { const s = t0; t0 = t1; t1 = s; }
+    tmin = Math.max(tmin, t0);
+    tmax = Math.min(tmax, t1);
+    if (tmin > tmax) return -1;
+  }
+  // Y
+  if (Math.abs(dy) < 1e-8) {
+    if (oy < box.min.y || oy > box.max.y) return -1;
+  } else {
+    const inv = 1 / dy;
+    let t0 = (box.min.y - oy) * inv;
+    let t1 = (box.max.y - oy) * inv;
+    if (t0 > t1) { const s = t0; t0 = t1; t1 = s; }
+    tmin = Math.max(tmin, t0);
+    tmax = Math.min(tmax, t1);
+    if (tmin > tmax) return -1;
+  }
+  // Z
+  if (Math.abs(dz) < 1e-8) {
+    if (oz < box.min.z || oz > box.max.z) return -1;
+  } else {
+    const inv = 1 / dz;
+    let t0 = (box.min.z - oz) * inv;
+    let t1 = (box.max.z - oz) * inv;
+    if (t0 > t1) { const s = t0; t0 = t1; t1 = s; }
+    tmin = Math.max(tmin, t0);
+    tmax = Math.min(tmax, t1);
+    if (tmin > tmax) return -1;
+  }
+  return tmin;
+}
+
+/**
+ * Bake per-vertex ambient occlusion into `aSurf.y` by tracing a short hemisphere
+ * of rays against the assembly's own part boxes.
+ *
+ * This is the change that makes the cabin read as a built volume rather than a
+ * lit diagram: corners go dark, undersides of consoles go dark, the recess
+ * behind every rib goes dark, and the shader then pools grime in exactly those
+ * places. It runs once per merged geometry (memoised by the caller), and it
+ * dedupes by quantised position + face so a flat-shaded box costs 6 traces
+ * rather than 36.
+ */
+function bakeAmbientOcclusion(
+  geo: THREE.BufferGeometry,
+  occluders: THREE.Box3[],
+  strength = 0.85
+): void {
+  const position = geo.attributes.position as THREE.BufferAttribute;
+  const normal = geo.attributes.normal as THREE.BufferAttribute;
+  const surface = geo.attributes.aSurf as THREE.BufferAttribute;
+  if (!position || !normal || !surface) return;
+
+  const cache = new Map<string, number>();
+  const tangent = new THREE.Vector3();
+  const bitangent = new THREE.Vector3();
+  const n = new THREE.Vector3();
+  const helper = new THREE.Vector3();
+
+  for (let i = 0; i < position.count; i++) {
+    const px = position.getX(i);
+    const py = position.getY(i);
+    const pz = position.getZ(i);
+    n.set(normal.getX(i), normal.getY(i), normal.getZ(i));
+    if (n.lengthSq() < 1e-8) continue;
+    n.normalize();
+
+    // Quantise to 5cm and to the normal's octant: flat-shaded parts collapse to
+    // a handful of distinct traces.
+    const key = `${Math.round(px * 20)},${Math.round(py * 20)},${Math.round(pz * 20)},`
+      + `${Math.round(n.x * 4)},${Math.round(n.y * 4)},${Math.round(n.z * 4)}`;
+    let ao = cache.get(key);
+
+    if (ao === undefined) {
+      helper.set(Math.abs(n.y) > 0.9 ? 1 : 0, Math.abs(n.y) > 0.9 ? 0 : 1, 0);
+      tangent.crossVectors(helper, n).normalize();
+      bitangent.crossVectors(n, tangent);
+
+      // Lift off the surface so a part never occludes itself at t=0.
+      const ox = px + n.x * 0.02;
+      const oy = py + n.y * 0.02;
+      const oz = pz + n.z * 0.02;
+
+      let occlusion = 0;
+      for (const tap of AO_TAPS) {
+        const dx = tangent.x * tap[0] + bitangent.x * tap[1] + n.x * tap[2];
+        const dy = tangent.y * tap[0] + bitangent.y * tap[1] + n.y * tap[2];
+        const dz = tangent.z * tap[0] + bitangent.z * tap[1] + n.z * tap[2];
+        let nearest = -1;
+        for (let b = 0; b < occluders.length; b++) {
+          const hit = rayBox(ox, oy, oz, dx, dy, dz, occluders[b]);
+          if (hit >= 0.03 && (nearest < 0 || hit < nearest)) nearest = hit;
+        }
+        // Near contacts darken hard, distant ones barely at all.
+        if (nearest >= 0) occlusion += 1 - nearest / AO_MAX_DISTANCE;
+      }
+      ao = Math.max(0.16, 1 - (occlusion / AO_TAPS.length) * strength);
+      cache.set(key, ao);
+    }
+
+    surface.setY(i, ao);
+  }
+  surface.needsUpdate = true;
+}
+
+/** Bounding boxes of the parts, used as the AO bake's occluder set. */
+function occluderBoxes(parts: THREE.BufferGeometry[]): THREE.Box3[] {
+  const boxes: THREE.Box3[] = [];
+  for (const part of parts) {
+    part.computeBoundingBox();
+    const box = part.boundingBox;
+    // Skip zero-thickness sheets and hair-thin trim: they occlude nothing
+    // meaningful and only cost trace time.
+    if (!box) continue;
+    const size = box.getSize(new THREE.Vector3());
+    if (size.x * size.y * size.z < 0.0008) continue;
+    boxes.push(box.clone());
+  }
+  return boxes;
+}
+
+/** Merge a tagged part list, bake its contact occlusion, and hand it over. */
+function assemble(parts: THREE.BufferGeometry[], label: string): THREE.BufferGeometry {
+  const boxes = occluderBoxes(parts);
+  const geo = mergeGeometries(parts, false);
+  if (!geo) throw new Error(`Failed to merge ${label} geometry`);
+  geo.computeVertexNormals();
+  bakeAmbientOcclusion(geo, boxes);
+  return geo;
+}
+
+// -----------------------------------------------------------------------------
+// Cockpit frame (one merged geometry, camera space, z negative)
 // -----------------------------------------------------------------------------
 
 /**
- * Hexagonal canopy rim + dashboard, authored in CAMERA space: everything sits at
- * z in [-2.2 .. -3.8] (near plane is 1) and hugs the frustum edges so the view
- * center stays clear. Emissive instruments are separate meshes (ShipCockpit).
+ * Canopy rim, glareshield and dashboard structure, authored in CAMERA space:
+ * everything sits at z in [-1.6 .. -3.8] (near plane is 1) and hugs the frustum
+ * edges so the view center stays clear.
+ *
+ * The rim is built as a chamfered assembly rather than a single bar — a rolled
+ * outer edge, a machined inner lip, and a raised seal channel between them. A
+ * canopy rim is the closest structure to the pilot's eye and the one the light
+ * rakes across, so it is where a flat box is most obvious and where three
+ * layers of shape buy the most.
  */
 export function createCockpitFrameGeometry(colors: ShipHullColors): THREE.BufferGeometry {
+  beginSurfaceAssembly();
   const t = 0.13;
   const topY = 1.62;
   const midY = 0.28;
   const dashY = -0.98;
+  const seal = lin(0x1c242e);
+  const rimMetal = lin(0x9aa5b2);
+
+  /** Rolled rim member: structural bar + inner machined lip + seal channel. */
+  const rimRun = (
+    a: THREE.Vector3,
+    b: THREE.Vector3,
+    inward: THREE.Vector3
+  ): THREE.BufferGeometry[] => {
+    const lipA = a.clone().addScaledVector(inward, 0.1);
+    const lipB = b.clone().addScaledVector(inward, 0.1);
+    const sealA = a.clone().addScaledVector(inward, -0.06);
+    const sealB = b.clone().addScaledVector(inward, -0.06);
+    return [
+      surf(beam(a, b, t, colors.dark), S_PANEL),
+      surf(beam(lipA, lipB, t * 0.42, rimMetal), S_METAL),
+      surf(beam(sealA, sealB, t * 0.3, seal), S_INSET)
+    ];
+  };
+
   const parts: THREE.BufferGeometry[] = [
-    // Hex rim: top bar, upper diagonals, lower diagonals down to the dash corners.
-    beam(new THREE.Vector3(-1.05, topY, -3.5), new THREE.Vector3(1.05, topY, -3.5), t, colors.dark),
-    beam(new THREE.Vector3(-1.05, topY, -3.5), new THREE.Vector3(-2.05, midY, -3.1), t, colors.dark),
-    beam(new THREE.Vector3(1.05, topY, -3.5), new THREE.Vector3(2.05, midY, -3.1), t, colors.dark),
-    beam(new THREE.Vector3(-2.05, midY, -3.1), new THREE.Vector3(-1.5, dashY, -2.6), t, colors.dark),
-    beam(new THREE.Vector3(2.05, midY, -3.1), new THREE.Vector3(1.5, dashY, -2.6), t, colors.dark),
+    // Hex rim: top bar, upper diagonals, lower diagonals to the dash corners.
+    ...rimRun(new THREE.Vector3(-1.05, topY, -3.5), new THREE.Vector3(1.05, topY, -3.5),
+      new THREE.Vector3(0, -1, 0)),
+    ...rimRun(new THREE.Vector3(-1.05, topY, -3.5), new THREE.Vector3(-2.05, midY, -3.1),
+      new THREE.Vector3(0.7, -0.7, 0)),
+    ...rimRun(new THREE.Vector3(1.05, topY, -3.5), new THREE.Vector3(2.05, midY, -3.1),
+      new THREE.Vector3(-0.7, -0.7, 0)),
+    ...rimRun(new THREE.Vector3(-2.05, midY, -3.1), new THREE.Vector3(-1.5, dashY, -2.6),
+      new THREE.Vector3(0.75, 0.66, 0)),
+    ...rimRun(new THREE.Vector3(2.05, midY, -3.1), new THREE.Vector3(1.5, dashY, -2.6),
+      new THREE.Vector3(-0.75, 0.66, 0)),
+
+    // Rim corner castings: the joints a fabricated frame actually has.
+    surf(box(-1.05, topY, -3.5, 0.22, 0.22, 0.2, rimMetal, 0, 0, 0.5), S_METAL),
+    surf(box(1.05, topY, -3.5, 0.22, 0.22, 0.2, rimMetal, 0, 0, -0.5), S_METAL),
+    surf(box(-2.05, midY, -3.1, 0.24, 0.24, 0.22, rimMetal, 0, 0, 0.35), S_METAL),
+    surf(box(2.05, midY, -3.1, 0.24, 0.24, 0.22, rimMetal, 0, 0, -0.35), S_METAL),
 
     // Dashboard: shallow-V of three slabs closing the hex at the bottom.
-    box(0, -1.12, -2.55, 1.7, 0.42, 0.5, colors.dark, 0.42),
-    box(-1.28, -1.06, -2.72, 1.35, 0.4, 0.5, colors.dark, 0.42, 0.42, 0),
-    box(1.28, -1.06, -2.72, 1.35, 0.4, 0.5, colors.dark, 0.42, -0.42, 0),
-    // Center binnacle the holo ring floats above.
-    box(0, -0.86, -2.42, 0.56, 0.16, 0.3, colors.mid, 0.5),
-    // Side sills closing the lower peripheral gaps.
-    box(-2.0, -0.7, -2.7, 0.5, 1.1, 0.9, colors.dark, 0, 0.5, 0.15),
-    box(2.0, -0.7, -2.7, 0.5, 1.1, 0.9, colors.dark, 0, -0.5, -0.15),
-    // Overhead spine stub with the status-light housing.
-    box(0, 1.52, -2.7, 0.5, 0.12, 1.1, colors.dark, -0.12),
+    surf(box(0, -1.12, -2.55, 1.7, 0.42, 0.5, colors.dark, 0.42), S_PANEL),
+    surf(box(-1.28, -1.06, -2.72, 1.35, 0.4, 0.5, colors.dark, 0.42, 0.42, 0), S_PANEL),
+    surf(box(1.28, -1.06, -2.72, 1.35, 0.4, 0.5, colors.dark, 0.42, -0.42, 0), S_PANEL),
+
+    // Glareshield: a padded hood over the dash. It shades the instruments, and
+    // its dark underside is what stops the dash from reading as a lit shelf.
+    surf(box(0, -0.86, -2.72, 1.9, 0.1, 0.34, lin(0x232a33), 0.34), S_PAD),
+    surf(box(-1.42, -0.8, -2.88, 1.3, 0.1, 0.32, lin(0x232a33), 0.34, 0.42, 0), S_PAD),
+    surf(box(1.42, -0.8, -2.88, 1.3, 0.1, 0.32, lin(0x232a33), 0.34, -0.42, 0), S_PAD),
+
+    // Center binnacle the holo ring floats above, on a machined pedestal.
+    surf(box(0, -0.86, -2.42, 0.56, 0.16, 0.3, colors.mid, 0.5), S_METAL),
+    surf(box(0, -1.0, -2.44, 0.4, 0.16, 0.24, lin(0x3a434f), 0.5), S_PANEL),
+
+    // Side sills closing the lower peripheral gaps, with a wear-strip capping
+    // the edge the pilot's arms rest against.
+    surf(box(-2.0, -0.7, -2.7, 0.5, 1.1, 0.9, colors.dark, 0, 0.5, 0.15), S_PANEL),
+    surf(box(2.0, -0.7, -2.7, 0.5, 1.1, 0.9, colors.dark, 0, -0.5, -0.15), S_PANEL),
+    surf(box(-1.94, -0.16, -2.72, 0.42, 0.09, 0.86, lin(0x2a323c), 0, 0.5, 0.15), S_PAD),
+    surf(box(1.94, -0.16, -2.72, 0.42, 0.09, 0.86, lin(0x2a323c), 0, -0.5, -0.15), S_PAD),
+
+    // Overhead spine stub with the status-light housing, plus its shroud.
+    surf(box(0, 1.52, -2.7, 0.5, 0.12, 1.1, colors.dark, -0.12), S_PANEL),
+    surf(box(0, 1.63, -2.7, 0.66, 0.1, 1.0, colors.mid, -0.12), S_METAL),
 
     // Controls animate separately in ShipCockpit so this merged draw stays static.
   ];
 
-  const geo = mergeGeometries(parts, false);
-  if (!geo) throw new Error('Failed to merge cockpit frame geometry');
-  geo.computeVertexNormals();
-  return geo;
+  // Rivet lines along the rim diagonals: small, but they set the scale of every
+  // other feature in the cabin, which is what the eye actually measures against.
+  for (const side of [1, -1]) {
+    for (let i = 0; i < 5; i++) {
+      const k = i / 4;
+      parts.push(surf(box(
+        side * THREE.MathUtils.lerp(1.05, 2.05, k),
+        THREE.MathUtils.lerp(topY, midY, k),
+        THREE.MathUtils.lerp(-3.5, -3.1, k) + 0.09,
+        0.05, 0.05, 0.05,
+        rimMetal
+      ), S_METAL));
+    }
+  }
+
+  return assemble(parts, 'cockpit frame');
 }
 
+// -----------------------------------------------------------------------------
+// Cockpit interior shell
+// -----------------------------------------------------------------------------
+
 /**
- * Broad camera-space cockpit tub. Large faceted walls own the peripheral view
- * on ultrawide screens while the forward aperture remains unobstructed.
+ * The camera-space cockpit tub: pressure shell, structural ribs, consoles and
+ * equipment.
+ *
+ * The shell boxes are the light-tight envelope and nothing more. What makes the
+ * cabin read is everything hung in FRONT of them — ribs, conduit, junction
+ * boxes, instrument housings — because an interior is legible at the scale of
+ * its smallest repeated feature, and a bare slab has none.
  */
 export function createCockpitInteriorGeometry(colors: ShipHullColors): THREE.BufferGeometry {
-  const cabinDark = lin(0x202b38);
-  const cabinMid = lin(0x4d6074);
-  const cabinLight = lin(0x91a2b2);
-  const inset = lin(0x101820);
+  beginSurfaceAssembly();
+  // The cabin palette sits deliberately higher than it used to. The old values
+  // only ever read because a strong `emissive` term was mixed in on top of
+  // them; with the surface shader doing real analytic lighting, the albedo has
+  // to be an actual albedo or every practical lands on black.
+  const cabinDark = lin(0x3d4a5a);
+  const cabinMid = lin(0x76889b);
+  const cabinLight = lin(0xb6c3ce);
+  const inset = lin(0x1b232d);
+  const shellDark = lin(0x333f4d);
+  const conduit = lin(0x5a6672);
+  const padding = lin(0x272e38);
+
   const parts: THREE.BufferGeometry[] = [
-    // Sectioned pressure shell. The middle gap becomes a narrow peripheral
-    // window instead of an undifferentiated black sidewall.
-    box(-5.05, 0, -2.65, 1.75, 3.65, 1.65, cabinDark, 0, -0.08, -0.04),
-    box(5.05, 0, -2.65, 1.75, 3.65, 1.65, cabinDark, 0, 0.08, 0.04),
-    box(-3.45, 1.38, -2.58, 2.15, 0.92, 1.55, cabinDark, 0, -0.1, -0.08),
-    box(3.45, 1.38, -2.58, 2.15, 0.92, 1.55, cabinDark, 0, 0.1, 0.08),
-    box(-3.5, -1.18, -2.38, 2.35, 1.18, 1.8, cabinDark, 0, -0.08, 0.05),
-    box(3.5, -1.18, -2.38, 2.35, 1.18, 1.8, cabinDark, 0, 0.08, -0.05),
-    box(0, 2.03, -2.78, 8.25, 0.62, 1.55, cabinDark, -0.04),
-    box(0, -1.8, -2.42, 8.45, 0.76, 1.9, cabinDark, 0.07),
+    // --- pressure shell -----------------------------------------------------
+    // Sectioned so the middle gap becomes a narrow peripheral window instead of
+    // an undifferentiated black sidewall.
+    surf(box(-5.05, 0, -2.65, 1.75, 3.65, 1.65, shellDark, 0, -0.08, -0.04), S_PANEL),
+    surf(box(5.05, 0, -2.65, 1.75, 3.65, 1.65, shellDark, 0, 0.08, 0.04), S_PANEL),
+    surf(box(-3.45, 1.38, -2.58, 2.15, 0.92, 1.55, cabinDark, 0, -0.1, -0.08), S_PANEL),
+    surf(box(3.45, 1.38, -2.58, 2.15, 0.92, 1.55, cabinDark, 0, 0.1, 0.08), S_PANEL),
+    surf(box(-3.5, -1.18, -2.38, 2.35, 1.18, 1.8, cabinDark, 0, -0.08, 0.05), S_PANEL),
+    surf(box(3.5, -1.18, -2.38, 2.35, 1.18, 1.8, cabinDark, 0, 0.08, -0.05), S_PANEL),
+    surf(box(0, 2.03, -2.78, 8.25, 0.62, 1.55, cabinDark, -0.04), S_PANEL),
+    surf(box(0, -1.8, -2.42, 8.45, 0.76, 1.9, cabinDark, 0.07), S_PANEL),
 
-    // Layered canopy hinges and sill ribs establish scale without blocking view.
-    beam(new THREE.Vector3(-2.04, 1.58, -3.48), new THREE.Vector3(-3.25, 1.84, -2.25), 0.13, cabinLight),
-    beam(new THREE.Vector3(2.04, 1.58, -3.48), new THREE.Vector3(3.25, 1.84, -2.25), 0.13, cabinLight),
-    beam(new THREE.Vector3(-2.05, -1.02, -2.6), new THREE.Vector3(-3.55, -1.58, -1.82), 0.14, cabinMid),
-    beam(new THREE.Vector3(2.05, -1.02, -2.6), new THREE.Vector3(3.55, -1.58, -1.82), 0.14, cabinMid),
-    beam(new THREE.Vector3(-4.15, 0.72, -1.83), new THREE.Vector3(-4.15, -0.38, -1.67), 0.11, cabinLight),
-    beam(new THREE.Vector3(4.15, 0.72, -1.83), new THREE.Vector3(4.15, -0.38, -1.67), 0.11, cabinLight),
+    // Roof liner. The pressure shell's own ceiling sits high enough to leave a
+    // band of open sky between it and the canopy rim; anything mounted up there
+    // then reads as debris floating over the aperture instead of as structure.
+    // This closes the volume at head height and gives the ribs a surface to die
+    // into, which is the whole reason they read as ribs.
+    surf(box(0, 1.86, -2.35, 8.8, 0.24, 2.2, cabinDark, -0.02), S_PANEL),
+    surf(box(0, 1.7, -3.32, 6.4, 0.2, 0.5, cabinDark, 0.22), S_PANEL),
 
-    // Recessed acoustic panels, small enough to read as trim rather than wings.
-    box(-3.0, 0.02, -1.74, 0.62, 1.48, 0.11, inset, 0, -0.12, -0.05),
-    box(3.0, 0.02, -1.74, 0.62, 1.48, 0.11, inset, 0, 0.12, 0.05),
-    box(-4.78, 0.06, -1.88, 0.75, 1.72, 0.1, inset, 0, -0.08),
-    box(4.78, 0.06, -1.88, 0.75, 1.72, 0.1, inset, 0, 0.08),
+    // --- canopy hinges and sill ribs ---------------------------------------
+    surf(beam(new THREE.Vector3(-2.04, 1.58, -3.48), new THREE.Vector3(-3.25, 1.84, -2.25), 0.13, cabinLight), S_METAL),
+    surf(beam(new THREE.Vector3(2.04, 1.58, -3.48), new THREE.Vector3(3.25, 1.84, -2.25), 0.13, cabinLight), S_METAL),
+    surf(beam(new THREE.Vector3(-2.05, -1.02, -2.6), new THREE.Vector3(-3.55, -1.58, -1.82), 0.14, cabinMid), S_METAL),
+    surf(beam(new THREE.Vector3(2.05, -1.02, -2.6), new THREE.Vector3(3.55, -1.58, -1.82), 0.14, cabinMid), S_METAL),
+    surf(beam(new THREE.Vector3(-4.15, 0.72, -1.83), new THREE.Vector3(-4.15, -0.38, -1.67), 0.11, cabinLight), S_METAL),
+    surf(beam(new THREE.Vector3(4.15, 0.72, -1.83), new THREE.Vector3(4.15, -0.38, -1.67), 0.11, cabinLight), S_METAL),
 
-    // Deep side consoles, central seat tub and overhead avionics cassette.
-    box(-2.38, -1.17, -1.92, 1.48, 0.34, 1.25, cabinMid, 0.1, 0.18, 0.06),
-    box(2.38, -1.17, -1.92, 1.48, 0.34, 1.25, cabinMid, 0.1, -0.18, -0.06),
-    box(0, 1.61, -2.13, 2.65, 0.32, 0.68, cabinMid, -0.08),
-    box(0, 1.48, -1.76, 1.72, 0.13, 0.12, inset, -0.08),
-    box(0, -1.43, -1.55, 1.3, 0.5, 0.82, inset, 0.16),
+    // --- display recesses ---------------------------------------------------
+    // The MFDs (utils/cockpitScreens.ts) sit just in front of these; the dark
+    // backing plate is what gives an emissive panel a housing to live in.
+    surf(box(-3.0, 0.02, -1.74, 0.72, 1.58, 0.11, inset, 0, -0.12, -0.05), S_INSET),
+    surf(box(3.0, 0.02, -1.74, 0.72, 1.58, 0.11, inset, 0, 0.12, 0.05), S_INSET),
+    surf(box(-4.78, 0.06, -1.88, 0.75, 1.72, 0.1, inset, 0, -0.08), S_INSET),
+    surf(box(4.78, 0.06, -1.88, 0.75, 1.72, 0.1, inset, 0, 0.08), S_INSET),
 
-    // Panel seams and latch rails add a second readable scale to the silhouette.
-    beam(new THREE.Vector3(-5.5, 1.16, -2.12), new THREE.Vector3(-4.45, 0.98, -1.82), 0.055, cabinLight),
-    beam(new THREE.Vector3(5.5, 1.16, -2.12), new THREE.Vector3(4.45, 0.98, -1.82), 0.055, cabinLight),
-    beam(new THREE.Vector3(-5.5, -0.94, -2.05), new THREE.Vector3(-4.42, -0.8, -1.75), 0.05, colors.accent),
-    beam(new THREE.Vector3(5.5, -0.94, -2.05), new THREE.Vector3(4.42, -0.8, -1.75), 0.05, colors.accent)
+    // --- consoles, seat tub, avionics cassette ------------------------------
+    surf(box(-2.38, -1.17, -1.92, 1.48, 0.34, 1.25, cabinMid, 0.1, 0.18, 0.06), S_PANEL),
+    surf(box(2.38, -1.17, -1.92, 1.48, 0.34, 1.25, cabinMid, 0.1, -0.18, -0.06), S_PANEL),
+    surf(box(0, 1.61, -2.13, 2.65, 0.32, 0.68, cabinMid, -0.08), S_PANEL),
+    surf(box(0, 1.48, -1.76, 1.72, 0.13, 0.12, inset, -0.08), S_INSET),
+    surf(box(0, -1.43, -1.55, 1.3, 0.5, 0.82, inset, 0.16), S_INSET),
+
+    // --- panel seams and latch rails ---------------------------------------
+    surf(beam(new THREE.Vector3(-5.5, 1.16, -2.12), new THREE.Vector3(-4.45, 0.98, -1.82), 0.055, cabinLight), S_METAL),
+    surf(beam(new THREE.Vector3(5.5, 1.16, -2.12), new THREE.Vector3(4.45, 0.98, -1.82), 0.055, cabinLight), S_METAL),
+    surf(beam(new THREE.Vector3(-5.5, -0.94, -2.05), new THREE.Vector3(-4.42, -0.8, -1.75), 0.05, colors.accent), S_TRIM),
+    surf(beam(new THREE.Vector3(5.5, -0.94, -2.05), new THREE.Vector3(4.42, -0.8, -1.75), 0.05, colors.accent), S_TRIM)
   ];
-  const geo = mergeGeometries(parts, false);
-  if (!geo) throw new Error('Failed to merge cockpit interior geometry');
+
+  // --- structural hoop ribs -------------------------------------------------
+  // Four frames march aft along the cabin, each stepping outboard. They are the
+  // reason the peripheral view now has depth cues instead of one flat value:
+  // successive ribs occlude each other and the AO bake pools shadow behind them.
+  // Every crown stays UNDER the roof liner: a hoop that pokes above it becomes a
+  // bar hanging across open sky, which is the single loudest way to break an
+  // interior. The ribs step outboard as they march aft, so successive frames
+  // stay separable in the periphery.
+  const RIBS: Array<{ z: number; halfW: number; top: number; bottom: number; t: number }> = [
+    { z: -3.05, halfW: 2.95, top: 1.6, bottom: -1.38, t: 0.11 },
+    { z: -2.55, halfW: 3.45, top: 1.62, bottom: -1.44, t: 0.12 },
+    { z: -2.05, halfW: 3.95, top: 1.64, bottom: -1.5, t: 0.13 },
+    { z: -1.55, halfW: 4.35, top: 1.66, bottom: -1.54, t: 0.13 }
+  ];
+  for (const rib of RIBS) {
+    const shoulderY = rib.top - 0.5;
+    for (const side of [1, -1]) {
+      const sill = new THREE.Vector3(side * (rib.halfW - 0.5), rib.bottom, rib.z);
+      const waist = new THREE.Vector3(side * rib.halfW, rib.bottom + 0.9, rib.z);
+      const shoulder = new THREE.Vector3(side * (rib.halfW - 0.35), shoulderY, rib.z);
+      const crown = new THREE.Vector3(side * (rib.halfW - 1.5), rib.top, rib.z);
+      parts.push(surf(beam(sill, waist, rib.t, cabinMid), S_METAL));
+      parts.push(surf(beam(waist, shoulder, rib.t, cabinMid), S_METAL));
+      parts.push(surf(beam(shoulder, crown, rib.t * 0.9, cabinMid), S_METAL));
+      // Gusset plate at the shoulder knuckle.
+      parts.push(surf(box(
+        side * (rib.halfW - 0.35), shoulderY, rib.z,
+        0.26, 0.26, 0.1, cabinLight, 0, 0, side * 0.5
+      ), S_METAL));
+    }
+    // Crown splice across the roof.
+    parts.push(surf(beam(
+      new THREE.Vector3(-(rib.halfW - 1.5), rib.top, rib.z),
+      new THREE.Vector3(rib.halfW - 1.5, rib.top, rib.z),
+      rib.t * 0.85, cabinMid
+    ), S_METAL));
+  }
+
+  // --- longitudinal conduit runs -------------------------------------------
+  // Cable trunks and their clamps, running fore-aft over the ribs. Long thin
+  // horizontals are what give a boxy interior a readable direction of travel.
+  for (const side of [1, -1]) {
+    for (const [y, radius, tone] of [
+      [1.42, 0.075, conduit],
+      [1.24, 0.055, cabinMid],
+      [-1.22, 0.085, conduit]
+    ] as Array<[number, number, THREE.Color]>) {
+      parts.push(surf(beam(
+        new THREE.Vector3(side * 3.05, y, -3.05),
+        new THREE.Vector3(side * 4.4, y - 0.12, -1.45),
+        radius * 2, tone
+      ), S_METAL));
+      for (let i = 0; i < 4; i++) {
+        const k = i / 3;
+        parts.push(surf(box(
+          side * THREE.MathUtils.lerp(3.05, 4.4, k),
+          THREE.MathUtils.lerp(y, y - 0.12, k),
+          THREE.MathUtils.lerp(-3.05, -1.45, k),
+          0.09, radius * 3.2, radius * 3.2, cabinLight
+        ), S_METAL));
+      }
+    }
+
+    // Equipment boxes bolted to the sidewall between the ribs.
+    parts.push(surf(box(side * 3.72, 0.78, -2.24, 0.5, 0.44, 0.62, cabinMid, 0, side * -0.2, 0), S_PANEL));
+    parts.push(surf(box(side * 3.72, 0.78, -2.24, 0.34, 0.1, 0.5, inset, 0, side * -0.2, 0), S_INSET));
+    parts.push(surf(box(side * 4.28, -0.62, -2.0, 0.44, 0.72, 0.5, cabinMid, 0, side * -0.14, 0), S_PANEL));
+    parts.push(surf(box(side * 4.28, -0.62, -1.79, 0.3, 0.5, 0.06, inset, 0, side * -0.14, 0), S_INSET));
+    // Ducting elbow up into the roof.
+    parts.push(surf(beam(
+      new THREE.Vector3(side * 4.5, 0.3, -2.5),
+      new THREE.Vector3(side * 4.2, 1.6, -2.5),
+      0.18, conduit
+    ), S_METAL));
+
+    // Grab handle above the door line: human-scale, and the eye reads it as such.
+    parts.push(surf(beam(
+      new THREE.Vector3(side * 3.3, 1.5, -2.9),
+      new THREE.Vector3(side * 3.55, 1.5, -2.05),
+      0.055, cabinLight
+    ), S_METAL));
+    parts.push(surf(box(side * 3.3, 1.61, -2.9, 0.09, 0.18, 0.09, cabinLight), S_METAL));
+    parts.push(surf(box(side * 3.55, 1.61, -2.05, 0.09, 0.18, 0.09, cabinLight), S_METAL));
+
+    // Display bezel: a raised frame around each main MFD recess.
+    for (const [bx, by, bz, bw, bh, ry] of [
+      [side * 3.0, 0.02, -1.68, 0.78, 1.64, side * -0.12]
+    ] as Array<[number, number, number, number, number, number]>) {
+      parts.push(surf(box(bx, by + bh / 2, bz, bw, 0.07, 0.12, cabinLight, 0, ry, 0), S_METAL));
+      parts.push(surf(box(bx, by - bh / 2, bz, bw, 0.07, 0.12, cabinLight, 0, ry, 0), S_METAL));
+      parts.push(surf(box(bx, by, bz, 0.07, bh, 0.12, cabinLight, 0, ry, 0), S_METAL));
+    }
+  }
+
+  // --- overhead breaker panel ----------------------------------------------
+  // A shallow rack of switch rows directly above the pilot. It is mostly seen
+  // edge-on, which is exactly why it needs relief rather than a printed look.
+  parts.push(surf(box(0, 1.5, -1.9, 3.1, 0.28, 0.5, cabinMid, 0.42), S_PANEL));
+  for (let i = 0; i < 11; i++) {
+    const x = THREE.MathUtils.lerp(-1.4, 1.4, i / 10);
+    parts.push(surf(box(x, 1.42, -2.03, 0.14, 0.1, 0.16, cabinLight, 0.42), S_METAL));
+    parts.push(surf(box(x, 1.57, -2.08, 0.16, 0.06, 0.2, inset, 0.42), S_INSET));
+  }
+
+  // --- dash coaming and console stacks -------------------------------------
+  for (const side of [1, -1]) {
+    // Padded arm rest capping each side console.
+    parts.push(surf(box(side * 2.38, -0.97, -1.92, 1.4, 0.11, 1.16, padding, 0.1, side * 0.18, side * 0.06), S_PAD));
+    // Switch cluster sunk into the console face.
+    for (let i = 0; i < 3; i++) {
+      parts.push(surf(box(
+        side * (2.05 + i * 0.3), -1.02, -2.02 + i * 0.05,
+        0.2, 0.05, 0.2, inset, 0.1, side * 0.18, 0
+      ), S_INSET));
+      parts.push(surf(box(
+        side * (2.05 + i * 0.3), -0.99, -2.02 + i * 0.05,
+        0.09, 0.07, 0.09, cabinLight, 0.1, side * 0.18, 0
+      ), S_METAL));
+    }
+  }
+
+  // --- dash display housings ----------------------------------------------
+  // The main MFDs moved out of the peripheral walls and onto the dash, where a
+  // 70-degree flight camera can actually see them. Each gets a canted backing
+  // plate and a raised bezel so the emissive panel is a fitted instrument.
+  for (const side of [1, -1]) {
+    parts.push(surf(box(side * 1.28, -0.87, -2.57, 1.02, 0.68, 0.1, inset,
+      -0.92, side * 0.42, side * 0.1), S_INSET));
+    parts.push(surf(box(side * 1.28, -0.9, -2.62, 1.12, 0.78, 0.08, cabinMid,
+      -0.92, side * 0.42, side * 0.1), S_METAL));
+  }
+
+  // --- footwell ------------------------------------------------------------
+  // Barely in frame at rest, but it closes the volume when you look down and it
+  // is where the floor bounce in the shader comes from.
+  parts.push(surf(box(0, -1.62, -1.9, 2.6, 0.14, 1.5, cabinMid, 0.12), S_METAL));
+  for (let i = 0; i < 7; i++) {
+    parts.push(surf(box(
+      THREE.MathUtils.lerp(-1.15, 1.15, i / 6), -1.54, -1.9,
+      0.08, 0.05, 1.4, inset, 0.12
+    ), S_INSET));
+  }
+
+  const geo = assemble(parts, 'cockpit interior');
   // Keep even the rotated floor corners safely beyond the flight camera near=1.
   geo.translate(0, 0, -0.22);
-  geo.computeVertexNormals();
   return geo;
 }
 
@@ -414,6 +872,33 @@ export function createCockpitLightGeometry(colors: ShipHullColors): THREE.Buffer
     box(-1.08, -0.84, -2.33, 0.32, 0.028, 0.025, colors.accent, 0.28),
     box(1.08, -0.84, -2.33, 0.32, 0.028, 0.025, amber, 0.28)
   ];
+
+  // Cove lighting: continuous strips washing the roof ribs and the footwell.
+  // Practical strips beat point lights here — they are one merged draw, they
+  // trace the architecture, and they give the AO bake something to fight.
+  for (const side of [1, -1]) {
+    parts.push(beam(
+      new THREE.Vector3(side * 2.9, 1.68, -3.0),
+      new THREE.Vector3(side * 4.2, 1.7, -1.5),
+      0.035, side > 0 ? amber : colors.accent
+    ));
+    parts.push(beam(
+      new THREE.Vector3(side * 2.6, -1.5, -2.6),
+      new THREE.Vector3(side * 3.9, -1.56, -1.5),
+      0.03, side > 0 ? amber : colors.accent
+    ));
+    // Rib end-caps read as running lights marching aft.
+    for (let i = 0; i < 4; i++) {
+      parts.push(box(
+        side * (2.9 + i * 0.47), 1.66 + i * 0.02, -3.05 + i * 0.5,
+        0.06, 0.05, 0.05, side > 0 ? amber : colors.accent
+      ));
+    }
+  }
+  // Overhead dome wash and the glareshield underlight that grazes the dash.
+  parts.push(box(0, 1.71, -2.4, 1.5, 0.04, 0.05, colors.accent));
+  parts.push(box(0, -0.92, -2.74, 1.8, 0.03, 0.04, amber, 0.34));
+
   const geo = mergeGeometries(parts, false);
   if (!geo) throw new Error('Failed to merge cockpit light geometry');
   geo.computeVertexNormals();

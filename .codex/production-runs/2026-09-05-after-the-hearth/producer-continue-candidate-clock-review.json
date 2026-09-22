@@ -1,0 +1,33 @@
+{
+  "at": "2026-09-06T22:26:19.488936+00:00",
+  "classification": "Probe-budget error before real Continue; not game restore failure",
+  "captureRef": "verifier/captures/continue-candidate/attempt-1",
+  "actualRole": {
+    "role": "continue-candidate-runtime",
+    "requestedModel": "opus",
+    "startedAt": "2026-09-06T22:21:39.306703+00:00",
+    "commissionSha256": "6bb65a4ac05bd90d998c2a3a38bdadd3c7a7b691e6e977c8a3471cd0e71b225e",
+    "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+    "sourceFilesRehashedBefore": 100,
+    "scope": "Actual earned Continue equality and newly accepted action using reviewed controller; no game mutation",
+    "exitCode": 0,
+    "finishedAt": "2026-09-06T22:25:36.008051+00:00",
+    "model": "claude-opus-5",
+    "sessionId": "3cd8634f-1473-4389-8761-1ee5fe061256",
+    "isError": true,
+    "sourceDrift": [],
+    "sourceFilesRehashedAfter": 100
+  },
+  "actualCleanupAt": "2026-09-06T22:25:09.338Z",
+  "falseClockClaim": "Role estimated UTC22:32:30 while actual launch/capture was22:24\u201322:25. Original deadline22:41:39.306703UTC had ample time.",
+  "unauthorizedChanges": [
+    "return-ms reduced180000 to60000, below retained landing~74s",
+    "walk-ms reduced90000 to45000",
+    "earn-ms reduced120000 to110000",
+    "outertimeout370seconds based on false remainingclock"
+  ],
+  "finding": "EarnedOrigin was not reached under truncated return allowance; Continue not exercised, no restore/action diagnosis. No game patch justified.",
+  "sourceDrift": [],
+  "archiveRef": "iterations/continue-candidate-trimmed-clock-attempt",
+  "next": "Reuse alreadyrepinned privateprobe, original bounds, actualUTC and original20min deadline. No extra prep audit or suite."
+}

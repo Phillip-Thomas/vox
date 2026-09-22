@@ -1,0 +1,22 @@
+{
+  "request": "fix them",
+  "scope": "One newly owner-commissioned correctness repair; not another creative exploration. Root owns and has prepared review-entry transport. You own only the supplied game paths. Do not edit tools, commissions, evidence, runner state or unrelated source.",
+  "diagnosis": "LandingMenu uses storyCompleted=hasCompletedStory() and storyInProgress=!storyCompleted&&canContinueStory(). hasCompletedStory intentionally checks the historical ch9Hearth milestone, including during later chapters (existing tests assert this). startOrContinueStory then calls onReturnToStorySite; App returnToCompletedStorySite calls beginStory() but forces TIDEGARDEN_WORLD_ID. The real Continue trace restored ch14-scar record equality but activePlanetId=-1,-1:p1, so unfinishedMap origin() correctly rejects it. Validate this source chain; fix menu Continue selection so an unfinished current story takes precedence over the historical completed arc. Preserve completed-story/free-play behavior and early-game behavior.",
+  "validation": "Add a focused meaningful regression test exercising Continue selection with ch9 completion plus unfinished ch10/ch13/ch14, and true terminal/fresh saves. Use affected checks and TypeScript. Do not weaken origin, readiness, arrival or accepted-action tests. No GPU work: runner will perform fresh capture after your source handoff.",
+  "evidence": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/manual/report.json",
+      "sha256": "32c0d93b1b8a3a78e1b4789ff54d5f3b6b417993f3e6432ca40b2ad6457f9ab1"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/recovery/report.json",
+      "sha256": "240424449802bccd335e63660eb7d360b8d1952618ea023c27c8404e9d63827a"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/report.json",
+      "sha256": "4f3afb77f357640d00a225d966ec536f8897ff8f70296e78dff5d899019e95fc"
+    }
+  ],
+  "preserves": "No audio, story, route or motion edits requested. Previous refiner audio corrections remain. The chapter is unaccepted until remaining real checks and independent reviews pass.",
+  "reviewEntry": "Root exports actual context.storageState before the successful Continue reload and only supplies it to the blind player after that same case proves equality and a new action. Origin relocation is transport-only for immutable preview port changes; saved values are unmodified. No unsupported direct-entry or progress setter."
+}

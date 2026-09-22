@@ -1,0 +1,14 @@
+{
+  "schema": "paravoxia.producerSourceReview.v1",
+  "reviewedAt": "2026-09-06T11:18:17.169636+00:00",
+  "integrationReportSha256": "f52ff3c196c3bb060b8911dc736a4e5d1bc5b48efa6c328ee1e78465c2a2ae84",
+  "disposition": "frozen-for-independent-verification-with-open-defects",
+  "sourceAcceptance": false,
+  "observations": [
+    "The observer-effect repair now reads the last executed plan and detached diagnostics; static regression and counterfactual are reported. Independent browser verification remains required.",
+    "Home Continue after fault review and common Continue after reciprocal crossing have explicit real-AV regressions. The last inbox request for a VALID mid-drawing/testing restore BEFORE routeTested, or common restore BEFORE reciprocalCrossed, was not addressed in the final report/tests. The milestone-only predecessor map may still block later new anchors there. This unresolved CG008 concern is explicitly carried to the independent verifier; no claim of comprehensive Continue correctness.",
+    "Report completedAt remains11:02:00Z from an earlier draft; invocation finishedAt11:17:11.957546UTC and final log/source hashes bind the actual final pass.",
+    "CG007 counterproof.method labels byte-backup/finally but the preservationIncident records the actual unsafe Git cleanup and exact recovery. The detailed incident and retained command stream are authoritative; no incident-free claim."
+  ],
+  "nextAction": "Independently full verify exact source and measure targeted cold paths plus the unresolved mid-beat restore cases early. Failures remain failures, no source edits in verifier, and no long redundant probe on a known block."
+}

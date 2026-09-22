@@ -1,0 +1,351 @@
+{
+  "schema": "paravoxia.verifier.arrivalCommonManualRuntime.v1",
+  "role": "arrival-common-manual",
+  "activeRoleAtRun": "arrival-common-manual",
+  "writtenAt": "2026-09-06T18:31:00Z",
+  "verdict": "BOTH COMMISSIONED LANES RAN; NEITHER PROVED COMMON. Reference lane stopped at the strict original-plane crossing of COMMON corner 1 with the body unsupported/airborne. Deviation lane physically crossed all nine ordered COMMON frontiers, recovered the omitted ground, and still ended with 6 of 18 credited units. No acceptance, no defect closure.",
+  "notAcceptance": [
+    "No chapter, Continue, full-story, variant, audio, taste or defect closure is claimed.",
+    "This is instrumented manual play from a labelled ch13-survey fixture with route waypoints read from frozen source; it can support no first-time-usability claim.",
+    "Every number below is a measurement of THIS session on THIS build; nothing is inferred about earlier ports, builds or runs."
+  ],
+  "binding": {
+    "previewUrl": "http://127.0.0.1:34413/",
+    "previewOwner": "root-production-preview (untouched by this role)",
+    "servedIndexSha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207",
+    "servedBundlePath": "/assets/index-BiDWGouH.js",
+    "servedBundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+    "servedStatus": { "index": 200, "bundle": 200 },
+    "title": "Paravoxia",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "headed": true,
+    "sourceManifestSha256Before": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sourceManifestSha256After": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "sourceFilesRehashed": 99,
+    "sourceFilesMismatched": 0,
+    "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+    "heavyLock": {
+      "path": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+      "fd": 9,
+      "acquiredBy": "flock -w 60 -x 9 in this role's shell, inherited by every node child",
+      "owned": true,
+      "contentionProbe": "refused (lock is live)"
+    }
+  },
+  "auxiliaryObservationSeparately": {
+    "path": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-delta.run-profile.json",
+    "producerRecordedHash": "a0b0ecdd0df08f1866af39fb74645bc8eea1c05b008cf1e8856de60edc1444c2",
+    "producerObservedHash": "605fb2efc36901bc9c012bda0a0d6e7552003888dd5f959420d612f5e57ae828",
+    "liveHashNow": "605fb2efc36901bc9c012bda0a0d6e7552003888dd5f959420d612f5e57ae828",
+    "note": "This path is NOT among the 99 hashes of the CURRENT implementation-source-manifest.json (6ef957c3...); the recorded/observed mismatch belongs to the OLD manifest and to producer-nonbinding-auxiliary-observation.json. All 99 current manifest paths matched exactly before and after every browser. No full verify was rerun."
+  },
+  "ownedInstrumentationChanges": [
+    {
+      "kind": "authorised bounded re-pin (instrumentation, NOT game repair)",
+      "file": "verifier/probes/arrival-common-manual/cgContract.pinned.mjs",
+      "beforeSha256": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551",
+      "afterSha256": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5",
+      "change": "SIGNED_CONTRACT_SHA256 4dbf722b...(scene-v2) -> 5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54 (scene-v3); two 'scene-v2' labels in comment/error prose updated. No predicate, geometry or acceptance touched.",
+      "sharedOriginalUnchanged": { "verifier/probes/lib/cgContract.mjs": "5f447ebd34543387cb3c1ade1e09ad52f5abb9ab6a4dfc1384ccc8af2c45c551" },
+      "preservedCopy": "logs/arrival-common-manual-runtime/cgContract.pinned.before.mjs",
+      "pinManifestUpdated": true,
+      "newOwnedTest": "pinned SIGNED_CONTRACT_SHA256 is the current signed scene-v3 contract (asserted against scene-contract.json bytes AND verification-ready.contractSha256)",
+      "usedByThisLane": "loadContract() is not called by common-passage-probe.mjs; the constant was inert for these measurements."
+    },
+    {
+      "kind": "the ONE authorised bounded focused harness correction",
+      "trigger": "reference-1 measured its own defect: three ordinary trusted clicks were aimed at a canvas rect captured BEFORE the attempt loop, and that rect was the unsized HTML default 300x150 -> the clicks landed at (150,75) and the browser reported their target as a <p>, so the shipped canvas handler was never the target.",
+      "files": [
+        "verifier/probes/arrival-common-manual/commonPassageLogic.mjs (added pure clickPointFromRect)",
+        "verifier/probes/arrival-common-manual/common-passage-probe.mjs (re-measure the canvas rect immediately before each click, refuse an implausible rect instead of clicking blind, record the live element stack at the intended point)",
+        "verifier/probes/arrival-common-manual/selftest.mjs (6 new CPU tests)"
+      ],
+      "beforeSha256": {
+        "common-passage-probe.mjs": "3eafe3960d87a44caf1292be72b24ad06e878f81abe1e492875fad84b05f7cf9",
+        "commonPassageLogic.mjs": "24d67c657f13fbc72022f0bb8954a549ed86269328043ea42a122e91ca19060c"
+      },
+      "afterSha256": {
+        "common-passage-probe.mjs": "5a8973cae9174272efe6493bd8b22850034da06958be1128941ce817aa84c562",
+        "commonPassageLogic.mjs": "7c02a73cd2799c3b409b33d620cf039ade4ce9ac13b92b3dc6e29fa0fc2ddc4e",
+        "selftest.mjs": "c7daa71b161cc50f820d35e264b6466020f03839c4e93b28e79d742a943f3b81"
+      },
+      "preservedCopies": [
+        "logs/arrival-common-manual-runtime/common-passage-probe.before-click-instrumentation.mjs",
+        "logs/arrival-common-manual-runtime/commonPassageLogic.before-click-instrumentation.mjs"
+      ],
+      "stillTrue": "one ordinary trusted click per attempt; no requestPointerLock, no synthetic/forced click, no dispatchEvent, no handler patch, no focus/policy edit; the pointer-lock gate itself is byte-unchanged.",
+      "cpuTests": "119/119 pass (was 112/112 before any change; 113 after the re-pin test)"
+    }
+  ],
+  "noSecondCodeCorrection": {
+    "measuredHarnessDefectLeftIN_PLACE": "walkTo compares the achieved step against expected = max(0.02, pulse.commandedUnits * 0.25), but planPulseMs returns commandedUnits as the FULL desired distance even when ms is clamped to maxMs. With the live calibration (0.004955 u/ms) a 400 ms ceiling can only deliver ~1.99 u, so on any leg longer than ~8 u EVERY pulse is scored a stall and the leg dies after 10 pulses (stallMs 7000).",
+      "evidenceItIsNotTheGame": "reference-2 trace: 10 consecutive pulses each moved the body ~1.985 u with distance falling monotonically 43.25 -> 27.48, supported true throughout, oscillation flips 0.",
+    "whatIDidInstead": "Used an EXISTING probe CLI budget --pulse-max-ms 2000 (an ordinary longer held key) for reference-3 and deviation-1. No second source edit was made; my one authorised correction was already spent on the click aim.",
+    "consequence": "reference-1 and reference-2 are preserved as invalidated attempts and are NOT deleted."
+  },
+  "runs": [
+    {
+      "label": "reference-1",
+      "mode": "reference",
+      "startedUtc": "2026-09-06T18:10:18Z",
+      "finishedUtc": "2026-09-06T18:10:46Z",
+      "nodeExit": 2,
+      "roleShellExit": 0,
+      "valid": false,
+      "invalidatedBy": "own harness click-aim defect (stale 300x150 canvas rect)",
+      "verdict": "STOPPED-PREREQUISITE",
+      "stoppedAt": "pointer-lock-and-focus",
+      "measured": {
+        "clicks": 3,
+        "clickTargetReportedByBrowser": "p (element), NOT the canvas",
+        "isTrusted": true,
+        "pointerType": "mouse",
+        "sourceCapabilities.firesTouchEvents": false,
+        "userActivation": { "isActive": true, "hasBeenActive": true },
+        "pointerlockchangeEvents": 0,
+        "pointerlockerrorEvents": 0,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "hasFocus": true,
+        "visibilityState": "visible",
+        "activeElement": "body",
+        "elementFromPointAtLiveCanvasCentre": "canvas, pointerEvents auto",
+        "gameStateAtStop": {
+          "beat": "ch13-survey",
+          "objectiveId": "ch13:survey:offer",
+          "markerLabel": "W-7744 · offer a route",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | W-7744 · offer a route | Approach W-7744. | [F] Offer to demonstrate a route.",
+          "supported": true,
+          "worldBound": true
+        }
+      },
+      "note": "No movement test was performed in this session, so nothing is claimed about keys. No OS/browser cause is claimed: the browser reported the click target and it was not the canvas.",
+      "cleanup": { "state": "stopped", "cleanupCompleted": true, "reason": "probe-finally", "error": null, "stopsRootPreview": false }
+    },
+    {
+      "label": "reference-2",
+      "mode": "reference",
+      "startedUtc": "2026-09-06T18:14:37Z",
+      "finishedUtc": "2026-09-06T18:15:01Z",
+      "nodeExit": 2,
+      "roleShellExit": 0,
+      "valid": false,
+      "invalidatedBy": "own harness false-stall arithmetic on the first long leg",
+      "verdict": "STOPPED-PREREQUISITE",
+      "stoppedAt": "leg-to-W-offer",
+      "provedByThisRun": {
+        "entryWorks": "ONE ordinary trusted click at the LIVE canvas centre (640,360) took pointer lock on attempt 1; pointerLockElement = canvas; 1 pointerlockchange, 0 pointerlockerror.",
+        "staleRectBeforeLoop": { "x": 0, "y": 0, "width": 300, "height": 150 },
+        "liveRectAtClick": { "x": 0, "y": 0, "width": 1280, "height": 720 },
+        "conclusion": "reference-1's refusal is explained by this harness's aim, not by a game input regression. This is a measurement of the harness, not a claim about the 16:31 event."
+      },
+      "measured": {
+        "keyReceipts": 4,
+        "directionSpreadDeg": 90.00000003931774,
+        "unitsPerMs": 0.004971654351067044,
+        "coastUnits": 0.027416229117162263,
+        "legTravelledUnits": 19.836459128908388,
+        "legDistanceRemaining": 27.481494601835504,
+        "supportedAtEnd": true,
+        "oscillationFlips": 0
+      },
+      "cleanup": { "state": "stopped", "cleanupCompleted": true, "reason": "probe-finally", "error": null, "stopsRootPreview": false }
+    },
+    {
+      "label": "reference-3",
+      "mode": "reference",
+      "startedUtc": "2026-09-06T18:16:41Z",
+      "finishedUtc": "2026-09-06T18:17:49Z",
+      "nodeExit": 2,
+      "roleShellExit": 0,
+      "valid": true,
+      "verdict": "STOPPED-PREREQUISITE",
+      "stoppedAt": "plane-common-1",
+      "gatesFailed": ["original-plane-crossed-common-1"],
+      "earnedBeforeTheFailure": {
+        "pointerLock": "attempt 1, ordinary click at (640,360)",
+        "legsReached": 23,
+        "fPresses": [
+          { "why": "W-demonstrate-route", "objectiveId": "ch13:survey:offer", "prompt": "F | Offer to demonstrate a route", "allowed": true },
+          { "why": "S-begin-recording", "objectiveId": "ch13:survey:start", "prompt": "F | Begin recording your route", "allowed": true },
+          { "why": "E-offer-the-walked-span", "objectiveId": "ch13:survey:offer-span", "prompt": "F | Offer the walked span", "allowed": true }
+        ],
+        "anchorsFired": ["anc.cg.repeated-measure", "anc.cg.demonstration-opened", "anc.cg.survey-started"],
+        "surveyDrawLegs": "draw-0 .. draw-17 all reached",
+        "standClearAtW": "reached",
+        "witnessPoint": "reached",
+        "eCommonStart": "reached"
+      },
+      "failureRaw": {
+        "vertexIndex": 1,
+        "vertex": [-42, 51.05, 14],
+        "plane": { "point": [-42, 51.05, 14], "normal": [0, 1], "from": [-42, 51.05, 12] },
+        "crossed": false,
+        "why": "body never reached the far side of the original incoming plane at this corner (no supported before->after transition was observed inside the leg)",
+        "beforeSample": { "pose": [-41.669723098940054, 54.17066442376196, 11.61861228323853], "offset": -2.38138771676147 },
+        "endPose": [-41.84314760720268, 51.35313767698468, 14.140832838487126],
+        "maxOffsetObserved": 0.14083288424718532,
+        "supportedAtEnd": false,
+        "terraUnitsAtEnd": 0,
+        "status": "oscillating",
+        "oscillation": { "flips": 4, "improvement": 0.013322834912158708 },
+        "bodyHeightObservation": "At the corner the body pose y ran 54.17 -> 51.35 while z stayed frozen at 14.140832 across 8 plane-step pulses, supported=false in every sample. RAW OBSERVATION ONLY: the body was above the nominal route height (route y 51.05) and descending; no collision mechanism, terrain cause or defect is claimed."
+      },
+      "cleanup": { "state": "stopped", "cleanupCompleted": true, "reason": "probe-finally", "error": null, "stopsRootPreview": false }
+    },
+    {
+      "label": "deviation-1",
+      "mode": "deviation",
+      "startedUtc": "2026-09-06T18:18:39Z",
+      "finishedUtc": "2026-09-06T18:19:58Z",
+      "nodeExit": 2,
+      "roleShellExit": 0,
+      "valid": true,
+      "verdict": "STOPPED-PREREQUISITE",
+      "stoppedAt": "terra-full-eighteen-unit-ordered-passage",
+      "gatesFailed": [
+        "terra-full-eighteen-unit-ordered-passage",
+        "reciprocal-crossed-anchor",
+        "early-corner-recovery-through-omitted-ground"
+      ],
+      "inputBoundary": {
+        "pointerLock": "attempt 1, ordinary click at the live canvas centre",
+        "fPresses": [
+          { "why": "W-demonstrate-route", "allowed": true },
+          { "why": "S-begin-recording", "allowed": true },
+          { "why": "E-offer-the-walked-span", "allowed": true },
+          { "why": "authored-witness-offer", "allowed": true }
+        ],
+        "noLaterFAfterAFailedPrerequisite": true,
+        "noPoseVelocityAnchorOrStoreWrites": true,
+        "noMilestoneGrantOrSeededFinalState": true
+      },
+      "earlyTurnDeviation": {
+        "intended": [-42, 51.05, 15.82],
+        "achievedPose": [-41.9016900620174, 50.98976247587633, 15.754167406049282],
+        "signedOffsetToOriginalZ16Plane": -0.245832593950718,
+        "shortfallUnits": 0.245832593950718,
+        "minShortfallRequired": 0.02,
+        "physicallyValid": true,
+        "creditedAtDeviation": 3.75416740628145
+      },
+      "farExcursion": { "creditedAfterFarExcursion": 4, "farExcursionBoughtNothing": true },
+      "recovery": {
+        "returnedToFrontierByOrdinaryMovement": true,
+        "omittedGroundActuallyTraversed": true,
+        "creditedAtFrontier": 4,
+        "creditedAfterOmittedCorner": 4.008321486093145,
+        "earnedPrefixRetained": true,
+        "noExtraFNoReset": true,
+        "fullEighteenAfterRecovery": false,
+        "verdict": "RECOVERY-FAILED-CREDIT-NOT-RESTORED"
+      },
+      "orderedFrontierCrossings": {
+        "allNineCrossedInOrder": true,
+        "creditedUnitsAtEachCrossing": [
+          { "index": 1, "atMs": 62104, "units": 2.013791967963801, "offset": 0.013791967861155996, "lateral": 0.44522411538583384 },
+          { "index": 2, "atMs": 70877, "units": 4.008321486093145, "offset": 0.16433316294610378, "lateral": 0.012989784752477362 },
+          { "index": 3, "atMs": 71644, "units": 6, "offset": 0.028859115081452558, "lateral": 0.16433316293273137 },
+          { "index": 4, "atMs": 72145, "units": 6, "offset": 0.06762272139380343, "lateral": 0.02740537770492324 },
+          { "index": 5, "atMs": 72679, "units": 6, "offset": 0.03801937792310639, "lateral": 0.06762272162751515 },
+          { "index": 6, "atMs": 73359, "units": 6, "offset": 0.12637046420422138, "lateral": 0.0676227242144023 },
+          { "index": 7, "atMs": 73909, "units": 6, "offset": 0.07645432428103405, "lateral": 0.11517557022695257 },
+          { "index": 8, "atMs": 74428, "units": 6, "offset": 0.060629912214800186, "lateral": 0.10611985271347635 },
+          { "index": 9, "atMs": 74948, "units": 6, "offset": 0.04613688426644558, "lateral": 0.09786331039084928 }
+        ],
+        "observation": "Credited terraUnits stopped growing at 6 after frontier 3 while frontiers 4..9 were still physically crossed in order and within the lateral limit. RAW MEASUREMENT; no cause and no defect is claimed."
+      },
+      "passage": {
+        "creditedFinal": 6,
+        "required": 18,
+        "comparisonProved": false,
+        "physicalArrivalAtC": true,
+        "liveSupportAtArrival": true,
+        "referenceHeldDuringPassage": true,
+        "orderedRouteLegsAllReached": true,
+        "bodyClearanceMaintained": true,
+        "minBodyClearanceUnits": 1.6019867322230676,
+        "noExtraFOrReset": true,
+        "prefixRetained": true,
+        "supportedThroughout": false,
+        "creditGrewWhileWalking": true,
+        "samples": 56,
+        "verdict": "PASSAGE-NOT-PROVED"
+      },
+      "standClearAtW": { "units": 6.838521457682058, "requiredUnits": 1, "ok": true },
+      "anchorsAtStop": [
+        "anc.cg.repeated-measure", "anc.cg.demonstration-opened", "anc.cg.survey-started",
+        "anc.cg.trace-drawn", "anc.cg.route-offered", "anc.cg.specific-hold",
+        "anc.cg.witness-held", "anc.cg.route-tested", "anc.cg.reciprocal-reference"
+      ],
+      "anchorsNotFired": ["reciprocal-crossed anchor", "COMMON completion / hand-back anchors"],
+      "objectiveNOTCleared": true,
+      "rawVisibleGuidanceAtStop": {
+        "markerLabel": "Far reference · check my route",
+        "health": "ready",
+        "hudText": "CURRENT OBJECTIVE | Far reference · check my route | W-7744 is holding the reference. | Walk the guide line to check your route from this end.",
+        "beat": "ch13-common",
+        "bodyPose": [-48.09784322835505, 50.99467991802065, 11.953863115731329],
+        "supported": true
+      },
+      "cleanup": { "state": "stopped", "cleanupCompleted": true, "reason": "probe-finally", "error": null, "stopsRootPreview": false }
+    }
+  ],
+  "variance": {
+    "commonCorner1": "reference-3 FAILED the strict original-plane crossing at vertex 1 (arrived airborne, unsupported, y 54.17 -> 51.35); deviation-1 CROSSED the same vertex 1 and all remaining frontiers. Two cold sessions, same build, opposite results at that corner. Reported as measured variance; no cause claimed.",
+    "coldSessionsPerLane": { "referenceValid": 1, "deviationValid": 1 }
+  },
+  "requirementsNotMet": [
+    "Real T [F] + occupancy: NOT REACHED in either lane (the deviation lane stopped at the 18-unit gate before the final-reference offer).",
+    "W full 18/18: NOT OBSERVED — best credited was 6 of 18 (deviation-1).",
+    "Final anchors and objective clear: NOT OBSERVED.",
+    "No endpoint pumping was credited and no safe-footprint refusal was forced."
+  ],
+  "artifacts": {
+    "captures": {
+      "reference-1": "verifier/captures/arrival-common-manual/reference-1 (summary.json 58124d01618c4cf52d02e7f50521bd5fc9daed6480f3b7c3223ad3d67523f003, trace.ndjson 199f71da83806982ed648a441cbaf167a9afc8dae30fffa726683c14a53299fd, stop-pointer-lock-and-focus.png)",
+      "reference-2": "verifier/captures/arrival-common-manual/reference-2 (summary.json 06768cdb89c1f8c6d0c8ee7975530563ea09fb16ed3d1a6cdf11802b84e2d5e3, trace.ndjson bd4ef1082fa16490896ed0d47503940fac351dfba0a3ff87ecc5e06142132751)",
+      "reference-3": "verifier/captures/arrival-common-manual/reference-3 (summary.json c3e6dead27fa431c6b9592fd11fb2537534118ef4ecd0ee05c46b009a7786664, trace.ndjson 8396cffaecd29622e9d03b44013b46d9bdfb4dad935ed54f98180f719aa80708)",
+      "deviation-1": "verifier/captures/arrival-common-manual/deviation-1 (summary.json d2e82f007cae943efbbf1c543bb33ed99dccd49c900207ede33efa5bdd706f54, trace.ndjson 4964ec222cab4a5788d3688d2a463100c85b9753aa3b0138852f0ac8f4ac8bf7)"
+    },
+    "logs": {
+      "reference-1.log": "7dd02cb98321efbfc989b4a6f00ce3a6fb9a509737d6fa8b40c24c82f1625458",
+      "reference-2.log": "1d000ea69ddecfee968783c1a930244f3260bedffcddd990db83d016e8beb1f2",
+      "reference-3.log": "e6552540aa937a5a1e99096c538a6f929f1bc1a236252607908de0b4895ef22e",
+      "deviation-1.log": "d90e25de81ba0140eb0dcc19b68655f014ef24544f4a2f0b94059d0402dc891a",
+      "selftest-baseline.log": "d52dd98cdd99546732e3cdd0d1e14d370ec09e5a43d88e8223d5d31b668fab09",
+      "selftest-after-repin.log": "d52dd98cdd99546732e3cdd0d1e14d370ec09e5a43d88e8223d5d31b668fab09",
+      "selftest-after-repin-2.log": "1705d710c744d013fb654580a9d7c6674f1852a1cb852b6a0f58fed83625a9ce",
+      "selftest-after-click-correction.log": "374cf94e21838f171f1299a22a97d99ee91f30718692512594bed73e1aa19153",
+      "dep-snapshot-pre-reference.json": "b8bf64b2f19994afb00fc1bef0189a3f0ed67e0b5d947c0843defe54fbb076ce",
+      "dep-snapshot-pre-reference-2.json": "db7579e6aa4826467ded7a25f5bf470affa03ffddadfcc723c7d95ba98c22d07"
+    },
+    "probeDependenciesAtFinalRuns": {
+      "common-passage-probe.mjs": "5a8973cae9174272efe6493bd8b22850034da06958be1128941ce817aa84c562",
+      "commonPassageLogic.mjs": "7c02a73cd2799c3b409b33d620cf039ade4ce9ac13b92b3dc6e29fa0fc2ddc4e",
+      "entryObservation.mjs": "4eb7ec5db079cd6da1c3a8f59dd2858f4926eecc11526d9d790c48e0dde894f4",
+      "cgContract.pinned.mjs": "5f3dbc2e29a62a4400df79e9c06b620792b39014be524dbeaeb453029ae083a5",
+      "ownedSession.pinned.mjs": "9a5c2556f606dc57c56dc063873e2f7ddcbf2d23e4c4fdeccac58301ff879d4b",
+      "sourceSnapshot.pinned.mjs": "b3e7f6814f9ab788e809fa2422ea723e84fbca427c60a017e9afc663b3343a20",
+      "pin.json": "716bc06853382a509b1bf6a21afb8d2f919dcbc6c19dd5676a9faedd0f034b92",
+      "selftest.mjs": "c7daa71b161cc50f820d35e264b6466020f03839c4e93b28e79d742a943f3b81",
+      "main/tools/lib/evidence.mjs (unpinned, unchanged from preparation)": "1997cf2a3e9db88ae6e1e474b76232a2589c78a58fe69a579b493b44e5aa5328"
+    }
+  },
+  "exits": {
+    "roleShell": { "reference-1": 0, "reference-2": 0, "reference-3": 0, "deviation-1": 0 },
+    "probeNode": { "reference-1": 2, "reference-2": 2, "reference-3": 2, "deviation-1": 2 },
+    "note": "The role shell exits 0 because it records the receipt; the probe's own non-zero exit is the measurement outcome and is reported separately, never hidden."
+  },
+  "cleanupAndOwnership": {
+    "postFinallyReceipts": 4,
+    "allStopped": true,
+    "cleanupErrors": 0,
+    "abandonedBrowsers": 0,
+    "rootPreviewTouched": false,
+    "processControlUsed": false,
+    "softwareOrHeadlessOrForeignWindowUsed": false,
+    "attemptedCaptureDirectoriesRemoved": 0
+  }
+}

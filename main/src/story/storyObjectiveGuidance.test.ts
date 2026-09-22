@@ -1,15 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import chapterRegistry from '../../chapter-registry.json';
-import type { StoryBeat } from './storyState.ts';
+import { STORY_BEAT_ORDER, type StoryBeat } from './storyState.ts';
 import {
   classifyStoryObjectiveGuidanceBeat,
   DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS,
   resolveStoryObjectiveGuidance,
-  STORY_OBJECTIVE_GUIDANCE_CLASSIFICATION,
+  storyObjectiveGuidanceClassification,
   type StoryObjectiveGuidanceFacts
 } from './storyObjectiveGuidance.ts';
 
 const CINEMATIC_BEATS = [
+  'crawl', 'manifest', 'voyage', 'deflect', 'crash', 'descent',
   'a1-ramp',
   'a2-awakening',
   'ch3-dusk',
@@ -18,7 +19,7 @@ const CINEMATIC_BEATS = [
   'a4-exhale'
 ] as const satisfies readonly StoryBeat[];
 
-const AUTHORED_CHAPTERS = new Set(['ch1', 'ch2', 'ch3', 'ch4', 'ch8', 'ch10']);
+const AUTHORED_CHAPTERS = new Set(['ch1', 'ch2', 'ch3', 'ch4', 'ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch13', 'ch14']);
 
 function resolve(
   beat: StoryBeat,
@@ -44,7 +45,14 @@ describe('story objective guidance authoring', () => {
     }
 
     const ids = requiredBeats.map(beat => resolve(beat)!.id);
-    expect(new Set(ids).size).toBe(ids.length);
+    // Settle/hearth preserve one objective across the handback until its facts change.
+    expect(resolve('ch9-settle')!.id).toBe(resolve('ch9-hearth')!.id);
+    // ch14's four beats share the unfinished-map objective, whose identity is
+    // driven by live director state rather than by the beat.
+    const ch14Beats = requiredBeats.filter(beat => beat.startsWith('ch14-'));
+    expect(ch14Beats).toHaveLength(4);
+    expect(new Set(ch14Beats.map(beat => resolve(beat)!.id)).size).toBe(1);
+    expect(new Set(ids).size).toBe(ids.length - 1 - (ch14Beats.length - 1));
   });
 
   it('classifies exactly the registry objectives plus the intentional cinematics', () => {
@@ -52,7 +60,8 @@ describe('story objective guidance authoring', () => {
       ...requiredAuthoredObjectiveBeats(),
       ...CINEMATIC_BEATS
     ]);
-    expect(new Set(Object.keys(STORY_OBJECTIVE_GUIDANCE_CLASSIFICATION))).toEqual(expected);
+    expect(new Set(Object.keys(storyObjectiveGuidanceClassification()))).toEqual(expected);
+    expect(expected).toEqual(new Set(STORY_BEAT_ORDER.filter(beat => beat !== 'done')));
   });
 
   it('classifies every excluded transition as an intentional cinematic null', () => {
@@ -60,15 +69,15 @@ describe('story objective guidance authoring', () => {
       expect(classifyStoryObjectiveGuidanceBeat(beat), beat).toBe('cinematic');
       expect(resolve(beat), beat).toBeNull();
     }
-    expect(Object.values(STORY_OBJECTIVE_GUIDANCE_CLASSIFICATION).filter(
+    expect(Object.values(storyObjectiveGuidanceClassification()).filter(
       disposition => disposition === 'cinematic'
     )).toHaveLength(CINEMATIC_BEATS.length);
   });
 
-  it('does not replace existing Ch5-Ch7 objective ownership', () => {
-    for (const beat of ['ch5-maw', 'ch6-dive', 'ch7-reconstruct', 'ch7-board'] as const) {
-      expect(classifyStoryObjectiveGuidanceBeat(beat)).toBe('outside-scope');
-      expect(resolve(beat)).toBeNull();
+  it('includes each formerly separate emergent objective in the canonical contract', () => {
+    for (const beat of ['ch5-maw', 'ch6-dive', 'ch7-reconstruct', 'ch7-board', 'ch9-settle', 'ch9-hearth'] as const) {
+      expect(classifyStoryObjectiveGuidanceBeat(beat)).toBe('objective');
+      expect(resolve(beat)).not.toBeNull();
     }
   });
 
@@ -206,7 +215,7 @@ describe('story objective guidance authoring', () => {
   });
 
   it('returns complete actionable contracts for every default objective beat', () => {
-    const objectiveBeats = Object.entries(STORY_OBJECTIVE_GUIDANCE_CLASSIFICATION)
+    const objectiveBeats = Object.entries(storyObjectiveGuidanceClassification())
       .filter(([, disposition]) => disposition === 'objective')
       .map(([beat]) => beat as StoryBeat);
 

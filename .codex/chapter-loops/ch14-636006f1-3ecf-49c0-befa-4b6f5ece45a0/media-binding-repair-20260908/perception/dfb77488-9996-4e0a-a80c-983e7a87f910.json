@@ -1,0 +1,37 @@
+{
+  "schema": "paravoxia.mediaPerception.v1",
+  "model": "gemini-3.8-flash",
+  "source": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/listen-1/audio.wav",
+    "sha256": "4a612a832c7e67c8416d8869d44ada63374d2b38cc35eec88d3d829f845b68c4",
+    "kind": "audio"
+  },
+  "segment": {
+    "path": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/media-binding-repair-20260908/perception/dfb77488-9996-4e0a-a80c-983e7a87f910.mp3",
+    "sha256": "e85a4478d0e3a802ddc7b8c1ac08ae6f60f5f38c7e598e1d809806d2697def36",
+    "startSeconds": 0,
+    "seconds": 12.288
+  },
+  "question": "Describe audible changes, sound layers and silence in this excerpt, with approximate timestamps.",
+  "at": "2026-09-08T22:16:22.778Z",
+  "status": "observed",
+  "usage": {
+    "promptTokenCount": 379,
+    "candidatesTokenCount": 152,
+    "totalTokenCount": 662,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 71
+      },
+      {
+        "modality": "AUDIO",
+        "tokenCount": 308
+      }
+    ],
+    "thoughtsTokenCount": 131,
+    "serviceTier": "standard"
+  },
+  "resolvedModel": "gemini-3.8-flash",
+  "description": "Below is a breakdown of the sound layers, audible changes, and silence throughout the excerpt:\n\n- **00:00 – 00:06**: A warm, sustained orchestral string/synth pad sound enters and gradually swells in volume and harmonic fullness, accompanied by subtle vibrato and ambient reverb.\n- **00:06 – 00:09**: The tone reaches its dynamic peak around 00:06 to 00:07 and begins a smooth, gradual decrescendo.\n- **00:09 – 00:13**: The reverberant tail decays softly until it fades into complete silence by approximately 00:11–00:13."
+}

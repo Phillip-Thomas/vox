@@ -1,0 +1,21 @@
+{
+  "capturedAt": "2026-09-05T18:00:19.500925+00:00",
+  "scope": "Six owned station integration source/tool files only; not a complete application source hash or rendered build.",
+  "sha256": "3d055afa25af799eb393c615f7d95b12a05c57ee8fde9cdb17515df9bafa22bb",
+  "files": {
+    ".codex/production-runs/2026-09-04-station-interior-light/recovery-ux-probe.mjs": "437ecb02ca64a52677dccdb71506d2d3be2b6a251bf1cb7af4a3a70ad8c774ce",
+    "main/src/components/spaceStation/SpaceStationLighting.tsx": "eeb76970ef95308a92573c0421f98053d29c58b6b3cf799c54803cbf783b77fd",
+    "main/src/game/spaceStation/spaceStationDressing.ts": "5425664dcb508c53a16b9c3d4d1d2d0242665dd47ab5004c70d5812aa1baad62",
+    "main/tools/lib/stationThresholdCapture.mjs": "c2dbdc3a8eaa0bf8ed8b89e4c015db1a1de97cc8542cabc661458982f7a8af86",
+    "main/tools/lib/stationThresholdCapture.test.mjs": "625ae7e4911d830a0906ec67395c3fce7eb74511669c370621002331fbebe4d4",
+    "main/tools/spaceStation-shots.mjs": "b4ac572c6a0c19f2f31f61155bf3b51e4dd0896008eb723cb68d6a7b38a98e51"
+  },
+  "contractSha256": "291e75b0c19294f68d00add730b8fedf9ae232288b5ecb744ff2f39d6a969cc1",
+  "validation": {
+    "typecheck": "PASS npx tsc --noEmit",
+    "stationTests": "PASS 22 tests / 5 files",
+    "timingEvidenceTests": "PASS 3 node:test tests",
+    "scriptSyntax": "PASS both modified probe entrypoints"
+  },
+  "rendered": false
+}

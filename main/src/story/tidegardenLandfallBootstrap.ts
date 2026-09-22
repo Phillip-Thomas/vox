@@ -1,3 +1,4 @@
+import { movieShelterLayout } from './movieShelterLayout.ts';
 import {
   buildStarSystemManifest,
   type PlanetDescriptor
@@ -24,7 +25,7 @@ import {
 } from '../game/systems/habitatSystem.ts';
 import {
   faceIndexForNormal,
-  oppositeFace,
+  fitDoor,
   placePiece
 } from '../game/systems/structureSystem.ts';
 import {
@@ -188,7 +189,7 @@ function tidegardenRehearsalHabitatSite(
  * two interior cells. Topped up rather than minted outright, exactly as the
  * movie runtime provisions its own shelter build.
  */
-const CH10_DEBUG_SHELTER_WOOD = 24;
+const CH10_DEBUG_SHELTER_WOOD = 38;
 
 /**
  * Chapter 10's rehearsal prerequisite: a certified second hearth.
@@ -217,14 +218,9 @@ export function bootstrapTidegardenHabitatDebug(
     ? new THREE.Vector3(core.up[0], core.up[1], core.up[2])
     : site?.up.clone() ?? null;
   if (!up) return false;
-  const upperCell: HabitatCell = [
-    lowerCell[0] + up.x,
-    lowerCell[1] + up.y,
-    lowerCell[2] + up.z
-  ];
   const upFace = faceIndexForNormal(up.x, up.y, up.z);
-  const floorFace = oppositeFace(upFace);
-  const wallFaces = [0, 1, 2, 3, 4, 5].filter(face => face !== upFace && face !== floorFace);
+  const extensionFace = [0, 1, 2, 3, 4, 5].find(face => Math.floor(face / 2) !== Math.floor(upFace / 2))!;
+  const layout = movieShelterLayout(lowerCell, upFace, extensionFace);
   // WORLD units, not cell indices: the certification's flood fill divides this
   // by VOXEL_SCALE to find the cell the player is standing in. Cell arithmetic
   // passed here read as a point three cells underground and the shelter never
@@ -252,13 +248,8 @@ export function bootstrapTidegardenHabitatDebug(
   if (wood < CH10_DEBUG_SHELTER_WOOD) {
     addItem('wood', CH10_DEBUG_SHELTER_WOOD - wood, actorId);
   }
-  placePiece(upperCell, upFace, 'ceiling', 'wood', upFace, actorId);
-  placePiece(lowerCell, floorFace, 'foundation', 'wood', upFace, actorId);
-  for (const cell of [lowerCell, upperCell]) {
-    for (const face of wallFaces) {
-      placePiece(cell, face, 'wall', 'wood', upFace, actorId);
-    }
-  }
+  for (const panel of layout.panels) placePiece(panel.cell, panel.face, panel.type, 'wood', upFace, actorId);
+  fitDoor(layout.door.cell, layout.door.face, 'wood', actorId);
 
   const certified = certifyTidegardenShelter({
     worldId: TIDEGARDEN_WORLD_ID,

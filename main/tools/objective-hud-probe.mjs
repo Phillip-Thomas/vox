@@ -85,7 +85,7 @@ try {
         await page.waitForFunction(() => {
           if (window.__paravoxiaAppState?.phase === 'playing') return true;
           return [...document.querySelectorAll('button')].some(button => (
-            button.textContent?.includes('Play Now') && !button.disabled
+            button.textContent?.includes('Free Play') && !button.disabled
           ));
         }, undefined, { timeout: 60_000 });
 
@@ -93,7 +93,7 @@ try {
           () => window.__paravoxiaAppState?.phase === 'playing'
         );
         if (!alreadyPlaying) {
-          await page.getByRole('button', { name: /Play Now/i }).click({ force: true });
+          await page.getByRole('button', { name: /Free Play/i }).click({ force: true });
         }
         entryAt = Date.now();
         await page.waitForFunction(expectedBeat => (

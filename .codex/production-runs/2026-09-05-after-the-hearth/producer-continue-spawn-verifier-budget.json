@@ -1,0 +1,16 @@
+{
+  "schema": "paravoxia.producer.boundedVerificationDecision.v1",
+  "at": "2026-09-06T23:25:21.318563+00:00",
+  "decidedBy": "delegate",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "role": "continue-spawn-verifier",
+  "wallBudgetSeconds": 1200,
+  "sourceManifestSha256": "2de3fa2aef0d577bdeca7fe9eaa4612751b2946115207fa9c18d2e8613bb9f63",
+  "sourceFiles": 103,
+  "sourceWriterFinishedAt": "2026-09-06T23:23:22.004432+00:00",
+  "sourceReviewRef": "producer-continue-spawn-source-review.json",
+  "phaseA": "Reuse application typecheck101focused receipts; missing node-tsconfig and build. No GPU before root newpreview/readiness/implementationgate.",
+  "phaseB": "Actual earned Continue, raw point equality, restored pose and new accepted F/route-offered; then one stable full suite through required runner.",
+  "sourceMutationAuthorized": false,
+  "publicationAuthorized": false
+}

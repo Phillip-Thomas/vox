@@ -1,0 +1,16 @@
+{
+  "role": "finale-window-fd-runtime",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T20:07:05.927860+00:00",
+  "commissionSha256": "1a324dfc0b170b2b150ff43bf87a14f78b69e83e588bb120b5053c307a6526c0",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "One unmuted atomic-state and isolated-output finale measurement; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T20:18:05.068039+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "4fbae108-44b5-45ee-ba3a-247ccc8cc16d",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

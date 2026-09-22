@@ -1,0 +1,15 @@
+```json
+{
+  "verdict": "PASS",
+  "handoffSha256": "6c4bc066b7ac6ab0efaa1b10577d154afc0b8767c478facfa94f7d6a426a5662",
+  "findings": [
+    {"severity": "medium", "description": "renewFinish hardcodes brief growth not declared by the owner authority: allowedPaths gains main/story-authority.json and interactionSystem.ts, and verification.observe.look.media is rewritten to require frame.png. Scope/verification change comes from transport code, not the signed packet.", "path": "main/tools/chapter-loop/finish-renewal.mjs"},
+    {"severity": "medium", "description": "Ceiling guard pins only status.releaseStoryCeiling; story-authority.json is now writable, so any other release-gating field in it is unprotected. Cumulative counters, limits, recipe hash, queue/cursor and observations are correctly retained; renewal is single-use and requires old deadline <= new requestedAt.", "path": "main/tools/chapter-loop/runner.mjs"},
+    {"severity": "low", "description": "Probe now emits media:[frame] and proof.media changed from 'none required' to 'real rendered frames'; the harness self-produces the artifact that satisfies the new look media obligation. Existence must not be treated as visual acceptance.", "path": "main/tools/chapter-loop/control-capture.mjs"},
+    {"severity": "low", "description": "a.extraInfrastructureRetries===1 is asserted but never applied to any counter; the extra recovery is granted only implicitly by appending one ownerRecoveries entry (no double grant, retries untouched).", "path": "main/tools/chapter-loop/finish-renewal.mjs"},
+    {"severity": "low", "description": "scanForbidden exempts key 'state' whenever a sibling type==='waitSelector', including in non-action positions (e.g. notes), so the exemption is not bound to validated actions. Nested forbidden keys are still scanned.", "path": "main/tools/chapter-loop/control-capture.mjs"},
+    {"severity": "low", "description": "Walk logic is sound (measured displacement, dot>0 required, no-progress and timeout throw, keys released in finally, MAX_WALK_MS==MAX_WAIT_MS so no ceiling expansion), but hold ms = min(tickMs, ..., until-now()) can be <=0 in the final iteration, issuing a zero/negative hold before the bound throws.", "path": "main/tools/chapter-loop/control-capture.mjs"},
+    {"severity": "low", "description": "Doc claims per-beat frames; code screenshots only beats listed in config.beats and omits the arriveWithin default (3). bootstrapSteps adds a third MAX_STEPS list, raising total actions per case though the per-list cap is unchanged.", "path": "docs/chapter-loop/control-config.md"}
+  ]
+}
+```

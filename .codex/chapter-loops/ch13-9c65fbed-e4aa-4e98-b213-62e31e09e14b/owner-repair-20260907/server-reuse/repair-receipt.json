@@ -1,0 +1,45 @@
+{
+  "schema": "paravoxia.chapterLoopInfrastructureRepair.v1",
+  "runId": "ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b",
+  "failureSha256": "d71c0ebf44fcb65176372eddf44724393ed4221ebbe984c913a584d9c57b9c01",
+  "amends": {
+    "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/owner-repair-20260907/repair-receipt.json",
+    "sha256": "7d1928a918beb24d6a3af5182697f0980f9d3ef2e314c30142e66e97a3bb13e4"
+  },
+  "files": [
+    {
+      "path": "main/tools/chapter-loop/evidence.mjs",
+      "before": "fb5b698d4820039ece1007e59355393bf69f9a397e9c09493b4e36f9c6a4e61e",
+      "after": "10a61bb3e87241eec8179a76ad363344e0bdbb62f7839b07097535059d302aa1"
+    },
+    {
+      "path": "main/tools/chapter-loop/legacy-capture.mjs",
+      "before": "15e884907baee0353afa0f5926948b847041c94578959afd97e7f247e4b9d47a",
+      "after": "70294e4638c52c4b4d6329c4f6d111e6930de8cfebd2064d25cbdfc45e1fa4a6"
+    },
+    {
+      "path": "main/tools/chapter-loop/loop.test.mjs",
+      "before": "c680645575838634bd2545ae7e1c2e3d6871f75d2a8e3f96b4a13ee9e82c1810",
+      "after": "987b689a6564ae9d42c90dfdb1380ab2fe55147de004f2ea52cb750f37dda7a5"
+    },
+    {
+      "path": "main/tools/chapter-loop/runner.mjs",
+      "before": "329824188af15d3d408d1adad10ac2885e39a1e081b24286823cdc297bd9a02f",
+      "after": "d653b0f6b2ca16dea5a7c0125692483103168c07b4a6160408222755301c5d1f"
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "command": "npm run chapter:loop:test",
+    "tests": 25,
+    "report": {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/owner-repair-20260907/server-reuse/final-tests.log",
+      "sha256": "bb115b40997a701001c4e68d6365036141894aef0d3f57d75f4537d0c3b02807"
+    }
+  },
+  "request": {
+    "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/owner-repair-20260907/server-reuse/request.json",
+    "sha256": "8ae5fd0fda22dba247ab4a3c1295b0606877a6495a19dfa81aff089db560fcb9"
+  },
+  "diagnosis": "Reuse source- and byte-verified persistent preview; explicitly reject software GPU overrides. Preserve probe cleanup ownership; fail unsupported capabilities before redundant capture."
+}

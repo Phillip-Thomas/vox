@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 463211,
+  "stop_reason": "end_turn",
+  "session_id": "70c80502-9a7a-4297-b4c1-a9d009ddd153",
+  "total_cost_usd": 3.055162500000001,
+  "usage": {
+    "input_tokens": 74,
+    "cache_creation_input_tokens": 103165,
+    "cache_read_input_tokens": 2360987,
+    "output_tokens": 33623,
+    "output_tokens_details": {
+      "thinking_tokens": 8997
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 103165,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1671,
+        "cache_read_input_tokens": 107782,
+        "cache_creation_input_tokens": 1574,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1574
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2004,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0020740000000000003,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 74,
+      "outputTokens": 33623,
+      "cacheReadInputTokens": 2360987,
+      "cacheCreationInputTokens": 103165,
+      "webSearchRequests": 0,
+      "costUSD": 3.0530885000000008,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 8997,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 45,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: `SHORT-NOT-PROVEN`** \u2014 by this lane's own signed completion predicate. The SHORT survey was physically performed end to end with ordinary input; 18/20 gates passed; the 2 failures are probe-side measurement mismatches I was not authorized to repair.\n\n**Preflight (all live-read, no stale literals):** activeRole `arrival-common-short-runtime`; URL `http://127.0.0.1:34413/`; title `Paravoxia`; index `6c8c378b\u2026`; bundle `/assets/index-BiDWGouH.js` `efc87feb\u2026`; contract scene-v3 `5ef85a32\u2026`; **99/99 source hashes exact before and after**; all 9 probe files match prep hashes; `evidence.mjs` `1997cf2a\u2026` unchanged. Only auxiliary mismatch is the recorded unused delta-profile `a0b0ecdd`\u2192`605fb2ef` \u2014 preserved, no fullverify. Probe's contract pin was already exact v3, no repin needed. One headed browser, `ANGLE (NVIDIA GB10/PCIe)`, EXCLUSIVE flock inherited on fd 9, no other holder.\n\n**Entry-harness evidence \u2014 inspected before GPU, both defects ABSENT, neither patched:** ctl is refreshed *after* settling (rect 1280\u00d7720, one ordinary click, lock acquired); the stall detector uses an absolute 0.05 u measured step per *executed* pulse, not full-residual `commandedUnits`. 0 stalls.\n\n**short-1 (exit 2, preserved):** stopped at the clean-fixture gate before any input \u2014 boot read at +1953 ms, `cgSnap` returned null (nothing published yet). Harness fault. One bounded correction spent: `03931214\u2026`\u2192`82a49ba5\u2026`, a pre-gate wait for the diagnostic; predicate byte-unchanged, nothing loosened, both CPU suites re-pass.\n\n**short-2 (exit 0, 52.5 s):** W offer `[F]` \u2192 S start `[F]` \u2192 8-leg straight **z=12, x \u221226\u2192\u221242** draw \u2192 span offered `[F]` \u2192 W's real test held with **`reference-occluded-survey-housing`** \u2192 witness `[F]` (genuinely new offer) \u2192 phase **`tested`**, **`acceptedClass: held-reference`**, `anc.cg.route-tested` fired.\n\n- **Class: SHORT.** Walked 15.6485 u (runtime 15.6486 u); deviation 0.500 u from SHORT vs 6.395 u from LONG. Not LONG, `mislabel: false`.\n- **Footing valid** \u2014 a named occlusion hold, not `footing-invalid`. Tail-revision branch neither needed nor exercised (`tailRevision` 0). No occupancy laundering occurred or could.\n\n**The two failures (unresolved, referred to producer):**\n1. Occupancy vertical compares **body centre y 52.78897** against **authored ground pose y 51.05** \u2192 1.739 u vs the 0.6 u allowance, while radial 0.498 u passes and the runtime's own `witnessOccupied` was true at every sample and at the completing tick. Same body-centre-vs-foot gap already recorded for the earned lane.\n2. Completion verdict compares runtime `acceptedSamples` **16** (free-recorder samples, 16 recorded \u2192 16 accepted) against `drawn.sampleCount` **8** (my waypoint-leg count). Different quantities. Every other clause passed.\n\nI did **not** relax either \u2014 they are the acceptance criterion of the claim under test and my correction budget was spent; loosening them would launder the claim.\n\n**Trials:** the 2 extra cold runs were withheld \u2014 they are conditioned on the first really completing, and the failure is deterministic in retained bytes (no identical repeat capture).\n\n**Cleanup:** post-finally receipt `stopped`/`cleanupCompleted: true`, closing receipt ok; independently confirmed no surviving renderer from this lane, no probe process, lock released, root preview untouched and serving 200. Source unchanged; only my owned probe file edited.\n\n**Unknowns:** foot pose at the stand point was not retained by `snapStep`; the shipped runtime's own occupancy frame was not read from source; witness-return not exercised; one trial only, so variance unmeasured; no FPS/strip/audio/variant/reset work in scope.\n\nArtifacts: `.codex/production-runs/2026-09-05-after-the-hearth/` \u2192 `verifier/captures/arrival-common-short-runtime/{short-1,short-2}/`, `logs/arrival-common-short-runtime/`, `arrival-common-short-runtime-report.{json,md}`, `arrival-common-short-runtime-progress.md`.\n\nNo claim of earned arrival, first-time usability, COMMON, whole chapter, SHORT acceptance, score/audibility/taste, or defect closure.",
+  "ttft_ms": 1164,
+  "type": "result",
+  "duration_ms": 560013,
+  "uuid": "d04ea0c6-21f5-485b-af89-8920172afbf9",
+  "ttft_stream_ms": 759,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 760,
+  "queued_turn_count": 0
+}

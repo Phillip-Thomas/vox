@@ -1,0 +1,201 @@
+{
+  "schema": "paravoxia.creativeScorecard.v1",
+  "runId": "2026-09-04-audio-10x",
+  "stage": "1",
+  "stageBeat": "audio-stage-1-bed-timbre-mastering",
+  "contractVersion": "draft-v2",
+  "contractSha256": "384120dc02b2ea46d855c4d0a360fbd31a93eb47624c00d954eaac7f494a9a6d",
+  "mode": "chapter",
+  "runProfileRef": "paravoxia-creative-chapter@v1",
+  "rubricRef": "paravoxia-creative-cohesion@v1",
+  "categories": [
+    {
+      "slug": "narrative_and_player_causality",
+      "weight": 14,
+      "score": 4.8,
+      "rationale": "Stage 1 changes no verb, objective, copy or beat predicate (diff confined to main/src/audio, tools, tests). The era ladder the story tells is honoured: bare and colour renders fingerprint-identical, story-beat mood level delta I -0.23. Agency untouched; camera taken zero times.",
+      "evidenceRefs": [
+        "implementation.diff",
+        "evidence/stage-1/ab-results.md#bare-colour-era-regression",
+        "verification-report.json#audio.bareEraRegression",
+        "score-audit.md#era-gates"
+      ],
+      "defectRefs": []
+    },
+    {
+      "slug": "audiovisual_emotional_alignment",
+      "weight": 16,
+      "score": 4.5,
+      "rationale": "The awakening earns its weight in sound as it does in image (+4 LU at alive, +4 dB body at 120-300 Hz, mono sub, air) and the fidelity ladder is one event across ear and eye. But the contracted peak gesture (BLOOM -14 short-term) does not land, and whether the widened era-transition LRA (11.17 -> 15.18) reads as weight or lurch is unheard.",
+      "evidenceRefs": [
+        "evidence/stage-1/ab-results.md",
+        "naive-audience-report.md#weight-width-air",
+        "evidence/stage-1/spectrograms",
+        "score-audit.md#taste-risks"
+      ],
+      "defectRefs": [
+        "D1",
+        "D5"
+      ]
+    },
+    {
+      "slug": "cinematic_composition_and_lens",
+      "weight": 14,
+      "score": 4.7,
+      "rationale": "No image term moves; shipped focal subjects, camera authority and FOV are untouched by construction (diff scope), not by audit. Scored from the diff, held below 5 because parity is asserted by scope rather than captured.",
+      "evidenceRefs": [
+        "implementation.diff",
+        "scene-contract.json#variants.desktop",
+        "iteration-ledger.jsonl"
+      ],
+      "defectRefs": [
+        "D14"
+      ]
+    },
+    {
+      "slug": "score_coherence_and_sync",
+      "weight": 12,
+      "score": 4.5,
+      "rationale": "Harmonic authority, motif and voice leading untouched; SYMPHONY LAW clean; six shipped clicks removed; blind reader: same piece, better built. Unmet: BLOOM short-term window; night bed 0.5 LU over band; colour inaudibility stated to 0.5 but proven to 0.38; three graph deviations unreconciled in the treatment.",
+      "evidenceRefs": [
+        "score-audit.md",
+        "evidence/stage-1/ab-results.md",
+        "naive-audience-report.md#artefacts",
+        "verification-report.json#audio.measurements"
+      ],
+      "defectRefs": [
+        "D1",
+        "D4",
+        "D9",
+        "D13"
+      ]
+    },
+    {
+      "slug": "palette_light_and_render_cohesion",
+      "weight": 10,
+      "score": 4.8,
+      "rationale": "Sound-as-rendering holds: every new rail gates on padChoir, story convolver on richness, so the bare and colour eras carry no room, width or drive they have not earned; PostFX and grade untouched.",
+      "evidenceRefs": [
+        "score-audit.md#era-gates",
+        "evidence/stage-1/spectrograms/before-era-transition_seed5-verdant_Ds-dorian_78bpm-4-4.png",
+        "evidence/stage-1/spectrograms/after-era-transition_seed5-verdant_Ds-dorian_78bpm-4-4.png"
+      ],
+      "defectRefs": []
+    },
+    {
+      "slug": "transition_and_state_integrity",
+      "weight": 10,
+      "score": 4.5,
+      "rationale": "Era-build and story-handoff sweeps 0 violations; endOfflineScoreRender determinism reset; bounded oscillator lifetimes. Gaps: no unit test protects the era-gate zero or glue topology; ~12 ms cumulative music-path latency is a forward hazard for Stage 3/4; sandbox probe not run at Stage 1.",
+      "evidenceRefs": [
+        "evidence/stage-1/ab-results.md#smoothness-battery",
+        "score-audit.md#SYMPHONY-LAW",
+        "score-audit.md#determinism",
+        "evidence/stage-1/pure-soak.log"
+      ],
+      "defectRefs": [
+        "D6",
+        "D10",
+        "D15"
+      ]
+    },
+    {
+      "slug": "creative_ambition_and_specificity",
+      "weight": 10,
+      "score": 4.6,
+      "rationale": "A bespoke instrument, not a preset: era-gated drive wet, seeded per-voice wander, breath on retune, exact-bypass LR4 mono-below, shared seeded impulse generator. Blind reader: 'the most professional-sounding change in the set' (mono bass), yet 'gain spread evenly rather than arriving in gestures' - the ambition is the ladder, not yet the peak.",
+      "evidenceRefs": [
+        "naive-audience-report.md#synth-patch-vs-score",
+        "score-audit.md#contract-fidelity",
+        "implementation.diff"
+      ],
+      "defectRefs": [
+        "D1"
+      ]
+    },
+    {
+      "slug": "interaction_accessibility_and_variants",
+      "weight": 6,
+      "score": 4.5,
+      "rationale": "Lean tier rendered independently and in band (-19.85 LUFS, corr 0.892); story-beat lean fingerprint-identical to full. Three lean voices equal the shipped count. Reduced motion and mobile viewport not applicable to an audio-only diff. Lean at 4x throttle not yet proven (D3).",
+      "evidenceRefs": [
+        "verification-report.json#variants.lowestQuality",
+        "evidence/stage-1/verify-rerun/lean/summary.json"
+      ],
+      "defectRefs": [
+        "D2",
+        "D3"
+      ]
+    },
+    {
+      "slug": "performance_and_implementation_fidelity",
+      "weight": 5,
+      "score": 4.3,
+      "rationale": "score:fps median 60.39 PASS, 41/41 targeted tests, verify green, implementation matches the contract graph with three documented deviations. But the contracted audio-thread ms/frame budgets (1.5 full / 3 lean at 4x throttle) are unmeasured against a 1.7x DSP cost, and a hard-coded Chrome makeup figure has no gate.",
+      "evidenceRefs": [
+        "evidence/stage-1/verify-rerun/fps.log",
+        "evidence/stage-1/verify-rerun/vitest.log",
+        "evidence/stage-1/README.md#deviation-8",
+        "score-audit.md#D3"
+      ],
+      "defectRefs": [
+        "D3",
+        "D7",
+        "D8"
+      ]
+    },
+    {
+      "slug": "evidence_review_and_learning",
+      "weight": 3,
+      "score": 4.5,
+      "rationale": "Self-incriminating deviation log, independent re-measurement that caught a claim overreach (2 LSB vs 1), a blind report that declares its limits. Weakened by two unfilled templates and an unrecorded story-audit skip.",
+      "evidenceRefs": [
+        "evidence/stage-1/README.md",
+        "verification-report.json#openDeviations",
+        "naive-audience-report.md",
+        "iteration-ledger.jsonl"
+      ],
+      "defectRefs": [
+        "D11",
+        "D12",
+        "D14"
+      ]
+    }
+  ],
+  "weightedScore": 4.6,
+  "categoryFloor": 4.3,
+  "fullCategoryCoverage": true,
+  "thresholds": {
+    "sceneWeighted": 4.75,
+    "sceneFloor": 4.3,
+    "flagshipWeighted": 4.8,
+    "flagshipFloor": 4.5,
+    "applied": "chapter profile 4.75 / 4.30"
+  },
+  "openDefects": {
+    "critical": 0,
+    "high": 1,
+    "mediumUnaccepted": 4,
+    "low": 10
+  },
+  "passes": {
+    "weighted": false,
+    "floor": true,
+    "noCriticalOrHigh": false,
+    "noUnacceptedMediumInFlooredCategories": false
+  },
+  "decision": "route_repair",
+  "releaseReady": false,
+  "humanTasteApproval": {
+    "status": "pending",
+    "gate": "headed-owner-audition-per-stage",
+    "note": "Owner audition of before/after excerpts is the acceptance for release; not required to proceed to Stage 2 under the recorded delegation."
+  },
+  "stage2GoCondition": "Stage 2 may begin only when draft-v3 (D1 amendment, D13 decision) is signed by all three directors AND D4 is closed, so Stage 1 after/ renders are pinned as Stage 2 before/ and the shared audioCore bus tail has one owner at a time. D3, D5, D6, D7, D12 may run in parallel but must close before the Stage 2 cohesion gate. No Stage 2 edit to audioCore.ts before both conditions hold.",
+  "confidence": {
+    "level": "medium-high",
+    "note": "All numbers independently reproduced; taste categories (audiovisual alignment, ambition) rest on signal analysis, not listening, and remain owner-audition dependent."
+  },
+  "judge": "scene-cohesion-judge (Claude Fable 5.1)",
+  "judgedAt": "2026-09-05T05:28:43-04:00"
+}

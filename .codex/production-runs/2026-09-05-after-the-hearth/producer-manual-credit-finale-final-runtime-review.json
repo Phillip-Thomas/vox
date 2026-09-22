@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-06T22:04:00.206719+00:00",
+  "invocationFinishedAt": "2026-09-06T22:02:45.944540+00:00",
+  "taskReportEndedAt": "2026-09-06T22:02:00Z",
+  "originalDeadline": "2026-09-06T22:04:34.043543+00:00",
+  "qualification": "Role stopped before its originaldeadline; out-of-budget language is not exact elapsedtime. Actual invocation clock retained.",
+  "outcome": "No candidate coldmovie or finale evidence. Additional manualpositive mislabelledcold; acknowledged/withdrawn. Actualrecovery notperformed.",
+  "finaleCause": "One copied relative import at finale-window-fr/finale-window-probe.mjs:423 still ../lib/ownedSession.mjs; correct ../../lib/ownedSession.mjs exists. Baseline verifier/probes/finale-window/ uses ../lib correctly, so this is COPY DEPTH, not a missing baseline dependency.",
+  "retention": "Original failurelogs and allfr1..fr5 artifacts retained; prior early emptycold dirs removed byrole before validcapture, root does not infer successful evidence lost.",
+  "sourceFilesRehashed": 100,
+  "sourceChanged": false,
+  "archiveRef": "iterations/manual-credit-finale-final-runtime-partial"
+}

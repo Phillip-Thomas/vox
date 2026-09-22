@@ -1,0 +1,26 @@
+{
+  "at": "2026-09-07T00:18:02.934403+00:00",
+  "inputRef": "continuity-preflight-report.md",
+  "inputSha256": "72269db159ccd76b5447a6deb5fde148c86e8fefba10083f18f2eac23b2921e5",
+  "disposition": "Useful source map; requires qualifications before execution. Not runtime proof.",
+  "actualTransportWindow": {
+    "startedAt": "2026-09-07T00:15:12.245405+00:00",
+    "finishedAt": "2026-09-07T00:16:51.877802+00:00",
+    "not": "Report incorrectly says00:15Z-00:23Z."
+  },
+  "acceptedFacts": [
+    "ch13 deep entry reconstructs consumed prior station-return receipts; cannot prove real installation.",
+    "Actual stationReturnStory install requires pending carried bonded_cell, real Tidegarden core and4.2reach; removes cell then marks installed/restored.",
+    "Station continuation contract is R12 post-terminal sidecar with issuance/return transactions, not new chapter11/12registeredbeats.",
+    "Existing inspected probes do not supply an already-proved continuous stationexit/cellinstall/ch13 or fullstorymovie capture."
+  ],
+  "corrections": [
+    "Canonical chapter-journey-probe.mjs1190-1209 defaults continuous scenario to story=1 unless scenario.storyParam or URL overrides it. Report claim --chapterch13 continuous entersch13-home is not generally correct; direct-entry alone selects chapter.entryBeat. Resolve actual scenario before a launch.",
+    "The canonical command shown is not a ready station-return driving scenario and must not be presented as execution-ready.",
+    "Actual completedContinue and manual recovery evidence exist in this run; the claim only movie-mode deep-entry samples are present is false. Lane completeness remains pending, but do not erase current actual proofs.",
+    "The preflight did not exhaustively inspect every capture and did not read the cited stationcontinuationcontract. Claims no evidence anywhere are overbroad. Root has now read that exact contract.",
+    "Source100 coldcommon overall elapsedMs36348/36425/36262 includes cleanup; game stopElapsedMs35052/34909/34912, spread143ms, is the relevant previously recorded flow timing.",
+    "Fullstation6-12min/fullstory20-45min are unmeasured guesses, not basis for acceptance or mandatory wait budgets."
+  ],
+  "nextAction": "A later verifier must adapt a real legal stationexit/return traversal with milestone+inventory transitions, source binding and explicit starting-state label. Fullstory continuous entry usesstory1; no deepentry or setter substitution."
+}

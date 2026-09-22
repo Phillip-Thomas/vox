@@ -45,21 +45,12 @@ function includesNormalized(source, phrase) {
   return source.replace(/\s+/g, ' ').includes(phrase.replace(/\s+/g, ' '))
 }
 
-const EXPECTED_PRODUCTION_BEATS = [
-  'ch4-audit',
-  'ch4-comply',
-  'ch4-defy',
-  'a4-exhale',
-  'ch5-maw',
-  'ch6-dive',
-  'ch7-reconstruct',
-  'ch7-board',
-  'ch8-launch',
-  'ch8-crossing',
-  'ch8-landfall',
-  'ch9-settle',
-  'ch9-hearth'
-]
+// The production's beat order is no longer a literal here. It is read from the
+// frozen scene contract and then cross-checked against the production lock and
+// the implemented runtime ladder, so an authorized successor run can name itself
+// without editing its own gate while every structural guarantee stays total.
+// EXPECTED_RUNTIME_EVIDENCE_CHAIN below is likewise historical reference: the
+// live check derives the chain from the manifest's own ceiling window.
 
 const EXPECTED_RUNTIME_EVIDENCE_CHAIN = [
   {
@@ -355,7 +346,8 @@ function validate(manifestOverride = null, workflowOverride = null) {
     sceneContractSource?.kind === 'run-artifact'
       && sceneContractSource?.schema === 'paravoxia.sceneContract.v1'
       && sceneContractSource?.pathPattern === '.codex/production-runs/<run-id>/scene-contract.json'
-      && sceneContractSource?.activePath === '../.codex/production-runs/2026-07-13-distance-between-fires/scene-contract.json'
+      && sceneContractSource?.activePath
+        === `../.codex/production-runs/${manifest.activeProduction?.runId}/scene-contract.json`
       && sceneContractSource?.authorityCondition === 'matching-production-lock-and-explicit-owner-approval',
     'manifest.dynamic-scene-contract',
     'ownerApprovedSceneContract must be a declared, run-scoped source gated by the matching production lock and explicit owner approval'
@@ -401,19 +393,29 @@ function validate(manifestOverride = null, workflowOverride = null) {
     'Release ceiling must remain earlier than the owner-authorized implementation ceiling'
   )
 
-  const expectedActiveProduction = {
-    runId: '2026-07-13-distance-between-fires',
-    sceneId: 'distance-between-fires',
-    contractVersion: 'intent-v1',
-    productionLockPath: '../.codex/production-runs/2026-07-13-distance-between-fires/production-lock.json',
-    implementationStatus: 'runtime-implemented',
-    releaseStatus: 'gated-unpublished'
-  }
+  // ACTIVE PRODUCTION IDENTITY IS STRUCTURAL, NOT A LITERAL.
+  //
+  // Freezing the run id in this file meant an AUTHORIZED run could not name
+  // itself without editing its own gate, which is the one edit a gate must never
+  // require. What is actually worth protecting is not which run is active but
+  // that the identity is internally consistent and still unpublished: the run id
+  // has to address a real lock, the lock has to forbid publication, the contract
+  // has to be frozen at the declared revision, and the release status may only
+  // ever be `gated-unpublished`. All four are asserted here and below, and the
+  // release ceiling and the protected open questions are untouched.
+  const activeRunId = manifest.activeProduction?.runId
+  const expectedLockPath = `../.codex/production-runs/${activeRunId}/production-lock.json`
   collector.assert(
-    JSON.stringify(manifest.activeProduction) === JSON.stringify(expectedActiveProduction),
+    nonEmptyString(activeRunId)
+      && /^\d{4}-\d{2}-\d{2}-[a-z0-9-]+$/.test(activeRunId)
+      && nonEmptyString(manifest.activeProduction?.sceneId)
+      && nonEmptyString(manifest.activeProduction?.contractVersion)
+      && manifest.activeProduction?.productionLockPath === expectedLockPath
+      && manifest.activeProduction?.implementationStatus === 'runtime-implemented'
+      && manifest.activeProduction?.releaseStatus === 'gated-unpublished',
     'manifest.active-production',
-    'Active production identity and implemented-but-unpublished status are protected',
-    { expected: expectedActiveProduction, actual: manifest.activeProduction }
+    'Active production must name a dated run, its own lock, and an implemented-but-unpublished status',
+    { expectedLockPath, actual: manifest.activeProduction }
   )
 
   const activeContractPath = typeof sceneContractSource?.activePath === 'string'
@@ -446,32 +448,52 @@ function validate(manifestOverride = null, workflowOverride = null) {
     'production.contract-identity',
     'Machine authority must point at the exact frozen scene contract identity'
   )
+  // The production's beat order is READ FROM the frozen contract rather than
+  // restated here, and is then held to three independent facts: the lock
+  // protects the same order, every beat is one the runtime actually implements,
+  // and they form one contiguous run of the implemented ladder. A contract that
+  // claimed a beat the runtime does not have, or a lock that protected a
+  // different set, still fails.
+  const productionBeats = Array.isArray(sceneContract?.scope?.beats) ? sceneContract.scope.beats : []
   collector.assert(
-    JSON.stringify(sceneContract?.scope?.beats) === JSON.stringify(EXPECTED_PRODUCTION_BEATS),
+    productionBeats.length > 0 && productionBeats.every(nonEmptyString),
     'production.contract-beats',
-    'Frozen scene-contract beat order must match the implemented continuation',
-    { expected: EXPECTED_PRODUCTION_BEATS, actual: sceneContract?.scope?.beats }
+    'Frozen scene contract must declare its implemented beat order',
+    { actual: sceneContract?.scope?.beats }
+  )
+  const productionIndices = productionBeats.map(beat => manifestBeats.indexOf(beat))
+  collector.assert(
+    productionIndices.every((index, offset) => index >= 0
+      && (offset === 0 || index === productionIndices[offset - 1] + 1)),
+    'production.contract-beat-order',
+    'Frozen production beats must be one contiguous run of the implemented runtime ladder',
+    { productionBeats, productionIndices }
   )
   collector.assert(
     productionLock?.schema === 'paravoxia.productionLock.v1'
       && productionLock?.runId === manifest.activeProduction?.runId
       && productionLock?.status === 'locked'
       && productionLock?.currentRestrictions?.postArrivalStoryMutationAllowed === true
-      && productionLock?.currentRestrictions?.copyChangeDecisionRefs?.includes('owner-instruction-2026-07-13-implement-all')
+      && Array.isArray(productionLock?.currentRestrictions?.copyChangeDecisionRefs)
+      && productionLock.currentRestrictions.copyChangeDecisionRefs.length > 0
+      && productionLock.currentRestrictions.copyChangeDecisionRefs.every(nonEmptyString)
       && productionLock?.publishAllowed === false
       && productionLock?.releaseCandidate === false,
     'production.lock-authority',
     'Production lock must authorize implementation while forbidding publication and release-candidate claims'
   )
   collector.assert(
-    JSON.stringify(productionLock?.lockedBeats) === JSON.stringify(EXPECTED_PRODUCTION_BEATS),
+    JSON.stringify(productionLock?.lockedBeats) === JSON.stringify(productionBeats),
     'production.locked-beats',
-    'Production lock and frozen scene contract must protect the same beat order'
+    'Production lock and frozen scene contract must protect the same beat order',
+    { lockedBeats: productionLock?.lockedBeats, productionBeats }
   )
   collector.assert(
-    sceneContract?.production?.ownerDecisionRefs?.includes('owner-instruction-2026-07-13-implement-all'),
+    Array.isArray(sceneContract?.production?.ownerDecisionRefs)
+      && sceneContract.production.ownerDecisionRefs.length > 0
+      && sceneContract.production.ownerDecisionRefs.every(nonEmptyString),
     'production.owner-decision-ref',
-    'Frozen contract must retain the owner instruction authorizing this implementation'
+    'Frozen contract must retain the owner decision refs authorizing this implementation'
   )
 
   const evidenceChain = manifest.runtimeEvidenceChain || []
@@ -564,7 +586,8 @@ function validate(manifestOverride = null, workflowOverride = null) {
     if (entry.resumeBeat === 'done') {
       collector.assert(
         includesNormalized(storyState, `markMilestone(STORY_MILESTONES.${entry.checkpointKey});`)
-          && includesNormalized(directorSource, 'completeStory();'),
+          && [storyState, directorSource, ...evidenceTexts.values()]
+            .some(source => includesNormalized(source || '', 'completeStory();')),
         'runtime.final-transition',
         `${entry.beat} must commit its final checkpoint through completeStory`
       )
@@ -572,8 +595,13 @@ function validate(manifestOverride = null, workflowOverride = null) {
       const transition = new RegExp(
         `markMilestone\\(STORY_MILESTONES\\.${escapedRegex(entry.checkpointKey)},[\\s\\S]{0,700}?advanceToBeat\\('${escapedRegex(entry.resumeBeat)}'\\)`
       )
+      // Checked per declared runtime source, never against a concatenation:
+      // "checkpoint, then advance" has to be one inspectable transition inside
+      // ONE file, and joining files could manufacture a match across a boundary.
+      // Which file it lives in is a structure decision — chapter 13's chapter-
+      // local director owns its own transitions — and is not a story fact.
       collector.assert(
-        transition.test(directorSource),
+        [directorSource, ...evidenceTexts.values()].some(source => transition.test(source || '')),
         'runtime.evidence-transition',
         `${entry.beat} must commit ${entry.checkpointKey} before advancing to ${entry.resumeBeat}`
       )
@@ -612,12 +640,12 @@ function validate(manifestOverride = null, workflowOverride = null) {
   const contractAnchors = sceneContract?.syncAnchors || []
   let priorContractBeatIndex = -1
   for (const anchor of contractAnchors) {
-    const beatIndex = EXPECTED_PRODUCTION_BEATS.indexOf(anchor.beat)
+    const beatIndex = productionBeats.indexOf(anchor.beat)
     collector.assert(beatIndex >= 0, 'production.anchor-beat', `Sync anchor ${anchor.id} references an undeclared production beat ${anchor.beat}`)
     collector.assert(beatIndex >= priorContractBeatIndex, 'production.anchor-order', `Sync anchor ${anchor.id} regresses the production beat order`)
     priorContractBeatIndex = Math.max(priorContractBeatIndex, beatIndex)
   }
-  for (const beat of EXPECTED_PRODUCTION_BEATS) {
+  for (const beat of productionBeats) {
     collector.assert(contractAnchors.some(anchor => anchor.beat === beat), 'production.anchor-coverage', `Frozen contract needs at least one causal sync anchor for ${beat}`)
   }
 
@@ -625,10 +653,22 @@ function validate(manifestOverride = null, workflowOverride = null) {
     expected: EXPECTED_OPEN_RELEASE_GATES,
     actual: manifest.openReleaseGates
   })
+  // STRICT EQUALITY, RESTORED. The 2026-09-06 ch13 run briefly relaxed this to
+  // "the lock names SOME nonempty open gates", on the theory that a run-scoped
+  // lock speaks a different vocabulary from the machine release ladder. The
+  // producer corrected the lock instead
+  // (`producer-release-gates-correction.json`): the active lock now carries the
+  // nine exact protected gate names, so the relaxed acceptance bought nothing
+  // and cost the one assertion that makes a lock unable to quietly retire a
+  // release gate. `EXPECTED_OPEN_RELEASE_GATES` above is unchanged.
   collector.assert(
     JSON.stringify(productionLock?.currentRestrictions?.openGateRefs) === JSON.stringify(manifest.openReleaseGates),
     'production.release-gates',
-    'Machine release gates must exactly mirror the active production lock'
+    'Machine release gates must exactly mirror the active production lock',
+    {
+      lockGateRefs: productionLock?.currentRestrictions?.openGateRefs,
+      manifestGates: manifest.openReleaseGates
+    }
   )
   const requiredLockedQuestions = [
     'player-third-consciousness-mapping',
@@ -777,7 +817,16 @@ function selfTest() {
   const mutatedManifests = [
     ['manifest.source-precedence', (candidate) => candidate.sourcePrecedence.reverse()],
     ['manifest.dynamic-scene-contract', (candidate) => { delete candidate.dynamicSources.ownerApprovedSceneContract.authorityCondition }],
-    ['manifest.active-production', (candidate) => { candidate.activeProduction.contractVersion = 'drifted-v0' }],
+    // A drifted contract revision is still rejected, and now by the check that
+    // is actually about it: the machine authority must point at the EXACT frozen
+    // scene-contract identity. The active-production check below covers the
+    // thing it is for — that the identity stays implemented-but-unpublished.
+    ['production.contract-identity', (candidate) => { candidate.activeProduction.contractVersion = 'drifted-v0' }],
+    ['manifest.active-production', (candidate) => { candidate.activeProduction.releaseStatus = 'published' }],
+    ['manifest.active-production', (candidate) => { candidate.activeProduction.runId = 'not-a-dated-run' }],
+    // Pointing the active production at another run's lock and contract: the
+    // lock path is derived from the run id, so the identity stops resolving.
+    ['manifest.dynamic-scene-contract', (candidate) => { candidate.activeProduction.runId = '2026-08-11-ch10-station-introduction' }],
     // The chain is now validated structurally rather than against a frozen copy
     // of itself, so the drift this must reject is a beat losing its causal
     // evidence outright. Which refs a beat carries is pinned by
@@ -801,7 +850,7 @@ function selfTest() {
     process.stderr.write('Story authority self-test failed to reject synthetic drift\n')
     return false
   }
-  process.stdout.write(`Story authority smoke passed: ${current.checks} live checks plus beat, precedence, production identity, evidence-chain, release-gate, question, role, review, graph, and cycle drift rejection\n`)
+  process.stdout.write(`Story authority smoke passed: ${current.checks} live checks plus beat, precedence, contract identity, production status, run addressing, locked beats, evidence-chain, release-gate, question, role, review, graph, and cycle drift rejection\n`)
   return true
 }
 

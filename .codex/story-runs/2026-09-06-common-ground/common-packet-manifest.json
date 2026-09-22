@@ -1,0 +1,20 @@
+{
+  "createdAt": "2026-09-06T04:41:29.962653+00:00",
+  "stage": "independent-director-treatments",
+  "files": {
+    "common-packet.md": "f1fa9582e45879dfcc9ca2a2dc7865d3717038957fb59f60ab4754f7157bb9b8",
+    "production-lock.md": "ec7e7460e5decaf401d72a3039c28e7e27f46aa86c6904a574c1d0bf44e96a68",
+    "owner-standing-authority.json": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+    "story-correction-brief.md": "8f22a8981cfda1ffd28b35fd0bb6af3bde269b9acda840bf4b4c069a93673b45",
+    "runtime-story-inventory.json": "e9f7e1da911ad3332f21d94a5c51f5d7ad29c161c4a0a1ed523f8f24bbc4a39b",
+    "shipped-copy-corpus.md": "d0fe844959ccdbbcd07b8df568f659633c760dede3515d1ddcf565b94e35e53e",
+    "shipped-audio-baseline.json": "f27b566b941160bee531b36e092170a9d931082df721ca6d1e226714d4e1f4d9",
+    "shipped-ux-baseline.json": "ea13c3bc5493582c56716fdf4f1932b242a3a1483a83579057c1f5d807bcbcfa",
+    "source-of-truth-map.json": "5858c5cfd8a94fecd17a7e48539ff6528f8ec7b2a758001d258a603a88fd8360",
+    "canon-audit.md": "9fd942d254dad0cbad8e36e2242f69869774e6d51b2bc1f232eed30db387672a",
+    "naive-reader-report.md": "b92da6948747ced273ae4998dc078cdf2709e11c733391c545bd1bb0869ff1a0",
+    "contradiction-report.json": "568d7642f2c886c6b2521321463bfb4dff696396686621d9a06bd846057e1406",
+    "integration-survey.md": "3d2ea7e186228f32cb12f6d3aff1aefc54f63a981bd0d0ab15a8f6ab10099eff",
+    "implementation-acceptance.md": "e9a71d4afd0f42853d7f4f9b7ad69640d058bdde400501314c3385901ae7dd1f"
+  }
+}

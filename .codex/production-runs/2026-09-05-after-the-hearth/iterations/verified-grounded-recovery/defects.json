@@ -1,0 +1,504 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v3",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "compiledAt": "2026-09-06T20:36:40.521710+00:00",
+  "compiledBy": "creative-producer; pre-review implementation findings, pending independent verification and moderator compilation",
+  "sourceReports": [
+    {
+      "path": "chapter-common-trace-clarification.md",
+      "sha256": "e24fba612e04e474b74f15ecb13b5961eeb57d6361fec86bd117409ac2c1a532"
+    },
+    {
+      "path": "cinema-common-trace-clarification.md",
+      "sha256": "68f084b60176dfda9fba8da5ece157cdaf970fa05ed0f44bc04a126c26e6937e"
+    },
+    {
+      "path": "producer-movie-interaction-finding.json",
+      "sha256": "34402039e6a60283468efdbdc8848dff8e69f402c91bb66997bd4c7e5d352f2f"
+    },
+    {
+      "path": "producer-movie-waypoint-finding.json",
+      "sha256": "a97f7792af3755b67b81b2f7a59061b086899217b5e62f9e8c7741646601d36a"
+    },
+    {
+      "path": "iterations/lifecycle-verification-findings/verifier-findings.json",
+      "sha256": "aca1051d4dbb141b2d34ed9e45ed7d0676fd8f255f1fca3e9184061971672236"
+    },
+    {
+      "path": "verification-lifecycle-interim-report.json",
+      "sha256": "2661e2a215340655b7970c540123bd38d8e5584f93e39cbdd044c2116ea84788"
+    },
+    {
+      "path": "score-home-anchor-eligibility-interpretation.md",
+      "sha256": "0672e4cb0e05e4ca0a367070e7d6d8e8764a3838b629a00e4f1ccdf23305a0e9"
+    },
+    {
+      "path": "chapter-manual-corner-interpretation.md",
+      "sha256": "c1e19fbac4970dee675ca7e0046e7a8fd2b180379f567ae9d14bae3e3b8fb9ee"
+    },
+    {
+      "path": "chapter-corner-candidate-disposition.json",
+      "sha256": "ae53954f3862b03647297bb064b92fbf712a5a3246bba1ba1f7c1ce39108acd7"
+    },
+    {
+      "path": "iterations/world-verification-findings/verification-world-interim-report.json",
+      "sha256": "97751fb0b832d950fee706cbb56d55b7ce7870a39a171b58de8c43f1404a8892"
+    },
+    {
+      "path": "iterations/world-verification-findings/verifier-findings.json",
+      "sha256": "60f2ae81723930ec514cce6829c8d041c28c71fd7f8e2260ad3974cdfe164997"
+    },
+    {
+      "path": "iterations/world-verification-findings/producer-world-verification-review.json",
+      "sha256": "d23ada7b96560ecb7113cf51d9d1f439fa1823372ce89da49939e60d7430814d"
+    },
+    {
+      "path": "iterations/world-final-verification/verification-world-final-report.json",
+      "sha256": "6d0ffbde140633de41ad61f8ab9915dcfbc55d30a6b072f85f39e9faf2b4d618"
+    },
+    {
+      "path": "iterations/world-final-verification/verifier-findings.json",
+      "sha256": "6187b4efe15a2390f686c77a56af88120efb5cdae0986b2d1c69169c7ccd9670"
+    },
+    {
+      "path": "iterations/world-final-verification/producer-world-final-review.json",
+      "sha256": "54b3351ed6ee04c31905e9791726d28553f7fadae4b07de840d4afe0fe645c62"
+    },
+    {
+      "ref": "producer-navigation-evidence-review.json",
+      "sha256": "30f51d74707bb5e14fb8d357a1d9c6d8dc2de6f3a8ee0131ec63a753a376b6d7"
+    },
+    {
+      "path": "chapter-arrival-guidance-interpretation.json",
+      "sha256": "c470b753cd4081d1d3d97e0bd6baa932b3dba9309eabd4ef3ef62e5b100f4315"
+    },
+    "producer-common-entry-crossing-review.json",
+    "producer-score-observed-direction-review.json"
+  ],
+  "requiresHumanTaste": false,
+  "defects": [
+    {
+      "id": "CG-IMPL-001",
+      "severity": "high",
+      "category": "player-experience/navigation",
+      "status": "open",
+      "owner": "chapter",
+      "anchor": "anc.cg.reciprocal-reference",
+      "statement": "The required common E-to-C path is unwalked and invisible, while the objective calls it traced and the signed presentation forbids its preview.",
+      "evidenceRefs": [
+        "chapter-common-trace-clarification.md",
+        "cinema-common-trace-clarification.md"
+      ],
+      "requestedRepair": "Explicitly authorize the common-only planned/unverified guide and honest guide-line copy. Preserve real traversal and one marker.",
+      "verificationRoute": "Independent raw manual/movie lifecycle and rendered variant evidence, then fresh UX/Cinema review. No implementation or acceptance inferred from this direction.",
+      "sourceReportRefs": [
+        "chapter-common-trace-clarification.md",
+        "cinema-common-trace-clarification.md"
+      ],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-002",
+      "severity": "medium",
+      "category": "cinematography",
+      "status": "open",
+      "owner": "cinematography",
+      "anchor": "anc.cg.route-offered",
+      "statement": "The first renderer uses identical squares instead of the signed proposed/tested/held-end shape grammar.",
+      "evidenceRefs": [
+        "cinema-common-trace-clarification.md"
+      ],
+      "requestedRepair": "Realize broken proposed bars, paired tested bars and open transverse stops within the existing512 pool.",
+      "verificationRoute": "Independent raw manual/movie lifecycle and rendered variant evidence, then fresh UX/Cinema review. No implementation or acceptance inferred from this direction.",
+      "sourceReportRefs": [
+        "cinema-common-trace-clarification.md"
+      ],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-003",
+      "severity": "medium",
+      "category": "player-experience/navigation",
+      "status": "open",
+      "owner": "chapter",
+      "anchor": "anc.cg.route-tested",
+      "statement": "Preparing work orders were introduced without binding their exact copy and ready transitions, and the survey marker prematurely claimed test in progress.",
+      "evidenceRefs": [
+        "chapter-common-trace-clarification.md"
+      ],
+      "requestedRepair": "Bind neutral offered-route label and exact preparing/ready copy under existing17 IDs with actual approach/H readiness and one entry cue.",
+      "verificationRoute": "Independent raw manual/movie lifecycle and rendered variant evidence, then fresh UX/Cinema review. No implementation or acceptance inferred from this direction.",
+      "sourceReportRefs": [
+        "chapter-common-trace-clarification.md"
+      ],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-004",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.fault-reviewed",
+      "statement": "applyCommonGroundRail interact branch calls ctx.noteScreeningAction before ctx.performStoryInteraction. The real performStoryInteraction immediately checks screeningActionReady and refuses the now-consumed cadence. All ch13 movie interact acts therefore starve while their ready prompts remain visible.",
+      "evidenceRefs": [
+        "verifier/captures/smoke-home/summary.json",
+        "verifier/captures/home-movie-1/0008-strip-ch13-home.png",
+        "main/src/story/commonGroundDirector.ts:1749",
+        "main/src/story/autopilot/primitives.ts:1641"
+      ],
+      "requestedRepair": "Let the shared performStoryInteraction own its existing cadence; remove premature consumption in chapter rail. Preserve real interaction resolver/input proof and no timeout rescue. Add a regression through applyCommonGroundRail with a cadence-aware shared performer rather than an always-success spy. Verify the actual home movie progression then the other ch13 interaction phases.",
+      "verificationRoute": "Producer observed source cause and 70-second hardware movie stagnation. Fresh independent verifier still running; not yet its final finding. Then independent real movie/lifecycle proof after the bounded fix.",
+      "sourceReportRefs": [
+        "producer-movie-interaction-finding.json"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-005",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.reciprocal-crossed",
+      "statement": "nextWaypoint scans the entire polyline on every tick and selects the FIRST point farther than 1.2 units from the current body. Once the body leaves the initial point by more than 1.2 units, that already visited start becomes the next target again. Both the long survey rail and common rail pass their complete unsliced route to this stateless scan.",
+      "evidenceRefs": [
+        "main/src/story/commonGroundDirector.ts:1597",
+        "main/src/story/commonGroundDirector.ts:1662",
+        "main/src/story/commonGroundDirector.ts:1692"
+      ],
+      "requestedRepair": "Track ordered controller traversal/reconstruct it from actual recorded progress and current body, without granting route proof. Never retarget already passed points during ordinary forward walking. Reset or reconstruct correctly for Continue/revision/beat changes; real world/route predicates remain the sole progress authority. Add a multi-tick rail regression that physically follows emitted move targets through all turns on both signed polylines and reaches the far end without shortcuts or toggling back to start. Then prove actual browser movie flow.",
+      "verificationRoute": "Source-observed; browser survey/common not yet reached because CG-IMPL-004 blocks home. Then independent real movie/lifecycle proof after the bounded fix.",
+      "sourceReportRefs": [
+        "producer-movie-waypoint-finding.json"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-006",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.route-drawn",
+      "statement": "The new chapter compares live capsule-centre positions with ground-authored poses; the survey movie physically reaches S but its subunit 3D arrival gate remains unsatisfiable.",
+      "evidenceRefs": [
+        "iterations/world-verification-findings/verifier-findings.json#VF-RAIL-2",
+        "verification-lifecycle-interim-report.json",
+        "iterations/world-verification-findings/verifier-findings.json#VF3-FOOTING-1"
+      ],
+      "requestedRepair": "Reconcile chapter physical coordinate semantics for arrival, recording, support, sockets, occupancy, clearance and traversal using actual capsule/up/ground facts. Preserve geometry and all physical predicates; test real centre-to-ground offsets and shared gait behavior.",
+      "verificationRoute": "Meaningful physical/AV integration regression followed by independent actual browser cold/continuous/manual/Continue evidence and affected independent reviewers. No test-only closure.",
+      "sourceReportRefs": [
+        "verification-lifecycle-interim-report.json"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "partialVerification": {
+        "sourceManifestSha256": "d9e36ae314ba547a292e55376d54eecbf0ff47dc3d6710c4f9b5ae3fee96caf2",
+        "confirmed": "Actual body-to-ground pose, on-foot approach and real F survey start now pass on hardware; four actual samples recorded with supported true.",
+        "remaining": "Remaining route columns, holes/placed blocks/hazards and full manual/Continue physical conditions still need independent proof. Distinct movie drawing stall is CG-IMPL-010."
+      }
+    },
+    {
+      "id": "CG-IMPL-007",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.repeated-measure",
+      "statement": "Direct entry to an on-foot ch13 beat can retain surface flight controls; the movie cannot walk or recover.",
+      "evidenceRefs": [
+        "iterations/world-verification-findings/verifier-findings.json#VF-DEEPLINK-1",
+        "verification-lifecycle-interim-report.json"
+      ],
+      "requestedRepair": "Correct the causal beat-entry/control lifecycle within the existing chapter boundary, preserving valid Continue/manual boarding and continuous return. Do not grant milestones or force manual disembark each tick.",
+      "verificationRoute": "Meaningful physical/AV integration regression followed by independent actual browser cold/continuous/manual/Continue evidence and affected independent reviewers. No test-only closure.",
+      "sourceReportRefs": [
+        "verification-lifecycle-interim-report.json"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "partialVerification": {
+        "confirmed": "Directsurveyentryboots onfoot withoutdisembarkfixture.",
+        "remaining": "Common directentry/Continue/fullcontinuous resetmatrix stillpending."
+      }
+    },
+    {
+      "id": "CG-IMPL-008",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.home-steady",
+      "statement": "A hydrated home entry performs real review and return actions but activates no home anchors. The ineligible live-install prerequisite and a locally spent rejected anchor are concrete source risks.",
+      "evidenceRefs": [
+        "iterations/world-verification-findings/verifier-findings.json#VF-ANCHOR-OBS-1",
+        "verification-lifecycle-interim-report.json",
+        "iterations/world-verification-findings/verifier-findings.json#VF3-AVHOME-1",
+        "iterations/world-verification-findings/verifier-findings.json#VF3-CG008-1"
+      ],
+      "requestedRepair": "Enforce the signed eligibility distinction: silent restored home-steady and later actual F anchors remain valid while live install acknowledgement requires its fresh receipt. Repair ordering/latch wiring without global order bypass, phantom receipt or replayed/deferred cue; cover actual AV runtime lifecycle in tests.",
+      "verificationRoute": "Meaningful physical/AV integration regression followed by independent actual browser cold/continuous/manual/Continue evidence and affected independent reviewers. No test-only closure.",
+      "sourceReportRefs": [
+        "verification-lifecycle-interim-report.json"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "partialVerification": {
+        "sourceManifestSha256": "d9e36ae314ba547a292e55376d54eecbf0ff47dc3d6710c4f9b5ae3fee96caf2",
+        "confirmed": "Actual home AV history now includes home-steady, fault-reviewed and return-chosen; return boarding/lift also activate.",
+        "remaining": "Actual partial Continue is assigned to the bounded active verifier; continuous station-home/live install ACK, cancellations and later anchors remain unproved.",
+        "actualContinue": "Failed in run4 actual UI path; see CG-IMPL-011. Prior unit-level roundtrip is insufficient for bootstrap/world-selection ordering."
+      }
+    },
+    {
+      "id": "CG-IMPL-009",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.reciprocal-crossed",
+      "statement": "The transient lifecycle-repair route candidate d7e5bbc3 credits small outstanding corner lag through endpoint displacement, without traversing omitted ground. Chapter objects under unchanged v2.",
+      "evidenceRefs": [
+        "producer-corner-candidate-concern.json",
+        "chapter-corner-candidate-disposition.json"
+      ],
+      "requestedRepair": "Withdraw the allowance or make a bounded compliant correction. Retain the original algorithm if actual ordinary return-to-frontier recovery already satisfies the contract. Add meaningful small-lag endpoint/late-leg pumping rejection and genuine recovery tests; preserve actual ordered18, physical conditions and agency.",
+      "verificationRoute": "Engineer is withdrawing the candidate within the same active integration pass. Independent verifier must confirm final source, adversarial rejection and actual manual/Continue recovery. No runtime deployment or browser acceptance of the transient candidate occurred.",
+      "sourceReportRefs": [
+        "chapter-corner-candidate-disposition.json"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-010",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.survey-started",
+      "statement": "Movie route drawing stops at an off-grid target although the player is supported and the rail keeps requesting walk. Reproduced in two cold runs; ordinary directional input advances the body, with later stops near other off-grid targets.",
+      "evidenceRefs": [
+        "iterations/world-final-verification/verifier-findings.json#VF4-SURVEY-STALL-1",
+        "verification-world-final-report.json",
+        "producer-world-final-review.json",
+        "verifier/captures/world-final/stall-discriminator/discriminator.json"
+      ],
+      "requestedRepair": "Reproduce the real shared navigator/walker terminal-cell versus exact requested-target mismatch. Restore actual directional movement to safe exact route targets without arrival-radius widening, bypassing terrain/collision safety, altering signed geometry, endpoint distance credit, grants, teleport or timeout rescue. Incorporate any separately demonstrated Continue issue only through an explicit current direction.",
+      "verificationRoute": "Real navigator/control regression and safe negative cases; fresh independent cold no-input movie traversal through every off-grid corner and the full chapter, actual manual/Continue and existing navigation safety. Preserve current grounded support and AV fixes.",
+      "sourceReportRefs": [
+        "verification-world-final-report.json",
+        "producer-world-final-review.json"
+      ],
+      "iterationIntroduced": 9,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "sourceManifestSha256": "d9e36ae314ba547a292e55376d54eecbf0ff47dc3d6710c4f9b5ae3fee96caf2",
+      "causeStatus": "Terminal snapped cell / radius.2 steering deadzone is consistent with observed geometry and source; exact live navWaypoint was not sampled. Integration must reproduce the causal seam before fixing.",
+      "latestVerification": {
+        "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+        "drawCornersPassed": true,
+        "fullChapterPassed": false,
+        "status": "Survey now passes; actual COMMON movie repeated terminal-target stall remains under same off-grid navigation defect.",
+        "evidenceRefs": [
+          "verifier/captures/handoff-standby/journey-common-1/summary.json",
+          "verifier/captures/handoff-standby/journey-common-2/summary.json"
+        ],
+        "details": "Both reach real route-tested and W holding H, then Terra stops about5.8/18 at railcursor3 requested[-44.6,51.05,16], radius.35, actual ground[-43.84527,50.98907,15.93745]. Supported/worldBound, no hold,20sec stable, no rescue. Exact new causal source audit pending; do not assume identical original mechanism."
+      }
+    },
+    {
+      "id": "CG-IMPL-011",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.survey-started",
+      "statement": "Actual beforeunload WorldSave contains a physically earned unfinished survey on Origin. Real landing Continue resumes ch13-return in the sibling world and overwrites Origin working samples with idle/null state. Reproduced after a labeled ch13-survey fixture; continuous-play reachability still needs proof.",
+      "evidenceRefs": [
+        "producer-partial-continue-review.json",
+        "verifier/captures/partial-continue/run-4/summary.json",
+        "verifier/captures/partial-continue/run-4/worldsave-pvx.v1.world.-1_-1.json",
+        "verifier/captures/partial-continue/run-4/worldsave-after-continue-pvx.v1.world.-1_-1.json"
+      ],
+      "requestedRepair": "Reproduce actual loadWorld/beginStory/storyEntryPoint/world-selection/autosave ordering with exact captured payload and a valid continuous-equivalent predecessor state. Preserve matching actor/world partial data, construction and player pose; never replace saved data with empty pre-hydration state. Resume earned stage without fake milestone/anchor replay or old ACK. Distinguish fixture incompleteness and general persistence defect.",
+      "verificationRoute": "Meaningful actual bootstrap regression then independent physical Continue and newly earned action with raw AV, followed by continuous journey proof.",
+      "sourceReportRefs": [
+        "producer-partial-continue-review.json"
+      ],
+      "iterationIntroduced": 10,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "latestVerification": {
+        "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+        "status": "Real earned partial survey points preserved, but saved on-foot position is replaced by actual persisted parked egress at controller mount. New accepted action remains pending.",
+        "evidenceRefs": [
+          "producer-continue-pose-handoff-closure-review.json",
+          "continue-pose-handoff-closure-report.json"
+        ],
+        "actualSavedPointCount": 16,
+        "actualRestoredPointCount": 17,
+        "fullSavedPointPrefixEqual": true,
+        "poseJumpUnits": 102.07778112331658,
+        "boundedRepairIteration": 9
+      }
+    },
+    {
+      "id": "CG-IMPL-012",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.route-offered",
+      "statement": "After drawing and offering the full long survey, the movie rail requests standby(-42,51.05,9) but the player remains at ground(-41.965326,50.988996,12.155896) with no progress. W-7744 is held on body-clearance; route-tested and common are not reached.",
+      "evidenceRefs": [
+        "verifier/captures/navigation/survey-movie-1/summary.json",
+        "producer-navigation-evidence-review.json",
+        "producer-handoff-standby-audit-review.json",
+        "verifier/captures/manual-focused/witness-2/summary.json"
+      ],
+      "requestedRepair": "Qualify and repair the standing-clear navigation inside signed physical and player-agency constraints. Establish actual target support and planner result before changing it; preserve body-clearance, exact route/proof geometry and safe navigation. Do not fix by reopening an unrelated tail, widening thresholds, grantingprogress orrescue.",
+      "verificationRoute": "Bounded true-manual clearance and actual target/route diagnostic; then cold zero-rescue long/short survey and common plus existing safety tests.",
+      "sourceReportRefs": [
+        "producer-navigation-evidence-review.json"
+      ],
+      "iterationIntroduced": 11,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+      "causeStatus": "Observed live standby/player/W stall; actual local footing substitution remains to reproduce. Producer rejects audit suggestion onLONGsurvey and rejects oddcoordinatealone as establishedcause.",
+      "latestVerification": {
+        "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+        "status": "Actual long survey route-tested and COMMON entry observed in three current hardware movie captures; short/manual/full route still pending.",
+        "evidenceRefs": [
+          "verifier/captures/handoff-standby/journey-survey-1/summary.json",
+          "verifier/captures/handoff-standby/journey-common-1/summary.json",
+          "verifier/captures/handoff-standby/journey-common-2/summary.json"
+        ]
+      }
+    },
+    {
+      "id": "CG-IMPL-013",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.origin-landed",
+      "statement": "Actual ch13-return flight twice enters Origin activation envelope at181.23/169.09centreunits, then celestial pose resets to departure2736.67 with activeplanetdeparture and two epoch increments. Executed runtime resolver wrongly reclaims departure during committedOrigin ch13-return; noOriginlanded.",
+      "evidenceRefs": [
+        "verifier/captures/partial-continue/earned-2/summary.json",
+        "producer-navigation-evidence-review.json",
+        "flight-discriminator-report.json",
+        "logs/flight-discriminator/telemetry.jsonl",
+        "logs/handoff-standby-audit/resolver-repro.log",
+        "producer-handoff-standby-audit-review.json"
+      ],
+      "requestedRepair": "Diagnose actual celestial position/velocity, target and active-planet/arrival transitions, then repair the specific return/arrival handoff. Preserve intendedworldidentity, earnedboarding/launch/landing and existingtravel safety. Noforcedlanding, milestonegrant, teleportrescue or acceptance bylongerblindtimeout.",
+      "verificationRoute": "One-cycle actualsystem flight telemetry, meaningful regression then independently earnedOrigin landing/partialsurvey save/realContinue/newact and normalcontinuouschapterroute.",
+      "sourceReportRefs": [
+        "producer-navigation-evidence-review.json"
+      ],
+      "iterationIntroduced": 11,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+      "causeStatus": "Actual telemetry plus executed current runtime-resolver reproduction and corroborating source chain; exact faithful seam now identified.",
+      "latestVerification": {
+        "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+        "status": "Actual Origin commit stays, physically lands, earns origin-landed milestone and enters survey. This flight probe did not sample full named AV anchor; earned Continue and full continuity still pending.",
+        "evidenceRefs": [
+          "verifier/captures/handoff-standby/flight-1/run.json",
+          "logs/handoff-standby-verifier/flight-1/telemetry.jsonl"
+        ],
+        "doesNotCloseNewArrivalGuidanceDefect": true
+      }
+    },
+    {
+      "id": "CG-IMPL-014",
+      "severity": "high",
+      "category": "player-experience/navigation",
+      "status": "open",
+      "owner": "chapter",
+      "anchor": "anc.cg.origin-landed",
+      "statement": "After actual Origin landing, ch13-return republishes mandatory Kestrel hatch \u00b7 board for109samples from44980 through73507ms while movie walks toW. A manual player is directed back to departure action until actualW arrival at73791ms. Existing return:origin exact flight-only copy also omits the already-signed on-foot approach.",
+      "evidenceRefs": [
+        "verifier/captures/handoff-standby/flight-1/0167-objectiveId.png",
+        "logs/handoff-standby-verifier/flight-1/telemetry.jsonl",
+        "chapter-arrival-guidance-interpretation.json"
+      ],
+      "requestedRepair": "Review and sign the narrow Chapter Director conditional arrival-copy proposal, then repair objective selection and real audit-site target through grounded Origin/disembark/on-foot approach under existing ID. Preserve real physical W arrival predicate, no early milestone or extra cue.",
+      "verificationRoute": "Fresh actual flight->land->on-foot W objective/marker/work-order/feedback lifecycle, actual pause/Continue reconstruction and independent player-experience review.",
+      "sourceReportRefs": [
+        "chapter-arrival-guidance-interpretation.json"
+      ],
+      "iterationIntroduced": 13,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+      "causeStatus": "Actual mandatory boarding regression directly observed in hardware telemetry and root-viewed frame; Chapter Director determines narrow conditional-copy amendment required. No source repair authorized yet."
+    },
+    {
+      "id": "CG-IMPL-015",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.common-committed",
+      "statement": "Actual eligible manual E-to-C movement freezes at six units after correct incoming-plane crossing and bounded positive overshoot; a carried projection residual exceeds the one-update credit ceiling despite continued supported ordered walking.",
+      "evidenceRefs": [
+        "producer-common-entry-crossing-review.json",
+        "chapter-manual-corner-interpretation.json"
+      ],
+      "requestedRepair": "Correct accounting for actual eligible ordered post-plane motion without paying for an omitted early corner or granting unrelated displacement; preserve exact early15.82 refusal and real return/retraversal.",
+      "verificationRoute": "Actual affected runtime action, focused regression, stable final suite, affected independent reviews; no test-only closure.",
+      "sourceReportRefs": [
+        "producer-common-entry-crossing-review.json",
+        "chapter-manual-corner-interpretation.json"
+      ],
+      "iterationIntroduced": 15,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-016",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration-engineer",
+      "anchor": "anc.cg.handback",
+      "statement": "Normal actual completion sets story.active=false, making the earlier foreground callback suspend Common Ground presentation and conflict with the signed final live-token handback exception.",
+      "evidenceRefs": [
+        "producer-finale-observed-completion-review.json",
+        "score-observed-completion-direction.json"
+      ],
+      "requestedRepair": "Distinguish normal done from genuine cancellation for the existing live-only final token. Keep all actual cancellation predicates, monotonic deadline/release and immediate controls; no completed-save hydration.",
+      "verificationRoute": "Actual affected runtime action, focused regression, stable final suite, affected independent reviews; no test-only closure.",
+      "sourceReportRefs": [
+        "producer-finale-observed-completion-review.json",
+        "score-observed-completion-direction.json"
+      ],
+      "iterationIntroduced": 15,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    }
+  ],
+  "updatedAt": "2026-09-06T23:15:21.182511+00:00"
+}

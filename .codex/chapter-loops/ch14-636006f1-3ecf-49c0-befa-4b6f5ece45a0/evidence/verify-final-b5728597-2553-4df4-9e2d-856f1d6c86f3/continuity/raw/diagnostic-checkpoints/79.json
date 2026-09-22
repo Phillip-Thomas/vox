@@ -1,0 +1,61 @@
+{
+  "schema": "paravoxia.diagnosticCheckpoint.v1",
+  "noncertifying": true,
+  "wallMs": 1788976254155,
+  "url": "http://127.0.0.1:42911/?story=1&movie=1&journeyprobe=1&journeylane=continuous&journeymode=movie&profile=HIGH",
+  "story": {
+    "active": true,
+    "chapter": "ch9",
+    "beat": "ch9-settle",
+    "runId": 1
+  },
+  "objective": {
+    "id": "settle:foundation",
+    "kind": "build",
+    "markerLabel": "CHOSEN SITE · PLACE FOUNDATION",
+    "workOrder": [
+      "[B] PLACE A FOUNDATION AT THE CHOSEN SITE."
+    ],
+    "requiresMarker": true,
+    "health": "ready",
+    "revision": 125
+  },
+  "storageState": {
+    "cookies": [],
+    "origins": [
+      {
+        "origin": "http://127.0.0.1:42911",
+        "localStorage": [
+          {
+            "name": "pvx.v1.world.-1,-1:p1",
+            "value": "{\"worldId\":\"-1,-1:p1\",\"seed\":1600321158,\"structures\":[],\"campfires\":[],\"trees\":[],\"stones\":[[-8,25,-3],[-10,25,-3],[15,25,-4],[11,25,-5],[23,25,-10],[23,25,-6],[21,25,-7],[20,25,-6],[19,25,-6],[18,25,-6],[16,25,-6],[11,25,-8],[10,25,-7],[-3,25,-5],[-5,25,-1],[-9,25,1],[-11,25,5],[-11,25,10],[-1,25,-1],[-10,25,5],[-8,25,5],[-10,25,4]],\"forage\":[[-11,25,0],[-10,25,8],[-10,25,3],[-8,24,1],[-7,24,2]],\"flora\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1:p1.voxels",
+            "value": "{\"worldId\":\"-1,-1:p1\",\"seed\":1600321158,\"generationSchemaVersion\":1,\"fingerprint\":94087,\"removed\":[],\"added\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"structures\":[],\"campfires\":[],\"trees\":[],\"stones\":[[-8,25,-3],[-10,25,-3],[15,25,-4],[11,25,-5],[23,25,-10],[23,25,-6],[21,25,-7],[20,25,-6],[19,25,-6],[18,25,-6],[16,25,-6],[11,25,-8],[10,25,-7],[-3,25,-5],[-5,25,-1],[-9,25,1],[-11,25,5],[-11,25,10],[-1,25,-1],[-10,25,5],[-8,25,5],[-10,25,4]],\"forage\":[[-11,25,0],[-10,25,8],[-10,25,3]],\"flora\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.voxels",
+            "value": "{\"worldId\":\"-1,-1\",\"seed\":3215739679,\"generationSchemaVersion\":1,\"fingerprint\":115629,\"removed\":[[6,25,-2],[-5,25,-2],[-6,25,-2]],\"added\":[]}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1.player",
+            "value": "{\"pos\":[4.086826801300049,53.678035736083984,-8.882451057434082],\"forward\":[-0.07231056586845064,2.743111031330486e-9,0.9973821645005412],\"pitch\":-0.20178768453683482}"
+          },
+          {
+            "name": "pvx.v1.global",
+            "value": "{\"inventory\":{\"wood\":1,\"stone\":39,\"berry\":5,\"iron_maw\":1,\"strut_frame\":1,\"refined_alloy\":1,\"logic_wafer\":1},\"mawCharge\":0,\"era\":\"emergent\",\"milestones\":[\"story:started\",\"story:choice:dispenser:unlock\",\"story:choice:lights:dimall\",\"story:choice:question:unknown\",\"story:name:moss\",\"story:choice:light:blinds\",\"story:choice:bell:ring\",\"story:choice:diagnostic:replay\",\"story:choice:replay2:remember\",\"story:choice:hum:join\",\"story:choice:hum2:continue\",\"story:choice:anomaly:ack\",\"story:debris-scattered:3\",\"story:tone:low\",\"story:cell:100\",\"story:prologue-seen\",\"story:debris:0\",\"story:debris:1\",\"story:ch1:track\",\"story:debris-stone-backfill:v2\",\"story:debris:2\",\"story:ch1:quota\",\"story:pod:0\",\"story:pod:1\",\"story:pod:2\",\"story:ch1:depth\",\"story:ch1:nav\",\"story:ch1:iso\",\"story:a1\",\"story:a2\",\"story:sense:health\",\"story:sense:inventory\",\"story:sense:temp\",\"story:a3\",\"story:sense:water\",\"story:ch3:shiplook\",\"story:ch3:drank\",\"story:sense:food\",\"story:ch3:ate\",\"story:ch3:signal\",\"story:ch4:constellations\",\"story:ch4:vigil\",\"story:ch4:arrived\",\"story:audit:fire-mismatch\",\"story:audit:life-mismatch\",\"story:audit:tree-mismatch\",\"story:ch4:audit-complete\",\"story:comply:fire-doused\",\"story:comply:organics-resolved\",\"story:comply:regression-settled\",\"story:ch4:compliance-complete\",\"story:defy:protected-tool-refused\",\"story:defy:refusal-available\",\"story:defy:refusal-committed\",\"story:ch4:refusal-complete\",\"story:a4\",\"story:a4:pond-response-visible\",\"story:a4:herd-route-visible\",\"story:a4:w7744-fault-recorded\",\"story:a4:field-pack-dropped\",\"story:a4:handback\",\"story:item:maw-repair-kit:acquired\",\"maw_repaired\",\"story:sense:maw\",\"story:maw:first-direction:lowered-and-listened\",\"story:maw:first-direction-resolved\",\"story:maw:pond-resonance-visible\",\"story:ch5:maw-repaired\",\"story:dive:waterline-entered\",\"story:capability:oxygen-online\",\"story:sense:oxygen\",\"story:dive:keel-sonar-revealed\",\"story:item:kestrel-keel-memory:acquired\",\"story:dive:surfaced-with-keel\",\"story:item:kestrel-keel-memory:banked\",\"story:ch6:keel-banked\",\"story:reconstruct:relationships-diagnosed-physical\",\"story:salvage:kestrel:claimed\",\"story:capability:jet-installed\",\"story:route:tidegarden:online\",\"story:reconstruct:calibration-completed-physical\",\"story:ch7:flight-ready\",\"story:sense:jet\",\"story:board:pressure-boundary-sealed\",\"story:board:physical-transaction-complete\",\"story:ch7:boarded\",\"story:ch8:launched\",\"story:ch8:crossed\",\"story:ch8:landfall\",\"story:kestrel:founding-reserve-claimed\",\"story:tidegarden:scanner-overload\",\"story:tidegarden:relationship-attended\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1:p1\",\"dayPhase\":0.9728620833288009,\"vitals\":{\"health\":100,\"hunger\":0,\"thirst\":7.762333331864228,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":6,\"records\":[{\"id\":\"maw_repaired\",\"actorId\":\"local\",\"firstEvidenceSequence\":1,\"lastEvidenceSequence\":1,\"evidenceHistory\":[{\"id\":\"story:maw:repair-committed\",\"sequence\":1,\"observedAt\":1788976120618,\"worldId\":\"-1,-1\",\"sourceKey\":\"authored-maw-repair\"}],\"firstEvidenceAt\":1788976120618,\"lastEvidenceAt\":1788976120618},{\"id\":\"returned_with_keel_memory\",\"actorId\":\"local\",\"firstEvidenceSequence\":2,\"lastEvidenceSequence\":2,\"evidenceHistory\":[{\"id\":\"story:dive:keel-banked\",\"sequence\":2,\"sourceKey\":\"story-event\",\"data\":{\"oxygen\":100}}]},{\"id\":\"the_wreck_stands\",\"actorId\":\"local\",\"firstEvidenceSequence\":4,\"lastEvidenceSequence\":4,\"evidenceHistory\":[{\"id\":\"story:reconstruct:flight_ready\",\"sequence\":4,\"sourceKey\":\"ship-repair-stage\",\"data\":{\"stage\":\"flight_ready\"}}]},{\"id\":\"tidegarden_relationship_attended\",\"actorId\":\"local\",\"firstEvidenceSequence\":5,\"lastEvidenceSequence\":5,\"evidenceHistory\":[{\"id\":\"story:tidegarden:local:relationship-attended\",\"sequence\":5,\"worldId\":\"-1,-1:p1\",\"sourceKey\":\"story-event\",\"data\":{\"relationshipId\":\"tideline-root-water-exchange\",\"sourceKey\":\"deterministic-waterline\",\"waterDepth\":3}}]},{\"id\":\"wreck_salvage_recovered\",\"actorId\":\"local\",\"firstEvidenceSequence\":3,\"lastEvidenceSequence\":3,\"evidenceHistory\":[{\"id\":\"story:reconstruct:wreck-salvage\",\"sequence\":3,\"sourceKey\":\"wreck-salvage\"}]}]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":3,\"records\":[{\"id\":\"wreck_scar_persistence\",\"actorId\":\"local\",\"firstEvidenceSequence\":1,\"lastEvidenceSequence\":2,\"evidenceHistory\":[{\"id\":\"wreck-scar:wrecked\",\"sequence\":1,\"worldId\":\"-1,-1\",\"sourceKey\":\"physical-wreck-scar\",\"data\":{\"stage\":\"wrecked\"}},{\"id\":\"wreck-scar:flight_ready\",\"sequence\":2,\"worldId\":\"-1,-1\",\"sourceKey\":\"physical-wreck-scar\",\"data\":{\"stage\":\"flight_ready\"}}],\"contradictionIds\":[],\"comparisonIds\":[],\"revisionHistory\":[{\"id\":\"attend:wreck-scar:wrecked\",\"kind\":\"attend\",\"sequence\":1,\"evidenceId\":\"wreck-scar:wrecked\"},{\"id\":\"attend:wreck-scar:flight_ready\",\"kind\":\"attend\",\"sequence\":2,\"evidenceId\":\"wreck-scar:flight_ready\"}],\"acknowledgement\":\"unacknowledged\",\"stage\":\"noticed\"}]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"flight_ready\",\"currentSystemId\":\"-1,-1\",\"currentWorldId\":\"-1,-1:p1\",\"parkedPose\":{\"position\":[-18,51.5,2],\"quaternion\":[0,0.7071067811865475,0,0.7071067811865476]},\"systemPose\":{\"position\":[2162,-58.5,-1633],\"quaternion\":[-0.005569408013546501,0.725718527145871,0.03403968464802728,0.6871265537880699],\"velocity\":[0,0,0]},\"locationMode\":\"surface\",\"repairHistory\":[{\"eventId\":\"story:reconstruct:bench_online\",\"from\":\"wrecked\",\"to\":\"bench_online\"},{\"eventId\":\"story:reconstruct:frame_restored\",\"from\":\"bench_online\",\"to\":\"frame_restored\"},{\"eventId\":\"story:reconstruct:hull_sealed\",\"from\":\"frame_restored\",\"to\":\"hull_sealed\"},{\"eventId\":\"story:reconstruct:lift_online\",\"from\":\"hull_sealed\",\"to\":\"lift_online\"},{\"eventId\":\"story:reconstruct:flight_ready\",\"from\":\"lift_online\",\"to\":\"flight_ready\"}]}}"
+          },
+          {
+            "name": "pvx.v1.world.-1,-1:p1.player",
+            "value": "{\"pos\":[0.8779961466789246,50.7898063659668,-17.935964584350586],\"forward\":[-0.9999862652368443,3.0642314938815906e-9,0.00524111988678895],\"pitch\":-0.011394588249767187}"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 458645,
+  "stop_reason": "end_turn",
+  "session_id": "0f61df71-24fb-4dcc-bce6-136382b36941",
+  "total_cost_usd": 3.6864739999999983,
+  "usage": {
+    "input_tokens": 124,
+    "cache_creation_input_tokens": 84148,
+    "cache_read_input_tokens": 3846646,
+    "output_tokens": 36779,
+    "output_tokens_details": {
+      "thinking_tokens": 6465
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 84148,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1478,
+        "cache_read_input_tokens": 87642,
+        "cache_creation_input_tokens": 573,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 573
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1501,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001576,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 124,
+      "outputTokens": 36779,
+      "cacheReadInputTokens": 3846646,
+      "cacheCreationInputTokens": 84148,
+      "webSearchRequests": 0,
+      "costUSD": 3.6848979999999982,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 6465,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 72,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Deliverables written. **Bounded documentation-only verdict: APPROVE.**\n\n**Artifacts** (in `.codex/story-runs/2026-09-06-common-ground/`, all prior reports/logs preserved):\n- `documentation-audit-v2.md` (~910 words)\n- `check-results-v2.json` \u2014 exact hashes, commands, results, source comparison\n- Raw logs: `validate-candidate-v2.log`, `story-authority-check-v2.log`, `story-authority-smoke-v2.log`, `runtime-drift-v2.log`\n\n**Mandated commands (all exit 0, nothing to preserve as failure)**\n- `node validate-candidate.mjs --owner` \u2192 **102 checks, 0 failures** (expected count matched)\n- `npm --prefix main run story:authority` \u2192 **1096 checks** (1094 at iteration 2)\n- `npm --prefix main run story:authority:smoke` \u2192 1096 live checks + all drift-rejection self-tests\n\n**Key verifications (hashes recomputed, not just cross-read)**\n- Candidate = `133d1dbe\u20262cbf`, matching commission, all three signoffs, register-bound owner decision, receipt (iteration 3). `decisionsSha256`, `directorSignoffsSha256`, `geometryBasisSha256`, `arenaNotesSha256` and the three arena final-response hashes all recomputed and consistent; 6 arena routes; 12 decisions; `ownerOnlyChoicesInferred: 0`.\n- **Cumulative diff boundary exact**: `git apply` of `implementation-diff.patch` onto the `authority-before/` snapshot in an isolated temp tree reproduces all five current hashes byte-for-byte. 5 paths, 0 outside allowed docs, 0 `main/src` hunks.\n- **Runtime unchanged proven**: all 958 `main/src/**` entries of `after-the-hearth/initial-source-hashes.json` recomputed \u2192 **0 drift, 0 missing**, so no mtime report owed. Gate script byte-identical to pre-run.\n- **v2 canon language**: backed instrument range 12 \u2714; 16/14 vs 36 (61 samples, +20, 125% longer, ratio 2.25) \u2714 arithmetic exact; 18-unit common passage with 8-unit contiguous span outside the fixed reference \u2714; Terra's actual comparison precedes her explicit far reference \u2714; quiet drawing \u2714; caps (2 slots / 128 samples / 120 units) byte-identical across drafts and signed candidate \u2714; head/non-overlap staging pending while only direction is approved \u2714; **F01 now reads `ch10-transit`** (prior R1 and critic finding 2 repaired) \u2714; no CPU study credited as live/body/hardware/listening \u2714; 0 loaded-vocabulary additions \u2714.\n- `activeProduction` deliberately remains `2026-07-13-distance-between-fires` \u2014 reported as intentional/declared plus a strict future obligation, not a new runtime identity.\n\n**Findings: none blocking.** Smallest concrete one (F-A, cosmetic, one word): Exec Plan:92-93 \"full held-reference coverage **and** a real eight-unit contiguous portion outside the fixed reference's useful coverage\" reads as a contradiction unless the held-vs-fixed distinction is already in mind; fix when next touched \u2192 \"full **worker-held** reference coverage.\" Also noted: F-B (only cinematography's signoff carries explicit runtime/publication/hardware refusal fields), F-C (snapshot asymmetry; gate provably unchanged, and iteration-2 `check-results.json` left uncorrected by design).\n\n**Unavoidable side effect disclosed**: the mandated validator itself rewrites `candidate-validation.json` (deterministic apart from `checkedAt`); `candidate-validation.pre-owner.json` untouched. I edited no source, docs, authority, signature or validator file.\n\n**Future obligations remain open**: signed scene contract (connected head, endpoint-contact predicate, non-overlapping near-end blocking), final scene geometry hash + three scene signatures, `activeProduction` update only at signed implementation, and headed-hardware/supported-tier/live/terrain/listening acceptance; release ceiling stays `ch4-arrival`, publication unauthorized.",
+  "ttft_ms": 1569,
+  "type": "result",
+  "duration_ms": 458422,
+  "uuid": "ab6701f7-9d8e-4f8c-a2d3-5a8c71ac7b24",
+  "ttft_stream_ms": 854,
+  "time_to_request_ms": 39,
+  "first_content_frame_ms": 857,
+  "queued_turn_count": 0
+}

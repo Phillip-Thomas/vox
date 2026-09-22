@@ -1,0 +1,381 @@
+{
+  "before": "moods-before.json",
+  "after": "moods-commitA.json",
+  "moods": 62,
+  "changed": 62,
+  "identical": 0,
+  "rows": [
+    {
+      "name": "crawl",
+      "identical": false,
+      "before": "6add47122f435b87",
+      "after": "7bf40ff8d6d690e1"
+    },
+    {
+      "name": "manifest",
+      "identical": false,
+      "before": "afebdc73effe5a9c",
+      "after": "eb641ad00c3ff2ee"
+    },
+    {
+      "name": "voyage",
+      "identical": false,
+      "before": "41fa11c7af71deaf",
+      "after": "641590cf387b750d"
+    },
+    {
+      "name": "deflect",
+      "identical": false,
+      "before": "e3186a903b5cabf2",
+      "after": "f174c16a6942d6e6"
+    },
+    {
+      "name": "crash",
+      "identical": false,
+      "before": "5c61eea2cb69a519",
+      "after": "90ab52aa87e0b421"
+    },
+    {
+      "name": "descent",
+      "identical": false,
+      "before": "bf5b11e2dadbe842",
+      "after": "112308afa13c4804"
+    },
+    {
+      "name": "ch1-fixed",
+      "identical": false,
+      "before": "c80dff40ea5efe06",
+      "after": "109f8bf55e49ac8d"
+    },
+    {
+      "name": "ch1-track",
+      "identical": false,
+      "before": "b3148973a0c12c46",
+      "after": "3531fd712a7e5c97"
+    },
+    {
+      "name": "ch1-raster",
+      "identical": false,
+      "before": "33768e9d78a1c321",
+      "after": "ef68226cbbe0d12a"
+    },
+    {
+      "name": "ch1-depth",
+      "identical": false,
+      "before": "20406e5c8b3cea9a",
+      "after": "1851549b1e635abd"
+    },
+    {
+      "name": "ch1-nav",
+      "identical": false,
+      "before": "52bb9b5a98dabf6b",
+      "after": "f0ac034915f8d9e2"
+    },
+    {
+      "name": "ch1-iso",
+      "identical": false,
+      "before": "65a5bbde3c6305ce",
+      "after": "cdd6c443267d413c"
+    },
+    {
+      "name": "ch1-lift",
+      "identical": false,
+      "before": "83541523d215cd3a",
+      "after": "41365c5d0ba5d069"
+    },
+    {
+      "name": "ch1-anomaly",
+      "identical": false,
+      "before": "65023e639c4f52ba",
+      "after": "af95d14f6c8614bf"
+    },
+    {
+      "name": "a1-ramp",
+      "identical": false,
+      "before": "d8d556ce59c5b221",
+      "after": "5541ecd4a3127865"
+    },
+    {
+      "name": "ch2-color",
+      "identical": false,
+      "before": "74b067387b658071",
+      "after": "50c273356f0fda93"
+    },
+    {
+      "name": "ch2-approach",
+      "identical": false,
+      "before": "4f8ff6cd1bd96195",
+      "after": "309aa7cdc59960fc"
+    },
+    {
+      "name": "a2-awakening",
+      "identical": false,
+      "before": "948fb3e3e5292e7f",
+      "after": "60fe615fa55fd12a"
+    },
+    {
+      "name": "ch3-gather",
+      "identical": false,
+      "before": "dd279fbdf4eacf29",
+      "after": "560f47651080846f"
+    },
+    {
+      "name": "ch3-dusk",
+      "identical": false,
+      "before": "fe9684413158c1ce",
+      "after": "a617bacda6f012ae"
+    },
+    {
+      "name": "ch3-await-rest",
+      "identical": false,
+      "before": "faf279fd1cbbf3e5",
+      "after": "a936b41fa9a74c3f"
+    },
+    {
+      "name": "a3-dawn",
+      "identical": false,
+      "before": "44f473d87181f635",
+      "after": "5df2802a078754ec"
+    },
+    {
+      "name": "ch3-thirst",
+      "identical": false,
+      "before": "696fb68076e80a93",
+      "after": "c6c0f8a038ade79e"
+    },
+    {
+      "name": "ch3-forage",
+      "identical": false,
+      "before": "c7df2c84edfbfbbc",
+      "after": "a22561d712170646"
+    },
+    {
+      "name": "ch3-signal",
+      "identical": false,
+      "before": "a07f17c63a3ca71c",
+      "after": "0559b4ac79ae867c"
+    },
+    {
+      "name": "ch4-vigil",
+      "identical": false,
+      "before": "f9359cc87c5bc8f4",
+      "after": "40f3283aa090f4fb"
+    },
+    {
+      "name": "ch4-arrival",
+      "identical": false,
+      "before": "1af2e49458ee9f77",
+      "after": "0baab6d7d8635f7a"
+    },
+    {
+      "name": "ch4-audit",
+      "identical": false,
+      "before": "57d0381e114907a0",
+      "after": "8b06bd14c5920ec9"
+    },
+    {
+      "name": "ch4-comply",
+      "identical": false,
+      "before": "2ded02486f5dcd05",
+      "after": "9ae2bc57c01cc86e"
+    },
+    {
+      "name": "ch4-defy",
+      "identical": false,
+      "before": "c53e9b4db25baa54",
+      "after": "e3edcb77dab6b28b"
+    },
+    {
+      "name": "a4-exhale",
+      "identical": false,
+      "before": "cfa64bc8704f0834",
+      "after": "27eabcb70d9f382b"
+    },
+    {
+      "name": "ch5-maw",
+      "identical": false,
+      "before": "5ad941f2e50ba339",
+      "after": "bc2b0a5b12b4c21b"
+    },
+    {
+      "name": "ch6-dive",
+      "identical": false,
+      "before": "f0e736526f26b7b9",
+      "after": "2d4022afabecab76"
+    },
+    {
+      "name": "ch7-reconstruct",
+      "identical": false,
+      "before": "5d1a2e364f423b8d",
+      "after": "dfb0f1179bc18923"
+    },
+    {
+      "name": "ch7-board",
+      "identical": false,
+      "before": "810b4db22a57201a",
+      "after": "ecb94e4348c1e6bf"
+    },
+    {
+      "name": "ch8-launch",
+      "identical": false,
+      "before": "8cb0bd322df43224",
+      "after": "0822f990d5fc67a9"
+    },
+    {
+      "name": "ch8-crossing",
+      "identical": false,
+      "before": "c132182238040451",
+      "after": "ba617681b883e4d7"
+    },
+    {
+      "name": "ch8-landfall",
+      "identical": false,
+      "before": "36ab7c923790e350",
+      "after": "031ea44416e47f5e"
+    },
+    {
+      "name": "ch9-settle",
+      "identical": false,
+      "before": "446c7e7ed0b2020a",
+      "after": "005a9da0634000a4"
+    },
+    {
+      "name": "ch9-hearth",
+      "identical": false,
+      "before": "a9c8b604aac6e564",
+      "after": "1ba7ee80aff57787"
+    },
+    {
+      "name": "ch7-reconstruct/diagnosis",
+      "identical": false,
+      "before": "f0eff339b848d8b8",
+      "after": "912e9ed75576fccb"
+    },
+    {
+      "name": "ch7-reconstruct/bench",
+      "identical": false,
+      "before": "55d887167101d71e",
+      "after": "3372ea6b23943c82"
+    },
+    {
+      "name": "ch7-reconstruct/frame",
+      "identical": false,
+      "before": "0c3236cdea5b2d37",
+      "after": "b4907e36093c8933"
+    },
+    {
+      "name": "ch7-reconstruct/hull",
+      "identical": false,
+      "before": "e66c9897d40b0bb4",
+      "after": "d349623ed1541f8a"
+    },
+    {
+      "name": "ch7-reconstruct/lift",
+      "identical": false,
+      "before": "3c539760a84565eb",
+      "after": "4117e4f9083da904"
+    },
+    {
+      "name": "ch7-reconstruct/hover",
+      "identical": false,
+      "before": "84d06ca08ccf22a6",
+      "after": "1b6b81fd2d196477"
+    },
+    {
+      "name": "ch7-reconstruct/route",
+      "identical": false,
+      "before": "9d6599e96d528d6c",
+      "after": "e9afa4482cbb1352"
+    },
+    {
+      "name": "ch7-reconstruct/calibration",
+      "identical": false,
+      "before": "e96622bbc2458b42",
+      "after": "763436b1ce4793fa"
+    },
+    {
+      "name": "ch7-board/outside",
+      "identical": false,
+      "before": "790d75e00a0647cd",
+      "after": "951d8102411d578e"
+    },
+    {
+      "name": "ch7-board/hatch",
+      "identical": false,
+      "before": "9de53030d779fe10",
+      "after": "7708c35fc245b1e8"
+    },
+    {
+      "name": "ch7-board/vehicle-owner",
+      "identical": false,
+      "before": "90796b3e803f2242",
+      "after": "04361f6f90249972"
+    },
+    {
+      "name": "ch7-board/cockpit",
+      "identical": false,
+      "before": "6e23dbf972d0eba0",
+      "after": "31202ae923c143fa"
+    },
+    {
+      "name": "ch10-ask/cold-settled",
+      "identical": false,
+      "before": "40ca61488dc130dc",
+      "after": "d81f79997fb50a59"
+    },
+    {
+      "name": "ch10-ask/fault-ledger",
+      "identical": false,
+      "before": "684fa016a521f50c",
+      "after": "39618b7fb601e0e4"
+    },
+    {
+      "name": "ch10-ask/refused",
+      "identical": false,
+      "before": "bb7544cd58228718",
+      "after": "c7164d9959806676"
+    },
+    {
+      "name": "ch10-ask/crossing-back",
+      "identical": false,
+      "before": "4362566170e29971",
+      "after": "298908ccdf92dabb"
+    },
+    {
+      "name": "ch10-ask/relay-ask",
+      "identical": false,
+      "before": "2791075d84febed2",
+      "after": "1aea579e7c94f086"
+    },
+    {
+      "name": "ch10-ask/relay-answer",
+      "identical": false,
+      "before": "1afbbb3f1a8b4fbf",
+      "after": "d9d332e6a45e2234"
+    },
+    {
+      "name": "ch10-ask/bearing-claimed",
+      "identical": false,
+      "before": "c6ada8ebaaa9fdb4",
+      "after": "88083e59916b4287"
+    },
+    {
+      "name": "ch10-ask/transit-hold",
+      "identical": false,
+      "before": "0ec4c09a62965130",
+      "after": "1f3c1b45a0e446d9"
+    },
+    {
+      "name": "ch10-ask/seam-ebb",
+      "identical": false,
+      "before": "a7d2b0f19ee0fb47",
+      "after": "b4bd3f6bad49c270"
+    },
+    {
+      "name": "ch10-ask/station-resolved",
+      "identical": false,
+      "before": "fbd85edee0cdfc9c",
+      "after": "a879aad697be7551"
+    }
+  ]
+}

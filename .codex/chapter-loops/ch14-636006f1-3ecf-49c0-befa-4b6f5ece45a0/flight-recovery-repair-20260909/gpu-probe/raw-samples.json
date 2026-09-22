@@ -1,0 +1,1217 @@
+{
+  "url": "http://127.0.0.1:39671/?story=ch8-landfall&movie=1&journeyprobe=1&profile=HIGH",
+  "samples": [
+    {
+      "t": 1788928177809,
+      "beat": "ch8-landfall",
+      "objective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": null,
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": null,
+      "captionText": "",
+      "ledgerText": "",
+      "camStatusText": "",
+      "probeBeat": "ch8-landfall",
+      "probeObjective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 1
+      },
+      "spaceFlight": {
+        "phase": "descent",
+        "controlMode": "flight",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "atmosphere",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            9,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            -0.7071067811865476,
+            0,
+            0,
+            0.7071067811865476
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "game": null,
+      "elapsedMs": 2056
+    },
+    {
+      "t": 1788928178867,
+      "beat": "ch8-landfall",
+      "objective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": null,
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": null,
+      "captionText": "",
+      "ledgerText": "",
+      "camStatusText": "",
+      "probeBeat": "ch8-landfall",
+      "probeObjective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 1
+      },
+      "spaceFlight": {
+        "phase": "descent",
+        "controlMode": "flight",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "atmosphere",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            9,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            -0.7071067811865476,
+            0,
+            0,
+            0.7071067811865476
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "game": null,
+      "elapsedMs": 3113
+    },
+    {
+      "t": 1788928180031,
+      "beat": "ch8-landfall",
+      "objective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": null,
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": null,
+      "captionText": "",
+      "ledgerText": "",
+      "camStatusText": "",
+      "probeBeat": "ch8-landfall",
+      "probeObjective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 1
+      },
+      "spaceFlight": {
+        "phase": "descent",
+        "controlMode": "flight",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "atmosphere",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            9,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            -0.7071063292818084,
+            0.0007994308018141883,
+            0.0007994308018141885,
+            0.7071063292818084
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "game": null,
+      "elapsedMs": 4278
+    },
+    {
+      "t": 1788928181048,
+      "beat": "ch8-landfall",
+      "objective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch8-landfall",
+        "clock": 1,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          0,
+          119,
+          0
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": true,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": true
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": false
+        },
+        "construction": null,
+        "lens": null
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": null,
+      "captionText": "",
+      "ledgerText": "",
+      "camStatusText": "",
+      "probeBeat": "ch8-landfall",
+      "probeObjective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 1
+      },
+      "spaceFlight": {
+        "phase": "descent",
+        "controlMode": "flight",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "atmosphere",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            -8.959460818813994,
+            -1635
+          ],
+          "velocity": [
+            2.518490683375858e-15,
+            -39.98348463835291,
+            1.4337804489897393e-15
+          ],
+          "quaternion": [
+            -0.1538069717110723,
+            0.6901763654697757,
+            0.6901763654697759,
+            0.1538069717110723
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "game": null,
+      "elapsedMs": 5295
+    },
+    {
+      "t": 1788928182055,
+      "beat": "ch8-landfall",
+      "objective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch8-landfall",
+        "clock": 2,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          0,
+          119,
+          0
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": true,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": true
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": false
+        },
+        "construction": null,
+        "lens": null
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": null,
+      "captionText": "",
+      "ledgerText": "",
+      "camStatusText": "",
+      "probeBeat": "ch8-landfall",
+      "probeObjective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 1
+      },
+      "spaceFlight": {
+        "phase": "descent",
+        "controlMode": "flight",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "atmosphere",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            -48.412604400127286,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            -0.024967504074122356,
+            0.7609167411907689,
+            0.6291362305586868,
+            0.1567480147062045
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "game": null,
+      "elapsedMs": 6302
+    },
+    {
+      "t": 1788928183059,
+      "beat": "ch8-landfall",
+      "objective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch8-landfall",
+        "clock": 3,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          0,
+          119,
+          0
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": true,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": true
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": false
+        },
+        "construction": null,
+        "lens": null
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": null,
+      "captionText": "",
+      "ledgerText": "",
+      "camStatusText": "",
+      "probeBeat": "ch8-landfall",
+      "probeObjective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 1
+      },
+      "spaceFlight": {
+        "phase": "descent",
+        "controlMode": "flight",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "atmosphere",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            -58.461749925102914,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            -0.00010758751650282473,
+            0.7084046927226808,
+            0.0027110120573851136,
+            0.7058012681817987
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "game": null,
+      "elapsedMs": 7306
+    },
+    {
+      "t": 1788928184066,
+      "beat": "ch8-landfall",
+      "objective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch8-landfall",
+        "clock": 3.7,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          2.5,
+          50.94,
+          0
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "story-caption",
+          "left": 509,
+          "top": 587.1,
+          "right": 1149,
+          "bottom": 633.6,
+          "width": 640,
+          "height": 46.5
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": null,
+      "captionText": "(a world does not",
+      "ledgerText": "",
+      "camStatusText": "",
+      "probeBeat": "ch8-landfall",
+      "probeObjective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 1
+      },
+      "spaceFlight": {
+        "phase": "surface",
+        "controlMode": "fps",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "surface",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            -58.5,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            0,
+            0.7161607962931487,
+            0.01846990745234919,
+            0.6976908888407996
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "game": null,
+      "elapsedMs": 8313
+    },
+    {
+      "t": 1788928185071,
+      "beat": "ch8-landfall",
+      "objective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch8-landfall",
+        "clock": 4.8,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          2.5,
+          50.79,
+          0
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "story-caption",
+          "left": 509,
+          "top": 587.1,
+          "right": 1149,
+          "bottom": 633.6,
+          "width": 640,
+          "height": 46.5
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": null,
+      "captionText": "(a world does not begin when you see it. it begi",
+      "ledgerText": "",
+      "camStatusText": "",
+      "probeBeat": "ch8-landfall",
+      "probeObjective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 1
+      },
+      "spaceFlight": {
+        "phase": "surface",
+        "controlMode": "fps",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "surface",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            -58.5,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            0,
+            0.7161607962931487,
+            0.01846990745234919,
+            0.6976908888407996
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "game": null,
+      "elapsedMs": 9317
+    },
+    {
+      "t": 1788928186129,
+      "beat": "ch8-landfall",
+      "objective": {
+        "id": "ch8:landfall:first-footfall",
+        "kind": "wait",
+        "markerLabel": "SIBLING WORLD · FIRST FOOTFALL",
+        "workOrder": [
+          "STAND ON THE SIBLING WORLD.",
+          "LET IT HOLD YOUR WEIGHT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch8-landfall",
+        "clock": 5.7,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          2.5,
+          50.79,
+          0
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned",
+        "routePlanMode": null,
+        "routeWaterCells": 0,
+        "routeWaypoint": null,
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "story-caption",
+          "left": 509,
+          "top": 587.1,
+          "right": 1149,
+          "bottom": 633.6,
+          "width": 640,
+          "height": 46.5
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": null,
+      "captionText": "(a world does not begin when you see it. it begins when it holds your weight.",
+      "ledgerText": "",
+      "camStatusText": "",
+      "probeBeat": "ch8-landfall",
+      "probeObjective": {
+        "id": "ch8:landfall:first-footfall",
+        "kind": "wait",
+        "markerLabel": "SIBLING WORLD · FIRST FOOTFALL",
+        "workOrder": [
+          "STAND ON THE SIBLING WORLD.",
+          "LET IT HOLD YOUR WEIGHT."
+        ],
+        "requiresMarker": false,
+        "health": "ready",
+        "revision": 2
+      },
+      "spaceFlight": {
+        "phase": "surface",
+        "controlMode": "fps",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "surface",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            -58.5,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            0,
+            0.7161607962931487,
+            0.01846990745234919,
+            0.6976908888407996
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "game": null,
+      "elapsedMs": 10376
+    },
+    {
+      "t": 1788928187152,
+      "beat": "ch9-settle",
+      "objective": {
+        "id": "settle:scan-waterline",
+        "kind": "travel",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "workOrder": [
+          "FOLLOW THE LIVING WATERLINE MARKER.",
+          "READ THE SIGNAL FIELD."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      },
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 0.6,
+        "backstops": 0,
+        "stuck": 0,
+        "pos": [
+          2.16,
+          50.79,
+          -2.54
+        ],
+        "goal": [
+          2,
+          50.9,
+          -4
+        ],
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          2,
+          50.9,
+          -4
+        ],
+        "controls": {
+          "forward": true,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "dryWalkWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "construction": null,
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 720,
+        "dpr": 1
+      },
+      "reservations": [
+        {
+          "id": "story-caption",
+          "left": 509,
+          "top": 587.1,
+          "right": 1149,
+          "bottom": 633.6,
+          "width": 640,
+          "height": 46.5
+        },
+        {
+          "id": "story-debug-trigger",
+          "left": 1222,
+          "top": 66,
+          "right": 1266,
+          "bottom": 110,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "workOrderText": null,
+      "captionText": "(abundance is no",
+      "ledgerText": "",
+      "camStatusText": "",
+      "probeBeat": "ch9-settle",
+      "probeObjective": {
+        "id": "settle:scan-waterline",
+        "kind": "travel",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "workOrder": [
+          "FOLLOW THE LIVING WATERLINE MARKER.",
+          "READ THE SIGNAL FIELD."
+        ],
+        "requiresMarker": true,
+        "health": "ready",
+        "revision": 5
+      },
+      "spaceFlight": {
+        "phase": "surface",
+        "controlMode": "fps",
+        "destination": null,
+        "target": null
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "layoutVersion": 1,
+        "locationMode": "surface",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "pose": {
+          "position": [
+            2180,
+            -58.5,
+            -1635
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "quaternion": [
+            0,
+            0.7161607962931487,
+            0.01846990745234919,
+            0.6976908888407996
+          ]
+        },
+        "target": null,
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "activationEpoch": 2
+      },
+      "game": null,
+      "elapsedMs": 11399
+    }
+  ],
+  "consoleLines": [
+    "log: [poses] ` = pin a vantage (with reason)   V = copy all pins to clipboard",
+    "info: [co-op] Firebase anonymous session ready {uid: 6L4LDZlDWVaGoqk36jhvfGgsymC2}",
+    "warning: using deprecated parameters for the initialization function; pass a single object instead",
+    "log: [poses] ` = pin a vantage (with reason)   V = copy all pins to clipboard",
+    "warning: [shader-warmup] initial render released without complete preparation {outcome: timeout, elapsedMs: 3534.7999999523163, compiledTargets: 2, worldAvailableAtMs: 3712.2999999523163, worldMountedAtMs: null}",
+    "log: [poses] ` = pin a vantage (with reason)   V = copy all pins to clipboard"
+  ]
+}

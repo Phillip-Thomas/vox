@@ -50,6 +50,7 @@ import {
   buildFaunaProfile,
   createFaunaGeometry,
   createFaunaMaterial,
+  faunaDetailForProfile,
   faunaScaleForKind,
   prepareFaunaInstanceAttributes,
   updateFaunaMaterial
@@ -658,7 +659,7 @@ function FaunaSpecimen({
   lighting: FaunaSpecimenLighting;
 }) {
   const mesh = useMemo(() => {
-    const geometry = createFaunaGeometry(kind, profile);
+    const geometry = createFaunaGeometry(kind, profile, faunaDetailForProfile(getQualityProfile()));
     const material = createFaunaMaterial(kind, profile);
     prepareFaunaInstanceAttributes(geometry, 1);
     const instance = new THREE.InstancedMesh(geometry, material, 1);

@@ -1,0 +1,12 @@
+before bed-sandbox-day ::  I: -24.6 LUFS ::  Peak: -11.5 dBFS ::  LRA: 3.8 LU
+before bed-sandbox-night ::  I: -22.9 LUFS ::  Peak: -8.6 dBFS ::  LRA: 3.5 LU
+before bed-contrast-A ::  I: -25.0 LUFS ::  Peak: -6.6 dBFS ::  LRA: 4.0 LU
+before bed-contrast-B ::  I: -25.3 LUFS ::  Peak: -11.9 dBFS ::  LRA: 5.1 LU
+before story-beat ::  I: -20.0 LUFS ::  Peak: -8.6 dBFS ::  LRA: 2.5 LU
+before era-transition ::  I: -26.1 LUFS ::  Peak: -5.2 dBFS ::  LRA: 11.2 LU
+after bed-sandbox-day ::  I: -20.5 LUFS ::  Peak: -9.4 dBFS ::  LRA: 3.6 LU
+after bed-sandbox-night ::  I: -19.0 LUFS ::  Peak: -7.2 dBFS ::  LRA: 3.0 LU
+after bed-contrast-A ::  I: -20.5 LUFS ::  Peak: -8.6 dBFS ::  LRA: 3.7 LU
+after bed-contrast-B ::  I: -21.1 LUFS ::  Peak: -9.5 dBFS ::  LRA: 5.1 LU
+after story-beat ::  I: -20.2 LUFS ::  Peak: -9.6 dBFS ::  LRA: 2.4 LU
+after era-transition ::  I: -22.6 LUFS ::  Peak: -9.0 dBFS ::  LRA: 15.2 LU

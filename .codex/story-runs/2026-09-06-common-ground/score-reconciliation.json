@@ -1,0 +1,33 @@
+{
+  "responses": [
+    {
+      "noteId": "chapter-to-score-01",
+      "by": "score",
+      "status": "accepted",
+      "response": "Accept. CG-05-other-end selects the restrained demonstrating texture once when W-7744 establishes the useful reciprocal reference and Terra starts crossing; it adds no melody, hit or warmth. CG-06-his-test keeps that texture. Only CG-07-model-incomplete, after actual final arrival plus reciprocal proof, selects independent-action-settled with its changed fifth spacing. Both route classes receive the same treatment; first-try success skips refusal and revision variants. Amend my immediate score-clear proposal as follows: logical completion, required-guidance retirement and full free-play controls occur immediately, while one live-completion-only final texture may continue for at most CG_FINAL_TEXTURE_MAX_S = 5 seconds, then release through the existing 4.5-second story/bed crossfade. This permits a cell to occur without guaranteeing a dropped attack. Do not add the separate-accounts mood change as another compulsory coda. This is a finite presentation allowance, never a story dwell, advancement predicate or repeated free-play score. Cancel it early on a new story/optional-survey action, actor/world change, reset, exit, pause, visibility loss, mute or unavailable audio; do not defer or replay it. Hydration of completion never starts it. Current storyDirector deactivation immediately clears score, so this allowance needs an explicit chapter-local transient integration through the existing storyScore authority; it is not already shipped behavior. Preserve one graph, one scheduler, edge-only mood selection and zero new quantized hits. A release deadline changes intent only and never schedules notes. If the live allowance is missed or cancelled, preserve immediate handback and accept the absent phrase rather than hold the player or raise intensity.",
+      "evidenceRefs": [
+        "chapter-peer-notes.json#chapter-to-score-01",
+        "chapter-story-treatment.md#candidate-shared-semantic-anchors",
+        "score-story-treatment.md#harmonic-and-rhythmic-realization",
+        "main/src/story/storyDirector.ts:1217",
+        "main/src/audio/scoreEngine.ts:123",
+        "main/src/audio/scoreEngine.ts:1712"
+      ],
+      "acceptance": "Later tests/capture must show full controls and retired guidance at completion; at most one live final texture; release no later than five seconds after its live start, with the existing fade then ending; immediate cancellation on listed transitions; no tail or completion cue after reload or optional repeat survey. Combined listening must assess the phrase and handoff without claiming every final fifth sounds. No such evidence has been produced yet."
+    },
+    {
+      "noteId": "CG-CIN-SC-01",
+      "by": "score",
+      "status": "accepted",
+      "response": "Accept. Distinguish three facts. An actually invalid offered span requiring redrawing enters refused-hold once on that semantic state edge, preserving the unresolved low floor and no punitive sting. Temporary loss of an occupied/offered witness position inside an otherwise valid route keeps the current demonstrating/revised texture unchanged; repeated release/retake neither reselects a mood nor restarts a dramatic refusal. The worker's stopped/resumed body, specific guidance and ordinary interaction feedback carry that reversible hold. Camera direction and musical phase cannot affect witness validity. At reciprocal usefulness CG-05, select the existing quiet demonstrating texture once; the reference acquisition is not final success. CG-06 final-test initiation remains there. The changed audit spacing follows CG-07 actual independent traversal completion only, using the bounded live-only ending allowance specified in my response to chapter-to-score-01. Feet, instrument direction and maintained reference lead the image and sound. No musical deadline delays movement; no added motif, hit, tempo increase or guaranteed attack. Extended holds remain quiet without a tension ramp, and a valid first attempt is not forced through refusal music.",
+      "evidenceRefs": [
+        "cinematography-peer-notes.json#CG-CIN-SC-01",
+        "cinematography-peer-notes.json#CG-CIN-CH-02",
+        "chapter-story-treatment.md#two-solutions-with-different-persistence",
+        "score-story-treatment.md#agency-indefinite-duration-and-lifecycle",
+        "score-reconciliation.json#chapter-to-score-01"
+      ],
+      "acceptance": "Verify one real invalid-span refusal separately from repeated temporary witness loss/resumption, then reciprocal usefulness and final completion. Trace mood selections to semantic state edges; temporary witness holds must produce no repeated refused-hold entry. Muted presentation must preserve the same cause, repair and completion."
+    }
+  ]
+}

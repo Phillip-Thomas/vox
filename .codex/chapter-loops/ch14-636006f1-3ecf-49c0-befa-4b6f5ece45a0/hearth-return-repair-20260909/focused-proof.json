@@ -1,0 +1,19 @@
+{
+  "schema": "paravoxia.focusedRepairEvidence.v1",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+  "errors": [],
+  "noncertifying": true,
+  "preStationWorldSha256": "c3d376e611d23878f14cc048f9433904115b1ad0f79abac393849d527ae83ca7",
+  "postUndockWorldSha256": "c3d376e611d23878f14cc048f9433904115b1ad0f79abac393849d527ae83ca7",
+  "worldPreserved": true,
+  "structures": 16,
+  "habitat": true,
+  "bondedCellInstalled": true,
+  "hearthRestored": true,
+  "inventoryCellCount": 0,
+  "enteredChapter13": true,
+  "lastBeat": "ch13-return",
+  "interruption": "Pause menu appeared at195s; root stopped after retaining cell/entry proof. Not a Chapter13 route failure or full continuity pass.",
+  "source": "source.json",
+  "trace": "station-forward/result.json"
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "paravoxia.directorRepairDirection.v1",
+  "director": "cinematography",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "defectIds": [
+    "CG-IMPL-002"
+  ],
+  "contractChangeRequired": false,
+  "boundedActions": [
+    "Realize the already signed actual-survey glyph grammar in CommonGroundWorld: replace identical axis-aligned squares with one short tangent-aligned bar per proposed sample, two parallel separated bars for an actually tested sample, and an open transverse stop made of two separated half-bars at a held endpoint. Read actual tested-prefix and hold facts; color or glow alone cannot encode state.",
+    "Orient corners using the recorded local segments and clamp bar length to real neighbouring sample spacing. Retain every recorded sample within the existing caps; do not decimate, infer future survey samples, draw through solids or float marks over missing support.",
+    "Use the existing unit-box geometry, prewarmed material, shared scratch transforms and512-instance pool. Two128-point recorded-route displays use at most two glyphs per point. The open held endpoint replaces its allocated pair rather than adding a third glyph. Preserve the accepted survey when a working display is present; the signed common display shares that working allocation rather than adding a pool or saved route.",
+    "Allocate and upload required instance matrices and any color attributes during setup. At verbs and handback update only existing matrices/counts/attributes, with zero new resources or programs in the plus/minus2-second windows. Retain the signed added8-draw/6-material/6-setup-program/2-MiB limits, fixed lights, free camera, palette and score.",
+    "Keep the scene-v2 common guide visually separate as its signed thin continuous planned line. This repair creates no additional guide authority: Chapter's v1-to-v2 direction owns that amendment. Its planned-to-paired display transition remains exclusive to actual final worker/full-route and reciprocal proof; guide display and scalar Terra progress must never fabricate walked evidence."
+  ],
+  "evidenceRefs": [
+    "scene-contract.json#/palette/semanticRoles",
+    "scene-contract.json#/evidence/acceptanceCriteria",
+    "scene-contract.json#/performance",
+    "scene-cinema-lane.json#/trace/glyphRealization",
+    "scene-cinema-lane.json#/commonGuide",
+    "cinema-common-trace-clarification.md",
+    "scene-v2-note-compilation.json",
+    "main/src/story/world/CommonGroundWorld.tsx:171-193 as source-observed in cinema-common-trace-clarification.md (hash a22da6a577282c7ca86b6eaaf962f4d49e42aca2d5b2c4a837cb523c976a02f3; not a current rendered acceptance claim)"
+  ],
+  "verificationRoute": "After the repair, independently verify actual proposed/tested-prefix/held endpoint instance selection, all sample retention and a maximum512 instances across the two display allocations. Capture real player-camera views of proposed, partial test, specific hold/recovery, accepted survey, common planned line and earned paired common outcome; the states must remain distinct with music muted, missing attacks and color differences removed. Include the contracted night, mobile, reduced-motion and lowest-tier cases, current-ground edits, Continue/world return and optional repeat without false footsteps or proof. Measure setup/verb/handback draw, program, storage and allocation deltas, then complete the already-required cold high/low hardware handback, non-regression and independent rendered/player-experience reviews. This direction and the exact contract signature do not claim the repair is implemented or that manual, rendered, hardware, performance or audio acceptance has passed.",
+  "authoredBy": "Cinematography Director (/root/cinematography_director)",
+  "authoredAt": "2026-09-06T08:24:47.285625+00:00"
+}

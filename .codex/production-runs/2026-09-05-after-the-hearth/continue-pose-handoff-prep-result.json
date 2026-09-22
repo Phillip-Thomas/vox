@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 162150,
+  "stop_reason": "end_turn",
+  "session_id": "f28d8a56-43fe-4d2a-944b-3b026d1a595c",
+  "total_cost_usd": 0.7012710000000001,
+  "usage": {
+    "input_tokens": 28,
+    "cache_creation_input_tokens": 24239,
+    "cache_read_input_tokens": 258482,
+    "output_tokens": 13091,
+    "output_tokens_details": {
+      "thinking_tokens": 946
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 24239,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1355,
+        "cache_read_input_tokens": 27772,
+        "cache_creation_input_tokens": 2773,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2773
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2160,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002225,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 28,
+      "outputTokens": 13091,
+      "cacheReadInputTokens": 258482,
+      "cacheCreationInputTokens": 24239,
+      "webSearchRequests": 0,
+      "costUSD": 0.6990460000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 946,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 18,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: PARTIAL HANDOFF \u2014 explicit. Prep is real and CPU-clean; two named gaps remain. No capture claimed. Finished 22:39:43 UTC, inside the 22:41:25 deadline.\n\n**Code hashes**\n- `verifier/probes/continue-pose-handoff/poseHandoffObservation.mjs` `e9646ffbf900d010fbef06ced8791a08ff168ae631d4b10f40ec50d00bd97607`\n- `verifier/probes/continue-pose-handoff/earned-continue-3d-probe.mjs` `c07d6c715118fb5a94c855816aaace2bdebfe98ba86d2c465db31d8fcda99640`\n- original `verifier/probes/continue-candidate/earned-continue-3d-probe.mjs` `46496492de0645c43e1a01537cb5cf3453c33f324c2607754da01d9b086bff22` (copied once, unmodified)\n\n**CPU checks**: `node --check` on the patched probe = pass; module import = pass (8 exports). No `npm run verify`, no build, no browser, no lock, no GPU.\n\n**Source provenance (read-only)**\n- `EfficientScene.tsx:523-524` \u2014 `landedPlayerSpawn = landedShipPos ? (landedPlayerEgress ?? arrivalPose.playerSurfacePosition) : initialPlayerPosition`. Parked egress is unconditional whenever `landedShipPos` is non-null, so a correctly loaded saved on-foot pose can be bypassed. Hypothesis only; live activation unmeasured.\n- `spawnValidation.ts:461-466` \u2014 `resolveShipPlayerEgressPosition(terrain, planetSize, shipPosition, face?)`. Face **is** optional and the scene calls it with three args, i.e. no explicit face; derived face is internal. No top-face expectation encoded anywhere; +X treated as possibly legitimate.\n\n**Wiring status (honest)**\n- Observer module written; imported by the probe entry file; `installPoseHandoffObserver` **is actually called on the entry path**, right after `attachPassivePageSinks(page)`, on its own `newCDPSession`; harvest runs in the existing `finally`. Not a helper-file-only stub.\n- **GAP 1**: `POSE_HANDOFF_POINTS` is an **empty table**. The 0-based executable CDP line/column positions on `index-C1X65dZp.js` are not resolved \u2014 that needs a `scriptParsed` + `getPossibleBreakpoints` pass on the running bundle, a browser step outside this CPU-only role. With an empty table every site reports `unresolved`; it cannot fabricate a hit.\n- **GAP 2**: `--pose-handoff-only` parses and annotates the stop point and non-claims, but does not yet hard-stop the subsequent walk-controller segment.\n\n**Safety**: every condition is a try/catch IIFE ending in `return false` (no reachable pause); bounded 400-event own buffer with counted drops/errors; requested-vs-actual position + `relocated` flag; no game/setter/AudioParam patching; unmeasured fields serialize as `{unmeasured:true,reason}` and are never aliased.\n\n**Explicit non-claims**: no completed capture, no new F, no Continue-action acceptance, no source change, no game fix, no invented global ship data. Modified files under `main/` in git status predate this session; I made zero edits there.\n\n**Remaining steps**: resolve the CDP position table on the pinned bundle; enforce the only-mode hard stop; then run `continue-pose-handoff-runtime`/`continue` headed on GB10 under shared lock FD9 with the existing owned helper.\n\n**Artifacts**: `RUN/continue-pose-handoff-prep-report.json`, `RUN/logs/continue-pose-handoff-prep/code-hashes.txt`, `RUN/verifier/probes/continue-pose-handoff/`.",
+  "ttft_ms": 1489,
+  "type": "result",
+  "duration_ms": 161585,
+  "uuid": "7c15ea4e-2f78-41b2-9abf-3db80f4f73fa",
+  "ttft_stream_ms": 701,
+  "time_to_request_ms": 38,
+  "first_content_frame_ms": 701,
+  "queued_turn_count": 0
+}

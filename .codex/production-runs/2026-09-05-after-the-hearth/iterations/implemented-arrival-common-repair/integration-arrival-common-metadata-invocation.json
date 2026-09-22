@@ -1,0 +1,15 @@
+{
+  "role": "integration-engineer-metadata-closure",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T17:33:08.791839+00:00",
+  "commissionSha256": "a9925f7d3adb5e0d00574c422c60a9aad5c56c3855c02eff0dcd3f4f80364074",
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "currentSourceSnapshotSha256": "d20486eddc94e0196e0f548cc09f5aa359540ff228d4dce15c817fd5f7970c10",
+  "materialRepairIteration": 7,
+  "scope": "Complete exact approved v3 registry/generator/schema identity bindings and final fullverify; no gameplay change",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T17:41:27.500809+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "4cb3cb70-dc68-438d-bd97-758e7ca987e5",
+  "isError": false
+}

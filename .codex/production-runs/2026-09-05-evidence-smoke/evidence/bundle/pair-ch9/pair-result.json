@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "schema": "judge-pair-result-v1",
+  "a": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-evidence-smoke/evidence/bundle",
+  "b": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-ch9-baseline/evidence/bundle",
+  "ordersCollected": 2,
+  "singleOrderOnly": false,
+  "dimensions": {
+    "audiovisual_emotional_alignment": {
+      "pA": 0.6950000000000001,
+      "pB": 0.13,
+      "pTie": 0.17500000000000002
+    },
+    "narrative_and_player_causality": {
+      "pA": 0.7,
+      "pB": 0.11499999999999999,
+      "pTie": 0.185
+    },
+    "cinematic_composition_and_lens": {
+      "pA": 0.635,
+      "pB": 0.19999999999999998,
+      "pTie": 0.165
+    },
+    "score_coherence_and_sync": {
+      "pA": 0.525,
+      "pB": 0.19000000000000003,
+      "pTie": 0.28500000000000003
+    },
+    "palette_light_and_render_cohesion": {
+      "pA": 0.585,
+      "pB": 0.175,
+      "pTie": 0.24
+    },
+    "transition_and_state_integrity": {
+      "pA": 0.51,
+      "pB": 0.175,
+      "pTie": 0.315
+    },
+    "creative_ambition_and_specificity": {
+      "pA": 0.615,
+      "pB": 0.19,
+      "pTie": 0.195
+    }
+  },
+  "overall": {
+    "pA": 0.71,
+    "pB": 0.15,
+    "pTie": 0.14
+  },
+  "rewardA": 0.456125,
+  "rewardB": -0.456125,
+  "inconsistent": false,
+  "injectionFlag": false,
+  "detail": "R_A=0.456 over 2 order(s)"
+}

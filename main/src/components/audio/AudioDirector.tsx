@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, type FC } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, type FC } from 'react';
 import { useAppState } from '../../state/appState.ts';
 import { useStoryState } from '../../story/storyState.ts';
 import { getSpaceFlightSnapshot, getWarp, useSpaceFlight } from '../../state/spaceFlight.ts';
@@ -16,12 +16,24 @@ import { getSystemFlightSnapshot } from '../../state/systemFlight.ts';
 import { getSunDirection } from '../SkyController.tsx';
 import { getAudioSettingsSnapshot, useAudioSettings } from '../../audio/audioSettings.ts';
 import { getMusicEngine } from '../../audio/musicEngine.ts';
-import { getSfxEngine } from '../../audio/sfxEngine.ts';
+import { getSfxEngine, setSfxRunSeed } from '../../audio/sfxEngine.ts';
+import { getPhysicalBoardingSnapshot } from '../../story/physicalBoarding.ts';
+import { getSfxEnvironment } from '../../audio/mix/sfxEnvironment.ts';
+import { onAudioEvent } from '../../audio/mix/audioEventBus.ts';
+import SoundCaption, { postSoundCaption, clearSoundCaptions } from '../hud/SoundCaption.tsx';
+import { isSoundCaptionSilentBeat, soundCaptionForTrigger, type SoundCaptionTrigger, type SoundCaptionId } from '../hud/soundCaptionTable.ts';
+import { pulseOxygenTick } from '../hud/OxygenMeter.tsx';
+import { isMovieMode } from '../../story/autopilot/primitives.ts';
 import { getVitals } from '../../game/systems/survivalVitals.ts';
 import {
+  setMixSnapshot,
   setMusicOutput,
-  setMusicSubmerged
+  setMusicSubmerged,
+  peekAudioContext
 } from '../../audio/audioCore.ts';
+import { tailLatencyForSampleRate } from '../../audio/mix/mixTuning.ts';
+import { resolveMixSnapshot } from '../../audio/mix/mixSnapshot.ts';
+import { automationDirty, type AutomationWrite } from '../../audio/mix/automationDirty.ts';
 import {
   getVoxelRealityEffects,
   getVoxelRealityStage
@@ -44,12 +56,13 @@ import {
 import {
   configureBedPlanet,
   getBedDebugSnapshot,
+  getBedQualityTier,
   updateBedSignals
 } from '../../audio/bedEngine.ts';
 import { isScoreMoodLeading } from '../../audio/scoreEngine.ts';
 import { SALT_REGION } from '../../audio/generative/seededMusic.ts';
 import { REGION_QUANT_BLOCKS } from '../../audio/generative/tuning.ts';
-import type { BedSignals } from '../../audio/generative/worldSignals.ts';
+import { neutralBedSignals, resolveEraGates, type BedSignals } from '../../audio/generative/worldSignals.ts';
 import {
   initialOxygenAudioClockState,
   stepOxygenAudioClock
@@ -64,7 +77,16 @@ import {
   resolveSystemBodyMusicIdentity,
   type DestinationMusicIdentity
 } from '../../audio/destinationMusicIdentity.ts';
-import { getEmergentScoreMixSnapshot } from '../../story/emergentScoreDirector.ts';
+import { getEmergentScoreMixSnapshot, getChapter10ScoreSnapshot } from '../../story/emergentScoreDirector.ts';
+import { setVoiceRunSeed } from '../../audio/voice/voiceBus.ts';
+import { resetVoicePresentation, suspendVoicePresentation, setVoicePresentationContext, setVoicePresentationFocused, getVoicePresentationDiagnostics } from '../../audio/voice/voicePresentation.ts';
+import { isStoryPaused } from '../../story/storyClock.ts';
+import { subscribeEmergentStoryEvents } from '../../story/emergentStoryEvents.ts';
+import { acknowledgeObjectiveStoryEvent } from '../../story/ux/objectiveEventFeedback.ts';
+import { getLocalActorId } from '../../game/playerActors.ts';
+import { subscribeFinalizedLocalGameplayCommand } from '../../game/commandDispatchAdapter.ts';
+import { acknowledgeObjectiveCommand } from '../../story/ux/objectiveCommandFeedback.ts';
+import { resolveInteriorRoomFraction } from '../../audio/sfx/roomPresets.ts';
 
 interface AudioDirectorProps {
   terrainSeed: number;
@@ -72,10 +94,68 @@ interface AudioDirectorProps {
 }
 
 const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
+  useEffect(() => subscribeFinalizedLocalGameplayCommand(result => acknowledgeObjectiveCommand(result, getLocalActorId())), []);
+  useEffect(() => subscribeEmergentStoryEvents(event => acknowledgeObjectiveStoryEvent(event, getLocalActorId())), []);
+  const pendingCaptions = useRef<{ id: SoundCaptionId; at: number }[]>([]);
+  useEffect(() => {
+    let raf = 0;
+    const admitted = () => {
+      const settings = getAudioSettingsSnapshot(), story = getStoryStateSnapshot();
+      return settings.soundCaptions && !isMovieMode() && !isSoundCaptionSilentBeat(story.active ? story.beat : null);
+    };
+    const post = (id: SoundCaptionId) => postSoundCaption(id, { reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
+    const tick = () => {
+      raf = 0;
+      if (!admitted()) { pendingCaptions.current = []; clearSoundCaptions(); return; }
+      const now = peekAudioContext()?.currentTime ?? 0;
+      pendingCaptions.current = pendingCaptions.current.filter(cue => { if (now < cue.at) return true; post(cue.id); return false; });
+      if (pendingCaptions.current.length) raf = requestAnimationFrame(tick);
+    };
+    const unsubscribe = onAudioEvent(event => {
+      if (!admitted()) return;
+      const entry = soundCaptionForTrigger((event.id === 'hatch' ? 'dockHatchIris' : event.id) as SoundCaptionTrigger);
+      if (!entry?.label) return;
+      const context = peekAudioContext();
+      const scheduled = event.params?.atAudioTime;
+      if (context && scheduled != null && scheduled > context.currentTime) {
+        const latency = tailLatencyForSampleRate(context.sampleRate).sfxPathS;
+        const device = context.outputLatency > 0 ? context.outputLatency : context.baseLatency || 0;
+        pendingCaptions.current.push({ id: entry.id, at: scheduled + latency + device });
+        if (pendingCaptions.current.length > 32) pendingCaptions.current.shift();
+        if (!raf) raf = requestAnimationFrame(tick);
+      } else post(entry.id);
+    });
+    return () => { unsubscribe(); cancelAnimationFrame(raf); pendingCaptions.current = []; clearSoundCaptions(); };
+  }, []);
   const app = useAppState();
   const flight = useSpaceFlight();
   const story = useStoryState();
   const audio = useAudioSettings();
+  useEffect(() => { pendingCaptions.current = []; clearSoundCaptions(); }, [story.beat, audio.soundCaptions]);
+  useEffect(() => {
+    const diagnosticWindow = window as unknown as { __voxVoiceDiag?: typeof getVoicePresentationDiagnostics };
+    diagnosticWindow.__voxVoiceDiag = getVoicePresentationDiagnostics;
+    return () => { delete diagnosticWindow.__voxVoiceDiag; };
+  }, []);
+  useLayoutEffect(() => {
+    setVoicePresentationContext({ beat: story.active ? story.beat : null, paused: isStoryPaused(), mood: getChapter10ScoreSnapshot().variant, stage: getVoxelRealityStage(), quality: getBedQualityTier(), underOxygen: story.beat === 'ch6-dive' && getCameraSubmergence() > 0.5 });
+    if (!story.active) resetVoicePresentation();
+  }, [story.active, story.beat]);
+  useEffect(() => () => resetVoicePresentation(), []);
+  useEffect(() => {
+    const hide = () => { if (document.hidden) suspendVoicePresentation('hidden'); };
+    const blur = () => setVoicePresentationFocused(false);
+    const focus = () => setVoicePresentationFocused(true);
+    setVoicePresentationFocused(document.hasFocus());
+    document.addEventListener('visibilitychange', hide);
+    window.addEventListener('blur', blur);
+    window.addEventListener('focus', focus);
+    return () => {
+      document.removeEventListener('visibilitychange', hide);
+      window.removeEventListener('blur', blur);
+      window.removeEventListener('focus', focus);
+    };
+  }, []);
   const profile = useMemo<PlanetProfile>(
     () => resolvePlanetProfile({ worldId, seed: terrainSeed }).profile,
     [terrainSeed, worldId]
@@ -106,6 +186,16 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
   const biomeWeightsRef = useRef(profile.biomeWeights);
   const destInfoRef = useRef<DestinationMusicIdentity | null>(null);
   const chordRootRef = useRef<number | null>(null);
+  const appPhaseRef = useRef(app.phase);
+  // Stage 2 per-frame hygiene: one reused signals struct (no per-frame literal)
+  // and the last-written automation targets for the dirty check.
+  const bedSignalsRef = useRef<BedSignals>(neutralBedSignals());
+  const lastLayerWriteRef = useRef<AutomationWrite | null>(null);
+  const lastProceduralWriteRef = useRef<AutomationWrite | null>(null);
+
+  useEffect(() => {
+    appPhaseRef.current = app.phase;
+  }, [app.phase]);
 
   useEffect(() => {
     planetMoodRef.current = planetMood;
@@ -115,7 +205,7 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
     windRef.current = wind;
   }, [wind]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // The generative bed retargets: new planet, new key/motif/tempo (tempo and
     // meter land on the next bar line — §8.1). The approach modulation has
     // already walked the harmony to this exact key when we arrive by flight.
@@ -123,13 +213,17 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
     archetypeRef.current = profile.archetype;
     paletteBrightnessRef.current = paletteBrightnessOf(profile);
     biomeWeightsRef.current = profile.biomeWeights;
+    // Publish seed/genome before the story driver's first frame can pin crawl's tonic.
     configureBedPlanet(terrainSeed, profile.archetype, paletteBrightnessRef.current);
+    setSfxRunSeed(terrainSeed);
+    setVoiceRunSeed(terrainSeed);
   }, [terrainSeed, profile]);
 
   useEffect(() => {
     // One volume/mute write covers the whole music mix (layers + score).
     setMusicOutput(audio.musicVolume, audio.muted);
     getSfxEngine().setOutput(audio.sfxVolume, audio.muted);
+    if (audio.muted || audio.sfxVolume === 0) suspendVoicePresentation();
   }, [audio.musicVolume, audio.sfxVolume, audio.muted]);
 
   useEffect(() => {
@@ -147,6 +241,7 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
     let raf = 0;
     let lastAt = performance.now();
     let oxygenClock = initialOxygenAudioClockState(lastAt / 1000);
+    let lastWaterLapAt = lastAt;
     const reducedMotionQuery = typeof window.matchMedia === 'function'
       ? window.matchMedia('(prefers-reduced-motion: reduce)')
       : null;
@@ -173,10 +268,34 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
       // state and the splash remain edge-driven at the waterline. EfficientPlayer
       // resets submergence to 0 on unmount, so boarding cannot leave it stuck.
       const submergence = getCameraSubmergence();
-      const submerged = submergence > 0.5;
+      const waterlineAudible = submergence > 0.02 && submergence < 0.5 && resolveEraGates(getMusicPrimitives().era, getVoxelRealityStage()).padChoir > 0;
+      if (!waterlineAudible) lastWaterLapAt = now;
+      else if (now - lastWaterLapAt >= 3400 && peekAudioContext()?.state === 'running') {
+        lastWaterLapAt = now;
+        const position = getPlayerWorldPosition();
+        getSfxEngine().play('waterLap', { position: { x: position.x, y: position.y, z: position.z } });
+      }
+      const roomBoarding = getPhysicalBoardingSnapshot();
+      const roomFlight = getSpaceFlightSnapshot();
+      const interiorFraction = resolveInteriorRoomFraction(roomBoarding, roomFlight.controlMode);
+      // Stage 2 snapshot mixer: ONE resolved mix state per frame (menu / sandbox /
+      // story-lead / dive / station) → bus gains and the SFX muffle edge, applied
+      // by audioCore only when they change. The splash is the one SFX edge here.
+      const snapshot = resolveMixSnapshot({
+        phase: appPhaseRef.current === 'menu' ? 'menu' : 'playing',
+        storyLead: isScoreMoodLeading(),
+        submergence,
+        station: getSfxEnvironment().station,
+        interior: interiorFraction > 0,
+        interiorFraction,
+        era: getMusicPrimitives().era,
+        stage: getVoxelRealityStage(),
+        quality: getBedQualityTier()
+      });
+      setMixSnapshot(snapshot);
+      const submerged = snapshot.sfxSubmerged;
       if (submerged !== submergedRef.current) {
         submergedRef.current = submerged;
-        getSfxEngine().setSubmerged(submerged ? 1 : 0);
         getSfxEngine().play(submerged ? 'splashEnter' : 'splashExit');
       }
       // Music follows the continuous camera depth; only the splash/SFX state is
@@ -184,6 +303,7 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
       setMusicSubmerged(submergence);
 
       const storySnapshot = getStoryStateSnapshot();
+      setVoicePresentationContext({ beat: storySnapshot.active ? storySnapshot.beat : null, paused: isStoryPaused(), mood: getChapter10ScoreSnapshot().variant, stage: getVoxelRealityStage(), quality: getBedQualityTier(), underOxygen: storySnapshot.beat === 'ch6-dive' && submergence > 0.5 });
       const liveOxygen = Math.min(1, Math.max(0, getVitals().oxygen / 100));
       const audioSnapshot = getAudioSettingsSnapshot();
       const oxygenStep = stepOxygenAudioClock(
@@ -200,7 +320,10 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
         now / 1000
       );
       oxygenClock = oxygenStep.state;
-      if (oxygenStep.emitPulse) getSfxEngine().playOxygenPulse(oxygenStep.plan);
+      if (oxygenStep.emitPulse) {
+        getSfxEngine().playOxygenPulse(oxygenStep.plan);
+        pulseOxygenTick();
+      }
 
       const daylight = sceneRef.current === 'deepSpace'
         ? 0.5
@@ -233,15 +356,35 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
       );
       const engine = getMusicEngine();
       const storyMix = getEmergentScoreMixSnapshot();
-      engine.setLayerTargets(mix.layers, mix.fadeSeconds);
-      engine.setProceduralTargets({
+      // Stage 2 dirty-checked automation: the legacy engine's start-anchored
+      // target curves are idempotent (re-issuing the same target restarts the
+      // same exponential), so writing only when a target moves by more than
+      // AUTOMATION_EPSILON — or on the AUTOMATION_CADENCE_S keep-alive — is
+      // audibly identical to the old per-frame write and ~20× cheaper.
+      const nowS = now / 1000;
+      const layerValues = mix.layers as Record<string, number>;
+      if (automationDirty(lastLayerWriteRef.current, layerValues, mix.fadeSeconds, undefined, nowS)) {
+        engine.setLayerTargets(mix.layers, mix.fadeSeconds);
+        lastLayerWriteRef.current = { at: nowS, fade: mix.fadeSeconds, values: { ...layerValues } };
+      }
+      const proceduralTargets = {
         ...mix.procedural,
         // Outside the hatch the repaired ship is seen, not yet inhabited. The
         // procedural engine hum returns only after the pressure boundary seals.
         ship: mix.procedural.ship * storyMix.shipHumMultiplier
-      }, mix.fadeSeconds, storyMix.shipHumSlewSeconds == null
-        ? undefined
-        : { shipGainSeconds: storyMix.shipHumSlewSeconds });
+      };
+      const shipSlew = storyMix.shipHumSlewSeconds ?? undefined;
+      if (automationDirty(lastProceduralWriteRef.current, proceduralTargets as unknown as Record<string, number>, mix.fadeSeconds, shipSlew, nowS)) {
+        engine.setProceduralTargets(proceduralTargets, mix.fadeSeconds, shipSlew == null
+          ? undefined
+          : { shipGainSeconds: shipSlew });
+        lastProceduralWriteRef.current = {
+          at: nowS,
+          fade: mix.fadeSeconds,
+          shipSlew,
+          values: { ...(proceduralTargets as unknown as Record<string, number>) }
+        };
+      }
 
       // --- The generative bed (P3): rAF writes INTENT only — one world
       // snapshot per frame; the bed's own lookahead scheduler does all
@@ -289,49 +432,51 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
         terrainSeedRef.current
       );
       const windProfile = windRef.current;
-      const bedSignals: BedSignals = {
-        era: prim.era,
-        stage: getVoxelRealityStage(),
-        tension: prim.tension,
-        energy: prim.energy,
-        warmth: prim.warmth,
-        wonder: prim.wonder,
-        chroma: reality.chroma,
-        detail: reality.detail,
-        organic: reality.organic,
-        atmosphere: reality.atmosphere,
-        thermal: reality.thermal,
-        crystalline: reality.crystalline,
-        metal: reality.metal,
-        daylight,
-        golden: inSpace ? 0 : localGolden(getSunDirection(), getPlayerUp()),
-        submergence,
-        oxygen: liveOxygen,
-        windStrength: windProfile.strength,
-        windTurbulence: windProfile.turbulence,
-        windGustSpeed: windProfile.gustSpeed,
-        windVeer: windProfile.veer,
-        windDirectionX: windProfile.direction.x,
-        windDirectionY: windProfile.direction.y,
-        windGustStrength: windProfile.gustStrength,
-        windGustScale: windProfile.gustScale,
-        windOffsetX: windProfile.offset.x,
-        windOffsetY: windProfile.offset.y,
-        playerX: pos.x,
-        playerZ: pos.z,
-        scene: bedScene,
-        warpActive: warp.active,
-        warpProgress: warp.active ? Math.min(1, warp.progress) : 0,
-        regionUnit,
-        timeSec: now / 1000,
-        destinationWorldId: destinationIdentity?.worldId ?? null,
-        destinationSeed: destinationIdentity?.seed ?? null,
-        destinationProfileId: destinationIdentity?.profileId ?? null,
-        destinationProfileVersion: destinationIdentity?.profileVersion ?? null,
-        destinationProfileHash: destinationIdentity?.profileHash ?? null,
-        destinationArchetype: destinationIdentity?.archetype ?? null,
-        storyLeads: isScoreMoodLeading()
-      };
+      // The one reused signals struct: written in place every frame (the bed
+      // reads fields, never identity), so rAF allocates nothing here.
+      const bedSignals = bedSignalsRef.current;
+      bedSignals.era = prim.era;
+      bedSignals.stage = getVoxelRealityStage();
+      bedSignals.tension = prim.tension;
+      bedSignals.energy = prim.energy;
+      bedSignals.warmth = prim.warmth;
+      bedSignals.wonder = prim.wonder;
+      bedSignals.chroma = reality.chroma;
+      bedSignals.detail = reality.detail;
+      bedSignals.organic = reality.organic;
+      bedSignals.atmosphere = reality.atmosphere;
+      bedSignals.thermal = reality.thermal;
+      bedSignals.crystalline = reality.crystalline;
+      bedSignals.metal = reality.metal;
+      bedSignals.daylight = daylight;
+      bedSignals.golden = inSpace ? 0 : localGolden(getSunDirection(), getPlayerUp());
+      bedSignals.submergence = submergence;
+      bedSignals.oxygen = liveOxygen;
+      bedSignals.biomeWeights = biomeWeightsRef.current;
+      bedSignals.windStrength = windProfile.strength;
+      bedSignals.windTurbulence = windProfile.turbulence;
+      bedSignals.windGustSpeed = windProfile.gustSpeed;
+      bedSignals.windVeer = windProfile.veer;
+      bedSignals.windDirectionX = windProfile.direction.x;
+      bedSignals.windDirectionY = windProfile.direction.y;
+      bedSignals.windGustStrength = windProfile.gustStrength;
+      bedSignals.windGustScale = windProfile.gustScale;
+      bedSignals.windOffsetX = windProfile.offset.x;
+      bedSignals.windOffsetY = windProfile.offset.y;
+      bedSignals.playerX = pos.x;
+      bedSignals.playerZ = pos.z;
+      bedSignals.scene = bedScene;
+      bedSignals.warpActive = warp.active;
+      bedSignals.warpProgress = warp.active ? Math.min(1, warp.progress) : 0;
+      bedSignals.regionUnit = regionUnit;
+      bedSignals.timeSec = now / 1000;
+      bedSignals.destinationWorldId = destinationIdentity?.worldId ?? null;
+      bedSignals.destinationSeed = destinationIdentity?.seed ?? null;
+      bedSignals.destinationProfileId = destinationIdentity?.profileId ?? null;
+      bedSignals.destinationProfileVersion = destinationIdentity?.profileVersion ?? null;
+      bedSignals.destinationProfileHash = destinationIdentity?.profileHash ?? null;
+      bedSignals.destinationArchetype = destinationIdentity?.archetype ?? null;
+      bedSignals.storyLeads = isScoreMoodLeading();
       updateBedSignals(bedSignals);
 
       const chord = getMusicChord();
@@ -363,7 +508,7 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
     return () => window.cancelAnimationFrame(raf);
   }, []);
 
-  return null;
+  return audio.soundCaptions && !isMovieMode() ? <SoundCaption /> : null;
 };
 
 export default AudioDirector;

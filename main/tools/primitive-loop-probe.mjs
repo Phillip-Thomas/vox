@@ -33,7 +33,7 @@ async function capture(page, name) {
 
 async function waitForPlay(page) {
   await page.waitForFunction(() => {
-    const button = [...document.querySelectorAll('button')].find(item => item.textContent?.includes('Play Now'));
+    const button = [...document.querySelectorAll('button')].find(item => item.textContent?.includes('Free Play'));
     return button instanceof HTMLButtonElement && !button.disabled;
   }, undefined, { timeout: playTimeoutMs });
 }
@@ -47,7 +47,7 @@ async function trustedMouseClick(page, locator) {
 async function trustedPlayClick(page) {
   const target = await page.evaluate(() => {
     const button = [...document.querySelectorAll('button')]
-      .find(item => item.textContent?.includes('Play Now'));
+      .find(item => item.textContent?.includes('Free Play'));
     if (!(button instanceof HTMLButtonElement)) return null;
     const rect = button.getBoundingClientRect();
     const x = rect.x + rect.width / 2;
@@ -92,7 +92,7 @@ async function enterPlay(page) {
     return window.__paravoxiaAppState?.phase === 'playing';
   }, undefined, { timeout: 12_000 })
     .then(() => page.waitForFunction(() => ![...document.querySelectorAll('button')]
-      .some(button => button.textContent?.includes('Play Now') || button.textContent?.includes('Generating world')), undefined, { timeout: 12_000 }))
+      .some(button => button.textContent?.includes('Free Play') || button.textContent?.includes('Generating world')), undefined, { timeout: 12_000 }))
     .catch(async error => {
       const receipt = await page.evaluate(() => {
         return {
@@ -101,7 +101,7 @@ async function enterPlay(page) {
           activeTag: document.activeElement?.tagName ?? '',
           app: window.__paravoxiaAppState ?? null,
           playButtons: [...document.querySelectorAll('button')]
-            .filter(button => button.textContent?.includes('Play Now'))
+            .filter(button => button.textContent?.includes('Free Play'))
             .map(button => ({ text: button.textContent, disabled: button.disabled, connected: button.isConnected }))
         };
       });

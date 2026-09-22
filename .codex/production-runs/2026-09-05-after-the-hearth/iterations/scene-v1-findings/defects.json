@@ -1,0 +1,83 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v1",
+  "contractSha256": "ecce3e98270a9041b071e3c627090b228cfaab8a34e6c847296bd775baac3a74",
+  "compiledAt": "2026-09-06T08:18:47.336480+00:00",
+  "compiledBy": "creative-producer; pre-review implementation findings, pending independent verification and moderator compilation",
+  "sourceReports": [
+    {
+      "path": "chapter-common-trace-clarification.md",
+      "sha256": "e24fba612e04e474b74f15ecb13b5961eeb57d6361fec86bd117409ac2c1a532"
+    },
+    {
+      "path": "cinema-common-trace-clarification.md",
+      "sha256": "68f084b60176dfda9fba8da5ece157cdaf970fa05ed0f44bc04a126c26e6937e"
+    }
+  ],
+  "requiresHumanTaste": false,
+  "defects": [
+    {
+      "id": "CG-IMPL-001",
+      "severity": "high",
+      "category": "player-experience/navigation",
+      "status": "open",
+      "owner": "chapter",
+      "anchor": "anc.cg.reciprocal-reference",
+      "statement": "The required common E-to-C path is unwalked and invisible, while the objective calls it traced and the signed presentation forbids its preview.",
+      "evidenceRefs": [
+        "chapter-common-trace-clarification.md",
+        "cinema-common-trace-clarification.md"
+      ],
+      "requestedRepair": "Explicitly authorize the common-only planned/unverified guide and honest guide-line copy. Preserve real traversal and one marker.",
+      "verificationRoute": "Independent raw manual/movie lifecycle and rendered variant evidence, then fresh UX/Cinema review. No implementation or acceptance inferred from this direction.",
+      "sourceReportRefs": [
+        "chapter-common-trace-clarification.md",
+        "cinema-common-trace-clarification.md"
+      ],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-002",
+      "severity": "medium",
+      "category": "cinematography",
+      "status": "open",
+      "owner": "cinematography",
+      "anchor": "anc.cg.route-offered",
+      "statement": "The first renderer uses identical squares instead of the signed proposed/tested/held-end shape grammar.",
+      "evidenceRefs": [
+        "cinema-common-trace-clarification.md"
+      ],
+      "requestedRepair": "Realize broken proposed bars, paired tested bars and open transverse stops within the existing512 pool.",
+      "verificationRoute": "Independent raw manual/movie lifecycle and rendered variant evidence, then fresh UX/Cinema review. No implementation or acceptance inferred from this direction.",
+      "sourceReportRefs": [
+        "cinema-common-trace-clarification.md"
+      ],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CG-IMPL-003",
+      "severity": "medium",
+      "category": "player-experience/navigation",
+      "status": "open",
+      "owner": "chapter",
+      "anchor": "anc.cg.route-tested",
+      "statement": "Preparing work orders were introduced without binding their exact copy and ready transitions, and the survey marker prematurely claimed test in progress.",
+      "evidenceRefs": [
+        "chapter-common-trace-clarification.md"
+      ],
+      "requestedRepair": "Bind neutral offered-route label and exact preparing/ready copy under existing17 IDs with actual approach/H readiness and one entry cue.",
+      "verificationRoute": "Independent raw manual/movie lifecycle and rendered variant evidence, then fresh UX/Cinema review. No implementation or acceptance inferred from this direction.",
+      "sourceReportRefs": [
+        "chapter-common-trace-clarification.md"
+      ],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    }
+  ]
+}

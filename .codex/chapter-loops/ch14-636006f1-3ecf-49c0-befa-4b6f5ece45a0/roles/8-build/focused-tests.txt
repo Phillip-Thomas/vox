@@ -1,0 +1,14 @@
+
+ RUN  v3.2.4 /home/thomasphillip/Projects/vox/main
+
+ ✓ src/story/unfinishedMapState.test.ts (12 tests) 2ms
+(node:3779752) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/story/storyState.test.ts (34 tests) 852ms
+   ✓ storyState — beat order (drives debug jumps + seeding) > stands the rehearsal hearth on Tidegarden's real surface, not inside it  795ms
+
+ Test Files  2 passed (2)
+      Tests  46 passed (46)
+   Start at  17:29:39
+   Duration  2.29s (transform 837ms, setup 0ms, collect 1.24s, tests 854ms, environment 0ms, prepare 94ms)
+

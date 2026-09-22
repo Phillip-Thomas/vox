@@ -37,15 +37,15 @@ await shot('ui_loading.png');
 // Playwright windows throttle rAF to ~1fps, so allow generous time for the
 // 8-frame ready gate — a real focused tab hits it in ~130ms.)
 await page.waitForFunction(
-  () => [...document.querySelectorAll('button')].some(b => /play now/i.test(b.textContent || '') && !b.disabled),
+  () => [...document.querySelectorAll('button')].some(b => /free play/i.test(b.textContent || '') && !b.disabled),
   null, { timeout: 30000 }
 ).catch(() => console.log('ready timeout'));
 await page.waitForTimeout(1200);
 await shot('ui_landing.png');
 
-// Try to click Play Now (enabled once sceneReady).
+// Try to click Free Play (enabled once sceneReady).
 const clicked = await page.evaluate(() => {
-  const btn = [...document.querySelectorAll('button')].find(b => /play now/i.test(b.textContent || ''));
+  const btn = [...document.querySelectorAll('button')].find(b => /free play/i.test(b.textContent || ''));
   if (btn && !btn.disabled) { btn.click(); return true; }
   return false;
 });

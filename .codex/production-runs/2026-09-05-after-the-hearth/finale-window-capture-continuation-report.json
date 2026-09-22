@@ -1,0 +1,287 @@
+{
+  "schema": "paravoxia.verifier.finaleWindowCaptureContinuation.v1",
+  "role": "finale-window-runtime",
+  "runId": "2026-09-05-after-the-hearth",
+  "isAcceptance": false,
+  "acceptanceNote": "This report records a successfully captured finale window. It makes NO chapter acceptance claim, NO audible claim, and NO game-audio or plot-fidelity claim.",
+  "continuationOf": "producer-finale-window-fd-runtime-review.json (transport continuation, same unfinished finale task, same Chapter 13 run)",
+  "originalDeadlineUtc": "2026-09-06T20:27:05.927860+00:00",
+  "budgetRestarted": false,
+  "preparationRedone": false,
+  "reusedPriorChecks": "33+31 focused tests and 7 real FD child checks reused from the FD-runtime iteration; not re-run.",
+
+  "roleGrant": {
+    "readBeforeGpuAcquire": true,
+    "preAcquireClockUtc": "2026-09-06T20:20:19.177831981Z",
+    "handoffFile": "producer-common-physical-finale-gpu-handoff.json",
+    "handoffAt": "2026-09-06T20:19:30.296786+00:00",
+    "to": "finale-window-runtime",
+    "commonFinished": "2026-09-06T20:17:51.387753+00:00",
+    "commonCaptureCleanupAt": "2026-09-06T20:17:11.566Z",
+    "kernelLockEntriesAtHandoff": [],
+    "acquiredOnCleanResources": true,
+    "authorityInferredFromOldCommission": false,
+    "roleGrantedInProbeGuard": true,
+    "reassignmentDuringAttempt": false,
+    "ownershipWaitSeconds": 0
+  },
+
+  "attempt": {
+    "id": "attempt1",
+    "lockAcquiredUtc": "2026-09-06T20:20:28.488008615Z",
+    "wrapperStartedAt": "2026-09-06T20:20:28.553Z",
+    "wrapperEndedAt": "2026-09-06T20:21:47.412Z",
+    "wholeSessionS": 78.859,
+    "probeElapsedS": 71.636,
+    "probeExitCode": 0,
+    "probeTimedOut": false,
+    "maxSessionS": 300,
+    "withinOriginalDeadline": true,
+    "privateFixRequired": false,
+    "priorFailedAttemptsPreserved": true
+  },
+
+  "command": {
+    "shell": "exec 9>\"/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock\" && flock -w 30 -x 9 && node verifier/probes/finale-window/finale-window-runtime.mjs --out <ABS>/verifier/captures/finale-window/window-4 --sink paravoxia_finale_window4_20260906 --max-session-s 300 --heavy-lock /home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock --heavy-lock-fd 9 --child-lock-fd 9 --probe-args --probe-lock-contention",
+    "childArgs": [
+      "verifier/probes/finale-window/finale-window-probe.mjs",
+      "--out", "finale-window/window-4",
+      "--unmuted",
+      "--pulse-sink", "paravoxia_finale_window4_20260906",
+      "--heavy-lock", "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+      "--heavy-lock-fd", "9",
+      "--probe-lock-contention"
+    ],
+    "newNamesOnly": true,
+    "earlierCapturePathsReusedOrRenamed": false
+  },
+
+  "identityChecks": {
+    "previewUrl": "http://127.0.0.1:34413/",
+    "previewIsExistingRootImmutable": true,
+    "indexSha256": "6c8c378b282e3edef451a6957a5b5ad52591e206fc771390cdc33f9859cbb207",
+    "bundleSha256": "efc87feb0068671e6ac297f808fe61ea320b208a13fd9a8c40fa051077a9a068",
+    "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+    "gameFileCount": 99,
+    "rehashMismatches": 0,
+    "rehashClean": true,
+    "titleIsParavoxia": true,
+    "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+    "allRetained": true
+  },
+
+  "hardwareAdapter": {
+    "headless": false,
+    "headed": true,
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "isSoftwareRasterizer": false,
+    "assertion": "actual hardware adapter confirmed; no swiftshader"
+  },
+
+  "heavyLock": {
+    "lockPath": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+    "fd": 9,
+    "childLockFd": 9,
+    "owned": true,
+    "problems": [],
+    "inProcessReadlinkTarget": "/home/thomasphillip/Projects/Paraform/harness/output/.heavy.lock",
+    "fdIdentity": { "fdDev": 66306, "fdIno": 8397196, "pathDev": 66306, "pathIno": 8397196, "match": true },
+    "kernelProcLockEntries": 1,
+    "exclusiveContentionProbe": {
+      "attempted": true,
+      "conclusive": true,
+      "secondProcessExitStatus": 1,
+      "acquiredBySecondProcess": false,
+      "note": "second flock -n exited 1: refused, the lock is genuinely held"
+    },
+    "knownFixPresent": "verifyHeavyLock in-process readlink + fd inode + kernel + actual exclusive contention — all four exercised and green"
+  },
+
+  "samplerInvocation": {
+    "knownFixPresent": "sampler invocation explicitly invokes the string function rather than returning function-undefined",
+    "samplerSchema": "paravoxia.verifier.finaleWindowSampler.v2",
+    "sampleErrors": 0,
+    "pageErrors": [],
+    "hookInventoryResolvedTypes": {
+      "__paravoxiaJourneyProbe": "object",
+      "journeyProbe.getSnapshot": "function",
+      "__voxBundleDiag": "function",
+      "__storyBeat": "string"
+    }
+  },
+
+  "atomicEdge": {
+    "required": "Terra18 AND Worker18 AND committed AND both actual AV anchors, atomically in one sample",
+    "satisfied": true,
+    "edgeIndex": 179,
+    "edgeAtMs": 62877.299999952316,
+    "edgeWallMs": 1788726092396,
+    "edgeReason": "complete+handback+committed-terra18-worker18",
+    "evidence": {
+      "beat": "done",
+      "storyActive": false,
+      "chapter": "complete",
+      "committed": true,
+      "committedPresent": true,
+      "terraUnits": 18,
+      "terraUnitsPresent": true,
+      "workerUnits": 18,
+      "workerUnitsPresent": true,
+      "routeUnitsRequired": 18,
+      "avHasCgComplete": true,
+      "avHasCgHandback": true,
+      "avHistoryCount": 12,
+      "avActivationSequence": 12,
+      "comparisonProved": true,
+      "finalReferenceOffered": true,
+      "pendingAnchors": []
+    },
+    "atomicityGuarantee": "Every field of every window.ndjson record was read inside ONE synchronous function call in ONE rAF callback. No record is stitched from separate awaited reads.",
+    "windowSealed": true,
+    "sealReason": "window-complete",
+    "sampleCount": 847,
+    "framesObserved": 4224,
+    "capHit": false
+  },
+
+  "audioCapture": {
+    "isolatedOwnBrowserWav": true,
+    "sinkName": "paravoxia_finale_window4_20260906",
+    "sinkIndex": 16256,
+    "moduleId": "536870913",
+    "recorderDevice": "paravoxia_finale_window4_20260906.monitor",
+    "isMicrophone": false,
+    "isDefaultMonitor": false,
+    "defaultSinkChanged": false,
+    "foreignStreamPresent": false,
+    "forcedAudioContext": false,
+    "milestoneForced": false,
+    "ownershipVerified": true,
+    "ownershipReason": "all-streams-in-probe-browser-process-tree",
+    "ownershipRecheckOk": true,
+    "streams": [{ "id": 16270, "sink": "16256", "pid": 2036950, "binary": "chrome", "appName": "Chromium" }],
+    "gestureUsed": "none required beyond shipped movie-mode activation; audioRoute at edge read 'game: direct (running)'",
+    "wav": {
+      "path": "verifier/captures/finale-window/window-4/owned-sink.wav",
+      "bytes": 12320812,
+      "channels": 2,
+      "sampleRateHz": 44100,
+      "sampleWidthBytes": 2,
+      "frames": 3080192,
+      "durationS": 69.846,
+      "preserved": true
+    },
+    "coverage": {
+      "required": "3000ms pre-edge through 11500ms post-edge in the SAME capture",
+      "complete": true,
+      "reason": "recorder-interval-covers-3000ms-pre-edge-through-11500ms-post-edge",
+      "recorderStartWallMs": 1788726035639,
+      "recorderStopWallMs": 1788726107376,
+      "edgeWallMs": 1788726092396,
+      "edgeOffsetIntoWavMs": 56757,
+      "preEdgeCoveredMs": 56757,
+      "postEdgeCoveredMs": 14980
+    },
+    "decodedEnergyRms": {
+      "note": "RAW int16 RMS only. No audible claim and no game-audio or plot-fidelity claim is derived from these numbers.",
+      "fullFile": 1357.23,
+      "requiredWindowMinus3000ToPlus11500": 2712.93,
+      "perSecondBins": [
+        { "offsetMs": -3000, "rms": 0.0 },
+        { "offsetMs": -2000, "rms": 0.0 },
+        { "offsetMs": -1000, "rms": 0.0 },
+        { "offsetMs": 0, "rms": 936.57 },
+        { "offsetMs": 1000, "rms": 2103.07 },
+        { "offsetMs": 2000, "rms": 2667.06 },
+        { "offsetMs": 3000, "rms": 3001.67 },
+        { "offsetMs": 4000, "rms": 3189.57 },
+        { "offsetMs": 5000, "rms": 3200.45 },
+        { "offsetMs": 6000, "rms": 3315.76 },
+        { "offsetMs": 7000, "rms": 3332.21 },
+        { "offsetMs": 8000, "rms": 3269.76 },
+        { "offsetMs": 9000, "rms": 3473.99 },
+        { "offsetMs": 10000, "rms": 3677.98 },
+        { "offsetMs": 11000, "rms": 3606.09 }
+      ],
+      "rawObservation": "The three pre-edge seconds decode to exactly 0.0 RMS on the owned sink; every post-edge second decodes non-zero and rising. This is a byte-level energy measurement of the owned sink only."
+    }
+  },
+
+  "frames": [
+    { "file": "0000-pre-window-baseline.png", "size": "1280x720", "meanLuma": 11.2, "min": 1, "max": 255, "blank": false },
+    { "file": "001-post-seal-0.png", "size": "1280x720", "meanLuma": 79.2, "min": 0, "max": 255, "blank": false },
+    { "file": "002-post-seal-1.png", "size": "1280x720", "meanLuma": 79.2, "min": 0, "max": 255, "blank": false },
+    { "file": "003-post-seal-2.png", "size": "1280x720", "meanLuma": 79.1, "min": 0, "max": 255, "blank": false }
+  ],
+  "objectiveVisualDefects": [],
+
+  "unobservableSignals": [
+    {
+      "signal": "final-texture cancellation reason / calling site",
+      "why": "commonGroundScore.ts:259 takes the reason as `_reason` and discards it; nothing records the caller.",
+      "consequence": "No capture can name WHICH suspend/cancel call fired; timing adjacency is circumstantial only."
+    },
+    {
+      "signal": "AudioContext.state / musicVolume / mute at the clearing frame",
+      "why": "No shipped read-only hook exposes the context object or mixer state; __voxAudioDiag returns describeGameAudioOutputRoutes() (a route string), not context state.",
+      "consequence": "The audio-block alternative (A1) cannot be excluded by state read."
+    },
+    {
+      "signal": "paused / hudBlockingOverlayOpen / downed / worldGenReady / initialRenderReleased",
+      "why": "React component state, not exposed on any diagnostic surface.",
+      "consequence": "A2 (pause reason label) stays indistinguishable from story-inactive by state read alone."
+    }
+  ],
+  "missingStateClaimGuard": "No game-audio correctness or plot-fidelity claim is made from the above missing state. CG score diagnostic (commonGround.scoreDiagnostic / getCommonGroundScoreDiagnostic) resolved undefined in the hook inventory; the signed-scene AV member and CG diagnostic were handled by the sampler as designed and the edge was proved from the AV history and common-ground snapshot instead.",
+
+  "cleanup": {
+    "browserTeardownProven": true,
+    "receiptState": "stopped",
+    "receiptCleanupCompleted": true,
+    "receiptSessionStopped": true,
+    "cleanupError": null,
+    "stopsRootPreview": false,
+    "rootOwnedPreviewUntouched": true,
+    "killsProcesses": false,
+    "forced": false,
+    "sinkModuleUnloaded": true,
+    "sinkModuleVerifiedGone": true,
+    "postFinallyModuleGrepMatches": 0,
+    "defaultSinkBefore": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+    "defaultSinkAfter": "alsa_output.platform-NVDA2014_00.hdmi-stereo",
+    "defaultSinkUnchangedPostFinally": true,
+    "cleanupComplete": true,
+    "incompleteCleanup": [],
+    "teardownErrors": []
+  },
+
+  "artifactSha256": {
+    "runtime-record.json": "15ac452d999aa6776093cfc36338598c91339774f7bd4c5efd63b72e6f52ac55",
+    "summary.json": "73043b612ad70014bffb32e0d19bb9f14d67f654810c387856b392c281afd907",
+    "owned-sink.wav": "766d304847b5037c9ea9bff1010b17e59b38ddb5b5844b6ca2c5a5419e60a24f",
+    "window.ndjson": "95e3a09bb90cadb14b4ed90a843b5af272e028a6dee720e4a42c45985ee5df1b",
+    "cleanup-receipt.json": "ceabb1fd81e74657c549203e8f749a11a4ccccfbb3678878721970ccedc2640c",
+    "probeSha256(unchanged)": "356fa23a3d840fa108ec7ab2be24a8fc92d46baec0c898727a5534a4862ba73a"
+  },
+
+  "mutationsMade": {
+    "gameSource": false,
+    "build": false,
+    "contract": false,
+    "newPreview": false,
+    "producerReceipts": false,
+    "controlFiles": false,
+    "priorArtifacts": false,
+    "probeFixes": false,
+    "ownedPathsOnly": [
+      "logs/finale-window-capture-continuation/",
+      "verifier/captures/finale-window/window-4/",
+      "finale-window-capture-continuation-report.json",
+      "finale-window-capture-continuation-report.md"
+    ]
+  },
+
+  "outcome": "FINALE-WINDOW-CAPTURED",
+  "outcomeIsChapterAcceptance": false,
+  "inconclusiveCause": null
+}

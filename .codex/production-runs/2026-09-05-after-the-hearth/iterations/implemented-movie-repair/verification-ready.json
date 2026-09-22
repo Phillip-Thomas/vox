@@ -1,0 +1,23 @@
+{
+  "schema": "paravoxia.verificationReadiness.v1",
+  "ready": true,
+  "readyAt": "2026-09-06T09:53:08.051474+00:00",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "integrationInvocationRef": "integration-movie-repair-invocation.json",
+  "integrationFinishedAt": "2026-09-06T09:51:14.653363+00:00",
+  "sourceManifestRef": "implementation-source-manifest.json",
+  "sourceManifestSha256": "58f275f6130914f878942774fd4b4c6ce74327755c33ae257965a9dbeed40e70",
+  "implementationGateRef": "implementation-gate-pass.json",
+  "implementationGateChecks": 1708,
+  "checkResultsRef": "check-results.json",
+  "instructions": "Proceed with independent full verify/build, announce build ready, then use the root-owned immutable preview. Read verifier-inbox.md and verifier-control.json between phases/probes and during long probes. No game-source edits. Actual targeted home/long/common playback and manual-corner recovery before comprehensive journeys.",
+  "publicationAuthorized": false,
+  "limitations": [
+    "Implementation checks do not prove actual gameplay, render, hearing, hardware or creative acceptance.",
+    "The previous 300-second failed home run is retained as old evidence.",
+    "Source manifest covers96 allowed files; all958 preexisting sources and unexpected new source paths checked, zero unexpected drift.",
+    "Manual corner risk and Chapter interpretation require independent observation; no new source fix is authorized by the interpretation alone."
+  ]
+}

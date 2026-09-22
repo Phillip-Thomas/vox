@@ -1,0 +1,146 @@
+{
+  "schema": "paravoxia.chapterLoopBlockerRepairResult.v1",
+  "at": "2026-09-07T13:29:54.531Z",
+  "runId": "ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b",
+  "reportedManualAdapterBlockerFixed": true,
+  "continueAllGates": {
+    "worldSaveEquality": true,
+    "worldActorIdentity": true,
+    "milestonesPreserved": true,
+    "noAnchorReplay": true,
+    "actualAcceptedNewAction": true,
+    "allHeld": true,
+    "note": "A restored survey is NOT sufficient. actualAcceptedNewAction requires the shipped [F] prompt to have been offered under signed authorization, pressed unforced, and to have produced a NEW anc.cg.route-offered anchor with every actual pre-[F] anchor preserved in order. A survey-phase change alone never satisfies it. worldSaveEquality remains the separate full WorldSave/point-prefix equality gate after Continue.",
+    "continueTelemetryComplete": true
+  },
+  "continueInput": {
+    "method": "keyboard.down/up",
+    "requestedHoldMs": 80,
+    "elapsedMs": 83.38719399999536
+  },
+  "chapterAccepted": false,
+  "status": "BLOCKED_INFRASTRUCTURE",
+  "active": null,
+  "cases": {
+    "recovery": {
+      "passed": true,
+      "proof": {
+        "hardware": true,
+        "cleanup": true,
+        "interrupted": true,
+        "recovered": true,
+        "acceptedAction": 1,
+        "cancellationObserved": true,
+        "available": true
+      },
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "report": {
+        "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-bdb3da8e-e2f2-490a-b312-33d2229aa34a/recovery/report.json",
+        "sha256": "4fa5899030300b95c71668a6459985482b6eda94d80b2dc3d857a76863dca72a"
+      },
+      "raw": {
+        "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-bdb3da8e-e2f2-490a-b312-33d2229aa34a/recovery/capture/summary.json",
+        "sha256": "d25426bdac9eb12bc47f9c26dc85a57b195f8101cdbc3763b1029c27f026d793"
+      }
+    },
+    "continue": {
+      "passed": true,
+      "proof": {
+        "hardware": true,
+        "cleanup": true,
+        "clickedContinue": true,
+        "stateEqual": true,
+        "newAcceptedAction": 1
+      },
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "report": {
+        "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-bdb3da8e-e2f2-490a-b312-33d2229aa34a/continue/report.json",
+        "sha256": "ef8997647005340360ce7bc901e2fc6f0140b6980a2e6fd6127c8488927a9e75"
+      },
+      "raw": {
+        "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-bdb3da8e-e2f2-490a-b312-33d2229aa34a/continue/capture/summary.json",
+        "sha256": "d55594851e30f571b318be55e58b55d0febc5b8aa165d65700e15f43dc85cb76"
+      }
+    },
+    "manual": {
+      "passed": true,
+      "proof": {
+        "hardware": true,
+        "cleanup": true,
+        "ordinaryControls": true,
+        "acceptedAction": 1
+      },
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "report": {
+        "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-bdb3da8e-e2f2-490a-b312-33d2229aa34a/manual/report.json",
+        "sha256": "0178e290cc3652acaba00a47e2c3a31e198b231252294a07c8d0b01361d5bc58"
+      },
+      "raw": {
+        "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-bdb3da8e-e2f2-490a-b312-33d2229aa34a/manual/capture/summary.json",
+        "sha256": "da046c052600366405084e09d91e5e5c21815d84c55cf1f18107a965029099e6"
+      }
+    }
+  },
+  "preview": {
+    "url": "http://127.0.0.1:34825/?story=ch13-home",
+    "kind": "diagnostic",
+    "live": true,
+    "reused": true,
+    "candidateSha256": "d41becaea454bd702bcc1c5f552055501ab7dd0bb068681dd105f6a4fff001fa",
+    "pid": 2375543,
+    "indexSha256": "74025800f5312519a92b480a15b493c3b27f971f0cbcbe1ec2b571342d4f4c82",
+    "ownershipLog": {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/evidence/verify-bdb3da8e-e2f2-490a-b312-33d2229aa34a/preview.log",
+      "sha256": "2d16a58a26730b50a01157ef660d65d26db1393b427a2717fb6c62b39791a957"
+    }
+  },
+  "source": {
+    "intactFiles": 103,
+    "drift": []
+  },
+  "validation": {
+    "chapterLoopTests": 25,
+    "continueGateTests": 74,
+    "passed": true,
+    "report": {
+      "path": ".codex/chapter-loops/ch13-9c65fbed-e4aa-4e98-b213-62e31e09e14b/owner-repair-20260907/server-reuse/final-tests.log",
+      "sha256": "bb115b40997a701001c4e68d6365036141894aef0d3f57d75f4537d0c3b02807"
+    }
+  },
+  "remaining": [
+    "AV binding: real live audible score plus decoded video/audio/frame artifacts",
+    "Full earned previous-to-next chapter continuity without fixtures",
+    "Independent player, audiovisual and canon reviews"
+  ],
+  "blockedAt": {
+    "stage": "verify",
+    "message": "Probe av failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-07T13:29:02.418Z",
+    "detail": "PROBE-ERROR-INCONCLUSIVE: AV binding incomplete: live audible score and decoded media are not yet bound; no redundant diagnostic capture launched"
+  },
+  "budget": {
+    "activeMs": 571647,
+    "remainingActiveMs": 13828353,
+    "retries": 2,
+    "originalRetryLimit": 1,
+    "ownerAuthorizedAdditional": 1,
+    "usage": {
+      "roleLaunches": 0,
+      "modelTurns": 0,
+      "inputTokens": 0,
+      "cacheReadTokens": 0,
+      "outputTokens": 0
+    },
+    "goalTokens": null,
+    "note": "All original limits and spent counters retained; root orchestration/preparation is outside runner model telemetry."
+  },
+  "changes": [
+    "Normalize actual embedded post-finally manual cleanup; missing or failed cleanup stays inconclusive",
+    "Hold the real Continue follow-up F input 80ms; keep exact arrival and new-route-anchor predicates",
+    "Reuse the existing source- and byte-verified persistent preview without stopping its owner",
+    "Disable software-renderer override on capture commands; reject software renderer strings",
+    "Skip known incapable diagnostic captures; preserve required evidence gates"
+  ],
+  "acceptanceScope": "The manual capture starts at a ch13-survey fixture. These focused passes do not certify the full chapter or artistic quality."
+}

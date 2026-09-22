@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 897062,
+  "stop_reason": "end_turn",
+  "session_id": "5f83446e-62f2-4392-b1dc-2a2fd27b4dbb",
+  "total_cost_usd": 7.689158000000003,
+  "usage": {
+    "input_tokens": 168,
+    "cache_creation_input_tokens": 179640,
+    "cache_read_input_tokens": 8549360,
+    "output_tokens": 64602,
+    "output_tokens_details": {
+      "thinking_tokens": 18159
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 179640,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2248,
+        "cache_read_input_tokens": 184866,
+        "cache_creation_input_tokens": 965,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 965
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2103,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002188,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 168,
+      "outputTokens": 64602,
+      "cacheReadInputTokens": 8549360,
+      "cacheCreationInputTokens": 179640,
+      "webSearchRequests": 0,
+      "costUSD": 7.686970000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 18159,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 96,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT**: fail \u2014 both commissioned manual COMMON lanes ran to a valid physical boundary in separate cold headed GB10 sessions; neither proved COMMON (reference stopped at the strict corner\u20111 plane crossing, deviation ended 6/18 credited with no final anchors and objective not cleared). No acceptance, no defect closure.\n\n**Measurements (per lane)**\n\n| Run | Mode | Valid | Node exit | Role shell exit | Stopped at | Cleanup receipt |\n|---|---|---|---|---|---|---|\n| reference-1 | reference | no \u2014 own click aim | 2 | 0 | `pointer-lock-and-focus` | post-finally, stopped, no error |\n| reference-2 | reference | no \u2014 own false stall | 2 | 0 | `leg-to-W-offer` | post-finally, stopped, no error |\n| reference-3 | reference | **yes** | 2 | 0 | `plane-common-1` | post-finally, stopped, no error |\n| deviation-1 | deviation | **yes** | 2 | 0 | `terra-full-eighteen-unit-ordered-passage` | post-finally, stopped, no error |\n\n- Binding verified live before every browser: URL `http://127.0.0.1:34413/`, index `6c8c378b\u2026b207` (200), bundle `/assets/index-BiDWGouH.js` `efc87feb\u2026a068` (200), title Paravoxia, ANGLE NVIDIA GB10 headed; manifest `6ef957c3\u2026ee5d6`, **99/99 source paths rehashed identical before and after**; contract scene-v3 `5ef85a32\u2026ec54`; fd\u20119 flock owned=true, contention probe `refused (lock is live)`.\n- Delta run-profile (separate, as directed): live hash `605fb2ef\u2026e828` = producer's observedHash; that path is **not** in the current 99-path manifest, so the mismatch belongs to the old manifest. No full verify rerun.\n\n**Input / body / proof boundaries**\n- reference-1: 3 ordinary trusted clicks (mouse, firesTouchEvents false, userActivation active, hasFocus true), **0** pointerlockchange, **0** pointerlockerror, 0 console/page errors \u2014 browser reported the click **target as a `<p>`**. No movement test performed; no OS/browser cause claimed.\n- reference-2/3, deviation-1: **one** ordinary trusted click at the live canvas centre (640,360) locked on attempt 1.\n- reference-3: W [F] `ch13:survey:offer`, S [F] `ch13:survey:start`, E [F] `ch13:survey:offer-span`, 18 draw legs, stand-clear, witness \u2014 then corner 1 `[-42,51.05,14]` **not crossed**: before offset \u22122.381 at pose y 54.17, end pose `[-41.843, 51.353, 14.1408]`, maxOffset 0.1408, **supported=false**, terraUnits 0, oscillating (4 flips). Raw only; no terrain/collision cause claimed.\n- deviation-1: early turn achieved at z 15.7542 (offset **\u22120.2458** before the original z=16 plane, min 0.02); far C bought nothing (4.000); returned to frontier and traversed omitted ground (4.008); **all nine ordered frontiers crossed**, credit 2.014 \u2192 4.008 \u2192 **6** then flat at 6 for frontiers 4\u20139; final **6/18**, physical arrival at C true, support at arrival true, min body clearance 1.602 u (required 1), stand-clear 6.839 u, prefix retained, no extra F/reset; anchors through `reciprocal-reference` only; objective **not** cleared; HUD at stop: `Far reference \u00b7 check my route | W-7744 is holding the reference. | Walk the guide line to check your route from this end.`\n- Variance: reference-3 failed corner 1, deviation-1 crossed it \u2014 opposite results on one build.\n- Not met: real T [F]+occupancy, W 18/18, final anchors, objective clear. No endpoint pumping credited; no safe-footprint refusal forced; no later F after a failed prerequisite; no pose/velocity/anchor/store writes.\n\n**Owned instrumentation (not game repair)**\n- Authorised re-pin: `cgContract.pinned.mjs` `5f447ebd\u2026c551` \u2192 `5f3dbc2e\u202683a5` (scene-v2 \u2192 scene-v3); shared original unchanged at `5f447ebd\u2026c551`; pin manifest updated, new owned test added.\n- The ONE authorised bounded correction: clicks were aimed at a canvas rect sampled before the loop that was the unsized default **300\u00d7150** (hence the `<p>` target); now re-measured live per click with refusal of an implausible rect and element-stack recording. Probe `3eafe396\u20267cf9` \u2192 `5a8973ca\u2026c562`, logic `24d67c65\u2026060c` \u2192 `7c02a73c\u2026dc4e`. CPU tests 112 \u2192 **119/119**.\n- A second measured harness defect (`walkTo` stall uses unclamped `commandedUnits`; reference-2 moved 1.985 u/pulse with monotone closing while scored \"stalled\") was **left unpatched**; reference-3/deviation-1 used the existing CLI budget `--pulse-max-ms 2000` instead.\n\n**Artifacts** (all preserved, nothing removed; root preview untouched, 0 abandoned browsers)\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/arrival-common-manual/{reference-1,reference-2,reference-3,deviation-1}/`\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/logs/arrival-common-manual-runtime/` (run logs, 4 selftest logs, 2 dep snapshots, pre-edit copies)\n- `/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/arrival-common-manual/`\n- Reports: `arrival-common-manual-runtime-report.json` `9afbdbfc\u20264115`, `.md` `51c40467\u20265aec`, `arrival-common-manual-runtime-progress.md` `2a3131bc\u2026d389`",
+  "ttft_ms": 1162,
+  "type": "result",
+  "duration_ms": 1076565,
+  "uuid": "543788d2-4668-4b04-a1c2-bb97b14bf84a",
+  "ttft_stream_ms": 769,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 769,
+  "queued_turn_count": 0
+}

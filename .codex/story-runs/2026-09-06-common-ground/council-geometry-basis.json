@@ -1,0 +1,71 @@
+{
+  "schema": "paravoxia.councilGeometryBasis.v1",
+  "chosenRange": 12,
+  "chosenApparatus": "one passive visibly opaque-backed finite-range survey instrument",
+  "sourceRefs": {
+    "geometry-arena.json": "5657d52990e0180b61e0a0d725937be8d330b077eab7c21c9a3ab0cd6e654690",
+    "geometry-instrument.json": "2186b509fcf192c090d2545fb8569ac255c96f2de385a2493fcd635eb7b603d3",
+    "selected-geometry-qualification.json": "521e78f5f1b3e76772a89a057de71e07fd037253fc4fd52100b737f50c7c4018",
+    "selected-geometry-qualification.md": "54a06dec9ef1a346324bb489cc984e021921afb92a606720af0fe365ebc77fa0",
+    "arena-instrument-repair-chapter.md": "64d43ab26d90132a32cae20102bae9e5aadaa15f48d0a49419cd49629742b2a8",
+    "arena-instrument-repair-cinema.md": "ad1a3e807f3b1aad4da7e2a22d3826ea44050f45e0cc8327e5c39b7f31a8e17d",
+    "arena-instrument-repair-score.md": "00f304b0cf66aae865a0dd208e033b1d9eac0f9123292659ffcb5ba3945bb1ee"
+  },
+  "routeClassProof": {
+    "shortUnits": 16,
+    "longUnits": 36,
+    "shortUnsupportedUnits": 14,
+    "longRatio": 2.25,
+    "longSamples": 61,
+    "shortSamples": 17,
+    "commonUnits": 18,
+    "commonDensePoints": 73,
+    "commonHeldCoverage": true,
+    "farTerraBodyClearance": 2,
+    "intermediateWitnessBodyClearance": 2
+  },
+  "sceneNomination": {
+    "centreCell": [
+      -17,
+      25,
+      10
+    ],
+    "centreWorldXZ": [
+      -34,
+      20
+    ],
+    "quarterTurns": 1,
+    "yawDegrees": 90,
+    "S": [
+      -26,
+      12
+    ],
+    "E": [
+      -42,
+      12
+    ],
+    "C": [
+      -48,
+      12
+    ],
+    "W": [
+      -34,
+      10
+    ],
+    "WNominal": [
+      -34,
+      11
+    ],
+    "terra": [
+      -44,
+      12
+    ]
+  },
+  "adoptionScope": "Select range12 and the measured two-route/reciprocal design for canon documentation. Exact final connected head and initial shared-end body blocking are scene-contract assembly obligations, not new canon choices. No playable or final audiovisual claim.",
+  "remainingSceneBindings": [
+    "literal connected head cap and general endpoint-contact predicate check",
+    "distinct near-reference actor blocking so Terra never starts inside W-7744",
+    "final complete scene geometry hash and three scene signatures"
+  ],
+  "hardwareOrLiveAcceptance": false
+}

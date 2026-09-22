@@ -1,0 +1,74 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "9728c899035272cf4d5df07a5367a587b1302d6be2e3fa0ce7a529f1ee1044aa",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": true,
+    "acceptedAction": 8,
+    "completePath": true,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/manual/raw/cleanup.json",
+      "sha256": "73f0c4f2177edd744ba46d1508bd0b0504452a0bcdcfa8a5ce2c847d95383e83"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/manual/raw/frame-4.png",
+      "sha256": "543fd04ab993b44fb95eca24fc60dff906648099d5476b6c8913c1a3ebae987e"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/manual/raw/frame-5.png",
+      "sha256": "2c9b52caf884ec6a2b7878f59dbd8e7026554c0d2cb7da1ff9b0e1e3538eadde"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/manual/raw/frame-6.png",
+      "sha256": "44286241bb031397cd6754be31823be598668c70d8c7d6d08c8cb1befb2ea24d"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/manual/raw/frame-7.png",
+      "sha256": "6a9daf2bda6cc14859dd59896db2cec63dbcc935d154adf39cf07605c0a1ebe0"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/manual/raw/observations.json",
+      "sha256": "e20d6ae65c35bf6fe1f74d71767d5fd760720e5c3f3b7232d9d2dcf813928da8"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/manual/raw/provenance.json",
+      "sha256": "b124e0d29fd71dec6d1b64caf479fcfec0c9fafab374a32b8508810052204ad2"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/manual/raw/trace.ndjson",
+      "sha256": "713c4ff3ca907514dd330f43bf8db50a01a5233b596913d53abfe6023b640fd8"
+    }
+  ],
+  "reviewEntry": null,
+  "media": [
+    {
+      "kind": "frame",
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-b44ef3c5-1109-4fe8-a25c-f0c316d15fe5/manual/frame.png",
+      "sha256": "3e10c87c65b69a5aa4bbcb672ac926dd4660dba20fe28c69ded86beef86ff8f9"
+    }
+  ],
+  "mediaTimeline": null,
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 0,
+  "reused": false,
+  "status": "passed",
+  "errors": [],
+  "provenance": {
+    "sourceManifestSha256": "1d9b0c751ef1d464b9693dc471d1ef058213be91974fec93969f59ab50437d4f",
+    "buildSha256": "646ffd729782e01c81c0018dcb14bc02a86afd9c6829c319c2fbfb43245c4c7e",
+    "transportSha256": "8f4f5467737f5bc105f789851f352695fe41531a884adc18a86ea689207de2fd"
+  }
+}

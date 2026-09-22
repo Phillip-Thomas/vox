@@ -1,0 +1,111 @@
+{
+  "schema": "paravoxia.audit.manualFrontier.v1",
+  "role": "manual-frontier-auditor",
+  "run": "2026-09-05-after-the-hearth",
+  "sourceFrozen": true,
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "gameSourceMutated": false,
+  "browserUsed": false,
+  "gpuUsed": false,
+  "buildRun": false,
+  "verdict": "HARNESS-ROUTE-DEFECT",
+  "notAClaim": [
+    "Plane crossings are NOT a certification of the passage. Crossing every original incoming plane while supported proves geometry and support only; the contract's credited quantity is routeProgressUnits, which the crossings do not exercise.",
+    "No acceptance, no creative redesign, no eighth repair proposed."
+  ],
+  "evidence": {
+    "trace": ".codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/arrival-common-manual/deviation-1/trace.ndjson",
+    "probeSha256": "5a8973cae9174272efe6493bd8b22850034da06958be1128941ce817aa84c562",
+    "logicSha256": "7c02a73cd2799c3b409b33d620cf039ade4ce9ac13b92b3dc6e29fa0fc2ddc4e",
+    "gameSourceSha256": {
+      "main/src/story/commonGroundRoute.ts": "6025bc4c55098bb3bffc54dd04134fa3b666ef71361e22bba1a9b3fad7a1f1ff",
+      "main/src/story/commonGroundDirector.ts": "3b2b95ccd1701b863348e147a8181a704c2ed73258467ea98617e06f0f25aba3",
+      "main/src/story/commonGroundState.ts": "7a3c03fb73cb715116ddbf1952fc2c312f52d1dac68b765b8097f4becdb0452e"
+    },
+    "liveSourceEqualsFrozen": true
+  },
+  "observedFacts": [
+    {"atMs": 70877, "fact": "vertex-2 plane crossed at pose z=16.164333 (0.164 PAST the vertex on the incoming +z axis); credit 4.008321486093145; supported true"},
+    {"atMs": 71644, "fact": "vertex-3 crossed at [-44.028859,50.989046,16.164333]; credit steps to exactly 6 and never changes again"},
+    {"atMs": "72145..74948", "fact": "vertices 4..9 all crossed, supported true every sample, credit constant 6 over ~12 further walked units"},
+    {"atMs": 74950, "fact": "gate all-original-incoming-planes-crossed-in-order ok:true while gate terra-full-eighteen-unit-ordered-passage failed on fullEighteenCredited only"},
+    {"source": "commonGroundDirector.ts:1320", "fact": "credit call is routeProgressUnits(CG_ROUTE_COMMON, body, common.terraUnits, displacement), gated on walkedSegmentSupported && checkReference; both were live-true here (supported:true, referenceHeldDuringPassage:true)"},
+    {"source": "commonGroundRoute.ts:467-503", "fact": "ceiling = previousUnits + displacementUnits, recomputed per frame from CREDIT (not from the body's true arc); an arc claim above the ceiling is refused outright, and the doc block at :437-465 states this frontier lock is deliberate"},
+    {"source": "commonGroundState.ts:113", "fact": "CG_ROUTE_COMMON vertices are 2 units apart, so arc at vertex i is exactly 2i; credit 6 == vertex 3 exactly"}
+  ],
+  "missingCondition": {
+    "statement": "Re-traversal after a deviation must resume with the body's route projection at or behind the credited frontier ON EVERY segment, including the OUTGOING leg's axis at each corner. A residual displacement past a corner vertex along that corner's incoming axis is lateral (uncredited) on the next leg, but becomes LONGITUDINAL again at the next corner that turns back onto that axis, where the projected arc jumps discontinuously by that residual. Credit can absorb a jump only if it is <= one frame's displacement.",
+    "quantities": {
+      "residualCarriedFromVertex2Units": 0.164333,
+      "perFrameDisplacementCeilingUnits": 0.0836,
+      "note": "0.0836 = measured unitsPerMs 0.005014681287175485 * 1000 / 60 Hz",
+      "consequence": "0.1643 > 0.0836, so the arc discontinuity at vertex 3 (6 -> 6.164) is refused; thereafter the gap only grows and the lock is permanent, exactly as commonGroundRoute.ts:446-451 documents"
+    },
+    "harnessCause": {
+      "file": "verifier/probes/arrival-common-manual/common-passage-probe.mjs:590-592",
+      "code": "aim = [vertex[0] + plane.normal[0]*0.15, vertex[1], vertex[2] + plane.normal[1]*0.15]; toPlane = max(0,-offset) + 0.15",
+      "why": "The plane step deliberately aims 0.15 PAST each vertex along that vertex's incoming normal, and the 30 ms minimum pulse quantises to ~0.15 units (0.1204 commanded + 0.0274 coast). At a corner the incoming normal is the axis the route later re-uses, so every corner step manufactures a 0.06-0.17 unit residual on a later leg's longitudinal axis - roughly twice the per-frame credit ceiling."
+    }
+  },
+  "discriminatingExperiment": {
+    "script": "verifier/probes/manual-frontier-audit/frontier-replay.mjs",
+    "kind": "CPU-only replay of the ACTUAL captured deviation-1 poses through the ACTUAL exported routeProgressUnits and CG_ROUTE_COMMON (node type-stripping, no build, no clone, no mirror suite)",
+    "command": "node .codex/production-runs/2026-09-05-after-the-hearth/verifier/probes/manual-frontier-audit/frontier-replay.mjs",
+    "exit": 0,
+    "output": "logs/manual-frontier-audit/frontier-replay.json",
+    "resultA_actualCapturedPoses": {"start": 4.008321486093145, "final": 6, "perVertex": [4.008321, 6, 6, 6, 6, 6, 6, 6], "matchesLive": true},
+    "resultB_onlyChange_cornerResidualOnIncomingSide": {"start": 4.008321486093145, "final": 18, "perVertex": [4.008321, 6, 8.027405, 10.038019, 12, 14.076454, 16.06063, 18]},
+    "conclusion": "The frozen game predicate reproduces the live plateau at exactly 6 from the captured poses, and credits the full eighteen when the single altered quantity is the sign of the vertex-2 corner residual. The failure is fully explained by the harness's corner aim; no unobserved game branch is needed.",
+    "limitations": [
+      "Captured poses are pulse-END samples; intra-pulse frames are linearly interpolated at the measured calibration speed, so real per-frame displacement is approximated.",
+      "The replay exercises the credit predicate only. walkedSegmentSupported, checkReference and terrain queries are NOT reproduced; they were independently live-true in the capture, so they are not candidate causes here.",
+      "bodyPose (projected foot, y~50.99) was used as the credited body. bodyCentre (y~52.79) is recorded separately and differs only in y, which is irrelevant to the horizontal projection."
+    ]
+  },
+  "passingRunContrast": {
+    "capture": "verifier/captures/arrival-common/journey-common-1/trace.ndjson",
+    "samples": [
+      {"elapsedMs": 45265, "units": 5.819, "pose": [-43.889, 50.99, 15.926]},
+      {"elapsedMs": 45375, "units": 6.268, "pose": [-44.196, 50.99, 16.347]}
+    ],
+    "reading": "The passing LONG run reaches vertex 3 with the outgoing-axis coordinate still BEHIND the vertex (z 15.926 < 16 while x is already past -43.889), so the arc is continuous through the corner and credit tracks displacement (~0.48/sample). Its larger overshoot bound (0.24) is harmless because the overshoot lies along the leg it is already being credited for, not along a later leg. This is an input-shape difference, not a reason to dismiss the manual failure.",
+    "referenceThreeNote": "reference-3 is read only for supported-start contrast (at-E footY 53.317 unsupported). It does not and cannot prove an all-grounded route."
+  },
+  "instrumentationLimitation": {
+    "helper": "verifier/probes/arrival-common-manual/commonPassageLogic.mjs:186 orderedFrontierVerdict",
+    "defect": "It checks only ordered indices, non-decreasing atMs, crossed===true, finite units, and MONOTONIC units (b.units + eps >= a.units). A constant credit of 6 across vertices 3..9 satisfies every one of those. It never asserts units >= 2*index (the route's own arc at vertex index), so the gate all-original-incoming-planes-crossed-in-order reported ok:true on the exact run whose credit was frozen.",
+    "effect": "The ordered-frontier gate is not evidence of credited progress and must not be read as partial certification."
+  },
+  "nextMeasurement": {
+    "smallestFalsifiable": "Re-run the SAME deviation-1 script with one bounded harness change: at each plane step aim to the vertex MINUS 0.05 along the incoming normal and require the outgoing-leg axis residual |offset| <= 0.05 before turning; assert live credit >= 2*vertexIndex - 0.05 at every crossing. Prediction from the replay: credit follows 6, 8, 10, 12, 14, 16, 18 and the passage gate passes with no game change.",
+    "falsifies": "If credit still freezes at 6 with a verified sub-0.05 residual at every corner while supported and reference-held stay true, the harness explanation is dead and a live game-side cause must be sought."
+  },
+  "harnessCorrection": {
+    "authorized": false,
+    "note": "Diagnostic only; no probe edit made in this audit.",
+    "approach": [
+      "Replace the +0.15 past-plane aim (common-passage-probe.mjs:590-592) with an aim AT the vertex plus a tolerance on the perpendicular axis, then a squaring step that drives the outgoing-leg axis residual to <= one frame of displacement before the turn.",
+      "Reduce the effective corner quantum: the 30 ms minimum pulse yields ~0.15 units. Either lower pulse-min-ms so the quantum is under the per-frame ceiling, or add a corner-only fine approach that stops short and never overshoots the outgoing axis.",
+      "Add a live credited-frontier guard: after each vertex crossing assert live terraUnits >= 2*index - epsilon and FAIL FAST at the first vertex where it does not, naming the residual axis. Fix orderedFrontierVerdict to carry that predicate rather than mere monotonicity.",
+      "None of this invents safe footing: support and reference remained live-true throughout; only the commanded stop point changes."
+    ]
+  },
+  "gameSourceMutation": {
+    "needed": false,
+    "rationale": "routeProgressUnits behaved exactly as its own signed documentation describes, and the recovery it promises (return to the frontier and re-traverse) was never actually executed - the harness re-created the debt at the very next corner. Making corner recovery cheaper is a creative question about the cost of a steering error, as commonGroundRoute.ts:459-465 already records; it is not decided here.",
+    "ifRootLaterOrders": {
+      "boundedPaths": ["main/src/story/commonGroundRoute.ts (routeProgressUnits only)"],
+      "regressionScenario": "main/src/story/commonGroundRoute.test.ts must continue to prove: standing at C earns 0; endpoint proximity earns 0; the 0.18-unit early turn still holds credit at 4 while 300 further units are walked; and a far-end wiggle still buys nothing. Any change that lets displacement spent outside the current segment pay for arc would break all four and contradict the signed reading of #/story/events/21 and #/guidance/objectives/13."
+    }
+  },
+  "artifactsWritten": [
+    "verifier/probes/manual-frontier-audit/frontier-replay.mjs",
+    "logs/manual-frontier-audit/frontier-replay.json",
+    "logs/manual-frontier-audit/frontier-replay.stderr",
+    "logs/manual-frontier-audit/source-before.sha256",
+    "logs/manual-frontier-audit/source-after.sha256",
+    "manual-frontier-audit.json",
+    "manual-frontier-audit.md"
+  ],
+  "sourceBeforeAfterIdentical": true
+}

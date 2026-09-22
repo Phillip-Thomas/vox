@@ -1,0 +1,572 @@
+--- .codex/production-runs/2026-09-05-after-the-hearth/iterations/movie-verification-findings/source/main/src/story/commonGroundDirector.ts	2026-09-06 04:56:00.989472356 -0400
++++ main/src/story/commonGroundDirector.ts	2026-09-06 05:45:08.676577292 -0400
+@@ -167,6 +167,14 @@
+   completionWasRestored: boolean;
+   /** Units to seed a resumed final-test leg with, consumed once. */
+   resumeUnits: number;
++  /**
++   * Ordered screening-rail traversal of an authored polyline.
++   *
++   * CONTROLLER STATE, NOT PROGRESS. It decides which point the rail body walks
++   * at next and is read by no predicate, no guidance fact, no marker and no
++   * receipt; the walked span is measured only from actual displacement.
++   */
++  railTraversal: CommonGroundRailTraversal | null;
+ }
+ 
+ const runtime: CommonGroundRuntime = {
+@@ -184,7 +192,8 @@
+   lastPlayer: null,
+   localTester: false,
+   completionWasRestored: false,
+-  resumeUnits: 0
++  resumeUnits: 0,
++  railTraversal: null
+ };
+ 
+ export function resetCommonGroundRuntime(options: { clearWorlds?: boolean } = {}): void {
+@@ -201,6 +210,7 @@
+   runtime.localTester = false;
+   runtime.completionWasRestored = false;
+   runtime.resumeUnits = 0;
++  runtime.railTraversal = null;
+   resetCommonGroundActor();
+   resetCommonGroundScoreRuntime();
+   if (options.clearWorlds) clearAllCommonGroundWorlds();
+@@ -1578,32 +1588,306 @@
+   interactionId: string | null;
+   /** Meaningful debug readout; permitted, and never a predicate. */
+   reason: string;
+-}
+-
+-const HOLD: CommonGroundRailPlan = { action: 'hold', target: null, interactionId: null, reason: 'nothing to do' };
++  /**
++   * The stop radius ordinary movement should use for this goal.
++   *
++   * A MOVE PARAMETER, NEVER A PREDICATE. Nothing downstream reads it to decide
++   * that anything happened; it exists because one blanket radius either stops
++   * the body short of a pose the live resolver measures, or cuts the corners of
++   * a span the world measures in walked units.
++   */
++  arriveRadius: number;
++}
++
++/** Stop radius for a route waypoint: tight, so corners are walked, not cut. */
++const CG_RAIL_ROUTE_ARRIVE = 0.35;
++/** Stop radius for a named pose: well inside the 1.25-unit occupancy cylinder. */
++const CG_RAIL_POSE_ARRIVE = 0.6;
++/** Stop radius beside a body: inside actor reach, outside body clearance. */
++const CG_RAIL_BODY_ARRIVE = 2.4;
++/** Stop radius at the habitat core, unchanged from the shipped approach. */
++const CG_RAIL_CORE_ARRIVE = 1.2;
++
++const HOLD: CommonGroundRailPlan = {
++  action: 'hold', target: null, interactionId: null, reason: 'nothing to do',
++  arriveRadius: CG_RAIL_POSE_ARRIVE
++};
+ 
+ /** Off the common route and off his positioning leg: somewhere to wait. */
+ const CG_STANDBY_CLEAR_OF_E: CommonGroundPoint = { x: CG_POSES.E.x, y: CG_POSES.E.y, z: CG_POSES.E.z - 3 };
+ 
+-function walkTo(point: CommonGroundPoint | null, reason: string): CommonGroundRailPlan {
+-  if (!point) return { action: 'hold', target: null, interactionId: null, reason: `${reason}: no target` };
+-  return { action: 'walk', target: [point.x, point.y, point.z], interactionId: null, reason };
++function walkTo(
++  point: CommonGroundPoint | null,
++  reason: string,
++  arriveRadius = CG_RAIL_POSE_ARRIVE
++): CommonGroundRailPlan {
++  if (!point) {
++    return {
++      action: 'hold', target: null, interactionId: null, reason: `${reason}: no target`,
++      arriveRadius
++    };
++  }
++  return {
++    action: 'walk', target: [point.x, point.y, point.z], interactionId: null, reason, arriveRadius
++  };
++}
++
++function act(
++  id: string,
++  point: CommonGroundPoint,
++  reason: string,
++  arriveRadius = CG_RAIL_POSE_ARRIVE
++): CommonGroundRailPlan {
++  return {
++    action: 'interact', target: [point.x, point.y, point.z], interactionId: id, reason, arriveRadius
++  };
+ }
+ 
+-function act(id: string, point: CommonGroundPoint, reason: string): CommonGroundRailPlan {
+-  return { action: 'interact', target: [point.x, point.y, point.z], interactionId: id, reason };
++// --- ordered controller traversal -----------------------------------------------------
++//
++// An authored polyline is walked IN ORDER.
++//
++// The previous scan was stateless: it took the first point farther than a fixed
++// radius from the body, so the instant the body left the start by more than that
++// radius the already-walked start became the next target again, and the walk
++// oscillated at the first vertex instead of crossing the span.
++//
++// THIS CURSOR IS CONTROLLER STATE AND NOTHING ELSE. It emits a move goal. It
++// grants no units, proves no passage, and no predicate anywhere reads it: the
++// walked span is still measured only by `routeProgressUnits` from the body's
++// ACTUAL frame-by-frame displacement, and the survey trace is still only the
++// samples the body actually produced on supported ground. When the body is not
++// where an ordinary forward walk could have left it — a beat change, a Continue,
++// a revision, a different route, a restored pose — the cursor is rebuilt from
++// where the body genuinely is, and never from anywhere ahead of it.
++
++/**
++ * Aim PAST a corner rather than at it.
++ *
++ * `routeProgressUnits` credits at most the displacement of the frame it is
++ * given, so a body that cuts a corner advances its own projection farther than
++ * it actually walked and permanently loses the difference — the 18-unit span
++ * then never closes however long the walk continues. Walking THROUGH the vertex
++ * costs a little extra real distance and keeps arc gain at or under displacement
++ * on every frame, which is what lets the honest predicate close by itself.
++ */
++const CG_RAIL_CORNER_OVERSHOOT = 0.6;
++/** Beyond this the body is not on the leg the cursor believes it is walking. */
++const CG_RAIL_LEG_TOLERANCE = 3;
++/** How far THROUGH the head of a polyline an approach aims. */
++const CG_RAIL_START_AIM = 0.35;
++
++interface CommonGroundRailTraversal {
++  /** Run, actor, world, beat and route identity. A change forces a rebuild. */
++  key: string;
++  /** Index of the vertex the controller is currently walking toward. */
++  index: number;
++}
++
++interface RailRouteOptions {
++  /** Stop radius the body will actually use for these waypoints. */
++  readonly arrive: number;
++  /** How far past the polyline's own final vertex a completed traversal aims. */
++  readonly terminalOvershoot: number;
++}
++
++interface SegmentProjection {
++  readonly t: number;
++  readonly distance: number;
++}
++
++function projectOnSegment(
++  from: CommonGroundPoint,
++  to: CommonGroundPoint,
++  body: CommonGroundPoint
++): SegmentProjection {
++  const dx = to.x - from.x;
++  const dy = to.y - from.y;
++  const dz = to.z - from.z;
++  const lengthSq = dx * dx + dy * dy + dz * dz;
++  if (!(lengthSq > 0)) return { t: 0, distance: distanceBetween(body, from) };
++  const t = Math.max(0, Math.min(1,
++    ((body.x - from.x) * dx + (body.y - from.y) * dy + (body.z - from.z) * dz) / lengthSq));
++  const closest = { x: from.x + dx * t, y: from.y + dy * t, z: from.z + dz * t };
++  return { t, distance: distanceBetween(body, closest) };
+ }
+ 
+-/** The next waypoint of an authored polyline the body has not yet reached. */
+-function nextWaypoint(
++/** Unit direction INTO `route[index]`, or null at the head of the polyline. */
++function legDirection(
++  route: readonly CommonGroundPoint[],
++  index: number
++): CommonGroundPoint | null {
++  if (index <= 0 || index >= route.length) return null;
++  const from = route[index - 1];
++  const to = route[index];
++  const length = distanceBetween(from, to);
++  if (!(length > 0)) return null;
++  return { x: (to.x - from.x) / length, y: (to.y - from.y) / length, z: (to.z - from.z) / length };
++}
++
++/** True when the polyline actually changes direction at this vertex. */
++function routeTurnsAt(route: readonly CommonGroundPoint[], index: number): boolean {
++  const into = legDirection(route, index);
++  const out = legDirection(route, index + 1);
++  if (!into || !out) return false;
++  return into.x * out.x + into.y * out.y + into.z * out.z < 0.999;
++}
++
++/** The body has genuinely reached this vertex: standing at it, or past it. */
++function vertexReached(
++  route: readonly CommonGroundPoint[],
++  index: number,
++  body: CommonGroundPoint,
++  arrive: number
++): boolean {
++  const point = route[index];
++  const distance = distanceBetween(body, point);
++  const direction = legDirection(route, index);
++  if (!direction) return distance <= arrive;
++  const along = (body.x - point.x) * direction.x
++    + (body.y - point.y) * direction.y
++    + (body.z - point.z) * direction.z;
++  // Past the vertex plane, and still beside the vertex rather than somewhere
++  // else on the map that happens to lie on the far side of it.
++  const passed = along >= 0 && distance <= arrive + CG_RAIL_CORNER_OVERSHOOT + 1;
++  // AT A TURN THE BODY MUST ACTUALLY PASS THE VERTEX.
++  //
++  // Turning even a fraction of a unit early cuts the corner, and a cut corner
++  // swings the body's own projection AROUND the corner farther than the body
++  // walked in that frame. `routeProgressUnits` refuses that frame outright —
++  // its allowance is exactly the displacement it was given — and the refusal is
++  // permanent, because every later projection is then further beyond the
++  // allowance than the last. Measured with a walking body, four cut corners
++  // froze the eighteen-unit comparison at four. A straight vertex has no corner
++  // to cut, so arriving inside the stop radius is enough there.
++  if (routeTurnsAt(route, index)) return passed;
++  return passed || distance <= arrive;
++}
++
++/**
++ * Rebuild the cursor from where the body ACTUALLY is.
++ *
++ * The rebuilt index is the vertex ahead of the body's own projection, so a
++ * reconstruction can only ever aim at a point the body has not passed. It reads
++ * the body and the authored polyline and nothing else — no recorded progress,
++ * no milestone, no receipt — so it cannot manufacture a position.
++ */
++function reconstructRouteCursor(
+   route: readonly CommonGroundPoint[],
+   body: CommonGroundPoint,
+-  reachedRadius = 1.2
++  arrive: number
++): number {
++  if (route.length <= 1) return Math.max(0, route.length - 1);
++  let bestDistance = Number.POSITIVE_INFINITY;
++  let cursor = 0;
++  for (let index = 1; index < route.length; index += 1) {
++    const projection = projectOnSegment(route[index - 1], route[index], body);
++    if (projection.distance > bestDistance) continue;
++    bestDistance = projection.distance;
++    cursor = projection.t >= 1 - 1e-6 ? Math.min(index + 1, route.length - 1) : index;
++    // Still short of the head: the head is what to walk to.
++    if (index === 1 && projection.t <= 1e-6 && distanceBetween(body, route[0]) > arrive) cursor = 0;
++  }
++  return cursor;
++}
++
++/** The move goal for a cursor position, aimed through corners and the end. */
++function railGoal(
++  route: readonly CommonGroundPoint[],
++  index: number,
++  options: RailRouteOptions
+ ): CommonGroundPoint {
+-  for (const point of route) {
+-    if (distanceBetween(body, point) > reachedRadius) return point;
++  const point = route[index];
++  const direction = legDirection(route, index);
++  if (!direction) return point;
++  const overshoot = index === route.length - 1
++    ? options.terminalOvershoot
++    : (routeTurnsAt(route, index) ? CG_RAIL_CORNER_OVERSHOOT : 0);
++  if (!(overshoot > 0)) return point;
++  return {
++    x: point.x + direction.x * overshoot,
++    y: point.y + direction.y * overshoot,
++    z: point.z + direction.z * overshoot
++  };
++}
++
++/** A point a step through the head of a polyline, along its own first leg. */
++function routeHeadApproach(route: readonly CommonGroundPoint[]): CommonGroundPoint {
++  const head = route[0];
++  const direction = legDirection(route, 1);
++  if (!direction) return head;
++  return {
++    x: head.x + direction.x * CG_RAIL_START_AIM,
++    y: head.y + direction.y * CG_RAIL_START_AIM,
++    z: head.z + direction.z * CG_RAIL_START_AIM
++  };
++}
++
++/** Identity of the traversal in progress. Any change rebuilds it honestly. */
++function railRouteKey(tag: string, route: readonly CommonGroundPoint[]): string {
++  const head = route[0];
++  const tail = route[route.length - 1];
++  return [
++    runtime.runId, runtime.actorId, currentWorldId(), runtime.beat ?? 'none', tag,
++    route.length, `${head.x},${head.y},${head.z}`, `${tail.x},${tail.y},${tail.z}`
++  ].join('|');
++}
++
++/** The ordered next goal on an authored polyline. Controller state only. */
++function railWaypoint(
++  route: readonly CommonGroundPoint[],
++  body: CommonGroundPoint,
++  key: string,
++  options: RailRouteOptions
++): CommonGroundPoint {
++  const last = route.length - 1;
++  if (last <= 0) return route[Math.max(0, last)] ?? body;
++  let traversal = runtime.railTraversal;
++  if (!traversal || traversal.key !== key) {
++    traversal = { key, index: reconstructRouteCursor(route, body, options.arrive) };
++    runtime.railTraversal = traversal;
++  } else if (traversal.index > 0) {
++    const leg = projectOnSegment(route[traversal.index - 1], route[traversal.index], body);
++    if (leg.distance > CG_RAIL_LEG_TOLERANCE) {
++      // Not on the leg it believes it is walking. Something moved the body that
++      // was not this walk; rebuild from the body rather than steering at a
++      // vertex it never approached.
++      traversal.index = reconstructRouteCursor(route, body, options.arrive);
++    }
++  }
++  // Ordinary forward progress: consume only vertices the body has REACHED, and
++  // never reconsider one behind it.
++  while (traversal.index < last && vertexReached(route, traversal.index, body, options.arrive)) {
++    traversal.index += 1;
++  }
++  return railGoal(route, traversal.index, options);
++}
++
++/**
++ * True while her body sits on the part of the offered span he still has to walk.
++ *
++ * Read from the offered samples ahead of his tested prefix under the SAME
++ * clearance rule that holds his leg, so the rail steps out of a hold it is
++ * itself causing instead of leaving him waiting on her — and instead of
++ * offering a witness, which repairs an end he cannot reach and has never
++ * repaired a body standing in the way.
++ */
++function standingOnHisTest(snapshot: CommonGroundSnapshot, body: CommonGroundPoint): boolean {
++  const survey = snapshot.survey;
++  if (survey.phase !== 'offered' && survey.phase !== 'testing' && survey.phase !== 'held') return false;
++  // A real reference hold is repaired by the witness branch below, at a pose
++  // that is off the trace anyway. Only her own obstruction is answered here.
++  if (survey.hold.reason !== null && survey.hold.reason !== 'body-clearance') return false;
++  // An established, occupied witness is a contribution, not an obstruction.
++  if (survey.witness?.offered && survey.witness.occupied) return false;
++  const slot = survey.working;
++  if (!slot) return false;
++  const samples = offeredSamples(snapshot);
++  const from = Math.max(0, Math.min(slot.testedPrefixCount - 1, samples.length - 1));
++  for (let index = from; index < samples.length; index += 1) {
++    if (!bodiesClear(body, samples[index])) return true;
+   }
+-  return route[route.length - 1];
++  return false;
+ }
+ 
+ export function commonGroundRailPlan(): CommonGroundRailPlan {
+@@ -1615,54 +1899,112 @@
+     case 'ch13-home': {
+       const core = tidegardenCorePosition();
+       if (!core) return { ...HOLD, reason: 'habitat core not mounted' };
+-      if (distanceBetween(body, core) > CG_CORE_REACH) return walkTo(core, 'walking to the core');
++      if (distanceBetween(body, core) > CG_CORE_REACH) {
++        return walkTo(core, 'walking to the core', CG_RAIL_CORE_ARRIVE);
++      }
+       return snapshot.home.faultReviewed
+-        ? act('story-ch13-choose-return', core, 'choosing the return')
+-        : act('story-ch13-fault-review', core, 'reviewing the stored fault');
++        ? act('story-ch13-choose-return', core, 'choosing the return', CG_RAIL_CORE_ARRIVE)
++        : act('story-ch13-fault-review', core, 'reviewing the stored fault', CG_RAIL_CORE_ARRIVE);
+     }
+     case 'ch13-return': {
+       const flight = getSpaceFlightSnapshot();
+       if (flight.controlMode !== 'flight') {
+-        if (onOrigin()) return walkTo(CG_POSES.W, 'approaching W-7744 on foot');
++        if (onOrigin()) {
++          // W IS HIS POSE, NOT AN EMPTY MARK. He is already mounted and
++          // inspecting there by the time she lands, so the approach stops at
++          // body distance — inside the reach this beat closes on, and outside
++          // the clearance his own leg is held by. Walking onto him would
++          // manufacture the body-clearance stand-off the chapter is careful
++          // never to resolve by displacing anybody.
++          return walkTo(CG_POSES.W, 'approaching W-7744 on foot', CG_RAIL_BODY_ARRIVE);
++        }
+         const ship = getShipPosition();
+         if (!ship) return { ...HOLD, reason: 'no ship pose' };
+-        return { action: 'board', target: ship, interactionId: null, reason: 'boarding the Kestrel' };
++        return {
++          action: 'board', target: ship, interactionId: null, reason: 'boarding the Kestrel',
++          arriveRadius: CG_RAIL_BODY_ARRIVE
++        };
+       }
+       if (onOrigin()) {
+         if (flight.phase === 'surface') {
+-          return { action: 'exit-ship', target: null, interactionId: null, reason: 'landed at Origin' };
++          return { ...HOLD, action: 'exit-ship', reason: 'landed at Origin' };
+         }
+-        return { action: 'land', target: null, interactionId: null, reason: 'descending to the audit site' };
++        return { ...HOLD, action: 'land', reason: 'descending to the audit site' };
+       }
+       if (flight.phase === 'surface') {
+-        return { action: 'launch', target: null, interactionId: null, reason: 'igniting and lifting' };
++        return { ...HOLD, action: 'launch', reason: 'igniting and lifting' };
+       }
+-      return { action: 'fly', target: null, interactionId: null, reason: 'crossing to Origin' };
++      return { ...HOLD, action: 'fly', reason: 'crossing to Origin' };
+     }
+     case 'ch13-survey': {
+       const survey = snapshot.survey;
+       if (survey.phase === 'idle') {
+         const worker = commonGroundActorPosition();
+         return distanceBetween(body, worker) > CG_ACTOR_REACH
+-          ? walkTo(worker, 'approaching W-7744')
+-          : act('story-ch13-offer-route', worker, 'offering to demonstrate a route');
++          ? walkTo(worker, 'approaching W-7744', CG_RAIL_BODY_ARRIVE)
++          : act('story-ch13-offer-route', worker, 'offering to demonstrate a route', CG_RAIL_BODY_ARRIVE);
+       }
+       if (survey.phase === 'awaiting-start') {
+-        return distanceBetween(body, CG_POSES.S) > CG_POINT_REACH
+-          ? walkTo(CG_POSES.S, 'walking to the survey start')
+-          : act('story-ch13-survey-start', CG_POSES.S, 'beginning the recording');
++        // ARRIVE, THEN RECORD.
++        //
++        // The resolver offers this two units out and a player may take it
++        // there. The rail must not, because the FIRST SAMPLE IS WRITTEN AT THE
++        // BODY'S ACTUAL POSE: recording two units short of the start, on the
++        // approach line in from his inspection pose, put the opening samples in
++        // the survey housing's shadow and stopped his first-try test on an
++        // occlusion the authored route does not contain.
++        //
++        // So the approach is aimed a step THROUGH the start along the route's
++        // own first leg. The clean side of the start is the side the route
++        // leaves by, and aiming through it puts the settling body there instead
++        // of behind it. The act reach is the aim plus the stop radius, so the
++        // body can never settle outside the reach it is waiting on.
++        if (distanceBetween(body, CG_POSES.S) > CG_RAIL_START_AIM + CG_RAIL_ROUTE_ARRIVE) {
++          return walkTo(
++            routeHeadApproach(CG_ROUTE_LONG_RAIL), 'walking to the survey start', CG_RAIL_ROUTE_ARRIVE
++          );
++        }
++        return act('story-ch13-survey-start', CG_POSES.S, 'beginning the recording', CG_RAIL_ROUTE_ARRIVE);
+       }
+       if (survey.phase === 'drawing') {
+         // The measured LONG route: supported end to end from the fixed
+         // reference, so a screening demonstrates the first-try-legal class
+         // without needing the contingent witness to exist.
+-        if (distanceBetween(body, CG_POSES.E) <= CG_POINT_REACH
++        // A PLAYER may offer the span anywhere inside the resolver's reach; the
++        // rail waits until the body has actually ARRIVED at the authored end,
++        // so the span it demonstrates is the whole walked route rather than one
++        // that stops two units short of it. This tightens only what the rail
++        // does, never what the resolver offers.
++        if (distanceBetween(body, CG_POSES.E) <= CG_RAIL_POSE_ARRIVE
+           && (survey.working?.samples.length ?? 0) >= 2) {
+           return act('story-ch13-offer-span', CG_POSES.E, 'offering the walked span');
+         }
+-        return walkTo(nextWaypoint(CG_ROUTE_LONG_RAIL, body), 'walking the demonstrated route');
++        // Ordered traversal, keyed to the revision so a reopened tail is
++        // rebuilt from his actual last tested pose rather than replayed.
++        const options: RailRouteOptions = {
++          arrive: CG_RAIL_ROUTE_ARRIVE,
++          // The end of this span is a PLACE she has to be near, not a walked
++          // total, and the fixed reference's range is tight at that corner, so
++          // the traversal stops at the authored end instead of past it.
++          terminalOvershoot: 0
++        };
++        const key = railRouteKey(`survey-long:${survey.working?.tailRevision ?? 0}`, CG_ROUTE_LONG_RAIL);
++        return walkTo(
++          railWaypoint(CG_ROUTE_LONG_RAIL, body, key, options),
++          'walking the demonstrated route',
++          CG_RAIL_ROUTE_ARRIVE
++        );
+       }
+-      if (survey.hold.reason && survey.hold.reason !== 'footing-invalid' && !survey.witness?.offered) {
++      // STAND CLEAR OF HIS TEST. Her last recorded sample is under her own feet,
++      // and that sample is on the span he now has to walk. A body in the way
++      // holds him rather than displacing her, so the honest answer is ordinary
++      // movement off the trace — NOT an intermediate witness, which repairs a
++      // reference she cannot reach and never repairs her own obstruction.
++      if (standingOnHisTest(snapshot, body)) {
++        return walkTo(CG_STANDBY_CLEAR_OF_E, 'standing clear of the span he is testing');
++      }
++      if (survey.hold.reason && survey.hold.reason !== 'footing-invalid'
++        && survey.hold.reason !== 'body-clearance' && !survey.witness?.offered) {
+         return distanceBetween(body, CG_POSES.W) > CG_POINT_REACH
+           ? walkTo(CG_POSES.W, `repairing ${survey.hold.reason} by occupying the marked reference`)
+           : act('story-ch13-hold-witness', CG_POSES.W, 'offering the intermediate reference');
+@@ -1688,10 +2030,26 @@
+           // rather than displacing her, so the honest instruction is to move.
+           return walkTo(CG_STANDBY_CLEAR_OF_E, 'standing clear while he takes the reference');
+         }
+-        return walkTo(nextWaypoint(CG_ROUTE_COMMON, body), 'walking the common span');
++        // The span is measured in WALKED UNITS, so this traversal walks through
++        // every corner and through the far end. It earns nothing by arriving:
++        // `routeProgressUnits` still credits only actual displacement inside the
++        // corridor, frame by frame.
++        const options: RailRouteOptions = {
++          arrive: CG_RAIL_ROUTE_ARRIVE,
++          terminalOvershoot: CG_RAIL_CORNER_OVERSHOOT
++        };
++        const key = railRouteKey('common', CG_ROUTE_COMMON);
++        return walkTo(
++          railWaypoint(CG_ROUTE_COMMON, body, key, options),
++          'walking the common span',
++          CG_RAIL_ROUTE_ARRIVE
++        );
+       }
+       if (!common.finalReferenceOffered) {
+-        return distanceBetween(body, CG_POSES.T) > CG_POINT_REACH
++        // The offer is only accepted from INSIDE the occupancy cylinder, so the
++        // rail closes to its stop radius before pressing rather than spending
++        // the cadence on attempts the transaction will refuse.
++        return distanceBetween(body, CG_POSES.T) > CG_RAIL_POSE_ARRIVE
+           ? walkTo(CG_POSES.T, 'walking to the far reference')
+           : act('story-ch13-offer-final-reference', CG_POSES.T, 'offering the far end');
+       }
+@@ -1713,13 +2071,25 @@
+   clearControls(): void;
+   controls: { forward: boolean; jump: boolean; sprint: boolean; interact: boolean };
+   _goalScratch: THREE.Vector3;
+-  walkToward(goal: THREE.Vector3, arriveRadius: number, slowRadius: number): number;
++  /**
++   * The shared walker. `stop` is the radius the feet stop inside; `lookLift`
++   * raises the gaze onto the goal's subject. The third argument was previously
++   * declared here as a slow radius, which the shared walker does not have.
++   */
++  walkToward(goal: THREE.Vector3, stop: number, lookLift?: number): number;
+   getPlayerWorldPosition(): THREE.Vector3;
+   enterShip(): void;
+   exitShip(): void;
+   getSpaceFlightSnapshot(): { controlMode: string; phase: string };
+-  screeningActionReady(): boolean;
+-  noteScreeningAction(): void;
++  /**
++   * The shared performer, and the ONLY door to an act.
++   *
++   * The screening cadence is deliberately absent from this surface. It belongs
++   * to the performer, which re-resolves the live interaction, re-checks its
++   * proximity and every transaction predicate, and spends the dwell only when
++   * an act has actually happened. A chapter rail that consumed the cadence
++   * first left the performer refusing the act it had just paid for.
++   */
+   performStoryInteraction(id: never): unknown;
+ }
+ 
+@@ -1738,7 +2108,8 @@
+     case 'walk': {
+       if (plan.target) {
+         ctx.walkToward(
+-          ctx._goalScratch.set(plan.target[0], plan.target[1], plan.target[2]), 1.2, 0.8
++          ctx._goalScratch.set(plan.target[0], plan.target[1], plan.target[2]),
++          plan.arriveRadius
+         );
+       }
+       break;
+@@ -1746,10 +2117,13 @@
+     case 'interact': {
+       if (!plan.target || !plan.interactionId) break;
+       const goal = ctx._goalScratch.set(plan.target[0], plan.target[1], plan.target[2]);
+-      if (ctx.walkToward(goal, 1.2, 0.8) <= CG_CORE_REACH && ctx.screeningActionReady()) {
+-        ctx.noteScreeningAction();
+-        ctx.performStoryInteraction(plan.interactionId as never);
+-      }
++      ctx.walkToward(goal, plan.arriveRadius);
++      // NO CADENCE IS SPENT HERE, and no reach is judged here either. The
++      // performer resolves what the player is actually being offered at this
++      // body position, refuses anything that is not this plan's id, and owns
++      // the dwell between acts. A rail that pre-consumed the dwell starved
++      // every act while its ready prompt stayed on screen.
++      ctx.performStoryInteraction(plan.interactionId as never);
+       break;
+     }
+     case 'board': {

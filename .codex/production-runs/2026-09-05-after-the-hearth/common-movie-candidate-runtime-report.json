@@ -1,0 +1,257 @@
+{
+  "schema": "paravoxia.verifier.commonMovieCandidateRuntime.v1",
+  "role": "common-movie-candidate-runtime",
+  "action": "continue",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "previewUrl": "http://127.0.0.1:37395/",
+  "previewDaemonPid": 2144696,
+  "servedIndexSha256": "a9b880389deff7717b3d76b0f4a962beff1031a2ffa44fde427a5f0022353d8f",
+  "servedBundleSha256": "68c8be8435c5be5da681f3b5d4a16fcc071d03932e64b4e2fc985a30ab80328b",
+  "command": "bash verifier/probes/common-movie-candidate/run-common-movie-candidate.sh",
+  "startedAt": "2026-09-06T22:15:45Z",
+  "endedAt": "2026-09-06T22:17:42Z",
+  "wrapperExit": 0,
+  "verdict": "PARTIAL",
+  "satisfied": [
+    "lane movie url ?movie=1",
+    "real autopilot active 202/203 samples",
+    "hardware GB10 headed",
+    "terraUnits 18",
+    "common.workerUnits 18",
+    "common.committed true",
+    "story beat done",
+    "zero timeout rescues (teleportNudgesTotal 0)",
+    "owned session stopped, root preview untouched"
+  ],
+  "missingEvidence": [
+    "anc.cg.complete NOT observed in anchorLedger/events in any run",
+    "anc.cg.handback NOT observed in anchorLedger/events in any run",
+    "anchor sequence 5 unaccounted in all 3 runs (ledger jumps 4 -> 6)",
+    "readState.lane absent from finalState (lane proven only via request URL, not shipped readState field)",
+    "H-to-E uncredited-2 transient NOT densely sampled; only final 18/18 captured"
+  ],
+  "runs": [
+    {
+      "run": 1,
+      "outDir": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/common-movie-candidate/attempt-20260906T221545Z-run1",
+      "url": "http://127.0.0.1:37395/?story=ch13-common&journeyprobe=1&debug=1&movie=1",
+      "laneRequested": "movie",
+      "headed": true,
+      "swiftshaderAllowed": false,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "rendererClass": "hardware",
+      "captureTier": "hardware-high",
+      "elapsedMs": 36348,
+      "stopReason": "reached-beat:done",
+      "outcome": "REACHED-STOP-PREDICATE",
+      "outcomeIsAcceptance": false,
+      "finalBeat": "done",
+      "autopilotFinal": {
+        "beat": "ch13-common",
+        "clock": 30.3,
+        "pos": [
+          -44.11,
+          52.79,
+          11.99
+        ],
+        "stillTime": 0,
+        "teleportNudgesTotal": 0,
+        "routeAction": "idle"
+      },
+      "teleportNudgesTotal": 0,
+      "anchorsObserved": [
+        [
+          1,
+          "anc.cg.reciprocal-reference"
+        ],
+        [
+          2,
+          "anc.cg.reciprocal-crossed"
+        ],
+        [
+          3,
+          "anc.cg.final-reference-offered"
+        ],
+        [
+          4,
+          "anc.cg.independent-test"
+        ],
+        [
+          6,
+          null
+        ]
+      ],
+      "anchorsDeclaredByGame": [
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ],
+      "common": {
+        "stage": "arrived",
+        "terraUnits": 18,
+        "comparisonProved": true,
+        "finalReferenceOffered": true,
+        "finalReferenceOccupied": false,
+        "workerUnits": 18,
+        "committed": true
+      },
+      "frames": 37,
+      "pageErrors": [],
+      "probeSha256": "bab7c6339ed6c02fdfee2b5273fd64b684e6a3462d463a1bab33b8e09ef93a36",
+      "stallLongestMs": 7650,
+      "stallPredicateFired": null,
+      "cleanup": "stopped"
+    },
+    {
+      "run": 2,
+      "outDir": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/common-movie-candidate/attempt-20260906T221545Z-run2",
+      "url": "http://127.0.0.1:37395/?story=ch13-common&journeyprobe=1&debug=1&movie=1",
+      "laneRequested": "movie",
+      "headed": true,
+      "swiftshaderAllowed": false,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "rendererClass": "hardware",
+      "captureTier": "hardware-high",
+      "elapsedMs": 36425,
+      "stopReason": "reached-beat:done",
+      "outcome": "REACHED-STOP-PREDICATE",
+      "outcomeIsAcceptance": false,
+      "finalBeat": "done",
+      "autopilotFinal": {
+        "beat": "ch13-common",
+        "clock": 30.4,
+        "pos": [
+          -44.12,
+          52.79,
+          11.99
+        ],
+        "stillTime": 0,
+        "teleportNudgesTotal": 0,
+        "routeAction": "idle"
+      },
+      "teleportNudgesTotal": 0,
+      "anchorsObserved": [
+        [
+          1,
+          "anc.cg.reciprocal-reference"
+        ],
+        [
+          2,
+          "anc.cg.reciprocal-crossed"
+        ],
+        [
+          3,
+          "anc.cg.final-reference-offered"
+        ],
+        [
+          4,
+          "anc.cg.independent-test"
+        ],
+        [
+          6,
+          null
+        ]
+      ],
+      "anchorsDeclaredByGame": [
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ],
+      "common": {
+        "stage": "arrived",
+        "terraUnits": 18,
+        "comparisonProved": true,
+        "finalReferenceOffered": true,
+        "finalReferenceOccupied": false,
+        "workerUnits": 18,
+        "committed": true
+      },
+      "frames": 37,
+      "pageErrors": [],
+      "probeSha256": "bab7c6339ed6c02fdfee2b5273fd64b684e6a3462d463a1bab33b8e09ef93a36",
+      "stallLongestMs": 7395,
+      "stallPredicateFired": null,
+      "cleanup": "stopped"
+    },
+    {
+      "run": 3,
+      "outDir": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-after-the-hearth/verifier/captures/common-movie-candidate/attempt-20260906T221545Z-run3",
+      "url": "http://127.0.0.1:37395/?story=ch13-common&journeyprobe=1&debug=1&movie=1",
+      "laneRequested": "movie",
+      "headed": true,
+      "swiftshaderAllowed": false,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "rendererClass": "hardware",
+      "captureTier": "hardware-high",
+      "elapsedMs": 36262,
+      "stopReason": "reached-beat:done",
+      "outcome": "REACHED-STOP-PREDICATE",
+      "outcomeIsAcceptance": false,
+      "finalBeat": "done",
+      "autopilotFinal": {
+        "beat": "ch13-common",
+        "clock": 30.4,
+        "pos": [
+          -44.09,
+          52.79,
+          11.99
+        ],
+        "stillTime": 0,
+        "teleportNudgesTotal": 0,
+        "routeAction": "idle"
+      },
+      "teleportNudgesTotal": 0,
+      "anchorsObserved": [
+        [
+          1,
+          "anc.cg.reciprocal-reference"
+        ],
+        [
+          2,
+          "anc.cg.reciprocal-crossed"
+        ],
+        [
+          3,
+          "anc.cg.final-reference-offered"
+        ],
+        [
+          4,
+          "anc.cg.independent-test"
+        ],
+        [
+          6,
+          null
+        ]
+      ],
+      "anchorsDeclaredByGame": [
+        "anc.cg.reciprocal-reference",
+        "anc.cg.reciprocal-crossed",
+        "anc.cg.final-reference-offered",
+        "anc.cg.independent-test",
+        "anc.cg.complete",
+        "anc.cg.handback"
+      ],
+      "common": {
+        "stage": "arrived",
+        "terraUnits": 18,
+        "comparisonProved": true,
+        "finalReferenceOffered": true,
+        "finalReferenceOccupied": false,
+        "workerUnits": 18,
+        "committed": true
+      },
+      "frames": 37,
+      "pageErrors": [],
+      "probeSha256": "bab7c6339ed6c02fdfee2b5273fd64b684e6a3462d463a1bab33b8e09ef93a36",
+      "stallLongestMs": 7661,
+      "stallPredicateFired": null,
+      "cleanup": "stopped"
+    }
+  ]
+}

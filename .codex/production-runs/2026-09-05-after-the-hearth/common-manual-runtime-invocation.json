@@ -1,0 +1,16 @@
+{
+  "role": "common-manual-runtimeor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T16:23:31.961610+00:00",
+  "commissionSha256": "e09585c1da8dbe909dc70810a62f699a0bace5e84e46e9750ceb42d88d7cedfc",
+  "sourceManifestSha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "Actual bounded manual COMMON reference and corner recovery proof; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T16:34:53.178964+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "172eff9d-6fb9-4ddb-8a19-1e5651813dd8",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

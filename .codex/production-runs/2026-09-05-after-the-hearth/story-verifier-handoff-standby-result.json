@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 1143947,
+  "stop_reason": "end_turn",
+  "session_id": "9d324a54-cbbf-4166-bf59-e6309d677db7",
+  "total_cost_usd": 8.798000000000002,
+  "usage": {
+    "input_tokens": 180,
+    "cache_creation_input_tokens": 208901,
+    "cache_read_input_tokens": 8972670,
+    "output_tokens": 88781,
+    "output_tokens_details": {
+      "thinking_tokens": 13588
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 208901,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2297,
+        "cache_read_input_tokens": 213698,
+        "cache_creation_input_tokens": 1394,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1394
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2150,
+      "outputTokens": 16,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00223,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 180,
+      "outputTokens": 88781,
+      "cacheReadInputTokens": 8972670,
+      "cacheCreationInputTokens": 208901,
+      "webSearchRequests": 0,
+      "costUSD": 8.795770000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 13588,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 103,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Verification complete. Reports written, corrections applied, no browser or probe abandoned.\n\n## VERDICT\n\n**MIXED** \u2014 return-flight lane **PASS**; movie survey lane **PASS to `ch13-common` with a standby-occupancy qualification**; COMMON reciprocal lane **FAIL** (reproducible physical stall, mechanism unproved).\n\n## Phase 1 \u2014 independent verify + BUILD READY\n\n| field | value |\n|---|---|\n| command / cwd | `npm --prefix main run verify` / `/home/thomasphillip/Projects/vox` |\n| started \u2192 finished (UTC) | `16:00:15.207720141Z` \u2192 `16:01:16.752129209Z` |\n| **exit** | **0** \u2014 351 files / 3158 tests passed, `vite build` ok |\n| log sha256 | `d029ad5f1883d5887e5b14bcee35af9acc51adf9f80b9cfaebe7ae468031a619` |\n| source rehash before / after / final | 99/99 match `dc63fbae\u2026adc36c`, **0 drift** at 16:00:09, 16:01:26, 16:18:44 |\n\nShipped JSON-file-map buildHash `9dc37db5\u20265d542` (recomputed with `previewSnapshot.mjs`); the auxiliary path/NUL/hash/newline hash is a different algorithm, `c7b6395a\u20269da03`. Root then published `http://127.0.0.1:38007/` bound to my manifest; I independently confirmed 200, `<title>Paravoxia</title>`, index 1568 B `1f699b4a\u2026`, bundle `/assets/index-BJql9v5k.js` 5666976 B `4f39f1ea\u2026`, all 4 assets matching my build byte-for-byte. **38803 was never opened.** (Ownership record still carried stale `bundlePath`/`verifierBuildHash` fields at my read; I did not edit it and relied on my own HTTP bytes.)\n\n## Phase 2 \u2014 return flight: PASS\n\n276 samples @250 ms over 73.79 s of a 120 s bound, probe exit **0** (inherited `ERR_STREAM_WRITE_AFTER_END` logger-order defect fixed in my copy).\n\n- Origin 185-unit envelope entered at **d=180.08**; **post-envelope max = 180.08** \u2014 no departure reset (prior failure reclaimed 2736.67).\n- Handoff `-1,-1:p1` \u2192 `-1,-1` at d=166.79; epochs **2\u21923\u21924 only** \u2014 the prior 3\u21925 / 6\u21928 jumps did not recur.\n- Landed: celestial pose `[53.5,16,-16]`, velocity 0, renderOrigin `[0,0,0]`, `surface`/`fps`, HUD `Ship: landed`.\n- `story:ch13-origin-landed` latched; beat \u2192 `ch13-survey` / `ch13:survey:start`. Zero nudges.\n- `anc.cg.origin-landed` **not read** by this probe \u2014 instrumentation gap, not a negative finding.\n\n## Phase 3 \u2014 movie survey / common\n\n**Survey (LONG), `journey-survey-1`:** reached `ch13-common` in 42.89 s, exit 0, 20 s stall predicate armed and never fired, zero rescues. Full chain `repeated-measure \u2192 demonstration-opened \u2192 survey-started \u2192 trace-drawn \u2192 route-offered \u2192 route-tested \u2192 reciprocal-reference`. Real drawing (7.59 s), real offer (`story-ch13-offer-route`), **W physically tested the span** (42 accepted samples, worker walked 104.9 u).\n\n**Standby (amended per your 16:18:15 review \u2014 you were right):** the shipped standby is **`(-40,51.05,8)`**, arriveRadius 0.6, \"standing clear of the span he is testing\". `(-42,51.05,12)` is W's E position / common route goal; my 1.754 figure is **withdrawn**.\n\n- desired-target clearance from the authored 19-waypoint offered polyline: **4.472 u** (desired-point only)\n- **actual occupied-body clearance: min 0.927 / max 3.219 u** \u2014 minimum at t=26009 while the rail reason was literally \"standing clear of the span he is testing\"\n- **Terra never occupied the standby**: closest 1.482 u vs arriveRadius 0.6; the walk was superseded at t=26765 by `hold` \"following his test\". Whether that is authored is a source question I did not settle.\n- Both producer-rejected candidates measure **0.0** against the authored offered polyline.\n\n**COMMON, `journey-common-1/2`: FAIL, 2 of 2**, probe exit 3 (measured game failure). At `anc.cg.reciprocal-reference`, rail cursor 3 requests `(-44.6,51.05,16)` r=0.35; body pins at `x\u2248-43.83/-43.88`, **0.7704 / 0.7217 u short**, frozen 19.7 / 20.2 s, `terraUnits` **5.795 / 5.845 of 18**, zero nudges, `holdReason=null`, no prompt, `supported=true`. Terra's 18-unit passage, T's F/occupancy, W's reciprocal test, the commit and the objective clear are all **not reached**; I pressed no later F. The raised terrain step is a **visual inference**, not a proved collision mechanism. Short-reference route: **not exercised** (harness selected LONG) \u2014 not failed, not unreachable.\n\n## Cleanup & integrity\n\n4 browsers opened, 4 stopped, **0 abandoned**, receipts in every capture dir; 0 servers started/stopped by me, root preview untouched and still listening; heavy lock released after all 4 exclusive acquisitions; hardware ANGLE/NVIDIA GB10 headed, software renderer refused, no audio claim. 0 edits to game/contract/gate/manifest/defect/shared-probe files; 0 prior evidence overwritten.\n\n**Artifacts:** `verification-handoff-standby-report.{json,md}` (`304182a0\u2026`, `becf585c\u2026`), `verifier-handoff-standby-progress.md`, `verifier/captures/handoff-standby/{flight-1,journey-survey-1,journey-common-1,journey-common-2}/`, `logs/handoff-standby-verifier/`, probes in `verifier/probes/handoff-standby-verifier/`.\n\n**Not claimed:** chapter acceptance, defect closure, publication, manual COMMON corner recovery, earned Continue, full-story/station continuity, three cold runs, variants/performance/AV, creative reviews, or closure of your CG-014.",
+  "ttft_ms": 1590,
+  "type": "result",
+  "duration_ms": 1408391,
+  "uuid": "b847d70c-a5b5-4e66-afe5-6c75df8d8227",
+  "ttft_stream_ms": 839,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 839,
+  "queued_turn_count": 0
+}

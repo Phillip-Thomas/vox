@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "phase": "implementation",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "checkedAt": "2026-09-06T14:10:43.125Z",
+  "checkCount": 1704,
+  "gateReportSha256": "e3c2a900db65de136d336584662ce0d180c7307a16733b0ac07e1da4b1044529",
+  "gateReportRef": "iterations/implemented-navigation-repair/creative-run-quality-report.json",
+  "publicationAuthorized": false
+}

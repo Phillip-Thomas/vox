@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 665342,
+  "stop_reason": "end_turn",
+  "session_id": "d1f95d79-e381-4264-8286-cc4c94c4524c",
+  "total_cost_usd": 5.292657000000003,
+  "usage": {
+    "input_tokens": 80,
+    "cache_creation_input_tokens": 169164,
+    "cache_read_input_tokens": 4185020,
+    "output_tokens": 60237,
+    "output_tokens_details": {
+      "thinking_tokens": 15883
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 169164,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1294,
+        "cache_read_input_tokens": 172625,
+        "cache_creation_input_tokens": 606,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 606
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2052,
+      "outputTokens": 26,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002182,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 80,
+      "outputTokens": 60237,
+      "cacheReadInputTokens": 4185020,
+      "cacheCreationInputTokens": 169164,
+      "webSearchRequests": 0,
+      "costUSD": 5.290475000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 15883,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 46,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Assembly complete.\n\n## Files written (only these three)\n- `scene-contract.final-candidate.json` \u2014 SHA-256 `60be671d\u20267157 1`\n- `assembly-final-notes.md`\n- `assemble-final-candidate.mjs` (run-local helper; writes only the candidate)\n\nNothing else was touched \u2014 lock, brief, treatments, lanes, reconciliations, signatures, source, schema and gate tooling are unmodified.\n\n## Counts\n| | |\n|---|---|\n| Formal beats | 4 (ch13-home/return/survey/common) |\n| Sync anchors / story events | 27 / 27 (1:1) |\n| Agency windows | 5 (station-return removed) |\n| Guidance objectives | 17 new ch13 pairs; 2 old pairs demoted to baseline/prior-contract continuity only |\n| Shots | 9 (accepted cinema ledger, replacing 6 placeholders) |\n| Score cues | 6 accepted mood bindings |\n| Acceptance criteria / captures / mechanical checks | 28 / 9 / 15 |\n| Perf DELTAs | +8 draw, +6 setup programs, +2 MiB (materials/glyph/critical-window terms in `measurementPlan`) |\n\n## Validation (read-only, no shared gate artifact mutated)\n1. Internal reference integrity + retired-identifier sweep: **0 errors** (every anchor has \u22651 shot and \u22651 cue).\n2. Full schema validation against the checked-in `paravoxia-scene-contract.schema.json` with `$ref` resolution and closed objects, plus mirrors of the gate's band-prose and placeholder scans: **0 errors, no invalid extra properties.**\n3. Gate's own `tools/lib/guidanceTargets.mjs` imported read-only over all 17 objectives + `actionableWorkOrder` mirror: **1 failure** (below). All 17 work-order lines pass the current lexicon.\n\nNo build, verify, browser or probe was run.\n\n## Remaining real producer/director decisions\n1. **`ux.contract-target-ceiling` rejects the contracted launch objective.** The rule allows `targetMode: none` only for `travel|wait`; the signed intent requires `ch13:return:launch` as a control-only `interact` with `maxVisibleTargets: 0`. Same narrow-gate class root is fixing \u2014 it must widen. I did **not** falsify it to `wait`.\n2. `mutationBoundary` set to `planning-only` to match the current lock; advancing to `bounded-runtime` is a lock/brief decision root owns.\n3. `allowedPaths`/`protectedPaths` carried through stale \u2014 root replaces from updated brief/lock.\n4. `evidence.headedTaste.required: true` / `realGpuRequired: true` \u2014 confirm.\n5. `shot.cg.return` is declared on ch13-return but per the ledger spans into `repeated-measure`/`demonstration-opened`; confirm the grouping or split into a tenth shot.\n6. Score lane's `anc.cg.restored-entry` and `anc.cg.final-texture-release` were mapped onto `anc.cg.home-steady` and onto release prose on `sc.cg.independent-settled`/`anc.cg.handback` rather than inventing anchors outside the exact rename map; confirm or commission the ids.\n7. Status stays `draft` pending the three exact director signatures; none fabricated.",
+  "ttft_ms": 1513,
+  "type": "result",
+  "duration_ms": 665255,
+  "uuid": "3e750382-eb30-463e-ae5f-cc9484b8f265",
+  "ttft_stream_ms": 702,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 703,
+  "queued_turn_count": 0
+}

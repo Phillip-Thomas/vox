@@ -1,0 +1,19 @@
+{
+  "schema": "paravoxia.producerReadOnlyAuditDisposition.v1",
+  "recordedAt": "2026-09-06T14:46:11.053717+00:00",
+  "auditRef": "standby-source-audit.json",
+  "auditSha256": "d3e8897dabf00390f01a96ca57268fd924ce5d94c74e9744e67d1ce174cf2e46",
+  "invocationRef": "standby-source-audit-invocation.json",
+  "invocationSha256": "0852d4216ecbb14f406181ecc50a854271bbf87274706423cad724ede4715cb4",
+  "acceptedAs": "read-only source hypothesis and discriminator; not live proof or repair authorization",
+  "sourceManifestSha256": "1a50c19f26ef11d17361810feb4ab7b872b215da67156b5db414abd85b8a61e8",
+  "sourceUnchanged": true,
+  "candidate": "Requested standby point is outside the terminal dry cell; nearest reachable dry goal may be the current cell, yielding direct/no controls/zero stillTime. Physical cause of unsuitable target remains unmeasured.",
+  "qualification": [
+    "The audit did not run a CPU replay or measure terrain. Its strongest causality statements remain an inference from source branches plus captured runtime fields.",
+    "The audit missing-world-identity statement overlooked raw survey-movie-1/0054 screenshot, which visibly records coordinate -1,-1, seed3215739679,totalvox125000. PlanetSize50 should be confirmed from actual debug field semantics or live world state.",
+    "Document label14:41Z is approximate; actual invocation ran14:34:08.001681 to14:40:51.519240UTC. Use actual invocation and file evidence times.",
+    "Recommendations B/C are not authorization to edit shared navigation or expand the current signed production boundary."
+  ],
+  "next": "Independent verifier continues actual earned-return and movement/terrain discriminator. No source mutation during measurement."
+}

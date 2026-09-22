@@ -1,0 +1,18 @@
+{
+  "schema": "judge-pair-meta-v1",
+  "a": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-evidence-smoke/evidence/bundle",
+  "b": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-05-ch9-baseline/evidence/bundle",
+  "seed": "pair",
+  "shaA": "e61b4fa963c3f8c3f014ba22ccccffbe3921e23dfef394c4198ff645392f90a8",
+  "shaB": "d925f5d0b74219018dffc97000738b332fba9c0387e82ccb019f14038bb8f3e7",
+  "orders": [
+    {
+      "dir": "order-0",
+      "xIs": "B"
+    },
+    {
+      "dir": "order-1",
+      "xIs": "A"
+    }
+  ]
+}

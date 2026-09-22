@@ -1,0 +1,9 @@
+
+> voxel-game@0.1.0 creative:gate
+> node tools/creative-triad-gate.mjs --run .codex/production-runs/2026-09-04-station-interior-light --phase contract
+
+Creative triad gate failed: 3 failure(s)
+run: /home/thomasphillip/Projects/vox/.codex/production-runs/2026-09-04-station-interior-light
+- [signoffs.lossless-assembly] chapter compiled signoff must reproduce the director-authored artifact exactly
+- [signoffs.lossless-assembly] score compiled signoff must reproduce the director-authored artifact exactly
+- [signoffs.lossless-assembly] cinematography compiled signoff must reproduce the director-authored artifact exactly

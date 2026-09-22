@@ -1,0 +1,91 @@
+{
+  "at": "2026-09-06T21:26:32.273921+00:00",
+  "role": "independent mechanical private-probe engineer (opus)",
+  "scope": "ONLY the three executable gaps in producer-continue-controller-preflight-review.json",
+  "readiness": "PRIVATE FIXES APPLIED AND CPU-TESTED; no runtime/gameplay conclusion is drawn",
+  "sourceTouched": false,
+  "sourceEvidence": "git status shows the probe folder as the only path I created/modified; `find main/src main/tools -newermt '2026-09-06 17:20'` returns 0 files. Pre-existing modifications elsewhere in the working tree are not mine and were not touched.",
+  "gpuUsed": false,
+  "browserUsed": false,
+  "buildRun": false,
+  "publicationAuthorized": false,
+  "candidateRunSourceRepinned": false,
+  "fixes": [
+    {
+      "id": "F1-harvest-failure-safe",
+      "fault": "harvestContinueSampler assignment occurred AFTER the click and wait loop; a throw in that region left the hoisted var undefined so the finally skipped the harvest and left a live rAF sampler installed.",
+      "fix": "The cleanup/harvest callable and every observation it reads (firstValidRuntimeMs, lastPollMsSinceClick, captureStopReason, captureDecision) are now declared BEFORE the sampler install and BEFORE the click. The callable is the real shared factory continueClosure.makeContinueSamplerHarvest, so the CPU test drives the ACTUAL code. On a throwing harvest read it records harvestError, then still stops (rec.stopped=true) and deletes window.__voxContinueSampler in a second best-effort evaluate; a cleanup failure is recorded as cleanupError. Frames actually returned are always retained; a failed/empty harvest reports harvested:false, samplerPresentAtHarvest:false and completeness.complete:false (dataClass 'unmeasured').",
+      "files": [
+        "continueClosure.mjs (makeContinueSamplerHarvest)",
+        "earned-continue-3d-probe.mjs (definition hoisted above install/click)"
+      ],
+      "testedBy": "preflightFaults.selftest.mjs \u2014 mocked page holding a real sampler record, injected throw on the harvest evaluate, injected throw on BOTH evaluates, idempotency, success path; asserts rec.stopped and key deletion observed on the throwing path. Order check on the probe source is supplementary, not the proof."
+    },
+    {
+      "id": "F2-no-world-up-guess-on-directed-path",
+      "fault": "The directed-burst path used cur.up ?? [0,1,0] for burst progress, key re-measurement and restamp, and `if (restamp.usable) entries[k]=restamp` preserved a stale usable key when the restamp failed.",
+      "fix": "New pure helpers liveCalibration.liveUpReading (rejects null/malformed/non-finite/degenerate; no default) and liveCalibration.directedBurstMeasurement. Pre-burst: an invalid live up CLEARS every key entry and direction, pushes an 'unmeasured-no-live-up' journey record and STOPS the route attempt (no staleness/retention/decision/chooseKey inference). Post-burst: progress, re-measurement and restamp all use the actual post-burst reading; unmeasured => key entry+direction cleared, inference refused, stop (real foot displacement is still accumulated). A failed-but-measured restamp also clears the key, so no stale usable direction survives. Ordinary key presses, pulse durations, budgetMs, CALIBRATION_BOUNDS and all other budgets unchanged.",
+      "files": [
+        "liveCalibration.mjs",
+        "earned-continue-3d-probe.mjs (directed loop)"
+      ],
+      "testedBy": "preflightFaults.selftest.mjs F2 block calls the helpers directly: missing/malformed/non-finite/degenerate/valid up, unmeasured clearing+refusal, failed restamp clearing, unpublished foot pose, ordinary measured burst; plus a loop-scoped check that no `cur.up ?? [0,1,0]` remains and the helpers are actually called."
+    },
+    {
+      "id": "F3-completeness-backed-by-retained-frames",
+      "fault": "continueCaptureCompleteness was computed from the wall poll clock (lastObservedMs) only, so an empty, capped, stale or failed-harvest capture could be marked complete.",
+      "fix": "continueCaptureCompleteness now requires: no harvestError, sampler present at harvest, no installError, a non-empty frame list, at least one retained POST-CLICK frame, the last retained post-click frame at or past firstValidRuntimeMs + holdAfterFirstValidMs (5000ms), and no frame cap hit. lastObservedMs is still reported but can no longer complete anything on its own. Every verdict carries dataClass: 'unmeasured' (instrumentation missing/failed/capped) vs 'game-failure' (frames retained, the run never reached a valid runtime reading) vs 'measured'. All frames, frame errors, cap state and harvest/cleanup errors are preserved; no broader telemetry rewrite and no harvest-side frame filtering was introduced.",
+      "files": [
+        "continueClosure.mjs"
+      ],
+      "testedBy": "preflightFaults.selftest.mjs F3 block: frames:null (wall poll alone), empty harvest, missing sampler, harvest error, stale frames ending at 4000ms while the poll ran to 20000ms, cap before the hold, late last frame that cannot fit the hold, no-valid-reading-with-frames (game-failure), and an actual valid capture through firstValid+5000ms; frame counts asserted unfiltered."
+    }
+  ],
+  "unchanged": [
+    "C1 signed [F] + NEW anc.cg.route-offered acceptance (spanOfferAcceptance) \u2014 untouched.",
+    "The separate full savepoint/WorldSave point-prefix equality gate (overwriteVerdict) \u2014 untouched.",
+    "CONTINUE_CAPTURE budgets: holdAfterFirstValidMs 5000, maxWindowMs 30000, continueWaitBudgetMs 60000, maxFrames 6000.",
+    "Directed-walk budgets, ordinary key presses/pulse durations, CALIBRATION_BOUNDS, calibration caps.",
+    "All previously recorded failed evidence and prior logs/archives retained; nothing deleted or rewritten."
+  ],
+  "staleAssertionsCorrected": [
+    "continueClosure.selftest.mjs: the completeness case now supplies retained frames, and a NEW check asserts the same wall poll WITHOUT frames is not complete.",
+    "entryAdaptation.selftest.mjs: cleanup and completeness assertions now point at the shared harvest in continueClosure.mjs (where the delete now lives); behaviour is proven by the mocked-page failure tests, not by grep."
+  ],
+  "commandsRun": [
+    "node preflightFaults.selftest.mjs -> 42 checks passed, 0 failed (exit 0)",
+    "node continueClosure.selftest.mjs -> 74 passed, 0 failed (exit 0)",
+    "node entryAdaptation.selftest.mjs -> 48 passed, 0 failed (exit 0)",
+    "node liveCalibration.selftest.mjs -> 36 passed, 0 failed (exit 0)",
+    "node --check on all six edited files -> syntax-ok"
+  ],
+  "suitesDeliberatelyNotRerun": "The 25-check ground-frame suite, tangentSteering3d and the broad selftest.mjs were NOT re-run: no file they cover changed in this pass. Their prior results stand as previously logged and are not restated as fresh evidence here (correcting the prior report's false 'not repeated' claim by simply not claiming coverage I did not run).",
+  "transportStatus": "Report transport/delivery status is NOT gameplay proof. Nothing here asserts that the Continue flow works in a real browser; only that the probe's instrumentation now fails safe, refuses world-up guesses and cannot report empty/stale/capped capture as complete.",
+  "instrumentationVsGameplay": "All 42 new checks are INSTRUMENTATION proofs on CPU with mocked pages and pure helpers. No gameplay claim, no runtime failure conclusion, no headed run.",
+  "hashes": {
+    "probeFiles": {
+      "earned-continue-3d-probe.mjs": "644579a4495cf58fdd1298865e07b90bda48fcb1d34f187cee27ef7b60095692",
+      "continueClosure.mjs": "d6b6fbe1cb7d8a2a3dccce77d591b544c648f608c36e009804a5cf9d76bba33c",
+      "liveCalibration.mjs": "0ca079a196fc35664a4b9ddc3c037b3225eb0b1ac96b786672e17ecf81322d32",
+      "preflightFaults.selftest.mjs": "d03f509b6aa5c2c159a4cef05917c78edc5f8cd5694a4bd53dbb496456e85f58",
+      "continueClosure.selftest.mjs": "43389c6c503ed02d0ef23db7dad9f27b4a20659c7fe97e445a878ff3805c90e6",
+      "entryAdaptation.selftest.mjs": "ce43423be89f30af093a39afadd1ed9c8c9d1160f0ca0f47d2a16029a2872f10"
+    },
+    "logs": {
+      "continueClosure.selftest.log": "be25aa8ab755fceacb8bc7f6cc795f8fe90bec5aa2ea3445d7f8a43e2f9810b6",
+      "entryAdaptation.selftest.log": "da3328111dae19beca8effb4538f5511d44ed218b51f0e1f4302439b62cd140e",
+      "liveCalibration.selftest.log": "864e64fb42413701b7546d4512fe7bd6608031e4d55470ab0a2c47e3b2bd7e3e",
+      "node-check.log": "2d43ac29955168c6753270a118385c9925359fe906f2b8d53a96dc7500a5acae",
+      "preflightFaults.selftest.log": "5e8f42ede3769d557f4f08c95bd6a115fc1bfff2ebd31c5c39f1b82d9035c8e2",
+      "sha256.txt": "ff0081e17e6d3447b79c250688522eea75391b6b5e891a94939e8ac41dc2c2c3"
+    }
+  },
+  "logDir": "logs/continue-controller-final-preflight/",
+  "ownedPaths": [
+    "verifier/probes/continue-controller-closure/",
+    "logs/continue-controller-final-preflight/",
+    "continue-controller-final-preflight-report.json"
+  ],
+  "deadlineChanged": false,
+  "cpuBudgetSeconds": 480
+}

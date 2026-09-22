@@ -1,0 +1,10 @@
+{
+  "at": "2026-09-06T17:59:29.115437+00:00",
+  "reviewedBy": "creative-producer",
+  "scope": "Score interpretation only; no audible finding, acceptance or repair",
+  "originalTraceWasAppending": true,
+  "directorReadTraceSha256": "c7473a705f516f2f1c381534bf8b7fb55fd8249635469a2f8d6b9ca1c67356d1",
+  "retainedExactPrefixRef": "iterations/score-completion-interpretation/trace-at-director-read.ndjson",
+  "completedTraceSha256": "3ad4bda044795529b686110f8a50f3de13770c44fe39e3ef8fed5c6911bcc72b",
+  "conclusion": "No signed audible minimum. Normal done alone is not an allowed early cancellation. A synchronized12second output/eligibility/clear-reason measurement remains required before attributing the observed early diagnostic loss."
+}

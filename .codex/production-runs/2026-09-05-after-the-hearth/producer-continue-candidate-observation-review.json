@@ -1,0 +1,108 @@
+{
+  "at": "2026-09-06T22:31:16.384326+00:00",
+  "scope": "Actual candidate earned Continue plus failed subsequent probe walk; no chapter acceptance",
+  "captureRef": "verifier/captures/continue-candidate/attempt-2",
+  "sourceManifestSha256": "8962a7b25cbb7158df008737a8a902daa6c0b3bb3468ea0277084aa668b46962",
+  "fullPointPrefixEquality": {
+    "before": 19,
+    "after": 20,
+    "allOriginalObjectsEqualPrefix": true,
+    "worldId": "-1,-1",
+    "seed": 3215739679,
+    "sameActor": true
+  },
+  "actualCentreDiscontinuities": [
+    {
+      "fromMsSinceClick": 688,
+      "toMsSinceClick": 711,
+      "distanceUnits": 100.89826407868404,
+      "fromCentre": [
+        -32.12171936035156,
+        52.797115325927734,
+        19.285409927368164
+      ],
+      "toCentre": [
+        53.849998474121094,
+        13.5,
+        -16
+      ],
+      "planetFrom": "-1,-1",
+      "planetTo": "-1,-1",
+      "seedFrom": 3215739679,
+      "seedTo": 3215739679,
+      "worldBoundFrom": true,
+      "worldBoundTo": true,
+      "beatFrom": "ch13-survey",
+      "beatTo": "ch13-survey"
+    }
+  ],
+  "telemetry": {
+    "allFrames": 361,
+    "preClickFrames": 2,
+    "postClickFrames": 359,
+    "actualPlanetIds": [
+      "-1,-1"
+    ],
+    "actualSeeds": [
+      "3215739679"
+    ],
+    "rawCompleteness": {
+      "complete": true,
+      "verdict": "complete",
+      "dataClass": "measured",
+      "reason": "361 retained post-click frames run through 6756ms, at least 5000ms past the first valid runtime reading at 1645ms, harvested with no cap and no harvest error",
+      "firstValidRuntimeMs": 1645,
+      "lastObservedMs": 6762,
+      "requiredThroughMs": 6645,
+      "capped": false,
+      "retainedFrameCount": 361,
+      "retainedPostClickFrameCount": 361,
+      "lastRetainedFrameMsSinceClick": 6756,
+      "capHit": false,
+      "harvestError": null,
+      "installError": null,
+      "samplerPresentAtHarvest": true,
+      "evidenceBasis": "actual retained post-click frames + harvest state; the wall poll clock alone cannot complete this"
+    },
+    "limit": "Raw helper reports361postclickframes but2arepreclick; actual359postclickframes. Retained5svalidtail stillpresent; do not repeat inaccuratecount."
+  },
+  "newAction": {
+    "accepted": false,
+    "pressedF": false,
+    "reason": "Controller stopped after34bursts/22.498s with no-usable-key, actualfoot85.695u fromE; signedauthorization correctlywithheld. No route/action failure cause established by that controller outcome."
+  },
+  "qualifications": [
+    "Earlier Origin->Tidegarden->Origin inference is not supported by this window: reportedactivePlanetId andseed stayOriginthrough100.898u centrejump. Does not rule out unpublished internal transient, but no such state may be claimed as measured.",
+    "Survey helper samplesSurvived=false/walkedUnitsSurvived=false compares early4sample checkpoint againstlate20sample state; actual serialized19fullobjects are all retained. Additional actualsamples are not loss.",
+    "Allpointprefix equality is established; playerpose preservation/newacceptedaction are separate unmetgates.",
+    "Exactphysicalpositionwriter/caller stillunmeasured. No sourcepatch authorized merely by source inference."
+  ],
+  "hashes": {
+    "summary.json": "800bd07981318b9545aa5b237f40037234f217ef6b39dc07d0ebfcdcd5024869",
+    "continue-raf-telemetry.json": "3431b720701b7acd87fe72b633ca2b8b1dd1cc3560e09633472ed9ee5aed0aec",
+    "worldsave-pvx.v1.world.-1_-1.json": "e53b51113869e532e997a40781287a124206c1299923506d2188908d2cbc5a3b",
+    "worldsave-after-continue-pvx.v1.world.-1_-1.json": "7127eb27f25d6b6e7ce4be34702d72781b7a3d1a4b7defa978f0e4e50ae6449c",
+    "playerpose-menu-before-continue.json": "468731306bf20dfe9824b5d95a4be364466110a2e0e5de904d8f4af75c5564f1",
+    "playerpose-after-continue.json": "2883ea76dfab1d195b7d17b440b6036ab8f2b63b20814b33114dbfbb8d9de718",
+    "domstorage-events.json": "d3106904e7eaeecae11ffc1d0e8cc8995a8cb743d0f09a3cd7c127db6ed548a1",
+    "cleanup-receipt.json": "a5bbdb0b803ed9f7a64b13265773565dedb65afde8a3b94edf844a89fb346333"
+  },
+  "publicationAuthorized": false,
+  "renderedFrameInspection": {
+    "path": "verifier/captures/continue-candidate/attempt-2/0003-after-continue.png",
+    "sha256": "d7ee9d645c15755ed6aedcfb859dc4ad253f5ad66426d72767d7843f913ce183",
+    "observed": "Actual Origin seed3215739679 surface/fps HUD, survey end marker104m, standing objective Walk your route to the survey end / F Offer the recorded span. Debug panels open.",
+    "limit": "Rendered marker distance corroborates displacement; no proof of writer cause or playercontrolfeel."
+  },
+  "verifierReportQualification": {
+    "ref": "continue-candidate-closure-report.json",
+    "sha256": "d7ba2f5ff00b539b962bf6b949bacc50aa77b1096781497b7398ecfc1abb6af7",
+    "accepted": "Fullpointprefix equality and no-newF/inconclusive classification agree with rawdata; actualdefaultbudget restored, cleanbrowser exit.",
+    "limits": [
+      "Reported94.5485u uses a different earlier saved pose and a ground-foot output. Primary causal measurement is centre-to-centre rawrAF jump100.898264u from+688 to+711ms using actualbeforeContinuecentre. Keep frames/coordinate semantics explicit.",
+      "Retained trace has361total frames,2preclick/359postclick; helperreported361postclick corrected byroot.",
+      "Preserved attempt-2-root-sigint-partial is an additionalbrief setup attempt during interrupted priorrole, not gamefailure; reportnameshistory."
+    ],
+    "invocationFinishedAt": "2026-09-06T22:33:00.338619+00:00"
+  }
+}

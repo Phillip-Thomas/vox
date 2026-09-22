@@ -1,0 +1,23 @@
+{
+  "role": "cohesion",
+  "agent": "story-cohesion-judge",
+  "startedAt": "2026-09-06T05:18:23.118252+00:00",
+  "tools": [
+    "Read",
+    "Grep",
+    "Glob"
+  ],
+  "safeMode": true,
+  "systemPromptSha256": "fd208aa1cd6f41ba3d6a3ba59e4de5275be4d77355e477a8c6d1b60540665b4a",
+  "commissionSha256": "229328e90cddf47564c75aa2db96d2dceaa7bcb822b564004a24690e8b79745c",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T05:24:36.250981+00:00",
+  "sessionId": "7555251c-d590-40bc-b77b-62c0c667139a",
+  "model": "claude-opus-5",
+  "actualTools": [
+    "Glob",
+    "Grep",
+    "Read"
+  ],
+  "isError": false
+}

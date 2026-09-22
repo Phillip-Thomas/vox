@@ -1,0 +1,56 @@
+{
+  "schema": "paravoxia.chapterLoopProbe.v1",
+  "candidateSha256": "26d068c3554ad8b7986848a52c0bc0400217e6c28797694ef7381b4cd767f5ed",
+  "kind": "manual",
+  "chapter": "ch14",
+  "proof": {
+    "ordinaryControls": false,
+    "acceptedAction": 0,
+    "completePath": false,
+    "interrupted": false,
+    "recovered": false,
+    "freshCheckpoint": false,
+    "clickedContinue": false,
+    "ctaBeforeRuntimeReady": false,
+    "stateEqual": false,
+    "newAcceptedAction": 0,
+    "hardware": true,
+    "cleanup": true
+  },
+  "missing": [
+    "ordinaryControls",
+    "acceptedAction",
+    "completePath"
+  ],
+  "raw": [
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-9/raw/cleanup.json",
+      "sha256": "c39827253898cc132ea5f88364a3cc707cfb8c6076ef83b47e5dc8d48bc46493"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-9/raw/observations.json",
+      "sha256": "da3507a0d81ed2bd795f22d72cab686314331e85db46dfc579a851fd099b3326"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-9/raw/provenance.json",
+      "sha256": "2adebbd0332cc1fa983cc838ad27a72d4b76796a29a5b5f7fc9b9210043d533a"
+    },
+    {
+      "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/observations/look-9/raw/trace.ndjson",
+      "sha256": "efb926c8b4b19a7ed47db1539bdfceecf1fdc8a21541aa0bb8ede2a9010a8bcf"
+    }
+  ],
+  "media": [],
+  "artifactRoot": "/home/thomasphillip/Projects/vox",
+  "exitCode": 2,
+  "reused": false,
+  "status": "inconclusive",
+  "errors": [
+    "steps[28]: bounded wait on /commonGround/diagnostic/common/comparisonProved was not satisfied"
+  ],
+  "provenance": {
+    "sourceManifestSha256": "fdaf79c9db4dbadee108d72012b9c8333f3c3a050e0e5718a0d291c6835e2fd9",
+    "buildSha256": "e232f2e1db7f0cd78d7d525b7e3db5aa069366db5a3ac314c107697022a8f56a",
+    "transportSha256": "6353f9d7d9377962eecb17015adaa25e885a6e7cf5ac7b878be4c833faa09820"
+  }
+}

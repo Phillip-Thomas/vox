@@ -1,0 +1,10 @@
+{
+  "at": "2026-09-06T22:37:22.001551+00:00",
+  "decidedBy": "delegate",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "scope": "4min CPU sparseobservationpreparation for actualContinue posehandoff; no newgameiteration",
+  "sourceMutationAuthorized": false,
+  "gpuAuthorized": false,
+  "publicationAuthorized": false
+}

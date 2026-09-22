@@ -1,0 +1,12 @@
+{
+  "ticket": "06193819-362b-46ed-a94b-c66b96e78256",
+  "at": "2026-09-08T00:22:09.333Z",
+  "task": {
+    "id": "renew-chapter",
+    "seconds": 900,
+    "writes": true,
+    "task": "Implement explicit owner-authorized renewal of expired Chapter13 within the SAME checkpoint, preserving full immutable prior state/history, all spent usage, recipe and accepted evidence. User now explicitly authorized \"do it all\" after plan: repair startup, verify13, create14 with whole operation deadline2026-09-08T08:06:46Z. Archived limits cannot silently reset. Add checked CLI renewal operation accepting exact authorization receipt + updated validated brief + unchanged chapter id; capture immutable prior state and clock; cumulative role/active/token counters retained; new commission clock uses actual owner timestamp/global deadline, only explicit bounded one additional infrastructure recovery. New profile capabilities/preflight and current source/tool hashes must validate; no fake PASS or completed-role replay; existing run id/index stays. Fresh source handoff can include scoped startup repair while signed creative recipe unchanged. Implement ONLY staged main/tools/chapter-loop/renewal.mjs, renewal.test.mjs, main/tools/chapter-loop.mjs and minimal runner.mjs integration if required; no others. Do not touch actual vox or scene source. Add meaningful tests for absent/wrong authority, deadline reset, old checkpoint intact, spend retained, index unchanged, invalid source/recipe change. Use existing store/contract APIs. No production dispatch or GPU. Return exact touched files and test result."
+  },
+  "permissionMode": "full",
+  "model": "opus"
+}

@@ -1,0 +1,380 @@
+{
+  "schema": "paravoxia.integrationRepairReport.v1",
+  "runId": "2026-09-05-after-the-hearth",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "owner": "integration-engineer",
+  "scope": "Bounded lifecycle repair of CG-IMPL-006 / CG-IMPL-007 / CG-IMPL-008 plus reproduction and assessment of the recorded manual-corner risk. No creative lane, no contract change, no publication.",
+  "completedAt": "2026-09-06T11:02:00Z",
+  "contractChanged": false,
+  "creativeChanged": false,
+  "predicatesRelaxed": false,
+  "publicationAuthorized": false,
+  "browserOrGpuRun": false,
+  "renderedOrMovieSuccessClaimed": false,
+  "startingSourceVerified": {
+    "manifest": "implementation-source-manifest.json",
+    "manifestSha256": "58f275f6130914f878942774fd4b4c6ce74327755c33ae257965a9dbeed40e70",
+    "filesChecked": 96,
+    "matchedBeforeEdits": 96,
+    "unexpectedDrift": [],
+    "note": "Rehashed independently before any edit: 96/96 identical, 0 missing."
+  },
+  "changedPaths": [
+    {
+      "path": "main/src/story/commonGroundDirector.ts",
+      "beforeSha256": "deea059b75dde9bc627ca040a4ccac71d260e0cea9fc3459fe0dd074cce3dec4",
+      "afterSha256": "81289ffd48e4260971b12b68dfd4bb8fa591faf03fc4a03ed1ba9cf847f64e6f",
+      "inAllowedPaths": true,
+      "kind": "source"
+    },
+    {
+      "path": "main/src/story/commonGroundDirector.test.ts",
+      "beforeSha256": "8e11edd1137ecffc57cb63dc86869ddd89f357834eff35ee1fd549538b081616",
+      "afterSha256": "02986e15185168adfd02e7e01eaa0103479f8e3645ac0626b53742dc0bc0021e",
+      "inAllowedPaths": true,
+      "kind": "test"
+    },
+    {
+      "path": "main/src/story/commonGroundRoute.ts",
+      "beforeSha256": "afab445acc7af77df13b372c20dbf74206236211a16f1e8dac398eae1d74fd13",
+      "afterSha256": "6025bc4c55098bb3bffc54dd04134fa3b666ef71361e22bba1a9b3fad7a1f1ff",
+      "inAllowedPaths": true,
+      "kind": "documentation-only"
+    },
+    {
+      "path": "main/src/story/commonGroundRoute.test.ts",
+      "beforeSha256": "67be8c3e52a8aff5f0227905c8f850fd2f7f0b65ef10f3a99f4774266a99dac4",
+      "afterSha256": "69e1760a1e2296b363af1dea7a7efe7bdde72044e0cf4449cee0bbee28e29f88",
+      "inAllowedPaths": true,
+      "kind": "test"
+    },
+    {
+      "path": "main/src/story/signedSceneAvRuntime.ts",
+      "beforeSha256": "01d59a2a44908857fa02e6d9b9849c539a7bbfa74580a7cd724659198e3a9184",
+      "afterSha256": "9b513a850c81f0ae3a75b26ded69156e11c429b6ba227568fcda19d99818a982",
+      "inAllowedPaths": true,
+      "kind": "source"
+    },
+    {
+      "path": "main/src/story/signedSceneAvRuntime.test.ts",
+      "beforeSha256": "4cf597db1e8629e60b166a6621b64e6862aa045c11b40e15f04bd0bf5676f728",
+      "afterSha256": "390077a75338593c52253d02927c4378adb7a52e1fe936d5f905b2b728de3fff",
+      "inAllowedPaths": true,
+      "kind": "test"
+    },
+    {
+      "path": "main/src/story/storyState.ts",
+      "beforeSha256": "7d66ff3ed42ca18e0849af8ef2df8cc057fdcfa37c7bf0c9760081461d70d535",
+      "afterSha256": "e8802af8a93e4e82623c96f5d81053b2fd8b74027570dcdfa90b3478a9449915",
+      "inAllowedPaths": true,
+      "kind": "source"
+    },
+    {
+      "path": "main/src/story/storyState.test.ts",
+      "beforeSha256": "d5e109296dc4603047b86a1e13e1df1a38ae9e261e7cf08c3741372c8aaf43a3",
+      "afterSha256": "f425b6e4e9467585f6a46ba1d48a355cb3e85d36546ef666a69f516bec4d2e22",
+      "inAllowedPaths": true,
+      "kind": "test"
+    },
+    {
+      "path": "main/src/story/StoryDirectorDriver.tsx",
+      "beforeSha256": "602f4a59b06ea4caf13afd59f0545e5aede0d587e0e1820db168cb8e94310005",
+      "afterSha256": "284f981accdf1ecfaed567d0668329d084e353233b5d1e0cea295a9d60e4e32a",
+      "inAllowedPaths": true,
+      "kind": "source"
+    }
+  ],
+  "unchangedSignedFiles": 87,
+  "diff": {
+    "path": "lifecycle-repair.diff",
+    "sha256": "969d32f1bdfe427f9ee7cf16cb63668fd213c0bbda405411c93218fc5c2d441d"
+  },
+  "defects": [
+    {
+      "id": "CG-IMPL-007",
+      "status": "repaired-at-source-pending-browser-verification",
+      "cause": "storyState.initStoryFromSave seeds ?story=ch13-survey and ?story=ch13-common with bootstrapOriginLaunchDebug(), whose last statement is restoreBoardedSurfaceFlight() (spaceFlight.ts:431) -> {phase:'surface', controlMode:'flight'}. That is the correct staging for ch8-launch and ch10-transit, which begin in the cockpit, and the wrong one for two beats that begin after ch13-return has landed and disembarked. The entry therefore published an on-foot beat over surface flight controls, where walk input does nothing. commonGroundRailPlan's missing exit-ship branch was the inability to recover, not the cause.",
+      "repair": "Seed the two Origin audit-site beats on foot with the shipped restoreFlightAtLocation('surface') - the same control-ownership restore the landfall bootstrap already uses for its disembarked state. No exit receipt is issued, no ship-exit listener fires, no milestone is granted, and the landed Kestrel stays parked to be boarded again. Separately, the screening rail now reports action 'exit-ship' if it ever holds surface flight controls inside these two beats, using the same ctx.exitShip() the ch13-return branch uses; it is reachable only by the screening rail, only in those beats, and only while the ship is parked on the surface.",
+      "milestonesGranted": false,
+      "resolverBypassed": false,
+      "timeoutRescueAdded": false,
+      "regressionTests": [
+        "storyState.test.ts > the ch13 direct entries agree with the beat they enter > boots the two Origin audit-site beats ON FOOT, with the landed ship still there",
+        "storyState.test.ts > ... > grants no ch13 proof by stepping out: only the prior beats it seeds",
+        "storyState.test.ts > ... > leaves the two ch13 hearth beats and every boarded rehearsal exactly as they were",
+        "commonGroundDirector.test.ts > an on-foot ch13 beat is never walked from inside the ship > leaves a landed ship on the two on-foot beats, and only then walks",
+        "commonGroundDirector.test.ts > ... > does not disembark anybody on the beats that are flown"
+      ],
+      "counterproof": {
+        "method": "byte-exact counterfactual (private byte backup, try/finally restore, rehash)",
+        "mutation": "restoreFlightAtLocation('surface') removed from the ch13-survey/ch13-common seeding",
+        "result": "1 test failed: the on-foot boot assertion. The remaining suite passed, so the assertion is specific to the repair."
+      }
+    },
+    {
+      "id": "CG-IMPL-006",
+      "status": "repaired-at-source-pending-browser-verification",
+      "cause": "commonGroundDirector.player() returned getPlayerWorldPosition() raw. That is the Rapier capsule CENTRE (EfficientPlayer mounts CapsuleCollider [PLAYER_CAPSULE_HALF_HEIGHT 1.3, PLAYER_CAPSULE_RADIUS 0.5]); every ch13 pose, route, socket, occupancy cylinder and footing column is a GROUNDED body origin. The two differ by 1.8 units along the LOCAL up. The consequences were wider than the rail gate the verifier measured: CommonGroundWorld's footing samples cell(y - 1.05), so a centre 1.8 above the ground column samples the EMPTY cell above it and reports unsupported - which silently refused the survey start, every trace sample, every witness offer and the far-reference offer. The shared walker measures surfaceGaitDistance (tangential, since the 1.8 drop is inside GAIT_STEP_DOWN 3.4), so it stopped on horizontal distance while the director judged full 3D from 1.8 units up.",
+      "repair": "One conversion at the chapter boundary: commonGroundPlayerPose() subtracts PLAYER_CAPSULE_HALF_HEIGHT + PLAYER_CAPSULE_RADIUS along getPlayerUp(), imported read-only from the protected physics constants and the published player frame. Every downstream predicate - route recording, supported ground, reference sockets, occupancy, body clearance, controller arrival and progress - then reads the pose semantics it was authored for. No radius was widened, no vertical term removed, no y clamped, no ground faked and no proof granted.",
+      "milestonesGranted": false,
+      "resolverBypassed": false,
+      "timeoutRescueAdded": false,
+      "regressionTests": [
+        "commonGroundDirector.test.ts > the chapter reads the actual physical body, not an idealized mark (8 cases: constants and live up, another cube face, the measured 52.79 rest height, the zero-height body refused, a jumping body refused, a hovering far-reference offer refused, gait/rail agreement, the long survey walked to a real F)",
+        "commonGroundDirector.test.ts > the reciprocal comparison measures a real standing body (3 cases including the zero-height negative and the unearned-fixture distinction)",
+        "commonGroundDirector.test.ts standAt() now places a real capsule centre, and the rail harness walker uses the REAL surfaceGaitDistance and keeps the body on the ground plane instead of lerping it onto the mark in 3D"
+      ],
+      "counterproof": {
+        "method": "byte-exact counterfactual",
+        "mutation": "player() restored to the raw capsule centre",
+        "result": "24 of 61 pre-existing tests failed alongside the new ones, including the survey start, the reciprocal passage, the completion texture and all four movie-rail traversals. The suite that previously passed at 3026 could not see this at all because standAt() stood a body of zero height on the authored pose."
+      }
+    },
+    {
+      "id": "CG-IMPL-008",
+      "status": "repaired-at-source-pending-browser-verification",
+      "cause": "Three separable faults, all of them category errors about what an anchor is. (1) signedSceneAvRuntime.activateAnchor treated EVERY ch13 anchor as a mandatory ordered prerequisite. anc.cg.cell-installed is signed as the live install receipt and its acceptance criterion says a hydrated entry is steady and silent, so a restored save or a valid deep link cannot produce it - and home-steady, fault-reviewed and return-chosen were refused forever behind it. The same error would have refused anc.cg.route-tested and anc.cg.complete whenever one of the eight signed 'Contingent:' anchors did not occur, which the contract explicitly permits ('any supported route ... may complete without this anchor', 'first-try success is legal'). (2) noteAnchor latched runtime.firedAnchors BEFORE calling activateSignedSceneAnchorById and discarded its boolean. (3) The shared director enters this chapter's seam BEFORE the AV rail (emergentStoryDirector: enterCommonGroundBeat(beat) then enterSignedSceneAvBeat(beat)), so the entry anchor is always offered to a rail still sitting on the previous beat and always refused - which, with (2), is why anc.cg.home-steady could never activate on ANY path, hydrated or live.",
+      "repair": "(1) A documented CONDITIONAL_ANCHORS set in signedSceneAvRuntime, each id carrying its contract citation, is exempted from being a PREREQUISITE for later anchors. Nothing else is removed: the monotonic order guard, the one-shot latch, beat membership and the required chain are all intact, and a required anchor whose ordered predecessor has not happened is still refused. (2) A refused activation is no longer spent: it is retried once, on the next frame of the same beat, through the same activateSignedSceneAnchorById with the same rules. (3) The install receipt is published at the install boundary, which is causally before the beat seam publishes the steady entry, so the signed order 0 then 1 is the order the rail sees.",
+      "retryBoundedBy": [
+        "exactly one retry, on the next tick of the same beat; a second refusal is a refusal and is dropped",
+        "cleared on beat change, run change, reset, chapter release and every suspendCommonGroundPresentation reason (pause, visibility-loss, exit, reset, world-change, actor-change)",
+        "scoped to the current run/actor/world by resetCommonGroundRuntime and the run-id sync",
+        "never a deferred audible acknowledgement: mood, completion texture and their cancellations are decided by noteAnchor at the instant of the fact, not by whether the rail accepted the anchor"
+      ],
+      "milestonesGranted": false,
+      "resolverBypassed": false,
+      "timeoutRescueAdded": false,
+      "regressionTests": [
+        "commonGroundDirector.test.ts > the home anchors activate from their real facts, in the signed order (7 cases: the one live acknowledgement before the steady entry, a hydrated entry silent but still activating fault-reviewed/return-chosen and releasing the score, the refused-then-retried fact, missing receipt / wrong world / wrong actor all blocked, replay and reset safety, no deferral across a pause, no carry across a beat transition, and a first-try legal survey reaching route-tested with no contingency invented)",
+        "signedSceneAvRuntime.test.ts > conditional signed anchors are not prerequisites for the ones after them (3 cases including a drift guard against the compiled contract and a proof that the required chain still refuses out of order)"
+      ],
+      "counterproof": {
+        "method": "byte-exact counterfactual, twice",
+        "mutation": "CONDITIONAL_ANCHORS gate removed; separately, requestAnchorActivation replaced by the old fire-and-forget call",
+        "result": "4 and 3 tests failed respectively. All of them use the real signedSceneAvRuntime and its own activation history; none uses a spy or an always-success mock."
+      },
+      "diagnosisCorrection": "An earlier reading of this defect (recorded in the progress file) said the LIVE path published home-steady before the install receipt. Instrumenting the real seam corrected it: reactivateStoryAtBeat notifies storyDirector.subscribeStory synchronously, so the whole shared beat seam runs inside that call and the receipt is published after it, activating first and in order. The anchor actually lost on every path is anc.cg.home-steady, published by this chapter's seam one call before the AV rail reaches the beat. No source ordering had to change; the latch was the repair. The earlier reading is corrected rather than deleted.",
+      "contingentAnchorCount": 8,
+      "midBeatContinue": {
+        "concern": "producer-midbeat-anchor-restore-concern.json",
+        "reproduced": "Yes, with the real AV runtime and a valid chapter state. A Continue that already holds story:ch13-fault-reviewed and then performs a NEW return-choice F: anc.cg.return-chosen was refused, because a beat entry clears activatedAnchorIds and the review - required, non-conditional, and correctly never replayed - therefore looked pending in this runtime's ledger.",
+        "repair": "A RECEIPT_SATISFIED_ANCHORS map answers only 'has this already happened?' for PREDECESSORS. An anchor whose own committed milestone is held, or which is implied by a later milestone in its legal transaction chain (the Origin landing implies the boarding and the lift; an accepted tested route implies the inspection, offer, start, trace and span; the eighteen-unit crossing implies he reached and held H; completion implies her far-reference offer and his test), is not something later anchors are waiting for. It NEVER activates anything, writes no activation history, replays no cue or shot and manufactures no receipt, and an anchor is never a prerequisite for itself.",
+        "boundaries": "With no receipts the required chain is unchanged and anc.cg.final-reference-offered / anc.cg.complete are still refused out of order (asserted). The restored predecessor is not added to the activation history (asserted).",
+        "regressionTests": [
+          "commonGroundDirector.test.ts > a Continue that already earned an anchor does not block the next one (3 cases: home return-choice after a restored review, the same shape mid-common, and the unearned-predecessor refusal)",
+          "signedSceneAvRuntime.test.ts > does not let an unearned receipt excuse an ordered predecessor",
+          "signedSceneAvRuntime.test.ts > treats an ALREADY EARNED predecessor as done, without replaying it"
+        ]
+      }
+    }
+  ],
+  "manualCornerAssessment": {
+    "id": "manual-corner-risk",
+    "status": "reproduced; NO source change made; reported for creative decision",
+    "reproducedFrom": "real per-frame displacement at 4.5 units/second, 60 Hz, in commonGroundRoute.test.ts",
+    "measured": "Turning at z 15.82, 0.18 units before the vertex at z 16, then walking every remaining leg: 17.83 units walked, 4.000 credited. Wiggling at the far end and a 30-unit unrelated loop both credit nothing further.",
+    "sourceMechanism": "routeProgressUnits accepts a projection only if its ABSOLUTE arc fits under previousUnits + this frame displacement. After an early turn every later projection is permanently beyond that ceiling.",
+    "honestRecoveryExists": true,
+    "recoveryEvidence": "Walking BACK along the route to the frontier it actually reached and re-traversing forward credits exactly 18.0000. No reset, no second F, no new marker, no prompt and no precision ritual; the four units earned before the deviation are retained throughout, and walking back earns nothing beyond the frontier it returns to.",
+    "recoveryCost": "She must re-walk from the frontier: about 14 units back and 14 forward for a 0.18-unit steering error, roughly 48 walked units for an 18-unit span.",
+    "correctionConsideredAndRemoved": "A bounded reconciliation was implemented and measured: the frontier creeping toward the body own closest-point projection at walking pace, bounded by a 0.6-unit deviation allowance. It restored the cut passage to 17.69 credited and completed at 18 after 0.8 further units. It was WITHDRAWN. Root ruled out paying for omitted ground with in-corridor displacement, and Chapter then registered CG-IMPL-009 with a static counterexample showing the allowance could be settled by lateral movement beside C without ever returning to the omitted corner. The withdrawal restored commonGroundRoute.ts to its exact prior implementation; the file differs from the frozen source in comments only, verified by a comment-stripped diff.",
+    "exactConflictForRoot": "Making the recovery cheaper than a full return-and-re-traverse requires letting real in-corridor distance stand in for ground that was not crossed, which Chapter has now explicitly refused. The shipped behaviour satisfies the signed proof rules; whether its usability cost - roughly 48 walked units for an 18-unit span after a 0.18-unit slip - is acceptable in play is a creative question that needs manual browser observation, and it is reported rather than decided here.",
+    "adversarialCasesExercised": [
+      "stationary at the far end",
+      "corner cut at z 15.82",
+      "far-end wiggle",
+      "backtrack and re-approach",
+      "unrelated 30-unit loop off the route",
+      "parallel leg two units away",
+      "Continue: a restored scalar with the body elsewhere earns nothing",
+      "exactly walked clean route"
+    ],
+    "chapterDisposition": {
+      "defectId": "CG-IMPL-009",
+      "ref": "chapter-corner-candidate-disposition.json / .md",
+      "verdict": "Chapter objected to the inspected candidate (commonGroundRoute.ts d7e5bbc3, the frontier-creep allowance) as incompatible with scene-v2, on a static source counterexample: at C with 17.6915 credited, lateral x movement of 0.075 keeps the nearest arc at 18, keeps the lag under the 0.6 allowance, and pays the remaining 0.3085 without ever returning to the omitted corner. Chapter noted my recovery test only revisited the final leg. Both points are correct and I accept them; my own endpoint-pumping case started from a 6-unit shortcut and so did not cover the SMALL outstanding lag.",
+      "permittedRoute": "Chapter states the correction may withdraw the allowance if the original return-to-frontier behaviour already satisfies intent. It does, and the withdrawal was already made: commonGroundRoute.ts is at 6025bc4c, whose implementation is byte-identical to the frozen afab445a after comment stripping.",
+      "resolvedBy": "withdrawal of the candidate; no contract amendment, no proof relaxation, no debt payment for omitted ground",
+      "status": "closed by withdrawal at source; manual browser usability remains unmeasured and may still need Chapter judgement"
+    }
+  },
+  "observability": {
+    "hook": "window.__paravoxiaCommonGround.snapshot()",
+    "installedBy": "main/src/story/StoryDirectorDriver.tsx (already-allowed owner)",
+    "gate": "?journeyprobe=1, ?chapterjourney=1 or ?debug=1; not installed in normal play and removed on unmount",
+    "builtBy": "commonGroundDirector.getCommonGroundProbeSnapshot()",
+    "schema": {
+      "beat": "StoryBeat | null",
+      "bodyCentre": "[x,y,z] raw Rapier capsule centre",
+      "bodyPose": "[x,y,z] grounded body origin every ch13 predicate uses",
+      "up": "[x,y,z] live local up used for that conversion",
+      "groundOffsetUnits": "number (1.8)",
+      "supported": "boolean | null - the mounted world footing at bodyPose",
+      "worldBound": "boolean",
+      "rail": "{action, target, interactionId, reason, arriveRadius} COPIED FROM THE LAST PLAN THE RAIL ACTUALLY EXECUTED, or null",
+      "diagnostic": "getCommonGroundDiagnostic() (beat, installWatch, anchors, holdReason, worker, survey, common)",
+      "pendingAnchors": "string[] - refused activations awaiting their single retry",
+      "railCursor": "number | null - the screening controller ordered cursor index, for telling a stalled walk from a walked one",
+      "score": "{beat, mood, finalTextureSeconds} copied from the existing pure getCommonGroundScoreDiagnostic, at the harness preparer request"
+    },
+    "properties": [
+      "read-only",
+      "never executes the planner or any controller",
+      "no setter, handle or mutable reference",
+      "copies, not live objects, including nested plan targets (asserted)",
+      "no preparation, grant or progression effect",
+      "boundary request NOT required: no protected file was touched"
+    ],
+    "noBoundaryRequestFiled": true,
+    "notAProof": "Exposing state is not evidence of rendering, traversal or hearing.",
+    "observerEffect": {
+      "concern": "producer-probe-observer-concern.json: the first version of getCommonGroundProbeSnapshot called commonGroundRailPlan(), which advances runtime.railTraversal - so a read would have stepped the controller it was meant to watch, and in manual play would have run a controller nobody started.",
+      "repair": "The snapshot no longer calls the planner at all. applyCommonGroundRail records a COPY of the plan it actually executed, and the probe reports that, or null when no rail has published one. Nested target values are copied so a consumer cannot reach internal state.",
+      "regression": "commonGroundDirector.test.ts > the chapter can be observed without being touched > reports the plan the rail EXECUTED, and never runs the planner itself - a hundred reads leave the cursor, the diagnostic, the body, the reported plan and every milestone identical; and a snapshot before any rail has run reports rail null rather than inventing one.",
+      "counterproof": "Reinstating the planner call under a byte-exact counterfactual fails that suite.",
+      "foundBy": "root, before any new browser capture; no observed runtime failure is claimed"
+    }
+  },
+  "preservationIncident": {
+    "what": "During a mutation check of the ch13-survey/ch13-common seeding repair I ran `git checkout -- src/story/storyState.ts` to undo the mutation. The worktree is deliberately dirty, so that command did not restore my counterfactual baseline - it restored the file to Git HEAD, discarding the whole run's prior implementation of that file.",
+    "detectedBy": "the immediately following test run and a system notice showing the file no longer contained the ch13 beats",
+    "recovery": "Restored byte-for-byte from the root-preserved immutable snapshot at iterations/lifecycle-verification-findings/source/main/src/story/storyState.ts, whose sha256 7d66ff3ed42ca18e0849af8ef2df8cc057fdcfa37c7bf0c9760081461d70d535 matches the frozen implementation-source-manifest entry exactly. A full 96-file rehash immediately afterwards showed only my three intended files differing from the frozen baseline. The repair was then re-applied and re-tested.",
+    "blastRadius": "one file, fully recovered; no other file was touched by the command and no unrelated dirty work was lost",
+    "correctiveAction": "No Git checkout/reset/restore has been used for a counterfactual since. The chronology, precisely: the two counterfactuals immediately after the incident still used ad-hoc `cp` backups under /tmp with shell-semicolon restore (/tmp/av.bak, /tmp/cgd2.bak, /tmp/cgd3.bak, /tmp/cgr.bak) - byte backups rather than Git, but interruptible and in a shared temp directory on a machine running concurrent sessions. After root's harness-hygiene note the later counterfactuals used a task-specific helper in this run's evidence directory - evidence/integration-lifecycle-repair/temp/counterfactual.py - which saves the current bytes, mutates, runs, and restores in a finally block with a rehash assertion, and reports the mutation's exit status separately from the restore. I do not offer an unbounded guarantee; I record what was actually used, when.",
+    "reportedHonestly": true
+  },
+  "checks": [
+    {
+      "name": "vitest-full",
+      "command": "npm --prefix main run test",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/vitest-full.log",
+      "logSha256": "cea80cb00bd72e58799bfe034b7ad6e3f1f014184865ee21296d9b340329343e"
+    },
+    {
+      "name": "vitest-story",
+      "command": "npx vitest run src/story (cwd main)",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/vitest-story.log",
+      "logSha256": "7f163cf93dfc625cc745732872496a0a3ddbab3c1379b102082a94b4cd8d53e5"
+    },
+    {
+      "name": "vitest-focused-changed",
+      "command": "npx vitest run src/story/commonGround*.test.ts src/story/signedSceneAvRuntime.test.ts src/story/storyState.test.ts src/story/StoryDirectorDriver.test.tsx src/story/autopilot (cwd main)",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/test-focused.log",
+      "logSha256": "30d1b7ddfcaa34a3fa0dc8ad42b56cb0e638110f7f9adc790ab22fd600f17af4"
+    },
+    {
+      "name": "typecheck",
+      "command": "npm --prefix main run typecheck",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/typecheck.log",
+      "logSha256": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af"
+    },
+    {
+      "name": "build",
+      "command": "npm --prefix main run build",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/build.log",
+      "logSha256": "4b456176c72738f93d2f0346d7d26ddc3dacbee3d970d704634554663116bd58"
+    },
+    {
+      "name": "scene:av:check",
+      "command": "npm --prefix main run scene:av:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/scene-av-check.log",
+      "logSha256": "0ebbe1c5b18705236588fc5a372b568b04e1ca8262eca5c0371006083793d543"
+    },
+    {
+      "name": "story:authority",
+      "command": "npm --prefix main run story:authority",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/story-authority.log",
+      "logSha256": "674a8248d269b8a863d77e818d72d74a874ab392ffee5afcbfbf64a93ef1a034"
+    },
+    {
+      "name": "chapter:registry:check",
+      "command": "npm --prefix main run chapter:registry:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/chapter-registry-check.log",
+      "logSha256": "63d2098e42a51ec027bd147b0869fcfe164c546b86e7526cab424065907ce4b5"
+    },
+    {
+      "name": "chapter:journey:check",
+      "command": "npm --prefix main run chapter:journey:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/chapter-journey-check.log",
+      "logSha256": "720c32d0e5edc52899f812187f01eb4bcb341a48e6dd6d682049a44d0bcb6a1b"
+    },
+    {
+      "name": "creative:workflow:check",
+      "command": "npm --prefix main run creative:workflow:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/creative-workflow-check.log",
+      "logSha256": "c10c1eaf7983659984c10ae1b82a38e6d999989e1322a37b26ea90151d9314d3"
+    },
+    {
+      "name": "story:ladder:check",
+      "command": "npm --prefix main run story:ladder:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/story-ladder-check.log",
+      "logSha256": "5d3870e2dee99ac875e03422a3cc7b1bc860d60e80c0716fdcddc4996518c743"
+    },
+    {
+      "name": "guidance:target-check",
+      "command": "npm --prefix main run guidance:target-check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/guidance-target-check.log",
+      "logSha256": "9bde7c25054de66e8d4ce4798cde2e7608582b874c155755dbb2ac0e847ef431"
+    },
+    {
+      "name": "story:ux:check",
+      "command": "npm --prefix main run story:ux:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/story-ux-check.log",
+      "logSha256": "86a0781a1d9dfb3895f6821499843cd2a63a54a4974f9e99b82c127d960d82bb"
+    },
+    {
+      "name": "preview:check",
+      "command": "npm --prefix main run preview:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/preview-check.log",
+      "logSha256": "b304acbfe2aa68a2962c2c02c7ee9eb4828d3008b1425eaabc325b065123f976"
+    },
+    {
+      "name": "catalog:check",
+      "command": "npm --prefix main run catalog:check",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/catalog-check.log",
+      "logSha256": "d4fa8765ef0712ca47020a9df56cfa743b49a33c857e2387d8d729f847d97a4a"
+    },
+    {
+      "name": "creative:gate --phase implementation",
+      "command": "node main/tools/creative-triad-gate.mjs --run .codex/production-runs/2026-09-05-after-the-hearth --phase implementation",
+      "exitCode": 0,
+      "logPath": "evidence/integration-lifecycle-repair/creative-gate-implementation.log",
+      "logSha256": "5d57eaa7d000906329b1503253248ad785685bb5d5954fca488bc4634f1f989c"
+    }
+  ],
+  "testTotals": {
+    "files": 348,
+    "tests": 3068,
+    "preRepairV2Baseline": 3026,
+    "intermediateDuringThisPass": 3063,
+    "addedByThisPass": 42,
+    "removed": 0,
+    "weakened": 0,
+    "note": "3026 is the baseline the independent verifier measured on the frozen source. Intermediate suites during this pass were 3059, 3062 and 3063 as the withdrawn corner correction was removed, the probe observer effect was repaired and the mid-beat Continue receipt case was added. Added by file: commonGroundDirector +27, commonGroundRoute +7, signedSceneAvRuntime +5, storyState +3. No test was removed, skipped, weakened or renamed to pass."
+  },
+  "notDone": [
+    "No browser, no GPU, no preview and no npm run verify: those belong to the independent verifier after a fresh frozen build.",
+    "Nothing was rendered, played or listened to. No movie, traversal, cadence, anchor audibility or score claim is made from these results.",
+    "The live install -> reactivate -> enter -> home-steady ordering is proved at source and test level only; it has not been observed on hardware.",
+    "The manual-corner usability cost is unmeasured in a browser and undecided by Chapter.",
+    "The three cold journeys, the continuous station->home->ch13 bridge, the full story movie, the 28 anchors as a set, the reset matrix, mobile/reduced-motion/lowest-tier and every performance figure remain unmeasured.",
+    "No chapter completion is claimed and no publication is authorized."
+  ],
+  "handoff": "Root owns the fresh implementation gate, the source manifest recompilation, check-results and readiness. The independent verifier owns the frozen build, the browser evidence and the typed final artifacts. The manual-corner recovery cost and the observability hook schema are both routed to root for disposition."
+}

@@ -1,0 +1,99 @@
+{
+  "schema": "paravoxia.authorizedSourceHandoff.v1",
+  "request": "i wish while you were doing the playthrough automation that you would rotate the camera... the rotation is currently static from what IM seeing on screen",
+  "continuingAuthority": "well keep grinding through the blockers, being sure to eliminate stuff that doesnty make sense rather than add to the pile",
+  "contributor": "root, ordinary-input automation change",
+  "scope": "Passive camera heading/ownership readings. Smooth ordinary mouse turns toward each walking destination, preserving native pointer position. Free-look movement reads the actual tangent frame instead of tapping four directions to calibrate; authored cameras retain their original handling. Original arrival, route and accepted-action predicates preserved.",
+  "status": "focused-hardware-pass-final-verification-pending",
+  "files": [
+    {
+      "path": "main/src/story/JourneyRuntimeProbeBridge.tsx",
+      "before": "362dacbb2ef8a29fd0a58c8add1a8e5d6cfae34c82e81d9cef32e975e1ca39dc",
+      "after": "e572a04d487145fdbf263406ebf01d30059688e712f90f85270959669fbd713a"
+    },
+    {
+      "path": "main/tools/chapter-loop/capture-case.test.mjs",
+      "before": "72872df96c4af7ef8ce78d822909972aab9e7689e8b5499b6e8def64f25d1e2e",
+      "after": "22a35e4196e69db2629389d1e480f40b29942a53aa33f8cf49a52ede2aa3f0b8"
+    },
+    {
+      "path": "main/tools/chapter-loop/control-capture.mjs",
+      "before": "65fd4f66511ea94458f2f5d83421920d16af1802b693a16a1b810c40761a39d7",
+      "after": "8f4f5467737f5bc105f789851f352695fe41531a884adc18a86ea689207de2fd"
+    }
+  ],
+  "previousState": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-follow-20260909/previous-state.json",
+    "sha256": "ead4b33ccdf4ec596dcd1077317e53d631d2ba4f915c6bcd38433287dfe294b7"
+  },
+  "priorFailure": {
+    "stage": "verify-final",
+    "message": "Probe recovery failed to execute",
+    "classification": "PROBE_ERROR_INCONCLUSIVE",
+    "at": "2026-09-09T03:28:31.138Z"
+  },
+  "tests": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-follow-20260909/transport-tests.log",
+    "sha256": "9bc5dfa4e50ce17d828cbd2e9f07b16a4dde3566134fc03e21fb975a8c104715"
+  },
+  "typescript": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-follow-20260909/typescript.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "build": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-follow-20260909/build.log",
+    "sha256": "8ccdc6ee02a6218f42a577d84b4ba7bffd6e1e0403352f52e6d57c6c8aa47cdc"
+  },
+  "source": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-follow-20260909/source.json",
+    "sha256": "825694d98415b0c2afa66cd446e882e63159915c16b699a40dbae3aceba3c6a1"
+  },
+  "preview": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-follow-20260909/preview-owner.json",
+    "sha256": "832671dbe27bc655d5e1298d26475ecbea9b661a0238fe71dc7648b38b098e45"
+  },
+  "runtime": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-follow-20260909/gpu-smoke-fixed/result.json",
+    "sha256": "58ec25d2d8e1ba0889f0d32c60c78544027b3839529c9abbe425588d3b938514"
+  },
+  "video": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-follow-20260909/gpu-smoke-fixed/camera-follow.webm",
+    "sha256": "c79defe1e3790011d59e5908d8e071fc51d3ffe8b2b858d504263ed22b654232"
+  },
+  "probe": {
+    "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/camera-follow-20260909/probe.mjs",
+    "sha256": "31c4264774baa9fa72c55150e6479cd0fa1ba6daa1ce978b36bd23247ec24e5c"
+  },
+  "caseOrder": {
+    "before": [
+      "manual",
+      "continue",
+      "recovery",
+      "continuity",
+      "av"
+    ],
+    "after": [
+      "recovery",
+      "manual",
+      "continue",
+      "continuity",
+      "av"
+    ]
+  },
+  "retainedUsage": {
+    "roleLaunches": 14,
+    "modelTurns": 414,
+    "inputTokens": 813455,
+    "cacheReadTokens": 23566776,
+    "outputTokens": 162438
+  },
+  "retainedClock": {
+    "schema": "paravoxia.chapterClock.v1",
+    "chapter": "ch14",
+    "startedAt": "2026-09-08T20:33:28.000Z",
+    "deadlineAt": "2026-09-09T04:33:28.000Z",
+    "maxElapsedMs": 28800000,
+    "existingRun": "ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0"
+  },
+  "at": "2026-09-09T03:35:59.964Z"
+}

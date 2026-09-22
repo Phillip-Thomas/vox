@@ -1,0 +1,49 @@
+{
+  "schema": "paravoxia.producerDelegatedBudgetDecision.v1",
+  "author": "creative-producer",
+  "decidedAt": "2026-09-06T20:37:25.856520+00:00",
+  "authority": "Direct user instruction to continue the story and auto approve everything; necessary in-scope implementation and verification decisions delegated.",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "directUserInstruction": "yes continue, and please auto approve everything; owner later explicitly continued routine autonomous repairs and checks",
+  "personallyReviewedByUser": false,
+  "productionRunUnchanged": true,
+  "baseRunProfileRef": "paravoxia-creative-chapter@v1",
+  "baseProfilePath": "docs/architecture/workflow-orchestration/run-profiles/paravoxia-creative-chapter.run-profile.json",
+  "baseProfileSha256": "f6ce3f3cea205b307fb0f19beb5c0390947c5d854b8090254c7b8f5c28ae1654",
+  "baseProfileEdited": false,
+  "completedMaterialRepairLoops": 7,
+  "runLocalBudgetOverride": {
+    "field": "executionBudget.maxPatchLoops",
+    "baseValue": 4,
+    "previousValueForThisRun": 7,
+    "valueForThisRun": 8,
+    "additionalMaterialRepairsAuthorized": 1
+  },
+  "decision": "One bounded eighth material repair for newly proven CG-IMPL-015 manual route-credit fidelity and CG-IMPL-016 normal-completion token cancellation, unchanged scene-v3. Preserve original one-extra-repair conditions: finished verifier/source handoff and exact predicates. No repeated broad reviews or new production run.",
+  "stallClassification": {
+    "kind": "Actual corrected-entry caller/callee capture now establishes the specific carried projection residual; actual completion plus fresh Score direction establishes an unconditional normal-done cancellation conflict. These differ from repaired movie steering/arrival-copy defects.",
+    "evidenceRefs": [
+      "producer-common-entry-crossing-review.json",
+      "chapter-manual-corner-interpretation.json",
+      "producer-score-observed-direction-review.json"
+    ]
+  },
+  "conditions": [
+    "All GPU roles and source readers finish, exact99 baseline archived and rehashed before one source writer begins. Active continue-pose-scope audit must finish before handoff.",
+    "Implement only listed direction/files; no Continue placement patch inferred from unresolved cause. Route any demonstrated extra seam explicitly.",
+    "Preserve full ordered18, exact early15.82 refusal and real return/retraversal, unchanged geometry/C/arrival/ref/support/clearance; no grants, endpoint pumping, timeout rescue or tolerance widening.",
+    "Preserve real score cancellations and first-completion-only eligibility, max5s monotonic plus existing4.5srelease, immediate controls, silent saved completion.",
+    "Actual affected manual/finale runtime first, focused meaningful checks, one final stable full suite; independent acceptance and other chapter requirements remain.",
+    "No profile/workflow mutation, publishing, accepted exceptions or blanket further repairs."
+  ],
+  "contractSha256": "5ef85a324f579ba1f627980002aab680f6c9b990fae84275daccc3dcb17eec54",
+  "contractChangeRequired": false,
+  "acceptedDefectExceptions": [],
+  "publicationAuthorized": false,
+  "sourceMutationAuthorizedNow": false,
+  "sourceMutationPending": "continue-pose-scope-audit finish and explicit root source handoff",
+  "previousBoundedOverrideRef": "producer-arrival-common-budget-decision.json",
+  "previousBoundedOverrideSha256": "ddaa38d76b8c9f0dcedca9cb8247538840ceb72d5ffffc3307df38e7daf6c7ee",
+  "finalDirectionRef": "manual-credit-finale-repair-direction.json"
+}

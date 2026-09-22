@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 633748,
+  "stop_reason": "end_turn",
+  "session_id": "6156ca4f-7f2b-4866-ac1b-59826d7fe8a4",
+  "total_cost_usd": 3.9707065000000004,
+  "usage": {
+    "input_tokens": 94,
+    "cache_creation_input_tokens": 108764,
+    "cache_read_input_tokens": 3292073,
+    "output_tokens": 49377,
+    "output_tokens_details": {
+      "thinking_tokens": 7909
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 108764,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1041,
+        "cache_read_input_tokens": 112484,
+        "cache_creation_input_tokens": 347,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 347
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2040,
+      "outputTokens": 19,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002135,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 94,
+      "outputTokens": 49377,
+      "cacheReadInputTokens": 3292073,
+      "cacheCreationInputTokens": 108764,
+      "webSearchRequests": 0,
+      "costUSD": 3.9685715000000004,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 7909,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 55,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Closure complete in ~10 minutes. `HARNESS-CLOSURE-COMPLETE-NO-GAMEPLAY-PROOF`.\n\n**Files (before \u2192 after)**\n| file | before | after | lines |\n|---|---|---|---|\n| `common-passage-probe.mjs` | `11c4a7d1\u2026` | `06e2c54d\u2026` | 579\u2192718 |\n| `commonPassageLogic.mjs` | `6e7cf4f1\u2026` | `79f3e002\u2026` | 697\u2192717 |\n| `selftest.mjs` | `52b2ba18\u2026` | `116f7d18\u2026` | 204\u2192506 |\n\nPrior closure's logic preserved; callers patched with `Edit`, not rewritten. Source frozen at `dc63fbae\u2026adc36c` before and after; nothing under `main/` touched since 12:03.\n\n**One substantive finding.** Selftest run 1 failed the genuine-lock case, and it was the completed helper that was wrong, not the test: on this kernel a flock belongs to the *open file description*, and `/proc/locks` records the pid that **created** it \u2014 for `flock -n -x 9` that's the transient `flock(1)`, already dead while the lock is still held. The ancestor-pid rule therefore misread a genuinely inherited lock as somebody else's. Ownership authority moved to `/proc/<pid>/fdinfo/<fd>`; `/proc/locks` kept as liveness corroboration only. Run 2: 83/83.\n\n**Boundaries proved end-to-end (`logs/common-manual-focused-closure/`)**, all exit 3 with no browser: no args; unlocked existing file (`\"the file exists but NO exclusive lock is held\"`); and with a real `exec 9>lock; flock -n -x 9; exec node` \u2014 `owned:true`, lock refusal gone, still correctly refused on `activeRole=handoff-standby-verifier`. Unrelated-holder rejection, the full served-identity matrix (index/bundle mismatch, 404, unreachable, missing *expected* hash, title+ANGLE-only), pulse/oscillation, and stand-clear provenance cases are covered in the selftest against a task-private lock and a task-private `node:http` fixture. The shared GPU/heavy lock was never opened and the other verifier's files were untouched.\n\nTwo things I did **not** get to a provable state, stated plainly rather than dressed up:\n\n1. Byte-exact served coverage is index + relevant bundle only; the other build files rest on root's published matched-file count (99). That limitation lives in the decision's own `note` field, so it can't be read as full coverage.\n2. The pulse/oscillation calibration runs live, but I could not validate it against real in-game motion \u2014 no capture was permitted. It is proved only against the 0.00515 u/ms and 0.053 u coast quoted from `manual-focused-report.md`. **This is preparation, not gameplay proof.**\n\nReports: `common-manual-probe-closure-report.json` / `.md`, with the exact future invocation quoted. No task-private lock or HTTP child left running; `/tmp/cmp-*` removed.",
+  "ttft_ms": 2554,
+  "type": "result",
+  "duration_ms": 636312,
+  "uuid": "9a96be52-22e4-4d6a-bbbb-3233e56e1ea0",
+  "ttft_stream_ms": 1571,
+  "time_to_request_ms": 34,
+  "first_content_frame_ms": 1571,
+  "queued_turn_count": 0
+}

@@ -1,0 +1,227 @@
+{
+  "documentKind": "chapter-arrival-guidance-interpretation",
+  "director": "chapter",
+  "runId": "2026-09-05-after-the-hearth",
+  "authoredBy": "Codex chapter_intent — Chapter Director",
+  "authoredAt": "2026-09-06T16:15:09.080925+00:00",
+  "contractVersion": "scene-v2",
+  "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+  "sourceManifest": {
+    "sha256": "dc63fbaeacea44166f41b4d9307bc2e31307fc28845c69512f75c7d641adc36c",
+    "fileCount": 99,
+    "provenance": "Current frozen implementation manifest supplied by producer; this task did not regenerate or independently hash that manifest."
+  },
+  "disposition": "existing-arrival-segment-wiring-defect-with-narrow-conditional-copy-amendment-proposed",
+  "wiringCorrectionRequiresContractAmendment": false,
+  "contractChangeRequired": true,
+  "contractChangeReason": "The required on-foot approach and physical-W arrival are already signed. Re-entering departure boarding on the actual Origin surface contradicts that lifecycle. However, v2 return:origin binds only exact flight/landing workOrder and an actionable flight verb at every state, so selecting that ID alone cannot truthfully guide the on-foot interval. Explicitly bind disembark/on-foot copy in the same objective; no new plot, player verb, objective, beat, anchor or milestone is required.",
+  "evidenceRefs": [
+    {
+      "ref": "verifier/captures/handoff-standby/flight-1/run.json",
+      "sha256": "74465b140d256735746f112f8fbd9ef7e355dd92c89e9f6d35ca31c3ee5cd947",
+      "finding": "Headed diagnostic reports NVIDIA GB10 hardware renderer; direct ch13-return prerequisite fixture with movie-scripted input. Its isAcceptance/isChapterVerification/isDefectFinding flags are false; do not treat this capture as full independent UX acceptance or continuous predecessor proof."
+    },
+    {
+      "ref": "logs/handoff-standby-verifier/flight-1/telemetry.jsonl:155",
+      "sha256": "c48ca4e83c63b09f2b146456e21fc58fe43cc3e4eeaaa967e43e5d4971a5330b",
+      "finding": "First observed active Origin in this telemetry is atMs41081 while still descending with return:origin."
+    },
+    {
+      "ref": "logs/handoff-standby-verifier/flight-1/telemetry.jsonl:167-275",
+      "finding": "109 samples from atMs44980 through73507 (28.527 seconds between endpoints) show actual Origin, surface/fps, landed ship, ch13-return, mandatory return:board / Kestrel hatch · board, while autopilot routeAction is walk. The marker distances change from208 to37; no arrival milestone yet."
+    },
+    {
+      "ref": "logs/handoff-standby-verifier/flight-1/telemetry.jsonl:276",
+      "finding": "AtMs73791 shows ch13-survey, origin-landed true and survey:start. Sampling does not by itself prove every intervening survey-offer/F lifecycle edge."
+    },
+    {
+      "ref": "verifier/captures/handoff-standby/flight-1/0167-objectiveId.png",
+      "finding": "Producer reports visible landed Origin with boarding work order and F Board prompt. Chapter read telemetry/run metadata here; no new image-viewing or GPU claim is made."
+    },
+    {
+      "ref": "main/src/story/ux/README.md:74-85",
+      "sha256": "fc556648a7b4fe0ae6f1eba948b93ad282ae1ae9563699f27f2a178be994ba85",
+      "finding": "Durable action selection, exact actionable marker/work order, matching verbs, one ID-entry cue and reconstruction of the same next action across resets."
+    },
+    {
+      "ref": "main/src/story/ux/README.md:89-101",
+      "finding": "Chapter owns verbs/copy/lifecycle, engineer wiring, and independent auditor acceptance; this interpretation does not approve its implementation."
+    }
+  ],
+  "signedExistingSemantics": {
+    "board": {
+      "ref": "scene-contract.json#/guidance/objectives/2",
+      "id": "ch13:return:board",
+      "markerLabel": "Kestrel hatch · board",
+      "workOrder": [
+        "Follow the hatch marker.",
+        "[F] Board the Kestrel."
+      ],
+      "boundary": "Chosen departure and actual boarding; it is not the mandatory action for an already landed Origin arrival walking to W."
+    },
+    "launch": {
+      "ref": "scene-contract.json#/guidance/objectives/3",
+      "id": "ch13:return:launch",
+      "workOrder": [
+        "Hold [Space] to ignite and lift."
+      ],
+      "boundary": "Existing boarded launch controls, no spatial target, clears on real lift; landing at Origin does not require another launch."
+    },
+    "origin": {
+      "ref": "scene-contract.json#/guidance/objectives/4",
+      "id": "ch13:return:origin",
+      "kind": "travel",
+      "markerLabel": "Origin · audit site",
+      "workOrder": [
+        "Fly to Origin.",
+        "Follow the audit-site approach and land."
+      ],
+      "enterAnchorRef": "anc.cg.lift-committed",
+      "clearAnchorRef": "anc.cg.origin-landed"
+    },
+    "arrival": {
+      "refs": [
+        "scene-contract.json#/story/events/6",
+        "scene-contract.json#/syncAnchors/6"
+      ],
+      "playerAction": "Fly to Origin, land at the audit site, disembark and approach on foot.",
+      "boundary": "Actual physical reach of W-7744 opens the survey, not world activation or landing alone."
+    }
+  },
+  "proposedPhaseCopy": {
+    "airborneTransitDescent": [
+      "Fly to Origin.",
+      "Follow the audit-site approach and land."
+    ],
+    "groundedOriginStillBoarded": [
+      "Disembark.",
+      "Follow the audit-site marker on foot."
+    ],
+    "groundedOriginOnFootBeforeW": [
+      "Follow the audit-site marker on foot."
+    ]
+  },
+  "lifecycleRequirements": [
+    "Before departure and wherever continuing the trip actually requires boarding or lifting outside the reached Origin approach, retain existing board/launch controls and their real readiness; this proposal does not broaden or replace those controls.",
+    "Keep return:origin during flight/descent and the complete grounded Origin approach, with the exact conditional copy for actual flight-control versus embodied state. A mere controlMode change to fps on Origin must not re-enter departure boarding.",
+    "Resolve one real Origin/audit-site destination; once on foot it must lead toward physical W, not the hatch. Preserve mounted-target readiness and existing destination ownership through the real world handoff; no zero-coordinate marker, fabricated actor or second marker language.",
+    "Existing disembarkation owns its actual control/input transition; no new key, F task or automatic grant is introduced. Already embodied arrival skips the disembark copy naturally.",
+    "Only real grounded Origin, embodied approach and physical W reach earn origin-landed once and clear return guidance. Select the existing survey objective from actual saved/current survey state; initial offer/start must still obey its real interaction and recording rules.",
+    "Same-ID phase changes silently replace standing text without another entry cue or score event. Pause/Continue must reconstruct actual arrival state, preserve earned receipts and avoid stale boarding, false missing targets or replayed arrival. Optional boarding at an actually usable hatch remains a normal action, not the chapter-required destination."
+  ],
+  "proposedChanges": [
+    {
+      "file": "scene-contract.json",
+      "operations": [
+        {
+          "op": "test",
+          "path": "/guidance/objectives/4/variantIntent",
+          "value": "The same objective ID, exact marker label, standing work order and predicate are published on desktop and mobile, with touch glyph substitution for the F prompt, and are unchanged under reduced motion and at every quality tier including potato; no tier removes the marker, the work order or the physical target."
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/4/variantIntent",
+          "value": "Exact state-conditioned copy under the existing ch13:return:origin travel objective and Origin · audit site label: while airborne, in transit or descending before a grounded Origin landing, use the signed base flight workOrder [\"Fly to Origin.\", \"Follow the audit-site approach and land.\"]. At actual grounded Origin while the player still owns boarded flight controls, use [\"Disembark.\", \"Follow the audit-site marker on foot.\"]. At actual grounded Origin with embodied on-foot controls before physical reach of W-7744, use [\"Follow the audit-site marker on foot.\"]. These are silent same-ID standing-copy changes with no additional entry acknowledgement, score event, required input, objective or arrival credit. The existing destination authority resolves the actual Origin/audit-site target in the active world; on foot it must lead to the real W-7744 approach, never the hatch. Existing vehicle controls own landing/disembarkation; this text does not create a new disembark control. Desktop/mobile, reduced motion and every quality tier use these same phase meanings, exact state copy and destination. Pause/Continue/world handoff reconstruct the actual next action without regressing a grounded Origin arrival to mandatory board or lift."
+        }
+      ]
+    },
+    {
+      "file": "scene-contract.json",
+      "operations": [
+        {
+          "op": "test",
+          "path": "/guidance/objectives/4/acceptanceCriterion",
+          "value": "The standing work order keeps a concrete destination and an actionable flight verb at every state, and the objective clears on the actual world and grounded flight facts, never on elapsed time."
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/4/acceptanceCriterion",
+          "value": "The standing work order describes the real current travel action: flight/landing before grounded Origin, disembarkation when grounded Origin still has boarded flight controls, and following the real audit-site marker on foot after the embodied handback. Origin · audit site remains the exact destination label, with its real existing destination authority. The objective clears only at anc.cg.origin-landed after actual grounded Origin, disembarkation and physical W-7744 reach; landing or world activation alone is insufficient. Same-ID phase copy updates are silent, with one objective-entry acknowledgement; pause/Continue and control-mode changes must not republish a completed departure instruction as the mandatory arrival action."
+        }
+      ]
+    },
+    {
+      "file": "scene-contract.json",
+      "operations": [
+        {
+          "op": "test",
+          "path": "/guidance/objectives/4/feedback/intent",
+          "value": "One acknowledgement that the Origin course is standing."
+        },
+        {
+          "op": "replace",
+          "path": "/guidance/objectives/4/feedback/intent",
+          "value": "One acknowledgement on the actual Origin-course objective entry; arrival/disembark/on-foot standing-copy changes under the same ID are silent and earn no milestone or score event."
+        }
+      ]
+    },
+    {
+      "file": "scene-contract.json",
+      "operations": [
+        {
+          "op": "test",
+          "path": "/story/events/6/acceptanceCriterion",
+          "value": "Grounded world and flight facts clear the approach objective; the survey phase opens at actual physical reach of W-7744."
+        },
+        {
+          "op": "replace",
+          "path": "/story/events/6/acceptanceCriterion",
+          "value": "The existing arrival anchor commits once only after the actual Origin world, grounded flight/landing facts, embodied on-foot state and physical reach of W-7744 satisfy the return. World activation or landing alone does not clear the return objective, grant the milestone or open the survey. Keep return:origin active with its signed state-conditioned travel guidance through disembarkation and the real on-foot approach; then clear it and select the actual survey objective from its existing state. No flight-mode regression, elapsed time, rail progress or seeded receipt substitutes for physical arrival."
+        }
+      ]
+    },
+    {
+      "file": "scene-contract.json",
+      "operations": [
+        {
+          "op": "test",
+          "path": "/syncAnchors/6/acceptanceCriterion",
+          "value": "Grounded world and flight facts clear the approach objective; the survey phase opens at actual physical reach of W-7744."
+        },
+        {
+          "op": "replace",
+          "path": "/syncAnchors/6/acceptanceCriterion",
+          "value": "The existing arrival anchor commits once only after the actual Origin world, grounded flight/landing facts, embodied on-foot state and physical reach of W-7744 satisfy the return. World activation or landing alone does not clear the return objective, grant the milestone or open the survey. Keep return:origin active with its signed state-conditioned travel guidance through disembarkation and the real on-foot approach; then clear it and select the actual survey objective from its existing state. No flight-mode regression, elapsed time, rail progress or seeded receipt substitutes for physical arrival."
+        }
+      ]
+    },
+    {
+      "file": "scene-contract.json",
+      "operations": [
+        {
+          "op": "test",
+          "path": "/story/agencyWindows/1/mandatoryPath",
+          "value": "Board the Kestrel, lift, fly to Origin and land at the audit site under existing controls."
+        },
+        {
+          "op": "replace",
+          "path": "/story/agencyWindows/1/mandatoryPath",
+          "value": "Board the Kestrel, lift, fly to Origin, land at the audit site, disembark and approach W-7744 on foot under existing controls. Actual physical reach completes the return; no additional objective or interaction is introduced."
+        }
+      ]
+    },
+    {
+      "file": "scene-cinema-lane.json",
+      "operations": [
+        {
+          "op": "test",
+          "path": "/objectiveBindings/4/realTransition",
+          "value": "Actual world/grounded flight facts → disembark/approach"
+        },
+        {
+          "op": "replace",
+          "path": "/objectiveBindings/4/realTransition",
+          "value": "Exact state-conditioned copy under the existing ch13:return:origin travel objective and Origin · audit site label: while airborne, in transit or descending before a grounded Origin landing, use the signed base flight workOrder [\"Fly to Origin.\", \"Follow the audit-site approach and land.\"]. At actual grounded Origin while the player still owns boarded flight controls, use [\"Disembark.\", \"Follow the audit-site marker on foot.\"]. At actual grounded Origin with embodied on-foot controls before physical reach of W-7744, use [\"Follow the audit-site marker on foot.\"]. These are silent same-ID standing-copy changes with no additional entry acknowledgement, score event, required input, objective or arrival credit. The existing destination authority resolves the actual Origin/audit-site target in the active world; on foot it must lead to the real W-7744 approach, never the hatch. Existing vehicle controls own landing/disembarkation; this text does not create a new disembark control. Desktop/mobile, reduced motion and every quality tier use these same phase meanings, exact state copy and destination. Pause/Continue/world handoff reconstruct the actual next action without regressing a grounded Origin arrival to mandatory board or lift. The existing arrival anchor commits once only after the actual Origin world, grounded flight/landing facts, embodied on-foot state and physical reach of W-7744 satisfy the return. World activation or landing alone does not clear the return objective, grant the milestone or open the survey. Keep return:origin active with its signed state-conditioned travel guidance through disembarkation and the real on-foot approach; then clear it and select the actual survey objective from its existing state. No flight-mode regression, elapsed time, rail progress or seeded receipt substitutes for physical arrival."
+        }
+      ]
+    }
+  ],
+  "proposedTextChanges": [
+    {
+      "file": "story-intent.md",
+      "old": "| `ch13:return:origin` | Origin · audit site | Fly to Origin. Follow the audit-site approach and land. | Actual world/grounded flight facts → disembark/approach |",
+      "new": "| `ch13:return:origin` | Origin · audit site | In flight: Fly to Origin. Follow the audit-site approach and land. Grounded Origin, still boarded: Disembark. Follow the audit-site marker on foot. Grounded Origin, on foot: Follow the audit-site marker on foot. | Keep this objective through actual disembarkation/approach; actual grounded Origin and physical W-7744 reach earn origin-landed and hand over to existing survey state. Same-ID phase-copy changes are silent. |"
+    }
+  ],
+  "authorityAndVerification": "Proposal only for bounded peer concurrence and exact revised signature under standing in-scope delegation; no seventh repair or source edit is authorized by this artifact. Frozen v2 remains untouched. After routing, require actual manual destination/actionability proof from grounded Origin through W, raw objective/marker/copy/input and arrival transitions, one-cue behavior, Continue/reset coverage and affected Score/Cinema/independent UX review. A movie walking the route despite wrong guidance does not satisfy manual guidance."
+}

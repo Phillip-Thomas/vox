@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 370188,
+  "stop_reason": "end_turn",
+  "session_id": "cf4b8de6-1ef8-4f60-a20b-b32997434291",
+  "total_cost_usd": 2.3167645,
+  "usage": {
+    "input_tokens": 84,
+    "cache_creation_input_tokens": 68683,
+    "cache_read_input_tokens": 1742371,
+    "output_tokens": 30249,
+    "output_tokens_details": {
+      "thinking_tokens": 2671
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 68683,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1389,
+        "cache_read_input_tokens": 72517,
+        "cache_creation_input_tokens": 326,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 326
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2014,
+      "outputTokens": 18,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.002104,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 84,
+      "outputTokens": 30249,
+      "cacheReadInputTokens": 1742371,
+      "cacheCreationInputTokens": 68683,
+      "webSearchRequests": 0,
+      "costUSD": 2.3146605000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2671,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 49,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done at **20:53:59Z**, inside the original 20:59:21Z deadline. The prior closure report still hashes to `b8521f7f\u2026` exactly as the producer recorded it \u2014 untouched.\n\n## What I actually applied\n\nThe entrypoint is **no longer the byte-identical copy**: `earned-continue-3d-probe.mjs` moved `2a9c9a54\u2026 \u2192 2f9e297c\u2026` and now *calls* the helpers at 7 sites.\n\n**The ID conflation \u2014 real mapping, read from source.** The producer was right, and the deeper finding is that the drawing objective *does* differ:\n\n- `objectiveId` = `ch13:survey:offer-span` (`objectivePrimitives.ts:761-766` \u2192 HUD `data-objective-id` at `StoryGuidanceHud.tsx:148`, read by `evidence.mjs:112`)\n- `actionId` = `story-ch13-offer-span` (`commonGroundDirector.ts:1632`) \u2014 a *different* namespace\n- While `survey.phase === 'drawing'`, the HUD publishes **`ch13:survey:draw`** until `samples \u2265 2` **and** the foot is within `CG_POINT_REACH` of E (`commonGroundDirector.ts:1478-1485`). So phase alone was never sufficient. The contract now carries `notYetObjectiveId` and refuses it by name.\n\nThe correct ID exists in shipped source, so I did **not** manufacture an observation gap. Verb / actionId / directiveKey / objectiveId are kept as four separate fields. Both gates receive a **boolean** from `gateInputsFromAuthorization`, which throws on an object.\n\n**Acceptance** is now `spanAuth.ok && fPressed && anchor is NEW vs the pre-F baseline && the restored 19-prefix is intact and in order` \u2014 not a generic phase change, not anchor presence. Bound to `commitCommonGroundSpanOffer` / `anc.cg.route-offered` from the bridge's existing `diagnostic.anchors`; no invented API.\n\n**Calibration** in the actual `walkTowards`: per-key `upAtSample` stamps, `recalibrationDecision` with the directed-motion guard and cap, retained directions, partial re-measurement, and accumulation from real `bodyPose` displacement. Foot is full XYZ throughout; `bodyCentre` stays `diagnosticOnly` and never substitutes.\n\n**Telemetry** is armed before the real Continue click using hooks I verified exist \u2014 `window.__storyBeat` is the same hook `evidence.mjs:111` already reads, not a guess; `__voxelDebug.spawn` is `EfficientScene.tsx:302-313`.\n\n## Three things worth your attention\n\n1. **`liveCalibration.selftest.mjs` first came back 31/3.** The three failures were the *fixture* passing `actionId` in the `objectiveId` slot \u2014 the same defect, one layer down. Corrected, plus two new refusal checks. Now 36/0.\n2. **`window.__paravoxiaSystem.snapshot()` is unverified.** I used it opportunistically for `activePlanetId` but did not confirm it exists in the shipped bundle. It is null-retained and flagged via `neverPublished`, not assumed. Same for `renderOrigin`, which falls back to `worldBound`.\n3. **Nothing here has run.** The sampler has produced zero frames; the mount/seed/beat transition around Continue is still unresolved, and the prior report's world excursion stays unproved. `:p1` is a sibling planet, per the pose-scope review.\n\nI marked `READY-PREPARED` only on the wiring. Repin and runtime are explicitly not claimed, and the 6u/6-round bounds are recorded as private probe safeguards \u2014 not progress evidence. Where the gate refuses, the report says the *controller* refused to authorize, not that the game is inaccessible. `main/` is untouched at 301 pre-existing paths.",
+  "ttft_ms": 1468,
+  "type": "result",
+  "duration_ms": 371075,
+  "uuid": "0e5763f3-6388-4afb-bcf8-3f64e816f075",
+  "ttft_stream_ms": 720,
+  "time_to_request_ms": 18,
+  "first_content_frame_ms": 720,
+  "queued_turn_count": 0
+}

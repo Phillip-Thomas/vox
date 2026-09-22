@@ -1,0 +1,12 @@
+{
+  "at": "2026-09-06T22:33:48.780692+00:00",
+  "decidedBy": "delegate",
+  "authorityRef": "../../story-runs/2026-09-06-common-ground/owner-standing-authority.json",
+  "authoritySha256": "3750caae92aa5a8cd809da5d6f921a800754db04f55f913435e26a054b1be338",
+  "scope": "12min actual audio-authority seam verification and pause cancellation, completing narrow private attachment; same source/run",
+  "priorBudgetsNotRewritten": true,
+  "cpuPrepFinished": true,
+  "previousGpuRoleFinishedAt": "2026-09-06T22:33:00.338619+00:00",
+  "sourceMutationAuthorized": false,
+  "publicationAuthorized": false
+}

@@ -1,0 +1,29 @@
+{
+  "findings": [
+    {
+      "severity": "major",
+      "description": "A real Continue restores equal Chapter14 record data but forces Tidegarden and leaves the Origin-only chapter unready; no newly accepted action after Continue.",
+      "evidence": [
+        {
+          "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/evidence/verify-final-9f6de201-2e66-4de0-b62c-ff2b847266f3/continue/report.json",
+          "sha256": "4f3afb77f357640d00a225d966ec536f8897ff8f70296e78dff5d899019e95fc"
+        }
+      ]
+    },
+    {
+      "severity": "major",
+      "description": "The player preview used manual ?story=ch14-record, which parseStoryParam rejects. Root is replacing this unsupported entry with an ordinarily earned browser checkpoint bound to passing Continue proof. No game debug seed is needed.",
+      "evidence": [
+        {
+          "path": ".codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/motion-handback-20260909/status.json",
+          "sha256": "13a30c447ba478c9bc22dd1b9599b4095b4e2d4111136284f8f0d40b9fbde1ba"
+        }
+      ]
+    }
+  ],
+  "keep": [
+    "Approved Chapter14 recipe and all text, score and staging",
+    "The verified movement driver, normal input authority, grounded arrival, reciprocal route and Origin identity requirements",
+    "Completed manual and pause/resume evidence retained as historical source-bound evidence"
+  ]
+}

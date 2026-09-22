@@ -1,0 +1,48 @@
+{
+  "selectionIsBounded": true,
+  "notAFullTranscript": "This is a bounded selection, not a complete game transcript. Prologue (CRAWL_LINES, MANIFEST_LINES, VOYAGE_STRANGE_LINES, VOYAGE_DECK, CRASH_LINES), all of chapter 1, chapter 2, chapter 3 (CH3_CAPTIONS, DUSK, A3_TIMELINE, FIRST_DAY_CAPTIONS, SIGNAL_LINES, STARGAZE), and the a1/a2/a3 awakenings are deliberately excluded.",
+  "beatsIncluded": [
+    "ch4-vigil (system orders only)",
+    "ch4-arrival",
+    "ch4-audit",
+    "ch4-comply",
+    "ch4-defy",
+    "a4-exhale (W-7744 flight lines only)",
+    "ch5-maw",
+    "ch6-dive",
+    "ch7-reconstruct",
+    "ch7-board",
+    "ch8-launch",
+    "ch8-crossing",
+    "ch8-landfall",
+    "ch9-settle",
+    "ch9-hearth",
+    "ch10-cold",
+    "ch10-ask",
+    "ch10-transit",
+    "R12 station sidecar (registry/issuer/depart)",
+    "R12 return/install"
+  ],
+  "sourcesSelected": [
+    "main/src/story/storyScript.ts (VIGIL_LINES, ARRIVAL, ARRIVAL_CAPTIONS, ARRIVAL_LINES)",
+    "main/src/story/emergentStoryDirector.ts (beat-entry captions, audit lines, K1–K11, CH7/CH8 caption constants, interaction verbs)",
+    "main/src/story/world/EmergentAuditSites.tsx (ch4 interaction verbs)",
+    "main/src/story/beats/objectivePrimitives.ts (ch10 objectives)",
+    "main/src/story/beats/ch5/objective-ch5-maw.ts",
+    "main/src/story/beats/ch9/objective-ch9-settle.ts",
+    "main/src/game/spaceStation/spaceStationStory.ts (station objectives)",
+    "main/src/components/spaceStation/StationStoryPanel.tsx (required station dialogue)",
+    "main/src/components/spaceStation/SpaceStationSandbox.tsx (station HUD low lines)",
+    "main/src/story/stationReturnStory.ts (return objectives)",
+    "main/src/story/world/TidegardenSettlementWorld.tsx (install verb)"
+  ],
+  "declaredGaps": [
+    "ch6-dive and ch7 objective work-order text was NOT extracted (objective-ch6-dive.ts, objective-ch7-board.ts, objective-ch7-reconstruct.ts unread); only their entry/exit captions are in the corpus.",
+    "CH7_REPAIR_STAGE_VOICE per-stage caption/audit literals were NOT extracted (only its structural shape and M1/M6 constants were located).",
+    "ch8 rescue/nudge copy, violation-channel strings, and generic HUD/input-glyph copy are excluded.",
+    "Bell's opening greeting is procedurally generated from spaceStationVendors.ts persona tables; only the shipped fallback literal in StationStoryPanel.tsx is quoted. Optional vendor topic buttons (Esk/Kite/Salt) were located but are EXCLUDED as generic catalog/vendor corpus.",
+    "The station-continuation contract's apron REGULATION triplet ('THRUST COLD · CLAMPS ENGAGED.' / 'PRESSURE EQUALIZING.' / 'ENTRY REQUIRES A DESIGNATION RECORD · PROCEED TO COUNTER.') has NO match anywhere under main/ — it is contract-only, not shipped copy, and is therefore omitted from the corpus.",
+    "The a4-exhale field-pack / hand-back tail beyond the W-7744 flight audit line is excluded."
+  ],
+  "outsideBlindCorpus": "Everything in this corpusScope field, all of sourceRefs, all of runtimeInventory, all of audioBaseline, and all of openIssues sits outside the blind reading corpus. shippedCopyCorpus contains observable text plus neutral channel/sequence labels only."
+}

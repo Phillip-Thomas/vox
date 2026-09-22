@@ -1,0 +1,59 @@
+[
+  {
+    "case": "manual",
+    "sequence": "steps",
+    "beforeIndex": 38,
+    "reusedReturnWaypoints": [
+      [
+        -25,
+        51,
+        12
+      ],
+      [
+        -15,
+        51,
+        9
+      ]
+    ],
+    "removedRedundantPostArrivalWaitMs": 350,
+    "reason": "walkByInputs already releases input and waits for stable arrival before returning"
+  },
+  {
+    "case": "recovery",
+    "sequence": "newActionSteps",
+    "beforeIndex": 2,
+    "reusedReturnWaypoints": [
+      [
+        -25,
+        51,
+        12
+      ],
+      [
+        -15,
+        51,
+        9
+      ]
+    ],
+    "removedRedundantPostArrivalWaitMs": 350,
+    "reason": "walkByInputs already releases input and waits for stable arrival before returning"
+  },
+  {
+    "case": "continue",
+    "sequence": "newActionSteps",
+    "beforeIndex": 2,
+    "reusedReturnWaypoints": [
+      [
+        -25,
+        51,
+        12
+      ],
+      [
+        -15,
+        51,
+        9
+      ]
+    ],
+    "removedRedundantPostArrivalWaitMs": 350,
+    "reason": "walkByInputs already releases input and waits for stable arrival before returning"
+  }
+]

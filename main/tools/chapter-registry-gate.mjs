@@ -49,7 +49,16 @@ const SUPPORTED_STATE_REF_PATTERNS = Object.freeze([
   // and docking authorization is granted only by Chapter 10's threshold
   // hand-back, after the signed reveal has completed.
   /^state:story\/ch10-(?:bearing-claimed|seam-passed)$/,
-  /^state:station\/docking-authorized$/
+  /^state:station\/docking-authorized$/,
+  // The prior station-continuation contract's two durable boundary facts, and
+  // chapter 13's terminal proof. Producers land FIRST
+  // (`storyBoundaryTelemetry#deriveStoryBoundaryState` publishes all three from
+  // the ch11/ch12/ch13 milestone ledger); only then may the registry rely on
+  // them. `state:station/departed` and `state:hearth/restored` are read, never
+  // reissued: they belong to the transaction that produced them.
+  /^state:station\/departed$/,
+  /^state:hearth\/restored$/,
+  /^state:story\/ch13-reciprocal-proof$/
 ]);
 
 class Audit {
@@ -82,6 +91,10 @@ function readJson(path) {
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
+}
+
+function nonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
 }
 
 function isRecord(value) {
@@ -203,7 +216,7 @@ function validateRegistryShape(audit, registry) {
     !exactObject(
       audit,
       registry,
-      ['schema', 'runtimeAuthorityRef', 'terminalBeat', 'sceneContracts', 'chapters'],
+      ['schema', 'runtimeAuthorityRef', 'terminalBeat', 'sceneContracts', 'chapters', 'externalTransitions'],
       'schema.registry',
       'registry'
     )
@@ -514,8 +527,183 @@ function validateBeatCoverage(audit, registry, authority) {
   }
 }
 
+/**
+ * Named boundaries that unregistered host segments run between.
+ *
+ * The registry's adjacency rule is exact equality of the predecessor's exit
+ * state and the successor's entry state, and that rule is right: a chapter that
+ * claims to begin where the last one ended must actually begin there. Chapter 10
+ * ends IN FLIGHT at a station standoff; chapter 13 begins ON FOOT at a restored
+ * second hearth on another world. Both are true, and the distance between them
+ * is a station visit and a return that are not chapters.
+ *
+ * The dishonest repairs are the two obvious ones: add guarantees chapter 10
+ * never earns, or drop requirements chapter 13 genuinely has. This declares the
+ * gap instead, and proves BOTH sides independently — the exit is still exactly
+ * what ch10 leaves, the entry is still exactly what ch13 needs, and the record
+ * has to name the host segments and the receipts they actually produce.
+ */
+// The host segments a transition may name, and the exact receipts each one
+// actually produces. Both are bound to real runtime producers, and are the only
+// values a transition is allowed to claim: a self-declared receipt string is a
+// declaration, not evidence, and would otherwise satisfy an entry requirement it
+// invented for itself.
+const EXTERNAL_TRANSITION_HOSTS = Object.freeze({
+  'station(ch11)': Object.freeze({
+    producerRef: 'main/src/game/spaceStation/spaceStationStory.ts',
+    receipts: Object.freeze(['story:ch11-station-departed', 'story:ch11-bonded-cell-acquired'])
+  }),
+  'return(ch12)': Object.freeze({
+    producerRef: 'main/src/story/stationReturnStory.ts',
+    receipts: Object.freeze(['story:ch12-bonded-cell-installed', 'story:ch12-hearth-restored'])
+  })
+});
+
+function externalTransitionIndex(audit, registry) {
+  const index = new Map();
+  const transitions = registry.externalTransitions ?? [];
+  if (!audit.assert(Array.isArray(transitions), 'transition.shape', 'externalTransitions must be an array')) {
+    return index;
+  }
+  const byId = new Set();
+  for (const transition of transitions) {
+    if (!exactObject(
+      audit,
+      transition,
+      ['id', 'from', 'to', 'hostSegments', 'producedReceipts', 'entryGuarantees', 'evidenceRefs', 'rationale'],
+      'transition.shape',
+      'externalTransition'
+    )) continue;
+    audit.assert(!byId.has(transition.id), 'transition.unique', `Duplicate external transition id ${transition.id}`);
+    byId.add(transition.id);
+    const from = transition.from;
+    const to = transition.to;
+    if (!audit.assert(
+      isRecord(from) && isRecord(to)
+        && nonEmptyString(from.chapter) && nonEmptyString(from.exitBeat)
+        && nonEmptyString(to.chapter) && nonEmptyString(to.entryBeat),
+      'transition.endpoints',
+      `${transition.id} must name both chapters and both boundary beats`
+    )) continue;
+    const pairKey = `${from.chapter}->${to.chapter}`;
+    if (!audit.assert(!index.has(pairKey), 'transition.unique-pair',
+      `Only one external transition may describe ${pairKey}`)) continue;
+    const fromChapter = registry.chapters.find((chapter) => chapter.id === from.chapter);
+    const toChapter = registry.chapters.find((chapter) => chapter.id === to.chapter);
+    audit.assert(Boolean(fromChapter), 'transition.reference', `${transition.id} names unknown chapter ${from.chapter}`);
+    audit.assert(Boolean(toChapter), 'transition.reference', `${transition.id} names unknown chapter ${to.chapter}`);
+    if (!fromChapter || !toChapter) continue;
+    // BOTH BOUNDARIES, INDEPENDENTLY. The transition may not move either one.
+    audit.assert(
+      fromChapter.exit?.beat === from.exitBeat,
+      'transition.exit-beat',
+      `${transition.id} must name ${from.chapter}'s actual exit beat`,
+      { expected: fromChapter.exit?.beat, actual: from.exitBeat }
+    );
+    audit.assert(
+      toChapter.entry?.beat === to.entryBeat,
+      'transition.entry-beat',
+      `${transition.id} must name ${to.chapter}'s actual entry beat`,
+      { expected: toChapter.entry?.beat, actual: to.entryBeat }
+    );
+    audit.assert(
+      sameSet(transition.entryGuarantees, toChapter.entry?.stateRefs),
+      'transition.entry-state',
+      `${transition.id} must guarantee exactly ${to.chapter}'s declared entry state`,
+      { expected: toChapter.entry?.stateRefs, actual: transition.entryGuarantees }
+    );
+    // The pair must be ORDERED AND ADJACENT. A transition is a declaration that
+    // two neighbours are separated by host segments, not a licence to link any
+    // two chapters and skip the ladder between them.
+    const fromIndex = registry.chapters.indexOf(fromChapter);
+    const toIndex = registry.chapters.indexOf(toChapter);
+    audit.assert(
+      toIndex === fromIndex + 1,
+      'transition.adjacent-pair',
+      `${transition.id} must describe an ordered adjacent chapter pair`,
+      { fromIndex, toIndex }
+    );
+
+    stringList(audit, transition.hostSegments, 'transition.host-segments', `${transition.id}.hostSegments`, { min: 1 });
+    stringList(audit, transition.producedReceipts, 'transition.receipts', `${transition.id}.producedReceipts`, { min: 1 });
+    stringList(audit, transition.evidenceRefs, 'transition.evidence', `${transition.id}.evidenceRefs`, { min: 1 });
+
+    // Hosts must be known, and the receipts must be EXACTLY the ones those
+    // hosts actually issue — no unknown segment, no invented or renumbered
+    // receipt, and none of the host's real receipts quietly dropped.
+    const hosts = Array.isArray(transition.hostSegments) ? transition.hostSegments : [];
+    const expectedReceipts = [];
+    for (const host of hosts) {
+      const known = EXTERNAL_TRANSITION_HOSTS[host];
+      if (!audit.assert(Boolean(known), 'transition.host-known',
+        `${transition.id} names unknown host segment ${host}`)) continue;
+      expectedReceipts.push(...known.receipts);
+      const producerPath = resolve(repoRoot, known.producerRef);
+      audit.assert(
+        existsSync(producerPath) && readFileSync(producerPath, 'utf8').includes(known.receipts[0]),
+        'transition.host-producer',
+        `${host} must be produced by ${known.producerRef}`
+      );
+    }
+    audit.assert(
+      sameJson([...(transition.producedReceipts ?? [])].sort(), [...expectedReceipts].sort()),
+      'transition.receipt-identity',
+      `${transition.id} receipts must be exactly what its host segments produce`,
+      { expected: expectedReceipts, actual: transition.producedReceipts }
+    );
+    // Every declared receipt must be a real string in a real runtime source.
+    for (const receipt of transition.producedReceipts ?? []) {
+      const owner = Object.values(EXTERNAL_TRANSITION_HOSTS)
+        .find((host) => host.receipts.includes(receipt));
+      const producerPath = owner ? resolve(repoRoot, owner.producerRef) : null;
+      audit.assert(
+        Boolean(producerPath) && existsSync(producerPath)
+          && readFileSync(producerPath, 'utf8').includes(`'${receipt}'`),
+        'transition.receipt-producer',
+        `${transition.id} receipt ${receipt} has no runtime producer`
+      );
+    }
+    // Evidence must resolve: a runtime path that exists, or a repository path.
+    for (const ref of transition.evidenceRefs ?? []) {
+      const target = ref.startsWith('runtime:')
+        ? resolve(mainRoot, ref.slice('runtime:'.length).split('#')[0])
+        : resolve(repoRoot, ref.split('#')[0]);
+      audit.assert(
+        staysWithin(repoRoot, target) && existsSync(target),
+        'transition.evidence-target',
+        `${transition.id} evidence ref does not resolve: ${ref}`
+      );
+    }
+    for (const ref of transition.entryGuarantees ?? []) {
+      audit.assert(
+        SUPPORTED_STATE_REF_PATTERNS.some((pattern) => pattern.test(ref)),
+        'transition.state-vocabulary',
+        `${transition.id} entry guarantee ${ref} has no runtime producer`
+      );
+    }
+    // The entry's own milestone requirements must be covered by the receipts the
+    // host segments actually issue, or by the predecessor's real guarantees.
+    const covered = new Set([
+      ...(transition.producedReceipts ?? []).map((receipt) => `milestone:${receipt}`),
+      ...(fromChapter.exit?.guarantees ?? [])
+    ]);
+    const uncovered = (toChapter.entry?.requirements ?? []).filter(
+      (requirement) => !covered.has(requirement) && !(transition.entryGuarantees ?? []).includes(requirement)
+    );
+    audit.assert(
+      uncovered.length === 0,
+      'transition.requirements',
+      `${transition.id} leaves ${to.chapter} entry requirements unproduced`,
+      { uncovered }
+    );
+    index.set(`${from.chapter}->${to.chapter}`, transition);
+  }
+  return index;
+}
+
 function validateAdjacency(audit, registry) {
   if (!Array.isArray(registry.chapters)) return;
+  const transitions = externalTransitionIndex(audit, registry);
   const chapters = registry.chapters;
   const byId = new Map(chapters.map((chapter) => [chapter.id, chapter]));
   audit.assert(byId.size === chapters.length, 'adjacency.unique-ids', 'Chapter ids must be unique');
@@ -549,20 +737,32 @@ function validateAdjacency(audit, registry) {
 
     if (index > 0) {
       const previous = chapters[index - 1];
-      audit.assert(
-        sameSet(previous.exit?.stateRefs, chapter.entry?.stateRefs),
-        'adjacency.state-boundary',
-        `${previous.id} exit state must exactly match ${chapter.id} entry state`,
-        { exit: previous.exit?.stateRefs, entry: chapter.entry?.stateRefs }
-      );
-      const guarantees = new Set(previous.exit?.guarantees ?? []);
-      const missingRequirements = (chapter.entry?.requirements ?? []).filter((requirement) => !guarantees.has(requirement));
-      audit.assert(
-        missingRequirements.length === 0,
-        'adjacency.requirements',
-        `${chapter.id} entry requirements must be guaranteed by ${previous.id}`,
-        { missingRequirements }
-      );
+      // ORDINARY ADJACENCY IS UNCHANGED AND STAYS EXACT. Only a pair that has
+      // declared, and passed, its own external transition is excused from it,
+      // and that transition proved both boundaries above.
+      const external = transitions.get(`${previous.id}->${chapter.id}`);
+      if (!external) {
+        audit.assert(
+          sameSet(previous.exit?.stateRefs, chapter.entry?.stateRefs),
+          'adjacency.state-boundary',
+          `${previous.id} exit state must exactly match ${chapter.id} entry state`,
+          { exit: previous.exit?.stateRefs, entry: chapter.entry?.stateRefs }
+        );
+        const guarantees = new Set(previous.exit?.guarantees ?? []);
+        const missingRequirements = (chapter.entry?.requirements ?? []).filter((requirement) => !guarantees.has(requirement));
+        audit.assert(
+          missingRequirements.length === 0,
+          'adjacency.requirements',
+          `${chapter.id} entry requirements must be guaranteed by ${previous.id}`,
+          { missingRequirements }
+        );
+      } else {
+        audit.assert(
+          !sameSet(previous.exit?.stateRefs, chapter.entry?.stateRefs),
+          'adjacency.external-necessary',
+          `${external.id} declares a gap that does not exist; use ordinary adjacency`
+        );
+      }
     }
   }
 
@@ -1071,6 +1271,87 @@ function runSelfTest(registry, schema, authority) {
       code: 'acceptance.performance-budget',
       mutate(value) {
         value.chapters[3].acceptance.performanceBudgets.minFps = 1;
+      }
+    },
+    // --- external transitions -------------------------------------------------
+    //
+    // These are the cases that would otherwise let a declaration stand in for
+    // evidence. A transition excuses a chapter pair from exact adjacency, so
+    // every string in it has to be bound to something real.
+    {
+      name: 'invented receipt satisfying an entry requirement',
+      code: 'transition.receipt-identity',
+      mutate(value) {
+        const transition = value.externalTransitions[0];
+        transition.producedReceipts = [...transition.producedReceipts, 'story:invented-receipt'];
+      }
+    },
+    {
+      name: 'renumbered receipt',
+      code: 'transition.receipt-identity',
+      mutate(value) {
+        value.externalTransitions[0].producedReceipts[0] = 'story:ch11-station-departed-v2';
+      }
+    },
+    {
+      name: 'dropped host receipt',
+      code: 'transition.receipt-identity',
+      mutate(value) {
+        value.externalTransitions[0].producedReceipts.pop();
+      }
+    },
+    {
+      name: 'unknown host segment',
+      code: 'transition.host-known',
+      mutate(value) {
+        value.externalTransitions[0].hostSegments = ['interlude(ch99)'];
+      }
+    },
+    {
+      name: 'unresolvable evidence ref',
+      code: 'transition.evidence-target',
+      mutate(value) {
+        value.externalTransitions[0].evidenceRefs[0] = 'runtime:src/story/doesNotExist.ts#nothing';
+      }
+    },
+    {
+      name: 'duplicate transition for one chapter pair',
+      code: 'transition.unique-pair',
+      mutate(value) {
+        const copy = clone(value.externalTransitions[0]);
+        copy.id = `${copy.id}-duplicate`;
+        value.externalTransitions.push(copy);
+      }
+    },
+    {
+      name: 'malformed transition endpoints',
+      code: 'transition.endpoints',
+      mutate(value) {
+        value.externalTransitions[0].from = { chapter: '', exitBeat: '' };
+      }
+    },
+    {
+      name: 'transition naming a non-adjacent pair',
+      code: 'transition.adjacent-pair',
+      mutate(value) {
+        value.externalTransitions[0].from = { chapter: 'ch9', exitBeat: 'ch9-hearth' };
+      }
+    },
+    {
+      name: 'transition entry guarantees drifting from the chapter entry',
+      code: 'transition.entry-state',
+      mutate(value) {
+        value.externalTransitions[0].entryGuarantees.pop();
+      }
+    },
+    {
+      name: 'a transition declaring a gap that does not exist',
+      code: 'adjacency.external-necessary',
+      mutate(value) {
+        const ch13 = value.chapters.find((chapter) => chapter.id === 'ch13');
+        const ch10 = value.chapters.find((chapter) => chapter.id === 'ch10');
+        ch13.entry.stateRefs = [...ch10.exit.stateRefs];
+        value.externalTransitions[0].entryGuarantees = [...ch10.exit.stateRefs];
       }
     }
   ];

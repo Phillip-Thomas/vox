@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 664157,
+  "stop_reason": "end_turn",
+  "session_id": "9301f4eb-4b33-41c3-9bd3-db48da48cae4",
+  "total_cost_usd": 4.739009,
+  "usage": {
+    "input_tokens": 118,
+    "cache_creation_input_tokens": 122345,
+    "cache_read_input_tokens": 4225386,
+    "output_tokens": 56017,
+    "output_tokens_details": {
+      "thinking_tokens": 6224
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 122345,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1118,
+        "cache_read_input_tokens": 126163,
+        "cache_creation_input_tokens": 342,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 342
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1786,
+      "outputTokens": 13,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001851,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 118,
+      "outputTokens": 56017,
+      "cacheReadInputTokens": 4225386,
+      "cacheCreationInputTokens": 122345,
+      "webSearchRequests": 0,
+      "costUSD": 4.737158000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 6224,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 64,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Both bounded preparations are complete, with passing CPU-only tests and no runtime.\n\n**Owned artifacts created**\n- `verifier/probes/arrival-common-manual/` (copy of `common-manual-focused/`)\n- `verifier/probes/arrival-common-earned/` (copy of `earned-continue/`)\n- `logs/arrival-common-probe-prep/` (9 logs), `arrival-common-probe-prep-report.json` (sha256 `648d8ee3\u2026`) and `.md`\n\n**Originals preserved byte-exactly** \u2014 all 8 files hashed before and after; `diff` empty, re-verified at the end.\n\n**1. Earned Origin gate tightened.** Now requires `landedActivePlanetId === '-1,-1'` exactly *and* `anc.cg.origin-landed` in **both** the named `signedSceneAv.activationHistoryAnchorIds` and the chapter fired-anchor history (an unread chapter history is refused as UNMEASURED). All prior requirements (real latched milestone, surface/fps, supported, grounded pose, measured fps, non-empty named history, key-count-is-not-evidence) survive, and every raw trace is reported on refusal and on pass. Discriminators all pass: wrong planet `3,7` fails, near-miss `-1,-1:p2` fails, non-empty lift-only AV history fails, chapter-only fails, AV-only fails, exact earned all-state passes. Continue lane (actual save bytes, no deep reseed, new action, no-replay) and all guards untouched. The disputed run-4/run-5 narrative is kept only as labelled inherited prose with the producer's qualification inline.\n\n**2. Passive entry observation added** to both copies: pointerlockchange/error, console warn/error/pageerror, click `isTrusted`/`pointerType`/`sourceCapabilities`/`target`/`currentTarget`, focus/touch/policy state. `describeEventTarget` handles Window/Document/Element/null (and hostile getters) without throwing \u2014 the exact defect the discriminator hit \u2014 and the injected page source embeds the CPU-tested function bytes. No `requestPointerLock`, no forced click, no handler patch, no key injection, no focus/policy edit, **no new loops, retries or timeouts**. The ordinary click path and pointer-lock gate are byte-unchanged; observation gates nothing.\n\n**Bindings:** roles hardcoded as `arrival-common-manual`/`arrival-common-earned`, absolute `--out` required in both, shared verifier libs pinned into each folder at identical depth (relative roots verified correct), old 38007/dc63fba/\"99 files\" appear only as labelled unexecuted placeholders.\n\n**Tests:** manual 112/112, earned 108/108 (inherited \u224895 and 69), earned inline self-test OK, 6/6 `node --check` clean \u2014 all exit 0, with times and log SHAs recorded.\n\nOne thing worth your decision, reported rather than expanded: the earned lane's `commonPassageLogic.pinned.mjs` is now a second-generation pin (all three byte sets currently identical, `24d67c65\u2026`); it will not follow future manual-role edits, so re-pinning must be an explicit owner call. Independent runtime remains pending \u2014 each lane needs its own release with the current URL and new source hash.",
+  "ttft_ms": 1584,
+  "type": "result",
+  "duration_ms": 667640,
+  "uuid": "4b23277d-2670-421b-b2d0-4575b09deb08",
+  "ttft_stream_ms": 816,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 817,
+  "queued_turn_count": 0
+}

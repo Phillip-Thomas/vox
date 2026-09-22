@@ -1,0 +1,6 @@
+{
+  "at": "2026-09-09T04:26:17.893345+00:00",
+  "flockPid": 245566,
+  "capturePid": 245567,
+  "reason": "ch8-landfall stays active over180s, with contradictory forward+backward controls and on-foot jump pulsing in the flight directive. Source shows ground stuck recovery uses parked player-body position and mutates ship controls. Player body position alone does NOT prove ship immobility; that earlier interpretation is corrected. Stop for focused flight-control repair and retain raw evidence."
+}

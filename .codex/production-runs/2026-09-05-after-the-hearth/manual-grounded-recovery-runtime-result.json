@@ -1,0 +1,110 @@
+{
+  "duration_api_ms": 205650,
+  "stop_reason": "end_turn",
+  "session_id": "8c534128-0cc3-492e-9c0b-91686339c158",
+  "total_cost_usd": 1.2536370000000003,
+  "usage": {
+    "input_tokens": 60,
+    "cache_creation_input_tokens": 42667,
+    "cache_read_input_tokens": 867698,
+    "output_tokens": 15624,
+    "output_tokens_details": {
+      "thinking_tokens": 2177
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 42667,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1543,
+        "cache_read_input_tokens": 46608,
+        "cache_creation_input_tokens": 2365,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2365
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 2148,
+      "outputTokens": 14,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0022180000000000004,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-opus-5": {
+      "inputTokens": 60,
+      "outputTokens": 15624,
+      "cacheReadInputTokens": 867698,
+      "cacheCreationInputTokens": 42667,
+      "webSearchRequests": 0,
+      "costUSD": 1.2514190000000003,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 2177,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 36,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VERDICT: PASS** \u2014 grounded physical return at E and full ordered retraversal, one real-headed attempt after a small private probe correction. Finished 00:12:11Z, inside the 00:13:32Z deadline.\n\n**Measurements table (per anchor)**\n\n| Anchor | Actual | Bound |\n|---|---|---|\n| Cut endpoint C | foot [-48.054116, 50.993785, 11.940479], **full 3D 0.0982**, supported=true | \u22640.35 |\n| Terra before return | 2.0894374124 (credit withheld) | \u2014 |\n| Settle at E | ok on **first** settle, 328ms, 4 retained samples, **no refinement needed** | \u22642s |\n| Final stand at E | foot [-41.976061, **51.210903**, 11.924618], up [-0.00776, 0.99997, ~0], **supported=true**, `__voxelDebug.player.grounded`=**true**, groundOffset 1.8, distXZ 0.0791 | \u2014 |\n| Return margin | frontierZ 14.0894374, foot z 11.9246 \u2192 **margin 2.1648** | \u22650.5 |\n| Retraversal | all 9 vertices crossed, supported=true on every one, horiz 0.083\u20130.307 | \u22640.35 |\n| Terra after | **18/18**, reset/secondGrant/rail all false | 18 |\n| T + F | 3D 0.1628 supported=true; F pressed, \"F \\| Offer this end\" | \u22640.35 |\n| Worker | 18/18; H\u2192E 2u approach stayed uncredited | 18 |\n| Commit / anchors / hand-back | committed+comparisonProved true; complete+handback published; objectiveId null, prompts [] | \u2014 |\n| Probe | verdict SHORT-HELD-REFERENCE-PROVEN, exit 0, 94.9s | \u2014 |\n\n**Objective defects:** none.\n\n**Corrections made (probe only, no source):** final E leg 0.6\u21920.25 XZ arrival; key release + bounded retained-sample settle measuring actual foot/up/CG-support and `__voxelDebug.player.grounded`; C endpoint predicate changed from the looser per-axis box to actual full 3D \u22640.35. The safety gate still demands an actual supported foot clearly before the frontier \u2014 it was not relaxed, and it passed on real geometry.\n\nThe prior negative is reproduced as an airborne mid-stride read, not a game failure: with a closer stop and released keys, a supported grounded stand appeared within 328ms unaided. I did **not** infer any game defect from it, and I make no defect- or chapter-closure claim.\n\n**Two things worth flagging rather than burying:**\n1. Attempts 1 and 2 failed before the real run \u2014 the probe carried its own hardcoded private-entry role constant, and then `assertFreshOutputDir` correctly rejected the dir holding attempt 1's `refusal.json`. Both are preserved; the real attempt used `capture-2`. So this was one real attempt, but three launcher invocations.\n2. The final foot sits **0.1609 above the 51.05 audited plane** while support and grounded both read true (groundOffset 1.8). It passes every declared gate, but it is not a flush-on-plane stand; I recorded it as measured and did not adjust for it. If your notion of \"supported\" implies plane contact, that discrepancy deserves your eyes before this proof is leaned on.\n\n**Artifacts**\n- Capture: `verifier/artifacts/manual-grounded-recovery-runtime-20260907T000701Z/capture-2` (27 entries)\n- Probe snapshot (beside, never inside): `.../manual-grounded-recovery-runtime-20260907T000701Z/probes-snapshot`\n- Preserved refusal: `.../manual-grounded-recovery-runtime-20260907T000701Z/capture/refusal.json`\n- Probe + launcher: `verifier/probes/manual-credit-finale/grounded-recovery-candidate/`\n- Logs + report: `verifier/logs/manual-grounded-recovery-runtime/{launcher.log,lock-proof.log,probe.log,report.md}`\n\nPins reused exactly (index-Ddqg7x9Y, bundle 4b41a7d5\u2026c83e9, served hashes matched); no revert to old C1X, no repin, no rerun of the 353/3207 suite, no edits to control files or producer receipts, root preview untouched. Leftover Chromium processes belong to the pre-existing shared owned helper \u2014 not killed, per the no-foreign-kill rule.",
+  "ttft_ms": 1357,
+  "type": "result",
+  "duration_ms": 468237,
+  "uuid": "ea94e28a-0c56-4dba-ba72-cd8d736b72c8",
+  "ttft_stream_ms": 785,
+  "time_to_request_ms": 17,
+  "first_content_frame_ms": 785,
+  "queued_turn_count": 0
+}

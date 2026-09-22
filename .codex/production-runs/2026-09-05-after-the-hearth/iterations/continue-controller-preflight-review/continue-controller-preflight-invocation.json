@@ -1,0 +1,16 @@
+{
+  "role": "continue-controller-preflightor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T21:02:24.060676+00:00",
+  "commissionSha256": "3966a2d3ce573dee749e5c9517c2290a8099895218979b3659876e63dd7ba971",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFrozen": false,
+  "sourceReference": "iterations/implemented-arrival-common-repair/source",
+  "scope": "Narrow private preflight correction of four concrete executable probe defects identified by root; additional10minute CPU commission under standing authorization, no material game repair or GPU",
+  "exitCode": 124,
+  "transportTimeout": true,
+  "finishedAt": "2026-09-06T21:12:24.085138+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "542e440a-b2bc-4c52-8411-2c8bbe22521e",
+  "gameSourceMutationAuthorized": false
+}

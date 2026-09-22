@@ -1,0 +1,463 @@
+{
+ "schema": "paravoxia.integrationRepairReport.v1",
+ "runId": "2026-09-05-after-the-hearth",
+ "pass": "integration-world-repair",
+ "role": "integration-engineer (single source writer)",
+ "contractVersion": "scene-v2",
+ "contractSha256": "4dbf722b308b92b170313285854e3c9c2abac853b3407bf3e0f4efccfddff88e",
+ "sourceManifestSha256": "51b25376aa6c87dc428249fcfd907811c592bc9dfdaf00d82c53112593ea02c3",
+ "directionRef": "world-repair-direction.json",
+ "defectIds": [
+  "CG-IMPL-006",
+  "CG-IMPL-008"
+ ],
+ "verifierFindingsAddressed": [
+  "VF3-FOOTING-1",
+  "VF3-AVHOME-1",
+  "VF3-CG008-1"
+ ],
+ "contractChangeRequired": false,
+ "publicationAuthorized": false,
+ "sourceAcceptance": false,
+ "completedAt": "2026-09-06T12:15:55.796174+00:00",
+ "changedPaths": [
+  {
+   "path": "main/src/story/world/CommonGroundWorld.tsx",
+   "beforeSha256": "d564573757f160aabdf3868d11234a9945346f2e9efd4d2979053a0f51aea096",
+   "afterSha256": "79b265c5e2c11feefc2380708372706f037c87cdd1e88e36533862ef49e6be1e",
+   "new": false
+  },
+  {
+   "path": "main/src/story/commonGroundDirector.ts",
+   "beforeSha256": "81289ffd48e4260971b12b68dfd4bb8fa591faf03fc4a03ed1ba9cf847f64e6f",
+   "afterSha256": "5688b86ebf06fd3a963693026e9933b1286079cf508747588f9f3a238814d6b3",
+   "new": false
+  },
+  {
+   "path": "main/src/story/commonGroundDirector.test.ts",
+   "beforeSha256": "02986e15185168adfd02e7e01eaa0103479f8e3645ac0626b53742dc0bc0021e",
+   "afterSha256": "58bc30b4d7ef208002aa448f48cd523d73115c48e979faa46311e94de9143008",
+   "new": false
+  },
+  {
+   "path": "main/src/story/signedSceneAvRuntime.ts",
+   "beforeSha256": "9b513a850c81f0ae3a75b26ded69156e11c429b6ba227568fcda19d99818a982",
+   "afterSha256": "681339e20ca341c01c08527a1b5519a40d7703abcf7d65fdf44661ebc8fb9764",
+   "new": false
+  },
+  {
+   "path": "main/src/story/world/CommonGroundWorld.test.tsx",
+   "beforeSha256": null,
+   "afterSha256": "a9c0eb4ac6000e960fd38a239b015e0a49572fd3c923fc206fb4c152bb8d64bb",
+   "new": true,
+   "note": "Allowed by production-lock and previously absent; root pre-authorized creating it."
+  }
+ ],
+ "checks": [
+  {
+   "name": "vitest-full",
+   "command": "npm test",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/vitest-full.log",
+   "logSha256": "5dfdb4bada7f74eed6f3b6e863ea4e98c0a73160417f0fd241b8500295daea22"
+  },
+  {
+   "name": "typecheck",
+   "command": "npm run typecheck",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/typecheck.log",
+   "logSha256": "171329fdf9993f3fb6a15c27cf88d32789c4c20cb98d23618cd3f54f8546d8af"
+  },
+  {
+   "name": "build",
+   "command": "npm run build",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/build.log",
+   "logSha256": "1f298f3c0a7ca9f4bf280c5b5ab14952f3c9c9d36639c0a8ae4e2840728c5568"
+  },
+  {
+   "name": "vitest-story",
+   "command": "npx vitest run src/story",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/vitest-story.log",
+   "logSha256": "406709956abdf793cc9690c31d0fd55daa322f0c0300df6d014d13b2f5f927f6"
+  },
+  {
+   "name": "story-ux",
+   "command": "npx vitest run src/story/ux",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/story-ux-check.log",
+   "logSha256": "f77aa4ae0d18319c02c4da7064b261f882f84d1b2db981b6c013d1335af5ce39"
+  },
+  {
+   "name": "vitest-focused",
+   "command": "npx vitest run src/story/signedSceneAvRuntime.test.ts src/story/commonGroundDirector.test.ts src/story/world/CommonGroundWorld.test.tsx src/story/commonGroundState.test.ts src/game/systems/persistence.test.ts src/story/storyState.test.ts src/App.test.tsx",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/vitest-focused.log",
+   "logSha256": "274a374196a8fb47512758357efffbc177e5515bda9590fea681f6c501f71dde"
+  },
+  {
+   "name": "scene-av-check",
+   "command": "npm run scene:av:check",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/scene-av-check.log",
+   "logSha256": "0ebbe1c5b18705236588fc5a372b568b04e1ca8262eca5c0371006083793d543"
+  },
+  {
+   "name": "chapter-registry-check",
+   "command": "npm run chapter:registry:check",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/chapter-registry-check.log",
+   "logSha256": "63d2098e42a51ec027bd147b0869fcfe164c546b86e7526cab424065907ce4b5"
+  },
+  {
+   "name": "chapter-journey-check",
+   "command": "npm run chapter:journey:check",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/chapter-journey-check.log",
+   "logSha256": "720c32d0e5edc52899f812187f01eb4bcb341a48e6dd6d682049a44d0bcb6a1b"
+  },
+  {
+   "name": "story-authority",
+   "command": "npm run story:authority",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/story-authority.log",
+   "logSha256": "674a8248d269b8a863d77e818d72d74a874ab392ffee5afcbfbf64a93ef1a034"
+  },
+  {
+   "name": "story-ladder-check",
+   "command": "npm run story:ladder:check",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/story-ladder-check.log",
+   "logSha256": "2298ec9bdc8ee62f6674127bc64824972d1aa9495696d84caccc77a8cb0050cd"
+  },
+  {
+   "name": "guidance-target-check",
+   "command": "npm run guidance:target-check",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/guidance-target-check.log",
+   "logSha256": "df8e5776749856298c81edd67d5453973791986c321bb6779016fe3799543c00"
+  },
+  {
+   "name": "creative-workflow-check",
+   "command": "npm run creative:workflow:check",
+   "cwd": "/home/thomasphillip/Projects/vox/main",
+   "exitCode": 0,
+   "logPath": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/creative-workflow-check.log",
+   "logSha256": "c10c1eaf7983659984c10ae1b82a38e6d999989e1322a37b26ea90151d9314d3"
+  }
+ ],
+ "testTotals": {
+  "preRepairV2Baseline": 3068,
+  "baselineNote": "Historical key name retained per root's compiler expectation; the value is the actual pre-repair baseline this pass started from (independently re-run by the verifier as 348 files / 3068 tests).",
+  "baselineFiles": 348,
+  "files": 349,
+  "tests": 3091,
+  "addedByThisPass": 23,
+  "removed": 0,
+  "arithmetic": "3068 + 23 - 0 = 3091",
+  "addedBreakdown": {
+   "main/src/story/world/CommonGroundWorld.test.tsx": 17,
+   "main/src/story/commonGroundDirector.test.ts": 6
+  },
+  "removedNote": "No test was deleted. One existing case, \"never defers an acknowledgement across a pause, a mute or a Continue\", was RENAMED and rewritten as \"never defers a MID-BEAT acknowledgement across a pause, a mute or a Continue\": its old form asserted the defect (a boot pause destroying the beat-entry anchor). The rule it protected \u2014 no deferred live install acknowledgement \u2014 is asserted more directly in the rewrite. Counted as changed, not removed.",
+  "intermediateSuiteTotals": [
+   {
+    "stage": "after VF3-FOOTING-1 fix only",
+    "command": "npx vitest run src/story/world/CommonGroundWorld.test.tsx",
+    "tests": 14,
+    "note": "focused file only, not a suite total"
+   },
+   {
+    "stage": "after root placed-block review finding",
+    "command": "npx vitest run src/story/world/CommonGroundWorld.test.tsx",
+    "tests": 17,
+    "note": "focused file only, not a suite total"
+   },
+   {
+    "stage": "after VF3-AVHOME-1 fix",
+    "command": "npx vitest run src/story/commonGroundDirector.test.ts",
+    "tests": 91,
+    "note": "focused file only"
+   },
+   {
+    "stage": "after VF3-CG008-1 fix",
+    "command": "npx vitest run src/story/commonGroundDirector.test.ts",
+    "tests": 94,
+    "note": "focused file only"
+   }
+  ],
+  "finalSuiteTotalsAreFrom": "npm test (vitest-full.log), 349 files / 3091 tests, exit 0"
+ },
+ "counterfactuals": [
+  {
+   "label": "cf1-unclipped-ceiling",
+   "path": "main/src/story/world/CommonGroundWorld.tsx",
+   "beforeSha256": "f0079fa8725c1263d75460abfa52377a7a5359c2713df66bf21279ab9aa5b634",
+   "mutatedSha256": "4c243d44853653fd30eb421df325a3cd1ab448c8520e01b3ab9b81ecbb043a49",
+   "afterSha256": "f0079fa8725c1263d75460abfa52377a7a5359c2713df66bf21279ab9aa5b634",
+   "mutationCommand": "npx vitest run src/story/world/CommonGroundWorld.test.tsx",
+   "mutationExitCode": 1,
+   "cleanupExitCode": 0,
+   "restoredExactly": true,
+   "mutationLog": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf1-unclipped-ceiling.log",
+   "privateByteBackup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf1-unclipped-ceiling.CommonGroundWorld.tsx.exact-bytes",
+   "superseded": true,
+   "supersededNote": "Run against the source BEFORE root's placed-block review finding; re-run as cf1-unclipped-phantom-ceiling / cf2-clip-only-no-contact-band against the final source. Retained verbatim rather than deleted."
+  },
+  {
+   "label": "cf1-unclipped-phantom-ceiling",
+   "path": "main/src/story/world/CommonGroundWorld.tsx",
+   "beforeSha256": "79b265c5e2c11feefc2380708372706f037c87cdd1e88e36533862ef49e6be1e",
+   "mutatedSha256": "3a2f0de76f640b531c864872f9ef0b4dcea4f84337ba5d86d060301bcb05f79f",
+   "afterSha256": "79b265c5e2c11feefc2380708372706f037c87cdd1e88e36533862ef49e6be1e",
+   "mutationCommand": "npx vitest run src/story/world/CommonGroundWorld.test.tsx",
+   "mutationExitCode": 1,
+   "cleanupExitCode": 0,
+   "restoredExactly": true,
+   "mutationLog": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf1-unclipped-phantom-ceiling.log",
+   "privateByteBackup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf1-unclipped-phantom-ceiling.CommonGroundWorld.tsx.exact-bytes",
+   "superseded": false
+  },
+  {
+   "label": "cf2-clip-only-no-contact-band",
+   "path": "main/src/story/world/CommonGroundWorld.tsx",
+   "beforeSha256": "79b265c5e2c11feefc2380708372706f037c87cdd1e88e36533862ef49e6be1e",
+   "mutatedSha256": "3fc40b96e88d7921b1d95c3a763524602893151d3c08a5111807d388ea36889a",
+   "afterSha256": "79b265c5e2c11feefc2380708372706f037c87cdd1e88e36533862ef49e6be1e",
+   "mutationCommand": "npx vitest run src/story/world/CommonGroundWorld.test.tsx",
+   "mutationExitCode": 1,
+   "cleanupExitCode": 0,
+   "restoredExactly": true,
+   "mutationLog": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf2-clip-only-no-contact-band.log",
+   "privateByteBackup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf2-clip-only-no-contact-band.CommonGroundWorld.tsx.exact-bytes",
+   "superseded": false
+  },
+  {
+   "label": "cf2-clip-only-no-contact",
+   "path": "main/src/story/world/CommonGroundWorld.tsx",
+   "beforeSha256": "f0079fa8725c1263d75460abfa52377a7a5359c2713df66bf21279ab9aa5b634",
+   "mutatedSha256": "5b8d61c8bef45335eb3e526e88e5423b68ac75f59ebad7935f3e87df2a93177e",
+   "afterSha256": "f0079fa8725c1263d75460abfa52377a7a5359c2713df66bf21279ab9aa5b634",
+   "mutationCommand": "npx vitest run src/story/world/CommonGroundWorld.test.tsx",
+   "mutationExitCode": 1,
+   "cleanupExitCode": 0,
+   "restoredExactly": true,
+   "mutationLog": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf2-clip-only-no-contact.log",
+   "privateByteBackup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf2-clip-only-no-contact.CommonGroundWorld.tsx.exact-bytes",
+   "superseded": true,
+   "supersededNote": "Run against the source BEFORE root's placed-block review finding; re-run as cf1-unclipped-phantom-ceiling / cf2-clip-only-no-contact-band against the final source. Retained verbatim rather than deleted."
+  },
+  {
+   "label": "cf3-boot-pause-clears-entry-anchor",
+   "path": "main/src/story/commonGroundDirector.ts",
+   "beforeSha256": "5688b86ebf06fd3a963693026e9933b1286079cf508747588f9f3a238814d6b3",
+   "mutatedSha256": "421d68350020acaa0563670b0cab20504bf06c60e1fb88bdbb7d62e27e157a3f",
+   "afterSha256": "5688b86ebf06fd3a963693026e9933b1286079cf508747588f9f3a238814d6b3",
+   "mutationCommand": "npx vitest run src/story/commonGroundDirector.test.ts",
+   "mutationExitCode": 1,
+   "cleanupExitCode": 0,
+   "restoredExactly": true,
+   "mutationLog": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf3-boot-pause-clears-entry-anchor.log",
+   "privateByteBackup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf3-boot-pause-clears-entry-anchor.commonGroundDirector.ts.exact-bytes",
+   "superseded": false
+  },
+  {
+   "label": "cf4-no-saved-survey-satisfaction",
+   "path": "main/src/story/signedSceneAvRuntime.ts",
+   "beforeSha256": "681339e20ca341c01c08527a1b5519a40d7703abcf7d65fdf44661ebc8fb9764",
+   "mutatedSha256": "3fe08a4c74004a298478dd840591db57ef13740d97ec46aa3cc07b0257948076",
+   "afterSha256": "681339e20ca341c01c08527a1b5519a40d7703abcf7d65fdf44661ebc8fb9764",
+   "mutationCommand": "npx vitest run src/story/commonGroundDirector.test.ts src/story/signedSceneAvRuntime.test.ts",
+   "mutationExitCode": 1,
+   "cleanupExitCode": 0,
+   "restoredExactly": true,
+   "mutationLog": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf4-no-saved-survey-satisfaction.log",
+   "privateByteBackup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf4-no-saved-survey-satisfaction.signedSceneAvRuntime.ts.exact-bytes",
+   "superseded": false
+  },
+  {
+   "label": "cf5-clip-would-discard-real-placed-voxel",
+   "path": "main/src/story/world/CommonGroundWorld.tsx",
+   "beforeSha256": "79b265c5e2c11feefc2380708372706f037c87cdd1e88e36533862ef49e6be1e",
+   "mutatedSha256": "73f3ba122feadc11ef299c6ec16ba5293ee2de7cb0f02f7689a499a830ff2875",
+   "afterSha256": "79b265c5e2c11feefc2380708372706f037c87cdd1e88e36533862ef49e6be1e",
+   "mutationCommand": "npx vitest run src/story/world/CommonGroundWorld.test.tsx",
+   "mutationExitCode": 1,
+   "cleanupExitCode": 0,
+   "restoredExactly": true,
+   "mutationLog": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf5-clip-would-discard-real-placed-voxel.log",
+   "privateByteBackup": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/temp/cf5-clip-would-discard-real-placed-voxel.CommonGroundWorld.tsx.exact-bytes",
+   "superseded": false
+  }
+ ],
+ "preservation": {
+  "preMutationManifestRehash": {
+   "files": 96,
+   "mismatch": 0,
+   "missing": 0,
+   "evidence": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/pre-mutation-manifest-rehash.json"
+  },
+  "postMutationManifestRehash": {
+   "files": 96,
+   "changed": 4,
+   "unexpectedDrift": [],
+   "note": "Exactly the four allowed files this pass edited; every other manifest file is byte-identical."
+  },
+  "privateByteBackups": ".codex/production-runs/2026-09-05-after-the-hearth/evidence/integration-world-repair/backup/index.json",
+  "backedUpButUntouchedRestoredExactly": [
+   "main/src/story/StoryDirectorDriver.tsx",
+   "main/src/story/commonGroundState.ts",
+   "main/src/story/commonGroundState.test.ts",
+   "main/src/story/signedSceneAvRuntime.test.ts",
+   "main/src/game/systems/persistence.ts",
+   "main/src/game/systems/persistence.test.ts"
+  ],
+  "dirtyTreeEntriesBefore": 322,
+  "dirtyTreeEntriesAfter": 323,
+  "dirtyTreeNote": "The single delta is the new allowed untracked test file. No tracked dirty file was lost.",
+  "destructiveGitUsed": false,
+  "destructiveGitStatement": "No git checkout, reset, restore, stash or clean was invoked at any point in this pass. Every counterfactual mutated one file, ran its command, and restored the exact saved bytes in a Python finally block with a before/after sha256 assertion; all five restored exactly (cleanupExitCode 0) and mutation exit codes are recorded separately.",
+  "priorIncidentReference": "lifecycle-mutation-cleanup-deviation.json records the PREVIOUS pass's git checkout of storyState.ts and its snapshot recovery. That incident is not repeated here and is not restated as this pass's own."
+ },
+ "passiveDiagnosticInterface": {
+  "global": "window.__paravoxiaCommonGround.snapshot()",
+  "queryGate": "journeyprobe=1 | chapterjourney=1 | debug=1",
+  "ownership": "main/src/story/StoryDirectorDriver.tsx (unchanged this pass); payload from commonGroundDirector.getCommonGroundProbeSnapshot()",
+  "observerEffect": "none; reads the last EXECUTED rail plan, never runs the planner",
+  "fields": [
+   "beat",
+   "bodyCentre",
+   "bodyPose",
+   "up",
+   "groundOffsetUnits",
+   "supported",
+   "worldBound",
+   "rail{action,target,interactionId,reason,arriveRadius}",
+   "railCursor",
+   "score{beat,mood,finalTextureSeconds}",
+   "diagnostic",
+   "pendingAnchors"
+  ],
+  "changedThisPass": [
+   "pendingAnchors now reports a detached copy of BOTH anchor queues, beat-entry first, in the order the retry will use."
+  ],
+  "scoreFieldAlreadyPresent": true
+ },
+ "routedItems": [
+  {
+   "id": "VF3-FOOTING-1",
+   "defect": "CG-IMPL-006 residual",
+   "status": "resolved-in-source",
+   "cause": "ESTABLISHED, not inferred. createFooting queried terrain.isSolidVoxel(cx, cy+1, cz) unclipped. createLiveAgentSurfaceTerrain's solid test falls through to generator.shouldVoxelExist, which keeps answering OUTSIDE the rendered/collided cube. A probe against the real generator at the real identity (getWorldGen(50, STORY_SEED, \"-1,-1\"), seed 3215739679) prints the actual column at S as cells 23:S 24:S 25:S 26:S 27:. with renderedRadiusCells(50) = floor(50/2) = 25 \u2014 so the generated bulge at cell 26 is one cell outside the cube and was read as an INVISIBLE CEILING above the ground she was standing on. At the landing area the same probe prints 25:S 26:. , which is exactly why supported was TRUE there and false for the whole approach: the verifier's \"localised, not global\" measurement, explained. The jump table is consistent: a lift into cell 26 returned TRUE because the phantom at 26 was \"solid\" and 27 was not \u2014 an artefact of the same unclipped read, not evidence that the ground top face is y=53.",
+   "reproduction": "main/src/story/world/CommonGroundWorld.test.tsx, 17 tests over the REAL generator, REAL voxelSystem, real seed/planet/world identity, plus the real director seam (registerCommonGroundWorld -> commonGroundPlayerPose -> getCommonGroundProbeSnapshot().supported -> commitCommonGroundSurveyStart). It asserts the cause from the generator, carries the exact published hardware pose (-26.303072, 50.98897476203079, 12.015123) and the authored 51.05, and replays the whole measured height response including the still-cell-25 hovering band the late clarification named.",
+   "resolution": "Three bounded clauses in createFooting, no shared terrain/physics change, no threshold widened. (1) The PROCEDURAL fallback is clipped to the rendered cube, exactly as agentSurfaceNavigation.ts:376-390 already does for agents; the support cell must itself be real, so cell 26 can no longer carry a body. (2) Real placed/exposed voxels are NOT clipped: solid = voxelSystem.hasVoxel(...) || (rendered && terrain.isSolidVoxel(...)), because addVoxel has no radius guard and a block a player actually built at cell 26 is meshed, collided and visible. Hazard follows the same shape. (3) CONTACT_TOLERANCE = VOXEL_SCALE/8 = 0.25: the feet must be ON the support column's nominal top face. cell(y - 1.05) alone accepts -0.95..+1.05 around that face, so clipping the ceiling on its own would have called a body hovering most of a voxel up \"grounded\". The band strictly contains both qualified heights \u2014 authored 51.05 (+0.05, the same authoring epsilon carried in PLAYER_CENTER_CLEARANCE) and the measured resting 50.98897 (-0.011, the 0.01 COLLIDER_HALF_EXTENT inset plus solver penetration) \u2014 and refuses everything a quarter voxel or more off it. Water is deliberately left unclipped, matching the same shipped clause. Every clause can only REJECT poses the old predicate accepted, except at cells the cube does not render.",
+   "counterfactuals": [
+    "cf1-unclipped-phantom-ceiling (10/17 fail)",
+    "cf2-clip-only-no-contact-band (4/17 fail)",
+    "cf5-clip-would-discard-real-placed-voxel (1/17 fail)"
+   ],
+   "preserved": [
+    "real placed blocks (carry AND obstruct, inside and outside the cube)",
+    "live dug holes",
+    "one-foot-over-the-hole rejection at a real cell boundary",
+    "interior rendered ceilings (dug pit + replaced block)",
+    "real water columns",
+    "real placed lava, inside and outside the cube",
+    "live-edit revision invalidation",
+    "jumping and hovering rejection",
+    "all six signed poses and all three authored routes under a swept body"
+   ],
+   "notProved": "No hardware, browser, movie, visual or audio acceptance. Source and unit proof only."
+  },
+  {
+   "id": "VF3-AVHOME-1",
+   "defect": "CG-IMPL-008 residual",
+   "status": "resolved-in-source",
+   "cause": "ESTABLISHED from the actual boot ordering, and it is NOT the app-phase candidate. For a ?story=ch13-home deep link appState computes DEEP_LINK true, so phase is already \"playing\" from module load. The real path is two lines: storyDirector.ts ends with subscribeStory(syncBeat) plus an immediate syncBeat(), and initStoryFromSave activates the beat inside App's useState initializer \u2014 so enterCommonGroundBeat(\"ch13-home\") and its anc.cg.home-steady publish run synchronously during render, BEFORE the first frame exists. App.tsx then mounts <StoryDirectorDriver paused={!worldGenReady || !initialRenderReleased || ...} />, so for the entire world-generation and shader-warmup boot every frame takes the !foreground branch and calls suspendCommonGroundPresentation(\"pause\"), whose unconditional clearPendingAnchors destroyed the queued entry anchor before any tick could retry it. firedAnchors had already latched it, so it could never be re-noted, and signedSceneAvRuntime's earlierRequiredAnchorPending guard then refused fault-reviewed and return-chosen behind it for the whole beat. That is exactly the measured shape: firedAnchors both, activationSequence 0, history [], pendingAnchors already empty at 11 ms, first accepted anchor hatch-boarded in the next beat.",
+   "reproduction": "commonGroundDirector.test.ts \"survives the boot: the entry anchor is retried after world-gen and warmup\": the synchronous entry seam with the rail elsewhere, then thirty suspend(\"pause\") frames standing in for world-gen and warmup, then the first real tick, then the two real F acts.",
+   "resolution": "A separate, BOUNDED beat-entry queue. It is populated only by enterCommonGroundBeat (in practice exactly one id, anc.cg.home-steady), drained once by the first tickCommonGround of that beat whatever the outcome, and dropped whole by clearAnchorQueues on every beat, run, world, actor, reset, exit and release transition. A pause or visibility loss leaves the chapter ON the beat, so it survives those two and only those two \u2014 which is what the boot actually reports itself as. StoryDirectorDriver.tsx was NOT edited: all existing UX and final-texture cancellation is unchanged.",
+   "preservedRules": [
+    "The live install acknowledgement anc.cg.cell-installed is published mid-beat and still goes through the ordinary pending queue, which a pause still empties on the spot \u2014 asserted by the rewritten \"never defers a MID-BEAT acknowledgement across a pause, a mute or a Continue\".",
+    "No unbounded queue: at most one entry anchor, one retry, then empty.",
+    "No manufactured receipt, no activation history written, no replay, no deferred audio unlock.",
+    "The completion token's cancellation path (cancelCommonGroundFinalTexture) is untouched."
+   ],
+   "counterfactuals": [
+    "cf3-boot-pause-clears-entry-anchor (1/91 fail)"
+   ],
+   "notProved": "Whether a continuous station->home entry behaves identically is unmeasured here; only the deep-link/boot ordering is reproduced in source."
+  },
+  {
+   "id": "VF3-CG008-1",
+   "defect": "CG-IMPL-008 intermediate Continue",
+   "status": "resolved-in-source",
+   "cause": "DEMONSTRATED, and it was a real failure rather than a speculative one. RECEIPT_SATISFIED_ANCHORS keys every survey predecessor on story:ch13-route-tested, and there are only six durable ch13 milestones, so a Continue taken in the MIDDLE of the survey can hold no receipt that excuses them. Built through the real seam \u2014 open the demonstration, start the recording, draw three real samples of the short route, serializeCommonGround -> WorldSave -> localStorage -> loadWorld -> stageCommonGroundWorldPayload -> hydrateCommonGround validator -> chapter seam, cold runtime, fresh AV ledger \u2014 the reload then walks to E and offers the span, and anc.cg.route-offered is REFUSED with a completely empty activation history.",
+   "reproduction": "commonGroundDirector.test.ts, three new cases: \"resumes a mid-DRAWING Continue and earns the next new anchor\", \"resumes a mid-TESTING Continue without replaying his walk or her offer\", and the negative control \"excuses NOTHING from a restore that has no recording at all\". All use the actual WorldSave round-trip with a Map-backed localStorage, the real validator and the real signedSceneAvRuntime; none hand-builds a snapshot.",
+   "resolution": "surveyStateSatisfiedAnchors() in signedSceneAvRuntime.ts extends the SAME transaction-chain doctrine the milestone map already states to the one lane whose chain has no durable milestone yet. It reads only a VALIDATED, hydrated, actor- and world-scoped chapter snapshot; a recording that exists is proof of the acts that are the only legal way to produce one (commitCommonGroundSurveyStart runs only from awaiting-start, which only commitCommonGroundDemonstrationOffer produces from idle, and anc.cg.repeated-measure is published on every tick of those two phases). An offered span additionally excuses trace-drawn and route-offered. It is consulted ONLY to answer \"is that predecessor still pending?\": it activates nothing, writes no activation history, replays no cue or shot, marks no milestone and creates no new event id.",
+   "boundaries": [
+    "Reads only state with hydrated === true, so a live in-session survey still activates its anchors in the ordinary order.",
+    "No new milestone constant and no new creative event id was added. The six real durable ch13 milestones are unchanged.",
+    "The FINAL proofs stay keyed to their durable milestones: route-tested, reciprocal-crossed and complete are not excused by any saved state.",
+    "A restore with no working and no accepted slot excuses nothing (negative control asserts route-offered and route-tested are both still refused).",
+    "A foreign actor or foreign world payload hydrates to null in the existing validator and therefore excuses nothing."
+   ],
+   "midCommonCase": "RETAINED AS ALREADY PASSING, not changed. The verifier reported that the mid-common case does not reproduce because commonGroundDirector marks the crossing receipt before noting its anchor. The existing real-seam regression \"resumes a mid-common Continue: an earned crossing is not a pending one\" covers it and still passes; no speculative change was made there.",
+   "counterfactuals": [
+    "cf4-no-saved-survey-satisfaction (2/122 fail)"
+   ],
+   "notProved": "Unit and real-seam proof only. No physical partial survey was earned and reloaded on hardware; the independent verifier owns that."
+  }
+ ],
+ "rootReviewFindingsAddressed": [
+  {
+   "finding": "The clip discarded ACTUAL placed/exposed voxels as well as the phantom generator fallback; addVoxel has no radius guard, so a real block at cell 26 above S must still obstruct and still carry.",
+   "status": "fixed",
+   "resolution": "solid = voxelSystem.hasVoxel(...) || (rendered && terrain.isSolidVoxel(...)); hazard uses the same shape. New regression \"keeps a REAL placed block outside the procedural cube both solid and standable\" asserts obstruct, carry, contact-only and remove/restore. Counterfactual cf5 proves it necessary."
+  },
+  {
+   "finding": "The \"half over hole\" test asserted only that two cell indices differ, not that a boundary body pose is rejected.",
+   "status": "fixed",
+   "resolution": "New test \"refuses a body with only ONE FOOT over the hole\": a pose at x=-24.8 whose centre is over an intact column and whose -x disc sample reaches the dug one, asserted supported before the dig and unsupported after it."
+  },
+  {
+   "finding": "\"refuses water and lava\" only tested a found water cell.",
+   "status": "fixed",
+   "resolution": "Split into \"refuses a real water column at the support cell\" (claim narrowed, and the found cell is now asserted to be water) and a new \"refuses a REAL placed lava block as ground, inside the cube and outside it\" using an actual placed blockId lava voxel and its removal."
+  }
+ ],
+ "unresolvedConcerns": [
+  "No gameplay, hardware, GPU, browser, movie, visual or audio acceptance is claimed by this pass. Every claim here is source or unit-level. The independent verifier owns real play after source freeze.",
+  "The continuous station -> home -> ch13 bridge is still unmeasured on this source; only the deep-link/boot ordering is reproduced.",
+  "Downstream of the survey start \u2014 both route classes, the ordered 18 units, corner behaviour, manual-corner recovery, the common beat, completion and handback \u2014 remains unverified on hardware, because the previous run could not get past VF3-FOOTING-1.",
+  "CONTACT_TOLERANCE is chosen as a quarter of the existing rounding window. It strictly contains the two qualified standing heights and rejects the measured hovering band, but the real gait envelope over uneven live terrain has not been measured on hardware; if a real walking body is ever refused at a legal pose, that is the number to re-examine, and it should be re-examined rather than widened silently.",
+  "The five-offset disc is genuinely degenerate at most sites at VOXEL_SCALE 2 (all five offsets round to one cell when the whole disc fits inside it). Per direction this is NOT reported as a defect; the new boundary test shows the offsets do separate at a real cell boundary and that the protection works there."
+ ],
+ "nonRegressionStatements": [
+  "Centre -> ground conversion still uses the real capsule half-height 1.3 + radius 0.5 along the live local up (CG_PLAYER_GROUND_OFFSET unchanged).",
+  "Direct survey/common entry still uses the existing on-foot restoration; no disembark fixture, teleport or grant was added.",
+  "The shared F performer still owns cadence; no chapter-side cadence gate was added.",
+  "Ordered movie control still traverses the actual corners; no route or waypoint code was touched this pass.",
+  "CG-IMPL-009: the manual corner-credit allowance remains WITHDRAWN by Chapter and the original route algorithm remains authoritative (chapter-corner-candidate-disposition.json). No route code was edited, so no endpoint, late-leg or wiggle credit exists to pay for omitted ground.",
+  "No arrival, occupancy, LOS or proof radius was changed. No body was clamped onto an authored plane. No ground was invented. No overhead check was removed wholesale. No shared terrain or physics module was edited.",
+  "No new camera, music cue, route, marker, objective, copy, canon or visual direction. No authored scenery moved and no prior home construction was rewritten.",
+  "window.__paravoxiaCommonGround.snapshot stays query-gated, passive, detached and never runs a planner; the score field was already present and is unchanged."
+ ],
+ "limits": {
+  "source": "Five files under production-lock allowedPaths: CommonGroundWorld.tsx, CommonGroundWorld.test.tsx (new, pre-authorized), commonGroundDirector.ts, commonGroundDirector.test.ts, signedSceneAvRuntime.ts. No protected path, no root-owned artifact, no shared engine module.",
+  "browser": "None. This role ran no GPU, browser, preview or capture. The old preview 45091 serves an immutable older snapshot and was not consulted or used for any claim.",
+  "newBoundaryRequested": "None. Every edited path was already allowed, and root had already pre-authorized creating the absent CommonGroundWorld.test.tsx."
+ }
+}

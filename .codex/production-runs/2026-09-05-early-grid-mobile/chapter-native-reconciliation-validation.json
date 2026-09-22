@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-09-05T21:09:04.808Z",
+  "contractVersion": "draft-v1",
+  "contractSha256": "1a38d749843f6d286d23e76504c07124a3e1b537c658ded8365b0e70666f249a",
+  "artifact": "chapter-reconciliation.jsonl",
+  "responses": [
+    "note.early.score-to-chapter.draft-v1",
+    "early.cinema-to-chapter.native-v1"
+  ],
+  "schemaAndRouteErrors": [],
+  "status": "pass",
+  "boundary": "Validated actual incoming notes plus own recipient fields in memory only. No compiled ledger, signature, runtime or GPU claim."
+}

@@ -1,0 +1,54 @@
+{
+  "beat": "ch4-vigil",
+  "settleS": 8,
+  "samples": 2,
+  "samplesTaken": [
+    {
+      "elapsedS": 5.006100000023842,
+      "fps": 60.12664549221279,
+      "writesPerS": 588.282295596567,
+      "perMethodPerS": {
+        "value=": 0.8,
+        "cancelAndHoldAtTime": 58.7,
+        "setTargetAtTime": 527.6,
+        "setValueAtTime": 0.4,
+        "exponentialRampToValueAtTime": 0.4,
+        "linearRampToValueAtTime": 0.4
+      }
+    },
+    {
+      "elapsedS": 5.013199999928474,
+      "fps": 60.041490466028584,
+      "writesPerS": 584.8559802205841,
+      "perMethodPerS": {
+        "value=": 0.8,
+        "cancelAndHoldAtTime": 56.8,
+        "setTargetAtTime": 526,
+        "setValueAtTime": 0.4,
+        "exponentialRampToValueAtTime": 0.4,
+        "linearRampToValueAtTime": 0.4
+      }
+    }
+  ],
+  "summary": {
+    "medianWritesPerS": 588.282295596567,
+    "maxWritesPerS": 588.282295596567,
+    "contextState": "running",
+    "beatLive": true
+  },
+  "generatedAt": "2026-09-05T11:03:02.727Z",
+  "sites": {
+    "setTargetAtTime @ /src/audio/scoreEngine.ts:825:19": 1068,
+    "setTargetAtTime @ /src/audio/scoreEngine.ts:830:21": 1068,
+    "setTargetAtTime @ /src/audio/scoreEngine.ts:831:25": 1068,
+    "setTargetAtTime @ /src/audio/scoreEngine.ts:832:26": 1068,
+    "cancelAndHoldAtTime @ rampParamAt (/src/audio/audioCore.ts:417:10)": 955,
+    "setTargetAtTime @ rampParamAt (/src/audio/audioCore.ts:421:9)": 955,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:796:17)": 267,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:804:17)": 267,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:805:17)": 267,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:806:21)": 267,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:811:21)": 267,
+    "setTargetAtTime @ applyRails (/src/audio/scoreEngine.ts:816:25)": 267
+  }
+}

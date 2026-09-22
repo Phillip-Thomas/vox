@@ -1,0 +1,42 @@
+{
+  "files": [
+    {
+      "path": "chapter-peer-notes.preparatory-original.jsonl",
+      "sha256": "8f9f04b487956d7deb396a7123a8a4646fa40be0cd063f83eb9f49da264d3b44",
+      "rows": 2
+    },
+    {
+      "path": "chapter-preparatory-notes.jsonl",
+      "sha256": "2f17cd7a05d38d517bd09d7aa64bc8646ae1cdd2e85ac29abb8deeca7ca8efa8",
+      "rows": 2
+    },
+    {
+      "path": "chapter-stage3-preparatory-notes.jsonl",
+      "sha256": "22597973617ec79700cdb7a3583c3e90a0fab896179939c2405d7e1565689a44",
+      "rows": 2
+    },
+    {
+      "path": "cinematography-preparatory-notes.jsonl",
+      "sha256": "1df2ae871dd5c46775401875999468c5804eab4558ebb317fcee34f35bdb4710",
+      "rows": 2
+    },
+    {
+      "path": "cinematography-stage3-reconciliation.jsonl",
+      "sha256": "06c84215ee9861406fceab86e731574d011581ec2351b02cf3ec7b869a35e3be",
+      "rows": 2
+    },
+    {
+      "path": "score-preparatory-notes.jsonl",
+      "sha256": "c2bd20652736e4f288d7caad674c2d75457b67c185e6b28c64267b8f5c90fc03",
+      "rows": 2
+    },
+    {
+      "path": "score-stage3-reconciliation.jsonl",
+      "sha256": "dd38093644c0021c69cc4fc46ef4fb7f4c355acd443697efa99e1460ef960ff2",
+      "rows": 2
+    }
+  ],
+  "nativeAcceptedNoteCount": 0,
+  "nativeSignatureCount": 0,
+  "recordDisposition": "Preserved at original paths with exact statements and responses; these records predate the real candidate and are not active native accepted notes."
+}

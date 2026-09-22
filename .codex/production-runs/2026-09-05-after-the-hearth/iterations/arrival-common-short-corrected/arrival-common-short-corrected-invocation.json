@@ -1,0 +1,16 @@
+{
+  "role": "arrival-common-short-runtimeor",
+  "requestedModel": "opus",
+  "startedAt": "2026-09-06T19:39:05.080010+00:00",
+  "commissionSha256": "e954597d8db1bc80c1a8e4b0cb20ad2e33f7844a9dd9ee99b640bf9165de80c9",
+  "sourceManifestSha256": "6ef957c3dd4a1af04852773b3e5f608d2247e212eb27d05a95ba6f40c1fee5d6",
+  "sourceFilesRehashedBefore": 99,
+  "scope": "Actual isolated SHORT survey held-reference/revision proof; no game mutation",
+  "exitCode": 0,
+  "finishedAt": "2026-09-06T19:50:47.805704+00:00",
+  "model": "claude-opus-5",
+  "sessionId": "15681bf7-da0d-496c-8121-785e6f5243f8",
+  "isError": false,
+  "sourceDrift": [],
+  "sourceFilesRehashedAfter": 99
+}

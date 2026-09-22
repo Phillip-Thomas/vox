@@ -1,0 +1,79 @@
+{
+  "noncertifying": true,
+  "kind": "same production sky shader; reveal0/1 held-camera pixel differences, no game",
+  "samples": [
+    {
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "changedPixels": 0,
+      "maxChannelDifference": 0,
+      "totalDifference": 0,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "file": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/isolated/sky-1_0_0.png"
+    },
+    {
+      "direction": [
+        -1,
+        0,
+        0
+      ],
+      "changedPixels": 0,
+      "maxChannelDifference": 0,
+      "totalDifference": 0,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "file": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/isolated/sky--1_0_0.png"
+    },
+    {
+      "direction": [
+        0,
+        1,
+        0
+      ],
+      "changedPixels": 0,
+      "maxChannelDifference": 0,
+      "totalDifference": 0,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "file": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/isolated/sky-0_1_0.png"
+    },
+    {
+      "direction": [
+        0,
+        -1,
+        0
+      ],
+      "changedPixels": 7002,
+      "maxChannelDifference": 253,
+      "totalDifference": 364297,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "file": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/isolated/sky-0_-1_0.png"
+    },
+    {
+      "direction": [
+        0,
+        0,
+        1
+      ],
+      "changedPixels": 0,
+      "maxChannelDifference": 0,
+      "totalDifference": 0,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "file": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/isolated/sky-0_0_1.png"
+    },
+    {
+      "direction": [
+        0,
+        0,
+        -1
+      ],
+      "changedPixels": 0,
+      "maxChannelDifference": 0,
+      "totalDifference": 0,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "file": "/home/thomasphillip/Projects/vox/.codex/chapter-loops/ch14-636006f1-3ecf-49c0-befa-4b6f5ece45a0/vigil-visibility-20260909/isolated/sky-0_0_-1.png"
+    }
+  ],
+  "errors": []
+}
